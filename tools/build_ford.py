@@ -14,7 +14,7 @@ OWNER='.nswc-ford-output'
 
 def check_site():
     source=(ROOT/'nswc_mod.f90').read_bytes()
-    from ford_documentation import transform
+    from ford_documentation import transform,strip,procedure_documentation,introductory_comments,preceding_comments
     if transform(source.decode('ascii'))!=source.decode('ascii'):
         raise ValueError('FORD prologues are stale; run tools/regenerate_sources.py')
     if (STAGE/'nswc_mod.f90').read_bytes()!=source:
@@ -27,7 +27,11 @@ def check_site():
         raise ValueError('FORD front page or module page is missing')
     review=json.loads((ROOT/'tools/ford-documentation.json').read_text())
     from bs4 import BeautifulSoup
-    for name,doc in review['procedures'].items():
+    original=strip(source.decode('ascii'));lines=original.splitlines(True)
+    imported=0;missing=[]
+    for name,start,end in procedure_spans(original):
+        preceding=preceding_comments(lines,start)
+        doc=procedure_documentation(name,lines[start:end],review,preceding)
         html=BeautifulSoup((OUTPUT/'proc'/f'{name.lower()}.html').read_text(encoding='utf-8'),'html.parser')
         for section in html.select('#text > section'):
             if 'Source Code' in section.get_text(): section.decompose()
@@ -37,6 +41,16 @@ def check_site():
             raise ValueError('Missing procedure description: '+name)
         if name in ('IPMPAR','SHELL','STOD') and not any('Meaning' in t.get_text() for t in html.find_all('th')):
             raise ValueError('Missing argument/result table: '+name)
+        if name not in review['procedures']:
+            legacy=introductory_comments(lines[start:end],preceding)
+            if legacy:
+                if not any(node.get_text().rstrip('\n')==legacy for node in html.select('pre')):
+                    raise ValueError('Imported notes were not preserved literally: '+name)
+                imported+=1
+            else:
+                missing.append(name.lower())
+                if 'No introductory description is present' not in html.get_text():
+                    raise ValueError('Missing documentation status: '+name)
     spmpar=BeautifulSoup((OUTPUT/'proc/spmpar.html').read_text(encoding='utf-8'),'html.parser')
     if not any('spmpar(1) = b**(1 - m)' in node.get_text() for node in spmpar.select('pre')):
         raise ValueError('Machine-model formulas were not preserved as code')
@@ -48,9 +62,13 @@ def check_site():
     metadata={'source_sha256':hashlib.sha256(source).hexdigest(),
               'project_sha256':hashlib.sha256((ROOT/'ford.md').read_bytes()).hexdigest(),
               'documentation_sha256':hashlib.sha256((ROOT/'tools/ford-documentation.json').read_bytes()).hexdigest(),
+              'renderer_sha256':hashlib.sha256((ROOT/'tools/ford_documentation.py').read_bytes()).hexdigest(),
               'requirements_sha256':hashlib.sha256((ROOT/'requirements-docs.txt').read_bytes()).hexdigest(),
-              'procedures':len(expected),'reviewed_prologues':len(review['procedures'])}
-    print(f'FORD: {len(expected)} procedure pages; {len(review["procedures"])} reviewed prologues, tables, formulas and links checked.',flush=True)
+              'procedures':len(expected),'reviewed_prologues':len(review['procedures']),
+              'imported_prologues':imported,'missing_original_descriptions':missing}
+    print(f'FORD: {len(expected)} documented procedure pages; {len(review["procedures"])} reviewed, '
+          f'{imported} imported, {len(missing)} without original descriptions. '
+          'Descriptions, literal notes, tables, formulas and links checked.',flush=True)
     return metadata
 
 

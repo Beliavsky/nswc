@@ -32,7 +32,7 @@ real :: leaf(2)
 leaf(1) = 1.0
 end subroutine data
 '''
-        result = module_source(source, {'CALLER': ['LEAF'], 'CALLBACK': ['LEAF']})
+        result = module_source(source, {'CALLER': ['LEAF'], 'CALLBACK': ['LEAF']}, documentation=False)
         self.assertIn('module nswc_mod\nimplicit none\nprivate\n', result)
         self.assertRegex(result, r'(?m)^public :: [^\n]*\bcaller\b')
         self.assertIn('real(nswc_sp) :: x, keep\nexternal user_callback\n', result)
@@ -58,7 +58,7 @@ end interface
 caller=leaf(x)
 end function caller
 '''
-        result = module_source(source, {'CALLER': ['LEAF']})
+        result = module_source(source, {'CALLER': ['LEAF']}, documentation=False)
         self.assertNotIn('interface', result)
         self.assertEqual(result.count('pure real(nswc_sp) function leaf'), 1)
 

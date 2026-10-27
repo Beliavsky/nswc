@@ -422,6 +422,7 @@ remaining issues, and the checks that reject new compiler warnings.
 
 Build the FORD reference with `python -m pip install -r requirements-docs.txt`
 and `python tools/build_ford.py`, then open `reports/ford-site/index.html`.
-The site indexes all 1,062 module procedures. Five reviewed procedure prologues
-form the first documentation batch; remaining procedures include signatures
-and source views. See the [FORD guide](docs/ford.md) for maintenance and checks.
+The site documents all 1,062 module procedures, including available introductory
+source notes, signatures, and source views. Five descriptions have been reviewed
+individually; other pages identify imported notes or missing original descriptions.
+See the [FORD guide](docs/ford.md) for maintenance and checks.

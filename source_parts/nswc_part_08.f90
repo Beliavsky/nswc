@@ -1,271 +1,580 @@
-pure subroutine crout1(a,ka,n,iend,index,temp,jp,ierr)
+pure subroutine dtred2(nm,n,a,d,e,z)
+!! <!-- nswc-ford:begin DTRED2 -->
+!! Reference for `dtred2`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      double precision dsqrt,dabs
+!!
+!!      This subroutine is a translation of the Algol procedure tred2,
+!!      NUM. Math. 11, 181-195(1968) By Martin, Reinsch, and Wilkinson.
+!!      Handbook for auto. Comp., Vol.ii-linear algebra, 212-226(1971).
+!!      This subroutine reduces a real symmetric matrix to A
+!!      symmetric tridiagonal matrix using and accumulating
+!!      orthogonal similarity transformations.
+!!      On input-
+!!         nm must be set to the row dimension of two-dimensional
+!!           array parameters as declared in the calling program
+!!           dimension statement,
+!!         n is the order of the matrix,
+!!         a contains the real symmetric input matrix.  Only the
+!!           lower triangle of the matrix need be supplied.
+!!      On output-
+!!         d contains the diagonal elements of the tridiagonal matrix,
+!!         e contains the subdiagonal elements of the tridiagonal
+!!           matrix in its last n-1 positions.  e(1) is set to zero,
+!!         z contains the orthogonal transformation matrix
+!!           produced in the reduction,
+!!         A and z may coincide.  If distinct, A is unaltered.
+!! ```
+!! <!-- nswc-ford:end -->
 implicit none
-integer, intent(in) :: iend
-integer, intent(inout) :: ierr, index(*), jp
-integer, intent(in) :: ka, n
-real, intent(inout) :: a(*), temp(n)
-!     beginning of local variable declarations
-integer :: i, ibeg, ij, ik, il, j, jcol, jj, k, kcol, kcount, kj, &
-   & kj0, kk, kl, km1, kp1, l, lj, lj0, lk, lmin, max, mcol, ncol, nk, &
-   & nm1, nmj, nmk, nn
-real :: c, pmin, s, nswc_ai_r4
-double precision :: dsum
-!     ******************************************************************
-!     crout procedure for inverting matrices
-!     ******************************************************************
-!     A is a matrix of order n where n is greater than or equal to 1.
-!     The inverse of A is computed and stored in A.
-!     ka = Length of the columns of the array a
-!     jp = The number of the column that contains the smallest pivot
-!     iend may be 0,1,...,n-1.  It is assumed that each of the first
-!     iend columns of the matrix a contains only one nonzero element
-!     and that the nonzero element is 1 or -1.
-!     Index is an array of dimension n-1 or larger that is used by the
-!     routine for keeping track of the row interchanges that are made.
-!     Temp is a temporary storage array.
-!     ierr reports the status of the results. If A is nonsingular then
-!     the inverse of A is computed and ierr=0. Otherwise if A is found
-!     to be singular then ierr=1 And the routine terminates.
-!     --------------------
-max = ka*n
-mcol = iend*ka
-if (iend == 0) go to 100
-!           Process the first iend columns of A
-kcol = 0
-do k = 1,iend
-   kk = kcol + k
-   nk = kcol + n
-   do lk = kk,nk
-      nswc_ai_r4 = a(lk)
-      if (nswc_ai_r4 < 0) go to 20
-      if (nswc_ai_r4 == 0) go to 10
-      go to 30
-10    continue
-   end do
-   jp = k
-   go to 300
-20 l = lk - kcol
-   lj0 = mcol + l
-   do lj = lj0,max,ka
-      a(lj) = -a(lj)
-   end do
-30 l = lk - kcol
-   index(k) = l
-   if (k == l) go to 32
-   lj = lk
-   do kj = kk,max,ka
-      c = a(kj)
-      a(kj) = a(lj)
-      a(lj) = c
-      lj = lj + ka
-   end do
-32 kcol = kcol + ka
-end do
-!           Process the remaining columns of A
-100 nm1 = n - 1
-jp = 1
-ierr = 0
-pmin = 0.0
-ibeg = iend + 1
-if (ibeg == n) go to 190
-k = ibeg
-km1 = iend
-kp1 = k + 1
-kcol = mcol
-kk = kcol + k
-do kcount = ibeg,nm1
-!     Search for the k-TH pivot element (k=ibeg,...,n-1)
-   l = k
-   s = abs(a(kk))
-   do i = kp1,n
-      ik = kcol + i
-      c = abs(a(ik))
-      if (s >= c) go to 110
-      l = i
-      s = c
-110   continue
-   end do
-   if (k > ibeg .and. s >= pmin) go to 120
-   jp = k
-   pmin = s
-   if (s == 0.0) go to 300
-!              Interchanging rows k and L
-120 index(k) = l
-   if (k == l) go to 130
-   kj0 = mcol + k
-   lj = mcol + l
-   do kj = kj0,max,ka
-      c = a(kj)
-      a(kj) = a(lj)
-      a(lj) = c
-      lj = lj + ka
-   end do
-!       Compute the k-TH row of U (k=ibeg,...,n-1)
-130 c = a(kk)
-   if (k > ibeg) go to 140
-   kj0 = kk + ka
-   do kj = kj0,max,ka
-      a(kj) = a(kj)/c
-   end do
-   go to 160
-140 kl = mcol + k
-   do l = ibeg,km1
-      temp(l) = a(kl)
-      kl = kl + ka
-   end do
-   kj0 = kk + ka
-   do kj = kj0,max,ka
-      jcol = kj - k
-      dsum = -a(kj)
-      do l = ibeg,km1
-         lj = jcol + l
-         dsum = dsum + dble(temp(l))*dble(a(lj))
-      end do
-      a(kj) = sngl(-dsum)/c
-   end do
-!      Compute the k-TH column of L (k=ibeg+1,...,n)
-160 km1 = k
-   k = kp1
-   kp1 = k + 1
-   kcol = kcol + ka
-   kk = kcol + k
-   do l = ibeg,km1
-      lk = kcol + l
-      temp(l) = a(lk)
-   end do
-   do i = k,n
-      il = mcol + i
-      dsum = 0.d0
-      do l = ibeg,km1
-         dsum = dsum + dble(a(il))*dble(temp(l))
-         il = il + ka
-      end do
-      a(il) = dble(a(il)) - dsum
-   end do
-end do
-!           Check the n-TH pivot element
-190 ncol = max - ka
-nn = ncol + n
-c = abs(a(nn))
-if (c > pmin) go to 200
-jp = n
-if (c == 0.0) go to 300
-!          Replace L with the inverse of L
-200 if (ibeg == n) go to 213
-jj = mcol + ibeg
-i = ka + 1
-do j = ibeg,nm1
-   a(jj) = 1.0/a(jj)
-   temp(j) = a(jj)
-   kj = jj
-   do km1 = j,nm1
-      k = km1 + 1
-      kj = kj + 1
-      dsum = 0.d0
-      kl = kj
-      do l = j,km1
-         dsum = dsum + dble(a(kl)*temp(l))
-         kl = kl + ka
-      end do
-      a(kj) = sngl(-dsum)/a(kl)
-      temp(k) = a(kj)
-   end do
-   jj = jj + i
-end do
-213 a(nn) = 1.0/a(nn)
-if (n == 1) return
-!       Solve UX = Y where Y is the inverse of L
-do nmk = 1,nm1
-   k = n - nmk
-   lmin = max0(ibeg,k + 1)
-   kl = (lmin - 1)*ka + k
-   do l = lmin,n
-      temp(l) = a(kl)
-      a(kl) = 0.0
-      kl = kl + ka
-   end do
-   kj0 = mcol + k
-   do kj = kj0,max,ka
-      dsum = -a(kj)
-      lj = (kj - k) + lmin
-      do l = lmin,n
-         dsum = dsum + dble(temp(l)*a(lj))
-         lj = lj + 1
-      end do
-      a(kj) = -dsum
-   end do
-end do
-!                 Column interchanges
-jcol = ncol - ka
-do nmj = 1,nm1
-   j = n - nmj
-   k = index(j)
-   if (j == k) go to 251
-   ij = jcol
-   ik = (k - 1)*ka
-   do i = 1,n
-      ij = ij + 1
-      ik = ik + 1
-      c = a(ij)
-      a(ij) = a(ik)
-      a(ik) = c
-   end do
-251 jcol = jcol - ka
-end do
-return
-!                    Error return
-300 ierr = 1
-end subroutine crout1
-
-pure subroutine assgn(n,a,c,t,iwk,ierr)
-implicit none
-integer, intent(inout) :: ierr
 integer, intent(in) :: n
-integer, intent(inout) :: a(n,*), c(n), t, iwk(*)
+integer, intent(in) :: nm
+double precision, intent(in) :: a(nm,n)
+double precision, intent(inout) :: d(n), e(n), z(nm,n)
 !     beginning of local variable declarations
-integer :: i1, i2, i3, i4, i5, i6
+integer :: i, j, k, l, ii, jp1
+double precision :: f, g, h, hh, scale
+!     double precision dsqrt,dabs
+!-----------------------------------------------------------------------
+!     This subroutine is a translation of the Algol procedure tred2,
+!     NUM. Math. 11, 181-195(1968) By Martin, Reinsch, and Wilkinson.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 212-226(1971).
+!     This subroutine reduces a real symmetric matrix to A
+!     symmetric tridiagonal matrix using and accumulating
+!     orthogonal similarity transformations.
+!     On input-
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!        n is the order of the matrix,
+!        a contains the real symmetric input matrix.  Only the
+!          lower triangle of the matrix need be supplied.
+!     On output-
+!        d contains the diagonal elements of the tridiagonal matrix,
+!        e contains the subdiagonal elements of the tridiagonal
+!          matrix in its last n-1 positions.  e(1) is set to zero,
+!        z contains the orthogonal transformation matrix
+!          produced in the reduction,
+!        A and z may coincide.  If distinct, A is unaltered.
+!-----------------------------------------------------------------------
+do i = 1, n
+   do j = 1, i
+      z(i,j) = a(i,j)
+   end do
+end do
+if (n == 1) go to 320
+!     ********** FOR i=n STEP -1 UNTIL 2 DO -- **********
+do ii = 2, n
+   i = n + 2 - ii
+   l = i - 1
+   h = 0.d0
+   scale = 0.d0
+   if (l < 2) go to 130
+!     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
+   do k = 1, l
+      scale = scale + abs(z(i,k))
+   end do
+   if (scale /= 0.d0) go to 140
+130 e(i) = z(i,l)
+   go to 290
+140 do k = 1, l
+      z(i,k) = z(i,k) / scale
+      h = h + z(i,k) * z(i,k)
+   end do
+   f = z(i,l)
+   g = sqrt(h)
+   if (f >= 0.d0) g = -g
+   e(i) = scale * g
+   h = h - f * g
+   z(i,l) = f - g
+   f = 0.d0
+   do j = 1, l
+      z(j,i) = z(i,j) / h
+      g = 0.d0
+!     ********** Form element of a*U **********
+      do k = 1, j
+         g = g + z(j,k) * z(i,k)
+      end do
+      jp1 = j + 1
+      if (l < jp1) go to 220
+      do k = jp1, l
+         g = g + z(k,j) * z(i,k)
+      end do
+!     ********** Form element of P **********
+220   e(j) = g / h
+      f = f + e(j) * z(i,j)
+   end do
+   hh = f / (h + h)
+!     ********** Form reduced a **********
+   do j = 1, l
+      f = z(i,j)
+      g = e(j) - hh * f
+      e(j) = g
+      do k = 1, j
+         z(j,k) = z(j,k) - f * e(k) - g * z(i,k)
+      end do
+   end do
+290 d(i) = h
+end do
+320 d(1) = 0.d0
+e(1) = 0.d0
+!     ********** Accumulation of transformation matrices **********
+do i = 1, n
+   l = i - 1
+   if (d(i) == 0.d0) go to 380
+   do j = 1, l
+      g = 0.d0
+      do k = 1, l
+         g = g + z(i,k) * z(k,j)
+      end do
+      do k = 1, l
+         z(k,j) = z(k,j) - g * z(k,i)
+      end do
+   end do
+380 d(i) = z(i,i)
+   z(i,i) = 1.d0
+   if (l < 1) go to 500
+   do j = 1, l
+      z(i,j) = 0.d0
+      z(j,i) = 0.d0
+   end do
+500 continue
+end do
+!     ********** Last card of dtred2 **********
+end subroutine dtred2
+
+pure subroutine dtql2(nm,n,d,e,z,ierr)
+!! <!-- nswc-ford:begin DTQL2 -->
+!! Reference for `dtql2`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      This subroutine is a translation of the Algol procedure tql2,
+!!      NUM. Math. 11, 293-306(1968) By Bowdler, Martin, Reinsch, and
+!!      Wilkinson.
+!!      Handbook for auto. Comp., Vol.ii-linear algebra, 227-240(1971).
+!!      This subroutine finds the eigenvalues and eigenvectors
+!!      of a symmetric tridiagonal matrix BY the QL method.
+!!      The eigenvectors of a full symmetric matrix can also
+!!      be found if  tred2  has been used to reduce this
+!!      full matrix to tridiagonal form.
+!!      On input-
+!!         nm must be set to the row dimension of two-dimensional
+!!           array parameters as declared in the calling program
+!!           dimension statement,
+!!         n is the order of the matrix,
+!!         d contains the diagonal elements of the input matrix,
+!!         e contains the subdiagonal elements of the input matrix
+!!           in its last n-1 positions.  e(1) is arbitrary,
+!!         z contains the transformation matrix produced in the
+!!           reduction by  tred2, if performed.  If the eigenvectors
+!!           of the tridiagonal matrix are desired, z must contain
+!!           the identity matrix.
+!!       On output-
+!!         d contains the eigenvalues in ascending order.  If an
+!!           error exit is made, the eigenvalues are correct but
+!!           unordered for indices 1,2,...,ierr-1,
+!!         e has been destroyed,
+!!         z contains orthonormal eigenvectors of the symmetric
+!!           tridiagonal (or full) matrix.  If an error exit is made,
+!!           z contains the eigenvectors associated with the stored
+!!           eigenvalues,
+!!         ierr is set to
+!!           ZERO       FOR NORMAL RETURN,
+!!           j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!!                      determined after 50 iterations.
+!!
+!!      ********** machep is a machine dependent parameter. Assign
+!!                 machep the value U where U is the smallest positive
+!!                 floating point number such that 1.0 + U .GT. 1.0 .
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: n
+integer, intent(in) :: nm
+integer, intent(out) :: ierr
+double precision, intent(inout) :: d(n), e(n), z(nm,n)
+!     beginning of local variable declarations
+integer :: i, j, k, l, m, ii, l1, mml
+double precision :: b, c, f, g, h, p, r, s, machep
 interface
-   pure subroutine assgn1(n,a,c,t,ch,lc,lr,lz,nz,rh,slc,slr,u,ierr)
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+end interface
+!-----------------------------------------------------------------------
+!     This subroutine is a translation of the Algol procedure tql2,
+!     NUM. Math. 11, 293-306(1968) By Bowdler, Martin, Reinsch, and
+!     Wilkinson.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 227-240(1971).
+!     This subroutine finds the eigenvalues and eigenvectors
+!     of a symmetric tridiagonal matrix BY the QL method.
+!     The eigenvectors of a full symmetric matrix can also
+!     be found if  tred2  has been used to reduce this
+!     full matrix to tridiagonal form.
+!     On input-
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!        n is the order of the matrix,
+!        d contains the diagonal elements of the input matrix,
+!        e contains the subdiagonal elements of the input matrix
+!          in its last n-1 positions.  e(1) is arbitrary,
+!        z contains the transformation matrix produced in the
+!          reduction by  tred2, if performed.  If the eigenvectors
+!          of the tridiagonal matrix are desired, z must contain
+!          the identity matrix.
+!      On output-
+!        d contains the eigenvalues in ascending order.  If an
+!          error exit is made, the eigenvalues are correct but
+!          unordered for indices 1,2,...,ierr-1,
+!        e has been destroyed,
+!        z contains orthonormal eigenvectors of the symmetric
+!          tridiagonal (or full) matrix.  If an error exit is made,
+!          z contains the eigenvectors associated with the stored
+!          eigenvalues,
+!        ierr is set to
+!          ZERO       FOR NORMAL RETURN,
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!                     determined after 50 iterations.
+!-----------------------------------------------------------------------
+!     ********** machep is a machine dependent parameter. Assign
+!                machep the value U where U is the smallest positive
+!                floating point number such that 1.0 + U .GT. 1.0 .
+machep = dpmpar(1)
+!                **********
+ierr = 0
+if (n == 1) go to 1001
+do i = 2, n
+   e(i - 1) = e(i)
+end do
+f = 0.d0
+b = 0.d0
+e(n) = 0.d0
+do l = 1, n
+   j = 0
+   h = machep * (abs(d(l)) + abs(e(l)))
+   if (b < h) b = h
+!     ********** Look for small sub-diagonal element **********
+   do m = l, n
+      if (abs(e(m)) <= b) exit
+!     ********** e(n) is always zero, so there is no exit
+!                through the bottom of the loop **********
+   end do
+   if (m == l) go to 220
+130 if (j == 50) go to 1000
+   j = j + 1
+!     ********** Form shift **********
+   l1 = l + 1
+   g = d(l)
+   p = (d(l1) - g) / (2.d0 * e(l))
+   r = sqrt(p*p + 1.d0)
+   if (p < 0.d0) r = -r
+   d(l) = e(l) / (p + r)
+   h = g - d(l)
+   do i = l1, n
+      d(i) = d(i) - h
+   end do
+   f = f + h
+!     ********** QL TRANSFORMATION **********
+   p = d(m)
+   c = 1.d0
+   s = 0.d0
+   mml = m - l
+!     ********** FOR i=m-1 STEP -1 UNTIL l DO -- **********
+   do ii = 1, mml
+      i = m - ii
+      g = c * e(i)
+      h = c * p
+      if (abs(p) < abs(e(i))) go to 150
+      c = e(i) / p
+      r = sqrt(c*c + 1.d0)
+      e(i + 1) = s * p * r
+      s = c / r
+      c = 1.d0 / r
+      go to 160
+150   c = p / e(i)
+      r = sqrt(c*c + 1.d0)
+      e(i + 1) = s * e(i) * r
+      s = 1.d0 / r
+      c = c * s
+160   p = c * d(i) - s * g
+      d(i + 1) = h + s * (c * g + s * d(i))
+!     ********** Form vector **********
+      do k = 1, n
+         h = z(k,i + 1)
+         z(k,i + 1) = s * z(k,i) + c * h
+         z(k,i) = c * z(k,i) - s * h
+      end do
+   end do
+   e(l) = s * p
+   d(l) = c * p
+   if (abs(e(l)) > b) go to 130
+220 d(l) = d(l) + f
+end do
+!     ********** Order eigenvalues and eigenvectors **********
+do ii = 2, n
+   i = ii - 1
+   k = i
+   p = d(i)
+   do j = ii, n
+      if (d(j) >= p) go to 260
+      k = j
+      p = d(j)
+260   continue
+   end do
+   if (k == i) go to 300
+   d(k) = d(i)
+   d(i) = p
+   do j = 1, n
+      p = z(j,i)
+      z(j,i) = z(j,k)
+      z(j,k) = p
+   end do
+300 continue
+end do
+go to 1001
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 50 iterations **********
+1000 ierr = l
+1001 return
+!     ********** Last card of dtql2 **********
+end subroutine dtql2
+
+pure subroutine ceig(ibal,ar,ai,ka,n,wr,wi,ierr)
+!! <!-- nswc-ford:begin CEIG -->
+!! Reference for `ceig`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!                 Eigenvalues of complex matrices
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: ibal
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, n
+real, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n)
+!     beginning of local variable declarations
+integer :: igh, low
+interface
+   pure subroutine cbal(nm,n,ar,ai,low,igh,scale)
       implicit none
       integer, intent(in) :: n
-      integer, intent(inout) :: a(n,*)
-      integer, intent(inout) :: c(n)
-      integer, intent(inout) :: t
-      integer, intent(inout) :: ch(n)
-      integer, intent(inout) :: lc(n)
-      integer, intent(inout) :: lr(n)
-      integer, intent(inout) :: lz(n)
-      integer, intent(inout) :: nz(n)
-      integer, intent(inout) :: rh(*)
-      integer, intent(inout) :: slc(n)
-      integer, intent(inout) :: slr(n)
-      integer, intent(inout) :: u(*)
+      integer, intent(in) :: nm
+      real, intent(inout) :: ar(nm,n)
+      real, intent(inout) :: ai(nm,n)
+      integer, intent(inout) :: low
+      integer, intent(inout) :: igh
+      real, intent(inout) :: scale(n)
+   end subroutine cbal
+   pure subroutine comqr(nm,n,low,igh,hr,hi,wr,wi,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      integer, intent(in) :: igh
+      real, intent(inout) :: hr(nm,n)
+      real, intent(inout) :: hi(nm,n)
+      real, intent(inout) :: wr(n)
+      real, intent(inout) :: wi(n)
       integer, intent(out) :: ierr
-   end subroutine assgn1
+   end subroutine comqr
+   pure subroutine corth(nm,n,low,igh,ar,ai,ortr,orti)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      real, intent(inout) :: ar(nm,n)
+      real, intent(inout) :: ai(nm,n)
+      real, intent(inout) :: ortr(igh)
+      real, intent(inout) :: orti(igh)
+   end subroutine corth
 end interface
-!     -------------------
-!     Solution of the assignment problem
-!     -------------------
-i1 = n + 1
-i2 = i1 + n
-i3 = i2 + n
-i4 = i3 + n + 1
-i5 = i4 + n
-i6 = i5 + n
-call assgn1(n,a,c,t,iwk(1),iwk(i1),iwk(i2),iwk(i3),iwk(1), &
-   & iwk(i3),iwk(i4),iwk(i5),iwk(i6),ierr)
-end subroutine assgn
+!-----------------------------------------------------------------------
+!                Eigenvalues of complex matrices
+!-----------------------------------------------------------------------
+low = 1
+igh = n
+if (ibal /= 0) call cbal(ka,n,ar,ai,low,igh,wr)
+call corth(ka,n,low,igh,ar,ai,wr,wi)
+call comqr(ka,n,low,igh,ar,ai,wr,wi,ierr)
+end subroutine ceig
 
-pure subroutine assgn1(n,a,c,t,ch,lc,lr,lz,nz,rh,slc,slr, &
-   & u,ierr)
+pure subroutine ceigv(ibal,ar,ai,ka,n,wr,wi,zr,zi,ierr,temp)
+!! <!-- nswc-ford:begin CEIGV -->
+!! Reference for `ceigv`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!           Eigenvalues and eigenvectors of complex matrices
+!!
+!!      Temp is a temporary storage area
+!!         DIMENSION(TEMP) .GE. 2*n    IF ibal .EQ. 0
+!!         DIMENSION(TEMP) .GE. 3*n    IF ibal .NE. 0
+!! ```
+!! <!-- nswc-ford:end -->
 implicit none
-integer, intent(out) :: ierr
-integer, intent(in) :: n
-integer, intent(inout) :: a(n,*), c(n), ch(n), lc(n), lr(n), &
-   & lz(n), nz(n), rh(*), slc(n), slr(n), u(*)
-integer, intent(inout) :: t
+integer, intent(in) :: ibal
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, n
+real, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n), zr(ka,n), &
+   & zi(ka,n), temp(*)
 !     beginning of local variable declarations
-integer :: i, j, k, kslc, kslr, l, lj, lm, m, maxnum, mm, nl, nm, np1, h, q, r, s, nswc_ai_i4
+integer :: i1, i2, i3, igh, low
+interface
+   pure subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi)
+      implicit none
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      integer, intent(in) :: igh
+      real, intent(in) :: scale(n)
+      real, intent(inout) :: zr(nm,m)
+      real, intent(inout) :: zi(nm,m)
+   end subroutine cbabk2
+   pure subroutine cbal(nm,n,ar,ai,low,igh,scale)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      real, intent(inout) :: ar(nm,n)
+      real, intent(inout) :: ai(nm,n)
+      integer, intent(inout) :: low
+      integer, intent(inout) :: igh
+      real, intent(inout) :: scale(n)
+   end subroutine cbal
+   pure subroutine comqr2(nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi, &
+      & ierr)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      real, intent(inout) :: ortr(igh)
+      real, intent(inout) :: orti(igh)
+      real, intent(inout) :: hr(nm,n)
+      real, intent(inout) :: hi(nm,n)
+      real, intent(inout) :: wr(n)
+      real, intent(inout) :: wi(n)
+      real, intent(inout) :: zr(nm,n)
+      real, intent(inout) :: zi(nm,n)
+      integer, intent(out) :: ierr
+   end subroutine comqr2
+   pure subroutine corth(nm,n,low,igh,ar,ai,ortr,orti)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      real, intent(inout) :: ar(nm,n)
+      real, intent(inout) :: ai(nm,n)
+      real, intent(inout) :: ortr(igh)
+      real, intent(inout) :: orti(igh)
+   end subroutine corth
+end interface
+!-----------------------------------------------------------------------
+!          Eigenvalues and eigenvectors of complex matrices
+!-----------------------------------------------------------------------
+!----------------------
+!     Temp is a temporary storage area
+!        DIMENSION(TEMP) .GE. 2*n    IF ibal .EQ. 0
+!        DIMENSION(TEMP) .GE. 3*n    IF ibal .NE. 0
+!----------------------
+i2 = 1
+i3 = n + 1
+i1 = n + i3
+low = 1
+igh = n
+if (ibal /= 0) call cbal(ka,n,ar,ai,low,igh,temp(i1))
+call corth(ka,n,low,igh,ar,ai,temp(i2),temp(i3))
+call comqr2(ka,n,low,igh,temp(i2),temp(i3),ar,ai,wr,wi,zr,zi,ierr)
+if (ierr /= 0) return
+if (ibal /= 0) call cbabk2(ka,n,low,igh,temp(i1),n,zr,zi)
+end subroutine ceigv
+
+pure subroutine cbal(nm,n,ar,ai,low,igh,scale)
+!! <!-- nswc-ford:begin CBAL -->
+!! Reference for `cbal`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      real abs
+!!
+!!      This subroutine is a translation of the Algol procedure
+!!      CBALANCE, which is a complex version of balance,
+!!      NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!!      Handbook for auto. Comp., Vol.II-linear algebra, 315-326(1971).
+!!      This subroutine balances a complex matrix and isolates
+!!      eigenvalues whenever possible.
+!!      On input-
+!!         nm must be set to the row dimension of two-dimensional
+!!           array parameters as declared in the calling program
+!!           dimension statement,
+!!         n is the order of the matrix,
+!!         ar and ai contain the real and imaginary parts,
+!!           respectively, of the complex matrix to be balanced.
+!!      On output-
+!!         ar and ai contain the real and imaginary parts,
+!!           respectively, of the balanced matrix,
+!!         low and igh are two integers such that ar(i,j) and ai(i,j)
+!!           are equal to zero if
+!!            (1) i is greater than j and
+!!            (2) j=1,...,low-1 OR i=igh+1,...,n,
+!!         scale contains information determining the
+!!            permutations and scaling factors used.
+!!      Suppose that the principal submatrix in rows low through igh
+!!      has been balanced, that P(j) denotes the index interchanged
+!!      with j during the permutation step, and that the elements
+!!      of the diagonal matrix used are denoted by D(i,j).  Then
+!!         scale(j) = P(j),    FOR j = 1,...,low-1
+!!                  = D(j,j)       j = low,...,igh
+!!                  = P(j)         j = igh+1,...,n.
+!!      The order in which the interchanges are made is n to igh+1,
+!!      then 1 to low-1.
+!!      Note that 1 is returned for igh if igh is zero formally.
+!!      The Algol procedure exc contained in CBALANCE appears in
+!!      cbal  in line.  (Note that the Algol roles of identifiers
+!!      k,l have been reversed.)
+!!
+!!      ********** radix is a machine dependent parameter specifying
+!!                 the base of the machine floating point representation.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: n
+integer, intent(in) :: nm
+integer, intent(inout) :: igh, low
+real, intent(inout) :: ar(nm,n), ai(nm,n), scale(n)
+!     beginning of local variable declarations
+integer :: i, j, k, l, m, jj, iexc
+real :: c, f, g, r, s, b2, radix
+logical :: noconv
 interface
    pure elemental function ipmpar(i)
       implicit none
@@ -273,6681 +582,380 @@ interface
       integer :: ipmpar
    end function ipmpar
 end interface
-! This subroutine solves the square assignment problem
-! the meaning of the input parameters is
-! n = Number of rows and columns of the cost matrix
-! a(i,j) = Element in row i and column j of the cost matrix
-! ( at the end of computation the elements of A are changed)
-! the meaning of the output parameters is
-! c(j) = Row assigned to column j (j=1,n)
-! t = Cost of the optimal assignment
-! all parameters are integer
-! the meaning of the local variables is
-! a(i,j) = Element of the cost matrix IF a(i,j) is positive,
-!          column of the unassigned zero following in row i
-!          (i=1,n) the unassigned zero of column j (j=1,n)
-!          if a(i,j) is not positive
-! a(i,n+1) = Column of the first unassigned zero of row i
-!            (i=1,n)
-! ch(i) = Column of the next unexplored and unassigned zero
-!         of row i (i=1,n)
-! lc(j) = Label of column j (j=1,n)
-! lr(i) = Label of row i (i=1,n)
-! LZ(i) = Column of the last unassigned zero of row i(i=1,n)
-! NZ(i) = Column of the next unassigned zero of row i(i=1,n)
-! RH(i) = Unexplored row following the unexplored row i
-!         (i=1,n)
-! RH(n+1) = First unexplored row
-! SLC(k) = k-TH element contained in the set of the labelled
-!          columns
-! slr(k) = k-TH element contained in the set of the labelled
-!          rows
-! U(i) = Unassigned row following the unassigned row i
-!        (i=1,n)
-! U(n+1) = First unassigned row
-! ierr = 0 If the routine terminates successfully. Otherwise
-!          ierr = 1
-! the vectors c,ch,lc,lr,LZ,NZ,SLC,slr must be dimensioned
-! at least at (n), the vectors RH,U at  least at (n+1),
-! and the matrix a at least at (n,n+1). To save storage
-! LZ and RH may use the same storage area, and NZ and ch
-! may use the same storage area.
-! Initialization
-maxnum = ipmpar(3)
-ierr = 0
-np1 = n + 1
-do j = 1,n
-   c(j) = 0
-   lz(j) = 0
-   nz(j) = 0
-   u(j) = 0
+!     real abs
+!-----------------------------------------------------------------------
+!     This subroutine is a translation of the Algol procedure
+!     CBALANCE, which is a complex version of balance,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 315-326(1971).
+!     This subroutine balances a complex matrix and isolates
+!     eigenvalues whenever possible.
+!     On input-
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!        n is the order of the matrix,
+!        ar and ai contain the real and imaginary parts,
+!          respectively, of the complex matrix to be balanced.
+!     On output-
+!        ar and ai contain the real and imaginary parts,
+!          respectively, of the balanced matrix,
+!        low and igh are two integers such that ar(i,j) and ai(i,j)
+!          are equal to zero if
+!           (1) i is greater than j and
+!           (2) j=1,...,low-1 OR i=igh+1,...,n,
+!        scale contains information determining the
+!           permutations and scaling factors used.
+!     Suppose that the principal submatrix in rows low through igh
+!     has been balanced, that P(j) denotes the index interchanged
+!     with j during the permutation step, and that the elements
+!     of the diagonal matrix used are denoted by D(i,j).  Then
+!        scale(j) = P(j),    FOR j = 1,...,low-1
+!                 = D(j,j)       j = low,...,igh
+!                 = P(j)         j = igh+1,...,n.
+!     The order in which the interchanges are made is n to igh+1,
+!     then 1 to low-1.
+!     Note that 1 is returned for igh if igh is zero formally.
+!     The Algol procedure exc contained in CBALANCE appears in
+!     cbal  in line.  (Note that the Algol roles of identifiers
+!     k,l have been reversed.)
+!-----------------------------------------------------------------------
+!     ********** radix is a machine dependent parameter specifying
+!                the base of the machine floating point representation.
+radix = ipmpar(4)
+!                **********
+b2 = radix * radix
+k = 1
+l = n
+go to 100
+!     ********** In-line procedure for row and
+!                column exchange **********
+20 scale(m) = j
+if (j == m) go to 50
+do i = 1, l
+   f = ar(i,j)
+   ar(i,j) = ar(i,m)
+   ar(i,m) = f
+   f = ai(i,j)
+   ai(i,j) = ai(i,m)
+   ai(i,m) = f
 end do
-u(np1) = 0
-t = 0
-! Reduction of the initial cost matrix
-do j = 1,n
-   s = a(1,j)
-   do l = 2,n
-      if (a(l,j) < s) s = a(l,j)
+do i = k, n
+   f = ar(j,i)
+   ar(j,i) = ar(m,i)
+   ar(m,i) = f
+   f = ai(j,i)
+   ai(j,i) = ai(m,i)
+   ai(m,i) = f
+end do
+50 select case (iexc)
+case (1)
+   go to 80
+case (2)
+   go to 130
+end select
+!     ********** Search for rows isolating an eigenvalue
+!                and push them down **********
+80 if (l == 1) go to 280
+l = l - 1
+!     ********** FOR j=l STEP -1 UNTIL 1 DO -- **********
+100 do jj = 1, l
+   j = l + 1 - jj
+   do i = 1, l
+      if (i == j) go to 110
+      if (ar(j,i) /= 0.0 .or. ai(j,i) /= 0.0) go to 120
+110   continue
    end do
-   nswc_ai_i4 = s
-   if (nswc_ai_i4 < 0) go to 20
-   if (nswc_ai_i4 == 0) go to 40
-   go to 30
-20 mm = maxnum + s
-   if (t < -mm) go to 400
-   t = t + s
-   do i = 1,n
-      if (a(i,j) > mm) go to 400
-      a(i,j) = a(i,j) - s
+   m = l
+   iexc = 1
+   go to 20
+120 continue
+end do
+go to 140
+!     ********** Search for columns isolating an eigenvalue
+!                and push them left **********
+130 k = k + 1
+140 do j = k, l
+   do i = k, l
+      if (i == j) go to 150
+      if (ar(i,j) /= 0.0 .or. ai(i,j) /= 0.0) go to 170
+150   continue
    end do
-   go to 40
-30 mm = maxnum - s
-   if (t > mm) go to 400
-   t = t + s
-   do i = 1,n
-      a(i,j) = a(i,j) - s
-   end do
-40 continue
-end do
-do i = 1,n
-   q = a(i,1)
-   do l = 2,n
-      if (a(i,l) < q) q = a(i,l)
-   end do
-   mm = maxnum - q
-   if (t > mm) go to 400
-   t = t + q
-   l = np1
-   do j = 1,n
-      a(i,j) = a(i,j) - q
-      if (a(i,j) /= 0) go to 60
-      a(i,l) = -j
-      l = j
-60    continue
-   end do
-end do
-! Choice of the initial solution
-k = np1
-do i = 1,n
-   lj = np1
-   j = -a(i,np1)
-80 if (c(j) == 0) go to 130
-   lj = j
-   j = -a(i,j)
-   if (j /= 0) go to 80
-   lj = np1
-   j = -a(i,np1)
-90 r = c(j)
-   lm = lz(r)
-   m = nz(r)
-100 if (m == 0) go to 110
-   if (c(m) == 0) go to 120
-   lm = m
-   m = -a(r,m)
-   go to 100
-110 lj = j
-   j = -a(i,j)
-   if (j /= 0) go to 90
-   u(k) = i
-   k = i
-   go to 140
-120 nz(r) = -a(r,m)
-   lz(r) = j
-   a(r,lm) = -j
-   a(r,j) = a(r,m)
-   a(r,m) = 0
-   c(m) = r
-130 c(j) = i
-   a(i,lj) = a(i,j)
-   nz(i) = -a(i,j)
-   lz(i) = lj
-   a(i,j) = 0
-140 continue
-end do
-! Research of a new assignment
-150 if (u(np1) == 0) return
-do i = 1,n
-   ch(i) = 0
-   lc(i) = 0
-   lr(i) = 0
-   rh(i) = 0
-end do
-rh(np1) = -1
-kslc = 0
-kslr = 1
-r = u(np1)
-lr(r) = -1
-slr(1) = r
-if (a(r,np1) == 0) go to 220
-170 l = -a(r,np1)
-if (a(r,l) == 0) go to 180
-if (rh(r) /= 0) go to 180
-rh(r) = rh(np1)
-ch(r) = -a(r,l)
-rh(np1) = r
-180 if (lc(l) == 0) go to 200
-if (rh(r) == 0) go to 210
-190 l = ch(r)
-ch(r) = -a(r,l)
-if (a(r,l) /= 0) go to 180
-rh(np1) = rh(r)
-rh(r) = 0
-go to 180
-200 lc(l) = r
-if (c(l) == 0) go to 360
-kslc = kslc + 1
-slc(kslc) = l
-r = c(l)
-lr(r) = l
-kslr = kslr + 1
-slr(kslr) = r
-if (a(r,np1) /= 0) go to 170
-210 continue
-if (rh(np1) > 0) go to 350
-! Reduction of the current cost matrix
-220 h = maxnum
-do j = 1,n
-   if (lc(j) /= 0) go to 240
-   do k = 1,kslr
-      i = slr(k)
-      if (a(i,j) < h) h = a(i,j)
-   end do
-240 continue
-end do
-mm = maxnum - h
-if (mm == 0 .or. t > mm) go to 400
-t = t + h
-do j = 1,n
-   if (lc(j) /= 0) go to 290
-   do k = 1,kslr
-      i = slr(k)
-      a(i,j) = a(i,j) - h
-      if (a(i,j) /= 0) go to 280
-      if (rh(i) /= 0) go to 250
-      rh(i) = rh(np1)
-      ch(i) = j
-      rh(np1) = i
-250   l = np1
-260   nl = -a(i,l)
-      if (nl == 0) go to 270
-      l = nl
-      go to 260
-270   a(i,l) = -j
-280   continue
-   end do
-290 continue
-end do
-if (kslc == 0) go to 350
-do i = 1,n
-   if (lr(i) /= 0) go to 340
-   do k = 1,kslc
-      j = slc(k)
-      if (a(i,j) > 0) go to 320
-      l = np1
-300   nl = - a(i,l)
-      if (nl == j) go to 310
-      l = nl
-      go to 300
-310   a(i,l) = a(i,j)
-      a(i,j) = h
-      go to 330
-320   mm = maxnum - h
-      if (a(i,j) > mm) go to 400
-      a(i,j) = a(i,j) + h
-330   continue
-   end do
-340 continue
-end do
-350 r = rh(np1)
-go to 190
-! Assignment of a new row
-360 c(l) = r
-m = np1
-370 nm = -a(r,m)
-if (nm == l) go to 380
-m = nm
-go to 370
-380 a(r,m) = a(r,l)
-a(r,l) = 0
-if (lr(r) < 0) go to 390
-l = lr(r)
-a(r,l) = a(r,np1)
-a(r,np1) = -l
-r = lc(l)
-go to 360
-390 u(np1) = u(r)
-u(r) = 0
-go to 150
-! Error return - Integer overflow occurs
-400 ierr = 1
-end subroutine assgn1
-
-pure subroutine mkp(n,m,p,w,k,bck,xstar,vstar,wk,iwk,num)
-implicit none
-integer, intent(in) :: m, n, num
-integer, intent(inout) :: p(n), w(n)
-integer, intent(in) :: k(m)
-integer, intent(inout) :: xstar(n), bck, vstar, iwk(num)
-real, intent(inout) :: wk(n)
-!     beginning of local variable declarations
-integer :: i, isumw, j, jj, jn, jnn, l, lx, lxi, maxw, minw, mn, n5, np1, npl, bb, bl, x, xl, b, ubb, f, pbl, q, v, bs, ps, ws, xs
-real :: ap, aw
-interface
-   pure subroutine mkp1(n,m,p,w,k,bck,xstar,vstar,np1,n5,bb,bl, &
-      & x,xl,b,ubb,lx,lxi,f,pbl,q,v,bs,ps,ws,xs,iwk)
-      implicit none
-      integer, intent(in) :: n5
-      integer, intent(in) :: np1
-      integer, intent(in) :: m
-      integer, intent(in) :: n
-      integer, intent(in) :: p(n)
-      integer, intent(in) :: w(n)
-      integer, intent(in) :: k(m)
-      integer, intent(inout) :: bck
-      integer, intent(inout) :: xstar(n)
-      integer, intent(inout) :: vstar
-      integer, intent(inout) :: bb(m,n)
-      integer, intent(inout) :: bl(m,np1)
-      integer, intent(inout) :: x(m,n)
-      integer, intent(inout) :: xl(m,n)
-      integer, intent(inout) :: b(np1)
-      integer, intent(inout) :: ubb(n)
-      integer, intent(inout) :: lx(n)
-      integer, intent(inout) :: lxi(n)
-      integer, intent(inout) :: f(m)
-      integer, intent(inout) :: pbl(m)
-      integer, intent(inout) :: q(m)
-      integer, intent(inout) :: v(m)
-      integer, intent(inout) :: bs(n)
-      integer, intent(inout) :: ps(np1)
-      integer, intent(inout) :: ws(np1)
-      integer, intent(inout) :: xs(n)
-      integer, intent(inout) :: iwk(n5)
-   end subroutine mkp1
-   pure subroutine risort(a,m,n)
-      implicit none
-      integer, intent(in) :: n
-      real, intent(inout) :: a(n)
-      integer, intent(inout) :: m(n)
-   end subroutine risort
-end interface
-! Subroutine to solve A 0-1 multiple knapsack problem of n
-! ITEMS (WITH  n .GE. 2) AND  m  KNAPSACKS (WITH  m .GE. 1 ,
-! I.E. also suitable for A 0-1 single knapsack problem).
-! The problem to be solved is
-! MAXIMIZE  vstar = p(1)*(x(1,1) + ... + x(m,1)) + ...
-!                   ... + p(n)*(x(1,n) + ... + x(m,n))
-! subject to
-! w(1)*x(i,1) + ... + w(n)*x(i,n) .LE. k(i)   FOR  i=1,...,m
-! x(1,j) + ... + x(m,j) .LE. 1   FOR  j=1,...,n
-! x(i,j) = 0 OR 1   FOR  i=1,...,m ,  j=1,...,n ,
-! where all p(j), w(j), and k(i) are positive integers.
-! Before mkp is called, array k must be sorted so that
-! k(1) .LE. k(2) .LE. ... .LE. k(m) .
-! Meaning of the input parameters ...
-! n    = Number of items.
-! m    = Number of knapsacks.
-! p(j) = Profit of item  j  (j=1,...,n) .
-! w(j) = Weight of item  j  (j=1,...,n) .
-! k(i) = Capacity of knapsack  i  (i=1,...,m) .
-! bck  = -1  If exact solution is required.
-!      = Maximum number of backtrackings to be performed, if
-!        heuristic solution is required.
-! wk   = Real work space of dimension n.
-! iwk  = Work space of dimension .GE. 5*m + 14*n + 4*m*n + 3
-! num  = Dimension of iwk
-! meaning of the output parameters ...
-! xstar(j) = 0  If item  j  is not in the optimal solution
-!               (I.E. if  x(i,j) = 0  For all  i ).
-!          = Knapsack where item  j  is inserted, otherwise
-!            (I.E. IF  x(xstar(j),j) = 1 ).
-! vstar    = Value of the optimal solution if  vstar .GT. 0.
-!          = ERROR CONDITION (INFEASIBILITY OR TRIVIALITY)
-!            in the input data if  vstar .LT. 0 .
-!            = -1  IF  n .LT. 2  OR  m .LT. 1 .
-!            = -2  If some  p(j) ,  w(j)  or  k(i) are not
-!                  positive.
-!            = -3  If a knapsack cannot contain any item.
-!            = -4  If an item cannot fit into any knapsack.
-!            = -5  If knapsack  m  contains all the items.
-!            = -7  If array  k is not correctly sorted.
-!            = -8  IF num .LT. 5*m + 14*n + 4*m*n + 3.
-!            (In all the above cases array  xstar is not
-!            defined).
-! All the parameters except wk are of integer type. When mkp
-! terminates, all the input parameters are unchanged except
-! bck, which gives the number of backtrackings performed.
-!                    Check the input data
-if (m < 1 .or. n < 2) go to 100
-mn = m*n
-if (num < 5*m + 14*n + 4*mn + 3) go to 160
-if (p(1) <= 0 .or. w(1) <= 0) go to 110
-ap = p(1)
-aw = w(1)
-wk(1) = -ap/aw
-maxw = w(1)
-minw = w(1)
-isumw = w(1)
-do j = 2,n
-   if (p(j) <= 0 .or. w(j) <= 0) go to 110
-   ap = p(j)
-   aw = w(j)
-   wk(j) = -ap/aw
-   if (w(j) > maxw) maxw = w(j)
-   if (w(j) < minw) minw = w(j)
-   isumw = isumw + w(j)
-end do
-if (k(1) <= 0) go to 110
-if (m == 1) go to 30
-do i = 2,m
-   if (k(i) <= 0) go to 110
-   if (k(i) < k(i - 1)) go to 150
-end do
-30 if (minw > k(1)) go to 120
-if (maxw > k(m)) go to 130
-if (isumw <= k(m)) go to 140
-vstar = 0
-!             Reorder the arrays p and w so that
-!                p(j)/w(j) .GE. p(j+1)/w(j+1)
-n5 = 5*n
-do j = 1,n
-   jj = n5 + j
-   iwk(jj) = j
-end do
-call risort(wk, iwk(n5 + 1), n)
-do j = 1,n
-   iwk(j) = p(j)
-   jn = j + n
-   iwk(jn) = w(j)
-end do
-do j = 1,n
-   jj = n5 + j
-   l = iwk(jj)
-   p(j) = iwk(l)
-   npl = n + l
-   w(j) = iwk(npl)
-end do
-!                Partition the work space iwk
-lx = jj + 1
-lxi = lx + n
-bs = lxi + n
-xs = bs + n
-ubb = xs + n
-np1 = n + 1
-b = ubb + n
-ps = b + np1
-ws = ps + np1
-f = ws + np1
-pbl = f + m
-q = pbl + m
-v = q + m
-bb = v + m
-x = bb + mn
-xl = x + mn
-bl = xl + mn
-!                     Solve the problem
-call mkp1(n, m, p, w, k, bck, xstar, vstar, np1, n5, &
-   & iwk(bb), iwk(bl), iwk(x), iwk(xl), &
-   & iwk(b), iwk(ubb), iwk(lx), iwk(lxi), &
-   & iwk(f), iwk(pbl), iwk(q), iwk(v), &
-   & iwk(bs), iwk(ps), iwk(ws), iwk(xs), iwk(1))
-!           Restore the initial ordering to p and w,
-!                and reorder xstar accordingly
-do j = 1,n
-   iwk(j) = p(j)
-   jn = j + n
-   iwk(jn) = w(j)
-   jnn = jn + n
-   iwk(jnn) = xstar(j)
-end do
-do j = 1,n
-   jj = n5 + j
-   l = iwk(jj)
-   p(l) = iwk(j)
-   jn = j + n
-   w(l) = iwk(jn)
-   jnn = jn + n
-   xstar(l) = iwk(jnn)
-end do
-return
-!                        Error return
-100 vstar = -1
-return
-110 vstar = -2
-return
-120 vstar = -3
-return
-130 vstar = -4
-return
-140 vstar = -5
-return
-150 vstar = -7
-return
-160 vstar = -8
-end subroutine mkp
-
-pure subroutine mkp1(n, m, p, w, k, bck, xstar, vstar, np1, n5, &
-   & bb, bl, x, xl, b, ubb, lx, lxi, &
-   & f, pbl, q, v, bs, ps, ws, xs, iwk)
-implicit none
-integer, intent(in) :: m, n, n5, np1
-integer, intent(in) :: p(n), w(n), k(m)
-integer, intent(inout) :: xstar(n), bck, vstar
-integer, intent(inout) :: bb(m,n), bl(m,np1), x(m,n), xl(m,n)
-integer, intent(inout) :: b(np1), ubb(n), lx(n), lxi(n)
-integer, intent(inout) :: f(m), pbl(m), q(m), v(m)
-integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n), iwk(n5)
-!     beginning of local variable declarations
-integer :: i, i1, ibv, iflag, ii, ip, ip1, iuv, j, jbck, jj, k1, kub, lb, li, lj, lr, lri, lub, lubi, m1, n1, s, u, ub, vb
-interface
-   pure subroutine parc(i,ii,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m &
-      & ,np1,lx,lxi,lr,lri,lubi)
-      implicit none
-      integer, intent(in) :: np1
-      integer, intent(in) :: m
-      integer, intent(in) :: n
-      integer, intent(in) :: i
-      integer, intent(in) :: ii
-      integer, intent(inout) :: ub
-      integer, intent(out) :: iflag
-      integer, intent(in) :: vb
-      integer, intent(in) :: lub
-      integer, intent(in) :: lj
-      integer, intent(in) :: li
-      integer, intent(in) :: f(m)
-      integer, intent(in) :: bb(m,n)
-      integer, intent(in) :: q(m)
-      integer, intent(in) :: b(np1)
-      integer, intent(in) :: lx(n)
-      integer, intent(in) :: lxi(n)
-      integer, intent(in) :: lr
-      integer, intent(in) :: lri
-      integer, intent(in) :: lubi
-   end subroutine parc
-   pure subroutine pi1(n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl,np1, &
-      & n5,bs,ps,ws,xs,iwk)
-      implicit none
-      integer, intent(in) :: n5
-      integer, intent(in) :: np1
-      integer, intent(in) :: m
-      integer, intent(in) :: n
-      integer, intent(in) :: p(n)
-      integer, intent(in) :: w(n)
-      integer, intent(in) :: q(m)
-      integer, intent(in) :: i
-      integer, intent(in) :: b(np1)
-      integer, intent(in) :: bb(m,n)
-      integer, intent(inout) :: kub
-      integer, intent(inout) :: bl(m,np1)
-      integer, intent(inout) :: lb
-      integer, intent(inout) :: pbl(m)
-      integer, intent(inout) :: v(m)
-      integer, intent(inout) :: xl(m,n)
-      integer, intent(inout) :: bs(n)
-      integer, intent(inout) :: ps(np1)
-      integer, intent(inout) :: ws(np1)
-      integer, intent(inout) :: xs(n)
-      integer, intent(inout) :: iwk(n5)
-   end subroutine pi1
-   pure subroutine sigma1(n,m,p,w,q,i,b,kub,ub,np1,n5,lx,lr,bs, &
-      & ps,ws,xs,iwk)
-      implicit none
-      integer, intent(in) :: n5
-      integer, intent(in) :: np1
-      integer, intent(in) :: m
-      integer, intent(in) :: n
-      integer, intent(in) :: p(n)
-      integer, intent(in) :: w(n)
-      integer, intent(in) :: q(m)
-      integer, intent(in) :: i
-      integer, intent(in) :: b(np1)
-      integer, intent(in) :: kub
-      integer, intent(inout) :: ub
-      integer, intent(inout) :: lx(n)
-      integer, intent(inout) :: lr
-      integer, intent(inout) :: bs(n)
-      integer, intent(inout) :: ps(np1)
-      integer, intent(inout) :: ws(np1)
-      integer, intent(inout) :: xs(n)
-      integer, intent(inout) :: iwk(n5)
-   end subroutine sigma1
-   pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
-      implicit none
-      integer, intent(in) :: n5
-      integer, intent(in) :: np1
-      integer, intent(in) :: n
-      integer, intent(in) :: ns
-      integer, intent(inout) :: qs
-      integer, intent(in) :: kub
-      integer, intent(inout) :: vs
-      integer, intent(inout) :: ps(np1)
-      integer, intent(inout) :: ws(np1)
-      integer, intent(inout) :: xs(n)
-      integer, intent(inout) :: iwk(n5)
-   end subroutine sknp
-end interface
-! Meaning of the main internal variables and arrays ...
-! i       = Knapsack currently considered.
-! LB      = Lower bound on the optimal solution.
-! ub      = Upper bound on the optimal solution.
-! vb      = Value of the current solution.
-! x(i,j)  = 1  If item  j  is inserted in knapsack  i  in
-!              the current solution.
-!         = 0  OTHERWISE.
-! f(i)    = Pointer to the last item inserted in knapsack  i
-!           ( = -1  If knapsack  i  is empty).
-! bb(i,j) = Pointer to the item inserted in knapsack  i
-!           just before item  j ( = -1  If  j  is the first
-!           item inserted in knapsack  i ).
-! q(i)    = Current available capacity of knapsack  i .
-! b(j)    = 1  If item  j  is not inserted in any knapsack.
-!         = 0  If item  j  is inserted in a knapsack.
-! pbl(i)  = Number of the items which can be inserted in
-!           KNAPSACK  i .
-! bl(i,s) = Pointer to the  s-TH  item which can be inserted
-!           in knapsack  i .
-! xl(i,j) = 1  If item  j  was inserted in knapsack  i  in
-!              the last execution of subroutine pi1.
-!         = 0  OTHERWISE.
-! iwk       WORK SPACE FOR THE SUBROUTINE sknp.
-if (m == 1) go to 250
-! Step 1 (initialization)
-jbck = bck
-bck = 0
-kub = 0
-n1 = n + 1
-b(n1) = 1
-m1 = m - 1
-do j = 1,n
-   b(j) = 1
-   do i = 1,m
-      x(i,j) = 0
-      bb(i,j) = 0
-   end do
-end do
-do i = 1,m1
-   q(i) = k(i)
-   f(i) = -1
-end do
-q(m) = k(m)
-vstar = 0
-vb = 0
-i = 1
-call sigma1(n,m,p,w,k,1,b,kub,ub,np1,n5,lx,lr, &
-   & bs,ps,ws,xs,iwk)
-do j = 1,n
-   lxi(j) = lx(j)
-end do
-lri = lr
-lubi = ub
-iflag = 0
-! Step 2 (heuristic)
-70 kub = vstar - vb
-call pi1(n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl, &
-   & np1,n5,bs,ps,ws,xs,iwk)
-if (lb + vb <= vstar) go to 140
-vstar = lb + vb
-do j = 1,n
-   xstar(j) = 0
-   do s = 1,i
-      if (x(s,j) == 0) go to 80
-      xstar(j) = s
-      exit
-80    continue
-   end do
-end do
-ip = pbl(i)
-if (ip == 0) go to 110
-do j = 1,ip
-   jj = bl(i,j)
-   if (xl(i,j) == 1) xstar(jj) = i
-end do
-110 i1 = i + 1
-do ii = i1,m
-   ip = pbl(ii)
-   if (ip == 0) go to 130
-   do j = 1,ip
-      jj = bl(ii,j)
-      if (xl(ii,j) == 1) xstar(jj) = ii
-   end do
-130 continue
-end do
-if (ub == lb) go to 200
-! Step 3 (updating)
-140 if (v(i) == 0) go to 180
-iuv = ub + vb
-u = pbl(i)
-ibv = 0
-do s = 1,u
-   if (xl(i,s) == 0) go to 170
-   j = bl(i,s)
-   x(i,j) = 1
-   q(i) = q(i) - w(j)
-   vb = vb + p(j)
-   b(j) = 0
-   bb(i,j) = f(i)
-   ubb(j) = iuv
-   if (iflag == 1) go to 150
-   lub = iuv
-   lj = j
-   li = i
-150 f(i) = j
-   ibv = ibv + p(j)
-   if (ibv == v(i)) exit
-   call parc(i,i,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
-      & lx,lxi,lr,lri,lubi)
-   if (iflag == 1) go to 160
-   kub = vstar - vb
-   call sigma1(n,m,p,w,q,i,b,kub,ub,np1,n5,lx,lr, &
-      & bs,ps,ws,xs,iwk)
-   lj = n1
-160 iuv = ub + vb
-   if (iuv <= vstar) go to 200
+   m = k
+   iexc = 2
+   go to 20
 170 continue
 end do
-180 if (i == m - 1) go to 200
-ip1 = i + 1
-call parc(ip1,i,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
-   & lx,lxi,lr,lri,lubi)
-if (iflag == 1) go to 190
-kub = vstar - vb
-call sigma1(n,m,p,w,q,ip1,b,kub,ub,np1,n5,lx,lr, &
-   & bs,ps,ws,xs,iwk)
-lj = n1
-190 if (ub + vb <= vstar) go to 200
-i = i + 1
-go to 140
-! Step 4 (backtracking)
-200 if (i > 0) go to 210
-bck = bck - 1
-return
-210 if (bck == jbck) return
-bck = bck + 1
-if (f(i) /= (-1)) go to 230
-do j = 1,n
-   bb(i,j) = 0
+!     ********** Now balance the submatrix in rows k to l **********
+do i = k, l
+   scale(i) = 1.0
 end do
-i = i - 1
-go to 200
-230 j = f(i)
-x(i,j) = 0
-b(j) = 1
-vb = vb - p(j)
-q(i) = q(i) + w(j)
-do s = 1,n
-   if (bb(i,s) == j) bb(i,s) = 0
-end do
-f(i) = bb(i,j)
-if (ubb(j) <= vstar) go to 200
-ub = ubb(j) - vb
-iflag = 1
-go to 70
-! Particular case (0-1 single knapsack problem)
-250 k1 = k(1)
-do j = 1,n
-   ps(j) = p(j)
-   ws(j) = w(j)
-end do
-call sknp(n,k1,0,vstar,n,np1,n5,ps,ws,xs,iwk)
-do j = 1,n
-   xstar(j) = xs(j)
-end do
-bck = 0
-end subroutine mkp1
-
-pure subroutine sigma1(n,m,p,w,q,i,b,kub,ub,np1,n5,lx,lr, &
-   & bs,ps,ws,xs,iwk)
-implicit none
-integer, intent(in) :: i, kub
-integer, intent(inout) :: lr
-integer, intent(in) :: m, n, n5, np1
-integer, intent(in) :: p(n), w(n), q(m), b(np1)
-integer, intent(inout) :: ub, iwk(n5)
-integer, intent(inout) :: lx(n), bs(n), ps(np1), ws(np1), xs(n)
-!     beginning of local variable declarations
-integer :: j, jj, ns, qs, sb
-interface
-   pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
-      implicit none
-      integer, intent(in) :: n5
-      integer, intent(in) :: np1
-      integer, intent(in) :: n
-      integer, intent(in) :: ns
-      integer, intent(inout) :: qs
-      integer, intent(in) :: kub
-      integer, intent(inout) :: vs
-      integer, intent(inout) :: ps(np1)
-      integer, intent(inout) :: ws(np1)
-      integer, intent(inout) :: xs(n)
-      integer, intent(inout) :: iwk(n5)
-   end subroutine sknp
-end interface
-! Subroutine to compute an upper bound  ub  on the best
-! final solution which can be obtained from the current
-! solution.
-ns = 0
-qs = 0
-do j = i,m
-   qs = qs + q(j)
-end do
-sb = 0
-do j = 1,n
-   lx(j) = 0
-   if (b(j) == 0) go to 20
-   ns = ns + 1
-   bs(ns) = j
-   ps(ns) = p(j)
-   ws(ns) = w(j)
-   sb = sb + w(j)
-20 continue
-end do
-if (sb > qs) go to 40
-lr = qs - sb
-ub = 0
-if (ns == 0) return
-do j = 1,ns
-   ub = ub + ps(j)
-   xs(j) = 1
-end do
-go to 50
-40 call sknp(ns,qs,kub,ub,n,np1,n5,ps,ws,xs,iwk)
-lr = qs
-50 do j = 1,ns
-   jj = bs(j)
-   lx(jj) = xs(j)
-end do
-end subroutine sigma1
-
-pure subroutine pi1(n,m,p,w,q,i,b,bb,kub,bl,lb,pbl,v,xl, &
-   & np1,n5,bs,ps,ws,xs,iwk)
-implicit none
-integer, intent(in) :: i
-integer, intent(inout) :: kub, lb
-integer, intent(in) :: m, n, n5, np1
-integer, intent(in) :: bb(m,n)
-integer, intent(inout) :: bl(m,np1), xl(m,n), iwk(n5)
-integer, intent(in) :: p(n), w(n), q(m), b(np1)
-integer, intent(inout) :: pbl(m), v(m)
-integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n)
-!     beginning of local variable declarations
-integer :: ii, ikub, j, jb, jbs, jj, ns, pb, qs, sb, u
-interface
-   pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
-      implicit none
-      integer, intent(in) :: n5
-      integer, intent(in) :: np1
-      integer, intent(in) :: n
-      integer, intent(in) :: ns
-      integer, intent(inout) :: qs
-      integer, intent(in) :: kub
-      integer, intent(inout) :: vs
-      integer, intent(inout) :: ps(np1)
-      integer, intent(inout) :: ws(np1)
-      integer, intent(inout) :: xs(n)
-      integer, intent(inout) :: iwk(n5)
-   end subroutine sknp
-end interface
-! Subroutine to compute a feasible solution to the current
-! problem. The solution is stored in array  xl , the
-! corresponding value in  lb .
-! Step 1
-u = 0
-do j = 1,n
-   if (b(j) == 0) go to 10
-   u = u + 1
-   bs(u) = j
-10 continue
-end do
-do j = i,m
-   pbl(j) = 0
-   v(j) = 0
-end do
-lb = 0
-ikub = kub
-if (u == 0) return
-ns = 0
-sb = 0
-do j = 1,u
-   jj = bs(j)
-   if (bb(i,jj) /= 0) go to 30
-   if (w(jj) > q(i)) go to 30
-   ns = ns + 1
-   sb = sb + w(jj)
-   bl(i,ns) = jj
-   ps(ns) = p(jj)
-   ws(ns) = w(jj)
-30 continue
-end do
-ii = i
-! Step 2
-40 pbl(ii) = ns
-if (sb > q(ii)) go to 60
-pb = 0
-if (ns == 0) go to 80
-do j = 1,ns
-   pb = pb + ps(j)
-   xl(ii,j) = 1
-end do
-go to 80
-60 qs = q(ii)
-kub = 0
-if (ii == m) kub = ikub
-call sknp(ns,qs,kub,pb,n,np1,n5,ps,ws,xs,iwk)
-do j = 1,ns
-   xl(ii,j) = xs(j)
-end do
-80 lb = lb + pb
-ikub = ikub - pb
-v(ii) = pb
-bl(ii,ns + 1) = n + 1
-! Step 3
-if (ii == m) return
-jb = 1
-jbs = 0
-do j = 1,u
-   if (bs(j) < bl(ii,jb)) go to 90
-   jb = jb + 1
-   if (xl(ii,jb - 1) == 1) go to 100
-90 jbs = jbs + 1
-   bs(jbs) = bs(j)
-100 continue
-end do
-u = jbs
-if (u == 0) return
-ns = 0
-sb = 0
-ii = ii + 1
-do j = 1,u
-   jj = bs(j)
-   if (w(jj) > q(ii)) go to 110
-   ns = ns + 1
-   sb = sb + w(jj)
-   bl(ii,ns) = jj
-   ps(ns) = p(jj)
-   ws(ns) = w(jj)
-110 continue
-end do
-go to 40
-end subroutine pi1
-
-pure subroutine parc(i,ii,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m,np1, &
-   & lx,lxi,lr,lri,lubi)
-implicit none
-integer, intent(in) :: i
-integer, intent(out) :: iflag
-integer, intent(in) :: ii, li, lj, lr, lri, lub, lubi, m, n, np1
-integer, intent(in) :: f(m), bb(m,n), q(m), b(np1)
-integer, intent(inout) :: ub
-integer, intent(in) :: vb
-integer, intent(in) :: lx(n), lxi(n)
-!     beginning of local variable declarations
-integer :: i1, iq, j, r, s
-! Subroutine for parametric computation of the upper bounds.
-iflag = 0
-if (b(lj) /= 0) go to 60
-i1 = i - 1
-if (i1 < li) go to 20
-iq = 0
-do r = li,i1
-   iq = iq + q(r)
-end do
-if (iq > lr) return
-20 r = ii
-s = f(r)
-30 if (s /= (-1)) go to 40
-r = r - 1
-s = f(r)
-go to 30
-40 if (lx(s) == 0) return
-if (s == lj) go to 50
-s = bb(r,s)
-go to 30
-50 ub = lub - vb
-iflag = 1
-return
-60 i1 = i - 1
-if (i1 < 1) go to 80
-iq = 0
-do r = 1,i1
-   iq = iq + q(r)
-end do
-if (iq > lri) return
-80 do j = 1,n
-   if (b(j) == 1) go to 90
-   if (lxi(j) == 0) return
-90 continue
-end do
-ub = lubi - vb
-iflag = 1
-end subroutine parc
-
-pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
-implicit none
-integer, intent(in) :: kub, n, n5, np1, ns
-integer, intent(inout) :: qs, vs
-integer, intent(inout) :: ps(np1), ws(np1), xs(n), iwk(n5)
-!     beginning of local variable declarations
-integer :: i1, i2, i3, i4, i5
-interface
-   pure subroutine sknp1(ns,qs,kub,vs,n,np1,ps,ws,xs,d,min,pbar &
-      & ,wbar,zbar)
-      implicit none
-      integer, intent(in) :: np1
-      integer, intent(in) :: n
-      integer, intent(in) :: ns
-      integer, intent(inout) :: qs
-      integer, intent(in) :: kub
-      integer, intent(out) :: vs
-      integer, intent(inout) :: ps(np1)
-      integer, intent(inout) :: ws(np1)
-      integer, intent(inout) :: xs(n)
-      integer, intent(inout) :: d(n)
-      integer, intent(inout) :: min(n)
-      integer, intent(inout) :: pbar(n)
-      integer, intent(inout) :: wbar(n)
-      integer, intent(inout) :: zbar(n)
-   end subroutine sknp1
-end interface
-! Subroutine to solve the 0-1 single knapsack problem
-! maximize    vs = ps(1)*xs(1) + ... + ps(ns)*xs(ns)
-! subject to       ws(1)*xs(1) + ... + ws(ns)*xs(ns) .LE. qs
-!                  xs(J) = 0 OR 1   FOR  J=1,...,ns
-!                  vs .GT. kub
-! this subroutine is a modified version of subroutine kp01
-! which appeared in  computing 21, 81-86(1978).
-i1 = 1
-i2 = i1 + n
-i3 = i2 + n
-i4 = i3 + n
-i5 = i4 + n
-call sknp1(ns,qs,kub,vs,n,np1,ps,ws,xs,iwk(i1),iwk(i2), &
-   & iwk(i3),iwk(i4),iwk(i5))
-end subroutine sknp
-
-pure subroutine sknp1(ns,qs,kub,vs,n,np1,ps,ws,xs,d,min, &
-   & pbar,wbar,zbar)
-implicit none
-integer, intent(in) :: kub, n, np1, ns
-integer, intent(inout) :: qs
-integer, intent(out) :: vs
-integer, intent(inout) :: ps(np1), ws(np1), xs(n)
-integer, intent(inout) :: d(n), min(n), pbar(n), wbar(n), zbar(n)
-!     beginning of local variable declarations
-integer :: ii, ii1, in, ip, j, j1, jj, kk, l, lim, lim1, ll, lold, mfirst, mink, ms, n1, nn, diff, pr, r, t, nswc_ai_i4
-real :: a, b, c
-! Subroutine to solve the 0-1 single knapsack problem
-! maximize    vs = ps(1)*xs(1) + ... + ps(ns)*xs(ns)
-! subject to       ws(1)*xs(1) + ... + ws(ns)*xs(ns) .LE. qs
-!                  xs(j) = 0 OR 1   FOR  j=1,...,ns
-!                  vs .GT. kub
-! this subroutine is a modified version of subroutine kp01
-! which appeared in  computing 21, 81-86(1978).
-vs = kub
-ip = 0
-ms = qs
-do l = 1,ns
-   ll = l
-   if (ws(l) > ms) exit
-   ip = ip + ps(l)
-   ms = ms - ws(l)
-end do
-ll = ll - 1
-if (ms == 0) go to 50
-ps(ns + 1) = 0
-ws(ns + 1) = qs + 1
-lim = ip + (ms*ps(ll + 2))/ws(ll + 2)
-a = ip + ps(ll + 1)
-b = (ws(ll + 1) - ms)*ps(ll)
-c = ws(ll)
-lim1 = a - b/c
-if (lim1 > lim) lim = lim1
-if (lim <= vs) return
-mink = qs + 1
-min(ns) = mink
-do j = 2,ns
-   kk = ns + 2 - j
-   if (ws(kk) < mink) mink = ws(kk)
-   min(kk - 1) = mink
-end do
-do j = 1,ns
-   d(j) = 0
-end do
-pr = 0
-lold = ns
-ii = 1
-go to 170
-50 if (vs >= ip) return
-vs = ip
-do j = 1,ll
-   xs(j) = 1
-end do
-nn = ll + 1
-do j = nn,ns
-   xs(j) = 0
-end do
-qs = 0
-return
-80 if (ws(ii) <= qs) go to 90
-ii1 = ii + 1
-if (vs >= (qs*ps(ii1))/ws(ii1) + pr) go to 280
-ii = ii1
-go to 80
-90 ip = pbar(ii)
-ms = qs - wbar(ii)
-in = zbar(ii)
-ll = ns
-if (in > ns) go to 110
-do l = in,ns
-   ll = l
-   if (ws(l) > ms) go to 160
-   ip = ip + ps(l)
-   ms = ms - ws(l)
-end do
-110 if (vs >= ip + pr) go to 280
-vs = ip + pr
-mfirst = ms
-nn = ii - 1
-do j = 1,nn
-   xs(j) = d(j)
-end do
-do j = ii,ll
-   xs(j) = 1
-end do
-if (ll == ns) go to 150
-nn = ll + 1
-do j = nn,ns
-   xs(j) = 0
-end do
-150 if (vs /= lim) go to 280
-qs = mfirst
-return
-160 l = ll
-ll = ll - 1
-if (ms == 0) go to 110
-if (vs >= pr + ip + (ms*ps(l))/ws(l)) go to 280
-170 wbar(ii) = qs - ms
-pbar(ii) = ip
-zbar(ii) = ll + 1
-d(ii) = 1
-nn = ll - 1
-if (nn < ii) go to 190
-do j = ii,nn
-   wbar(j + 1) = wbar(j) - ws(j)
-   pbar(j + 1) = pbar(j) - ps(j)
-   zbar(j + 1) = ll + 1
-   d(j + 1) = 1
-end do
-190 j1 = ll + 1
-do j = j1,lold
-   wbar(j) = 0
-   pbar(j) = 0
-   zbar(j) = j
-end do
-lold = ll
-qs = ms
-pr = pr + ip
-nswc_ai_i4 = ll - (ns - 2)
-if (nswc_ai_i4 < 0) go to 240
-if (nswc_ai_i4 == 0) go to 220
-go to 210
-210 ii = ns
-go to 250
-220 if (qs < ws(ns)) go to 230
-qs = qs - ws(ns)
-pr = pr + ps(ns)
-d(ns) = 1
-230 ii = ns - 1
-go to 250
-240 ii = ll + 2
-if (qs >= min(ii - 1)) go to 80
-250 if (vs >= pr) go to 270
-vs = pr
-do j = 1,ns
-   xs(j) = d(j)
-end do
-mfirst = qs
-if (vs == lim) return
-270 if (d(ns) == 0) go to 280
-d(ns) = 0
-qs = qs + ws(ns)
-pr = pr - ps(ns)
-280 nn = ii - 1
-if (nn == 0) go to 300
-do j = 1,nn
-   kk = ii - j
-   if (d(kk) == 1) go to 310
-end do
-300 qs = mfirst
-return
-310 r = qs
-qs = qs + ws(kk)
-pr = pr - ps(kk)
-d(kk) = 0
-if (r < min(kk)) go to 320
-ii = kk + 1
-go to 80
-320 nn = kk + 1
-ii = kk
-330 if (vs >= pr + (qs*ps(nn))/ws(nn)) go to 280
-diff = ws(nn) - ws(kk)
-nswc_ai_i4 = diff
-if (nswc_ai_i4 < 0) go to 390
-if (nswc_ai_i4 == 0) go to 340
-go to 350
-340 nn = nn + 1
-go to 330
-350 if (diff > r) go to 340
-if (vs >= pr + ps(nn)) go to 340
-vs = pr + ps(nn)
-do j = 1,kk
-   xs(j) = d(j)
-end do
-jj = kk + 1
-do j = jj,ns
-   xs(j) = 0
-end do
-xs(nn) = 1
-mfirst = qs - ws(nn)
-if (vs /= lim) go to 380
-qs = mfirst
-return
-380 r = r - diff
-kk = nn
-nn = nn + 1
-go to 330
-390 t = r - diff
-if (t < min(nn)) go to 340
-n1 = nn + 1
-if (vs >= pr + ps(nn) + (t*ps(n1))/ws(n1)) go to 280
-qs = qs - ws(nn)
-pr = pr + ps(nn)
-d(nn) = 1
-ii = nn + 1
-wbar(nn) = ws(nn)
-pbar(nn) = ps(nn)
-zbar(nn) = ii
-do j = n1,lold
-   wbar(j) = 0
-   pbar(j) = 0
-   zbar(j) = j
-end do
-lold = nn
-go to 80
-end subroutine sknp1
-
-subroutine lainv(mo,fun,t,aerr,rerr,y,c,error,num,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: mo
-integer, intent(out) :: num
-real, intent(in) :: aerr
-real, intent(inout) :: c, error
-real, intent(in) :: rerr, t
-real, intent(inout) :: y
-external fun
-!     beginning of local variable declarations
-integer :: ier, ierc, num1
-real :: a
-interface
-   pure elemental function exparg(l)
-      implicit none
-      integer, intent(in) :: l
-      real :: exparg
-   end function exparg
-end interface
-!-----------------------------------------------------------------------
-!             Computation of the inverse Laplace transform
-!              of a function which is not too oscillatory
-!                          ------------------
-!     mo is an input integer which specifies the search procedure
-!     for determination of c.  a two-pass procedure is used when
-!     mo = 0 , and a one-pass procedure is used when mo is not zero.
-!     When all singularities of F(Z) are expected to be real, mo = 0
-!     is preferable.
-!     Fun is a real subroutine defined by the user.  The actual name
-!     for fun needs to be declared external in the driver program.
-!     Fun has the arguments X, y, A, and B.
-!     t is a positive value of the independent variable for which
-!     the inverse Laplace transform is to be calculated.
-!     c is the abscissa of convergence.  It may be either given
-!     or calculated by lainv.
-!     y is the calculated value of the inverse Laplace transform.
-!     aerr is the absolute accuracy requested.
-!     rerr is the relative accuracy requested.  The subroutine
-!     attempts to satisfy the less stringent of the two requirements.
-!     It is assumed that aerr and rerr are .GE. 0.  If one wants
-!     accuracy to K significant figures, then rerr should be
-!     set = 10.0**(-k).
-!     Error is the estimated absolute error of y.
-!     num is the number of evaluations of fun in lainv.
-!     ierr may be either an input integer or an output integer.  When
-!     ierr is equal to any negative integer at the beginning of lainv,
-!     the abscissa of convergence is calculated and the value obtained
-!     is assigned to the argument c.  otherwise, c must be input by
-!     the user.  After completion of lainv, ierr has one of the
-!     following values...
-!        ierr = 0   The calculation was successful.
-!        ierr = 1   The calculated value of y may not be accurate
-!                   due to possible inaccuracy in the calculation
-!                   of c.  this value of ierr may occur only when
-!                   ierr is initially negative.
-!        ierr = 2   The calculation of y did not converge, while
-!                   the given or calculated value of c may be
-!                   considered accurate.
-!        ierr = 3   The calculation of y did not converge, and the
-!                   calculated value of c may be inaccurate.  This
-!                   value of ierr may occur only when ierr is
-!                   initially negative.
-!        ierr = 4   The value of t is less than or equal to 0.
-!                   The special values y = 0.0 and error = 1.0
-!                   are assigned.
-!        ierr = 5   c was not found in the interval (-1.0E4,1.0E4).
-!                   The special values c = 0.0, y = 0.0, and
-!                   error = 1.0 are assigned.
-!                   This value of ierr may occur only when
-!                   ierr is initially negative.
-!        ierr = 6   t is too large for the inverse transform to be
-!                   computed. The values y = 0.0 and error = 1.0
-!                   are assigned.
-!-----------------------------------------------------------------------
-num = 0
-ierc = -1
-if (ierr >= 0) go to 10
-!     Calculation of the abscissa of convergence.
-if (mo == 0) go to 5
-call abcon1(fun,c,num,ierc)
-go to 10
-5 call abcon(fun,c,num,ierc)
-10 if (ierc == 2) go to 100
-!     Check if t is too large
-a = c + 2.0/t
-if (a*t > exparg(0)) go to 110
-!     Calculation of the inverse Laplace transform.
-call lainv1(fun,t,c,rerr,aerr,y,error,num1,ier)
-num = num + num1
-!     Report the status of the results.
-if (ierc >= 0) go to 20
-if (ier == 0) go to 30
-if (ier == 1) go to 50
-20 if (ier == 2) go to 80
-if (ier == 1) go to 60
-if (ierc == 1) go to 40
-30 ierr = 0
-return
-40 ierr = 1
-return
-50 ierr = 2
-return
-60 if (ierc == 1) go to 70
-ierr = 2
-return
-70 ierr = 3
-return
-80 ierr = 4
-return
-100 y = 0.0
-error = 1.0
-ierr = 5
-return
-110 y = 0.0
-error = 1.0
-ierr = 6
-end subroutine lainv
-
-subroutine abcon(fun, c, num, ierr)
-implicit none
-integer, intent(inout) :: ierr, num
-real, intent(inout) :: c
-external fun
-!     beginning of local variable declarations
-integer :: num1
-real :: eta, x0, xmin
-logical :: find
-external acond, xcond
-!-----------------------------------------------------------------------
-!             Computation of the abscissa of convergence
-!             of a function which is not too oscillatory
-!                         -----------------
-!     Fun is a real subroutine defined by the user.  The actual name
-!     for fun needs to be declared external in the driver program.
-!     Fun has the arguments X, Y, A, and B.
-!     c is the calculated value of the abscissa of convergence.
-!     num is a variable. On output it has for its value the number
-!     of evaluations of fun that were performed.
-!     ierr is an output integer reporting the status of the
-!     calculation of c.  ierr is assigned values as follows...
-!        ierr = 0   The calculation was successful.
-!        ierr = 1   The requested accuracy may not have been
-!                   obtained.  More subintervals may be required
-!                   in the numerical quadratures in subroutines
-!                   acond AND xcond.
-!        ierr = 2   c could not be calculated with sufficient
-!                   accuracy, or an interval containing c could
-!                   not be found. The special value c = 0.0 is
-!                   assigned.
-!-----------------------------------------------------------------------
-eta = 0.01
-xmin = -1.00358e4
-!     Calculation of the location of the singularity on the real
-!     axis which is farthest to the right. Set this value to x0.
-call srch(fun, xcond, xmin, eta, x0, num, ierr)
-c = x0
-if (ierr == 2) go to 20
-if (ierr == 3) go to 10
-!     Check if x0 is on the right or left of the abscissa of
-!     convergence. If it is on the right then we are done.
-call acond(fun, x0, find, num1, ierr)
-num = num + num1
-if (find) go to 20
-!     Search to the right of x0 to find the abscissa of
-!     convergence.
-10 call srch(fun, acond, x0, eta, c, num1, ierr)
-num = num + num1
-if (ierr == 3) c = 0.0
-!     Termination
-20 ierr = min(ierr,2)
-end subroutine abcon
-
-subroutine srch(fun,cond,xl,eta,x,num,ierr)
-implicit none
-integer, intent(out) :: ierr
-integer, intent(inout) :: num
-real, intent(in) :: eta
-real, intent(inout) :: x
-real, intent(in) :: xl
-external fun, cond
-!     beginning of local variable declarations
-integer :: i, ier, num1
-real :: dx, tol, x1, x2, xbar, xm
-logical :: cnd
-!-----------------------------------------------------------------------
-!     srch computes an upper bound for the smallest number x such
-!     that a given condition is satisfied. It is assumed that the
-!     condition is satisfied for sufficiently large x.
-!-----------------------------------------------------------------------
-!     Fun is a real subroutine defined by the user.  The actual name
-!     for fun needs to be declared external in the driver program.
-!     Fun has the arguments x, Y, A, and B.
-!     Cond is a real subroutine defined by the user.  The actual name
-!     for cond needs to be declared external in the driver program.
-!     Cond has the arguments fun, x, cnd, and ier, where cnd is
-!     a logical variable.
-!     xl is the smallest value of x for which a search is made.  It
-!     should lie in the range - 1.0E4 .LE. xl .LT. 1.0E4.  It is
-!     assumed that the logical variable cnd calculated by cond is
-!     .FALSE. WHEN x = xl.
-!     eta is the relative tolerance to which the result is to be
-!     determined. It is a positive real number. When this subroutine
-!     is used to calculate C for use in the piessens code lainv1
-!     (algorithm 619), it is usually sufficient to take eta = 0.01.
-!     x is the calculated result.  It is larger than the exact
-!     result by an amount less than eta*x.
-!     num is a variable. On output it has for its value the number
-!     of evaluations of fun that were performed.
-!     ierr is an output integer reporting the status of the
-!     calculation of x.  ierr is assigned values as follows...
-!          ierr = 0     The calculation was fully successful.
-!          ierr = 1     x may be in error due to the calculation
-!                       of cond.
-!          ierr = 2     cnd IS .FALSE. WHEN x = 1.0E4.  x IS SET = 0.0.
-!          ierr = 3     cnd is .TRUE. for  x .GE. xl.  x is set to xl.
-ierr = 0
-!     Search for an interval (x1, x2) containing x where
-!     x1 .GE. 0.01269
-x1 = max(.01269, xl)
-call cond(fun,x1,cnd,num,ier)
-if (cnd) go to 20
-x2 = 10.1269
-do i = 1,4
-   if (x2 <= x1) go to 10
-   call cond(fun,x2,cnd,num1,ier)
-   num = num + num1
-   if (cnd) go to 200
-   x1 = x2
-10 x2 = 10.0*x2
-end do
-go to 300
-20 if (x1 == xl) go to 400
-!     Search for an interval (x1, x2) containing x where
-!     x2 .LE. 0.01269
-x2 = x1
-x1 = -.100358
-do i = 1,6
-   x1 = max(x1, xl)
-   call cond(fun,x1,cnd,num1,ier)
-   num = num + num1
-   if (.not. cnd) exit
-   x2 = x1
-   if (x1 == xl) go to 400
-   x1 = 10.0*x1
-end do
-!     Search for x in the interval (x1, x2) by bisection
-200 dx = x2 - x1
-xbar = x1 + dx/2.0
-call cond(fun,xbar,cnd,num1,ierr)
-num = num + num1
-xm = max(abs(x1), abs(x2))
-tol = eta
-if (xm > 1.0) tol = eta*xm
-if (dx <= tol) go to 250
-if (cnd) go to 225
-x1 = xbar
-go to 200
-225 x2 = xbar
-go to 200
-!     Final assembly
-250 if (cnd) go to 275
-x = x2
-return
-275 x = xbar
-return
-!     Error return when x could not be found in the interval
-!     (-1.0E4, 1.OE4).
-300 x = 0.0
-ierr = 2
-return
-400 x = xl
-ierr = 3
-end subroutine srch
-
-subroutine abcon1(fun, c, num, ierr)
-implicit none
-integer, intent(inout) :: ierr, num
-real, intent(inout) :: c
-external fun
-!     beginning of local variable declarations
-integer :: i, num1
-real :: dx, eta, tol, x1, x2, xbar, xm
-logical :: cmplex, iend, right
-external acond, xcond
-!-----------------------------------------------------------------------
-!             Computation of the abscissa of convergence
-!             of a function which is not too oscillatory
-!                         -----------------
-!     Fun is a real subroutine defined by the user. The actual name
-!     for fun needs to be declared external in the driver program.
-!     Fun has the arguments X, Y, A, and B.
-!     c is the calculated value of the abscissa of convergence.
-!     num is a variable. On output it has for its value the number
-!     of evaluations of fun that were performed.
-!     ierr is an output integer reporting the status of the
-!     calculation of c.  ierr is assigned values as follows...
-!        ierr = 0   The calculation was successful.
-!        ierr = 1   The requested accuracy may not have been
-!                   obtained.  More subintervals may be required
-!                   in the numerical quadratures in subroutines
-!                   acond AND xcond.
-!        ierr = 2   c could not be calculated with sufficient
-!                   accuracy, or an interval containing c could
-!                   not be found. The special value c = 0.0 is
-!                   assigned.
-!-----------------------------------------------------------------------
-eta = 0.01
-cmplex = .false.
-x1 = .01269
-call xcond(fun,x1,right,num,ierr)
-if (.not. right) go to 10
-call acond(fun,x1,right,num1,ierr)
-num = num + num1
-if (right) go to 30
-cmplex = .true.
-!     Search for an interval (x1, x2) containing X where
-!     x1 .GE. 0.01269
-10 x2 = 10.1269
-do i = 1,4
-   if (cmplex) go to 20
-   call xcond(fun,x2,right,num1,ierr)
-   num = num + num1
-   if (.not. right) go to 21
-20 call acond(fun,x2,right,num1,ierr)
-   num = num + num1
-   if (right) go to 50
-   cmplex = .true.
-21 x1 = x2
-   x2 = 10.0*x2
-end do
-go to 100
-!     Search for an interval (x1, x2) containing X where
-!     x2 .LE. 0.01269
-30 x2 = x1
-x1 = -.100358
-do i = 1,6
-   call xcond(fun,x1,right,num1,ierr)
-   num = num + num1
-   if (.not. right) go to 50
-   call acond(fun,x1,right,num1,ierr)
-   num = num + num1
-   if (.not. right) go to 45
-   x2 = x1
-   x1 = 10.0*x1
-end do
-go to 100
-45 cmplex = .true.
-!     Search for X in the interval (x1, x2) by bisection
-50 dx = x2 - x1
-xbar = x1 + dx/2.0
-xm = max(abs(x1), abs(x2))
-tol = eta
-if (xm > 1.0) tol = eta*xm
-iend = dx <= tol
-if (cmplex) go to 60
-call xcond(fun,xbar,right,num1,ierr)
-num = num + num1
-if (right) go to 60
-if (iend) go to 80
-x1 = xbar
-go to 50
-60 call acond(fun,xbar,right,num1,ierr)
-num = num + num1
-if (right) go to 70
-if (iend) go to 80
-x1 = xbar
-cmplex = .true.
-go to 50
-70 x2 = xbar
-if (.not. iend) go to 50
-!     Standard termination
-80 c = x2
-return
-!     Error return when X cannot be found in (-1.E4, 1.E4)
-100 c = 0.0
-ierr = 2
-end subroutine abcon1
-
-subroutine acond(fun, x, cond, num, ierr)
-implicit none
-integer, intent(inout) :: ierr, num
-real, intent(in) :: x
-logical, intent(inout) :: cond
-external fun
-!     beginning of local variable declarations
-integer :: ier, ier1, ier2, iwk(100), n, num1, num2
-real :: a, c, error1, error2, wk(400), y, z1, z2
-real :: acondg
-real :: acondf
-external acondf, acondg
-integer, parameter :: l = 100
-integer, parameter :: m = 400
-real, parameter :: aerr = 1.e-30
-real, parameter :: rerr = 1.e-4
-real, parameter :: tol = 1.e-4
-!-----------------------------------------------------------------------
-!        This subroutine tests whether or not a given value of x
-!        lies to the right of the abscissa of convergence of the
-!        complex function defined by fun when no singularities lie
-!        on the real axis.
-!                      ----------------
-!     Fun is a real subroutine defined by the user.  The actual name
-!     for fun needs to be declared external in the driver program.
-!     Fun has the arguments x, y, A, and B.
-!     x is a real number. The logical variable cond = .TRUE. if
-!     x .GT. c, where c is the abscissa of convergence, and .FALSE.
-!     IF x .LT. c.
-!     num is a variable. On output it has for its value the number
-!     of evaluations of fun that were performed.
-!     ierr is an output integer indicating the status of the
-!     calculation. It is assigned values as follows...
-!        ierr = 0   The calculation was successful.
-!        ierr = 1   The calculation of cond may not be
-!                   accurate for all values of x.
-!-----------------------------------------------------------------------
-!--------------------------
-!--------------------------
-c = x
-!     Calculation of the integral of acondf from x to infinity.
-call qagi1(acondf,fun,y,c,x,1,aerr,rerr,z1,error1,num1,ier1, &
-   & l,m,n,iwk,wk)
-!     Calculation of the integral of acondg from 0 to infinity.
-a = 0.0
-call qagi1(acondg,fun,y,c,a,1,aerr,rerr,z2,error2,num2,ier2, &
-   & l,m,n,iwk,wk)
-num = num1 + num2
-ier = max(ier1, ier2)
-!     Determination of cond.
-cond = .false.
-if (abs(z1 - z2) <= tol*max(abs(z1),abs(z2))) cond = .true.
-!     Set ierr and return
-ierr = 0
-if (ier > 4) ierr = 1
-end subroutine acond
-
-function acondf(x, y, c, fun)
-implicit none
-real, intent(in) :: c
-real :: x
-real, intent(in) :: y
-external fun
-real :: acondf
-!     beginning of local variable declarations
-real :: a, b, t
-!-----------------------------------------------------------------------
-!        acondf is the function integrated along the x-axis in
-!        acond. y is a dummy variable.
-!-----------------------------------------------------------------------
-call fun(x, 0.0, a, b)
-t = 1.0/((x - c) + 1.0)
-acondf = a*t*t
-end function acondf
-
-function acondg(x, y, c, fun)
-implicit none
-real :: c, x
-real, intent(in) :: y
-external fun
-real :: acondg
-!     beginning of local variable declarations
-real :: a, b, s, t, u, v
-interface
-   pure elemental subroutine crec(x,y,u,v)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real, intent(inout) :: u
-      real, intent(inout) :: v
-   end subroutine crec
-end interface
-!-----------------------------------------------------------------------
-!        acondg is the function integrated along the line x = c
-!        in acond. y is a dummy variable.
-!-----------------------------------------------------------------------
-call fun(c, x, a, b)
-call crec(1.0, x, s, t)
-u = s*s - t*t
-v = 2.0*s*t
-acondg = -(a*v + b*u)
-end function acondg
-
-subroutine xcond(fun, x, cond, num, ierr)
-implicit none
-integer, intent(inout) :: ierr, num
-real :: x
-logical, intent(out) :: cond
-external fun
-!     beginning of local variable declarations
-integer :: iwk(100), n
-real :: c, error, t, wk(400), y, y1, z
-real :: xcondy
-real :: xcondx
-external xcondx, xcondy
-integer, parameter :: l = 100
-integer, parameter :: m = 400
-real, parameter :: aerr = 1.e-30
-real, parameter :: rerr = 1.e-4
-real, parameter :: tol = 1.e-4
-real, parameter :: epsr = 1.e-2
-!-----------------------------------------------------------------------
-!        This subroutine tests whether or not a given value of x
-!        lies to the right of all singularities of the complex
-!        function defined by fun which lie on the real axis.
-!                         ------------
-!     Fun is a real subroutine defined by the user.  The actual name
-!     for fun needs to be declared external in the driver program.
-!     Fun has the arguments x, y, A, and B.
-!     x is a real number.  The logical variable cond = .True if
-!     x .GT. c, where c is the abscissa of the singularity on the
-!     REAL AXIS WHICH LIES FARTHEST TO THE RIGHT, AND .FALSE. IF
-!     x .LT. c.
-!     num is a variable. On output it has for its value the number
-!     of evaluations of fun that were performed.
-!     ierr is an output integer indicating the status of the
-!     calculation.  It is assigned values as follows...
-!        ierr = 0   The calculation was successful.
-!        ierr = 1   The calculation of cond may not be
-!                   accurate for all values of x.
-!-----------------------------------------------------------------------
-!--------------------------
-!--------------------------
-c = 1.0 - x
-y = epsr
-cond = .false.
-!     Numerical integration of the imaginary part of the integrand
-!     along the line y = epsr.
-call qagi1(xcondy,fun,y,c,x,1,aerr,rerr,z,error,num,ierr, &
-   & l,m,n,iwk,wk)
-if (ierr /= 0) go to 100
-!     Determination of cond.
-y1 = 0.5*y
-t = (xcondx(x,y,c,fun) + 4.0*xcondx(x,y1,c,fun) + &
-   & xcondx(x,0.0,c,fun))*epsr/6.0
-num = num + 3
-if (t*z > 0.0) return
-if (abs(t + z) > tol*max(abs(t), abs(z))) return
-cond = .true.
-return
-!     Error return
-100 ierr = 1
-end subroutine xcond
-
-function xcondx(x,y,c,fun)
-implicit none
-real, intent(in) :: c
-real :: x, y
-external fun
-real :: xcondx
-!     beginning of local variable declarations
-real :: a, b, s, t, u, v
-interface
-   pure elemental subroutine crec(x,y,u,v)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real, intent(inout) :: u
-      real, intent(inout) :: v
-   end subroutine crec
-end interface
-!     Real part of the integrand in xcond
-call fun(x, y, a, b)
-call crec(x + c, y, s, t)
-u = s*s - t*t
-v = 2.0*s*t
-xcondx = a*u - b*v
-end function xcondx
-
-function xcondy(x,y,c,fun)
-implicit none
-real, intent(in) :: c
-real :: x, y
-external fun
-real :: xcondy
-!     beginning of local variable declarations
-real :: a, b, s, t, u, v
-interface
-   pure elemental subroutine crec(x,y,u,v)
-      implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real, intent(inout) :: u
-      real, intent(inout) :: v
-   end subroutine crec
-end interface
-!     Imaginary part of integrand in xcond
-call fun(x, y, a, b)
-call crec(x + c, y, s, t)
-u = s*s - t*t
-v = 2.0*s*t
-xcondy = a*v + b*u
-end function xcondy
-
-subroutine lainv1(fun,t,c,epsre,epsab,result,esterr,num, &
-   & ier)
-implicit none
-real, intent(in) :: c, epsab, epsre
-real, intent(out) :: esterr, result
-real, intent(in) :: t
-integer, intent(out) :: ier
-integer, intent(out) :: num
-!     beginning of local variable declarations
-real :: a, aim, ak, are, arg, b, bb, e, eps, epsr1, f, fim, fre, &
-   & pid16, r, s, si(32), tol
-complex :: rex(52), cres, res3la(3)
-integer :: i, k, kc, kk, ks, m, nex, nres
-integer, parameter :: max = 500
-interface
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-! ......................................................................
-!   1. lainv1
-!        inversion of Laplace transform using the Durbin formula
-!        in combination with the epsilon algorithm
-!   2. Purpose
-!        the routine calculates an approximation result to the
-!        inverse Laplace transform f(t) of fun, for the value
-!        of the independent variable equal to t, hopefully
-!        satisfying the following claim for accuracy ....
-!        abs(f(t)-result).LE.max(epsab,epsre*abs(f(t)))
-!   3. Calling sequence
-!        call lainv1(fun,t,c,epsre,epsab,result,esterr,num,ier)
-!      input parameters
-!        FUN    - REAL
-!                 subroutine defining the Laplace transform as
-!                 a complex function.  The calling sequence of
-!                 fun is call fun(a,b,c,D) where
-!                 a - Real
-!                     real part of the independent variable
-!                     of the Laplace transform (input)
-!                 b - Real
-!                     imaginary part of the independent
-!                     variable of the Laplace transform (input)
-!                 c - Real
-!                     real part of the value of the Laplace
-!                     transform (OUTPUT)
-!                 D - Real
-!                     imaginary part of the value of the
-!                     Laplace transform (OUTPUT)
-!                 the actual name for fun needs to be declared
-!                 external in the driver program.
-!        t      - REAL
-!                 value of the independent variable for which the
-!                 inverse Laplace transform has to be computed.
-!                 t should be greater than zero.
-!        c      - REAL
-!                 abscissa of convergence of the Laplace transform
-!        epsre  - Real
-!                 relative accuracy requested.  It is assumed that
-!                 epsre .GE. 0.  If one wants accuracy to k significant
-!                 figures, then RERR should be set = 10.0**(-k).
-!        epsab  - Real
-!                 absolute accuracy requested.  It is assumed that
-!                 epsab .GE. 0.  The routine tries to satisfy the
-!                 least stringent of both accuracy requirements.
-!      Output parameters
-!        result - Real
-!                 inverse Laplace transform
-!        esterr - Real
-!                 estimate of the absolute error abs(f(t)-result)
-!        num    - INTEGER
-!                 number of evaluations of fun
-!        ier    - INTEGER
-!                 parameter giving information on the termination
-!                 of the algorithm
-!                 ier = 0 Normal and reliable termination of the
-!                         routine
-!                 ier = 1 The computations are terminated because
-!                         the bound on the number of evaluations
-!                         of fun has been achieved.  This bound
-!                         is equal to 8*max+5 where  max  is A
-!                         number initialized in a data
-!                         statement.  One can allow more function
-!                         evaluations by increasing the value of
-!                         max in the data-statement.
-!                 ier = 2 The value of t is less than or equal
-!                         to zero.
-!   4. Subroutines or functions needed
-!                fun - User provided subroutine
-!                cqext - Epsilon algorithm
-!                spmpar - This function is called by
-!                          cqext, and provides machine constants
-!                atan, exp, AMAX1, sin, abs,
-!                DBLE, cmplx, real - Fortran functions
-! ......................................................................
-!   The array si contains values of the sine and cosine functions
-!   required in the Durbin formula. si(8) and si(16) are given in
-!   the following data statement. The other values are computed.
-data si(8),si(16)/ 1.0e+00,0.0e+00/
-!   Max is a bound on the number of terms used in the Durbin
-!   formula.
-! ....................................................
-!   Eps is a machine dependent constant.  Eps is the
-!   smallest number such that 1 + eps .GT. 1.
-eps = spmpar(1)
-! ....................................................
-!   Calculation of the relative tolerance used.
-tol = 10.0*eps
-epsr1 = amax1(tol,epsre)
-!   Test on validity of the input parameter t
-ier = 2
-result = 0.0e+00
-esterr = 1.0e+00
-num = 0
-if (t <= 0.0e+00) go to 999
-!   PID16 is equal to pi/16
-pid16 = atan(1.0e+00)/4.0e+00
-!   Computation of the elements of the array si
-ak = 1.0e+00
-do k = 1,7
-   si(k) = sin(ak*pid16)
-   ak = ak + 1.0e+00
-   kk = 16 - k
-   si(kk) = si(k)
-end do
-ier = 0
-nres = 0
-do k = 17,32
-   si(k) = -si(k - 16)
-end do
-!   Initialization of the summation of the Durbin formula.
-arg = pid16/t
-are = c + 2.0e+00/t
-aim = 0.0e+00
-bb = exp(are*t)/(1.6e+01*t)
-call fun(are,aim,fre,fim)
-num = 5
-r = 5.0e-01*fre
-s = 0.0
-nex = 0
-kc = 8
-ks = 0
-!   Main loop for the summation
-do i = 1,max
-   m = 8
-   if (i == 1) m = 12
-   do k = 1,m
-      aim = aim + arg
-      kc = kc + 1
-      ks = ks + 1
-      if (kc > 32) kc = 1
-      if (ks > 32) ks = 1
-      call fun(are,aim,fre,fim)
-      a = fre*si(kc)
-      b = -fim*si(ks)
-      r = dble(r) + dble(a) + dble(b)
-      e = fre*si(ks)
-      f = fim*si(kc)
-      s = dble(s) + dble(e) + dble(f)
+!     ********** Iterative loop for norm reduction **********
+190 noconv = .false.
+do i = k, l
+   c = 0.0
+   r = 0.0
+   do j = k, l
+      if (j == i) go to 200
+      c = c + abs(ar(j,i)) + abs(ai(j,i))
+      r = r + abs(ar(i,j)) + abs(ai(i,j))
+200   continue
    end do
-   num = num + 8
-   nex = nex + 1
-   rex(nex) = cmplx(r, s)
-!   Extrapolation using the epsilon algorithm
-   if (nex >= 3) call cqext(nex,rex,cres,esterr,res3la,nres)
-   if (nres < 4) go to 40
-!   Computation of intermediate result and estimate of the
-!   absolute error
-   result = real(cres)
-   result = result * bb
-   esterr = esterr * bb
-   if (esterr < amax1(epsab,epsr1*abs(result)).and.abs(r*bb - &
-      & result) < 5.0e-01*abs(result)) go to 999
-40 continue
-end do
-!   Set error flag in the case that the number of terms in the
-!   summation is equal to max
-ier = 1
-999 return
-end subroutine lainv1
-
-pure subroutine cqext(n,epstab,result,abserr,res3la,nres)
-implicit none
-real, intent(out) :: abserr
-complex, intent(inout) :: epstab(52)
-complex, intent(out) :: result
-complex, intent(inout) :: res3la(3)
-integer, intent(inout) :: n
-integer, intent(inout) :: nres
-!     beginning of local variable declarations
-real :: a1, a2, b1, b2, c1, c2, d1, d2, e1abs, epmach, epsinf, &
-   & err1, err2, err3, error, oflow, res1, res2
-complex :: delta1, delta2, delta3, e0, e1, e2, e3, res, ss
-double precision :: r, s, u1, u2, u3, v1, v2, v3, ss1, ss2, w1, w2
-integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp, newelm, num
-interface
-   pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
-      implicit none
-      double precision, intent(in) :: ar
-      double precision, intent(in) :: ai
-      double precision, intent(in) :: br
-      double precision, intent(in) :: bi
-      double precision, intent(inout) :: cr
-      double precision, intent(inout) :: ci
-   end subroutine cdivid
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-! 1.        cqext
-!           epsilon algorithm
-!              standard Fortran subroutine
-!              complex version
-! 2.        PURPOSE
-!              the routine determines the limit of a given sequence of
-!              approximations, by means of the epsilon algorithm
-!              of P. wynn.
-!              An estimate of the absolute error is also given.
-!              The condensed epsilon table is computed. Only those
-!              elements needed for the computation of the next diagonal
-!              are preserved.
-! 3.        CALLING SEQUENCE
-!              call cqext(n,epstab,result,abserr,res3la,nres)
-!           parameters
-!              n      - INTEGER
-!                       epstab(n) contains the new element in the
-!                       first column of the epsilon table.
-!              epstab - Complex
-!                       vector of dimension 52 containing the elements
-!                       of the two lower diagonals of the
-!                       triangular epsilon table
-!                       the elements are numbered starting at the
-!                       right-hand corner of the triangle.
-!              result - Complex
-!                       resulting approximation to the integral
-!              abserr - Real
-!                       estimate of the absolute error of the real
-!                       part of result computed from result and
-!                       the 3 previous results
-!              res3la - Complex
-!                       vector of dimension 3 containing the last 3
-!                       results
-!              nres   - INTEGER
-!                       number of calls to the routine
-!                       (should be zero at first call)
-! 4.        SUBROUTINES OR FUNCTIONS NEEDED
-!                     - spmpar, cdivid
-!                     - Fortran abs, AMAX1, cabs, cmplx,
-!                       real, aimag, SNGL
-!     ..................................................................
-!           List of major variables
-!           -----------------------
-!           e0     - The 4 elements on which the
-!           e1       COMPUTATION OF A NEW ELEMENT IN
-!           e2       THE EPSILON TABLE IS BASED
-!           e3                 e0
-!                        e3    e1    NEW
-!                              e2
-!           newelm - Number of elements to be computed in the new
-!                    diagonal
-!           ERROR  - ERROR = abs(e1-e0)+abs(e2-e1)+abs(NEW-e2)
-!           result - The element in the new diagonal with least value
-!                    of error
-!           machine dependent constants
-!           ---------------------------
-!           epmach is the largest relative spacing.
-!           OFLOW is the largest positive magnitude.
-!           limexp is the maximum number of elements the epsilon
-!           table can contain. If this number is reached, the upper
-!           diagonal of the epsilon table is deleted.
-!***First executable statement
-oflow = spmpar(3)
-epmach = spmpar(1)
-nres = nres + 1
-abserr = oflow
-result = epstab(n)
-if (n < 3) go to 100
-limexp = 50
-epstab(n + 2) = epstab(n)
-newelm = (n - 1)/2
-epstab(n) = cmplx(oflow,0.0)
-num = n
-k1 = n
-do i = 1,newelm
-   k2 = k1 - 1
-   k3 = k1 - 2
-   res = epstab(k1 + 2)
-   e0 = epstab(k3)
-   e1 = epstab(k2)
-   e2 = res
-   e1abs = abs(e1)
-   a1 = real(e0)
-   a2 = aimag(e0)
-   b1 = real(e1)
-   b2 = aimag(e1)
-   c1 = real(e2)
-   c2 = aimag(e2)
-   err2 = abs(c1 - b1)
-   err3 = abs(b1 - a1)
-   if (abs(a1 - b1) > epmach*max(abs(a1),abs(b1)) .or. &
-      & abs(a2 - b2) > epmach*max(abs(a2),abs(b2))) go to 10
-   if (abs(b1 - c1) > epmach*max(abs(b1),abs(c1)) .or. &
-      & abs(b2 - c2) > epmach*max(abs(b2),abs(c2))) go to 10
-!           If e0, e1 and e2 are equal to within machine
-!           accuracy, convergence is assumed.
-!           result = e2
-!           abserr = cabs(e1-e0)+cabs(e2-e1)
-   result = res
-   abserr = err2 + err3
-!***Jump out of do-loop
-   go to 100
-10 e3 = epstab(k1)
-   epstab(k1) = e1
-   d1 = real(e3)
-   d2 = aimag(e3)
-   err1 = abs(b1 - d1)
-!           If two elements are very close to each other, omit
-!           a part of the table by adjusting the value of n
-   delta1 = e1 - e3
-   delta2 = e2 - e1
-   delta3 = e1 - e0
-   if (abs(delta1) <= epmach*max(e1abs,abs(e3))) go to 20
-   if (abs(delta2) <= epmach*max(e1abs,abs(e2))) go to 20
-   if (abs(delta3) <= epmach*max(abs(e0),e1abs)) go to 20
-   r = real(delta1)
-   s = aimag(delta1)
-   call cdivid(1.d0,0.d0,r,s,u1,v1)
-   r = real(delta2)
-   s = aimag(delta2)
-   call cdivid(1.d0,0.d0,r,s,u2,v2)
-   r = real(delta3)
-   s = aimag(delta3)
-   call cdivid(1.d0,0.d0,r,s,u3,v3)
-   ss1 = u1 + u2 - u3
-   ss2 = v1 + v2 - v3
-   ss = cmplx(sngl(ss1), sngl(ss2))
-   epsinf = abs(ss*e1)
-!           Test to detect irregular behaviour in the table, and
-!           eventually omit a part of the table adjusting the value
-!           OF n.
-   if (epsinf > 1.0e-04) go to 30
-20 n = i + i - 1
-!***Jump out of do-loop
-   exit
-!           Compute a new element and eventually adjust
-!           the value of result.
-30 call cdivid(1.d0,0.d0,ss1,ss2,w1,w2)
-   res1 = real(e1) + sngl(w1)
-   res2 = aimag(e1) + sngl(w2)
-   res = cmplx(res1,res2)
-   epstab(k1) = res
-   k1 = k1 - 2
-   error = err2 + abs(c1 - real(res)) + err3
-   if (error > abserr) go to 40
-   abserr = error
-   result = res
-40 continue
-end do
-!           Shift the table.
-if (n == limexp) n = 2*(limexp/2) - 1
-ib = 1
-if ((num/2)*2 == num) ib = 2
-ie = newelm + 1
-do i = 1,ie
-   ib2 = ib + 2
-   epstab(ib) = epstab(ib2)
-   ib = ib2
-end do
-if (num == n) go to 80
-indx = num - n + 1
-do i = 1,n
-   epstab(i) = epstab(indx)
-   indx = indx + 1
-end do
-80 if (nres >= 4) go to 90
-res3la(nres) = result
-abserr = oflow
-go to 100
-!           Compute error estimate
-90 abserr = abs(real(result - res3la(3))) + abs(real(result - res3la(2))) &
-   & + abs(real(result - res3la(1)))
-res3la(1) = res3la(2)
-res3la(2) = res3la(3)
-res3la(3) = result
-100 abserr = max(abserr,5.0e+00*epmach*abs(real(result)))
-end subroutine cqext
-
-subroutine qagi1(f,phi,y,c,bound,inf,epsabs,epsrel,result,abserr, &
-   & neval,ier,limit,lenw,last,iwork,work)
-implicit none
-integer, intent(out) :: ier
-integer, intent(in) :: inf
-integer, intent(out) :: last
-integer, intent(in) :: lenw, limit
-integer, intent(out) :: neval
-real, intent(out) :: abserr
-real, intent(in) :: bound
-real :: c
-real, intent(in) :: epsabs, epsrel
-real, intent(out) :: result
-real :: y
-real :: f
-real, intent(inout) :: work(lenw)
-integer, intent(inout) :: iwork(limit)
-external f, phi
-!     beginning of local variable declarations
-integer :: l1, l2, l3
-!-----------------------------------------------------------------------
-!                   Integration over infinite intervals
-!-----------------------------------------------------------------------
-!        Purpose
-!           the routine calculates an approximation  result  to a given
-!           integral    I = Integral of  f  over (bound,+INFINITY)
-!                    or I = Integral of  f  over (-INFINITY,bound)
-!                    or I = Integral of  f  over (-INFINITY,+INFINITY),
-!           hopefully satisfying following claim for accuracy
-!           abs(I-result).LE.max(epsabs,epsrel*abs(I)). f HAS THE
-!           arguments X and phi where phi is a function.
-!        Parameters
-!         on entry
-!            f      - REAL
-!                     function subprogram defining the integrand
-!                     function f(x). the actual name for f needs to be
-!                     declared E X T E R N A L in the driver program.
-!                     f has the arguments X and phi.
-!            PHI    - REAL
-!                     function subprogram having a single real argument.
-!                     The actual name for phi must be declared external
-!                     in the driver program.
-!            bound  - Real
-!                     finite bound of integration range
-!                     (has no meaning if interval is doubly-infinite)
-!            y      - REAL
-!                     parameter for use in xcond.  Ordinate of
-!                     horizontal line along which integration
-!                     is performed.
-!            c       - REAL
-!                      parameter for use in acond and xcond.
-!            inf    - INTEGER
-!                     indicating the kind of integration range
-!                     involved
-!                     inf = 1 CORRESPONDS TO  (bound,+INFINITY),
-!                     inf = -1            to  (-infinity,bound),
-!                     inf = 2             to (-infinity,+infinity).
-!            epsabs - REAL
-!                     absolute accuracy requested
-!            epsrel - REAL
-!                     relative accuracy requested
-!         on return
-!            result - Real
-!                     approximation to the integral
-!            abserr - REAL
-!                     estimate of the modulus of the absolute error,
-!                     which should equal or exceed abs(I-result)
-!            neval  - INTEGER
-!                     number of integrand evaluations
-!            ier    - INTEGER
-!                     ier = 0 Normal and reliable termination of the
-!                             routine. It is assumed that the requested
-!                             accuracy has been achieved.
-!                   - ier.GT.0 abnormal termination of the routine. The
-!                             estimates for result and error are less
-!                             reliable. It is assumed that the requested
-!                             accuracy has not been achieved.
-!                     ier = 1 Maximum number of subdivisions allowed
-!                             has been achieved. One can allow more
-!                             subdivisions by increasing the value
-!                             of limit (and taking the according
-!                             dimension adjustments into account).
-!                             However, if this yields no improvement
-!                             it is advised to analyze the integrand
-!                             in order to determine the integration
-!                             difficulties. If the position of a local
-!                             difficulty can be determined (E.G.
-!                             Singularity, discontinuity within the
-!                             interval) one will probably gain from
-!                             splitting up the interval at this point
-!                             and calling the integrator on the
-!                             subranges. If possible, an appropriate
-!                             special-purpose integrator should be used,
-!                             which is designed for handling the type
-!                             of difficulty involved.
-!                         = 2 The occurrence of roundoff error is
-!                             detected, which prevents the requested
-!                             tolerance from being achieved.
-!                             The error may be under-estimated.
-!                         = 3 Extremely bad integrand behaviour occurs
-!                             at some points of the integration
-!                             interval.
-!                         = 4 The algorithm does not converge.
-!                             Roundoff error is detected in the
-!                             extrapolation table.
-!                             It is assumed that the requested tolerance
-!                             cannot be achieved, and that the returned
-!                             result is the best which can be obtained.
-!                         = 5 The integral is probably divergent, or
-!                             slowly convergent. It must be noted that
-!                             divergence can occur with any other value
-!                             of ier.
-!                         = 6 The input is invalid because epsabs
-!                             or epsrel is negative, limit .LT. 1,
-!                             OR lenw .LT. 4 * limit.
-!                             Result, abserr, neval, last are
-!                             set to zero.
-!         Dimensioning parameters
-!            limit - Integer
-!                    dimensioning parameter for iwork
-!                    limit determines the maximum number
-!                    of subintervals in the partition of the given
-!                    INTEGRATION INTERVAL (A,B), limit.GE.1.
-!                    If limit.LT.1, the routine will end with
-!                    ier = 6.
-!            lenw  - INTEGER
-!                    dimensioning parameter for work
-!                    lenw must be at least limit*4.
-!                    If lenw.LT.limit*4, the routine will end
-!                    with ier = 6.
-!            last  - Integer
-!                    on return, last equals the number of
-!                    subintervals produced in the subdivision
-!                    process, which determines the number of significant
-!                    elements actually in the work arrays.
-!         Work arrays
-!            iwork - INTEGER
-!                    vector of dimension at least limit, the first
-!                    K elements of which contain pointers
-!                    to the error estimates over the subintervals,
-!                    such that work(limit*3+iwork(1)),... ,
-!                    work(limit*3+iwork(K)) form a decreasing
-!                    sequence, with K = last if last.LE.(limit/2+2), and
-!                    K = limit+1-last otherwise
-!            work  - Real
-!                    vector of dimension at least lenw
-!                    on return
-!                    work(1), ..., work(last) contain the left
-!                     END POINTS OF THE SUBINTERVALS IN THE
-!                     partition of (A,B),
-!                    work(limit+1), ..., work(limit+last) contain
-!                     the right end points,
-!                    work(limit*2+1), ..., work(limit*2+last)
-!                     contain the integral approximations over
-!                     the subintervals,
-!                    work(limit*3+1), ..., work(limit*3+last)
-!                     contain the error estimates.
-!        Subroutines or functions needed
-!              - qagie1
-!              - qk15i1
-!              - qpsrt
-!              - qelg
-!              - f (user provided function)
-!              - Phi (user provided function)
-!              - spmpar
-!-----------------------------------------------------------------------
-!         Check validity of limit and lenw.
-ier = 6
-neval = 0
-last = 0
-result = 0.0
-abserr = 0.0
-if (limit < 1 .or. lenw < limit*4) return
-!         Prepare call for qagie1.
-l1 = limit + 1
-l2 = limit + l1
-l3 = limit + l2
-call qagie1(f,phi,y,c,bound,inf,epsabs,epsrel,limit,result,abserr, &
-   & neval,ier,work(1),work(l1),work(l2),work(l3),iwork,last)
-end subroutine qagi1
-
-subroutine qagie1(f,phi,y,c,bound,inf,epsabs,epsrel,limit,result, &
-   & abserr,neval,ier,alist,blist,rlist,elist,iord,last)
-implicit none
-integer, intent(out) :: ier
-integer, intent(in) :: inf
-integer, intent(inout) :: iord
-integer, intent(out) :: last
-integer, intent(in) :: limit
-integer, intent(out) :: neval
-real, intent(out) :: abserr
-real, intent(inout) :: alist(limit), blist(limit)
-real, intent(in) :: bound
-real :: c
-real, intent(inout) :: elist(limit)
-real, intent(in) :: epsabs, epsrel
-real, intent(out) :: result
-real, intent(inout) :: rlist(limit)
-real :: y
-real :: f
-external f, phi
-dimension iord(limit)
-!     beginning of local variable declarations
-integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, &
-   & ktmin, maxerr, nres, nrmax, numrl2
-real :: a1, a2, abseps, area, area1, area12, area2, b1, b2, boun, &
-   & correc, defab1, defab2, defabs, dres, epmach, erlarg, erlast, &
-   & errbnd, errmax, erro12, error1, error2, errsum, ertest, oflow, &
-   & rerr, res3la(3), resabs, reseps, rlist2(52), small, t, uflow
-logical :: extrap, noext
-interface
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-!-----------------------------------------------------------------------
-!                   Integration over infinite intervals
-!-----------------------------------------------------------------------
-!        Purpose
-!           the routine calculates an approximation  result  to a given
-!           integral    I = Integral of  f  over (bound,+INFINITY)
-!                    or I = Integral of  f  over (-INFINITY,bound)
-!                    or I = Integral of  f  over (-INFINITY,+INFINITY),
-!           hopefully satisfying following claim for accuracy
-!           abs(I-result).LE.max(epsabs,epsrel*abs(I)).
-!        Parameters
-!         on entry
-!            f      - REAL
-!                     function subprogram defining the integrand
-!                     function f(x). the actual name for f needs to be
-!                     declared E X T E R N A L in the driver program.
-!                     f has the arguments X and phi.
-!            PHI    - REAL
-!                     function subprogram having a single real argument.
-!                     The actual name for phi must be declared external
-!                     in the driver program.
-!            bound  - Real
-!                     finite bound of integration range
-!                     (has no meaning if interval is doubly-infinite)
-!            y      - REAL
-!                     parameter for use in xcond.  Ordinate of
-!                     horizontal line along which integration
-!                     is performed.
-!            c      - REAL
-!                     parameter for use in acond and xcond.
-!            inf    - INTEGER
-!                     indicating the kind of integration range
-!                     involved
-!                     inf = 1 CORRESPONDS TO  (bound,+INFINITY),
-!                     inf = -1            to  (-infinity,bound),
-!                     inf = 2             to (-infinity,+infinity).
-!            epsabs - REAL
-!                     absolute accuracy requested
-!            epsrel - REAL
-!                     relative accuracy requested
-!            limit  - Integer
-!                     gives an upper bound on the number of
-!                     subintervals in the partition of (A,B),
-!                     limit.GE.1
-!         on return
-!            result - Real
-!                     approximation to the integral
-!            abserr - REAL
-!                     estimate of the modulus of the absolute error,
-!                     which should equal or exceed abs(I-result)
-!            neval  - INTEGER
-!                     number of integrand evaluations
-!            ier    - INTEGER
-!                     ier = 0 Normal and reliable termination of the
-!                             routine. It is assumed that the requested
-!                             accuracy has been achieved.
-!                   - ier.GT.0 abnormal termination of the routine. The
-!                             estimates for result and error are less
-!                             reliable. It is assumed that the requested
-!                             accuracy has not been achieved.
-!                     ier = 1 Maximum number of subdivisions allowed
-!                             has been achieved. One can allow more
-!                             subdivisions by increasing the value
-!                             of limit (and taking the according
-!                             dimension adjustments into account).
-!                             However, if this yields no improvement
-!                             it is advised to analyze the integrand
-!                             in order to determine the integration
-!                             difficulties. If the position of a local
-!                             difficulty can be determined (E.G.
-!                             Singularity, discontinuity within the
-!                             interval) one will probably gain from
-!                             splitting up the interval at this point
-!                             and calling the integrator on the
-!                             subranges. If possible, an appropriate
-!                             special-purpose integrator should be used,
-!                             which is designed for handling the type
-!                             of difficulty involved.
-!                         = 2 The occurrence of roundoff error is
-!                             detected, which prevents the requested
-!                             tolerance from being achieved.
-!                             The error may be under-estimated.
-!                         = 3 Extremely bad integrand behaviour occurs
-!                             at some points of the integration
-!                             interval.
-!                         = 4 The algorithm does not converge.
-!                             Roundoff error is detected in the
-!                             extrapolation table.
-!                             It is assumed that the requested tolerance
-!                             cannot be achieved, and that the returned
-!                             result is the best which can be obtained.
-!                         = 5 The integral is probably divergent, or
-!                             slowly convergent. It must be noted that
-!                             divergence can occur with any other value
-!                             of ier.
-!                         = 6 The input is invalid because epsabs
-!                             or epsrel is negative.
-!                             Result, abserr, neval, last, rlist(1),
-!                             elist(1) and iord(1) are set to zero.
-!                             alist(1) and blist(1) are set to 0
-!                             and 1 respectively.
-!            alist  - REAL
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the left
-!                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
-!                     of the transformed integration range (0,1).
-!            blist  - REAL
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the right
-!                     END POINTS OF THE SUBINTERVALS IN THE PARTITION
-!                     of the transformed integration range (0,1).
-!            rlist  - REAL
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the integral
-!                     approximations on the subintervals
-!            elist  - REAL
-!                     vector of dimension at least limit,  the first
-!                      last  elements of which are the moduli
-!                     of the absolute error estimates on the
-!                     subintervals
-!            iord   - INTEGER
-!                     vector of dimension limit, the first k
-!                     elements of which are pointers to the
-!                     error estimates over the subintervals,
-!                     such that elist(iord(1)), ..., elist(iord(k))
-!                     form a decreasing sequence, with k = last
-!                     if last.LE.(limit/2+2), and k = limit+1-last
-!                     otherwise
-!            last   - INTEGER
-!                     number of subintervals actually produced
-!                     in the subdivision process
-!        subroutines or functions needed
-!              - qk15i1
-!              - qpsrt
-!              - qelg
-!              - f (user-provided function)
-!              - Phi (user-provided function)
-!              - spmpar
-!-----------------------------------------------------------------------
-!            The dimension of RLIST2 is determined by the value of
-!            LIMEXP in subroutine qelg.
-!            List of major variables
-!            -----------------------
-!           alist     - List of left end points of all subintervals
-!                       considered up to now
-!           blist     - List of right end points of all subintervals
-!                       considered up to now
-!           rlist(I)  - Approximation to the integral over
-!                       (alist(I),blist(I))
-!           RLIST2    - Array of dimension at least (LIMEXP+2),
-!                       containing the part of the epsilon table
-!                       wich is still needed for further computations
-!           elist(I)  - Error estimate applying to rlist(I)
-!           MAXERR    - Pointer to the interval with largest error
-!                       estimate
-!           ERRMAX    - elist(MAXERR)
-!           ERLAST    - Error on the interval currently subdivided
-!                       (before that subdivision has taken place)
-!           area      - Sum of the integrals over the subintervals
-!           ERRSUM    - Sum of the errors over the subintervals
-!           ERRBND    - Requested accuracy max(epsabs,epsrel*
-!                       abs(result))
-!           *****1    - Variable for the left subinterval
-!           *****2    - Variable for the right subinterval
-!           last      - Index for subdivision
-!           NRES      - Number of calls to the extrapolation routine
-!           NUMRL2    - Number of elements currently in RLIST2. If an
-!                       appropriate approximation to the compounded
-!                       integral has been obtained, it is put in
-!                       RLIST2(NUMRL2) after NUMRL2 has been increased
-!                       by one.
-!           Small     - Length of the smallest interval considered up
-!                       to now, multiplied by 1.5
-!           ERLARG    - Sum of the errors over the intervals larger
-!                       than the smallest interval considered up to now
-!           extrap    - Logical variable denoting that the routine
-!                       is attempting to perform extrapolation. I.E.
-!                       Before subdividing the smallest interval we
-!                       try to decrease the value of ERLARG.
-!           noext     - Logical variable denoting that extrapolation
-!                       is no longer allowed (TRUE-VALUE)
-!            machine dependent constants
-!            ---------------------------
-!           EPMACH is the largest relative spacing.
-!           UFLOW is the smallest positive magnitude.
-!           OFLOW is the largest positive magnitude.
-epmach = spmpar(1)
-uflow = spmpar(2)
-oflow = spmpar(3)
-!           Test on validity of parameters
-!           -----------------------------
-neval = 0
-last = 0
-result = 0.0
-abserr = 0.0
-alist(1) = 0.0
-blist(1) = 1.0
-rlist(1) = 0.0
-elist(1) = 0.0
-iord(1) = 0
-ier = 6
-if (epsabs < 0.0 .or. epsrel < 0.0) go to 999
-ier = 0
-rerr = max(epsrel, 50.0*epmach, 0.5e-14)
-!           First approximation to the integral
-!           -----------------------------------
-!           Determine the interval to be mapped onto (0,1).
-!           If inf = 2 The integral is computed as I = I1+I2, where
-!           I1 = Integral of f over (-INFINITY,0),
-!           I2 = Integral of f over (0,+INFINITY).
-boun = bound
-if (inf == 2) boun = 0.0
-call qk15i1(f, phi, y, c, boun, inf, 0.0, 1.0, result, abserr, &
-   & defabs, resabs, epmach, uflow)
-!           Test on accuracy
-last = 1
-rlist(1) = result
-elist(1) = abserr
-iord(1) = 1
-dres = abs(result)
-errbnd = max(epsabs,rerr*dres)
-if (abserr <= 100.0*epmach*defabs .and. abserr > errbnd) &
-   & ier = 2
-if (limit == 1) ier = 1
-if (ier /= 0 .or. (abserr <= errbnd .and. abserr /= resabs) &
-   & .or. abserr == 0.0) go to 130
-!           Initialization
-!           --------------
-rlist2(1) = result
-errmax = abserr
-maxerr = 1
-area = result
-errsum = abserr
-abserr = oflow
-correc = 0.0
-nrmax = 1
-nres = 0
-ktmin = 0
-numrl2 = 2
-extrap = .false.
-noext = .false.
-ierro = 0
-iroff1 = 0
-iroff2 = 0
-iroff3 = 0
-ksgn = -1
-if (dres >= (1.0 - 50.0*epmach)*defabs) ksgn = 1
-t = 1.0 + 100.0*epmach
-!           Main do-loop
-!           ------------
-do last = 2,limit
-!           Bisect the subinterval with NRMAX-TH largest
-!           error estimate.
-   a1 = alist(maxerr)
-   b1 = 0.5*(alist(maxerr) + blist(maxerr))
-   a2 = b1
-   b2 = blist(maxerr)
-   erlast = errmax
-   call qk15i1(f, phi, y, c, boun, inf, a1, b1, area1, error1, &
-      & resabs, defab1, epmach, uflow)
-   call qk15i1(f, phi, y, c, boun, inf, a2, b2, area2, error2, &
-      & resabs, defab2, epmach, uflow)
-!           Improve previous approximations to integral
-!           and error and test for accuracy.
-   area12 = area1 + area2
-   erro12 = error1 + error2
-   errsum = errsum + erro12 - errmax
-   area = area + area12 - rlist(maxerr)
-   if (defab1 == error1 .or. defab2 == error2) go to 15
-   if (abs(rlist(maxerr) - area12) > 0.1e-04*abs(area12) &
-      & .or. erro12 < 0.99*errmax) go to 10
-   if (extrap) iroff2 = iroff2 + 1
-   if (.not.extrap) iroff1 = iroff1 + 1
-10 if (last > 10 .and. erro12 > errmax) iroff3 = iroff3 + 1
-15 rlist(maxerr) = area1
-   rlist(last) = area2
-   errbnd = max(epsabs,rerr*abs(area))
-!           Test for roundoff error and eventually
-!           set error flag.
-   if (iroff1 + iroff2 >= 10 .or. iroff3 >= 20) ier = 2
-   if (iroff2 >= 5) ierro = 3
-!           Set error flag in the case that the number of
-!           subintervals equals limit.
-   if (last == limit) ier = 1
-!           Set error flag in the case of bad integrand behaviour
-!           at some points of the integration range.
-   if (max(abs(a1),abs(b2)) <= &
-      & t*(abs(a2) + 0.1e+04*uflow)) ier = 4
-!           Append the newly-created intervals to the list.
-   if (error2 > error1) go to 20
-   alist(last) = a2
-   blist(maxerr) = b1
-   blist(last) = b2
-   elist(maxerr) = error1
-   elist(last) = error2
-   go to 30
-20 alist(maxerr) = a2
-   alist(last) = a1
-   blist(last) = b1
-   rlist(maxerr) = area2
-   rlist(last) = area1
-   elist(maxerr) = error2
-   elist(last) = error1
-!           CALL SUBROUTINE qpsrt TO MAINTAIN THE DESCENDING ORDERING
-!           in the list of error estimates and select the
-!           subinterval with NRMAX-TH largest error estimate (to be
-!           bisected next).
-30 call qpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
-   if (errsum <= errbnd) go to 115
-   if (ier /= 0) exit
-   if (last == 2) go to 80
-   if (noext) go to 90
-   erlarg = erlarg - erlast
-   if (abs(b1 - a1) > small) erlarg = erlarg + erro12
-   if (extrap) go to 40
-!           Test whether the interval to be bisected next is the
-!           smallest interval.
-   if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
-   extrap = .true.
-   nrmax = 2
-40 if (ierro == 3.or.erlarg <= ertest) go to 60
-!           The smallest interval has the largest error.
-!           Before bisecting decrease the sum of the errors
-!           over the larger intervals (ERLARG) and perform
-!           extrapolation.
-   id = nrmax
-   jupbnd = last
-   if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do k = id,jupbnd
-      maxerr = iord(nrmax)
-      errmax = elist(maxerr)
-      if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
-      nrmax = nrmax + 1
+!     ********** Guard against zero c or r due to underflow **********
+   if (c == 0.0 .or. r == 0.0) go to 270
+   g = r / radix
+   f = 1.0
+   s = c + r
+210 if (c >= g) go to 220
+   f = f * radix
+   c = c * b2
+   go to 210
+220 g = r * radix
+230 if (c < g) go to 240
+   f = f / radix
+   c = c / b2
+   go to 230
+!     ********** Now balance **********
+240 if ((c + r) / f >= 0.95 * s) go to 270
+   g = 1.0 / f
+   scale(i) = scale(i) * f
+   noconv = .true.
+   do j = k, n
+      ar(i,j) = ar(i,j) * g
+      ai(i,j) = ai(i,j) * g
    end do
-!           Perform extrapolation.
-60 numrl2 = numrl2 + 1
-   rlist2(numrl2) = area
-   call qelg(numrl2, rlist2, reseps, abseps, res3la, nres, &
-      & epmach, oflow)
-   ktmin = ktmin + 1
-   if (ktmin > 5.and.abserr < 0.1e-02*errsum) ier = 5
-   if (abseps >= abserr) go to 70
-   ktmin = 0
-   abserr = abseps
-   result = reseps
-   correc = erlarg
-   ertest = max(epsabs,rerr*abs(reseps))
-   if (abserr <= ertest) exit
-!            Prepare bisection of the smallest interval.
-70 if (numrl2 == 1) noext = .true.
-   if (ier == 5) exit
-   maxerr = iord(1)
-   errmax = elist(maxerr)
-   nrmax = 1
-   extrap = .false.
-   small = small*0.5e+00
-   erlarg = errsum
-   go to 90
-80 small = 0.375e+00
-   erlarg = errsum
-   ertest = errbnd
-   rlist2(2) = area
-90 continue
+   do j = 1, l
+      ar(j,i) = ar(j,i) * f
+      ai(j,i) = ai(j,i) * f
+   end do
+270 continue
 end do
-!           Set final result and error estimate.
-!           ------------------------------------
-if (abserr == oflow) go to 115
-if (ier + ierro == 0) go to 110
-if (ierro == 3) abserr = abserr + correc
-if (ier == 0) ier = 3
-if (result /= 0.0 .and. area /= 0.0) go to 105
-if (abserr > errsum) go to 115
-if (area == 0.0) go to 130
-go to 110
-105 if (abserr/abs(result) > errsum/abs(area)) go to 115
-!           Test on divergence
-110 if (ksgn == -1 .and. max(abs(result),abs(area)) <= &
-   & defabs*0.1e-01) go to 130
-if (0.1e-01 > (result/area) .or. (result/area) > 0.1e+03 &
-   & .or. errsum > abs(area)) ier = 6
-go to 130
-!           Compute global integral sum.
-115 result = 0.0
-do k = 1,last
-   result = result + rlist(k)
-end do
-abserr = errsum
-130 neval = 30*last - 15
-if (inf == 2) neval = 2*neval
-if (ier > 2) ier = ier - 1
-999 return
-end subroutine qagie1
+if (noconv) go to 190
+280 low = k
+igh = l
+!     ********** Last card of cbal **********
+end subroutine cbal
 
-subroutine qk15i1(f, phi, y, c, boun, inf, a, b, result, abserr, &
-   & resabs, resasc, epmach, uflow)
-implicit none
-integer, intent(in) :: inf
-real, intent(in) :: a
-real, intent(inout) :: abserr
-real, intent(in) :: b, boun
-real :: c
-real, intent(in) :: epmach
-real, intent(inout) :: resabs, resasc, result
-real, intent(in) :: uflow
-real :: y
-real :: f
-external f, phi
-!     beginning of local variable declarations
-integer :: j
-real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, fv1(7), fv2(7)
-real, parameter :: xgk(8) = [0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
-   & 0.7415311855993944e+00, 0.5860872354676911e+00, 0.4058451513773972e+00, 0.2077849550078985e+00, 0.0000000000000000e+00]
-real, parameter :: wgk(8) = [0.2293532201052922e-01, 0.6309209262997855e-01, 0.1047900103222502e+00, &
-   & 0.1406532597155259e+00, 0.1690047266392679e+00, 0.1903505780647854e+00, 0.2044329400752989e+00, 0.2094821410847278e+00]
-real, parameter :: wg(8) = [0.0000000000000000e+00, 0.1294849661688697e+00, 0.0000000000000000e+00, 0.2797053914892767e+00 &
-   & , 0.0000000000000000e+00, 0.3818300505051189e+00, 0.0000000000000000e+00, 0.4179591836734694e+00]
-!-----------------------------------------------------------------------
-! 1.        PURPOSE
-!              the original (infinite) integration range is mapped
-!              onto the interval (0,1) and (a,b) is a part of (0,1).
-!              It is the purpose to compute
-!              I = Integral of transformed integrand over (a,b),
-!              j = Integral of abs(transformed integrand) over (a,b).
-! 2.        PARAMETERS
-!            on entry
-!              f      - REAL
-!                       function subprogram defining the integrand
-!                       function f(x). the actual name for f needs
-!                       to be declared E X T E R N A L in the
-!                       calling program. f has the arguments X and
-!                       phi.
-!              PHI    - REAL
-!                       function subprogram having a single real
-!                       argument. The actual name for phi must be
-!                       dechared external in the driver program.
-!              boun   - REAL
-!                       finite bound of original integration
-!                       RANGE (SET TO ZERO IF inf = +2)
-!              inf    - INTEGER
-!                       if inf = -1, the original interval is
-!                                   (-INFINITY,BOUND),
-!                       if inf = +1, the original interval is
-!                                   (BOUND,+INFINITY),
-!                       if inf = +2, the original interval is
-!                                   (-INFINITY,+INFINITY) and
-!                       the integral is computed as the sum of two
-!                       integrals, one over (-INFINITY,0)
-!                       and one over (0,+INFINITY).
-!              a      - REAL
-!                       lower limit for integration over subrange
-!                       of (0,1)
-!              b      - REAL
-!                       upper limit for integration over subrange
-!                       of (0,1)
-!              epmach - REAL
-!                       the relative precision of the floating
-!                       arithmetic being used.
-!              uflow  - REAL
-!                       the smallest positive magnitude.
-!            On return
-!              result - Real
-!                       approximation to the integral I
-!                       result is computed by applying the 15-point
-!                       Kronrod rule(RESK) obtained by optimal
-!                       addition of abscissae to the 7-point Gauss
-!                       RULE(RESG).
-!              abserr - REAL
-!                       estimate of the modulus of the absolute error,
-!                       which should equal or exceed abs(I-result)
-!              resabs - REAL
-!                       approximation to the integral j
-!              resasc - REAL
-!                       approximation to the integral of
-!                       abs((transformed integrand)-I/(b-a))
-!                       OVER (a,b)
-! 3.        SUBROUTINES OR FUNCTIONS NEEDED
-!                 - f (user-provided function)
-!                 - Phi (user-provided function)
-!-----------------------------------------------------------------------
-!           The abscissae and weights are supplied for the interval
-!           (-1,1).  Because of symmetry only the positive abscissae and
-!           their corresponding weights are given.
-!           xgk    - Abscissae of the 15-point Kronrod rule
-!                    xgk(2), xgk(4), ... abscissae of the 7-point
-!                    Gauss rule
-!                    xgk(1), xgk(3), ...  abscissae which are optimally
-!                    added to the 7-point Gauss rule
-!           wgk    - Weights of the 15-point Kronrod rule
-!           wg     - Weights of the 7-point Gauss rule, corresponding
-!                    to the abscissae xgk(2), xgk(4), ...
-!                    wg(1), wg(3), ... are set to zero.
-!           List of major variables
-!           -----------------------
-!           centr  - Mid point of the interval
-!           HLGTH  - Half-length of the interval
-!           absc*  - ABSCISSA
-!           TABSC* - Transformed abscissa
-!           FVAL*  - Function VALUE
-!           RESG   - result of the 7-point Gauss formula
-!           RESK   - result of the 15-point Kronrod formula
-!           RESKH  - Approximation to the mean value of the transformed
-!                    integrand over (a,b), I.E. to I/(b-a)
-dinf = min(1,inf)
-centr = 0.5*(a + b)
-hlgth = 0.5*(b - a)
-tabsc1 = boun + dinf*(1.0 - centr)/centr
-fval1 = f(tabsc1,y,c,phi)
-if (inf == 2) fval1 = fval1 + f(-tabsc1,y,c,phi)
-fc = (fval1/centr)/centr
-!           Compute the 15-point Kronrod approximation to
-!           the integral, and estimate the error.
-resg = wg(8)*fc
-resk = wgk(8)*fc
-resabs = abs(resk)
-do j = 1,7
-   absc = hlgth*xgk(j)
-   absc1 = centr - absc
-   absc2 = centr + absc
-   tabsc1 = boun + dinf*(1.0 - absc1)/absc1
-   tabsc2 = boun + dinf*(1.0 - absc2)/absc2
-   fval1 = f(tabsc1,y,c,phi)
-   fval2 = f(tabsc2,y,c,phi)
-   if (inf == 2) fval1 = fval1 + f(-tabsc1,y,c,phi)
-   if (inf == 2) fval2 = fval2 + f(-tabsc2,y,c,phi)
-   fval1 = (fval1/absc1)/absc1
-   fval2 = (fval2/absc2)/absc2
-   fv1(j) = fval1
-   fv2(j) = fval2
-   fsum = fval1 + fval2
-   resg = resg + wg(j)*fsum
-   resk = resk + wgk(j)*fsum
-   resabs = resabs + wgk(j)*(abs(fval1) + abs(fval2))
-end do
-reskh = resk*0.5
-resasc = wgk(8)*abs(fc - reskh)
-do j = 1,7
-   resasc = resasc + wgk(j)*(abs(fv1(j) - reskh) + &
-      & abs(fv2(j) - reskh))
-end do
-result = resk*hlgth
-resasc = resasc*hlgth
-resabs = resabs*hlgth
-abserr = abs((resk - resg)*hlgth)
-if (resasc /= 0.0 .and. abserr /= 0.0) abserr = resasc* &
-   & min(1.0, (0.2e+03*abserr/resasc)**1.5)
-tol = 50.0*epmach
-if (resabs > uflow/tol) abserr = max(abserr, tol*resabs)
-end subroutine qk15i1
-
-subroutine fft(c,n,isn,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer :: isn, n
-real, intent(inout) :: c(*)
-!-----------------------------------------------------------------------
-!     The complex array c of dimension n is interpreted by the code
-!     as a real array of dimension 2*n. if this association is not
-!     permitted by the Fortran being used, then the user may use the
-!     SUBROUTINE fft1.
-!-----------------------------------------------------------------------
-if (abs(isn) /= 1) go to 10
-call sfft(c(1),c(2),n,n,n,isn + isn,ierr)
-return
-10 ierr = 4
-end subroutine fft
-
-subroutine fft1(a,b,n,isn,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer :: isn, n
-real, intent(inout) :: a(n), b(n)
-!     ------------
-if (abs(isn) /= 1) go to 10
-call sfft(a,b,n,n,n,isn,ierr)
-return
-10 ierr = 4
-end subroutine fft1
-
-subroutine mfft(c,n,ndim,isn,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: isn, ndim
-real, intent(inout) :: c(*)
-integer :: n(ndim)
-!     beginning of local variable declarations
-integer :: i, isign, nspan, ntot
-!-----------------------------------------------------------------------
-!     Let ntot denote the product of n(1),...,n(ndim). The complex
-!     array c of dimension ntot is interpreted by the routine as
-!     a real array of dimension 2*ntot. If this association is not
-!     permitted by the Fortran being used, then the user may use
-!     the subroutine mfft1.
-!-----------------------------------------------------------------------
-if (abs(isn) /= 1) go to 40
-if (ndim <= 0) go to 50
-ntot = 1
-do i = 1,ndim
-   ntot = n(i)*ntot
-end do
-if (ntot < 1) go to 30
-isign = isn + isn
-nspan = 1
-do i = 1,ndim
-   nspan = n(i)*nspan
-   call sfft(c(1),c(2),ntot,n(i),nspan,isign,ierr)
-   if (ierr /= 0) return
-end do
-return
-30 ierr = 1
-return
-40 ierr = 4
-return
-50 ierr = 5
-end subroutine mfft
-
-subroutine mfft1(a,b,n,ndim,isn,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer :: isn
-integer, intent(in) :: ndim
-real, intent(inout) :: a(*), b(*)
-integer :: n(ndim)
-!     beginning of local variable declarations
-integer :: i, nspan, ntot
-!     ------------
-if (abs(isn) /= 1) go to 40
-if (ndim <= 0) go to 50
-ntot = 1
-do i = 1,ndim
-   ntot = n(i)*ntot
-end do
-if (ntot < 1) go to 30
-nspan = 1
-do i = 1,ndim
-   nspan = n(i)*nspan
-   call sfft(a,b,ntot,n(i),nspan,isn,ierr)
-   if (ierr /= 0) return
-end do
-return
-30 ierr = 1
-return
-40 ierr = 4
-return
-50 ierr = 5
-end subroutine mfft1
-
-subroutine sfft(a,b,ntot,n,nspan,isn,ierr)
-implicit none
-integer :: ierr, isn, n, nspan, ntot
-real :: a(*), b(*)
-!     beginning of local variable declarations
-integer :: i, inc, j, jc, jf, jj, k, k1, k2, k3, k4, kk, ks, kspan, kspnn, kt, l, m, max, maxf, maxn, maxp, nfac(15), nn, np(209), &
-   & nt, num
-real :: aa, aj, ajm, ajp, ak, akm, akp, at(23), bb, bj, bjm, bjp, &
-   & bk, bkm, bkp, bt(23), c1, c2, c3, c72, cd, ck(23), rad, radf, s1, &
-   & s120, s2, s3, s72, sd, sk(23), u, v
-integer :: nswc_ai_i4
-!  Multivariate complex Fourier transform, computed in place
-!    using mixed-radix fast Fourier transform algorithm.
-!  By R. C. Singleton, Stanford Research Institute, oct. 1968
-!    modified by A. H. Morris, NSWC/DL, Dahlgren VA
-!  arrays A and b originally hold the real and imaginary
-!    components of the data, and return the real and
-!    imaginary components of the resulting Fourier coefficients.
-!  Multivariate data is indexed according to the Fortran
-!    array element successor function, without limit
-!    on the number of implied multiple subscripts.
-!    The subroutine is called once for each variate.
-!    The calls for a multivariate transform may be in any order.
-!  ntot is the total number of complex data values.
-!  n is the dimension of the current variable.
-!  nspan/n is the spacing of consecutive data values
-!    while indexing the current variable.
-!  The sign of isn determines the sign of the complex
-!    exponential, and the magnitude of isn is normally one.
-!  A TRI-variate transform with a(N1,N2,N3), b(N1,N2,N3)
-!    is computed by
-!      call sfft(a,b,n1*n2*n3,n1,n1,1,ierr)
-!      call sfft(a,b,n1*n2*n3,n2,n1*n2,1,ierr)
-!      call sfft(a,b,n1*n2*n3,n3,n1*n2*n3,1,ierr)
-!  for a single-variate transform,
-!    ntot = n = nspan = (number of complex data values), E.G.
-!      call sfft(a,b,n,n,n,1,ierr)
-!  the data may alternatively be stored in a single complex
-!    array a, then the magnitude of isn changed to two to
-!    give the correct indexing increment and a(2) used to
-!    pass the initial address for the sequence of imaginary
-!    values, E.G.
-!      call sfft(a,a(2),ntot,n,nspan,2,ierr)
-!  arrays NFAC(MAXN),NP(MAXP),at(MAXF),ck(MAXF),BT(MAXF),SK(MAXF)
-!    are used for temporary storage.
-!    MAXN must be .GE. the number of factors of n
-!    MAXF must be .GE. the maximum prime factor of n.
-!    MAXP must be .GT. the number of prime factors of n.
-!    In addition, MAXN is assumed to be odd.
-!    If the square-free portion k of n has two or more prime
-!    factors, then MAXP must be .GE. k-1.
-!  ierr is a variable. ierr is set to 0 if no input errors are
-!    detected. Otherwise, ierr is assigned one of the values
-!      ierr=1    n is less than 1
-!      ierr=2    n has more than MAXN factors
-!      ierr=3    n has a prime factor greater than
-!                MAXF or the square-free portion of
-!                n is greater than MAXP+1
-!  array storage in NFAC for a maximum of 15 factors of n.
-!  If n has more than one square-free factor, the product of the
-!    square-free factors must be .LE. 210
-!  array storage for maximum prime factor of 23
-!  The following constants should agree with the array dimensions.
-maxn = 15
-maxf = 23
-maxp = 209
-!  Set the following constants
-!     rad=2.0*pi
-!     s72=sin(rad/5.0)
-!     c72=cos(rad/5.0)
-!     s120=sqrt(0.75)
-rad = 6.2831853071796
-s72 = .951056516295154
-c72 = .309016994374947
-s120 = .86602540378444
-ierr = 0
-nswc_ai_i4 = n - 1
-if (nswc_ai_i4 < 0) go to 1000
-if (nswc_ai_i4 == 0) go to 960
-go to 5
-5 inc = isn
-if (isn >= 0) go to 10
-s72 = -s72
-s120 = -s120
-rad = -rad
-inc = -inc
-10 nt = inc*ntot
-ks = inc*nspan
-kspan = ks
-nn = nt - inc
-jc = ks/n
-radf = rad*float(jc)*0.5
-i = 0
-jf = 0
-!  Determine the factors of n
-m = 0
-k = n
-max = maxn/2
-go to 20
-15 if (m == max) go to 1001
-m = m + 1
-nfac(m) = 4
-k = l
-20 l = k/16
-if (k == l*16) go to 15
-j = 3
-jj = 9
-go to 30
-25 if (m == max) go to 1001
-m = m + 1
-nfac(m) = j
-k = k/jj
-30 if (mod(k,jj) == 0) go to 25
-j = j + 2
-jj = j**2
-if (j <= maxf .and. jj <= k) go to 30
-if (k > 4) go to 40
-kt = m
-nfac(m + 1) = k
-if (k /= 1) m = m + 1
-go to 80
-40 l = k/4
-if (k /= l*4) go to 50
-if (m == max) go to 1001
-m = m + 1
-nfac(m) = 2
-k = l
-kt = m
-if (k == 1) go to 85
-50 kt = m
-if (k - 1 > maxp) go to 1002
-num = maxn - kt - kt
-j = 2
-60 if (mod(k,j) /= 0) go to 70
-m = m + 1
-nfac(m) = j
-num = num - 1
-k = k/j
-if (k == 1) go to 80
-if (num <= 0) go to 1001
-70 l = (j + 1)/2
-j = l + l + 1
-if (j <= maxf) go to 60
-go to 1002
-80 if (kt == 0) go to 100
-85 j = kt
-90 m = m + 1
-nfac(m) = nfac(j)
-j = j - 1
-if (j /= 0) go to 90
-!  Compute Fourier transform
-100 sd = radf/float(kspan)
-cd = 2.0*sin(sd)**2
-sd = sin(sd + sd)
-kk = 1
-i = i + 1
-if (nfac(i) /= 2) go to 400
-!  Transform for factor of 2 (including rotation factor)
-kspan = kspan/2
-k1 = kspan + 2
-210 k2 = kk + kspan
-ak = a(k2)
-bk = b(k2)
-a(k2) = a(kk) - ak
-b(k2) = b(kk) - bk
-a(kk) = a(kk) + ak
-b(kk) = b(kk) + bk
-kk = k2 + kspan
-if (kk <= nn) go to 210
-kk = kk - nn
-if (kk <= jc) go to 210
-if (kk > kspan) go to 800
-220 c1 = 1.0 - cd
-s1 = sd
-230 k2 = kk + kspan
-ak = a(kk) - a(k2)
-bk = b(kk) - b(k2)
-a(kk) = a(kk) + a(k2)
-b(kk) = b(kk) + b(k2)
-a(k2) = c1*ak - s1*bk
-b(k2) = s1*ak + c1*bk
-kk = k2 + kspan
-if (kk < nt) go to 230
-k2 = kk - nt
-c1 = -c1
-kk = k1 - k2
-if (kk > k2) go to 230
-u = sd*s1 + cd*c1
-v = sd*c1 - cd*s1
-ak = c1 - u
-s1 = s1 + v
-!  The following three statements compensate for truncation error.
-!    If rounded arithmetic is used then one may substitute
-!     c1=ak
-c1 = 1.5 - 0.5*(ak*ak + s1*s1)
-s1 = c1*s1
-c1 = c1*ak
-kk = kk + jc
-if (kk < k2) go to 230
-k1 = k1 + inc + inc
-kk = (k1 - kspan)/2 + jc
-if (kk <= jc + jc) go to 220
-go to 100
-!  Transform for factor of 3 (optional code)
-320 k1 = kk + kspan
-k2 = k1 + kspan
-ak = a(kk)
-bk = b(kk)
-aj = a(k1) + a(k2)
-bj = b(k1) + b(k2)
-a(kk) = ak + aj
-b(kk) = bk + bj
-ak = -0.5*aj + ak
-bk = -0.5*bj + bk
-aj = (a(k1) - a(k2))*s120
-bj = (b(k1) - b(k2))*s120
-a(k1) = ak - bj
-b(k1) = bk + aj
-a(k2) = ak + bj
-b(k2) = bk - aj
-kk = k2 + kspan
-if (kk < nn) go to 320
-kk = kk - nn
-if (kk <= kspan) go to 320
-go to 700
-!  Transform for factor of 4
-400 if (nfac(i) /= 4) go to 600
-kspnn = kspan
-kspan = kspan/4
-410 c1 = 1.0
-s1 = 0.0
-420 k1 = kk + kspan
-k2 = k1 + kspan
-k3 = k2 + kspan
-akp = a(kk) + a(k2)
-akm = a(kk) - a(k2)
-ajp = a(k1) + a(k3)
-ajm = a(k1) - a(k3)
-a(kk) = akp + ajp
-ajp = akp - ajp
-bkp = b(kk) + b(k2)
-bkm = b(kk) - b(k2)
-bjp = b(k1) + b(k3)
-bjm = b(k1) - b(k3)
-b(kk) = bkp + bjp
-bjp = bkp - bjp
-if (isn < 0) go to 450
-akp = akm - bjm
-akm = akm + bjm
-bkp = bkm + ajm
-bkm = bkm - ajm
-if (s1 == 0.0) go to 460
-430 a(k1) = akp*c1 - bkp*s1
-b(k1) = akp*s1 + bkp*c1
-a(k2) = ajp*c2 - bjp*s2
-b(k2) = ajp*s2 + bjp*c2
-a(k3) = akm*c3 - bkm*s3
-b(k3) = akm*s3 + bkm*c3
-kk = k3 + kspan
-if (kk <= nt) go to 420
-440 u = sd*s1 + cd*c1
-v = sd*c1 - cd*s1
-c2 = c1 - u
-s1 = s1 + v
-!  The following three statements compensate for truncation error.
-!    If rounded arithmetic is used then one may substitute
-!     c1=c2
-c1 = 1.5 - 0.5*(c2*c2 + s1*s1)
-s1 = c1*s1
-c1 = c1*c2
-c2 = c1*c1 - s1*s1
-s2 = 2.0*c1*s1
-c3 = c2*c1 - s2*s1
-s3 = c2*s1 + s2*c1
-kk = kk - nt + jc
-if (kk <= kspan) go to 420
-kk = kk - kspan + inc
-if (kk <= jc) go to 410
-if (kspan == jc) go to 800
-go to 100
-450 akp = akm + bjm
-akm = akm - bjm
-bkp = bkm - ajm
-bkm = bkm + ajm
-if (s1 /= 0.0) go to 430
-460 a(k1) = akp
-b(k1) = bkp
-a(k2) = ajp
-b(k2) = bjp
-a(k3) = akm
-b(k3) = bkm
-kk = k3 + kspan
-if (kk <= nt) go to 420
-go to 440
-!  Transform for factor of 5 (optional code)
-510 c2 = c72**2 - s72**2
-s2 = 2.0*c72*s72
-520 k1 = kk + kspan
-k2 = k1 + kspan
-k3 = k2 + kspan
-k4 = k3 + kspan
-akp = a(k1) + a(k4)
-akm = a(k1) - a(k4)
-bkp = b(k1) + b(k4)
-bkm = b(k1) - b(k4)
-ajp = a(k2) + a(k3)
-ajm = a(k2) - a(k3)
-bjp = b(k2) + b(k3)
-bjm = b(k2) - b(k3)
-aa = a(kk)
-bb = b(kk)
-a(kk) = aa + akp + ajp
-b(kk) = bb + bkp + bjp
-ak = akp*c72 + ajp*c2 + aa
-bk = bkp*c72 + bjp*c2 + bb
-aj = akm*s72 + ajm*s2
-bj = bkm*s72 + bjm*s2
-a(k1) = ak - bj
-a(k4) = ak + bj
-b(k1) = bk + aj
-b(k4) = bk - aj
-ak = akp*c2 + ajp*c72 + aa
-bk = bkp*c2 + bjp*c72 + bb
-aj = akm*s2 - ajm*s72
-bj = bkm*s2 - bjm*s72
-a(k2) = ak - bj
-a(k3) = ak + bj
-b(k2) = bk + aj
-b(k3) = bk - aj
-kk = k4 + kspan
-if (kk < nn) go to 520
-kk = kk - nn
-if (kk <= kspan) go to 520
-go to 700
-!  Transform for odd factors
-600 k = nfac(i)
-kspnn = kspan
-kspan = kspan/k
-if (k == 3) go to 320
-if (k == 5) go to 510
-if (k == jf) go to 640
-jf = k
-s1 = rad/float(k)
-c1 = cos(s1)
-s1 = sin(s1)
-ck(jf) = 1.0
-sk(jf) = 0.0
-j = 1
-630 ck(j) = ck(k)*c1 + sk(k)*s1
-sk(j) = ck(k)*s1 - sk(k)*c1
-k = k - 1
-ck(k) = ck(j)
-sk(k) = -sk(j)
-j = j + 1
-if (j < k) go to 630
-640 k1 = kk
-k2 = kk + kspnn
-aa = a(kk)
-bb = b(kk)
-ak = aa
-bk = bb
-j = 1
-k1 = k1 + kspan
-650 k2 = k2 - kspan
-j = j + 1
-at(j) = a(k1) + a(k2)
-ak = at(j) + ak
-bt(j) = b(k1) + b(k2)
-bk = bt(j) + bk
-j = j + 1
-at(j) = a(k1) - a(k2)
-bt(j) = b(k1) - b(k2)
-k1 = k1 + kspan
-if (k1 < k2) go to 650
-a(kk) = ak
-b(kk) = bk
-k1 = kk
-k2 = kk + kspnn
-j = 1
-660 k1 = k1 + kspan
-k2 = k2 - kspan
-jj = j
-ak = aa
-bk = bb
-aj = 0.0
-bj = 0.0
-k = 1
-670 k = k + 1
-ak = at(k)*ck(jj) + ak
-bk = bt(k)*ck(jj) + bk
-k = k + 1
-aj = at(k)*sk(jj) + aj
-bj = bt(k)*sk(jj) + bj
-jj = jj + j
-if (jj > jf) jj = jj - jf
-if (k < jf) go to 670
-k = jf - j
-a(k1) = ak - bj
-b(k1) = bk + aj
-a(k2) = ak + bj
-b(k2) = bk - aj
-j = j + 1
-if (j < k) go to 660
-kk = kk + kspnn
-if (kk <= nn) go to 640
-kk = kk - nn
-if (kk <= kspan) go to 640
-!  Multiply by rotation factor (except for factors of 2 and 4)
-700 if (i == m) go to 800
-kk = jc + 1
-710 c2 = 1.0 - cd
-s1 = sd
-720 c1 = c2
-s2 = s1
-kk = kk + kspan
-730 ak = a(kk)
-a(kk) = c2*ak - s2*b(kk)
-b(kk) = s2*ak + c2*b(kk)
-kk = kk + kspnn
-if (kk <= nt) go to 730
-ak = s1*s2
-s2 = s1*c2 + c1*s2
-c2 = c1*c2 - ak
-kk = kk - nt + kspan
-if (kk <= kspnn) go to 730
-u = sd*s1 + cd*c1
-v = sd*c1 - cd*s1
-c2 = c1 - u
-s1 = s1 + v
-!  The following three statements compensate for truncation
-!    error.  If rounded arithmetic is used then they may
-!    be deleted.
-c1 = 1.5 - 0.5*(c2*c2 + s1*s1)
-s1 = c1*s1
-c2 = c1*c2
-kk = kk - kspnn + jc
-if (kk <= kspan) go to 720
-kk = kk - kspan + jc + inc
-if (kk <= jc + jc) go to 710
-go to 100
-!  Permute the results to normal order---done in two stages
-!  permutation for square factors of n
-800 np(1) = ks
-if (kt == 0) go to 890
-k = kt + kt + 1
-if (m < k) k = k - 1
-j = 1
-np(k + 1) = jc
-810 np(j + 1) = np(j)/nfac(j)
-np(k) = np(k + 1)*nfac(j)
-j = j + 1
-k = k - 1
-if (j < k) go to 810
-k3 = np(k + 1)
-kspan = np(2)
-kk = jc + 1
-k2 = kspan + 1
-j = 1
-if (n /= ntot) go to 850
-!  Permutation for single-variate transform (optional code)
-820 ak = a(kk)
-a(kk) = a(k2)
-a(k2) = ak
-bk = b(kk)
-b(kk) = b(k2)
-b(k2) = bk
-kk = kk + inc
-k2 = kspan + k2
-if (k2 < ks) go to 820
-830 k2 = k2 - np(j)
-j = j + 1
-k2 = np(j + 1) + k2
-if (k2 > np(j)) go to 830
-j = 1
-840 if (kk < k2) go to 820
-kk = kk + inc
-k2 = kspan + k2
-if (k2 < ks) go to 840
-if (kk < ks) go to 830
-jc = k3
-go to 890
-!  Permutation for multivariate transform
-850 k = kk + jc
-860 ak = a(kk)
-a(kk) = a(k2)
-a(k2) = ak
-bk = b(kk)
-b(kk) = b(k2)
-b(k2) = bk
-kk = kk + inc
-k2 = k2 + inc
-if (kk < k) go to 860
-kk = kk + ks - jc
-k2 = k2 + ks - jc
-if (kk < nt) go to 850
-k2 = k2 - nt + kspan
-kk = kk - nt + jc
-if (k2 < ks) go to 850
-870 k2 = k2 - np(j)
-j = j + 1
-k2 = np(j + 1) + k2
-if (k2 > np(j)) go to 870
-j = 1
-880 if (kk < k2) go to 850
-kk = kk + jc
-k2 = kspan + k2
-if (k2 < ks) go to 880
-if (kk < ks) go to 870
-jc = k3
-890 if (2*kt + 1 >= m) return
-kspnn = np(kt + 1)
-!  Permutation for square-free factors of n
-j = m - kt
-nfac(j + 1) = 1
-900 nfac(j) = nfac(j)*nfac(j + 1)
-j = j - 1
-if (j /= kt) go to 900
-kt = kt + 1
-nn = nfac(kt) - 1
-jj = 0
-j = 0
-go to 906
-902 jj = jj - k2
-k2 = kk
-k = k + 1
-kk = nfac(k)
-904 jj = kk + jj
-if (jj >= k2) go to 902
-np(j) = jj
-906 k2 = nfac(kt)
-k = kt + 1
-kk = nfac(k)
-j = j + 1
-if (j <= nn) go to 904
-!  Determine the permutation cycles of length greater than 1
-j = 0
-go to 914
-910 k = kk
-kk = np(k)
-np(k) = -kk
-if (kk /= j) go to 910
-k3 = kk
-914 j = j + 1
-kk = np(j)
-if (kk < 0) go to 914
-if (kk /= j) go to 910
-np(j) = -j
-if (j /= nn) go to 914
-maxf = inc*maxf
-!  Reorder A and b, following the permutation cycles
-go to 950
-924 j = j - 1
-if (np(j) < 0) go to 924
-jj = jc
-926 kspan = jj
-if (jj > maxf) kspan = maxf
-jj = jj - kspan
-k = np(j)
-kk = jc*k + i + jj
-k1 = kk + kspan
-k2 = 0
-928 k2 = k2 + 1
-at(k2) = a(k1)
-bt(k2) = b(k1)
-k1 = k1 - inc
-if (k1 /= kk) go to 928
-932 k1 = kk + kspan
-k2 = k1 - jc*(k + np(k))
-k = -np(k)
-936 a(k1) = a(k2)
-b(k1) = b(k2)
-k1 = k1 - inc
-k2 = k2 - inc
-if (k1 /= kk) go to 936
-kk = k2
-if (k /= j) go to 932
-k1 = kk + kspan
-k2 = 0
-940 k2 = k2 + 1
-a(k1) = at(k2)
-b(k1) = bt(k2)
-k1 = k1 - inc
-if (k1 /= kk) go to 940
-if (jj /= 0) go to 926
-if (j /= 1) go to 924
-950 j = k3 + 1
-nt = nt - kspnn
-i = nt - inc + 1
-if (nt >= 0) go to 924
-960 return
-!  Error finish - There is an input error
-1000 ierr = 1
-return
-1001 ierr = 2
-return
-1002 ierr = 3
-end subroutine sfft
-
-!     ******************************************************************
-!     subroutine cosqi(n,wsave)
-!     ******************************************************************
-!     Subroutine cosqi initializes the array wsave which is used in
-!     both cosqf and cosqb. The prime factorization of n together with
-!     a tabulation of the trigonometric functions are computed and
-!     stored in WSAVE.
-!     Input parameter
-!     n       THE LENGTH OF THE ARRAY TO BE TRANSFORMED.  THE METHOD
-!             is most efficient when n is a product of small primes.
-!     Output parameter
-!     WSAVE   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 3*n+15.
-!             The same work array can be used for both cosqf and cosqb
-!             as long as n remains unchanged. Different WSAVE arrays
-!             are required for different values of n. the contents of
-!             WSAVE must not be changed between calls of cosqf or cosqb.
-subroutine cosqi(n,wsave)
-implicit none
-integer :: n
-real, intent(inout) :: wsave(*)
-!     beginning of local variable declarations
-integer :: k
-real :: dt, fk
-real, parameter :: pih = 1.57079632679491
-dt = pih/float(n)
-fk = 0.
-do k = 1,n
-   fk = fk + 1.
-   wsave(k) = cos(fk*dt)
-end do
-call rffti(n,wsave(n + 1))
-end subroutine cosqi
-
-!     ******************************************************************
-!     subroutine cosqf(n,x,wsave)
-!     ******************************************************************
-!     Subroutine cosqf computes the fast Fourier transform of quarter
-!     wave data. That is , cosqf computes the coefficients in a cosine
-!     series representation with only odd wave numbers. The transform
-!     is defined below at output parameter X
-!     cosqf is the unnormalized inverse of cosqb since a call of cosqf
-!     followed by a call of cosqb will multiply the input sequence X
-!     BY 4*n.
-!     The array wsave which is used by subroutine cosqf must be
-!     initialized by calling subroutine cosqi(n,wsave).
-!     Input parameters
-!     n       THE LENGTH OF THE ARRAY X TO BE TRANSFORMED.  THE METHOD
-!             is most efficient when n is a product of small primes.
-!     X       AN ARRAY WHICH CONTAINS THE SEQUENCE TO BE TRANSFORMED
-!     wsave   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 3*n+15
-!             in the program that calls cosqf. The wsave array must be
-!             initialized by calling subroutine cosqi(n,wsave) and A
-!             different wsave array must be used for each different
-!             value of n. this initialization does not have to be
-!             repeated so long as n remains unchanged thus subsequent
-!             transforms can be obtained faster than the first.
-!     Output parameters
-!     X       FOR I=1,...,n
-!                  X(I) = X(1) plus the sum from k=2 To k=n of
-!                     2*X(k)*cos((2*I-1)*(k-1)*pi/(2*n))
-!                  a call of cosqf followed by a call of
-!                  cosqb will multiply the sequence X by 4*n.
-!                  Therefore cosqb is the unnormalized inverse
-!                  OF cosqf.
-!     wsave   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
-!             be destroyed between calls of cosqf or cosqb.
-subroutine cosqf(n,x,wsave)
-implicit none
-integer :: n
-real, intent(inout) :: wsave(*), x(*)
-!     beginning of local variable declarations
-real :: tsqx
-integer :: nswc_ai_i4
-real, parameter :: sqrt2 = 1.4142135623731
-nswc_ai_i4 = n - 2
-if (nswc_ai_i4 < 0) go to 102
-if (nswc_ai_i4 == 0) go to 101
-go to 103
-101 tsqx = sqrt2*x(2)
-x(2) = x(1) - tsqx
-x(1) = x(1) + tsqx
-102 return
-103 call cosqf1(n,x,wsave,wsave(n + 1))
-end subroutine cosqf
-
-subroutine cosqf1(n,x,w,xh)
-implicit none
-integer :: n
-real :: w(*)
-real, intent(inout) :: x(*), xh(*)
-!     beginning of local variable declarations
-integer :: i, k, kc, modn, np2, ns2
-real :: xim1
-ns2 = (n + 1)/2
-np2 = n + 2
-do k = 2,ns2
-   kc = np2 - k
-   xh(k) = x(k) + x(kc)
-   xh(kc) = x(k) - x(kc)
-end do
-modn = mod(n,2)
-if (modn == 0) xh(ns2 + 1) = x(ns2 + 1) + x(ns2 + 1)
-do k = 2,ns2
-   kc = np2 - k
-   x(k) = w(k - 1)*xh(kc) + w(kc - 1)*xh(k)
-   x(kc) = w(k - 1)*xh(k) - w(kc - 1)*xh(kc)
-end do
-if (modn == 0) x(ns2 + 1) = w(ns2)*xh(ns2 + 1)
-call rfftf(n,x,xh)
-do i = 3,n,2
-   xim1 = x(i - 1) - x(i)
-   x(i) = x(i - 1) + x(i)
-   x(i - 1) = xim1
-end do
-end subroutine cosqf1
-
-!     ******************************************************************
-!     subroutine cosqb(n,x,wsave)
-!     ******************************************************************
-!     Subroutine cosqb computes the fast Fourier transform of quarter
-!     wave data. That is , cosqb computes a sequence from its
-!     representation in terms of a cosine series with odd wave numbers.
-!     The transform is defined below at output parameter x.
-!     cosqb is the unnormalized inverse of cosqf since a call of cosqb
-!     followed by a call of cosqf will multiply the input sequence x
-!     BY 4*n.
-!     The array wsave which is used by subroutine cosqb must be
-!     initialized by calling subroutine cosqi(n,WSAVE).
-!     Input parameters
-!     n       THE LENGTH OF THE ARRAY x TO BE TRANSFORMED.  THE METHOD
-!             is most efficient when n is a product of small primes.
-!     x       AN ARRAY WHICH CONTAINS THE SEQUENCE TO BE TRANSFORMED
-!     WSAVE   A WORK ARRAY THAT MUST BE DIMENSIONED AT LEAST 3*n+15
-!             in the program that calls cosqb. The WSAVE array must be
-!             initialized by calling subroutine cosqi(n,WSAVE) and A
-!             different WSAVE array must be used for each different
-!             value of n. this initialization does not have to be
-!             repeated so long as n remains unchanged thus subsequent
-!             transforms can be obtained faster than the first.
-!     Output parameters
-!     x       FOR i=1,...,n
-!                  x(i)= The sum from k=1 To k=n of
-!                    4*x(k)*cos((2*k-1)*(i-1)*pi/(2*n))
-!                  a call of cosqb followed by a call of
-!                  cosqf will multiply the sequence x by 4*n.
-!                  Therefore cosqf is the unnormalized inverse
-!                  OF cosqb.
-!     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
-!             be destroyed between calls of cosqb or cosqf.
-subroutine cosqb(n,x,wsave)
-implicit none
-integer :: n
-real, intent(inout) :: wsave(*), x(*)
-!     beginning of local variable declarations
-real :: x1
-integer :: nswc_ai_i4
-real, parameter :: tsqrt2 = 2.82842712474619
-nswc_ai_i4 = n - 2
-if (nswc_ai_i4 < 0) go to 101
-if (nswc_ai_i4 == 0) go to 102
-go to 103
-101 x(1) = 4.*x(1)
-return
-102 x1 = 4.*(x(1) + x(2))
-x(2) = tsqrt2*(x(1) - x(2))
-x(1) = x1
-return
-103 call cosqb1(n,x,wsave,wsave(n + 1))
-end subroutine cosqb
-
-subroutine cosqb1(n,x,w,xh)
-implicit none
-integer :: n
-real :: w(*)
-real, intent(inout) :: x(*), xh(*)
-!     beginning of local variable declarations
-integer :: i, k, kc, modn, np2, ns2
-real :: xim1
-ns2 = (n + 1)/2
-np2 = n + 2
-do i = 3,n,2
-   xim1 = x(i - 1) + x(i)
-   x(i) = x(i) - x(i - 1)
-   x(i - 1) = xim1
-end do
-x(1) = x(1) + x(1)
-modn = mod(n,2)
-if (modn == 0) x(n) = x(n) + x(n)
-call rfftb(n,x,xh)
-do k = 2,ns2
-   kc = np2 - k
-   xh(k) = w(k - 1)*x(kc) + w(kc - 1)*x(k)
-   xh(kc) = w(k - 1)*x(k) - w(kc - 1)*x(kc)
-end do
-if (modn == 0) x(ns2 + 1) = w(ns2)*(x(ns2 + 1) + x(ns2 + 1))
-do k = 2,ns2
-   kc = np2 - k
-   x(k) = xh(k) + xh(kc)
-   x(kc) = xh(k) - xh(kc)
-end do
-x(1) = x(1) + x(1)
-end subroutine cosqb1
-
-!     ******************************************************************
-!     subroutine sinqf(n,x,wsave)
-!     ******************************************************************
-!     Subroutine sinqf computes the fast Fourier transform of quarter
-!     wave data. That is , sinqf computes the coefficients in a sine
-!     series representation with only odd wave numbers. The transform
-!     is defined below at output parameter x.
-!     sinqb is the unnormalized inverse of sinqf since a call of sinqf
-!     followed by a call of sinqb will multiply the input sequence x
-!     BY 4*n.
-!     The array wsave which is used by subroutine sinqf must be
-!     initialized by calling subroutine sinqi(n,WSAVE).
-!     Input parameters
-!     n       THE LENGTH OF THE ARRAY x TO BE TRANSFORMED.  THE METHOD
-!             is most efficient when n is a product of small primes.
-!     x       AN ARRAY WHICH CONTAINS THE SEQUENCE TO BE TRANSFORMED
-!     WSAVE   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 3*n+15.
-!             In the program that calls sinqf. The WSAVE array must be
-!             initialized by calling subroutine sinqi(n,WSAVE) and A
-!             different WSAVE array must be used for each different
-!             value of n. this initialization does not have to be
-!             repeated so long as n remains unchanged thus subsequent
-!             transforms can be obtained faster than the first.
-!     Output parameters
-!     x       FOR i=1,...,n
-!                  x(i) = (-1)**(i-1)*x(n)
-!                     + the sum from k=1 To k=n-1 of
-!                     2*x(k)*sin((2*i-1)*k*pi/(2*n))
-!                  a call of sinqf followed by a call of
-!                  sinqb will multiply the sequence x by 4*n.
-!                  Therefore sinqb is the unnormalized inverse
-!                  OF sinqf.
-!     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
-!             be destroyed between calls of sinqf or sinqb.
-subroutine sinqf(n,x,wsave)
-implicit none
-integer :: n
-real, intent(inout) :: wsave(*), x(*)
-!     beginning of local variable declarations
-integer :: k, kc, ns2
-real :: xhold
-if (n == 1) return
-ns2 = n/2
-do k = 1,ns2
-   kc = n - k
-   xhold = x(k)
-   x(k) = x(kc + 1)
-   x(kc + 1) = xhold
-end do
-call cosqf(n,x,wsave)
-do k = 2,n,2
-   x(k) = -x(k)
-end do
-end subroutine sinqf
-
-!     ******************************************************************
-!     subroutine sinqb(n,x,wsave)
-!     ******************************************************************
-!     Subroutine sinqb computes the fast Fourier transform of quarter
-!     wave data. That is , sinqb computes a sequence from its
-!     representation in terms of a sine series with odd wave numbers.
-!     The transform is defined below at output parameter x.
-!     sinqf is the unnormalized inverse of sinqb since a call of sinqb
-!     followed by a call of sinqf will multiply the input sequence x
-!     BY 4*n.
-!     The array wsave which is used by subroutine sinqb must be
-!     initialized by calling subroutine sinqi(n,wsave).
-!     Input parameters
-!     n       THE LENGTH OF THE ARRAY x TO BE TRANSFORMED.  THE METHOD
-!             is most efficient when n is a product of small primes.
-!     x       AN ARRAY WHICH CONTAINS THE SEQUENCE TO BE TRANSFORMED
-!     wsave   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 3*n+15.
-!             In the program that calls sinqb. The wsave array must be
-!             initialized by calling subroutine sinqi(n,wsave) and A
-!             different wsave array must be used for each different
-!             value of n. this initialization does not have to be
-!             repeated so long as n remains unchanged thus subsequent
-!             transforms can be obtained faster than the first.
-!     Output parameters
-!     x       FOR I=1,...,n
-!                  x(I)= The sum from k=1 To k=n of
-!                    4*x(k)*sin((2k-1)*I*pi/(2*n))
-!                  a call of sinqb followed by a call of
-!                  sinqf will multiply the sequence x by 4*n.
-!                  Therefore sinqf is the unnormalized inverse
-!                  OF sinqb.
-!     wsave   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
-!             be destroyed between calls of sinqb or sinqf.
-subroutine sinqb(n,x,wsave)
-implicit none
-integer :: n
-real, intent(inout) :: wsave(*), x(*)
-!     beginning of local variable declarations
-integer :: k, kc, ns2
-real :: xhold
-if (n > 1) go to 101
-x(1) = 4.*x(1)
-return
-101 ns2 = n/2
-do k = 2,n,2
-   x(k) = -x(k)
-end do
-call cosqb(n,x,wsave)
-do k = 1,ns2
-   kc = n - k
-   xhold = x(k)
-   x(k) = x(kc + 1)
-   x(kc + 1) = xhold
-end do
-end subroutine sinqb
-
-!     ******************************************************************
-!     subroutine rffti(n,wsave)
-!       ****************************************************************
-!     Subroutine rffti initializes the array wsave which is used in
-!     both rfftf and rfftb. The prime factorization of n together with
-!     a tabulation of the trigonometric functions are computed and
-!     stored in wsave.
-!     Input parameter
-!     n       THE LENGTH OF THE SEQUENCE TO BE TRANSFORMED.
-!     Output parameter
-!     wsave   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 2*n+15.
-!             The same work array can be used for both rfftf and rfftb
-!             as long as n remains unchanged. Different wsave arrays
-!             are required for different values of n. the contents of
-!             wsave must not be changed between calls of rfftf or rfftb.
-subroutine rffti(n,wsave)
-implicit none
-integer :: n
-real, intent(inout) :: wsave(*)
-if (n == 1) return
-call rffti1(n,wsave(n + 1),wsave(2*n + 1))
-end subroutine rffti
-
-pure subroutine rffti1(n,wa,ifac)
+pure subroutine corth(nm,n,low,igh,ar,ai,ortr,orti)
+!! <!-- nswc-ford:begin CORTH -->
+!! Reference for `corth`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      real sqrt,cabs,abs
+!!      complex cmplx
+!!
+!!      This subroutine is a translation of a complex analogue of
+!!      the Algol procedure orthes, NUM. Math. 12, 349-368(1968)
+!!      by Martin and Wilkinson.
+!!      Handbook for auto. Comp., Vol.ii-linear algebra, 339-358(1971).
+!!      Given a complex general matrix, this subroutine
+!!      reduces a submatrix situated in rows and columns
+!!      low through igh to upper Hessenberg form by
+!!      unitary similarity transformations.
+!!      On input-
+!!         nm must be set to the row dimension of two-dimensional
+!!           array parameters as declared in the calling program
+!!           dimension statement,
+!!         n is the order of the matrix,
+!!         low and igh are integers determined by the balancing
+!!           subroutine  cbal.  If  cbal  has not been used,
+!!           set low=1, igh=n,
+!!         ar and ai contain the real and imaginary parts,
+!!           respectively, of the complex input matrix.
+!!      On output-
+!!         ar and ai contain the real and imaginary parts,
+!!           respectively, of the Hessenberg matrix.  Information
+!!           about the unitary transformations used in the reduction
+!!           is stored in the remaining triangles under the
+!!           Hessenberg matrix,
+!!         ortr and orti contain further information about the
+!!           transformations.  Only elements low through igh are used.
+!! ```
+!! <!-- nswc-ford:end -->
 implicit none
 integer, intent(in) :: n
-real, intent(inout) :: wa(*), ifac(*)
+integer, intent(in) :: nm, igh
+integer, intent(in) :: low
+real, intent(inout) :: ar(nm,n), ai(nm,n), ortr(igh), orti(igh)
 !     beginning of local variable declarations
-integer :: i, ib, ido, ii, ip, ipm, is, j, k1, l1, l2, ld, nf, &
-   & nfm1, nl, nq, nr, ntry
-real :: arg, argh, argld, fi, tpi
-integer, parameter :: ntryh(4) = [4, 2, 3, 5]
-nl = n
-nf = 0
-j = 0
-101 j = j + 1
-if ((j - 4) <= 0) go to 102
-go to 103
-102 ntry = ntryh(j)
-go to 104
-103 ntry = ntry + 2
-104 nq = nl/ntry
-nr = nl - ntry*nq
-if ((nr) == 0) go to 105
-go to 101
-105 nf = nf + 1
-ifac(nf + 2) = ntry
-nl = nq
-if (ntry /= 2) go to 107
-if (nf == 1) go to 107
-do i = 2,nf
-   ib = nf - i + 2
-   ifac(ib + 2) = ifac(ib + 1)
-end do
-ifac(3) = 2
-107 if (nl /= 1) go to 104
-ifac(1) = n
-ifac(2) = nf
-tpi = 6.28318530717959
-argh = tpi/float(n)
-is = 0
-nfm1 = nf - 1
-l1 = 1
-if (nfm1 == 0) return
-do k1 = 1,nfm1
-   ip = ifac(k1 + 2)
-   ld = 0
-   l2 = l1*ip
-   ido = n/l2
-   ipm = ip - 1
-   do j = 1,ipm
-      ld = ld + l1
-      i = is
-      argld = float(ld)*argh
-      fi = 0.
-      do ii = 3,ido,2
-         i = i + 2
-         fi = fi + 1.
-         arg = fi*argld
-         wa(i - 1) = cos(arg)
-         wa(i) = sin(arg)
-      end do
-      is = is + ido
+integer :: i, j, m, ii, jj, la, mp, kp1
+real :: f, g, h, fi, fr, scale
+!     real sqrt,cabs,abs
+!     complex cmplx
+!-----------------------------------------------------------------------
+!     This subroutine is a translation of a complex analogue of
+!     the Algol procedure orthes, NUM. Math. 12, 349-368(1968)
+!     by Martin and Wilkinson.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 339-358(1971).
+!     Given a complex general matrix, this subroutine
+!     reduces a submatrix situated in rows and columns
+!     low through igh to upper Hessenberg form by
+!     unitary similarity transformations.
+!     On input-
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!        n is the order of the matrix,
+!        low and igh are integers determined by the balancing
+!          subroutine  cbal.  If  cbal  has not been used,
+!          set low=1, igh=n,
+!        ar and ai contain the real and imaginary parts,
+!          respectively, of the complex input matrix.
+!     On output-
+!        ar and ai contain the real and imaginary parts,
+!          respectively, of the Hessenberg matrix.  Information
+!          about the unitary transformations used in the reduction
+!          is stored in the remaining triangles under the
+!          Hessenberg matrix,
+!        ortr and orti contain further information about the
+!          transformations.  Only elements low through igh are used.
+!-----------------------------------------------------------------------
+la = igh - 1
+kp1 = low + 1
+if (la < kp1) go to 200
+do m = kp1, la
+   h = 0.0
+   ortr(m) = 0.0
+   orti(m) = 0.0
+   scale = 0.0
+!     ********** scale COLUMN (ALGOL TOL THEN NOT NEEDED) **********
+   do i = m, igh
+      scale = scale + abs(ar(i,m - 1)) + abs(ai(i,m - 1))
    end do
-   l1 = l2
-end do
-end subroutine rffti1
-
-!     ******************************************************************
-!     subroutine rfftb(n,r,wsave)
-!     ******************************************************************
-!     Subroutine rfftb computes the real perodic sequence from its
-!     Fourier coefficients (Fourier synthesis). The transform is defined
-!     below at output parameter R.
-!     Input parameters
-!     n       THE LENGTH OF THE ARRAY R TO BE TRANSFORMED.  THE METHOD
-!             is most efficient when n is a product of small primes.
-!             n may change so long as different work arrays are provided
-!     R       A REAL ARRAY OF LENGTH n WHICH CONTAINS THE SEQUENCE
-!             to be transformed
-!     WSAVE   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 2*n+15.
-!             In the program that calls rfftb. The WSAVE array must be
-!             initialized by calling subroutine rffti(n,WSAVE) and A
-!             different WSAVE array must be used for each different
-!             value of n. this initialization does not have to be
-!             repeated so long as n remains unchanged thus subsequent
-!             transforms can be obtained faster than the first.
-!             The same WSAVE array can be used by rfftf and rfftb.
-!     Output parameters
-!     R       for n even and for i = 1,...,n
-!                  r(i) = r(1)+(-1)**(i-1)*r(n)
-!                       plus the sum from K=2 To K=n/2 of
-!                        2.*R(2*K-2)*cos((K-1)*(i-1)*2*pi/n)
-!                       -2.*R(2*K-1)*sin((K-1)*(i-1)*2*pi/n)
-!             for n odd and for i = 1,...,n
-!                  R(i) = R(1) plus the sum from K=2 To K=(n+1)/2 of
-!                       2.*R(2*K-2)*cos((K-1)*(i-1)*2*pi/n)
-!                      -2.*R(2*K-1)*sin((K-1)*(i-1)*2*pi/n)
-!      *****  NOTE
-!                  this transform is unnormalized since a call of rfftf
-!                  followed by a call of rfftb will multiply the input
-!                  sequence by n.
-!     WSAVE   CONTAINS RESULTS WHICH MUST NOT BE DESTROYED BETWEEN
-!             calls of rfftb or rfftf.
-subroutine rfftb(n,r,wsave)
-implicit none
-integer :: n
-real, intent(inout) :: r(*), wsave(*)
-if (n == 1) return
-call rfftb1(n,r,wsave,wsave(n + 1),wsave(2*n + 1))
-end subroutine rfftb
-
-subroutine rfftb1(n,c,ch,wa,ifac)
-implicit none
-integer, intent(in) :: n
-real, intent(inout) :: c(*), ch(*)
-real :: wa(*)
-real, intent(in) :: ifac(*)
-!     beginning of local variable declarations
-integer :: i, idl1, ido, ip, iw, ix2, ix3, ix4, k1, l1, l2, na, nf
-nf = ifac(2)
-na = 0
-l1 = 1
-iw = 1
-do k1 = 1,nf
-   ip = ifac(k1 + 2)
-   l2 = ip*l1
-   ido = n/l2
-   idl1 = ido*l1
-   if (ip /= 4) go to 103
-   ix2 = iw + ido
-   ix3 = ix2 + ido
-   if (na /= 0) go to 101
-   call radb4(ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3))
-   go to 102
-101 call radb4(ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3))
-102 na = 1 - na
-   go to 115
-103 if (ip /= 2) go to 106
-   if (na /= 0) go to 104
-   call radb2(ido,l1,c,ch,wa(iw))
+   if (scale == 0.0) go to 180
+   mp = m + igh
+!     ********** FOR i=igh STEP -1 UNTIL m DO -- **********
+   do ii = m, igh
+      i = mp - ii
+      ortr(i) = ar(i,m - 1) / scale
+      orti(i) = ai(i,m - 1) / scale
+      h = h + ortr(i) * ortr(i) + orti(i) * orti(i)
+   end do
+   g = sqrt(h)
+   f = abs(cmplx(ortr(m),orti(m)))
+   if (f == 0.0) go to 103
+   h = h + f * g
+   g = g / f
+   ortr(m) = (1.0 + g) * ortr(m)
+   orti(m) = (1.0 + g) * orti(m)
    go to 105
-104 call radb2(ido,l1,ch,c,wa(iw))
-105 na = 1 - na
-   go to 115
-106 if (ip /= 3) go to 109
-   ix2 = iw + ido
-   if (na /= 0) go to 107
-   call radb3(ido,l1,c,ch,wa(iw),wa(ix2))
-   go to 108
-107 call radb3(ido,l1,ch,c,wa(iw),wa(ix2))
-108 na = 1 - na
-   go to 115
-109 if (ip /= 5) go to 112
-   ix2 = iw + ido
-   ix3 = ix2 + ido
-   ix4 = ix3 + ido
-   if (na /= 0) go to 110
-   call radb5(ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3),wa(ix4))
-   go to 111
-110 call radb5(ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3),wa(ix4))
-111 na = 1 - na
-   go to 115
-112 if (na /= 0) go to 113
-   call radbg(ido,ip,l1,idl1,c,c,c,ch,ch,wa(iw))
-   go to 114
-113 call radbg(ido,ip,l1,idl1,ch,ch,ch,c,c,wa(iw))
-114 if (ido == 1) na = 1 - na
-115 l1 = l2
-   iw = iw + (ip - 1)*ido
-end do
-if (na == 0) return
-do i = 1,n
-   c(i) = ch(i)
-end do
-end subroutine rfftb1
-
-subroutine radb2(ido,l1,cc,ch,wa1)
-implicit none
-integer, intent(in) :: ido, l1
-real :: cc(ido,2,l1)
-real, intent(inout) :: ch(ido,l1,*)
-real :: wa1(*)
-!     beginning of local variable declarations
-integer :: i, ic, idp2, k, nswc_ai_i4
-real :: ti2, tr2
-do k = 1,l1
-   ch(1,k,1) = cc(1,1,k) + cc(ido,2,k)
-   ch(1,k,2) = cc(1,1,k) - cc(ido,2,k)
-end do
-nswc_ai_i4 = ido - 2
-if (nswc_ai_i4 < 0) go to 107
-if (nswc_ai_i4 == 0) go to 105
-go to 102
-102 idp2 = ido + 2
-if ((ido - 1)/2 < l1) go to 108
-do k = 1,l1
-   do i = 3,ido,2
-      ic = idp2 - i
-      ch(i - 1,k,1) = cc(i - 1,1,k) + cc(ic - 1,2,k)
-      tr2 = cc(i - 1,1,k) - cc(ic - 1,2,k)
-      ch(i,k,1) = cc(i,1,k) - cc(ic,2,k)
-      ti2 = cc(i,1,k) + cc(ic,2,k)
-      ch(i - 1,k,2) = wa1(i - 2)*tr2 - wa1(i - 1)*ti2
-      ch(i,k,2) = wa1(i - 2)*ti2 + wa1(i - 1)*tr2
-   end do
-end do
-go to 111
-108 do i = 3,ido,2
-   ic = idp2 - i
-   do k = 1,l1
-      ch(i - 1,k,1) = cc(i - 1,1,k) + cc(ic - 1,2,k)
-      tr2 = cc(i - 1,1,k) - cc(ic - 1,2,k)
-      ch(i,k,1) = cc(i,1,k) - cc(ic,2,k)
-      ti2 = cc(i,1,k) + cc(ic,2,k)
-      ch(i - 1,k,2) = wa1(i - 2)*tr2 - wa1(i - 1)*ti2
-      ch(i,k,2) = wa1(i - 2)*ti2 + wa1(i - 1)*tr2
-   end do
-end do
-111 if (mod(ido,2) == 1) return
-105 do k = 1,l1
-   ch(ido,k,1) = cc(ido,1,k) + cc(ido,1,k)
-   ch(ido,k,2) = -(cc(1,2,k) + cc(1,2,k))
-end do
-107 return
-end subroutine radb2
-
-subroutine radb3(ido,l1,cc,ch,wa1,wa2)
-implicit none
-integer, intent(in) :: ido, l1
-real :: cc(ido,3,l1)
-real, intent(inout) :: ch(ido,l1,*)
-real :: wa1(*), wa2(*)
-!     beginning of local variable declarations
-integer :: i, ic, idp2, k
-real :: ci2, ci3, cr2, cr3, di2, di3, dr2, dr3, ti2, tr2
-real, parameter :: taur = -.5
-real, parameter :: taui = .866025403784439
-do k = 1,l1
-   tr2 = cc(ido,2,k) + cc(ido,2,k)
-   cr2 = cc(1,1,k) + taur*tr2
-   ch(1,k,1) = cc(1,1,k) + tr2
-   ci3 = taui*(cc(1,3,k) + cc(1,3,k))
-   ch(1,k,2) = cr2 - ci3
-   ch(1,k,3) = cr2 + ci3
-end do
-if (ido == 1) return
-idp2 = ido + 2
-if ((ido - 1)/2 < l1) go to 104
-do k = 1,l1
-   do i = 3,ido,2
-      ic = idp2 - i
-      tr2 = cc(i - 1,3,k) + cc(ic - 1,2,k)
-      cr2 = cc(i - 1,1,k) + taur*tr2
-      ch(i - 1,k,1) = cc(i - 1,1,k) + tr2
-      ti2 = cc(i,3,k) - cc(ic,2,k)
-      ci2 = cc(i,1,k) + taur*ti2
-      ch(i,k,1) = cc(i,1,k) + ti2
-      cr3 = taui*(cc(i - 1,3,k) - cc(ic - 1,2,k))
-      ci3 = taui*(cc(i,3,k) + cc(ic,2,k))
-      dr2 = cr2 - ci3
-      dr3 = cr2 + ci3
-      di2 = ci2 + cr3
-      di3 = ci2 - cr3
-      ch(i - 1,k,2) = wa1(i - 2)*dr2 - wa1(i - 1)*di2
-      ch(i,k,2) = wa1(i - 2)*di2 + wa1(i - 1)*dr2
-      ch(i - 1,k,3) = wa2(i - 2)*dr3 - wa2(i - 1)*di3
-      ch(i,k,3) = wa2(i - 2)*di3 + wa2(i - 1)*dr3
-   end do
-end do
-return
-104 do i = 3,ido,2
-   ic = idp2 - i
-   do k = 1,l1
-      tr2 = cc(i - 1,3,k) + cc(ic - 1,2,k)
-      cr2 = cc(i - 1,1,k) + taur*tr2
-      ch(i - 1,k,1) = cc(i - 1,1,k) + tr2
-      ti2 = cc(i,3,k) - cc(ic,2,k)
-      ci2 = cc(i,1,k) + taur*ti2
-      ch(i,k,1) = cc(i,1,k) + ti2
-      cr3 = taui*(cc(i - 1,3,k) - cc(ic - 1,2,k))
-      ci3 = taui*(cc(i,3,k) + cc(ic,2,k))
-      dr2 = cr2 - ci3
-      dr3 = cr2 + ci3
-      di2 = ci2 + cr3
-      di3 = ci2 - cr3
-      ch(i - 1,k,2) = wa1(i - 2)*dr2 - wa1(i - 1)*di2
-      ch(i,k,2) = wa1(i - 2)*di2 + wa1(i - 1)*dr2
-      ch(i - 1,k,3) = wa2(i - 2)*dr3 - wa2(i - 1)*di3
-      ch(i,k,3) = wa2(i - 2)*di3 + wa2(i - 1)*dr3
-   end do
-end do
-end subroutine radb3
-
-subroutine radb4(ido,l1,cc,ch,wa1,wa2,wa3)
-implicit none
-integer, intent(in) :: ido, l1
-real :: cc(ido,4,l1)
-real, intent(inout) :: ch(ido,l1,*)
-real :: wa1(*), wa2(*), wa3(*)
-!     beginning of local variable declarations
-integer :: i, ic, idp2, k, nswc_ai_i4
-real :: ci2, ci3, ci4, cr2, cr3, cr4, ti1, ti2, ti3, ti4, tr1, tr2, tr3, tr4
-real, parameter :: sqrt2 = 1.414213562373095
-do k = 1,l1
-   tr1 = cc(1,1,k) - cc(ido,4,k)
-   tr2 = cc(1,1,k) + cc(ido,4,k)
-   tr3 = cc(ido,2,k) + cc(ido,2,k)
-   tr4 = cc(1,3,k) + cc(1,3,k)
-   ch(1,k,1) = tr2 + tr3
-   ch(1,k,2) = tr1 - tr4
-   ch(1,k,3) = tr2 - tr3
-   ch(1,k,4) = tr1 + tr4
-end do
-nswc_ai_i4 = ido - 2
-if (nswc_ai_i4 < 0) go to 107
-if (nswc_ai_i4 == 0) go to 105
-go to 102
-102 idp2 = ido + 2
-if ((ido - 1)/2 < l1) go to 108
-do k = 1,l1
-   do i = 3,ido,2
-      ic = idp2 - i
-      ti1 = cc(i,1,k) + cc(ic,4,k)
-      ti2 = cc(i,1,k) - cc(ic,4,k)
-      ti3 = cc(i,3,k) - cc(ic,2,k)
-      tr4 = cc(i,3,k) + cc(ic,2,k)
-      tr1 = cc(i - 1,1,k) - cc(ic - 1,4,k)
-      tr2 = cc(i - 1,1,k) + cc(ic - 1,4,k)
-      ti4 = cc(i - 1,3,k) - cc(ic - 1,2,k)
-      tr3 = cc(i - 1,3,k) + cc(ic - 1,2,k)
-      ch(i - 1,k,1) = tr2 + tr3
-      cr3 = tr2 - tr3
-      ch(i,k,1) = ti2 + ti3
-      ci3 = ti2 - ti3
-      cr2 = tr1 - tr4
-      cr4 = tr1 + tr4
-      ci2 = ti1 + ti4
-      ci4 = ti1 - ti4
-      ch(i - 1,k,2) = wa1(i - 2)*cr2 - wa1(i - 1)*ci2
-      ch(i,k,2) = wa1(i - 2)*ci2 + wa1(i - 1)*cr2
-      ch(i - 1,k,3) = wa2(i - 2)*cr3 - wa2(i - 1)*ci3
-      ch(i,k,3) = wa2(i - 2)*ci3 + wa2(i - 1)*cr3
-      ch(i - 1,k,4) = wa3(i - 2)*cr4 - wa3(i - 1)*ci4
-      ch(i,k,4) = wa3(i - 2)*ci4 + wa3(i - 1)*cr4
-   end do
-end do
-go to 111
-108 do i = 3,ido,2
-   ic = idp2 - i
-   do k = 1,l1
-      ti1 = cc(i,1,k) + cc(ic,4,k)
-      ti2 = cc(i,1,k) - cc(ic,4,k)
-      ti3 = cc(i,3,k) - cc(ic,2,k)
-      tr4 = cc(i,3,k) + cc(ic,2,k)
-      tr1 = cc(i - 1,1,k) - cc(ic - 1,4,k)
-      tr2 = cc(i - 1,1,k) + cc(ic - 1,4,k)
-      ti4 = cc(i - 1,3,k) - cc(ic - 1,2,k)
-      tr3 = cc(i - 1,3,k) + cc(ic - 1,2,k)
-      ch(i - 1,k,1) = tr2 + tr3
-      cr3 = tr2 - tr3
-      ch(i,k,1) = ti2 + ti3
-      ci3 = ti2 - ti3
-      cr2 = tr1 - tr4
-      cr4 = tr1 + tr4
-      ci2 = ti1 + ti4
-      ci4 = ti1 - ti4
-      ch(i - 1,k,2) = wa1(i - 2)*cr2 - wa1(i - 1)*ci2
-      ch(i,k,2) = wa1(i - 2)*ci2 + wa1(i - 1)*cr2
-      ch(i - 1,k,3) = wa2(i - 2)*cr3 - wa2(i - 1)*ci3
-      ch(i,k,3) = wa2(i - 2)*ci3 + wa2(i - 1)*cr3
-      ch(i - 1,k,4) = wa3(i - 2)*cr4 - wa3(i - 1)*ci4
-      ch(i,k,4) = wa3(i - 2)*ci4 + wa3(i - 1)*cr4
-   end do
-end do
-111 if (mod(ido,2) == 1) return
-105 do k = 1,l1
-   ti1 = cc(1,2,k) + cc(1,4,k)
-   ti2 = cc(1,4,k) - cc(1,2,k)
-   tr1 = cc(ido,1,k) - cc(ido,3,k)
-   tr2 = cc(ido,1,k) + cc(ido,3,k)
-   ch(ido,k,1) = tr2 + tr2
-   ch(ido,k,2) = sqrt2*(tr1 - ti1)
-   ch(ido,k,3) = ti2 + ti2
-   ch(ido,k,4) = -sqrt2*(tr1 + ti1)
-end do
-107 return
-end subroutine radb4
-
-subroutine radb5(ido,l1,cc,ch,wa1,wa2,wa3,wa4)
-implicit none
-integer, intent(in) :: ido, l1
-real :: cc(ido,5,l1)
-real, intent(inout) :: ch(ido,l1,*)
-real :: wa1(*), wa2(*), wa3(*), wa4(*)
-!     beginning of local variable declarations
-integer :: i, ic, idp2, k
-real :: ci2, ci3, ci4, ci5, cr2, cr3, cr4, cr5, di2, di3, di4, di5, dr2, dr3, dr4, dr5, ti2, ti3, ti4, ti5, tr2, tr3, tr4, tr5
-real, parameter :: tr11 = .309016994374947
-real, parameter :: ti11 = .951056516295154
-real, parameter :: tr12 = -.809016994374947
-real, parameter :: ti12 = .587785252292473
-do k = 1,l1
-   ti5 = cc(1,3,k) + cc(1,3,k)
-   ti4 = cc(1,5,k) + cc(1,5,k)
-   tr2 = cc(ido,2,k) + cc(ido,2,k)
-   tr3 = cc(ido,4,k) + cc(ido,4,k)
-   ch(1,k,1) = cc(1,1,k) + tr2 + tr3
-   cr2 = cc(1,1,k) + tr11*tr2 + tr12*tr3
-   cr3 = cc(1,1,k) + tr12*tr2 + tr11*tr3
-   ci5 = ti11*ti5 + ti12*ti4
-   ci4 = ti12*ti5 - ti11*ti4
-   ch(1,k,2) = cr2 - ci5
-   ch(1,k,3) = cr3 - ci4
-   ch(1,k,4) = cr3 + ci4
-   ch(1,k,5) = cr2 + ci5
-end do
-if (ido == 1) return
-idp2 = ido + 2
-if ((ido - 1)/2 < l1) go to 104
-do k = 1,l1
-   do i = 3,ido,2
-      ic = idp2 - i
-      ti5 = cc(i,3,k) + cc(ic,2,k)
-      ti2 = cc(i,3,k) - cc(ic,2,k)
-      ti4 = cc(i,5,k) + cc(ic,4,k)
-      ti3 = cc(i,5,k) - cc(ic,4,k)
-      tr5 = cc(i - 1,3,k) - cc(ic - 1,2,k)
-      tr2 = cc(i - 1,3,k) + cc(ic - 1,2,k)
-      tr4 = cc(i - 1,5,k) - cc(ic - 1,4,k)
-      tr3 = cc(i - 1,5,k) + cc(ic - 1,4,k)
-      ch(i - 1,k,1) = cc(i - 1,1,k) + tr2 + tr3
-      ch(i,k,1) = cc(i,1,k) + ti2 + ti3
-      cr2 = cc(i - 1,1,k) + tr11*tr2 + tr12*tr3
-      ci2 = cc(i,1,k) + tr11*ti2 + tr12*ti3
-      cr3 = cc(i - 1,1,k) + tr12*tr2 + tr11*tr3
-      ci3 = cc(i,1,k) + tr12*ti2 + tr11*ti3
-      cr5 = ti11*tr5 + ti12*tr4
-      ci5 = ti11*ti5 + ti12*ti4
-      cr4 = ti12*tr5 - ti11*tr4
-      ci4 = ti12*ti5 - ti11*ti4
-      dr3 = cr3 - ci4
-      dr4 = cr3 + ci4
-      di3 = ci3 + cr4
-      di4 = ci3 - cr4
-      dr5 = cr2 + ci5
-      dr2 = cr2 - ci5
-      di5 = ci2 - cr5
-      di2 = ci2 + cr5
-      ch(i - 1,k,2) = wa1(i - 2)*dr2 - wa1(i - 1)*di2
-      ch(i,k,2) = wa1(i - 2)*di2 + wa1(i - 1)*dr2
-      ch(i - 1,k,3) = wa2(i - 2)*dr3 - wa2(i - 1)*di3
-      ch(i,k,3) = wa2(i - 2)*di3 + wa2(i - 1)*dr3
-      ch(i - 1,k,4) = wa3(i - 2)*dr4 - wa3(i - 1)*di4
-      ch(i,k,4) = wa3(i - 2)*di4 + wa3(i - 1)*dr4
-      ch(i - 1,k,5) = wa4(i - 2)*dr5 - wa4(i - 1)*di5
-      ch(i,k,5) = wa4(i - 2)*di5 + wa4(i - 1)*dr5
-   end do
-end do
-return
-104 do i = 3,ido,2
-   ic = idp2 - i
-   do k = 1,l1
-      ti5 = cc(i,3,k) + cc(ic,2,k)
-      ti2 = cc(i,3,k) - cc(ic,2,k)
-      ti4 = cc(i,5,k) + cc(ic,4,k)
-      ti3 = cc(i,5,k) - cc(ic,4,k)
-      tr5 = cc(i - 1,3,k) - cc(ic - 1,2,k)
-      tr2 = cc(i - 1,3,k) + cc(ic - 1,2,k)
-      tr4 = cc(i - 1,5,k) - cc(ic - 1,4,k)
-      tr3 = cc(i - 1,5,k) + cc(ic - 1,4,k)
-      ch(i - 1,k,1) = cc(i - 1,1,k) + tr2 + tr3
-      ch(i,k,1) = cc(i,1,k) + ti2 + ti3
-      cr2 = cc(i - 1,1,k) + tr11*tr2 + tr12*tr3
-      ci2 = cc(i,1,k) + tr11*ti2 + tr12*ti3
-      cr3 = cc(i - 1,1,k) + tr12*tr2 + tr11*tr3
-      ci3 = cc(i,1,k) + tr12*ti2 + tr11*ti3
-      cr5 = ti11*tr5 + ti12*tr4
-      ci5 = ti11*ti5 + ti12*ti4
-      cr4 = ti12*tr5 - ti11*tr4
-      ci4 = ti12*ti5 - ti11*ti4
-      dr3 = cr3 - ci4
-      dr4 = cr3 + ci4
-      di3 = ci3 + cr4
-      di4 = ci3 - cr4
-      dr5 = cr2 + ci5
-      dr2 = cr2 - ci5
-      di5 = ci2 - cr5
-      di2 = ci2 + cr5
-      ch(i - 1,k,2) = wa1(i - 2)*dr2 - wa1(i - 1)*di2
-      ch(i,k,2) = wa1(i - 2)*di2 + wa1(i - 1)*dr2
-      ch(i - 1,k,3) = wa2(i - 2)*dr3 - wa2(i - 1)*di3
-      ch(i,k,3) = wa2(i - 2)*di3 + wa2(i - 1)*dr3
-      ch(i - 1,k,4) = wa3(i - 2)*dr4 - wa3(i - 1)*di4
-      ch(i,k,4) = wa3(i - 2)*di4 + wa3(i - 1)*dr4
-      ch(i - 1,k,5) = wa4(i - 2)*dr5 - wa4(i - 1)*di5
-      ch(i,k,5) = wa4(i - 2)*di5 + wa4(i - 1)*dr5
-   end do
-end do
-end subroutine radb5
-
-subroutine radbg(ido,ip,l1,idl1,cc,c1,c2,ch,ch2,wa)
-implicit none
-integer, intent(in) :: idl1, ido, ip, l1
-real, intent(inout) :: c1(ido,l1,ip), c2(idl1,ip)
-real :: cc(ido,ip,l1)
-real, intent(inout) :: ch(ido,l1,ip), ch2(idl1,ip)
-real :: wa(*)
-!     beginning of local variable declarations
-integer :: i, ic, idij, idp2, ik, ipp2, ipph, is, j, j2, jc, k, l, &
-   & lc, nbd
-real :: ai1, ai2, ar1, ar1h, ar2, ar2h, arg, dc2, dcp, ds2, dsp
-real, parameter :: tpi = 6.28318530717959
-arg = tpi/float(ip)
-dcp = cos(arg)
-dsp = sin(arg)
-idp2 = ido + 2
-nbd = (ido - 1)/2
-ipp2 = ip + 2
-ipph = (ip + 1)/2
-if (ido < l1) go to 103
-do k = 1,l1
-   do i = 1,ido
-      ch(i,k,1) = cc(i,1,k)
-   end do
-end do
-go to 106
-103 do i = 1,ido
-   do k = 1,l1
-      ch(i,k,1) = cc(i,1,k)
-   end do
-end do
-106 do j = 2,ipph
-   jc = ipp2 - j
-   j2 = j + j
-   do k = 1,l1
-      ch(1,k,j) = cc(ido,j2 - 2,k) + cc(ido,j2 - 2,k)
-      ch(1,k,jc) = cc(1,j2 - 1,k) + cc(1,j2 - 1,k)
-   end do
-end do
-if (ido == 1) go to 116
-if (nbd < l1) go to 112
-do j = 2,ipph
-   jc = ipp2 - j
-   do k = 1,l1
-      do i = 3,ido,2
-         ic = idp2 - i
-         ch(i - 1,k,j) = cc(i - 1,2*j - 1,k) + cc(ic - 1,2*j - 2,k)
-         ch(i - 1,k,jc) = cc(i - 1,2*j - 1,k) - cc(ic - 1,2*j - 2,k)
-         ch(i,k,j) = cc(i,2*j - 1,k) - cc(ic,2*j - 2,k)
-         ch(i,k,jc) = cc(i,2*j - 1,k) + cc(ic,2*j - 2,k)
+103 ortr(m) = g
+   ar(m,m - 1) = scale
+!     ********** FORM (i-(U*UT)/h) * A **********
+105 do j = m, n
+      fr = 0.0
+      fi = 0.0
+!     ********** FOR i=igh STEP -1 UNTIL m DO -- **********
+      do ii = m, igh
+         i = mp - ii
+         fr = fr + ortr(i) * ar(i,j) + orti(i) * ai(i,j)
+         fi = fi + ortr(i) * ai(i,j) - orti(i) * ar(i,j)
+      end do
+      fr = fr / h
+      fi = fi / h
+      do i = m, igh
+         ar(i,j) = ar(i,j) - fr * ortr(i) + fi * orti(i)
+         ai(i,j) = ai(i,j) - fr * orti(i) - fi * ortr(i)
       end do
    end do
-end do
-go to 116
-112 do j = 2,ipph
-   jc = ipp2 - j
-   do i = 3,ido,2
-      ic = idp2 - i
-      do k = 1,l1
-         ch(i - 1,k,j) = cc(i - 1,2*j - 1,k) + cc(ic - 1,2*j - 2,k)
-         ch(i - 1,k,jc) = cc(i - 1,2*j - 1,k) - cc(ic - 1,2*j - 2,k)
-         ch(i,k,j) = cc(i,2*j - 1,k) - cc(ic,2*j - 2,k)
-         ch(i,k,jc) = cc(i,2*j - 1,k) + cc(ic,2*j - 2,k)
+!     ********** FORM (i-(U*UT)/h)*A*(i-(U*UT)/h) **********
+   do i = 1, igh
+      fr = 0.0
+      fi = 0.0
+!     ********** FOR j=igh STEP -1 UNTIL m DO -- **********
+      do jj = m, igh
+         j = mp - jj
+         fr = fr + ortr(j) * ar(i,j) - orti(j) * ai(i,j)
+         fi = fi + ortr(j) * ai(i,j) + orti(j) * ar(i,j)
+      end do
+      fr = fr / h
+      fi = fi / h
+      do j = m, igh
+         ar(i,j) = ar(i,j) - fr * ortr(j) - fi * orti(j)
+         ai(i,j) = ai(i,j) + fr * orti(j) - fi * ortr(j)
       end do
    end do
+   ortr(m) = scale * ortr(m)
+   orti(m) = scale * orti(m)
+   ar(m,m - 1) = -g * ar(m,m - 1)
+   ai(m,m - 1) = -g * ai(m,m - 1)
+180 continue
 end do
-116 ar1 = 1.
-ai1 = 0.
-do l = 2,ipph
-   lc = ipp2 - l
-   ar1h = dcp*ar1 - dsp*ai1
-   ai1 = dcp*ai1 + dsp*ar1
-   ar1 = ar1h
-   do ik = 1,idl1
-      c2(ik,l) = ch2(ik,1) + ar1*ch2(ik,2)
-      c2(ik,lc) = ai1*ch2(ik,ip)
-   end do
-   dc2 = ar1
-   ds2 = ai1
-   ar2 = ar1
-   ai2 = ai1
-   do j = 3,ipph
-      jc = ipp2 - j
-      ar2h = dc2*ar2 - ds2*ai2
-      ai2 = dc2*ai2 + ds2*ar2
-      ar2 = ar2h
-      do ik = 1,idl1
-         c2(ik,l) = c2(ik,l) + ar2*ch2(ik,j)
-         c2(ik,lc) = c2(ik,lc) + ai2*ch2(ik,jc)
-      end do
-   end do
-end do
-do j = 2,ipph
-   do ik = 1,idl1
-      ch2(ik,1) = ch2(ik,1) + ch2(ik,j)
-   end do
-end do
-do j = 2,ipph
-   jc = ipp2 - j
-   do k = 1,l1
-      ch(1,k,j) = c1(1,k,j) - c1(1,k,jc)
-      ch(1,k,jc) = c1(1,k,j) + c1(1,k,jc)
-   end do
-end do
-if (ido == 1) go to 132
-if (nbd < l1) go to 128
-do j = 2,ipph
-   jc = ipp2 - j
-   do k = 1,l1
-      do i = 3,ido,2
-         ch(i - 1,k,j) = c1(i - 1,k,j) - c1(i,k,jc)
-         ch(i - 1,k,jc) = c1(i - 1,k,j) + c1(i,k,jc)
-         ch(i,k,j) = c1(i,k,j) + c1(i - 1,k,jc)
-         ch(i,k,jc) = c1(i,k,j) - c1(i - 1,k,jc)
-      end do
-   end do
-end do
-go to 132
-128 do j = 2,ipph
-   jc = ipp2 - j
-   do i = 3,ido,2
-      do k = 1,l1
-         ch(i - 1,k,j) = c1(i - 1,k,j) - c1(i,k,jc)
-         ch(i - 1,k,jc) = c1(i - 1,k,j) + c1(i,k,jc)
-         ch(i,k,j) = c1(i,k,j) + c1(i - 1,k,jc)
-         ch(i,k,jc) = c1(i,k,j) - c1(i - 1,k,jc)
-      end do
-   end do
-end do
-132 continue
-if (ido == 1) return
-do ik = 1,idl1
-   c2(ik,1) = ch2(ik,1)
-end do
-do j = 2,ip
-   do k = 1,l1
-      c1(1,k,j) = ch(1,k,j)
-   end do
-end do
-if (nbd > l1) go to 139
-is = -ido
-do j = 2,ip
-   is = is + ido
-   idij = is
-   do i = 3,ido,2
-      idij = idij + 2
-      do k = 1,l1
-         c1(i - 1,k,j) = wa(idij - 1)*ch(i - 1,k,j) - wa(idij)*ch(i,k,j)
-         c1(i,k,j) = wa(idij - 1)*ch(i,k,j) + wa(idij)*ch(i - 1,k,j)
-      end do
-   end do
-end do
-go to 143
-139 is = -ido
-do j = 2,ip
-   is = is + ido
-   do k = 1,l1
-      idij = is
-      do i = 3,ido,2
-         idij = idij + 2
-         c1(i - 1,k,j) = wa(idij - 1)*ch(i - 1,k,j) - wa(idij)*ch(i,k,j)
-         c1(i,k,j) = wa(idij - 1)*ch(i,k,j) + wa(idij)*ch(i - 1,k,j)
-      end do
-   end do
-end do
-143 return
-end subroutine radbg
+200 return
+!     ********** Last card of corth **********
+end subroutine corth
 
-!     ******************************************************************
-!     subroutine rfftf(n,r,wsave)
-!     ******************************************************************
-!     Subroutine rfftf computes the Fourier coefficients of a real
-!     perodic sequence (Fourier analysis). The transform is defined
-!     below at output parameter R.
-!     Input parameters
-!     N       THE LENGTH OF THE ARRAY R TO BE TRANSFORMED.  THE METHOD
-!             is most efficient when N is a product of small primes.
-!             N may change so long as different work arrays are provided
-!     R       A REAL ARRAY OF LENGTH N WHICH CONTAINS THE SEQUENCE
-!             to be transformed
-!     WSAVE   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 2*N+15.
-!             In the program that calls rfftf. The WSAVE array must be
-!             initialized by calling subroutine rffti(N,WSAVE) and A
-!             different WSAVE array must be used for each different
-!             value of N. this initialization does not have to be
-!             repeated so long as N remains unchanged thus subsequent
-!             transforms can be obtained faster than the first.
-!             The same WSAVE array can be used by rfftf and rfftb.
-!     Output parameters
-!     R       R(1) = The sum from i=1 To i=N of R(i)
-!             if N is even set l =N/2   , if N is odd set l = (N+1)/2
-!               then for k = 2,...,l
-!                  R(2*k-2) = The sum from i = 1 To i = N of
-!                       R(i)*cos((k-1)*(i-1)*2*pi/N)
-!                  R(2*k-1) = The sum from i = 1 To i = N of
-!                      -R(i)*sin((k-1)*(i-1)*2*pi/N)
-!             if N is even
-!                  R(N) = The sum from i = 1 To i = N of
-!                       (-1)**(i-1)*R(i)
-!      *****  NOTE
-!                  this transform is unnormalized since a call of rfftf
-!                  followed by a call of rfftb will multiply the input
-!                  sequence by N.
-!     WSAVE   CONTAINS RESULTS WHICH MUST NOT BE DESTROYED BETWEEN
-!             calls of rfftf or rfftb.
-subroutine rfftf(n,r,wsave)
-implicit none
-integer :: n
-real, intent(inout) :: r(*), wsave(*)
-if (n == 1) return
-call rfftf1(n,r,wsave,wsave(n + 1),wsave(2*n + 1))
-end subroutine rfftf
-
-subroutine rfftf1(n,c,ch,wa,ifac)
+pure subroutine comqr(nm,n,low,igh,hr,hi,wr,wi,ierr)
+!! <!-- nswc-ford:begin COMQR -->
+!! Reference for `comqr`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      integer min0
+!!      real sqrt,cabs,abs,real,aimag
+!!      complex csqrt,cmplx
+!!
+!!      This subroutine is a translation of a unitary analogue of the
+!!      Algol procedure  COMLR, NUM. Math. 12, 369-376(1968) By Martin
+!!      and Wilkinson.
+!!      Handbook for auto. Comp., Vol.II-linear algebra, 396-403(1971).
+!!      The unitary analogue substitutes the QR algorithm of Francis
+!!      (comp. Jour. 4, 332-345(1962)) For the LR algorithm.
+!!      This subroutine finds the eigenvalues of a complex
+!!      upper Hessenberg matrix BY the QR method.
+!!      On input-
+!!         nm must be set to the row dimension of two-dimensional
+!!           array parameters as declared in the calling program
+!!           dimension statement,
+!!         n is the order of the matrix,
+!!         low and igh are integers determined by the balancing
+!!           subroutine  cbal.  If  cbal  has not been used,
+!!           set low=1, igh=n,
+!!         hr and hi contain the real and imaginary parts,
+!!           respectively, of the complex upper Hessenberg matrix.
+!!           Their lower triangles below the subdiagonal contain
+!!           information about the unitary transformations used in
+!!           the reduction by  corth, if performed.
+!!      On output-
+!!         the upper Hessenberg portions of hr and hi have been
+!!           destroyed.  Therefore, they must be saved before
+!!           calling  comqr  if subsequent calculation of
+!!           eigenvectors is to be performed,
+!!         wr and wi contain the real and imaginary parts,
+!!           respectively, of the eigenvalues.  If an error
+!!           exit is made, the eigenvalues should be correct
+!!           for indices ierr+1,...,n,
+!!         ierr is set to
+!!           ZERO       FOR NORMAL RETURN,
+!!           j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!!                      determined after 30 iterations.
+!!      Arithmetic is real except for the replacement of the Algol
+!!      procedure cdiv by complex division and use of the subroutines
+!!      CSQRT and cmplx in computing complex square roots.
+!!
+!!      ********** machep is a machine dependent parameter specifying
+!!                 the relative precision of floating point arithmetic.
+!! ```
+!! <!-- nswc-ford:end -->
 implicit none
 integer, intent(in) :: n
-real, intent(inout) :: c(*), ch(*)
-real :: wa(*)
-real, intent(in) :: ifac(*)
+integer, intent(in) :: nm, igh
+integer, intent(in) :: low
+integer, intent(out) :: ierr
+real, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n)
 !     beginning of local variable declarations
-integer :: i, idl1, ido, ip, iw, ix2, ix3, ix4, k1, kh, l1, l2, &
-   & na, nf
-nf = ifac(2)
-na = 1
-l2 = n
-iw = n
-do k1 = 1,nf
-   kh = nf - k1
-   ip = ifac(kh + 3)
-   l1 = l2/ip
-   ido = n/l2
-   idl1 = ido*l1
-   iw = iw - (ip - 1)*ido
-   na = 1 - na
-   if (ip /= 4) go to 102
-   ix2 = iw + ido
-   ix3 = ix2 + ido
-   if (na /= 0) go to 101
-   call radf4(ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3))
-   go to 110
-101 call radf4(ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3))
-   go to 110
-102 if (ip /= 2) go to 104
-   if (na /= 0) go to 103
-   call radf2(ido,l1,c,ch,wa(iw))
-   go to 110
-103 call radf2(ido,l1,ch,c,wa(iw))
-   go to 110
-104 if (ip /= 3) go to 106
-   ix2 = iw + ido
-   if (na /= 0) go to 105
-   call radf3(ido,l1,c,ch,wa(iw),wa(ix2))
-   go to 110
-105 call radf3(ido,l1,ch,c,wa(iw),wa(ix2))
-   go to 110
-106 if (ip /= 5) go to 108
-   ix2 = iw + ido
-   ix3 = ix2 + ido
-   ix4 = ix3 + ido
-   if (na /= 0) go to 107
-   call radf5(ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3),wa(ix4))
-   go to 110
-107 call radf5(ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3),wa(ix4))
-   go to 110
-108 if (ido == 1) na = 1 - na
-   if (na /= 0) go to 109
-   call radfg(ido,ip,l1,idl1,c,c,c,ch,ch,wa(iw))
-   na = 1
-   go to 110
-109 call radfg(ido,ip,l1,idl1,ch,ch,ch,c,c,wa(iw))
-   na = 0
-110 l2 = l1
-end do
-if (na == 1) return
-do i = 1,n
-   c(i) = ch(i)
-end do
-end subroutine rfftf1
-
-subroutine radf2(ido,l1,cc,ch,wa1)
-implicit none
-integer, intent(in) :: ido, l1
-real :: cc(ido,l1,*)
-real, intent(inout) :: ch(ido,2,l1)
-real :: wa1(*)
-!     beginning of local variable declarations
-integer :: i, ic, idp2, k, nswc_ai_i4
-real :: ti2, tr2
-do k = 1,l1
-   ch(1,1,k) = cc(1,k,1) + cc(1,k,2)
-   ch(ido,2,k) = cc(1,k,1) - cc(1,k,2)
-end do
-nswc_ai_i4 = ido - 2
-if (nswc_ai_i4 < 0) go to 107
-if (nswc_ai_i4 == 0) go to 105
-go to 102
-102 idp2 = ido + 2
-if ((ido - 1)/2 < l1) go to 108
-do k = 1,l1
-   do i = 3,ido,2
-      ic = idp2 - i
-      tr2 = wa1(i - 2)*cc(i - 1,k,2) + wa1(i - 1)*cc(i,k,2)
-      ti2 = wa1(i - 2)*cc(i,k,2) - wa1(i - 1)*cc(i - 1,k,2)
-      ch(i,1,k) = cc(i,k,1) + ti2
-      ch(ic,2,k) = ti2 - cc(i,k,1)
-      ch(i - 1,1,k) = cc(i - 1,k,1) + tr2
-      ch(ic - 1,2,k) = cc(i - 1,k,1) - tr2
-   end do
-end do
-go to 111
-108 do i = 3,ido,2
-   ic = idp2 - i
-   do k = 1,l1
-      tr2 = wa1(i - 2)*cc(i - 1,k,2) + wa1(i - 1)*cc(i,k,2)
-      ti2 = wa1(i - 2)*cc(i,k,2) - wa1(i - 1)*cc(i - 1,k,2)
-      ch(i,1,k) = cc(i,k,1) + ti2
-      ch(ic,2,k) = ti2 - cc(i,k,1)
-      ch(i - 1,1,k) = cc(i - 1,k,1) + tr2
-      ch(ic - 1,2,k) = cc(i - 1,k,1) - tr2
-   end do
-end do
-111 if (mod(ido,2) == 1) return
-105 do k = 1,l1
-   ch(1,2,k) = -cc(ido,k,2)
-   ch(ido,1,k) = cc(ido,k,1)
-end do
-107 return
-end subroutine radf2
-
-subroutine radf3(ido,l1,cc,ch,wa1,wa2)
-implicit none
-integer, intent(in) :: ido, l1
-real :: cc(ido,l1,*)
-real, intent(inout) :: ch(ido,3,l1)
-real :: wa1(*), wa2(*)
-!     beginning of local variable declarations
-integer :: i, ic, idp2, k
-real :: ci2, cr2, di2, di3, dr2, dr3, ti2, ti3, tr2, tr3
-real, parameter :: taur = -.5
-real, parameter :: taui = .866025403784439
-do k = 1,l1
-   cr2 = cc(1,k,2) + cc(1,k,3)
-   ch(1,1,k) = cc(1,k,1) + cr2
-   ch(1,3,k) = taui*(cc(1,k,3) - cc(1,k,2))
-   ch(ido,2,k) = cc(1,k,1) + taur*cr2
-end do
-if (ido == 1) return
-idp2 = ido + 2
-if ((ido - 1)/2 < l1) go to 104
-do k = 1,l1
-   do i = 3,ido,2
-      ic = idp2 - i
-      dr2 = wa1(i - 2)*cc(i - 1,k,2) + wa1(i - 1)*cc(i,k,2)
-      di2 = wa1(i - 2)*cc(i,k,2) - wa1(i - 1)*cc(i - 1,k,2)
-      dr3 = wa2(i - 2)*cc(i - 1,k,3) + wa2(i - 1)*cc(i,k,3)
-      di3 = wa2(i - 2)*cc(i,k,3) - wa2(i - 1)*cc(i - 1,k,3)
-      cr2 = dr2 + dr3
-      ci2 = di2 + di3
-      ch(i - 1,1,k) = cc(i - 1,k,1) + cr2
-      ch(i,1,k) = cc(i,k,1) + ci2
-      tr2 = cc(i - 1,k,1) + taur*cr2
-      ti2 = cc(i,k,1) + taur*ci2
-      tr3 = taui*(di2 - di3)
-      ti3 = taui*(dr3 - dr2)
-      ch(i - 1,3,k) = tr2 + tr3
-      ch(ic - 1,2,k) = tr2 - tr3
-      ch(i,3,k) = ti2 + ti3
-      ch(ic,2,k) = ti3 - ti2
-   end do
-end do
-return
-104 do i = 3,ido,2
-   ic = idp2 - i
-   do k = 1,l1
-      dr2 = wa1(i - 2)*cc(i - 1,k,2) + wa1(i - 1)*cc(i,k,2)
-      di2 = wa1(i - 2)*cc(i,k,2) - wa1(i - 1)*cc(i - 1,k,2)
-      dr3 = wa2(i - 2)*cc(i - 1,k,3) + wa2(i - 1)*cc(i,k,3)
-      di3 = wa2(i - 2)*cc(i,k,3) - wa2(i - 1)*cc(i - 1,k,3)
-      cr2 = dr2 + dr3
-      ci2 = di2 + di3
-      ch(i - 1,1,k) = cc(i - 1,k,1) + cr2
-      ch(i,1,k) = cc(i,k,1) + ci2
-      tr2 = cc(i - 1,k,1) + taur*cr2
-      ti2 = cc(i,k,1) + taur*ci2
-      tr3 = taui*(di2 - di3)
-      ti3 = taui*(dr3 - dr2)
-      ch(i - 1,3,k) = tr2 + tr3
-      ch(ic - 1,2,k) = tr2 - tr3
-      ch(i,3,k) = ti2 + ti3
-      ch(ic,2,k) = ti3 - ti2
-   end do
-end do
-end subroutine radf3
-
-subroutine radf4(ido,l1,cc,ch,wa1,wa2,wa3)
-implicit none
-integer, intent(in) :: ido, l1
-real :: cc(ido,l1,*)
-real, intent(inout) :: ch(ido,4,l1)
-real :: wa1(*), wa2(*), wa3(*)
-!     beginning of local variable declarations
-integer :: i, ic, idp2, k, nswc_ai_i4
-real :: ci2, ci3, ci4, cr2, cr3, cr4, ti1, ti2, ti3, ti4, tr1, tr2, tr3, tr4
-real, parameter :: hsqt2 = .7071067811865475
-do k = 1,l1
-   tr1 = cc(1,k,2) + cc(1,k,4)
-   tr2 = cc(1,k,1) + cc(1,k,3)
-   ch(1,1,k) = tr1 + tr2
-   ch(ido,4,k) = tr2 - tr1
-   ch(ido,2,k) = cc(1,k,1) - cc(1,k,3)
-   ch(1,3,k) = cc(1,k,4) - cc(1,k,2)
-end do
-nswc_ai_i4 = ido - 2
-if (nswc_ai_i4 < 0) go to 107
-if (nswc_ai_i4 == 0) go to 105
-go to 102
-102 idp2 = ido + 2
-if ((ido - 1)/2 < l1) go to 111
-do k = 1,l1
-   do i = 3,ido,2
-      ic = idp2 - i
-      cr2 = wa1(i - 2)*cc(i - 1,k,2) + wa1(i - 1)*cc(i,k,2)
-      ci2 = wa1(i - 2)*cc(i,k,2) - wa1(i - 1)*cc(i - 1,k,2)
-      cr3 = wa2(i - 2)*cc(i - 1,k,3) + wa2(i - 1)*cc(i,k,3)
-      ci3 = wa2(i - 2)*cc(i,k,3) - wa2(i - 1)*cc(i - 1,k,3)
-      cr4 = wa3(i - 2)*cc(i - 1,k,4) + wa3(i - 1)*cc(i,k,4)
-      ci4 = wa3(i - 2)*cc(i,k,4) - wa3(i - 1)*cc(i - 1,k,4)
-      tr1 = cr2 + cr4
-      tr4 = cr4 - cr2
-      ti1 = ci2 + ci4
-      ti4 = ci2 - ci4
-      ti2 = cc(i,k,1) + ci3
-      ti3 = cc(i,k,1) - ci3
-      tr2 = cc(i - 1,k,1) + cr3
-      tr3 = cc(i - 1,k,1) - cr3
-      ch(i - 1,1,k) = tr1 + tr2
-      ch(ic - 1,4,k) = tr2 - tr1
-      ch(i,1,k) = ti1 + ti2
-      ch(ic,4,k) = ti1 - ti2
-      ch(i - 1,3,k) = ti4 + tr3
-      ch(ic - 1,2,k) = tr3 - ti4
-      ch(i,3,k) = tr4 + ti3
-      ch(ic,2,k) = tr4 - ti3
-   end do
-end do
-go to 110
-111 do i = 3,ido,2
-   ic = idp2 - i
-   do k = 1,l1
-      cr2 = wa1(i - 2)*cc(i - 1,k,2) + wa1(i - 1)*cc(i,k,2)
-      ci2 = wa1(i - 2)*cc(i,k,2) - wa1(i - 1)*cc(i - 1,k,2)
-      cr3 = wa2(i - 2)*cc(i - 1,k,3) + wa2(i - 1)*cc(i,k,3)
-      ci3 = wa2(i - 2)*cc(i,k,3) - wa2(i - 1)*cc(i - 1,k,3)
-      cr4 = wa3(i - 2)*cc(i - 1,k,4) + wa3(i - 1)*cc(i,k,4)
-      ci4 = wa3(i - 2)*cc(i,k,4) - wa3(i - 1)*cc(i - 1,k,4)
-      tr1 = cr2 + cr4
-      tr4 = cr4 - cr2
-      ti1 = ci2 + ci4
-      ti4 = ci2 - ci4
-      ti2 = cc(i,k,1) + ci3
-      ti3 = cc(i,k,1) - ci3
-      tr2 = cc(i - 1,k,1) + cr3
-      tr3 = cc(i - 1,k,1) - cr3
-      ch(i - 1,1,k) = tr1 + tr2
-      ch(ic - 1,4,k) = tr2 - tr1
-      ch(i,1,k) = ti1 + ti2
-      ch(ic,4,k) = ti1 - ti2
-      ch(i - 1,3,k) = ti4 + tr3
-      ch(ic - 1,2,k) = tr3 - ti4
-      ch(i,3,k) = tr4 + ti3
-      ch(ic,2,k) = tr4 - ti3
-   end do
-end do
-110 if (mod(ido,2) == 1) return
-105 do k = 1,l1
-   ti1 = -hsqt2*(cc(ido,k,2) + cc(ido,k,4))
-   tr1 = hsqt2*(cc(ido,k,2) - cc(ido,k,4))
-   ch(ido,1,k) = tr1 + cc(ido,k,1)
-   ch(ido,3,k) = cc(ido,k,1) - tr1
-   ch(1,2,k) = ti1 - cc(ido,k,3)
-   ch(1,4,k) = ti1 + cc(ido,k,3)
-end do
-107 return
-end subroutine radf4
-
-subroutine radf5(ido,l1,cc,ch,wa1,wa2,wa3,wa4)
-implicit none
-integer, intent(in) :: ido, l1
-real :: cc(ido,l1,*)
-real, intent(inout) :: ch(ido,5,l1)
-real :: wa1(*), wa2(*), wa3(*), wa4(*)
-!     beginning of local variable declarations
-integer :: i, ic, idp2, k
-real :: ci2, ci3, ci4, ci5, cr2, cr3, cr4, cr5, di2, di3, di4, di5, dr2, dr3, dr4, dr5, ti2, ti3, ti4, ti5, tr2, tr3, tr4, tr5
-real, parameter :: tr11 = .309016994374947
-real, parameter :: ti11 = .951056516295154
-real, parameter :: tr12 = -.809016994374947
-real, parameter :: ti12 = .587785252292473
-do k = 1,l1
-   cr2 = cc(1,k,5) + cc(1,k,2)
-   ci5 = cc(1,k,5) - cc(1,k,2)
-   cr3 = cc(1,k,4) + cc(1,k,3)
-   ci4 = cc(1,k,4) - cc(1,k,3)
-   ch(1,1,k) = cc(1,k,1) + cr2 + cr3
-   ch(ido,2,k) = cc(1,k,1) + tr11*cr2 + tr12*cr3
-   ch(1,3,k) = ti11*ci5 + ti12*ci4
-   ch(ido,4,k) = cc(1,k,1) + tr12*cr2 + tr11*cr3
-   ch(1,5,k) = ti12*ci5 - ti11*ci4
-end do
-if (ido == 1) return
-idp2 = ido + 2
-if ((ido - 1)/2 < l1) go to 104
-do k = 1,l1
-   do i = 3,ido,2
-      ic = idp2 - i
-      dr2 = wa1(i - 2)*cc(i - 1,k,2) + wa1(i - 1)*cc(i,k,2)
-      di2 = wa1(i - 2)*cc(i,k,2) - wa1(i - 1)*cc(i - 1,k,2)
-      dr3 = wa2(i - 2)*cc(i - 1,k,3) + wa2(i - 1)*cc(i,k,3)
-      di3 = wa2(i - 2)*cc(i,k,3) - wa2(i - 1)*cc(i - 1,k,3)
-      dr4 = wa3(i - 2)*cc(i - 1,k,4) + wa3(i - 1)*cc(i,k,4)
-      di4 = wa3(i - 2)*cc(i,k,4) - wa3(i - 1)*cc(i - 1,k,4)
-      dr5 = wa4(i - 2)*cc(i - 1,k,5) + wa4(i - 1)*cc(i,k,5)
-      di5 = wa4(i - 2)*cc(i,k,5) - wa4(i - 1)*cc(i - 1,k,5)
-      cr2 = dr2 + dr5
-      ci5 = dr5 - dr2
-      cr5 = di2 - di5
-      ci2 = di2 + di5
-      cr3 = dr3 + dr4
-      ci4 = dr4 - dr3
-      cr4 = di3 - di4
-      ci3 = di3 + di4
-      ch(i - 1,1,k) = cc(i - 1,k,1) + cr2 + cr3
-      ch(i,1,k) = cc(i,k,1) + ci2 + ci3
-      tr2 = cc(i - 1,k,1) + tr11*cr2 + tr12*cr3
-      ti2 = cc(i,k,1) + tr11*ci2 + tr12*ci3
-      tr3 = cc(i - 1,k,1) + tr12*cr2 + tr11*cr3
-      ti3 = cc(i,k,1) + tr12*ci2 + tr11*ci3
-      tr5 = ti11*cr5 + ti12*cr4
-      ti5 = ti11*ci5 + ti12*ci4
-      tr4 = ti12*cr5 - ti11*cr4
-      ti4 = ti12*ci5 - ti11*ci4
-      ch(i - 1,3,k) = tr2 + tr5
-      ch(ic - 1,2,k) = tr2 - tr5
-      ch(i,3,k) = ti2 + ti5
-      ch(ic,2,k) = ti5 - ti2
-      ch(i - 1,5,k) = tr3 + tr4
-      ch(ic - 1,4,k) = tr3 - tr4
-      ch(i,5,k) = ti3 + ti4
-      ch(ic,4,k) = ti4 - ti3
-   end do
-end do
-return
-104 do i = 3,ido,2
-   ic = idp2 - i
-   do k = 1,l1
-      dr2 = wa1(i - 2)*cc(i - 1,k,2) + wa1(i - 1)*cc(i,k,2)
-      di2 = wa1(i - 2)*cc(i,k,2) - wa1(i - 1)*cc(i - 1,k,2)
-      dr3 = wa2(i - 2)*cc(i - 1,k,3) + wa2(i - 1)*cc(i,k,3)
-      di3 = wa2(i - 2)*cc(i,k,3) - wa2(i - 1)*cc(i - 1,k,3)
-      dr4 = wa3(i - 2)*cc(i - 1,k,4) + wa3(i - 1)*cc(i,k,4)
-      di4 = wa3(i - 2)*cc(i,k,4) - wa3(i - 1)*cc(i - 1,k,4)
-      dr5 = wa4(i - 2)*cc(i - 1,k,5) + wa4(i - 1)*cc(i,k,5)
-      di5 = wa4(i - 2)*cc(i,k,5) - wa4(i - 1)*cc(i - 1,k,5)
-      cr2 = dr2 + dr5
-      ci5 = dr5 - dr2
-      cr5 = di2 - di5
-      ci2 = di2 + di5
-      cr3 = dr3 + dr4
-      ci4 = dr4 - dr3
-      cr4 = di3 - di4
-      ci3 = di3 + di4
-      ch(i - 1,1,k) = cc(i - 1,k,1) + cr2 + cr3
-      ch(i,1,k) = cc(i,k,1) + ci2 + ci3
-      tr2 = cc(i - 1,k,1) + tr11*cr2 + tr12*cr3
-      ti2 = cc(i,k,1) + tr11*ci2 + tr12*ci3
-      tr3 = cc(i - 1,k,1) + tr12*cr2 + tr11*cr3
-      ti3 = cc(i,k,1) + tr12*ci2 + tr11*ci3
-      tr5 = ti11*cr5 + ti12*cr4
-      ti5 = ti11*ci5 + ti12*ci4
-      tr4 = ti12*cr5 - ti11*cr4
-      ti4 = ti12*ci5 - ti11*ci4
-      ch(i - 1,3,k) = tr2 + tr5
-      ch(ic - 1,2,k) = tr2 - tr5
-      ch(i,3,k) = ti2 + ti5
-      ch(ic,2,k) = ti5 - ti2
-      ch(i - 1,5,k) = tr3 + tr4
-      ch(ic - 1,4,k) = tr3 - tr4
-      ch(i,5,k) = ti3 + ti4
-      ch(ic,4,k) = ti4 - ti3
-   end do
-end do
-end subroutine radf5
-
-subroutine radfg(ido,ip,l1,idl1,cc,c1,c2,ch,ch2,wa)
-implicit none
-integer, intent(in) :: idl1, ido, ip, l1
-real, intent(inout) :: c1(ido,l1,ip), c2(idl1,ip), cc(ido,ip,l1), &
-   & ch(ido,l1,ip), ch2(idl1,ip)
-real :: wa(*)
-!     beginning of local variable declarations
-integer :: i, ic, idij, idp2, ik, ipp2, ipph, is, j, j2, jc, k, l, &
-   & lc, nbd
-real :: ai1, ai2, ar1, ar1h, ar2, ar2h, arg, dc2, dcp, ds2, dsp
-real, parameter :: tpi = 6.28318530717959
-arg = tpi/float(ip)
-dcp = cos(arg)
-dsp = sin(arg)
-ipph = (ip + 1)/2
-ipp2 = ip + 2
-idp2 = ido + 2
-nbd = (ido - 1)/2
-if (ido == 1) go to 119
-do ik = 1,idl1
-   ch2(ik,1) = c2(ik,1)
-end do
-do j = 2,ip
-   do k = 1,l1
-      ch(1,k,j) = c1(1,k,j)
-   end do
-end do
-if (nbd > l1) go to 107
-is = -ido
-do j = 2,ip
-   is = is + ido
-   idij = is
-   do i = 3,ido,2
-      idij = idij + 2
-      do k = 1,l1
-         ch(i - 1,k,j) = wa(idij - 1)*c1(i - 1,k,j) + wa(idij)*c1(i,k,j)
-         ch(i,k,j) = wa(idij - 1)*c1(i,k,j) - wa(idij)*c1(i - 1,k,j)
-      end do
-   end do
-end do
-go to 111
-107 is = -ido
-do j = 2,ip
-   is = is + ido
-   do k = 1,l1
-      idij = is
-      do i = 3,ido,2
-         idij = idij + 2
-         ch(i - 1,k,j) = wa(idij - 1)*c1(i - 1,k,j) + wa(idij)*c1(i,k,j)
-         ch(i,k,j) = wa(idij - 1)*c1(i,k,j) - wa(idij)*c1(i - 1,k,j)
-      end do
-   end do
-end do
-111 if (nbd < l1) go to 115
-do j = 2,ipph
-   jc = ipp2 - j
-   do k = 1,l1
-      do i = 3,ido,2
-         c1(i - 1,k,j) = ch(i - 1,k,j) + ch(i - 1,k,jc)
-         c1(i - 1,k,jc) = ch(i,k,j) - ch(i,k,jc)
-         c1(i,k,j) = ch(i,k,j) + ch(i,k,jc)
-         c1(i,k,jc) = ch(i - 1,k,jc) - ch(i - 1,k,j)
-      end do
-   end do
-end do
-go to 121
-115 do j = 2,ipph
-   jc = ipp2 - j
-   do i = 3,ido,2
-      do k = 1,l1
-         c1(i - 1,k,j) = ch(i - 1,k,j) + ch(i - 1,k,jc)
-         c1(i - 1,k,jc) = ch(i,k,j) - ch(i,k,jc)
-         c1(i,k,j) = ch(i,k,j) + ch(i,k,jc)
-         c1(i,k,jc) = ch(i - 1,k,jc) - ch(i - 1,k,j)
-      end do
-   end do
-end do
-go to 121
-119 do ik = 1,idl1
-   c2(ik,1) = ch2(ik,1)
-end do
-121 do j = 2,ipph
-   jc = ipp2 - j
-   do k = 1,l1
-      c1(1,k,j) = ch(1,k,j) + ch(1,k,jc)
-      c1(1,k,jc) = ch(1,k,jc) - ch(1,k,j)
-   end do
-end do
-ar1 = 1.
-ai1 = 0.
-do l = 2,ipph
-   lc = ipp2 - l
-   ar1h = dcp*ar1 - dsp*ai1
-   ai1 = dcp*ai1 + dsp*ar1
-   ar1 = ar1h
-   do ik = 1,idl1
-      ch2(ik,l) = c2(ik,1) + ar1*c2(ik,2)
-      ch2(ik,lc) = ai1*c2(ik,ip)
-   end do
-   dc2 = ar1
-   ds2 = ai1
-   ar2 = ar1
-   ai2 = ai1
-   do j = 3,ipph
-      jc = ipp2 - j
-      ar2h = dc2*ar2 - ds2*ai2
-      ai2 = dc2*ai2 + ds2*ar2
-      ar2 = ar2h
-      do ik = 1,idl1
-         ch2(ik,l) = ch2(ik,l) + ar2*c2(ik,j)
-         ch2(ik,lc) = ch2(ik,lc) + ai2*c2(ik,jc)
-      end do
-   end do
-end do
-do j = 2,ipph
-   do ik = 1,idl1
-      ch2(ik,1) = ch2(ik,1) + c2(ik,j)
-   end do
-end do
-if (ido < l1) go to 132
-do k = 1,l1
-   do i = 1,ido
-      cc(i,1,k) = ch(i,k,1)
-   end do
-end do
-go to 135
-132 do i = 1,ido
-   do k = 1,l1
-      cc(i,1,k) = ch(i,k,1)
-   end do
-end do
-135 do j = 2,ipph
-   jc = ipp2 - j
-   j2 = j + j
-   do k = 1,l1
-      cc(ido,j2 - 2,k) = ch(1,k,j)
-      cc(1,j2 - 1,k) = ch(1,k,jc)
-   end do
-end do
-if (ido == 1) return
-if (nbd < l1) go to 141
-do j = 2,ipph
-   jc = ipp2 - j
-   j2 = j + j
-   do k = 1,l1
-      do i = 3,ido,2
-         ic = idp2 - i
-         cc(i - 1,j2 - 1,k) = ch(i - 1,k,j) + ch(i - 1,k,jc)
-         cc(ic - 1,j2 - 2,k) = ch(i - 1,k,j) - ch(i - 1,k,jc)
-         cc(i,j2 - 1,k) = ch(i,k,j) + ch(i,k,jc)
-         cc(ic,j2 - 2,k) = ch(i,k,jc) - ch(i,k,j)
-      end do
-   end do
-end do
-return
-141 do j = 2,ipph
-   jc = ipp2 - j
-   j2 = j + j
-   do i = 3,ido,2
-      ic = idp2 - i
-      do k = 1,l1
-         cc(i - 1,j2 - 1,k) = ch(i - 1,k,j) + ch(i - 1,k,jc)
-         cc(ic - 1,j2 - 2,k) = ch(i - 1,k,j) - ch(i - 1,k,jc)
-         cc(i,j2 - 1,k) = ch(i,k,j) + ch(i,k,jc)
-         cc(ic,j2 - 2,k) = ch(i,k,jc) - ch(i,k,j)
-      end do
-   end do
-end do
-end subroutine radfg
-
-subroutine cheby(a, b, f, g, phi, eps, itno, mxiter, l, m, &
-   & p, q, error, ierr, w)
-implicit none
-integer, intent(inout) :: ierr, itno
-integer, intent(in) :: l, m, mxiter
-double precision, intent(in) :: a, b
-double precision :: f, g, phi
-double precision, intent(in) :: eps
-double precision, intent(inout) :: error
-double precision, intent(inout) :: p(*), q(*), w(*)
-external f, g, phi
-!     beginning of local variable declarations
-integer :: i1, i2, i3, i4, i5, lp1, lpm, mp1, n, np1
-!     ******************************************************************
-!     Rational Chebychev approximation of continuous functions
-!     ******************************************************************
-!     -------------------
-if (l < 0 .or. m < 0) go to 10
-lp1 = l + 1
-mp1 = m + 1
-lpm = l + m
-n = lpm + 1
-np1 = n + 1
-!     -------------------
-i1 = np1 + 1
-i2 = i1 + np1
-i3 = i2 + np1*np1
-i4 = i3 + np1
-i5 = i4 + np1
-call cheby1(a, b, f, g, phi, eps, itno, mxiter, l, m, p, q, &
-   & error, ierr, lp1, mp1, lpm, n, np1, w(1), &
-   & w(i1), w(i2), w(i3), w(i4), w(i5))
-return
-!     ------------------------------------------------------------------
-!     Error return
-!     ------------------------------------------------------------------
-10 ierr = 1
-end subroutine cheby
-
-subroutine cheby1(a, b, f, g, phi, eps, itno, mxiter, l, m, &
-   & p, q, error, ierr, lp1, mp1, lpm, n, np1, &
-   & x, xval, c, d, err, h)
-implicit none
-integer, intent(inout) :: ierr, itno
-integer, intent(in) :: l, lp1, lpm, m, mp1, mxiter, n, np1
-double precision, intent(in) :: a, b
-double precision :: f, g, phi
-double precision, intent(in) :: eps
-double precision, intent(out) :: error
-double precision, intent(inout) :: p(lp1), q(mp1), x(np1), &
-   & xval(np1), c(np1,np1), d(np1), err(np1), h(np1)
-external f, g, phi
-!     beginning of local variable declarations
-integer :: i, ii, j, k, kount, lpi
-double precision :: b1, del, dn, dnp1, h1, olderr, sign, sum, templ, test, u, xi, xlb, xm1, y, y2, y3, z, zz, z1, z2, z3
-double precision, parameter :: pi = 3.14159265358979323846264338328d0
-double precision, parameter :: zero = 0.d0
-double precision, parameter :: half = .5d0
-double precision, parameter :: one = 1.d0
-double precision, parameter :: ten = 10.d0
-double precision, parameter :: eps0 = 1.d-2
-double precision, parameter :: tau = .015d0
-double precision, parameter :: c0 = .0625d0
-!     ------------------------------------------------------------------
-!     -------------------
-!     -------------------
-error = zero
-if (eps <= zero .or. eps >= eps0) go to 200
-ierr = 0
-itno = 1
-xlb = zero
-dn = n
-dnp1 = np1
-do i = 1,lp1
-   p(i) = zero
-end do
-do i = 1,mp1
-   q(i) = zero
-end do
-q(1) = one
-!     Compute initial approximations of the critical points
-x(1) = a
-x(np1) = b
-k = n/2
-if (k <= 0) go to 30
-b1 = half*(b - a)
-xm1 = half*(a + b)
-do i = 1,k
-   xi = i
-   z = -b1*cos(pi*(xi/dn))
-   x(i + 1) = z + xm1
-   ii = np1 - i
-   x(ii) = xm1 - z
-end do
-!     Evaluate phi at the critical points
-30 do i = 1,np1
-   xval(i) = phi(x(i))
-end do
-kount = 1
-!     Set up the linear equations
-40 k = l + 2
-sign = one
-do i = 1,np1
-   sign = -sign
-   c(i,1) = one
-   if (l <= 0) go to 42
-   do j = 2,lp1
-      c(i,j) = c(i,j - 1)*xval(i)
-   end do
-42 d(i) = f(x(i))
-   if (m <= 0) go to 44
-   templ = sign*xlb*g(x(i)) - d(i)
-   c(i,k) = xval(i)*templ
-   if (k > lpm) go to 44
-   do j = k,lpm
-      c(i,j + 1) = c(i,j)*xval(i)
-   end do
-44 c(i,np1) = sign*g(x(i))
-end do
-!     Solve the equations CX = D and store the results in D
-call dpslv(np1, 1, c, np1, d, np1, ierr)
-if (ierr /= 0) go to 220
-if (kount > 1) go to 50
-!     Redefine the equations and solve
-xlb = (d(np1) + xlb*dn)/dnp1
-if (m <= 0) go to 61
-kount = 2
-go to 40
-50 test = abs(xlb - d(np1))
-xlb = (d(np1) + xlb*dn)/dnp1
-kount = kount + 1
-if (kount <= 4 .and. test > eps0*abs(xlb)) go to 40
-!     Store the results in p and q
-do i = 2,mp1
-   lpi = l + i
-   q(i) = d(lpi)
-end do
-61 do i = 1,lp1
-   p(i) = d(i)
-end do
-!     Search for new critical points
-olderr = error
-error = zero
-z1 = zero
-u = one
-if (xlb < zero) u = -u
-if (n > 1) go to 70
-h(1) = tau*(x(2) - x(1))
-h(2) = -h(1)
-go to 72
-70 do i = 2,n
-   h(i) = tau*(x(i + 1) - x(i - 1))
-end do
-h(1) = half*h(2)
-h(np1) = -half*h(n)
-72 continue
-do i = 1,np1
-   y2 = x(i)
-   h1 = h(i)
-   y3 = y2 + h1
-   call cerr(y2, f(y2), g(y2), phi(y2), del, ierr, l, lp1, m, np1, d)
-   if (ierr /= 0) return
-   z2 = u*del
-   call cerr(y3, f(y3), g(y3), phi(y3), del, ierr, l, lp1, m, np1, d)
-   if (ierr /= 0) return
-   z3 = u*del
-   if (z2 < z3) go to 80
-   h1 = -h1
-   z = z3
-   z3 = z2
-   z2 = z
-   y = y3
-   y3 = y2
-   y2 = y
-80 y = y3 + h1
-   if (y >= a) go to 81
-   y = a
-   go to 90
-81 if (y <= b) go to 82
-   y = b
-   go to 90
-82 call cerr(y, f(y), g(y), phi(y), del, ierr, l, lp1, m, np1, d)
-   if (ierr /= 0) return
-   z = u*del
-   if (z <= z3) go to 83
-   y2 = y3
-   y3 = y
-   z2 = z3
-   z3 = z
-   go to 80
-83 y = (z - z3) + (z2 - z3)
-   if (y /= zero) go to 84
-   y = y3
-   go to 90
-84 y = half*(y2 + y3) + h1*(z2 - z3)/y
-90 x(i) = y
-   call cerr(y, f(y), g(y), phi(y), del, ierr, l, lp1, m, np1, d)
-   if (ierr /= 0) return
-   err(i) = del
-   u = -u
-   if (i == 1) go to 91
-   if (x(i) <= x(i - 1)) go to 230
-91 z = abs(err(i))
-   error = max(error, z)
-   if (z >= ten) go to 240
-   y = abs(xlb)
-   zz = one
-   if (y /= zero) zz = abs(z - y)/y
-   if (z1 < zz) z1 = zz
-end do
-!     Search for an extra extremal point between the endpoints
-!     of the interval and the critical points
-if (x(1) <= a) go to 110
-h1 = c0*(x(1) - a)
-u = one
-if (xlb >= zero) u = -u
-z3 = zero
-y = a
-do i = 1,16
-   call cerr(y, f(y), g(y), phi(y), del, ierr, l, lp1, m, np1, d)
-   if (ierr /= 0) return
-   z = u*del
-   if (z <= z3) go to 100
-   z3 = z
-   z2 = y
-100 y = y + h1
-end do
-error = max(error, z3)
-z = abs(xlb)
-if (z3 <= z) go to 110
-i = np1
-do ii = 2,np1
-   err(i) = err(i - 1)
-   x(i) = x(i - 1)
-   i = i - 1
-end do
-x(1) = z2
-err(1) = u*z3
-go to 113
-110 if (x(np1) >= b) go to 120
-h1 = c0*(b - x(np1))
-u = one
-if (err(np1) >= zero) u = -u
-z3 = zero
-y = b
-do i = 1,16
-   call cerr(y, f(y), g(y), phi(y), del, ierr, l, lp1, m, np1, d)
-   if (ierr /= 0) return
-   z = u*del
-   if (z <= z3) go to 111
-   z3 = z
-   z2 = y
-111 y = y - h1
-end do
-error = max(error, z3)
-z = abs(xlb)
-if (z3 <= z) go to 120
-do i = 1,n
-   err(i) = err(i + 1)
-   x(i) = x(i + 1)
-end do
-x(np1) = z2
-err(np1) = u*z3
-113 xlb = -xlb
-zz = one
-if (z /= zero) zz = abs(z3 - z)/z
-if (z1 < zz) z1 = zz
-!     Check for convergence
-120 if (z1 <= eps) return
-!     Set up for the next iteration
-if (itno >= mxiter) go to 210
-sum = zero
-sign = one
-do i = 1,np1
-   sum = sum + sign*err(i)
-   sign = -sign
-end do
-xlb = sum/dnp1
-itno = itno + 1
-go to 30
-!     ------------------------------------------------------------------
-!     Error return
-!     ------------------------------------------------------------------
-!     Input error
-200 ierr = 1
-return
-!     mxiter iterations were performed - More iterations are needed
-210 ierr = 2
-return
-!     The linear equations cannot be solved
-220 if (itno == 1) go to 250
-ierr = 3
-return
-!     The sequence of critical points is not monotonically increasing
-230 ierr = 4
-if (i <= n) error = olderr
-return
-!     It appears that the algorithm has failed to converge
-!     there may be poles in the rational approximation
-240 ierr = 5
-return
-!     The routine HAS completely failed - The results should be ignored
-250 ierr = 6
-end subroutine cheby1
-
-pure subroutine cerr(t, ft, gt, phit, del, ierr, l, lp1, m, np1, d)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: l, lp1, m, np1
-double precision, intent(in) :: t, ft, gt, phit
-double precision, intent(inout) :: del
-double precision, intent(in) :: d(np1)
-!     beginning of local variable declarations
-integer :: i, ii
-double precision :: p, q, r
-double precision, parameter :: zero = 0.d0
-double precision, parameter :: one = 1.d0
-!     ------------------------------------------------------------------
-!     Compute the approximation error at point t
-!     ------------------------------------------------------------------
-!     -------------------
-p = d(lp1)
-if (l <= 0) go to 20
-do i = 1,l
-   ii = lp1 - i
-   p = p*phit + d(ii)
-end do
-20 q = zero
-if (m <= 0) go to 22
-do i = 1,m
-   ii = np1 - i
-   q = (q + d(ii))*phit
-end do
-22 q = q + one
-if (q == zero) go to 110
-if (gt == zero) go to 100
-r = p/q
-del = (r - ft)/gt
-return
-!     ------------------------------------------------------------------
-!     Error return
-!     ------------------------------------------------------------------
-!     The function G is zero at point t
-100 ierr = 1
-return
-!     The routine HAS completely failed - The results should be ignored
-110 ierr = 6
-end subroutine cerr
-
-subroutine adapt(f, xlft, xrgt, epsln, npiece, errest, xknots, &
-   & coefs, ierr, kmax, ndeg, nsmth, anorm, dx, mo, kbreak, brakpt, &
-   & kdiff, vallft, valrgt)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: kbreak, kdiff(kbreak), kmax, mo, ndeg
-integer, intent(inout) :: npiece
-integer, intent(in) :: nsmth
-double precision, intent(inout) :: xknots(*), coefs(kmax,*)
-double precision, intent(in) :: anorm, brakpt(kbreak), dx, epsln
-double precision, intent(inout) :: errest
-double precision, intent(in) :: vallft(kbreak), valrgt(kbreak), &
-   & xlft, xrgt
-double precision :: f
-external f
-!     beginning of local variable declarations
-integer :: k, kdimen, ndimen
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
-!        ===============================================================
-!     Tabulation of the internal and external names of the arguments.
-!    INTERNAL   EXTERNAL
-!     f          f
-!     A          XLFT
-!     b          XRGT
-!     accur      epsln
-!     KNOTS      npiece
-!     ERROR      errest
-!     xknots     xknots
-!     coefs      coefs
-!     ierr       ierr
-!     kmax       kmax
-!     DEGREE     ndeg
-!     SMOOTH     nsmth
-!     NORM       anorm
-!     charf      dx
-!     edist      mo
-!     nbreak     kbreak
-!     XBREAK     brakpt
-!     dbreak     kdiff
-!     bleft      vallft
-!     BRIGHT     valrgt
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
-a = xlft
-b = xrgt
-accur = epsln
-degree = ndeg
-smooth = nsmth
-norm = anorm
-charf = dx
-edist = mo
-nbreak = kbreak
-if (nbreak <= 0 .or. nbreak >= 21) go to 30
-do k = 1,nbreak
-   xbreak(k) = brakpt(k)
-   dbreak(k) = kdiff(k)
-   bleft(k) = vallft(k)
-   bright(k) = valrgt(k)
-end do
-30 continue
-kdimen = kmax + 1
-ndimen = ndeg + 1
-call adapt1(f, xknots, coefs, kdimen, kmax, ndimen, ierr)
-npiece = knots
-errest = error
-end subroutine adapt
-
-subroutine adapt1(f, xknots, coefs, kdimen, kmax, ndimen, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: kdimen, kmax, ndimen
-double precision, intent(inout) :: xknots(kdimen), &
-   & coefs(kmax,ndimen)
-double precision :: f
-external f
-!     beginning of local variable declarations
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
-!     This algorithm computes a piecewise polynomial approximation
-!  of specified smoothness, accuracy and degree.  The input to the
-!  computation is
-!   f      - Function being approximated. It must provide values of
-!            derivatives up to the order of smoothness specified for
-!            the approximation.  The calling sequence is f(X,FDERV) and
-!            FDERV contains the derivatives( see constraint below)
-!   A,b    - THE ENDPOINTS OF THE INTERVAL OF APPROXIMATION
-!   accur  - The accuracy required for the approximation
-!   smooth - The smoothness required for the approximation
-!              = 0  Means continuous
-!              = 1  Means continuous slope
-!              = 2  Means continuous second derivative, etc.
-!   degree - The degree of the polynomial pieces.
-!            Must have degree GT 2*smooth
-!   charf  - Characteristic length of the function f(X). Pieces are not
-!            longer than this length.
-!   Norm   - Norm to measure the approximation error
-!              = 1  L1 APPROXIMATION (LEAST DEVIATIONS)
-!              = 2  L2 APPROXIMATION (LEAST SQUARES)
-!              = 3  TCHEBYCHEFF (MINIMAX) APPROXIMATION
-!              =-P  (NEGATIVE VALUE) GENERAL LP APPROXIMATION
-!   nbreak - Number of special break points in the approximation.
-!            Associated input variables are
-!              XBREAK(J)  - Location of break points
-!              dbreak(J)  - Derivative broken at XBREAK
-!              bleft (J)  - Value from left for dbreak derivative
-!              bright(J)  -   -    -   right -    -        -
-!   edist  - Switch to change from proportional error distribution
-!            to fixed distribution. This is primarily of use in
-!            approximation of functions with singularities. One should
-!            use norm = 1. Or so in such cases
-!              = 0  Proportional distribution
-!              = 1  Approximate fixed error distribution
-!                   attempts to achieve specified accuracy value accur
-!              = 2  True fixed error distribution
-!  ********** OUTPUT **********
-!     the output of the computation consists of 4 parts, each returned
-!     to the user in a different way. They are
-!   xknots,COEFS - Arrays defining the piecewise polynomial result.
-!            xknots(K)  = knots of the approximation ( K = 1 To knots)
-!                         the last one is right end point of interval
-!            COEFS(K,N) = Coefficient of (X - XKNOT(K))**(N-1) in the
-!                         interval XKNOT(K) to XKNOT(K+1)
-!                           K = 1 To knots-1  and  N = 1 To degree+1
-!            these arrays are passed as arguments so as to use variable
-!            dimensions. The arrays are of dimension xknots(kdimen) and
-!            COEFS(kmax,ndimen). It is assumed that kdimen = kmax+1.
-!               ***** Note ***** several small arrays here have fixed
-!                        dimensions that limit degree and thus ndimen
-!                        should not exceed this limit (currently = 20)
-!   RESULZ - a labeled common block containing knots and error
-!              knots - Number of knots of the approximation
-!              error - Estimated accuracy of the approximation
-!   ierr - Status indicator. ierr takes the values
-!      0   THE APPROXIMATION WAS SUCCESSFULLY CONSTRUCTED.
-!     -1   INPUT ERROR REPORTED BY adset.
-!     -2   A AND b ARE TOO CLOSE.
-!     -3   charf IS TOO SMALL.
-!     -4   EITHER ALL THE BREAK POINTS ARE NOT BETWEEN A AND b, OR
-!          XBREAK(I).GE.XBREAK(I+1) for some I.
-!     -5   dbreak(I).LT.0 .OR. dbreak(I).GT.(degree-1)/2 for some I.
-!      1   THE KNOT LIMIT WAS EXCEEDED.
-!      2   BREAK POINT ADJUSTMENT REQUIRES THAT A SUBINTERVAL BE
-!          partitioned. However, this cannot be done either because
-!          the interval stack is full, or partitioning will produce
-!          too small an interval.
-!      3   A SUBINTERVAL MUST BE PARTITIONED BECAUSE ITS LENGTH IS
-!          greater than charf. However, this cannot be done since the
-!          interval stack is full.
-!      4   A SUBINTERVAL MUST BE PARTITIONED SO THAT THE ACCURACY
-!          criteria can be satisfied. However, this cannot be done
-!          either because the interval stack is full, or partitioning
-!          will produce too small an interval.
-!  ********** Dimension constraints **********
-!     maxknt - Max number of knots taken from user via kdimen
-!              arrays with this dimension (or related values)
-!                   COEFS   xknots
-!     maxpar - Max number of parameters per interval (currently = 20)
-!                   user provided ndimen must have ndimen le maxpar
-!                   must have  degree + 1 le maxpar
-!              arrays with this dimension (or related values)
-!                D       DDTEMP  FDERVL  FDERVR  FDUMB   FACTOR
-!                FINTRP  FLEFT   FRIGHT  POWERS  XTEMP   XINTRP  XDD
-!              ***** note ***** maxpar also affects argument fderv
-!              of function f.  FDERVL, FDERVR are also involved.
-!              Should declare FDERV of size 10 in f to be safe.
-!     maxaux - Maximum number of auxiliary input ( = 20 Now ). Arrays
-!                 XBREAK  dbreak  bleft   BRIGHT
-!     maxstk - Max size of active interval stack
-!              min interval length is 2**(-maxstk)*(b-a). Arrays
-!                 XLEFT   XRIGHT
-!  **********  portability considerations  **********
-!     all the routines in this package (except adapt) are written in
-!     ANSI standard Fortran. In addition, they meet all the requirements
-!     of the Bell labs portable Fortran -PFORT-.  Nevertheless, the
-!     routines are affected by a change in machine word length and
-!     changing to single precision.
-!     ***** The Gauss weights and abscissae in adcomp are given to
-!           30 digits. The parameter eps0 in adset specifies the
-!           accuracy of these constants. If the accuracy is changed
-!           to K decimal digits then set EPS0 = 10**(-K).
-!     ***** The interval stack size maxstk is defined in adset to
-!           be 50. If maxstk is modified then set the dimensions of
-!           XLEFT and XRIGHT to the new value for maxstk. Note that
-!           the minimum interval length is 2**(-maxstk)*(b-a).
-!  Single precision conversion -- requires four steps
-!     1. Declare all double precision variables to be real.
-!     2. Change all double precision numbers in the data statements.
-!        (Floating point numbers appear only in data statements.)
-!     3. Change dabs,DMAX1,DMIN1 at many places.
-!     4. Change dpmpar to spmpar in adset.
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-!                      kntdim - kdimen, name changed to put in common
-!                      npardm - ndimen, name changed to put in common
-common /resulz/ error, knots
-!                      knots = Final no. of knots, includes b as one.
-!                      Error = Estimate of error actually achieved.
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-!             KONTRL contains generally useful variables
-!                      maxstk - See comments above
-!                      buffer - The machine dependent tolerance used
-!                               by the algorithm
-!                      NSTACK - Counter for interval stack, consists of
-!                               (XLEFT(J),XRIGHT(J))  J = 1 TO NSTACK
-!                      ERRORI - Error estimate for top interval
-!                      DSCTOL - Tolerance to check discarding intervals
-!                      discrd - Switch to signal discard of top interval
-!                      factor - Array of factorials
-!                      NPAR   - Number of PAREMETERS = degree + 1
-!                      interp - Number of interior interpolation points
-!                               in the normal interval
-!                      ibreak - Counter on break points
-!                      break  - Switch for break point in top interval
-!                               0     = No break present
-!                               left  = break at XLEFT(NSTACK)
-!                               right = break at XRIGHT(NSTACK)
-!                               both  = break at both ends
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
-!             COMDIF contains variables used only by adcomp and friends.
-!                      nintrp - Number of interior interpolation points
-!                               for the current interval
-!                      XINTRP - Interior interpolation points
-!                      FINTRP - f values at XINTRP points
-!                      leftx  - Multiplicity of interpolation at XLEFT
-!                               = No. of derivatives matched at XLEFT
-!                      FLEFT  - Values of f and its derivatives at XLEFT
-!                      rightx - Multiplicity of interpolation at XRIGHT
-!                      fright - Values of f and derivatives at XRIGHT
-!                      DDTEMP - The array of divided differences
-!                      XDD    - The X values for DDTEMP with proper
-!                               multiplicities of XLEFT and XRIGHT
-!------------------------ main control program -------------------------
-!            check the input and initialize all the parameters
-call adset(xknots, coefs, kdimen, kmax, ndimen, ierr)
-if (ierr /= 0) return
-!                  Loop over processing of intervals
-10 call adtake(ierr)
-if (ierr /= 0) return
-call adcomp(f)
-!                   Check for discarding intervals
-call adchk
-!            Put new intervals on stack or discard, update status
-call adput(xknots, coefs, kdimen, kmax, ndimen, ierr)
-if (ierr /= 0) return
-!                    Test for normal termination
-if (nstack == 0) return
-!                Check on the number of knots generated
-if (knots < maxknt) go to 10
-ierr = 1
-end subroutine adapt1
-
-subroutine adset(xknots, coefs, kdimen, kmax, ndimen, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: kdimen, kmax, ndimen
-double precision, intent(inout) :: xknots(kdimen)
-double precision, intent(in) :: coefs(kmax,ndimen)
-!     beginning of local variable declarations
-integer :: j, k, limsm
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
-double precision :: akmax, eps, km1, ratio
-!        ===============================================================
-! **  This program checks the input data and initializes the computation
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
-double precision, parameter :: eps0 = 1.d-30
-double precision, parameter :: zero = 0.d0
-double precision, parameter :: one = 1.d0
-double precision, parameter :: two = 2.d0
-double precision, parameter :: three = 3.d0
-double precision, parameter :: c100 = 100.d0
-integer, parameter :: kleft = 1
-integer, parameter :: kright = 2
-integer, parameter :: kboth = 3
-interface
-   pure elemental function dpmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      double precision :: dpmpar
-   end function dpmpar
-end interface
-eps = dpmpar(1)
-buffer = c100*max(eps,eps0)
-!         Put data statement items into common variables
-left = kleft
-right = kright
-both = kboth
-! -------- Set current values of limits on dimensions ------------------
-kntdim = kdimen
-npardm = ndimen
-maxknt = kntdim
-maxstk = 50
-maxpar = min(20,npardm)
-maxaux = 20
-! -------- Check input data --------------------------------------------
-ierr = 0
-if (a >= b .or. accur <= zero) go to 200
-if (degree >= maxpar .or. 2*smooth >= degree) go to 200
-akmax = kmax
-ratio = (b - a)/(abs(a) + abs(b))
-if (ratio <= two*buffer*akmax) go to 210
-if (charf < (b - a)/akmax) go to 220
-if (norm >= zero .and. (norm - one)*(norm - two)*(norm - three) /= zero) &
-   & go to 200
-if (edist*(edist - 1)*(edist - 2) /= 0) go to 200
-if (nbreak < 0 .or. nbreak > maxaux) go to 200
-if (nbreak == 0) go to 150
-!         Check the break point data, monotonicity and degree
-j = 1
-if (xbreak(1) < a .or. xbreak(nbreak) > b) go to 230
-if (nbreak == 1) go to 110
-do j = 2,nbreak
-   if (xbreak(j - 1) >= xbreak(j)) go to 230
-end do
-110 limsm = (degree - 1)/2
-do j = 1,nbreak
-   if (dbreak(j) < 0 .or. dbreak(j) > limsm) go to 240
-end do
-! -------- Initialization of variables ---------------------------------
-!             active interval stack
-150 nstack = 1
-xleft(1) = a
-xright(1) = b
-!             Termination and error values
-error = zero
-dsctol = accur**abs(norm)
-if (edist == 0) dsctol = dsctol/(b - a)
-if (norm == three) dsctol = accur
-!             Miscellaneous variables and pointers
-ibreak = 1
-knots = 1
-interp = degree + 2 - 2*smooth
-xknots(1) = a
-npar = degree + 1
-!             Compute array of NPAR factorials
-factor(1) = one
-factor(2) = one
-do k = 3,npar
-   km1 = k - 1
-   factor(k) = km1*factor(k - 1)
-end do
-return
-! -------- Error return ------------------------------------------------
-200 ierr = -1
-return
-!         A and b are too close
-210 ierr = -2
-return
-!         charf is too small
-220 ierr = -3
-return
-!         Break points are not monotonic
-230 ierr = -4
-return
-!         Bad value in derivative breaks
-240 ierr = -5
-end subroutine adset
-
-subroutine adtake(ierr)
-implicit none
-integer, intent(inout) :: ierr
-!     beginning of local variable declarations
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
-double precision :: dx, ratio
-!        ===============================================================
-! **  This program takes an active interval off the top of the stack
-!     it also does most of the work of locating and handling
-!     break points
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
-!         Check for break point
-break = 0
-if (nbreak == 0 .or. ibreak > nbreak) go to 20
-if (xbreak(ibreak) > xright(nstack)) go to 20
-!               Set control variable break, check for location
-if (xbreak(ibreak) > xleft(nstack)) go to 10
-break = left
-if (ibreak == nbreak) go to 20
-!             Check for second break point in this interval
-if (xbreak(ibreak + 1) >= xright(nstack)) go to 20
-!                 Next break is inside interval, split top interval
-break = both
-!                  Check exceeding stack limit. If so, stop
-if (nstack == maxstk) go to 30
-!                     Dont split very small intervals, stop instead
-dx = xbreak(ibreak + 1) - xleft(nstack)
-ratio = dx/(abs(a) + abs(b))
-if (ratio <= buffer) go to 30
-nstack = nstack + 1
-xleft(nstack) = xleft(nstack - 1)
-xright(nstack) = xbreak(ibreak + 1)
-xleft(nstack - 1) = xright(nstack)
-go to 20
-10 break = right
-!                 Check to see if break is already at right end point
-if (xbreak(ibreak) >= xright(nstack)) go to 20
-!                 The break is inside interval, split top interval
-!                  check exceeding stack limit. If so, stop
-if (nstack == maxstk) go to 30
-!                     Dont split very small intervals, stop instead
-dx = xbreak(ibreak) - xleft(nstack)
-ratio = dx/(abs(a) + abs(b))
-if (ratio <= buffer) go to 30
-nstack = nstack + 1
-xleft(nstack) = xleft(nstack - 1)
-xright(nstack) = xbreak(ibreak)
-xleft(nstack - 1) = xright(nstack)
-20 continue
-return
-!        A break point is in the interior of the top subinterval of
-!        the stack.  The subinterval cannot be partitioned either
-!        because the stack is full, or because partitioning leads to
-!        too small an interval.
-30 ierr = 2
-end subroutine adtake
-
-subroutine adcomp(f)
-implicit none
-double precision :: f
-external f
-!     beginning of local variable declarations
-integer :: j
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
-double precision :: absc(4), aj, dx, fdumb(9), r, wgts(4)
-double precision :: errint, polydd
-external polydd
-!        ===============================================================
-! **  This program computes the piecewise polynomial approximation on
-!     the current interval. It also estimates the error
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
-data r/1.5d0/
-!     Thirty digit values for the Gauss integration constants
-!                    .861136311594052575223946488893D0
-!                    .339981043584856264802665759103D0
-!                    .347854845137453857373063949222D0
-!                    .652145154862546142626936050778D0
-!     ***** the ABSISSAE and weights are given below to 30 digits.
-!           The parameter eps0 in adset specifies the accuracy of
-!           these constants. If the accuracy is changed to K decimal
-!           digits then set EPS0 = 10**(-K).
-data absc(1) /-.861136311594052575223946488893d0 /
-data absc(2) /-.339981043584856264802665759103d0 /
-data absc(3) / .339981043584856264802665759103d0 /
-data absc(4) / .861136311594052575223946488893d0 /
-data wgts(1) / .347854845137453857373063949222d0 /
-data wgts(2) / .652145154862546142626936050778d0 /
-data wgts(3) / .652145154862546142626936050778d0 /
-data wgts(4) / .347854845137453857373063949222d0 /
-!             Compute interpolation information
-nintrp = degree - 2*smooth - 1
-!          Increase number of interpolation points if break points are
-!          specified with fewer derivatives than smooth
-if (break == left .or. break == right) nintrp = nintrp + smooth - &
-   & dbreak(ibreak)
-if (break == both) nintrp = nintrp + 2*smooth - dbreak(ibreak) - &
-   & dbreak(ibreak + 1)
-if (nintrp == 0) go to 20
-!             Generate equal spaced interpolation points
-aj = nintrp + 1
-dx = (xright(nstack) - xleft(nstack))/aj
-do j = 1,nintrp
-   aj = j
-   xintrp(j) = xleft(nstack) + aj*dx
-end do
-!             Get left and right f-values, put f-value in first element
-!             of arrays FLEFT and fright.  Get derivatives back as
-!             other elements via the subarrays fdervl and fdervr.
-20 fleft(1) = f(xleft(nstack),fleft(2:10))
-fright(1) = f(xright(nstack),fright(2:10))
-leftx = smooth + 1
-rightx = leftx
-!            Get f-values at other interpolation points, if any
-if (nintrp == 0) go to 40
-do j = 1,nintrp
-   fintrp(j) = f(xintrp(j),fdumb)
-end do
-!          Check for break points, modify values if necessary
-40 continue
-if (break /= left) go to 50
-leftx = dbreak(ibreak) + 1
-fleft(leftx) = bright(ibreak)
-50 if (break /= right) go to 60
-rightx = dbreak(ibreak) + 1
-fright(rightx) = bleft(ibreak)
-60 if (break /= both) go to 70
-leftx = dbreak(ibreak) + 1
-rightx = dbreak(ibreak + 1) + 1
-fleft(leftx) = bright(ibreak)
-fright(rightx) = bleft(ibreak + 1)
-70 continue
-!           Compute divided differences, Newton form of polynomial
-call newton(leftx, rightx, nintrp)
-!         Compute norm of error of this appromimation using four pts
-!         add 50 percent fudge factor
-errori = errint(f,polydd,xleft(nstack),xright(nstack),absc,wgts)
-errori = r*errori
-end subroutine adcomp
-
-double precision function errint(f, fit, aaa, bbb, points, weight)
-implicit none
-double precision :: aaa, bbb, fit, points(*), weight(*)
-double precision :: f
-external f, fit
-!     beginning of local variable declarations
-integer :: j
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
-double precision :: abmid, ba, fdumb(9), p, pj, er, f1, f2
-!        ===============================================================
-! **  This function does a four point integration rule for the
-!     absolute value of the difference of two functions( f and fit )
-!                   abs( f(X) - fit(X) )**NORM
-!     the integration uses the points and weights given and scaled
-!     from (-1,1) to (aaa,bbb)
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
-double precision, parameter :: two = 2.0d0
-double precision, parameter :: three = 3.0d0
-!         Compute midpoint = abmid and half length = ba of interval
-abmid = (aaa + bbb)/two
-ba = (bbb - aaa)/two
-pj = abmid + ba*points(1)
-!         Test for Tchebycheff (minimax) norm which uses special code
-if (norm == three) go to 20
-!         Have general LP norm or least squares or least deviations
-p = abs(norm)
-!              Initialize the quadrature rule
-errint = abs(f(pj,fdumb) - fit(pj))**p*weight(1)
-!              Loop through remaining points
-do j = 2,4
-   pj = abmid + ba*points(j)
-   f1 = f(pj,fdumb)
-   f2 = fit(pj)
-   er = abs(f1 - f2)**p
-   errint = errint + abs(f(pj,fdumb) - fit(pj))**p*weight(j)
-end do
-errint = errint*ba
-go to 40
-!         Tchebycheff norm
-20 continue
-!             Find max error on points
-!               initialize
-errint = abs(f(pj,fdumb) - fit(pj))
-!              Loop through the remaining points
-do j = 2,4
-   pj = abmid + ba*points(j)
-   errint = max(errint,abs(f(pj,fdumb) - fit(pj)))
-end do
-40 continue
-end function errint
-
-subroutine newton(nl, nr, ni)
-implicit none
-integer :: ni, nl, nr
-!     beginning of local variable declarations
-integer :: idif, ipt, ipt2, j, k, nddx, nl1, nl2, nr1, nr2, nrl, &
-   & nrlj, nrlj1
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
-double precision :: difff, diffx
-!        ===============================================================
-! **  This program computes the divided differences array as follows
-!         nl COALESCED POINTS ON left   - DERIV VALUES IN FLEFT
-!         nr COALESCED POINTS ON right  -   -      -    - FRIGHT
-!         ni DISTINCT  POINTS INBETWEEN - FNCTN    -    - FINTRP
-!     the points are ordered XL = XLEFT (NSTACK)
-!                            xr = xright(nstack)
-!                            XINTRP ARRAY
-!         layout of the DDTEMP divided difference array
-!     nl=6    llllll****ii
-!     nr=4    Lllll****II     L = First triangle
-!     ni=2    llll****ii
-!             LLL****II       R = Second triangle
-!             LL****II
-!             L****II         * = Fill between triangles
-!             RRRRII
-!             RRRII           I = Completion for interpolation points
-!             RRII
-!             RII       idif = Horizontal coord. = Difference order
-!             II        ipt  = Vertical coord. Associated with points
-!             I
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
-!                 Main calculation of divided differences
-!         define a few short constants
-nl1 = nl - 1
-nl2 = nl + 1
-nr1 = nr - 1
-nr2 = nr + 1
-nrl = nr + nl
-!         Put X-values in a single array with nddx = nl+nr+ni points
-do nddx = 1,nl
-   xdd(nddx) = xleft(nstack)
-end do
-nddx = nl
-do k = 1,nr
-   nddx = nddx + 1
-   xdd(nddx) = xright(nstack)
-end do
-!            Check if there are any interpolation points to add to XDD
-if (ni == 0) go to 40
-do k = 1,ni
-   nddx = nddx + 1
-   xdd(nddx) = xintrp(k)
-end do
-!           Fill border of first triangle - Size nl.
-40 continue
-!         Top border
-do idif = 1,nl
-   ddtemp(idif,1) = fleft(idif)/factor(idif)
-end do
-if (nl1 == 0) go to 70
-!                   Bottom border
-do idif = 1,nl1
-   ipt = nl2 - idif
-   ddtemp(idif,ipt) = ddtemp(idif,1)
-end do
-!          Fill border of second triangle - Size nr
-70 continue
-!         Top border
-do idif = 1,nr
-   ddtemp(idif,nl2) = fright(idif)/factor(idif)
-end do
-if (nrl == nl2) go to 100
-!                   Bottom border
-do idif = 1,nr1
-   ipt = nrl + 1 - idif
-   ddtemp(idif,ipt) = ddtemp(idif,nl2)
-end do
-!           Fill parallogram between the two triangles just filled
-!          fill entries parallel to bottom of first triangle
-100 continue
-!         Loop stepping along top side of second triangle
-do j = 2,nr2
-   idif = j
-!             Loop stepping parallel to bottom side of first triangle
-   do k = 2,nl2
-      ipt = nl + 2 - k
-      difff = ddtemp(idif - 1,ipt + 1) - ddtemp(idif - 1,ipt)
-      ipt2 = ipt - 1 + idif
-      diffx = xdd(ipt2) - xdd(ipt)
-      ddtemp(idif,ipt) = difff/diffx
-      idif = idif + 1
-   end do
-end do
-!         Fill in bottom diagonals for interpolation points, if any
-if (ni == 0) go to 150
-!         Loop through the interpolatation points
-do j = 1,ni
-   idif = 2
-   nrlj = nrl + j
-   ddtemp(1,nrlj) = fintrp(j)
-!         Loop through the differences (idif index)
-   nrlj1 = nrlj - 1
-   do k = 1,nrlj1
-      ipt = nrlj - k
-      difff = ddtemp(idif - 1,ipt + 1) - ddtemp(idif - 1,ipt)
-      diffx = xdd(nrlj) - xdd(ipt)
-      ddtemp(idif,ipt) = difff/diffx
-      idif = idif + 1
-   end do
-end do
-150 continue
-end subroutine newton
-
-double precision function polydd(x)
-implicit none
-double precision :: x
-!     beginning of local variable declarations
-integer :: j, k
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
-!        ===============================================================
-! **  This function evaluates the current polynomial piece represented
-!     by the divided differences DDTEMP on the point set XDD.
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
-polydd = ddtemp(degree + 1,1)
-do k = 1,degree
-   j = degree + 1 - k
-   polydd = ddtemp(j,1) + (x - xdd(j))*polydd
-end do
-end function polydd
-
-subroutine adchk
-implicit none
-!     beginning of local variable declarations
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
-double precision :: aknots, dtest, dx
-integer :: nswc_ai_i4
-!        ===============================================================
-! **  This program checks for discarding interval, applies various
-!     tests about discarding involving edist and charf.
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
-double precision, parameter :: three = 3.0d0
-double precision, parameter :: five = 5.0d0
-discrd = .false.
-dx = xright(nstack) - xleft(nstack)
-if (dx > charf) return
-!         Compute dtest for the local error criterion
-if (norm == three) go to 30
-nswc_ai_i4 = edist - 1
-if (nswc_ai_i4 < 0) go to 10
-if (nswc_ai_i4 == 0) go to 20
-go to 30
-10 dtest = dx*dsctol
-go to 40
-!         For the approximate fixed error distribution type we estimate
-!         the final number of knots by( limiting it a little )
-!             (NSTACK+knots+2)((b-a)/(XRIGHT-a))
-20 aknots = nstack + knots + 2
-dtest = dsctol/(aknots*min((b - a)/(xright(nstack) - a),five))
-go to 40
-30 dtest = dsctol
-!             Check for discard of interval
-40 if (errori <= dtest) discrd = .true.
-end subroutine adchk
-
-subroutine adput(xknots, coefs, kdimen, kmax, ndimen, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: kdimen, kmax, ndimen
-double precision, intent(inout) :: xknots(kdimen), &
-   & coefs(kmax,ndimen)
-!     beginning of local variable declarations
-integer :: k
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
-double precision :: dx, powers(20), p, ratio
-!        ===============================================================
-! **  This program puts intervals on the stack or discards them.
-!     When an interval is discarded a new knot is found. Then this
-!     program updates the error estimate, the XKNOT array, transforms
-!     the polynomial to the power form and put the coefficients into
-!     the array coefs.  It also checks for passing break points
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
-double precision, parameter :: half = .5d0
-double precision, parameter :: one = 1.d0
-double precision, parameter :: three = 3.d0
-!            Check for discarding the interval
-if (discrd) go to 30
-!         Subdivide interval and place on stack
-if (nstack < maxstk) go to 10
-!             Fatal error, exceeded active stack size
-ierr = 4
-dx = xright(nstack) - xleft(nstack)
-if (dx > charf) ierr = 3
-return
-10 dx = (xright(nstack) - xleft(nstack))*half
-!              Check for small intervals
-ratio = dx/(abs(a) + abs(b))
-if (ratio > buffer) go to 20
-ierr = 4
-return
-20 nstack = nstack + 1
-xleft(nstack) = xleft(nstack - 1)
-xleft(nstack - 1) = xright(nstack - 1) - dx
-xright(nstack) = xleft(nstack - 1)
-return
-!            Discard interval, update global error, xknots and COEFS
-30 p = abs(norm)
-if (norm == three) error = max(error,errori)
-if (norm /= three) error = (error**p + errori)**(one/p)
-!              Check for passing break points
-if (break == left .or. break == both) ibreak = ibreak + 1
-!             Transform representation of polynomial from divided
-!             differences to powers of X with origin at xknots (knots)
-call adtran(ddtemp, powers)
-!             Put COEFS into the main array
-do k = 1,npar
-   coefs(knots,k) = powers(k)
-end do
-!            Put the new knots in xknots
-knots = knots + 1
-xknots(knots) = xright(nstack)
-nstack = nstack - 1
-end subroutine adput
-
-subroutine adtran(d, powers)
-implicit none
-double precision :: d(20,*)
-double precision, intent(inout) :: powers(*)
-!     beginning of local variable declarations
-integer :: i, ii, j, k, khi, koef, l, ltop, ni, ni1, nl, nr, nri, &
-   & nri1, nrl, nrli, nrlk
-integer :: leftx, nintrp
-integer :: kntdim, level, nbreak, npardm
-integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack
-integer :: knots
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-   & ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-   & fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-   & xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-   & smooth
-logical :: discrd
-double precision :: shift, xl, xr, xtemp(20)
-!        ===============================================================
-! **  This program converts polynomial representation from divided
-!     difference to power form.  There are coalesced points on each
-!     END OF THE INTERVAL (xl,xr) = (XLEFT(NSTACK),XRIGHT(NSTACK)).
-!     The number coalesced at each end is leftx and rightx.
-!     And there are nintrp other pts XINTRP(k)  inbetween them.
-!     See subroutine newton for more details
-common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
-   & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
-common /resulz/ error, knots
-common /kontrl/ dsctol, errori, xleft, xright, break, both, &
-   & factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
-   & npar, nstack, right, discrd, buffer
-common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
-   & leftx, nintrp, rightx
-!         Set some short local variable names
-xl = xleft(nstack)
-xr = xright(nstack)
-nl = leftx
-nr = rightx
-ni = nintrp
-nrl = nr + nl
-nri = nr + ni
-nri1 = nri - 1
-nrli = nrl + ni
-!         Starting representation is (assuming xl = 0 )
-!    d(1) +d(2)X +d(3)X**2 + --- +d(nl)X**(nl-1)
-!   +(X**nl)*( d(nl+1)(+d(nl+2)(X-xr)**2 + --- +d(nl+nr)*(X-xr)**(nr-1)
-!        *((X-xr)**nr)*(d(nl+nr+1) + d(nl+nr+2)*(X-XINTRP(1))
-!                      +d(nl+nr+3)*(X-XINTRP(1))(X-XINTRP(2)) + ---))
-!         strategy is to first convert the part from the interp. Pts.
-!         To poly in (X-xr).  This poly then has origin shifted to xl.
-!     The conversion of the interp part is done explicitly for degree
-!     two or less and done by synthetic division for higher degrees
-!   D1 + D2(X-X1) +D3(X**2-(X1+X2)X +X1*X2)
-!     the resulting coefficients are put in the array powers
-if (ni == 0) go to 100
-!             Build up the polynomial for the interpolation points
-!         use special formulas for ni less than 3
-if (ni == 1) go to 10
-if (ni == 2) go to 20
-go to 30
-10 powers(1) = d(nrl + 1,1)
-go to 80
-20 powers(1) = d(nrl + 1,1) + (xr - xintrp(1))*d(nrl + 2,1)
-powers(2) = d(nrl + 2,1)
-go to 80
-!         Conversion by repeated synthetic division
-30 ni1 = ni - 1
-!         Initialize the powers and xtemp arrays
-do k = 1,ni
-   xtemp(k) = xintrp(k)
-   nrlk = nrl + k
-   powers(k) = d(nrlk,1)
-end do
-!         Do the repeated synthetic division to replace the xtemp
-!         = XINTRP points of the Newton expansion by the xr points
-do k = 1,ni1
-!              powers(ni) is fixed and set above
-   do ii = 1,ni1
-      i = ni - ii
-      powers(i) = powers(i) + (xr - xtemp(i))*powers(i + 1)
-   end do
-!              Shift the Newton expansion pts. Up, put in one more xr
-   do ii = 1,ni1
-      i = ni - ii
-      xtemp(i + 1) = xtemp(i)
-   end do
-   xtemp(1) = xr
-end do
-80 continue
-!             Shift the coefficients to the top of the powers array
-do k = 1,ni
-   l = ni + 1 - k
-   ltop = l + nrl
-   powers(ltop) = powers(l)
-end do
-!             Have the interpolation PT. COEFS. In the array powers
-100 continue
-!             Put the remaining divided diffs into the powers array
-do j = 1,nrl
-   powers(j) = d(j,1)
-end do
-!         Transform the origin of the polynomial from xr to xl
-!         we use repeated synthetic division
-if (nri == 1) go to 140
-shift = xr - xl
-khi = nri1
-!             Loop through the coefficients
-do j = 2,nri
-!                   Synthetic division loop
-   do k = 1,khi
-      koef = nrli - k
-      powers(koef) = powers(koef) - shift*powers(koef + 1)
-   end do
-   khi = khi - 1
-end do
-140 continue
-!     The coefficients are now of the power form with origin xl
-end subroutine adtran
-
-subroutine cpsc(f, z, n, ic, tol, r, rs, err)
-implicit none
-integer, intent(in) :: ic, n
-real, intent(inout) :: err(n), r
-real, intent(in) :: tol
-complex :: f
-complex, intent(inout) :: rs(n)
-complex :: z
-!     beginning of local variable declarations
-integer :: i, ia, inr, iq, is, it, ix, j, jn, kl, km, kn, l, l1, l2, lf, ln, m, np, nr
-real :: ang, b, c(4), cm, cp, ct, cx, ep6, eps, eps0, fac, fact, &
-   & fc(3), pi, r1, ra, re, sc(4), sf, sp, sr
-complex :: a(64), v
-complex :: rt(51,3), fv(6), u, w, t, rv(3), rq, s, xk, co
-integer, parameter :: iw(7) = [1, 2, 4, 8, 16, 32, 64]
-integer, parameter :: ip(32) = [64, 32, 48, 16, 56, 24, 40, 8, 60, 28, 44, 12, 52, 20, 36, 4, 62, 30, 46, 14, 54, 22, &
-   & 38, 6, 58, 26, 42, 10, 50, 18, 34, 2]
+integer :: i, j, l, en, ll, its, lp1, enm1
+real :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
+complex :: z3
 interface
    pure elemental function spmpar(i)
       implicit none
@@ -6955,228 +963,1161 @@ interface
       real :: spmpar
    end function spmpar
 end interface
-!  Evaluation of complex power series coefficients or derivatives.
-!  *** Input parameters ***
-!    f   COMPLEX FUNCTION, OF WHICH THE COEFFICIENTS OR DERIVATIVES
-!        are sought. This function must be declared external in the
-!        calling program.
-!    z   COMPLEX POINT AROUND WHICH f IS TO BE EXPANDED OR AT WHICH
-!        derivatives are to be evaluated.
-!    n   INTEGER, NUMBER OF COEFFICIENTS OR DERIVATIVES WANTED.
-!        n must be GE 1 and le 51.
-!    ic  selects between power series coefficients and derivatives.
-!        ic .EQ. 0   routine returns power series coefficients in rs.
-!        ic .NE. 0   routine returns derivatives in rs.
-!    tol estimated relative accuracy of f. it is assumed that tol
-!        is nonnegative. If tol = 0 Then f is assumed to be correct
-!        to machine accuracy.
-!  *** Input and output parameter ***
-!    r   INITIAL RADIUS USED IN SEARCH FOR OPTIMAL RADIUS. THE RESULTING
-!        radius is left in r. the provided guess may be in error with at
-!        most a factor of 3.E4 .
-!  *** Output parameters ***
-!    rs  complex array rs(n) containing the n first
-!        coefficients (corresponding to the powers 0 to n-1) or deriva-
-!        tives (orders 0 to n-1).
-!    err real array err(n) containing absolute error estimates for the
-!        numbers in rs.
-!  List of the variables initialized in the data statement below.
-!   iw   2**( 0 , 1 , 2 , 3 , 4 , 5 , 6 ) .
-!   ip   PERMUTATION CONSTANTS FOR THE FFT.
-!   rv   CONSTANTS FOR THE LAURENT SERIES TEST.
-data rv(1)/(-.4,.3)/, rv(2)/(.7,.2)/, rv(3)/(.02,-.06)/
-!  Statement function for multiplication of a complex number
-!  by a real number.
-!  -------------------
-!  ****** eps0 is a machine dependent constant. eps0 is the
-!         smallest number such that 1 + eps0 .GT. 1.
-eps0 = spmpar(1)
-!  -------------------
-!  Initialization.
-eps = max(eps0,tol)
-sc(1) = .125
-c(1) = eps**(1./28.)
-ep6 = c(1)**6
-pi = 4.0*atan(1.0)
-fv(1) = (-1.,0.)
-fv(2) = (0.,-1.)
-r1 = sqrt(0.5)
-ra = 1.0/r1
-fv(3) = cmplx(r1,-r1)
-do i = 2,4
-   sc(i) = .5*sc(i - 1)
-   c(i) = sqrt(c(i - 1))
-   ang = pi*sc(i - 1)
-   fv(i + 2) = cmplx(cos(ang),-sin(ang))
-end do
-!  Start execution.
-if (n > 51 .or. n < 1) go to 260
-l2 = 1
-lf = 0
-np = 0
-m = 0
-nr = -1
-!  Find if A FFT over 8, 16, 32, or 64 points should be used.
-kl = 1
-if (n > 6) kl = 2
-if (n > 12) kl = 3
-if (n > 25) kl = 4
-km = kl + 2
-kn = 7 - km
-ix = iw(km + 1)
-is = iw(kn)
-30 v = cmplx(r,0.0)
-!  Function values of f are stored ready permutated for the FFT.
-do i = is,32,is
-   iq = ip(i)
-   v = v*fv(km)
-   a(iq) = f(z + v)
-   a(iq - 1) = f(z - v)
-end do
-ln = 2
-jn = 1
-!  The loop  do 70 ... constitutes the FFT.
-do l = 1,km
-   u = (1.,0.)
-   w = fv(l)
-   do j = 1,jn
-      do i = j,ix,ln
-         it = i + jn
-         t = a(it)*u
-         a(it) = a(i) - t
-         a(i) = a(i) + t
-      end do
-      u = u*w
+!     integer min0
+!     real sqrt,cabs,abs,real,aimag
+!     complex csqrt,cmplx
+!-----------------------------------------------------------------------
+!     This subroutine is a translation of a unitary analogue of the
+!     Algol procedure  COMLR, NUM. Math. 12, 369-376(1968) By Martin
+!     and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 396-403(1971).
+!     The unitary analogue substitutes the QR algorithm of Francis
+!     (comp. Jour. 4, 332-345(1962)) For the LR algorithm.
+!     This subroutine finds the eigenvalues of a complex
+!     upper Hessenberg matrix BY the QR method.
+!     On input-
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!        n is the order of the matrix,
+!        low and igh are integers determined by the balancing
+!          subroutine  cbal.  If  cbal  has not been used,
+!          set low=1, igh=n,
+!        hr and hi contain the real and imaginary parts,
+!          respectively, of the complex upper Hessenberg matrix.
+!          Their lower triangles below the subdiagonal contain
+!          information about the unitary transformations used in
+!          the reduction by  corth, if performed.
+!     On output-
+!        the upper Hessenberg portions of hr and hi have been
+!          destroyed.  Therefore, they must be saved before
+!          calling  comqr  if subsequent calculation of
+!          eigenvectors is to be performed,
+!        wr and wi contain the real and imaginary parts,
+!          respectively, of the eigenvalues.  If an error
+!          exit is made, the eigenvalues should be correct
+!          for indices ierr+1,...,n,
+!        ierr is set to
+!          ZERO       FOR NORMAL RETURN,
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!                     determined after 30 iterations.
+!     Arithmetic is real except for the replacement of the Algol
+!     procedure cdiv by complex division and use of the subroutines
+!     CSQRT and cmplx in computing complex square roots.
+!-----------------------------------------------------------------------
+!     ********** machep is a machine dependent parameter specifying
+!                the relative precision of floating point arithmetic.
+machep = spmpar(1)
+!                **********
+ierr = 0
+if (low == igh) go to 180
+!     ********** Create real subdiagonal elements **********
+l = low + 1
+do i = l, igh
+   ll = min(i + 1,igh)
+   if (hi(i,i - 1) == 0.0) go to 170
+   norm = abs(cmplx(hr(i,i - 1),hi(i,i - 1)))
+   yr = hr(i,i - 1) / norm
+   yi = hi(i,i - 1) / norm
+   hr(i,i - 1) = norm
+   hi(i,i - 1) = 0.0
+   do j = i, igh
+      si = yr * hi(i,j) - yi * hr(i,j)
+      hr(i,j) = yr * hr(i,j) + yi * hi(i,j)
+      hi(i,j) = si
    end do
-   ln = ln + ln
-   jn = jn + jn
-end do
-cx = 0.0
-b = 1.0
-!  Test on how fast the coefficients obtained decrease.
-do i = 1,ix
-   ct = abs(a(i))/b
-   if (ct < cx) go to 80
-   cx = ct
-   inr = i
-80 b = b*c(kl)
-end do
-if (m <= 1) go to 100
-!  Estimate of the rounding error level for the last radius.
-err(1) = cx*eps
-do i = 2,n
-   err(i) = err(i - 1)/r
-end do
-100 sf = sc(kl)
-do i = 1,ix
-   a(i) = mult(sf,a(i))
-   sf = sf/r
-end do
-l1 = l2
-l2 = 1
-if (inr > iw(km)) go to 150
-if (lf == 1) go to 140
-!  Test if the series is a Taylor or a Laurent series.
-sr = 0.0
-sp = 0.0
-do j = 1,3
-   rq = mult(r,rv(j))
-   s = a(ix)
-   do i = 2,ix
-      ia = ix + 1 - i
-      s = s*rq + a(ia)
+   do j = low, ll
+      si = yr * hi(j,i) + yi * hr(j,i)
+      hr(j,i) = yr * hr(j,i) - yi * hi(j,i)
+      hi(j,i) = si
    end do
-   cp = abs(s)
-   if (cp > sp) sp = cp
-   cm = abs(s - f(z + rq))
-   if (cm > sr) sr = cm
+170 continue
 end do
-if (sr > 1.e-3*sp) go to 150
-lf = 1
-140 l2 = -1
-!  Determination of the next radius to be used.
-150 if (nr >= 0) go to 160
-fact = 2.0
-if (l2 == 1) fact = 0.5
-l1 = l2
-nr = 0
-160 if (l1 /= l2) go to 180
-if (nr > 0) go to 170
-np = np + 1
-if ((np - 15) <= 0) go to 190
-go to 260
-170 fact = 1.0/fact
-180 fact = 1.0/sqrt(fact)
-nr = nr + 1
-190 r = r*fact
-m = nr - kl - 1
-if (m <= 0) go to 30
-!  The results for the last three radii are stored.
-do i = 1,n
-   rt(i,m) = a(i)
+!     ********** Store roots isolated by cbal **********
+180 do i = 1, n
+   if (i >= low .and. i <= igh) go to 200
+   wr(i) = hr(i,i)
+   wi(i) = hi(i,i)
+200 continue
 end do
-if (m == 1) go to 220
-!  Extrapolation.
-do i = 1,n
-   xk = rt(i,m - 1) - rt(i,m)
-   rt(i,m - 1) = rt(i,m) - mult(fc(m - 1),xk)
+en = igh
+tr = 0.0
+ti = 0.0
+!     ********** Search for next eigenvalue **********
+220 if (en < low) go to 1001
+its = 0
+enm1 = en - 1
+!     ********** Look for single small sub-diagonal element
+!                for l=en step -1 Until low  -- **********
+240 do ll = low, en
+   l = en + low - ll
+   if (l == low) exit
+   if (abs(hr(l,l - 1)) <= &
+      & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
+      & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
 end do
-if (m == 3) go to 230
-!  Calculation of the extrapolation constants.
-220 fc(m) = 1.5 + sign(.5,fact - 1.)
-if (m == 2) fc(m) = fc(m) + ra
-if (fact > 1.0) fc(m) = -fc(m)
-go to 30
-230 fc(3) = fc(1)*fc(2)/(fc(1) + fc(2) + 1.0)
-!  Final extrapolation and error estimate.
-do i = 1,n
-   xk = rt(i,1) - rt(i,2)
-   err(i) = err(i) + ep6*abs(xk)
-   rs(i) = rt(i,2) - mult(fc(3),xk)
+!     ********** Form shift **********
+300 if (l == en) go to 660
+if (its == 30) go to 1000
+if (its == 10 .or. its == 20) go to 320
+sr = hr(en,en)
+si = hi(en,en)
+xr = hr(enm1,en) * hr(en,enm1)
+xi = hi(enm1,en) * hr(en,enm1)
+if (xr == 0.0 .and. xi == 0.0) go to 340
+yr = (hr(enm1,enm1) - sr) / 2.0
+yi = (hi(enm1,enm1) - si) / 2.0
+z3 = sqrt(cmplx(yr**2 - yi**2 + xr,2.0*yr*yi + xi))
+zzr = real(z3)
+zzi = aimag(z3)
+if (yr * zzr + yi * zzi >= 0.0) go to 310
+zzr = -zzr
+zzi = -zzi
+310 z3 = cmplx(xr,xi) / cmplx(yr + zzr,yi + zzi)
+sr = sr - real(z3)
+si = si - aimag(z3)
+go to 340
+!     ********** Form exceptional shift **********
+320 sr = abs(hr(en,enm1)) + abs(hr(enm1,en - 2))
+si = 0.0
+340 do i = low, en
+   hr(i,i) = hr(i,i) - sr
+   hi(i,i) = hi(i,i) - si
 end do
-!  Multiply power series coefficients and error estimate by factorials
-!  if derivatives wanted.
-if (ic == 0) return
-fac = 0.0
-fact = 1.0
-do i = 1,n
-   rs(i) = mult(fact,rs(i))
-   err(i) = fact*err(i)
-   fac = fac + 1.0
-   fact = fact*fac
+tr = tr + sr
+ti = ti + si
+its = its + 1
+!     ********** Reduce to triangle (rows) **********
+lp1 = l + 1
+do i = lp1, en
+   sr = hr(i,i - 1)
+   hr(i,i - 1) = 0.0
+   norm = sqrt(hr(i - 1,i - 1)*hr(i - 1,i - 1) + hi(i - 1,i - 1)*hi(i - 1,i - 1) &
+      & + sr*sr)
+   xr = hr(i - 1,i - 1) / norm
+   wr(i - 1) = xr
+   xi = hi(i - 1,i - 1) / norm
+   wi(i - 1) = xi
+   hr(i - 1,i - 1) = norm
+   hi(i - 1,i - 1) = 0.0
+   hi(i,i - 1) = sr / norm
+   do j = i, en
+      yr = hr(i - 1,j)
+      yi = hi(i - 1,j)
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      hr(i - 1,j) = xr * yr + xi * yi + hi(i,i - 1) * zzr
+      hi(i - 1,j) = xr * yi - xi * yr + hi(i,i - 1) * zzi
+      hr(i,j) = xr * zzr - xi * zzi - hi(i,i - 1) * yr
+      hi(i,j) = xr * zzi + xi * zzr - hi(i,i - 1) * yi
+   end do
 end do
-return
-!  Error return.
-260 do i = 1,n
-   rs(i) = (0.,0.)
-   err(i) = 1.e10
+si = hi(en,en)
+if (si == 0.0) go to 540
+norm = abs(cmplx(hr(en,en),si))
+sr = hr(en,en) / norm
+si = si / norm
+hr(en,en) = norm
+hi(en,en) = 0.0
+!     ********** INVERSE OPERATION (COLUMNS) **********
+540 do j = lp1, en
+   xr = wr(j - 1)
+   xi = wi(j - 1)
+   do i = l, j
+      yr = hr(i,j - 1)
+      yi = 0.0
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      if (i == j) go to 560
+      yi = hi(i,j - 1)
+      hi(i,j - 1) = xr * yi + xi * yr + hi(j,j - 1) * zzi
+560   hr(i,j - 1) = xr * yr - xi * yi + hi(j,j - 1) * zzr
+      hr(i,j) = xr * zzr + xi * zzi - hi(j,j - 1) * yr
+      hi(i,j) = xr * zzi - xi * zzr - hi(j,j - 1) * yi
+   end do
 end do
-contains
-   pure function mult(re, co) result(nswc_sf_result)
-      implicit none
-      real, intent(in) :: re
-      complex, intent(in) :: co
-      complex :: nswc_sf_result
-      nswc_sf_result = cmplx(re*real(co),re*aimag(co))
-   end function mult
-end subroutine cpsc
+if (si == 0.0) go to 240
+do i = l, en
+   yr = hr(i,en)
+   yi = hi(i,en)
+   hr(i,en) = sr * yr - si * yi
+   hi(i,en) = sr * yi + si * yr
+end do
+go to 240
+!     ********** A ROOT FOUND **********
+660 wr(en) = hr(en,en) + tr
+wi(en) = hi(en,en) + ti
+en = enm1
+go to 220
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 30 iterations **********
+1000 ierr = en
+1001 return
+!     ********** Last card of comqr **********
+end subroutine comqr
 
-subroutine dcpsc(fun, x, y, n, ic, tol, r, rs1, rs2, err)
+pure subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi)
+!! <!-- nswc-ford:begin CBABK2 -->
+!! Reference for `cbabk2`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      This subroutine is a translation of the Algol procedure
+!!      cbabk2, which is a complex version of balbak,
+!!      NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!!      Handbook for auto. Comp., Vol.ii-linear algebra, 315-326(1971).
+!!      This subroutine forms the eigenvectors of a complex general
+!!      matrix BY back transforming those of the corresponding
+!!      balanced matrix determined by  cbal.
+!!      On input-
+!!         nm must be set to the row dimension of two-dimensional
+!!           array parameters as declared in the calling program
+!!           dimension statement,
+!!         n is the order of the matrix,
+!!         low and igh are integers determined by  cbal,
+!!         scale contains information determining the permutations
+!!           and scaling factors used by  cbal,
+!!         m is the number of eigenvectors to be back transformed,
+!!         zr and zi contain the real and imaginary parts,
+!!           respectively, of the eigenvectors to be
+!!           back transformed in their first m columns.
+!!      On output-
+!!         zr and zi contain the real and imaginary parts,
+!!           respectively, of the transformed eigenvectors
+!!           in their first m columns.
+!! ```
+!! <!-- nswc-ford:end -->
 implicit none
-integer, intent(in) :: ic, n
-double precision :: x, y
-double precision, intent(in) :: tol
-double precision, intent(inout) :: r, rs1(n), rs2(n), err(n)
+integer, intent(in) :: m, n
+integer, intent(in) :: nm, igh, low
+real, intent(in) :: scale(n)
+real, intent(inout) :: zr(nm,m), zi(nm,m)
 !     beginning of local variable declarations
-integer :: i, ia, inr, iq, is, it, ix, j, jn, kl, km, kn, l, l1, &
-   & l2, lf, ln, m, mm1, np, nr
-double precision :: ang, b, cm, cp, ct, cx, eps, eps0, ep6, fac, fact, pi, ra, r1, s, sf, sp, sr, t, u, v, w, c(4), fc(3), sc(4), &
-   & a1(64), a2(64), fv1(6), fv2(6), rt1(51,3), rt2(51,3)
-integer, parameter :: iw(7) = [1, 2, 4, 8, 16, 32, 64]
-integer, parameter :: ip(32) = [64, 32, 48, 16, 56, 24, 40, 8, 60, 28, 44, 12, 52, 20, 36, 4, 62, 30, 46, 14, 54, 22, &
-   & 38, 6, 58, 26, 42, 10, 50, 18, 34, 2]
-double precision, parameter :: rv1(3) = [-.4d0, .7d0, .02d0]
-double precision, parameter :: rv2(3) = [.3d0, .2d0, -.06d0]
+integer :: i, j, k, ii
+real :: s
+!-----------------------------------------------------------------------
+!     This subroutine is a translation of the Algol procedure
+!     cbabk2, which is a complex version of balbak,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 315-326(1971).
+!     This subroutine forms the eigenvectors of a complex general
+!     matrix BY back transforming those of the corresponding
+!     balanced matrix determined by  cbal.
+!     On input-
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!        n is the order of the matrix,
+!        low and igh are integers determined by  cbal,
+!        scale contains information determining the permutations
+!          and scaling factors used by  cbal,
+!        m is the number of eigenvectors to be back transformed,
+!        zr and zi contain the real and imaginary parts,
+!          respectively, of the eigenvectors to be
+!          back transformed in their first m columns.
+!     On output-
+!        zr and zi contain the real and imaginary parts,
+!          respectively, of the transformed eigenvectors
+!          in their first m columns.
+!-----------------------------------------------------------------------
+if (m == 0) go to 200
+if (igh == low) go to 120
+do i = low, igh
+   s = scale(i)
+!     ********** Left hand eigenvectors are back transformed
+!                if the foregoing statement is replaced by
+!                s=1.0/scale(i). **********
+   do j = 1, m
+      zr(i,j) = zr(i,j) * s
+      zi(i,j) = zi(i,j) * s
+   end do
+end do
+!     ********** FOR i=low-1 STEP -1 UNTIL 1,
+!                igh+1 STEP 1 UNTIL n DO -- **********
+120 do ii = 1, n
+   i = ii
+   if (i >= low .and. i <= igh) go to 140
+   if (i < low) i = low - ii
+   k = scale(i)
+   if (k == i) go to 140
+   do j = 1, m
+      s = zr(i,j)
+      zr(i,j) = zr(k,j)
+      zr(k,j) = s
+      s = zi(i,j)
+      zi(i,j) = zi(k,j)
+      zi(k,j) = s
+   end do
+140 continue
+end do
+200 return
+!     ********** Last card of cbabk2 **********
+end subroutine cbabk2
+
+pure subroutine comqr2(nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr)
+!! <!-- nswc-ford:begin COMQR2 -->
+!! Reference for `comqr2`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      integer min0
+!!      real sqrt,cabs,abs,real,aimag
+!!      complex csqrt,cmplx
+!!
+!!      This subroutine is a translation of a unitary analogue of the
+!!      Algol procedure  COMLR2, NUM. Math. 16, 181-204(1970) By peters
+!!      and Wilkinson.
+!!      Handbook for auto. Comp., Vol.ii-linear algebra, 372-395(1971).
+!!      The unitary analogue substitutes the QR algorithm of Francis
+!!      (comp. Jour. 4, 332-345(1962)) For the LR algorithm.
+!!      This subroutine finds the eigenvalues and eigenvectors
+!!      of a complex upper Hessenberg matrix BY the QR
+!!      method.  The eigenvectors of a complex general matrix
+!!      can also be found if  corth  has been used to reduce
+!!      this general matrix to Hessenberg form.
+!!      On input-
+!!         nm must be set to the row dimension of two-dimensional
+!!           array parameters as declared in the calling program
+!!           dimension statement,
+!!         n is the order of the matrix,
+!!         low and igh are integers determined by the balancing
+!!           subroutine  cbal.  If  cbal  has not been used,
+!!           set low=1, igh=n,
+!!         ORTR and ORTI contain information about the unitary trans-
+!!           formations used in the reduction by  corth, if performed.
+!!           Only elements low through igh are used.  If the eigenvectors
+!!           of the Hessenberg matrix are desired, set ORTR(j) and
+!!           ORTI(j) to 0.0 for these elements,
+!!         hr and hi contain the real and imaginary parts,
+!!           respectively, of the complex upper Hessenberg matrix.
+!!           Their lower triangles below the subdiagonal contain further
+!!           information about the transformations which were used in the
+!!           reduction by  corth, if performed.  If the eigenvectors of
+!!           the Hessenberg matrix are desired, these elements may be
+!!           arbitrary.
+!!      On output-
+!!         ORTR, ORTI, and the upper Hessenberg portions of hr and hi
+!!           have been destroyed,
+!!         wr and wi contain the real and imaginary parts,
+!!           respectively, of the eigenvalues.  If an error
+!!           exit is made, the eigenvalues should be correct
+!!           for indices ierr+1,...,n,
+!!         zr and ZI contain the real and imaginary parts,
+!!           respectively, of the eigenvectors.  The eigenvectors
+!!           are unnormalized.  If an error exit is made, none of
+!!           the eigenvectors has been found,
+!!         ierr is set to
+!!           ZERO       FOR NORMAL RETURN,
+!!           j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!!                      determined after 30 iterations.
+!!      Arithmetic is real except for the replacement of the Algol
+!!      procedure cdiv by complex division and use of the subroutines
+!!      CSQRT and cmplx in computing complex square roots.
+!!
+!!      ********** machep is a machine dependent parameter specifying
+!!                 the relative precision of floating point arithmetic.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: n
+integer, intent(in) :: nm
+integer, intent(in) :: igh
+integer, intent(in) :: low
+integer, intent(out) :: ierr
+real, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n), zr(nm,n), &
+   & zi(nm,n), ortr(igh), orti(igh)
+!     beginning of local variable declarations
+integer :: i, j, k, l, m, en, ii, jj, ll, nn, ip1, its, lp1, enm1, iend, nswc_ai_i4
+real :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
+complex :: z3
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!     integer min0
+!     real sqrt,cabs,abs,real,aimag
+!     complex csqrt,cmplx
+!-----------------------------------------------------------------------
+!     This subroutine is a translation of a unitary analogue of the
+!     Algol procedure  COMLR2, NUM. Math. 16, 181-204(1970) By peters
+!     and Wilkinson.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 372-395(1971).
+!     The unitary analogue substitutes the QR algorithm of Francis
+!     (comp. Jour. 4, 332-345(1962)) For the LR algorithm.
+!     This subroutine finds the eigenvalues and eigenvectors
+!     of a complex upper Hessenberg matrix BY the QR
+!     method.  The eigenvectors of a complex general matrix
+!     can also be found if  corth  has been used to reduce
+!     this general matrix to Hessenberg form.
+!     On input-
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!        n is the order of the matrix,
+!        low and igh are integers determined by the balancing
+!          subroutine  cbal.  If  cbal  has not been used,
+!          set low=1, igh=n,
+!        ORTR and ORTI contain information about the unitary trans-
+!          formations used in the reduction by  corth, if performed.
+!          Only elements low through igh are used.  If the eigenvectors
+!          of the Hessenberg matrix are desired, set ORTR(j) and
+!          ORTI(j) to 0.0 for these elements,
+!        hr and hi contain the real and imaginary parts,
+!          respectively, of the complex upper Hessenberg matrix.
+!          Their lower triangles below the subdiagonal contain further
+!          information about the transformations which were used in the
+!          reduction by  corth, if performed.  If the eigenvectors of
+!          the Hessenberg matrix are desired, these elements may be
+!          arbitrary.
+!     On output-
+!        ORTR, ORTI, and the upper Hessenberg portions of hr and hi
+!          have been destroyed,
+!        wr and wi contain the real and imaginary parts,
+!          respectively, of the eigenvalues.  If an error
+!          exit is made, the eigenvalues should be correct
+!          for indices ierr+1,...,n,
+!        zr and ZI contain the real and imaginary parts,
+!          respectively, of the eigenvectors.  The eigenvectors
+!          are unnormalized.  If an error exit is made, none of
+!          the eigenvectors has been found,
+!        ierr is set to
+!          ZERO       FOR NORMAL RETURN,
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!                     determined after 30 iterations.
+!     Arithmetic is real except for the replacement of the Algol
+!     procedure cdiv by complex division and use of the subroutines
+!     CSQRT and cmplx in computing complex square roots.
+!-----------------------------------------------------------------------
+!     ********** machep is a machine dependent parameter specifying
+!                the relative precision of floating point arithmetic.
+machep = spmpar(1)
+!                **********
+ierr = 0
+!     ********** Initialize eigenvector matrix **********
+do i = 1, n
+   do j = 1, n
+      zr(i,j) = 0.0
+      zi(i,j) = 0.0
+      if (i == j) zr(i,j) = 1.0
+   end do
+end do
+!     ********** Form the matrix of accumulated transformations
+!                from the information left by corth **********
+iend = igh - low - 1
+nswc_ai_i4 = iend
+if (nswc_ai_i4 < 0) go to 180
+if (nswc_ai_i4 == 0) go to 150
+go to 105
+!     ********** For i=igh-1 step -1 Until low+1 do -- **********
+105 do ii = 1, iend
+   i = igh - ii
+   if (ortr(i) == 0.0 .and. orti(i) == 0.0) go to 140
+   if (hr(i,i - 1) == 0.0 .and. hi(i,i - 1) == 0.0) go to 140
+!     ********** norm below is negative of H formed in corth **********
+   norm = hr(i,i - 1) * ortr(i) + hi(i,i - 1) * orti(i)
+   ip1 = i + 1
+   do k = ip1, igh
+      ortr(k) = hr(k,i - 1)
+      orti(k) = hi(k,i - 1)
+   end do
+   do j = i, igh
+      sr = 0.0
+      si = 0.0
+      do k = i, igh
+         sr = sr + ortr(k) * zr(k,j) + orti(k) * zi(k,j)
+         si = si + ortr(k) * zi(k,j) - orti(k) * zr(k,j)
+      end do
+      sr = sr / norm
+      si = si / norm
+      do k = i, igh
+         zr(k,j) = zr(k,j) + sr * ortr(k) - si * orti(k)
+         zi(k,j) = zi(k,j) + sr * orti(k) + si * ortr(k)
+      end do
+   end do
+140 continue
+end do
+!     ********** Create real subdiagonal elements **********
+150 l = low + 1
+do i = l, igh
+   ll = min(i + 1,igh)
+   if (hi(i,i - 1) == 0.0) go to 170
+   norm = abs(cmplx(hr(i,i - 1),hi(i,i - 1)))
+   yr = hr(i,i - 1) / norm
+   yi = hi(i,i - 1) / norm
+   hr(i,i - 1) = norm
+   hi(i,i - 1) = 0.0
+   do j = i, n
+      si = yr * hi(i,j) - yi * hr(i,j)
+      hr(i,j) = yr * hr(i,j) + yi * hi(i,j)
+      hi(i,j) = si
+   end do
+   do j = 1, ll
+      si = yr * hi(j,i) + yi * hr(j,i)
+      hr(j,i) = yr * hr(j,i) - yi * hi(j,i)
+      hi(j,i) = si
+   end do
+   do j = low, igh
+      si = yr * zi(j,i) + yi * zr(j,i)
+      zr(j,i) = yr * zr(j,i) - yi * zi(j,i)
+      zi(j,i) = si
+   end do
+170 continue
+end do
+!     ********** Store roots isolated by cbal **********
+180 do i = 1, n
+   if (i >= low .and. i <= igh) go to 200
+   wr(i) = hr(i,i)
+   wi(i) = hi(i,i)
+200 continue
+end do
+en = igh
+tr = 0.0
+ti = 0.0
+!     ********** Search for next eigenvalue **********
+220 if (en < low) go to 680
+its = 0
+enm1 = en - 1
+!     ********** Look for single small sub-diagonal element
+!                for l=en step -1 Until low do -- **********
+240 do ll = low, en
+   l = en + low - ll
+   if (l == low) exit
+   if (abs(hr(l,l - 1)) <= &
+      & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
+      & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
+end do
+!     ********** Form shift **********
+300 if (l == en) go to 660
+if (its == 30) go to 1000
+if (its == 10 .or. its == 20) go to 320
+sr = hr(en,en)
+si = hi(en,en)
+xr = hr(enm1,en) * hr(en,enm1)
+xi = hi(enm1,en) * hr(en,enm1)
+if (xr == 0.0 .and. xi == 0.0) go to 340
+yr = (hr(enm1,enm1) - sr) / 2.0
+yi = (hi(enm1,enm1) - si) / 2.0
+z3 = sqrt(cmplx(yr**2 - yi**2 + xr,2.0*yr*yi + xi))
+zzr = real(z3)
+zzi = aimag(z3)
+if (yr * zzr + yi * zzi >= 0.0) go to 310
+zzr = -zzr
+zzi = -zzi
+310 z3 = cmplx(xr,xi) / cmplx(yr + zzr,yi + zzi)
+sr = sr - real(z3)
+si = si - aimag(z3)
+go to 340
+!     ********** Form exceptional shift **********
+320 sr = abs(hr(en,enm1)) + abs(hr(enm1,en - 2))
+si = 0.0
+340 do i = low, en
+   hr(i,i) = hr(i,i) - sr
+   hi(i,i) = hi(i,i) - si
+end do
+tr = tr + sr
+ti = ti + si
+its = its + 1
+!     ********** Reduce to triangle (rows) **********
+lp1 = l + 1
+do i = lp1, en
+   sr = hr(i,i - 1)
+   hr(i,i - 1) = 0.0
+   norm = sqrt(hr(i - 1,i - 1)*hr(i - 1,i - 1) + hi(i - 1,i - 1)*hi(i - 1,i - 1) &
+      & + sr*sr)
+   xr = hr(i - 1,i - 1) / norm
+   wr(i - 1) = xr
+   xi = hi(i - 1,i - 1) / norm
+   wi(i - 1) = xi
+   hr(i - 1,i - 1) = norm
+   hi(i - 1,i - 1) = 0.0
+   hi(i,i - 1) = sr / norm
+   do j = i, n
+      yr = hr(i - 1,j)
+      yi = hi(i - 1,j)
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      hr(i - 1,j) = xr * yr + xi * yi + hi(i,i - 1) * zzr
+      hi(i - 1,j) = xr * yi - xi * yr + hi(i,i - 1) * zzi
+      hr(i,j) = xr * zzr - xi * zzi - hi(i,i - 1) * yr
+      hi(i,j) = xr * zzi + xi * zzr - hi(i,i - 1) * yi
+   end do
+end do
+si = hi(en,en)
+if (si == 0.0) go to 540
+norm = abs(cmplx(hr(en,en),si))
+sr = hr(en,en) / norm
+si = si / norm
+hr(en,en) = norm
+hi(en,en) = 0.0
+if (en == n) go to 540
+ip1 = en + 1
+do j = ip1, n
+   yr = hr(en,j)
+   yi = hi(en,j)
+   hr(en,j) = sr * yr + si * yi
+   hi(en,j) = sr * yi - si * yr
+end do
+!     ********** INVERSE OPERATION (COLUMNS) **********
+540 do j = lp1, en
+   xr = wr(j - 1)
+   xi = wi(j - 1)
+   do i = 1, j
+      yr = hr(i,j - 1)
+      yi = 0.0
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      if (i == j) go to 560
+      yi = hi(i,j - 1)
+      hi(i,j - 1) = xr * yi + xi * yr + hi(j,j - 1) * zzi
+560   hr(i,j - 1) = xr * yr - xi * yi + hi(j,j - 1) * zzr
+      hr(i,j) = xr * zzr + xi * zzi - hi(j,j - 1) * yr
+      hi(i,j) = xr * zzi - xi * zzr - hi(j,j - 1) * yi
+   end do
+   do i = low, igh
+      yr = zr(i,j - 1)
+      yi = zi(i,j - 1)
+      zzr = zr(i,j)
+      zzi = zi(i,j)
+      zr(i,j - 1) = xr * yr - xi * yi + hi(j,j - 1) * zzr
+      zi(i,j - 1) = xr * yi + xi * yr + hi(j,j - 1) * zzi
+      zr(i,j) = xr * zzr + xi * zzi - hi(j,j - 1) * yr
+      zi(i,j) = xr * zzi - xi * zzr - hi(j,j - 1) * yi
+   end do
+end do
+if (si == 0.0) go to 240
+do i = 1, en
+   yr = hr(i,en)
+   yi = hi(i,en)
+   hr(i,en) = sr * yr - si * yi
+   hi(i,en) = sr * yi + si * yr
+end do
+do i = low, igh
+   yr = zr(i,en)
+   yi = zi(i,en)
+   zr(i,en) = sr * yr - si * yi
+   zi(i,en) = sr * yi + si * yr
+end do
+go to 240
+!     ********** A ROOT FOUND **********
+660 hr(en,en) = hr(en,en) + tr
+wr(en) = hr(en,en)
+hi(en,en) = hi(en,en) + ti
+wi(en) = hi(en,en)
+en = enm1
+go to 220
+!     ********** All roots found.  Backsubstitute to find
+!                vectors of upper triangular form **********
+680 norm = 0.0
+do i = 1, n
+   do j = i, n
+      norm = norm + abs(hr(i,j)) + abs(hi(i,j))
+   end do
+end do
+if (n == 1 .or. norm == 0.0) go to 1001
+!     ********** FOR en=n STEP -1 UNTIL 2 DO -- **********
+do nn = 2, n
+   en = n + 2 - nn
+   xr = wr(en)
+   xi = wi(en)
+   enm1 = en - 1
+!     ********** FOR i=en-1 STEP -1 UNTIL 1 DO -- **********
+   do ii = 1, enm1
+      i = en - ii
+      zzr = hr(i,en)
+      zzi = hi(i,en)
+      if (i == enm1) go to 760
+      ip1 = i + 1
+      do j = ip1, enm1
+         zzr = zzr + hr(i,j) * hr(j,en) - hi(i,j) * hi(j,en)
+         zzi = zzi + hr(i,j) * hi(j,en) + hi(i,j) * hr(j,en)
+      end do
+760   yr = xr - wr(i)
+      yi = xi - wi(i)
+      if (yr == 0.0 .and. yi == 0.0) yr = machep * norm
+      z3 = cmplx(zzr,zzi) / cmplx(yr,yi)
+      hr(i,en) = real(z3)
+      hi(i,en) = aimag(z3)
+   end do
+end do
+!     ********** End backsubstitution **********
+enm1 = n - 1
+!     ********** Vectors of isolated roots **********
+do i = 1, enm1
+   if (i >= low .and. i <= igh) go to 840
+   ip1 = i + 1
+   do j = ip1, n
+      zr(i,j) = hr(i,j)
+      zi(i,j) = hi(i,j)
+   end do
+840 continue
+end do
+!     ********** Multiply by transformation matrix to give
+!                vectors of original full matrix.
+!                For j=n step -1 Until low+1 do -- **********
+do jj = low, enm1
+   j = n + low - jj
+   m = min(j - 1,igh)
+   do i = low, igh
+      zzr = zr(i,j)
+      zzi = zi(i,j)
+      do k = low, m
+         zzr = zzr + zr(i,k) * hr(k,j) - zi(i,k) * hi(k,j)
+         zzi = zzi + zr(i,k) * hi(k,j) + zi(i,k) * hr(k,j)
+      end do
+      zr(i,j) = zzr
+      zi(i,j) = zzi
+   end do
+end do
+go to 1001
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 30 iterations **********
+1000 ierr = en
+1001 return
+!     ********** Last card of comqr2 **********
+end subroutine comqr2
+
+pure subroutine dceig(ibal,ar,ai,ka,n,wr,wi,ierr)
+!! <!-- nswc-ford:begin DCEIG -->
+!! Reference for `dceig`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!             Eigenvalues of double precision complex matrices
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: ibal
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, n
+double precision, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
+   & wi(n)
+!     beginning of local variable declarations
+integer :: igh, low
+interface
+   pure subroutine dcbal(nm,n,ar,ai,low,igh,scale)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      double precision, intent(inout) :: ar(nm,n)
+      double precision, intent(inout) :: ai(nm,n)
+      integer, intent(inout) :: low
+      integer, intent(inout) :: igh
+      double precision, intent(inout) :: scale(n)
+   end subroutine dcbal
+   pure subroutine dcomqr(nm,n,low,igh,hr,hi,wr,wi,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      integer, intent(in) :: igh
+      double precision, intent(inout) :: hr(nm,n)
+      double precision, intent(inout) :: hi(nm,n)
+      double precision, intent(inout) :: wr(n)
+      double precision, intent(inout) :: wi(n)
+      integer, intent(out) :: ierr
+   end subroutine dcomqr
+   pure subroutine dcorth(nm,n,low,igh,ar,ai,ortr,orti)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      double precision, intent(inout) :: ar(nm,n)
+      double precision, intent(inout) :: ai(nm,n)
+      double precision, intent(inout) :: ortr(igh)
+      double precision, intent(inout) :: orti(igh)
+   end subroutine dcorth
+end interface
+!-----------------------------------------------------------------------
+!            Eigenvalues of double precision complex matrices
+!-----------------------------------------------------------------------
+low = 1
+igh = n
+if (ibal /= 0) call dcbal(ka,n,ar,ai,low,igh,wr)
+call dcorth(ka,n,low,igh,ar,ai,wr,wi)
+call dcomqr(ka,n,low,igh,ar,ai,wr,wi,ierr)
+end subroutine dceig
+
+pure subroutine dceigv(ibal,ar,ai,ka,n,wr,wi,zr,zi,ierr,temp)
+!! <!-- nswc-ford:begin DCEIGV -->
+!! Reference for `dceigv`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!                      Eigenvalues and eigenvectors
+!!                  of double precision complex matrices
+!!
+!!      Temp is a temporary storage area
+!!         DIMENSION(TEMP) .GE. 2*n    IF ibal .EQ. 0
+!!         DIMENSION(TEMP) .GE. 3*n    IF ibal .NE. 0
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: ibal
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, n
+double precision, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
+   & wi(n), zr(ka,n), zi(ka,n), temp(*)
+!     beginning of local variable declarations
+integer :: i1, i2, i3, igh, low
+interface
+   pure subroutine dcbabk(nm,n,low,igh,scale,m,zr,zi)
+      implicit none
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      integer, intent(in) :: igh
+      double precision, intent(in) :: scale(n)
+      double precision, intent(inout) :: zr(nm,m)
+      double precision, intent(inout) :: zi(nm,m)
+   end subroutine dcbabk
+   pure subroutine dcbal(nm,n,ar,ai,low,igh,scale)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      double precision, intent(inout) :: ar(nm,n)
+      double precision, intent(inout) :: ai(nm,n)
+      integer, intent(inout) :: low
+      integer, intent(inout) :: igh
+      double precision, intent(inout) :: scale(n)
+   end subroutine dcbal
+   pure subroutine dcmqr2(nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi, &
+      & ierr)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      double precision, intent(inout) :: ortr(igh)
+      double precision, intent(inout) :: orti(igh)
+      double precision, intent(inout) :: hr(nm,n)
+      double precision, intent(inout) :: hi(nm,n)
+      double precision, intent(inout) :: wr(n)
+      double precision, intent(inout) :: wi(n)
+      double precision, intent(inout) :: zr(nm,n)
+      double precision, intent(inout) :: zi(nm,n)
+      integer, intent(out) :: ierr
+   end subroutine dcmqr2
+   pure subroutine dcorth(nm,n,low,igh,ar,ai,ortr,orti)
+      implicit none
+      integer, intent(in) :: igh
+      integer, intent(in) :: n
+      integer, intent(in) :: nm
+      integer, intent(in) :: low
+      double precision, intent(inout) :: ar(nm,n)
+      double precision, intent(inout) :: ai(nm,n)
+      double precision, intent(inout) :: ortr(igh)
+      double precision, intent(inout) :: orti(igh)
+   end subroutine dcorth
+end interface
+!-----------------------------------------------------------------------
+!                     Eigenvalues and eigenvectors
+!                 of double precision complex matrices
+!-----------------------------------------------------------------------
+!----------------------
+!     Temp is a temporary storage area
+!        DIMENSION(TEMP) .GE. 2*n    IF ibal .EQ. 0
+!        DIMENSION(TEMP) .GE. 3*n    IF ibal .NE. 0
+!----------------------
+i2 = 1
+i3 = n + 1
+i1 = n + i3
+low = 1
+igh = n
+if (ibal /= 0) call dcbal(ka,n,ar,ai,low,igh,temp(i1))
+call dcorth(ka,n,low,igh,ar,ai,temp(i2),temp(i3))
+call dcmqr2(ka,n,low,igh,temp(i2),temp(i3),ar,ai,wr,wi, &
+   & zr,zi,ierr)
+if (ierr /= 0) return
+if (ibal /= 0) call dcbabk(ka,n,low,igh,temp(i1),n,zr,zi)
+end subroutine dceigv
+
+pure subroutine dcbal(nm,n,ar,ai,low,igh,scale)
+!! <!-- nswc-ford:begin DCBAL -->
+!! Reference for `dcbal`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      This subroutine is a translation of the Algol procedure
+!!      CBALANCE, which is a complex version of balance,
+!!      NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!!      Handbook for auto. Comp., Vol.II-linear algebra, 315-326(1971).
+!!      dcbal balances a double precision complex matrix and
+!!      isolates eigenvalues whenever possible.
+!!      On input-
+!!         nm must be set to the row dimension of two-dimensional
+!!           array parameters as declared in the calling program
+!!           dimension statement,
+!!         n is the order of the matrix,
+!!         ar and ai contain the real and imaginary parts,
+!!           respectively, of the complex matrix to be balanced.
+!!      On output-
+!!         ar and ai contain the real and imaginary parts,
+!!           respectively, of the balanced matrix,
+!!         low and igh are two integers such that ar(i,j) and ai(i,j)
+!!           are equal to zero if
+!!            (1) i is greater than j and
+!!            (2) j=1,...,low-1 OR i=igh+1,...,n,
+!!         scale contains information determining the
+!!            permutations and scaling factors used.
+!!      Suppose that the principal submatrix in rows low through igh
+!!      has been balanced, that P(j) denotes the index interchanged
+!!      with j during the permutation step, and that the elements
+!!      of the diagonal matrix used are denoted by D(i,j).  Then
+!!         scale(j) = P(j),    FOR j = 1,...,low-1
+!!                  = D(j,j)       j = low,...,igh
+!!                  = P(j)         j = igh+1,...,n.
+!!      The order in which the interchanges are made is n to igh+1,
+!!      then 1 to low-1.
+!!      Note that 1 is returned for igh if igh is zero formally.
+!!      The Algol procedure exc contained in CBALANCE appears in
+!!      dcbal in line.  (Note that the Algol roles of identifiers
+!!      k,l have been reversed.)
+!!
+!!      ********** radix is a machine dependent parameter specifying
+!!                 the base of the machine floating point representation.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: n
+integer, intent(in) :: nm
+integer, intent(inout) :: igh, low
+double precision, intent(inout) :: ar(nm,n), ai(nm,n), scale(n)
+!     beginning of local variable declarations
+integer :: i, j, k, l, m, jj, iexc
+double precision :: c, f, g, r, s, b2, radix
+logical :: noconv
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
+!-----------------------------------------------------------------------
+!     This subroutine is a translation of the Algol procedure
+!     CBALANCE, which is a complex version of balance,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 315-326(1971).
+!     dcbal balances a double precision complex matrix and
+!     isolates eigenvalues whenever possible.
+!     On input-
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!        n is the order of the matrix,
+!        ar and ai contain the real and imaginary parts,
+!          respectively, of the complex matrix to be balanced.
+!     On output-
+!        ar and ai contain the real and imaginary parts,
+!          respectively, of the balanced matrix,
+!        low and igh are two integers such that ar(i,j) and ai(i,j)
+!          are equal to zero if
+!           (1) i is greater than j and
+!           (2) j=1,...,low-1 OR i=igh+1,...,n,
+!        scale contains information determining the
+!           permutations and scaling factors used.
+!     Suppose that the principal submatrix in rows low through igh
+!     has been balanced, that P(j) denotes the index interchanged
+!     with j during the permutation step, and that the elements
+!     of the diagonal matrix used are denoted by D(i,j).  Then
+!        scale(j) = P(j),    FOR j = 1,...,low-1
+!                 = D(j,j)       j = low,...,igh
+!                 = P(j)         j = igh+1,...,n.
+!     The order in which the interchanges are made is n to igh+1,
+!     then 1 to low-1.
+!     Note that 1 is returned for igh if igh is zero formally.
+!     The Algol procedure exc contained in CBALANCE appears in
+!     dcbal in line.  (Note that the Algol roles of identifiers
+!     k,l have been reversed.)
+!-----------------------------------------------------------------------
+!     ********** radix is a machine dependent parameter specifying
+!                the base of the machine floating point representation.
+radix = ipmpar(4)
+!                **********
+b2 = radix * radix
+k = 1
+l = n
+go to 100
+!     ********** In-line procedure for row and
+!                column exchange **********
+20 scale(m) = j
+if (j == m) go to 50
+do i = 1, l
+   f = ar(i,j)
+   ar(i,j) = ar(i,m)
+   ar(i,m) = f
+   f = ai(i,j)
+   ai(i,j) = ai(i,m)
+   ai(i,m) = f
+end do
+do i = k, n
+   f = ar(j,i)
+   ar(j,i) = ar(m,i)
+   ar(m,i) = f
+   f = ai(j,i)
+   ai(j,i) = ai(m,i)
+   ai(m,i) = f
+end do
+50 select case (iexc)
+case (1)
+   go to 80
+case (2)
+   go to 130
+end select
+!     ********** Search for rows isolating an eigenvalue
+!                and push them down **********
+80 if (l == 1) go to 280
+l = l - 1
+!     ********** FOR j=l STEP -1 UNTIL 1 DO -- **********
+100 do jj = 1, l
+   j = l + 1 - jj
+   do i = 1, l
+      if (i == j) go to 110
+      if (ar(j,i) /= 0.d0 .or. ai(j,i) /= 0.d0) go to 120
+110   continue
+   end do
+   m = l
+   iexc = 1
+   go to 20
+120 continue
+end do
+go to 140
+!     ********** Search for columns isolating an eigenvalue
+!                and push them left **********
+130 k = k + 1
+140 do j = k, l
+   do i = k, l
+      if (i == j) go to 150
+      if (ar(i,j) /= 0.d0 .or. ai(i,j) /= 0.d0) go to 170
+150   continue
+   end do
+   m = k
+   iexc = 2
+   go to 20
+170 continue
+end do
+!     ********** Now balance the submatrix in rows k to l **********
+do i = k, l
+   scale(i) = 1.d0
+end do
+!     ********** Iterative loop for norm reduction **********
+190 noconv = .false.
+do i = k, l
+   c = 0.d0
+   r = 0.d0
+   do j = k, l
+      if (j == i) go to 200
+      c = c + abs(ar(j,i)) + abs(ai(j,i))
+      r = r + abs(ar(i,j)) + abs(ai(i,j))
+200   continue
+   end do
+!     ********** Guard against zero c or r due to underflow **********
+   if (c == 0.d0 .or. r == 0.d0) go to 270
+   g = r / radix
+   f = 1.d0
+   s = c + r
+210 if (c >= g) go to 220
+   f = f * radix
+   c = c * b2
+   go to 210
+220 g = r * radix
+230 if (c < g) go to 240
+   f = f / radix
+   c = c / b2
+   go to 230
+!     ********** Now balance **********
+240 if ((c + r) / f >= 0.95d0 * s) go to 270
+   g = 1.d0 / f
+   scale(i) = scale(i) * f
+   noconv = .true.
+   do j = k, n
+      ar(i,j) = ar(i,j) * g
+      ai(i,j) = ai(i,j) * g
+   end do
+   do j = 1, l
+      ar(j,i) = ar(j,i) * f
+      ai(j,i) = ai(j,i) * f
+   end do
+270 continue
+end do
+if (noconv) go to 190
+280 low = k
+igh = l
+!     ********** Last card of dcbal **********
+end subroutine dcbal
+
+pure subroutine dcorth(nm,n,low,igh,ar,ai,ortr,orti)
+!! <!-- nswc-ford:begin DCORTH -->
+!! Reference for `dcorth`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      This subroutine is a translation of a complex analogue of
+!!      the Algol procedure orthes, NUM. Math. 12, 349-368(1968)
+!!      by Martin and Wilkinson.
+!!      Handbook for auto. Comp., Vol.ii-linear algebra, 339-358(1971).
+!!      Given a double precision complex matrix, dcorth
+!!      reduces a submatrix situated in rows and columns
+!!      low through igh to upper Hessenberg form by
+!!      unitary similarity transformations.
+!!      On input-
+!!         nm must be set to the row dimension of two-dimensional
+!!           array parameters as declared in the calling program
+!!           dimension statement,
+!!         n is the order of the matrix,
+!!         low and igh are integers determined by the balancing
+!!           subroutine dcbal.  If dcbal has not been used,
+!!           set low=1, igh=n,
+!!         ar and ai contain the real and imaginary parts,
+!!           respectively, of the complex input matrix.
+!!      On output-
+!!         ar and ai contain the real and imaginary parts,
+!!           respectively, of the Hessenberg matrix.  Information
+!!           about the unitary transformations used in the reduction
+!!           is stored in the remaining triangles under the
+!!           Hessenberg matrix,
+!!         ortr and ORTI contain further information about the
+!!           transformations.  Only elements low through igh are used.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: n
+integer, intent(in) :: nm, igh
+integer, intent(in) :: low
+double precision, intent(inout) :: ar(nm,n), ai(nm,n), ortr(igh), &
+   & orti(igh)
+!     beginning of local variable declarations
+integer :: i, j, m, ii, jj, la, mp, kp1
+double precision :: f, g, h, fi, fr, scale
 interface
    pure elemental function dcpabs(x,y)
       implicit none
@@ -7184,2440 +2125,2849 @@ interface
       double precision, intent(in) :: y
       double precision :: dcpabs
    end function dcpabs
+end interface
+!-----------------------------------------------------------------------
+!     This subroutine is a translation of a complex analogue of
+!     the Algol procedure orthes, NUM. Math. 12, 349-368(1968)
+!     by Martin and Wilkinson.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 339-358(1971).
+!     Given a double precision complex matrix, dcorth
+!     reduces a submatrix situated in rows and columns
+!     low through igh to upper Hessenberg form by
+!     unitary similarity transformations.
+!     On input-
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!        n is the order of the matrix,
+!        low and igh are integers determined by the balancing
+!          subroutine dcbal.  If dcbal has not been used,
+!          set low=1, igh=n,
+!        ar and ai contain the real and imaginary parts,
+!          respectively, of the complex input matrix.
+!     On output-
+!        ar and ai contain the real and imaginary parts,
+!          respectively, of the Hessenberg matrix.  Information
+!          about the unitary transformations used in the reduction
+!          is stored in the remaining triangles under the
+!          Hessenberg matrix,
+!        ortr and ORTI contain further information about the
+!          transformations.  Only elements low through igh are used.
+!-----------------------------------------------------------------------
+la = igh - 1
+kp1 = low + 1
+if (la < kp1) go to 200
+do m = kp1, la
+   h = 0.d0
+   ortr(m) = 0.d0
+   orti(m) = 0.d0
+   scale = 0.d0
+!     ********** scale COLUMN (ALGOL TOL THEN NOT NEEDED) **********
+   do i = m, igh
+      scale = scale + abs(ar(i,m - 1)) + abs(ai(i,m - 1))
+   end do
+   if (scale == 0.d0) go to 180
+   mp = m + igh
+!     ********** FOR i=igh STEP -1 UNTIL m DO -- **********
+   do ii = m, igh
+      i = mp - ii
+      ortr(i) = ar(i,m - 1) / scale
+      orti(i) = ai(i,m - 1) / scale
+      h = h + ortr(i) * ortr(i) + orti(i) * orti(i)
+   end do
+   g = sqrt(h)
+   f = dcpabs(ortr(m),orti(m))
+   if (f == 0.d0) go to 103
+   h = h + f * g
+   g = g / f
+   ortr(m) = (1.d0 + g) * ortr(m)
+   orti(m) = (1.d0 + g) * orti(m)
+   go to 105
+103 ortr(m) = g
+   ar(m,m - 1) = scale
+!     ********** FORM (i-(U*UT)/h) * A **********
+105 do j = m, n
+      fr = 0.d0
+      fi = 0.d0
+!     ********** FOR i=igh STEP -1 UNTIL m DO -- **********
+      do ii = m, igh
+         i = mp - ii
+         fr = fr + ortr(i) * ar(i,j) + orti(i) * ai(i,j)
+         fi = fi + ortr(i) * ai(i,j) - orti(i) * ar(i,j)
+      end do
+      fr = fr / h
+      fi = fi / h
+      do i = m, igh
+         ar(i,j) = ar(i,j) - fr * ortr(i) + fi * orti(i)
+         ai(i,j) = ai(i,j) - fr * orti(i) - fi * ortr(i)
+      end do
+   end do
+!     ********** FORM (i-(U*UT)/h)*A*(i-(U*UT)/h) **********
+   do i = 1, igh
+      fr = 0.d0
+      fi = 0.d0
+!     ********** FOR j=igh STEP -1 UNTIL m DO -- **********
+      do jj = m, igh
+         j = mp - jj
+         fr = fr + ortr(j) * ar(i,j) - orti(j) * ai(i,j)
+         fi = fi + ortr(j) * ai(i,j) + orti(j) * ar(i,j)
+      end do
+      fr = fr / h
+      fi = fi / h
+      do j = m, igh
+         ar(i,j) = ar(i,j) - fr * ortr(j) - fi * orti(j)
+         ai(i,j) = ai(i,j) + fr * orti(j) - fi * ortr(j)
+      end do
+   end do
+   ortr(m) = scale * ortr(m)
+   orti(m) = scale * orti(m)
+   ar(m,m - 1) = -g * ar(m,m - 1)
+   ai(m,m - 1) = -g * ai(m,m - 1)
+180 continue
+end do
+200 return
+!     ********** Last card of dcorth **********
+end subroutine dcorth
+
+pure subroutine dcomqr(nm,n,low,igh,hr,hi,wr,wi,ierr)
+!! <!-- nswc-ford:begin DCOMQR -->
+!! Reference for `dcomqr`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      This subroutine is a translation of a unitary analogue of the
+!!      Algol procedure  COMLR, NUM. Math. 12, 369-376(1968) By Martin
+!!      and Wilkinson.
+!!      Handbook for auto. Comp., Vol.II-linear algebra, 396-403(1971).
+!!      The unitary analogue substitutes the QR algorithm of Francis
+!!      (comp. Jour. 4, 332-345(1962)) For the LR algorithm.
+!!      This subroutine finds the eigenvalues of a double precision
+!!      complex upper Hessenberg matrix BY the QR method.
+!!      On input-
+!!         nm must be set to the row dimension of two-dimensional
+!!           array parameters as declared in the calling program
+!!           dimension statement,
+!!         n is the order of the matrix,
+!!         low and igh are integers determined by the balancing
+!!           subroutine dcbal.  If dcbal has not been used,
+!!           set low=1, igh=n,
+!!         hr and hi contain the real and imaginary parts,
+!!           respectively, of the complex upper Hessenberg matrix.
+!!           Their lower triangles below the subdiagonal contain
+!!           information about the unitary transformations used in
+!!           the reduction by dcorth, if performed.
+!!      On output-
+!!         the upper Hessenberg portions of hr and hi have been
+!!           destroyed.  Therefore, they must be saved before
+!!           calling dcomqr if subsequent calculation of
+!!           eigenvectors is to be performed,
+!!         wr and WI contain the real and imaginary parts,
+!!           respectively, of the eigenvalues.  If an error
+!!           exit is made, the eigenvalues should be correct
+!!           for indices ierr+1,...,n,
+!!         ierr is set to
+!!           ZERO       FOR NORMAL RETURN,
+!!           j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!!                      determined after 50 iterations.
+!!
+!!      ********** MACHEP is a machine dependent parameter specifying
+!!                 the relative precision of floating point arithmetic.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: n
+integer, intent(in) :: nm, igh
+integer, intent(in) :: low
+integer, intent(out) :: ierr
+double precision, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
+   & wi(n)
+!     beginning of local variable declarations
+integer :: i, j, l, en, ll, its, lp1, enm1
+double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep, r2, w(2), z(2)
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+   pure subroutine dcsqrt(z,w)
+      implicit none
+      double precision, intent(in) :: z(2)
+      double precision, intent(inout) :: w(2)
+   end subroutine dcsqrt
    pure elemental function dpmpar(i)
       implicit none
       integer, intent(in) :: i
       double precision :: dpmpar
    end function dpmpar
 end interface
-!  Evaluation of complex power series coefficients or derivatives.
-!  *** Input parameters ***
-!    fun subroutine which computes the complex function F for which
-!        the coefficients or derivatives are sought. We write
-!                   call fun(u1,u2,w1,w2)
-!        when W = F(U) is to be computed for the complex argument U.
-!        Here U1 and U2 are the real and imaginary parts of U, and W1
-!        and W2 are the real and imaginary parts of W.  U1,U2,W1,W2
-!        have double precision values. The subroutine FUN must be
-!        declared in the calling program to be of type external.
-!    x   REAL PART OF THE COMPLEX POINT AROUND WHICH F IS TO BE
-!        expanded or at which its derivatives are to be computed.
-!    y   IMAGINARY PART OF THE COMPLEX POINT AROUND WHICH F IS TO BE
-!        expanded or at which its derivatives are to be computed.
-!    n   INTEGER, NUMBER OF COEFFICIENTS OR DERIVATIVES WANTED.
-!        n must be GE 1 and le 51.
-!    ic  selects between power series coefficients and derivatives.
-!        ic .EQ. 0   routine returns power series coefficients in
-!                    rs1 AND rs2.
-!        ic .NE. 0   routine returns derivatives in rs1 and rs2.
-!    tol estimated relative accuracy of fun. It is assumed that tol
-!        is nonnegative. If tol = 0 Then fun is assumed to be correct
-!        to machine accuracy.
-!  *** Input and output parameter ***
-!    r   INITIAL RADIUS USED IN SEARCH FOR OPTIMAL RADIUS. THE RESULTING
-!        radius is left in r. the provided guess may be in error with at
-!        most a factor of 3.E4 .
-!  *** Output parameters ***
-!    rs1 array rs1(n) containing the real parts of the first n complex
-!        coefficients (corresponding to the powers 0 to n-1) or deriva-
-!        tives (orders 0 to n-1).
-!    rs2 array rs2(n) containing the imaginary parts of the first n
-!        coefficients (corresponding to the powers 0 to n-1) or deriva-
-!        tives (orders 0 to n-1).
-!    err real array err(n) containing absolute error estimates for the
-!        COMPLEX NUMBERS WHOSE REAL AND IMAGINARY PARTS ARE IN rs1,rs2.
-!  List of the variables initialized in the data statement below.
-!   iw   2**( 0 , 1 , 2 , 3 , 4 , 5 , 6 ) .
-!   ip   PERMUTATION CONSTANTS FOR THE FFT.
-!   RV1  real parts of the constants for the Laurent series test.
-!   RV2  imaginary parts of the constants for the Laurent series test.
-!  -------------------
-!  ****** eps0 is a machine dependent constant. eps0 is the
-!         smallest number such that 1 + eps0 .GT. 1.
-eps0 = dpmpar(1)
-!  -------------------
-!  Initialization.
-eps = max(eps0,tol)
-sc(1) = .125d0
-c(1) = eps**(1.d0/28.d0)
-ep6 = c(1)**6
-pi = 4.d0*atan(1.d0)
-fv1(1) = -1.d0
-fv2(1) = 0.d0
-fv1(2) = 0.d0
-fv2(2) = -1.d0
-r1 = sqrt(0.5d0)
-ra = 1.d0/r1
-fv1(3) = r1
-fv2(3) = -r1
-do i = 2,4
-   sc(i) = 0.5d0*sc(i - 1)
-   c(i) = sqrt(c(i - 1))
-   ang = pi*sc(i - 1)
-   fv1(i + 2) = cos(ang)
-   fv2(i + 2) = -sin(ang)
+!-----------------------------------------------------------------------
+!     This subroutine is a translation of a unitary analogue of the
+!     Algol procedure  COMLR, NUM. Math. 12, 369-376(1968) By Martin
+!     and Wilkinson.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 396-403(1971).
+!     The unitary analogue substitutes the QR algorithm of Francis
+!     (comp. Jour. 4, 332-345(1962)) For the LR algorithm.
+!     This subroutine finds the eigenvalues of a double precision
+!     complex upper Hessenberg matrix BY the QR method.
+!     On input-
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!        n is the order of the matrix,
+!        low and igh are integers determined by the balancing
+!          subroutine dcbal.  If dcbal has not been used,
+!          set low=1, igh=n,
+!        hr and hi contain the real and imaginary parts,
+!          respectively, of the complex upper Hessenberg matrix.
+!          Their lower triangles below the subdiagonal contain
+!          information about the unitary transformations used in
+!          the reduction by dcorth, if performed.
+!     On output-
+!        the upper Hessenberg portions of hr and hi have been
+!          destroyed.  Therefore, they must be saved before
+!          calling dcomqr if subsequent calculation of
+!          eigenvectors is to be performed,
+!        wr and WI contain the real and imaginary parts,
+!          respectively, of the eigenvalues.  If an error
+!          exit is made, the eigenvalues should be correct
+!          for indices ierr+1,...,n,
+!        ierr is set to
+!          ZERO       FOR NORMAL RETURN,
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!                     determined after 50 iterations.
+!-----------------------------------------------------------------------
+!     ********** MACHEP is a machine dependent parameter specifying
+!                the relative precision of floating point arithmetic.
+machep = dpmpar(1)
+!                **********
+ierr = 0
+if (low == igh) go to 180
+!     ********** Create real subdiagonal elements **********
+l = low + 1
+do i = l, igh
+   ll = min(i + 1,igh)
+   if (hi(i,i - 1) == 0.d0) go to 170
+   norm = dcpabs(hr(i,i - 1),hi(i,i - 1))
+   yr = hr(i,i - 1) / norm
+   yi = hi(i,i - 1) / norm
+   hr(i,i - 1) = norm
+   hi(i,i - 1) = 0.d0
+   do j = i, igh
+      si = yr * hi(i,j) - yi * hr(i,j)
+      hr(i,j) = yr * hr(i,j) + yi * hi(i,j)
+      hi(i,j) = si
+   end do
+   do j = low, ll
+      si = yr * hi(j,i) + yi * hr(j,i)
+      hr(j,i) = yr * hr(j,i) - yi * hi(j,i)
+      hi(j,i) = si
+   end do
+170 continue
 end do
-!  Start execution.
-if (n > 51 .or. n < 1) go to 260
-l2 = 1
-lf = 0
-np = 0
-m = 0
-nr = -1
-!  Find if A FFT over 8, 16, 32, or 64 points should be used.
-kl = 1
-if (n > 6) kl = 2
-if (n > 12) kl = 3
-if (n > 25) kl = 4
-km = kl + 2
-kn = 7 - km
-ix = iw(km + 1)
-is = iw(kn)
-30 u = r
-v = 0.d0
-!  Function values of F are stored ready permutated for the FFT.
-do i = is,32,is
-   iq = ip(i)
-   t = u*fv1(km) - v*fv2(km)
-   v = u*fv2(km) + v*fv1(km)
-   u = t
-   call fun(x + u, y + v, a1(iq), a2(iq))
-   call fun(x - u, y - v, a1(iq - 1), a2(iq - 1))
+!     ********** Store roots isolated by dcbal **********
+180 do i = 1, n
+   if (i >= low .and. i <= igh) go to 200
+   wr(i) = hr(i,i)
+   wi(i) = hi(i,i)
+200 continue
 end do
-ln = 2
-jn = 1
-!  The loop  do 70 ... constitutes the FFT.
-do l = 1,km
-   u = 1.0
-   v = 0.0
-   do j = 1,jn
-      do i = j,ix,ln
-         it = i + jn
-         s = u*a1(it) - v*a2(it)
-         t = u*a2(it) + v*a1(it)
-         a1(it) = a1(i) - s
-         a2(it) = a2(i) - t
-         a1(i) = a1(i) + s
-         a2(i) = a2(i) + t
+en = igh
+tr = 0.d0
+ti = 0.d0
+!     ********** Search for next eigenvalue **********
+220 if (en < low) go to 1001
+its = 0
+enm1 = en - 1
+!     ********** Look for single small sub-diagonal element
+!                for l=en step -1 Until low  -- **********
+240 do ll = low, en
+   l = en + low - ll
+   if (l == low) exit
+   if (abs(hr(l,l - 1)) <= &
+      & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
+      & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
+end do
+!     ********** Form shift **********
+300 if (l == en) go to 660
+if (its == 50) go to 1000
+if (its == 10 .or. its == 20 .or. its == 30) go to 320
+sr = hr(en,en)
+si = hi(en,en)
+xr = hr(enm1,en) * hr(en,enm1)
+xi = hi(enm1,en) * hr(en,enm1)
+if (xr == 0.d0 .and. xi == 0.d0) go to 340
+yr = (hr(enm1,enm1) - sr) / 2.d0
+yi = (hi(enm1,enm1) - si) / 2.d0
+z(1) = yr*yr - yi*yi + xr
+z(2) = 2.d0*yr*yi + xi
+call dcsqrt(z,w)
+zzr = w(1)
+zzi = w(2)
+if (yr * zzr + yi * zzi >= 0.d0) go to 310
+zzr = -zzr
+zzi = -zzi
+310 z(1) = yr + zzr
+z(2) = yi + zzi
+r2 = z(1)**2 + z(2)**2
+sr = sr - (xr*z(1) + xi*z(2))/r2
+si = si - (xi*z(1) - xr*z(2))/r2
+go to 340
+!     ********** Form exceptional shift **********
+320 sr = abs(hr(en,enm1)) + abs(hr(enm1,en - 2))
+si = 0.d0
+340 do i = low, en
+   hr(i,i) = hr(i,i) - sr
+   hi(i,i) = hi(i,i) - si
+end do
+tr = tr + sr
+ti = ti + si
+its = its + 1
+!     ********** Reduce to triangle (rows) **********
+lp1 = l + 1
+do i = lp1, en
+   sr = hr(i,i - 1)
+   hr(i,i - 1) = 0.d0
+   norm = sqrt(hr(i - 1,i - 1)*hr(i - 1,i - 1) + hi(i - 1,i - 1)*hi(i - 1,i - 1) &
+      & + sr*sr)
+   xr = hr(i - 1,i - 1) / norm
+   wr(i - 1) = xr
+   xi = hi(i - 1,i - 1) / norm
+   wi(i - 1) = xi
+   hr(i - 1,i - 1) = norm
+   hi(i - 1,i - 1) = 0.d0
+   hi(i,i - 1) = sr / norm
+   do j = i, en
+      yr = hr(i - 1,j)
+      yi = hi(i - 1,j)
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      hr(i - 1,j) = xr * yr + xi * yi + hi(i,i - 1) * zzr
+      hi(i - 1,j) = xr * yi - xi * yr + hi(i,i - 1) * zzi
+      hr(i,j) = xr * zzr - xi * zzi - hi(i,i - 1) * yr
+      hi(i,j) = xr * zzi + xi * zzr - hi(i,i - 1) * yi
+   end do
+end do
+si = hi(en,en)
+if (si == 0.d0) go to 540
+norm = dcpabs(hr(en,en),si)
+sr = hr(en,en) / norm
+si = si / norm
+hr(en,en) = norm
+hi(en,en) = 0.d0
+!     ********** INVERSE OPERATION (COLUMNS) **********
+540 do j = lp1, en
+   xr = wr(j - 1)
+   xi = wi(j - 1)
+   do i = l, j
+      yr = hr(i,j - 1)
+      yi = 0.d0
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      if (i == j) go to 560
+      yi = hi(i,j - 1)
+      hi(i,j - 1) = xr * yi + xi * yr + hi(j,j - 1) * zzi
+560   hr(i,j - 1) = xr * yr - xi * yi + hi(j,j - 1) * zzr
+      hr(i,j) = xr * zzr + xi * zzi - hi(j,j - 1) * yr
+      hi(i,j) = xr * zzi - xi * zzr - hi(j,j - 1) * yi
+   end do
+end do
+if (si == 0.d0) go to 240
+do i = l, en
+   yr = hr(i,en)
+   yi = hi(i,en)
+   hr(i,en) = sr * yr - si * yi
+   hi(i,en) = sr * yi + si * yr
+end do
+go to 240
+!     ********** A ROOT FOUND **********
+660 wr(en) = hr(en,en) + tr
+wi(en) = hi(en,en) + ti
+en = enm1
+go to 220
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 50 iterations **********
+1000 ierr = en
+1001 return
+end subroutine dcomqr
+
+pure subroutine dcbabk(nm,n,low,igh,scale,m,zr,zi)
+!! <!-- nswc-ford:begin DCBABK -->
+!! Reference for `dcbabk`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      This subroutine is a translation of the Algol procedure
+!!      cbabk2, which is a complex version of balbak,
+!!      NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!!      Handbook for auto. Comp., Vol.ii-linear algebra, 315-326(1971).
+!!      This subroutine forms the eigenvectors of a double precision
+!!      complex matrix BY back transforming those of the corresponding
+!!      balanced matrix determined by dcbal.
+!!      On input-
+!!         nm must be set to the row dimension of two-dimensional
+!!           array parameters as declared in the calling program
+!!           dimension statement,
+!!         n is the order of the matrix,
+!!         low and igh are integers determined by dcbal,
+!!         scale contains information determining the permutations
+!!           and scaling factors used by dcbal,
+!!         m is the number of eigenvectors to be back transformed,
+!!         zr and zi contain the real and imaginary parts,
+!!           respectively, of the eigenvectors to be
+!!           back transformed in their first m columns.
+!!      On output-
+!!         zr and zi contain the real and imaginary parts,
+!!           respectively, of the transformed eigenvectors
+!!           in their first m columns.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: m, n
+integer, intent(in) :: nm, igh, low
+double precision, intent(in) :: scale(n)
+double precision, intent(inout) :: zr(nm,m), zi(nm,m)
+!     beginning of local variable declarations
+integer :: i, j, k, ii
+double precision :: s
+!-----------------------------------------------------------------------
+!     This subroutine is a translation of the Algol procedure
+!     cbabk2, which is a complex version of balbak,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 315-326(1971).
+!     This subroutine forms the eigenvectors of a double precision
+!     complex matrix BY back transforming those of the corresponding
+!     balanced matrix determined by dcbal.
+!     On input-
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!        n is the order of the matrix,
+!        low and igh are integers determined by dcbal,
+!        scale contains information determining the permutations
+!          and scaling factors used by dcbal,
+!        m is the number of eigenvectors to be back transformed,
+!        zr and zi contain the real and imaginary parts,
+!          respectively, of the eigenvectors to be
+!          back transformed in their first m columns.
+!     On output-
+!        zr and zi contain the real and imaginary parts,
+!          respectively, of the transformed eigenvectors
+!          in their first m columns.
+!-----------------------------------------------------------------------
+if (m == 0) go to 200
+if (igh == low) go to 120
+do i = low, igh
+   s = scale(i)
+!     ********** Left hand eigenvectors are back transformed
+!                if the foregoing statement is replaced by
+!                s=1.0/scale(i). **********
+   do j = 1, m
+      zr(i,j) = zr(i,j) * s
+      zi(i,j) = zi(i,j) * s
+   end do
+end do
+!     ********** FOR i=low-1 STEP -1 UNTIL 1,
+!                igh+1 STEP 1 UNTIL n DO -- **********
+120 do ii = 1, n
+   i = ii
+   if (i >= low .and. i <= igh) go to 140
+   if (i < low) i = low - ii
+   k = scale(i)
+   if (k == i) go to 140
+   do j = 1, m
+      s = zr(i,j)
+      zr(i,j) = zr(k,j)
+      zr(k,j) = s
+      s = zi(i,j)
+      zi(i,j) = zi(k,j)
+      zi(k,j) = s
+   end do
+140 continue
+end do
+200 return
+!     ********** Last card of dcbabk **********
+end subroutine dcbabk
+
+pure subroutine dcmqr2(nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr)
+!! <!-- nswc-ford:begin DCMQR2 -->
+!! Reference for `dcmqr2`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      This subroutine is a translation of a unitary analogue of the
+!!      Algol procedure  COMLR2, NUM. Math. 16, 181-204(1970) By peters
+!!      and Wilkinson.
+!!      Handbook for auto. Comp., Vol.ii-linear algebra, 372-395(1971).
+!!      The unitary analogue substitutes the QR algorithm of Francis
+!!      (comp. Jour. 4, 332-345(1962)) For the LR algorithm.
+!!      This subroutine finds the eigenvalues and eigenvectors of
+!!      a double precision complex upper Hessenberg matrix BY the
+!!      QR method.  The eigenvectors of a complex general matrix
+!!      can also be found if dcorth has been used to reduce
+!!      this general matrix to Hessenberg form.
+!!      On input-
+!!         nm must be set to the row dimension of two-dimensional
+!!           array parameters as declared in the calling program
+!!           dimension statement,
+!!         n is the order of the matrix,
+!!         low and igh are integers determined by the balancing
+!!           subroutine dcbal.  If dcbal has not been used,
+!!           set low=1, igh=n,
+!!         ORTR and ORTI contain information about the unitary trans-
+!!           formations used in the reduction by dcorth, if performed.
+!!           Only elements low through igh are used.  If the eigenvectors
+!!           of the Hessenberg matrix are desired, set ORTR(j) and
+!!           ORTI(j) to 0.0 for these elements,
+!!         hr and hi contain the real and imaginary parts,
+!!           respectively, of the complex upper Hessenberg matrix.
+!!           Their lower triangles below the subdiagonal contain further
+!!           information about the transformations which were used in the
+!!           reduction by dcorth, if performed.  If the eigenvectors of
+!!           the Hessenberg matrix are desired, these elements may be
+!!           arbitrary.
+!!      On output-
+!!         ORTR, ORTI, and the upper Hessenberg portions of hr and hi
+!!           have been destroyed,
+!!         wr and WI contain the real and imaginary parts,
+!!           respectively, of the eigenvalues.  If an error
+!!           exit is made, the eigenvalues should be correct
+!!           for indices ierr+1,...,n,
+!!         ZR and ZI contain the real and imaginary parts,
+!!           respectively, of the eigenvectors.  The eigenvectors
+!!           are unnormalized.  If an error exit is made, none of
+!!           the eigenvectors has been found,
+!!         ierr is set to
+!!           ZERO       FOR NORMAL RETURN,
+!!           j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!!                      determined after 50 iterations.
+!!
+!!      ********** MACHEP is a machine dependent parameter specifying
+!!                 the relative precision of floating point arithmetic.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: n
+integer, intent(in) :: nm
+integer, intent(in) :: igh
+integer, intent(in) :: low
+integer, intent(out) :: ierr
+double precision, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
+   & wi(n), zr(nm,n), zi(nm,n), ortr(igh), orti(igh)
+!     beginning of local variable declarations
+integer :: i, j, k, l, m, en, ii, jj, ll, nn, ip1, its, lp1, enm1, iend, nswc_ai_i4
+double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep, r2, w(2), z(2)
+interface
+   pure elemental function dcpabs(x,y)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(in) :: y
+      double precision :: dcpabs
+   end function dcpabs
+   pure subroutine dcsqrt(z,w)
+      implicit none
+      double precision, intent(in) :: z(2)
+      double precision, intent(inout) :: w(2)
+   end subroutine dcsqrt
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+end interface
+!-----------------------------------------------------------------------
+!     This subroutine is a translation of a unitary analogue of the
+!     Algol procedure  COMLR2, NUM. Math. 16, 181-204(1970) By peters
+!     and Wilkinson.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 372-395(1971).
+!     The unitary analogue substitutes the QR algorithm of Francis
+!     (comp. Jour. 4, 332-345(1962)) For the LR algorithm.
+!     This subroutine finds the eigenvalues and eigenvectors of
+!     a double precision complex upper Hessenberg matrix BY the
+!     QR method.  The eigenvectors of a complex general matrix
+!     can also be found if dcorth has been used to reduce
+!     this general matrix to Hessenberg form.
+!     On input-
+!        nm must be set to the row dimension of two-dimensional
+!          array parameters as declared in the calling program
+!          dimension statement,
+!        n is the order of the matrix,
+!        low and igh are integers determined by the balancing
+!          subroutine dcbal.  If dcbal has not been used,
+!          set low=1, igh=n,
+!        ORTR and ORTI contain information about the unitary trans-
+!          formations used in the reduction by dcorth, if performed.
+!          Only elements low through igh are used.  If the eigenvectors
+!          of the Hessenberg matrix are desired, set ORTR(j) and
+!          ORTI(j) to 0.0 for these elements,
+!        hr and hi contain the real and imaginary parts,
+!          respectively, of the complex upper Hessenberg matrix.
+!          Their lower triangles below the subdiagonal contain further
+!          information about the transformations which were used in the
+!          reduction by dcorth, if performed.  If the eigenvectors of
+!          the Hessenberg matrix are desired, these elements may be
+!          arbitrary.
+!     On output-
+!        ORTR, ORTI, and the upper Hessenberg portions of hr and hi
+!          have been destroyed,
+!        wr and WI contain the real and imaginary parts,
+!          respectively, of the eigenvalues.  If an error
+!          exit is made, the eigenvalues should be correct
+!          for indices ierr+1,...,n,
+!        ZR and ZI contain the real and imaginary parts,
+!          respectively, of the eigenvectors.  The eigenvectors
+!          are unnormalized.  If an error exit is made, none of
+!          the eigenvectors has been found,
+!        ierr is set to
+!          ZERO       FOR NORMAL RETURN,
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!                     determined after 50 iterations.
+!-----------------------------------------------------------------------
+!     ********** MACHEP is a machine dependent parameter specifying
+!                the relative precision of floating point arithmetic.
+machep = dpmpar(1)
+!                **********
+ierr = 0
+!     ********** Initialize eigenvector matrix **********
+do i = 1, n
+   do j = 1, n
+      zr(i,j) = 0.d0
+      zi(i,j) = 0.d0
+      if (i == j) zr(i,j) = 1.d0
+   end do
+end do
+!     ********** Form the matrix of accumulated transformations
+!                from the information left by dcorth **********
+iend = igh - low - 1
+nswc_ai_i4 = iend
+if (nswc_ai_i4 < 0) go to 180
+if (nswc_ai_i4 == 0) go to 150
+go to 105
+!     ********** For i=igh-1 step -1 Until low+1 do -- **********
+105 do ii = 1, iend
+   i = igh - ii
+   if (ortr(i) == 0.d0 .and. orti(i) == 0.d0) go to 140
+   if (hr(i,i - 1) == 0.d0 .and. hi(i,i - 1) == 0.d0) go to 140
+!     ********** Norm below is negative of H formed in dcorth **********
+   norm = hr(i,i - 1) * ortr(i) + hi(i,i - 1) * orti(i)
+   ip1 = i + 1
+   do k = ip1, igh
+      ortr(k) = hr(k,i - 1)
+      orti(k) = hi(k,i - 1)
+   end do
+   do j = i, igh
+      sr = 0.d0
+      si = 0.d0
+      do k = i, igh
+         sr = sr + ortr(k) * zr(k,j) + orti(k) * zi(k,j)
+         si = si + ortr(k) * zi(k,j) - orti(k) * zr(k,j)
       end do
-      t = u*fv1(l) - v*fv2(l)
-      v = u*fv2(l) + v*fv1(l)
-      u = t
+      sr = sr / norm
+      si = si / norm
+      do k = i, igh
+         zr(k,j) = zr(k,j) + sr * ortr(k) - si * orti(k)
+         zi(k,j) = zi(k,j) + sr * orti(k) + si * ortr(k)
+      end do
    end do
-   ln = ln + ln
-   jn = jn + jn
+140 continue
 end do
-cx = 0.d0
-b = 1.d0
-!  Test on how fast the coefficients obtained decrease.
-do i = 1,ix
-   ct = dcpabs(a1(i),a2(i))/b
-   if (ct < cx) go to 80
-   cx = ct
-   inr = i
-80 b = b*c(kl)
-end do
-if (m <= 1) go to 100
-!  Estimate of the rounding error level for the last radius.
-err(1) = cx*eps
-do i = 2,n
-   err(i) = err(i - 1)/r
-end do
-100 sf = sc(kl)
-do i = 1,ix
-   a1(i) = sf*a1(i)
-   a2(i) = sf*a2(i)
-   sf = sf/r
-end do
-l1 = l2
-l2 = 1
-if (inr > iw(km)) go to 150
-if (lf == 1) go to 140
-!  Test if the series is a Taylor or a Laurent series.
-sr = 0.d0
-sp = 0.d0
-do j = 1,3
-   s = a1(ix)
-   t = a2(ix)
-   u = r*rv1(j)
-   v = r*rv2(j)
-   do i = 2,ix
-      ia = ix + 1 - i
-      w = (s*u - t*v) + a1(ia)
-      t = (s*v + t*u) + a2(ia)
-      s = w
+!     ********** Create real subdiagonal elements **********
+150 l = low + 1
+do i = l, igh
+   ll = min(i + 1,igh)
+   if (hi(i,i - 1) == 0.d0) go to 170
+   norm = dcpabs(hr(i,i - 1),hi(i,i - 1))
+   yr = hr(i,i - 1) / norm
+   yi = hi(i,i - 1) / norm
+   hr(i,i - 1) = norm
+   hi(i,i - 1) = 0.d0
+   do j = i, n
+      si = yr * hi(i,j) - yi * hr(i,j)
+      hr(i,j) = yr * hr(i,j) + yi * hi(i,j)
+      hi(i,j) = si
    end do
-   cp = dcpabs(s,t)
-   if (cp > sp) sp = cp
-   call fun(x + u, y + v, u, v)
-   cm = dcpabs(s - u, t - v)
-   if (cm > sr) sr = cm
+   do j = 1, ll
+      si = yr * hi(j,i) + yi * hr(j,i)
+      hr(j,i) = yr * hr(j,i) - yi * hi(j,i)
+      hi(j,i) = si
+   end do
+   do j = low, igh
+      si = yr * zi(j,i) + yi * zr(j,i)
+      zr(j,i) = yr * zr(j,i) - yi * zi(j,i)
+      zi(j,i) = si
+   end do
+170 continue
 end do
-if (sr > 1.d-3*sp) go to 150
-lf = 1
-140 l2 = -1
-!  Determination of the next radius to be used.
-150 if (nr >= 0) go to 160
-fact = 2.d0
-if (l2 == 1) fact = 0.5d0
-l1 = l2
-nr = 0
-160 if (l1 /= l2) go to 180
-if (nr > 0) go to 170
-np = np + 1
-if ((np - 15) <= 0) go to 190
-go to 260
-170 fact = 1.d0/fact
-180 fact = 1.d0/sqrt(fact)
-nr = nr + 1
-190 r = r*fact
-m = nr - kl - 1
-if (m <= 0) go to 30
-!  The results for the last three radii are stored.
-do i = 1,n
-   rt1(i,m) = a1(i)
-   rt2(i,m) = a2(i)
+!     ********** Store roots isolated by dcbal **********
+180 do i = 1, n
+   if (i >= low .and. i <= igh) go to 200
+   wr(i) = hr(i,i)
+   wi(i) = hi(i,i)
+200 continue
 end do
-if (m == 1) go to 220
-!  Extrapolation.
-mm1 = m - 1
-do i = 1,n
-   u = rt1(i,mm1) - rt1(i,m)
-   v = rt2(i,mm1) - rt2(i,m)
-   rt1(i,mm1) = rt1(i,m) - fc(mm1)*u
-   rt2(i,mm1) = rt2(i,m) - fc(mm1)*v
+en = igh
+tr = 0.d0
+ti = 0.d0
+!     ********** Search for next eigenvalue **********
+220 if (en < low) go to 680
+its = 0
+enm1 = en - 1
+!     ********** Look for single small sub-diagonal element
+!                for l=en step -1 Until low do -- **********
+240 do ll = low, en
+   l = en + low - ll
+   if (l == low) exit
+   if (abs(hr(l,l - 1)) <= &
+      & machep * (abs(hr(l - 1,l - 1)) + abs(hi(l - 1,l - 1)) &
+      & + abs(hr(l,l)) + abs(hi(l,l)))) go to 300
 end do
-if (m == 3) go to 230
-!  Calculation of the extrapolation constants.
-220 fc(m) = 1.5d0 + sign(0.5d0,fact - 1.d0)
-if (m == 2) fc(m) = fc(m) + ra
-if (fact > 1.d0) fc(m) = -fc(m)
-go to 30
-230 fc(3) = fc(1)*fc(2)/(fc(1) + fc(2) + 1.d0)
-!  Final extrapolation and error estimate.
-do i = 1,n
-   u = rt1(i,1) - rt1(i,2)
-   v = rt2(i,1) - rt2(i,2)
-   err(i) = err(i) + ep6*dcpabs(u,v)
-   rs1(i) = rt1(i,2) - fc(3)*u
-   rs2(i) = rt2(i,2) - fc(3)*v
+!     ********** Form shift **********
+300 if (l == en) go to 660
+if (its == 50) go to 1000
+if (its == 10 .or. its == 20 .or. its == 30) go to 320
+sr = hr(en,en)
+si = hi(en,en)
+xr = hr(enm1,en) * hr(en,enm1)
+xi = hi(enm1,en) * hr(en,enm1)
+if (xr == 0.d0 .and. xi == 0.d0) go to 340
+yr = (hr(enm1,enm1) - sr) / 2.d0
+yi = (hi(enm1,enm1) - si) / 2.d0
+z(1) = yr*yr - yi*yi + xr
+z(2) = 2.d0*yr*yi + xi
+call dcsqrt(z,w)
+zzr = w(1)
+zzi = w(2)
+if (yr * zzr + yi * zzi >= 0.d0) go to 310
+zzr = -zzr
+zzi = -zzi
+310 z(1) = yr + zzr
+z(2) = yi + zzi
+r2 = z(1)**2 + z(2)**2
+sr = sr - (xr*z(1) + xi*z(2))/r2
+si = si - (xi*z(1) - xr*z(2))/r2
+go to 340
+!     ********** Form exceptional shift **********
+320 sr = abs(hr(en,enm1)) + abs(hr(enm1,en - 2))
+si = 0.d0
+340 do i = low, en
+   hr(i,i) = hr(i,i) - sr
+   hi(i,i) = hi(i,i) - si
 end do
-!  Multiply power series coefficients and error estimate by factorials
-!  if derivatives wanted.
-if (ic == 0) return
-fac = 0.d0
-fact = 1.d0
-do i = 1,n
-   rs1(i) = fact*rs1(i)
-   rs2(i) = fact*rs2(i)
-   err(i) = fact*err(i)
-   fac = fac + 1.d0
-   fact = fact*fac
+tr = tr + sr
+ti = ti + si
+its = its + 1
+!     ********** Reduce to triangle (rows) **********
+lp1 = l + 1
+do i = lp1, en
+   sr = hr(i,i - 1)
+   hr(i,i - 1) = 0.d0
+   norm = sqrt(hr(i - 1,i - 1)*hr(i - 1,i - 1) + hi(i - 1,i - 1)*hi(i - 1,i - 1) &
+      & + sr*sr)
+   xr = hr(i - 1,i - 1) / norm
+   wr(i - 1) = xr
+   xi = hi(i - 1,i - 1) / norm
+   wi(i - 1) = xi
+   hr(i - 1,i - 1) = norm
+   hi(i - 1,i - 1) = 0.d0
+   hi(i,i - 1) = sr / norm
+   do j = i, n
+      yr = hr(i - 1,j)
+      yi = hi(i - 1,j)
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      hr(i - 1,j) = xr * yr + xi * yi + hi(i,i - 1) * zzr
+      hi(i - 1,j) = xr * yi - xi * yr + hi(i,i - 1) * zzi
+      hr(i,j) = xr * zzr - xi * zzi - hi(i,i - 1) * yr
+      hi(i,j) = xr * zzi + xi * zzr - hi(i,i - 1) * yi
+   end do
 end do
-return
-!  Error return.
-260 do i = 1,n
-   rs1(i) = 0.d0
-   rs2(i) = 0.d0
-   err(i) = 1.d10
+si = hi(en,en)
+if (si == 0.d0) go to 540
+norm = dcpabs(hr(en,en),si)
+sr = hr(en,en) / norm
+si = si / norm
+hr(en,en) = norm
+hi(en,en) = 0.d0
+if (en == n) go to 540
+ip1 = en + 1
+do j = ip1, n
+   yr = hr(en,j)
+   yi = hi(en,j)
+   hr(en,j) = sr * yr + si * yi
+   hi(en,j) = sr * yi - si * yr
 end do
-end subroutine dcpsc
+!     ********** INVERSE OPERATION (COLUMNS) **********
+540 do j = lp1, en
+   xr = wr(j - 1)
+   xi = wi(j - 1)
+   do i = 1, j
+      yr = hr(i,j - 1)
+      yi = 0.d0
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      if (i == j) go to 560
+      yi = hi(i,j - 1)
+      hi(i,j - 1) = xr * yi + xi * yr + hi(j,j - 1) * zzi
+560   hr(i,j - 1) = xr * yr - xi * yi + hi(j,j - 1) * zzr
+      hr(i,j) = xr * zzr + xi * zzi - hi(j,j - 1) * yr
+      hi(i,j) = xr * zzi - xi * zzr - hi(j,j - 1) * yi
+   end do
+   do i = low, igh
+      yr = zr(i,j - 1)
+      yi = zi(i,j - 1)
+      zzr = zr(i,j)
+      zzi = zi(i,j)
+      zr(i,j - 1) = xr * yr - xi * yi + hi(j,j - 1) * zzr
+      zi(i,j - 1) = xr * yi + xi * yr + hi(j,j - 1) * zzi
+      zr(i,j) = xr * zzr + xi * zzi - hi(j,j - 1) * yr
+      zi(i,j) = xr * zzi - xi * zzr - hi(j,j - 1) * yi
+   end do
+end do
+if (si == 0.d0) go to 240
+do i = 1, en
+   yr = hr(i,en)
+   yi = hi(i,en)
+   hr(i,en) = sr * yr - si * yi
+   hi(i,en) = sr * yi + si * yr
+end do
+do i = low, igh
+   yr = zr(i,en)
+   yi = zi(i,en)
+   zr(i,en) = sr * yr - si * yi
+   zi(i,en) = sr * yi + si * yr
+end do
+go to 240
+!     ********** A ROOT FOUND **********
+660 hr(en,en) = hr(en,en) + tr
+wr(en) = hr(en,en)
+hi(en,en) = hi(en,en) + ti
+wi(en) = hi(en,en)
+en = enm1
+go to 220
+!     ********** All roots found.  Backsubstitute to find
+!                vectors of upper triangular form **********
+680 norm = 0.d0
+do i = 1, n
+   do j = i, n
+      norm = norm + abs(hr(i,j)) + abs(hi(i,j))
+   end do
+end do
+if (n == 1 .or. norm == 0.d0) go to 1001
+!     ********** FOR en=n STEP -1 UNTIL 2 DO -- **********
+do nn = 2, n
+   en = n + 2 - nn
+   xr = wr(en)
+   xi = wi(en)
+   enm1 = en - 1
+!     ********** FOR i=en-1 STEP -1 UNTIL 1 DO -- **********
+   do ii = 1, enm1
+      i = en - ii
+      zzr = hr(i,en)
+      zzi = hi(i,en)
+      if (i == enm1) go to 760
+      ip1 = i + 1
+      do j = ip1, enm1
+         zzr = zzr + hr(i,j) * hr(j,en) - hi(i,j) * hi(j,en)
+         zzi = zzi + hr(i,j) * hi(j,en) + hi(i,j) * hr(j,en)
+      end do
+760   yr = xr - wr(i)
+      yi = xi - wi(i)
+      if (yr == 0.d0 .and. yi == 0.d0) yr = machep * norm
+      r2 = yr*yr + yi*yi
+      hr(i,en) = (zzr*yr + zzi*yi)/r2
+      hi(i,en) = (zzi*yr - zzr*yi)/r2
+   end do
+end do
+!     ********** End backsubstitution **********
+enm1 = n - 1
+!     ********** Vectors of isolated roots **********
+do i = 1, enm1
+   if (i >= low .and. i <= igh) go to 840
+   ip1 = i + 1
+   do j = ip1, n
+      zr(i,j) = hr(i,j)
+      zi(i,j) = hi(i,j)
+   end do
+840 continue
+end do
+!     ********** Multiply by transformation matrix to give
+!                vectors of original full matrix.
+!                For j=n step -1 Until low+1 do -- **********
+do jj = low, enm1
+   j = n + low - jj
+   m = min(j - 1,igh)
+   do i = low, igh
+      zzr = zr(i,j)
+      zzi = zi(i,j)
+      do k = low, m
+         zzr = zzr + zr(i,k) * hr(k,j) - zi(i,k) * hi(k,j)
+         zzi = zzi + zr(i,k) * hi(k,j) + zi(i,k) * hr(k,j)
+      end do
+      zr(i,j) = zzr
+      zi(i,j) = zzi
+   end do
+end do
+go to 1001
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 50 iterations **********
+1000 ierr = en
+1001 return
+!     ********** Last card of dcmqr2 **********
+end subroutine dcmqr2
 
-function trp(a,n,x,y)
+pure subroutine cl1(k, l, m, n, q, kq, kode, toler, iter, x, res, &
+   & error, wk, iwk)
+!! <!-- nswc-ford:begin CL1 -->
+!! Reference for `cl1`.
+!!
+!! No introductory description is present in the original source.
+!! The signature below records the declared arguments and their available intents;
+!! consult the source and chapter manual for algorithm details.
+!! <!-- nswc-ford:end -->
 implicit none
-integer, intent(in) :: n
-real, intent(in) :: a
-real, intent(in) :: x(n), y(n)
-real :: trp
+integer, intent(inout) :: iter, iwk(*)
+integer, intent(in) :: k
+integer, intent(inout) :: kode
+integer, intent(in) :: kq, l, m, n
+real, intent(inout) :: error, q(kq,*), res(*)
+real, intent(in) :: toler
+real, intent(inout) :: wk(*), x(*)
 !     beginning of local variable declarations
-integer :: i, il, ir, nm1
-real :: r, nswc_ai_r4
-nm1 = n - 1
-if (a < x(2)) go to 50
-if (a >= x(nm1)) go to 40
-il = 2
-ir = nm1
-!     Bisection search
-10 i = (il + ir)/2
-if (i == il) go to 60
-nswc_ai_r4 = a - x(i)
-if (nswc_ai_r4 < 0) go to 20
-if (nswc_ai_r4 == 0) go to 60
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!     a.LT.x(2) .OR. a.GE.x(n-1)
-40 i = nm1
-go to 60
-50 i = 1
-!     Evaluation
-60 r = (a - x(i))/(x(i + 1) - x(i))
-trp = y(i) + r*(y(i + 1) - y(i))
-end function trp
+integer :: klm
+interface
+   pure subroutine xl1(k,l,m,n,klmd,klm2d,nklmd,n2d,q,kode, &
+      & toler,iter,x,res,error,cu,iu,s)
+      implicit none
+      integer, intent(in) :: n2d
+      integer, intent(in) :: nklmd
+      integer, intent(in) :: klm2d
+      integer, intent(in) :: klmd
+      integer, intent(in) :: k
+      integer, intent(in) :: l
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      real, intent(inout) :: q(klm2d,n2d)
+      integer, intent(inout) :: kode
+      real, intent(in) :: toler
+      integer, intent(inout) :: iter
+      real, intent(inout) :: x(n2d)
+      real, intent(inout) :: res(klmd)
+      real, intent(inout) :: error
+      real, intent(inout) :: cu(2,nklmd)
+      integer, intent(inout) :: iu(2,nklmd)
+      integer, intent(inout) :: s(klmd)
+   end subroutine xl1
+end interface
+!     -------------------
+klm = k + l + m
+call xl1(k, l, m, n, klm, kq, klm + n, n + 2, q, kode, toler, &
+   & iter, x, res, error, wk, iwk(klm + 1), iwk(1))
+end subroutine cl1
 
-subroutine ltrp(m,x,y,n,xi,yi,ni,t,ierr)
+pure subroutine xl1(k, l, m, n, klmd, klm2d, nklmd, n2d, &
+   & q, kode, toler, iter, x, res, error, cu, iu, s)
+!! <!-- nswc-ford:begin XL1 -->
+!! Reference for `xl1`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!  This subroutine uses a modification of the simplex
+!!  method of linear programming to calculate an L1 solution
+!!  to A k by n system of linear equations
+!!              ax=b
+!!  subject to l linear equality constraints
+!!              cx=d
+!!  and m linear inequality constraints
+!!              EX.LE.F.
+!!  Description of parameters
+!!  k      number of rows of the matrix A (k.GE.1).
+!!  l      number of rows of the matrix C (l.GE.0).
+!!  m      number of rows of the matrix E (m.GE.0).
+!!  n      number of columns of the matrices A,C,E (n.GE.1).
+!!  klmd   SET TO AT LEAST k+l+m FOR ADJUSTABLE DIMENSIONS.
+!!  klm2d  set to at least k+l+m+2 for adjustable dimensions.
+!!  nklmd  set to at least n+k+l+m for adjustable dimensions.
+!!  n2d    SET TO AT LEAST n+2 FOR ADJUSTABLE DIMENSIONS
+!!  q      TWO DIMENSIONAL REAL ARRAY WITH klm2d ROWS AND
+!!         at least n2d columns.
+!!         On entry the matrices A,C and E, and the vectors
+!!         B,D and F must be stored in the first k+l+m rows
+!!         and n+1 columns of q as follows
+!!              A B
+!!          q = C D
+!!              E F
+!!         these values are destroyed by the subroutine.
+!!  kode   A CODE USED ON ENTRY TO, AND EXIT
+!!         from, the subroutine.
+!!         On entry, this should normally be set to 0.
+!!         However, if certain nonnegativity constraints
+!!         are to be included implicitly, rather than
+!!         explicitly in the constraints EX.LE.F, then kode
+!!         should be set to 1, and the nonnegativity
+!!         constraints included in the arrays x and
+!!         res (see below).
+!!         On exit, kode has one of the
+!!         following values
+!!              0- optimal solution found,
+!!              1- no feasible solution to the
+!!                 constraints,
+!!              2- calculations terminated
+!!                 prematurely due to rounding errors,
+!!              3- maximum number of iterations reached.
+!!  toler  a small positive tolerance. Empirical
+!!         evidence suggests toler = 10**(-D*2/3),
+!!         where D represents the number of decimal
+!!         digits of accuracy available. Essentially,
+!!         the subroutine CANNOT distinguish between zero
+!!         and any quantity whose magnitude does not exceed
+!!         toler. In particular, it will not pivot on any
+!!         number whose magnitude does not exceed toler.
+!!  ITER   ON ENTRY ITER MUST CONTAIN AN UPPER BOUND ON
+!!         the maximum number of iterations allowed.
+!!         A suggested value is 10*(k+l+m). On exit iter
+!!         gives the number of simplex iterations.
+!!  x      ONE DIMENSIONAL REAL ARRAY OF SIZE AT LEAST n2d.
+!!         On exit this array contains A
+!!         solution to the L1 problem. If kode=1
+!!         on entry, this array is also used to include
+!!         simple nonnegativity constraints on the
+!!         variables. The values -1, 0, or 1
+!!         for x(j) indicate that the j-TH variable
+!!         is restricted to be .LE.0, unrestricted,
+!!         OR .GE.0 RESPECTIVELY.
+!!  RES    ONE DIMENSIONAL REAL ARRAY OF SIZE AT LEAST klmd.
+!!         On exit this contains the residuals B-AX
+!!         in the first k components, D-CX in the
+!!         NEXT l COMPONENTS (THESE WILL BE =0),AND
+!!         F-EX in the next m components. If kode=1 On
+!!         entry, this array is also used to include simple
+!!         nonnegativity constraints on the residuals
+!!         B-AX. The values -1, 0, or 1 for res(i)
+!!         indicate that the i-TH residual (1.le.i.le.k) is
+!!         restricted to be .LE.0, unrestricted, or .GE.0
+!!         respectively.
+!!  Error  on exit, this gives the minimum sum of
+!!         absolute values of the residuals.
+!!  cu     A TWO DIMENSIONAL REAL ARRAY WITH TWO ROWS AND
+!!         at least nklmd columns used for workspace.
+!!  iu     A TWO DIMENSIONAL INTEGER ARRAY WITH TWO ROWS AND
+!!         at least nklmd columns used for workspace.
+!!  s      INTEGER ARRAY OF SIZE AT LEAST klmd, USED FOR
+!!         workspace.
+!!  If your Fortran compiler permits a single column of a two
+!!  dimensional array to be passed to a one dimensional array
+!!  through a subroutine CALL, considerable savings in
+!!  execution time may be achieved through the use of the
+!!  following subroutine, which operates on column vectors.
+!!      subroutine col(v1, v2, xmlt, notrow, k)
+!!  this subroutine adds to the vector v1 a multiple of the
+!!  vector v2 (elements 1 through k excluding NOTROW).
+!!      dimension v1(k), v2(k)
+!!      kend = notrow - 1
+!!      kstart = notrow + 1
+!!      if (kend .lt. 1) go to 20
+!!      do 10 i=1,kend
+!!         v1(i) = v1(i) + xmlt*v2(i)
+!!   10 continue
+!!      if(kstart .gt. k) go to 40
+!!   20 do 30 i=kstart,k
+!!        v1(i) = v1(i) + xmlt*v2(i)
+!!   30 continue
+!!   40 return
+!!      end
+!!  see comments following statement labelled 440 for
+!!  instructions on the implementation of this modification.
+!!  Initialization.
+!! ```
+!! <!-- nswc-ford:end -->
 implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: m, n, ni
-real, intent(inout) :: t(m)
-real, intent(in) :: x(n), xi(ni), y(n)
-real, intent(inout) :: yi(ni)
+! This subroutine uses a modification of the simplex
+! method of linear programming to calculate an L1 solution
+! to A k by n system of linear equations
+!             ax=b
+! subject to l linear equality constraints
+!             cx=d
+! and m linear inequality constraints
+!             EX.LE.F.
+! Description of parameters
+! k      number of rows of the matrix A (k.GE.1).
+! l      number of rows of the matrix C (l.GE.0).
+! m      number of rows of the matrix E (m.GE.0).
+! n      number of columns of the matrices A,C,E (n.GE.1).
+! klmd   SET TO AT LEAST k+l+m FOR ADJUSTABLE DIMENSIONS.
+! klm2d  set to at least k+l+m+2 for adjustable dimensions.
+! nklmd  set to at least n+k+l+m for adjustable dimensions.
+! n2d    SET TO AT LEAST n+2 FOR ADJUSTABLE DIMENSIONS
+! q      TWO DIMENSIONAL REAL ARRAY WITH klm2d ROWS AND
+!        at least n2d columns.
+!        On entry the matrices A,C and E, and the vectors
+!        B,D and F must be stored in the first k+l+m rows
+!        and n+1 columns of q as follows
+!             A B
+!         q = C D
+!             E F
+!        these values are destroyed by the subroutine.
+! kode   A CODE USED ON ENTRY TO, AND EXIT
+!        from, the subroutine.
+!        On entry, this should normally be set to 0.
+!        However, if certain nonnegativity constraints
+!        are to be included implicitly, rather than
+!        explicitly in the constraints EX.LE.F, then kode
+!        should be set to 1, and the nonnegativity
+!        constraints included in the arrays x and
+!        res (see below).
+!        On exit, kode has one of the
+!        following values
+!             0- optimal solution found,
+!             1- no feasible solution to the
+!                constraints,
+!             2- calculations terminated
+!                prematurely due to rounding errors,
+!             3- maximum number of iterations reached.
+! toler  a small positive tolerance. Empirical
+!        evidence suggests toler = 10**(-D*2/3),
+!        where D represents the number of decimal
+!        digits of accuracy available. Essentially,
+!        the subroutine CANNOT distinguish between zero
+!        and any quantity whose magnitude does not exceed
+!        toler. In particular, it will not pivot on any
+!        number whose magnitude does not exceed toler.
+! ITER   ON ENTRY ITER MUST CONTAIN AN UPPER BOUND ON
+!        the maximum number of iterations allowed.
+!        A suggested value is 10*(k+l+m). On exit iter
+!        gives the number of simplex iterations.
+! x      ONE DIMENSIONAL REAL ARRAY OF SIZE AT LEAST n2d.
+!        On exit this array contains A
+!        solution to the L1 problem. If kode=1
+!        on entry, this array is also used to include
+!        simple nonnegativity constraints on the
+!        variables. The values -1, 0, or 1
+!        for x(j) indicate that the j-TH variable
+!        is restricted to be .LE.0, unrestricted,
+!        OR .GE.0 RESPECTIVELY.
+! RES    ONE DIMENSIONAL REAL ARRAY OF SIZE AT LEAST klmd.
+!        On exit this contains the residuals B-AX
+!        in the first k components, D-CX in the
+!        NEXT l COMPONENTS (THESE WILL BE =0),AND
+!        F-EX in the next m components. If kode=1 On
+!        entry, this array is also used to include simple
+!        nonnegativity constraints on the residuals
+!        B-AX. The values -1, 0, or 1 for res(i)
+!        indicate that the i-TH residual (1.le.i.le.k) is
+!        restricted to be .LE.0, unrestricted, or .GE.0
+!        respectively.
+! Error  on exit, this gives the minimum sum of
+!        absolute values of the residuals.
+! cu     A TWO DIMENSIONAL REAL ARRAY WITH TWO ROWS AND
+!        at least nklmd columns used for workspace.
+! iu     A TWO DIMENSIONAL INTEGER ARRAY WITH TWO ROWS AND
+!        at least nklmd columns used for workspace.
+! s      INTEGER ARRAY OF SIZE AT LEAST klmd, USED FOR
+!        workspace.
+! If your Fortran compiler permits a single column of a two
+! dimensional array to be passed to a one dimensional array
+! through a subroutine CALL, considerable savings in
+! execution time may be achieved through the use of the
+! following subroutine, which operates on column vectors.
+!     subroutine col(v1, v2, xmlt, notrow, k)
+! this subroutine adds to the vector v1 a multiple of the
+! vector v2 (elements 1 through k excluding NOTROW).
+!     dimension v1(k), v2(k)
+!     kend = notrow - 1
+!     kstart = notrow + 1
+!     if (kend .lt. 1) go to 20
+!     do 10 i=1,kend
+!        v1(i) = v1(i) + xmlt*v2(i)
+!  10 continue
+!     if(kstart .gt. k) go to 40
+!  20 do 30 i=kstart,k
+!       v1(i) = v1(i) + xmlt*v2(i)
+!  30 continue
+!  40 return
+!     end
+! see comments following statement labelled 440 for
+! instructions on the implementation of this modification.
+real, intent(inout) :: q, x
+real, intent(inout) :: cu
+real, intent(inout) :: res
+real, intent(inout) :: error
+real, intent(in) :: toler
+integer, intent(in) :: k, l, m, n
+integer, intent(inout) :: s
+integer, intent(inout) :: iu
+integer, intent(in) :: n2d
+integer, intent(inout) :: iter
+integer, intent(in) :: klmd
+integer, intent(inout) :: kode
+integer, intent(in) :: klm2d
+integer, intent(in) :: nklmd
+dimension q(klm2d,n2d), x(n2d), res(klmd), cu(2,nklmd), &
+   & iu(2,nklmd), s(klmd)
 !     beginning of local variable declarations
-integer :: i, ii, il, ilm1, ilold, ipm, ir, istep, j, jmax, k, l, &
-   & mm1, num
-real :: dl, dr, xx, nswc_ai_r4
-!     ******************************************************************
-!     Lagrange interpolation
-!     ******************************************************************
-!     Check input
-if (m < 2) go to 130
-if (m > n) go to 131
-if (ni < 1) go to 132
-ierr = 0
-!     Initialization
-mm1 = m - 1
-k = 1
-xx = xi(1)
-ilold = 0
-!     Find the subinterval which contains xx. i = 1 If xx.LT.x(2)
-!     AND i = n IF xx.GE.x(n). OTHERWISE x(i).LE.xx.LT.x(i+1).
-nswc_ai_r4 = xx - x(1)
-if (nswc_ai_r4 < 0) go to 10
-if (nswc_ai_r4 == 0) go to 11
-go to 20
-10 i = 1
-il = 1
-ir = m
-go to 80
-11 i = 1
-yi(k) = y(1)
-go to 110
-20 nswc_ai_r4 = x(n) - xx
-if (nswc_ai_r4 < 0) go to 21
-if (nswc_ai_r4 == 0) go to 22
-go to 23
-21 i = n
-il = n - m + 1
-ir = n
-go to 80
-22 i = n
-yi(k) = y(n)
-go to 110
-23 il = 1
-ir = n
-!     Bisection search
-30 i = (il + ir)/2
-if (i == il) go to 50
-nswc_ai_r4 = xx - x(i)
-if (nswc_ai_r4 < 0) go to 31
-if (nswc_ai_r4 == 0) go to 32
-go to 33
-31 ir = i
-go to 30
-32 yi(k) = y(i)
-go to 110
-33 il = i
-go to 30
-!     Linear forward search
-40 nswc_ai_r4 = xx - x(i + 1)
-if (nswc_ai_r4 < 0) go to 50
-if (nswc_ai_r4 == 0) go to 41
-go to 42
-41 i = i + 1
-yi(k) = y(i)
-go to 110
-42 i = i + 1
-go to 40
-!     Point xx lies in the open subinterval (x(i),x(i+1)).
-!     Find the m closest points x(il),...,x(ir) to xx.
-50 if (i > m) go to 51
-il = 1
-num = i
-go to 60
-51 il = i - m + 1
-num = m
-60 ipm = i + m
-if (ipm <= n) go to 61
-ir = n
-num = num + n - i
-go to 70
-61 ir = ipm
-num = num + m
-70 num = num - m
-if (num == 0) go to 80
-dl = xx - x(il)
-dr = x(ir) - xx
-do l = 1,num
-   if (dl <= dr) go to 71
-   il = il + 1
-   dl = xx - x(il)
-   go to 72
-71 ir = ir - 1
-   dr = x(ir) - xx
-72 continue
+double precision :: sum
+real :: z, sn, zu, zv, cuv, xmax, xmin, pivot, tpivot, nswc_ai_r4
+integer :: i, j, ia, ii, in, js, kk, nk, n1, n2, jmn, jpn, klm, nkl, nk1, iimn, iout, klm1, klm2, nklm, nkl1, maxit, iphase, &
+   & kforce, iineg
+! Initialization.
+maxit = iter
+n1 = n + 1
+n2 = n + 2
+nk = n + k
+nk1 = nk + 1
+nkl = nk + l
+nkl1 = nkl + 1
+klm = k + l + m
+klm1 = klm + 1
+klm2 = klm + 2
+nklm = n + klm
+kforce = 1
+iter = 0
+js = 1
+ia = 0
+! Set up labels in q.
+do j = 1,n
+   q(klm2,j) = j
 end do
-!     Compute the coefficients t(1),...,t(m) of the backward
-!     Newton form of the interpolating polynomial.
-80 if (il == ilold) go to 100
-ilold = il
-ilm1 = il - 1
-do j = 1,m
-   l = ilm1 + j
-   t(j) = y(l)
-end do
-do istep = 1,mm1
-   jmax = m - istep
-   do j = 1,jmax
-      ii = ilm1 + j
-      l = ii + istep
-      t(j) = (t(j) - t(j + 1))/(x(ii) - x(l))
+do i = 1,klm
+   q(i,n2) = n + i
+   if (q(i,n1) >= 0.) go to 30
+   do j = 1,n2
+      q(i,j) = -q(i,j)
    end do
+30 continue
 end do
-!     Evaluation of the interpolating polynomial
-100 yi(k) = t(1)
-do j = 2,m
-   l = ilm1 + j
-   yi(k) = t(j) + yi(k)*(xx - x(l))
+! Set up phase 1 costs.
+iphase = 2
+do j = 1,nklm
+   cu(1,j) = 0.
+   cu(2,j) = 0.
+   iu(1,j) = 0
+   iu(2,j) = 0
 end do
-!     Next point
-110 if (k >= ni) return
-k = k + 1
-xx = xi(k)
-nswc_ai_r4 = xx - x(1)
-if (nswc_ai_r4 < 0) go to 10
-if (nswc_ai_r4 == 0) go to 11
-go to 111
-111 nswc_ai_r4 = x(n) - xx
-if (nswc_ai_r4 < 0) go to 21
-if (nswc_ai_r4 == 0) go to 22
-go to 120
-120 nswc_ai_r4 = xx - xi(k - 1)
-if (nswc_ai_r4 < 0) go to 121
-if (nswc_ai_r4 == 0) go to 122
-go to 40
-121 il = 1
-ir = min(i + 1,n)
-go to 30
-122 yi(k) = yi(k - 1)
-go to 110
-!     Error return
-130 ierr = 1
-return
-131 ierr = 2
-return
-132 ierr = 3
-end subroutine ltrp
+if (l == 0) go to 60
+do j = nk1,nkl
+   cu(1,j) = 1.
+   cu(2,j) = 1.
+   iu(1,j) = 1
+   iu(2,j) = 1
+end do
+iphase = 1
+60 if (m == 0) go to 80
+do j = nkl1,nklm
+   cu(2,j) = 1.
+   iu(2,j) = 1
+   jmn = j - n
+   if (q(jmn,n2) < 0.) iphase = 1
+end do
+80 if (kode == 0) go to 150
+do j = 1,n
+   nswc_ai_r4 = x(j)
+   if (nswc_ai_r4 < 0) go to 90
+   if (nswc_ai_r4 == 0) go to 110
+   go to 100
+90 cu(1,j) = 1.
+   iu(1,j) = 1
+   go to 110
+100 cu(2,j) = 1.
+   iu(2,j) = 1
+110 continue
+end do
+do j = 1,k
+   jpn = j + n
+   nswc_ai_r4 = res(j)
+   if (nswc_ai_r4 < 0) go to 120
+   if (nswc_ai_r4 == 0) go to 140
+   go to 130
+120 cu(1,jpn) = 1.
+   iu(1,jpn) = 1
+   if (q(j,n2) > 0.0) iphase = 1
+   go to 140
+130 cu(2,jpn) = 1.
+   iu(2,jpn) = 1
+   if (q(j,n2) < 0.0) iphase = 1
+140 continue
+end do
+150 if (iphase == 2) go to 500
+! Compute the marginal costs.
+160 do j = js,n1
+   sum = 0.d0
+   do i = 1,klm
+      ii = q(i,n2)
+      if (ii < 0) go to 170
+      z = cu(1,ii)
+      go to 180
+170   iineg = -ii
+      z = cu(2,iineg)
+180   sum = sum + dble(q(i,j))*dble(z)
+   end do
+   q(klm1,j) = sum
+end do
+do j = js,n
+   ii = q(klm2,j)
+   if (ii < 0) go to 210
+   z = cu(1,ii)
+   go to 220
+210 iineg = -ii
+   z = cu(2,iineg)
+220 q(klm1,j) = q(klm1,j) - z
+end do
+! Determine the vector to enter the basis.
+240 xmax = 0.
+if (js > n) go to 490
+do j = js,n
+   zu = q(klm1,j)
+   ii = q(klm2,j)
+   if (ii > 0) go to 250
+   ii = -ii
+   zv = zu
+   zu = -zu - cu(1,ii) - cu(2,ii)
+   go to 260
+250 zv = -zu - cu(1,ii) - cu(2,ii)
+260 if (kforce == 1 .and. ii > n) go to 280
+   if (iu(1,ii) == 1) go to 270
+   if (zu <= xmax) go to 270
+   xmax = zu
+   in = j
+270 if (iu(2,ii) == 1) go to 280
+   if (zv <= xmax) go to 280
+   xmax = zv
+   in = j
+280 continue
+end do
+if (xmax <= toler) go to 490
+if (q(klm1,in) == xmax) go to 300
+do i = 1,klm2
+   q(i,in) = -q(i,in)
+end do
+q(klm1,in) = xmax
+! Determine the vector to leave the basis.
+300 if (iphase == 1 .or. ia == 0) go to 330
+xmax = 0.
+do i = 1,ia
+   z = abs(q(i,in))
+   if (z <= xmax) go to 310
+   xmax = z
+   iout = i
+310 continue
+end do
+if (xmax <= toler) go to 330
+do j = 1,n2
+   z = q(ia,j)
+   q(ia,j) = q(iout,j)
+   q(iout,j) = z
+end do
+iout = ia
+ia = ia - 1
+pivot = q(iout,in)
+go to 420
+330 kk = 0
+do i = 1,klm
+   z = q(i,in)
+   if (z <= toler) go to 340
+   kk = kk + 1
+   res(kk) = q(i,n1)/z
+   s(kk) = i
+340 continue
+end do
+350 if (kk > 0) go to 360
+kode = 2
+go to 590
+360 xmin = res(1)
+iout = s(1)
+j = 1
+if (kk == 1) go to 380
+do i = 2,kk
+   if (res(i) >= xmin) go to 370
+   j = i
+   xmin = res(i)
+   iout = s(i)
+370 continue
+end do
+res(j) = res(kk)
+s(j) = s(kk)
+380 kk = kk - 1
+pivot = q(iout,in)
+ii = q(iout,n2)
+if (iphase == 1) go to 400
+if (ii < 0) go to 390
+if (iu(2,ii) == 1) go to 420
+go to 400
+390 iineg = -ii
+if (iu(1,iineg) == 1) go to 420
+400 ii = abs(ii)
+cuv = cu(1,ii) + cu(2,ii)
+if (q(klm1,in) - pivot*cuv <= toler) go to 420
+! Bypass intermediate vertices.
+do j = js,n1
+   z = q(iout,j)
+   q(klm1,j) = q(klm1,j) - z*cuv
+   q(iout,j) = -z
+end do
+q(iout,n2) = -q(iout,n2)
+go to 350
+! Gauss-Jordan elimination.
+420 if (iter < maxit) go to 430
+kode = 3
+go to 590
+430 iter = iter + 1
+do j = js,n1
+   if (j /= in) q(iout,j) = q(iout,j)/pivot
+end do
+! If permitted, use subroutine col of the description
+! section and replace the following seven statements down
+! to and including statement number 460 by..
+!     do 460 j=js,n1
+!        if(j .eq. in) go to 460
+!        z = -q(iout,j)
+!        call col(q(1,j), q(1,in), z, iout, klm1)
+! 460 continue
+do j = js,n1
+   if (j == in) go to 460
+   z = -q(iout,j)
+   do i = 1,klm1
+      if (i /= iout) q(i,j) = q(i,j) + z*q(i,in)
+   end do
+460 continue
+end do
+tpivot = -pivot
+do i = 1,klm1
+   if (i /= iout) q(i,in) = q(i,in)/tpivot
+end do
+q(iout,in) = 1./pivot
+z = q(iout,n2)
+q(iout,n2) = q(klm2,in)
+q(klm2,in) = z
+ii = abs(z)
+if (iu(1,ii) == 0 .or. iu(2,ii) == 0) go to 240
+do i = 1,klm2
+   z = q(i,in)
+   q(i,in) = q(i,js)
+   q(i,js) = z
+end do
+js = js + 1
+go to 240
+! Test for optimality.
+490 if (kforce == 0) go to 580
+if (iphase == 1 .and. q(klm1,n1) <= toler) go to 500
+kforce = 0
+go to 240
+! Set up phase 2 costs.
+500 iphase = 2
+do j = 1,nklm
+   cu(1,j) = 0.
+   cu(2,j) = 0.
+end do
+do j = n1,nk
+   cu(1,j) = 1.
+   cu(2,j) = 1.
+end do
+do i = 1,klm
+   ii = q(i,n2)
+   if (ii > 0) go to 530
+   ii = -ii
+   if (iu(2,ii) == 0) go to 560
+   cu(2,ii) = 0.
+   go to 540
+530 if (iu(1,ii) == 0) go to 560
+   cu(1,ii) = 0.
+540 ia = ia + 1
+   do j = 1,n2
+      z = q(ia,j)
+      q(ia,j) = q(i,j)
+      q(i,j) = z
+   end do
+560 continue
+end do
+go to 160
+570 if (q(klm1,n1) <= toler) go to 500
+kode = 1
+go to 590
+580 if (iphase == 1) go to 570
+! Prepare output.
+kode = 0
+590 sum = 0.d0
+do j = 1,n
+   x(j) = 0.
+end do
+do i = 1,klm
+   res(i) = 0.
+end do
+do i = 1,klm
+   ii = q(i,n2)
+   sn = 1.
+   if (ii > 0) go to 620
+   ii = -ii
+   sn = -1.
+620 if (ii > n) go to 630
+   x(ii) = sn*q(i,n1)
+   go to 640
+630 iimn = ii - n
+   res(iimn) = sn*q(i,n1)
+   if (ii >= n1 .and. ii <= nk) sum = sum + &
+      & dble(q(i,n1))
+640 continue
+end do
+error = sum
+end subroutine xl1
 
-subroutine htrp(n,x,y,a,t,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n
-real, intent(inout) :: a(n), t(n)
-real, intent(in) :: x(n), y(n)
-!     beginning of local variable declarations
-integer :: i, ibeg, iend, k
-real :: diff, f, r
-!     ******************************************************************
-!     Hermite interpolation
-!     ******************************************************************
-if (n <= 0) go to 30
-ierr = 0
-a(1) = y(1)
-if (n == 1) return
-f = 1.0
-r = 0.0
-iend = 0
-ibeg = 1
-do k = 2,n
-   if ((x(k) - x(k - 1)) == 0) go to 20
-   go to 10
-10 f = 1.0
-   r = 0.0
-   iend = k - 1
-   ibeg = k
-   t(1) = y(k)
-   do i = 1,iend
-      diff = x(i) - x(k)
-      if ((diff) == 0) go to 31
-      go to 11
-11    t(i + 1) = (a(i) - t(i))/diff
-   end do
-   go to 22
-20 r = r + 1.0
-   f = f*r
-   t(1) = y(k)/f
-   if (iend == 0) go to 22
-   do i = 1,iend
-      t(i + 1) = (t(i + 1) - t(i))/(x(i) - x(k))
-   end do
-22 a(k) = t(ibeg)
-end do
-return
-30 ierr = 1
-return
-31 ierr = 2
-t(1) = i
-t(2) = k
-end subroutine htrp
-
-pure subroutine pcoeff(alpha,n,x,a,c,t)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: alpha
-real, intent(in) :: x(*), a(n)
-real, intent(inout) :: c(n)
-double precision, intent(inout) :: t(n)
-!     beginning of local variable declarations
-integer :: i, j, k, nm1
-double precision :: xx, r
-if (n > 1) go to 10
-c(1) = a(1)
-return
-10 xx = alpha
-nm1 = n - 1
-do i = 1,n
-   t(i) = a(i)
-end do
-do i = 1,nm1
-   j = n - i
-   r = xx - dble(x(j))
-   do k = j,nm1
-      t(k) = t(k) + r*t(k + 1)
-   end do
-end do
-do i = 1,n
-   c(i) = t(i)
-end do
-end subroutine pcoeff
-
-pure subroutine pfit(nd,np,x,y,a,rnorm,phi,phix,ierr)
+subroutine llsq(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
+!! <!-- nswc-ford:begin LLSQ -->
+!! Reference for `llsq`.
+!!
+!! No introductory description is present in the original source.
+!! The signature below records the declared arguments and their available intents;
+!! consult the source and chapter manual for algorithm details.
+!! <!-- nswc-ford:end -->
 implicit none
 integer, intent(out) :: ierr
-integer, intent(in) :: nd, np
-real, intent(inout) :: rnorm
-real, intent(in) :: x(np), y(np)
-real, intent(inout) :: a(*), phi(2,*), phix(4,np)
+integer, intent(inout) :: iwk
+integer, intent(in) :: ka, kb, m, n, nb
+real, intent(inout) :: a(ka,n), b(kb,nb), wk(n)
+dimension iwk(n)
 !     beginning of local variable declarations
-integer :: k, la, lb, ls, m, mp1, nd1
-real :: alpha, c, temp, xmax, xmin, za, zb, lambda
-double precision :: dalpha, dsum
-!     ******************************************************************
-!     Unweighted least squares polynomial fit
-!     ******************************************************************
-!     ---------------------
+integer :: i, j, np1
+real :: rnorm
+logical :: exit
+!     --------------
 ierr = 0
-if (1 <= nd.and.nd < np) go to 10
+if (1 < n .and. n <= m) go to 10
 ierr = 1
 return
-!                      Initialization
-10 nd1 = nd + 1
-do k = 1,nd1
-   a(k) = 0.0
-   phi(1,k) = 0.0
-   phi(2,k) = 0.0
+10 np1 = n + 1
+call ortho(m,n,a,ka,wk,iwk,exit)
+if (exit) go to 20
+ierr = 2
+return
+20 do j = 1,nb
+   call orsol(m,n,a,ka,wk,iwk,b(1,j))
+   if (m == n) go to 22
+   rnorm = 0.0
+   do i = np1,m
+      rnorm = rnorm + b(i,j)*b(i,j)
+   end do
+   b(np1,j) = sqrt(rnorm)
+22 continue
 end do
-!                SET Z=a+B*x WHERE abs(Z).LE.1
-xmin = x(1)
-xmax = x(1)
-do k = 2,np
-   if (x(k) >= xmin) go to 20
-   xmin = x(k)
-   go to 21
-20 if (x(k) > xmax) xmax = x(k)
-21 continue
-end do
-zb = 2.0/(xmax - xmin)
-za = -xmin*zb - 1.0
-do k = 1,np
-   phix(3,k) = za + zb*x(k)
-end do
-!           Compute the closest polynomial of degree 0
-lambda = np
-phi(1,1) = 1.0/sqrt(lambda)
-dalpha = 0.d0
-dsum = 0.d0
-do k = 1,np
-   phix(1,k) = phi(1,1)
-   dalpha = dalpha + dble(phix(3,k))
-   dsum = dsum + dble(y(k))
-end do
-alpha = sngl(dalpha)/lambda
-a(1) = sngl(dsum)/lambda
-do k = 1,np
-   phix(4,k) = a(1)
-end do
-la = 2
-lb = 1
-do m = 1,nd
-   mp1 = m + 1
-!          Generate lambda(m)*phi(m) and evaluate it at Z
-   if (m /= 1) go to 50
-   phi(2,1) = -alpha*phi(1,1)
-   phi(2,2) = phi(1,1)
-   do k = 1,np
-      phix(2,k) = (phix(3,k) - alpha)*phi(1,1)
-   end do
-   go to 60
-50 c = 0.0
-   do k = 1,m
-      phi(la,k) = dble(c) - dble(alpha*phi(lb,k)) - dble(lambda*phi(la,k))
-      c = phi(lb,k)
-   end do
-   phi(la,mp1) = c
-   do k = 1,np
-      phix(la,k) = (phix(3,k) - alpha)*phix(lb,k) - lambda*phix(la,k)
-   end do
-!                Compute alpha(m) and lambda(m)
-60 dalpha = 0.d0
-   dsum = 0.d0
-   do k = 1,np
-      c = phix(la,k)*phix(la,k)
-      dalpha = dalpha + dble(c*phix(3,k))
-      dsum = dsum + dble(c)
-   end do
-   lambda = dsum
-   alpha = sngl(dalpha)/lambda
-   lambda = sqrt(lambda)
-!              Generate phi(m) and evaluate it at Z
-   do k = 1,mp1
-      phi(la,k) = phi(la,k)/lambda
-   end do
-   do k = 1,np
-      phix(la,k) = phix(la,k)/lambda
-   end do
-!        Compute the closest polynomial of degree m or less
-!                     and evaluate it at Z
-   dsum = 0.d0
-   do k = 1,np
-      dsum = dsum + dble((y(k) - phix(4,k))*phix(la,k))
-   end do
-   c = dsum
-   do k = 1,mp1
-      a(k) = a(k) + c*phi(la,k)
-   end do
-   do k = 1,np
-      phix(4,k) = phix(4,k) + c*phix(la,k)
-   end do
-   ls = la
-   la = lb
-   lb = ls
-end do
-!                        Compute rnorm
-dsum = 0.d0
-do k = 1,np
-   dsum = dsum + dble((y(k) - phix(4,k))**2)
-end do
-rnorm = sqrt(sngl(dsum))
-!        Convert the closest polynomial from a polynomial
-!                  in Z to a polynomial in x
-a(1) = a(1) + za*a(2)
-a(2) = zb*a(2)
-if (nd == 1) return
-phi(1,1) = za
-phi(1,2) = zb
-do m = 2,nd
-   mp1 = m + 1
-   c = 0.0
-   do k = 1,m
-      temp = phi(1,k)*zb
-      phi(1,k) = phi(1,k)*za + c
-      c = temp
-   end do
-   phi(1,mp1) = c
-   do k = 1,m
-      a(k) = a(k) + a(mp1)*phi(1,k)
-   end do
-   a(mp1) = a(mp1)*phi(1,mp1)
-end do
-end subroutine pfit
+end subroutine llsq
 
-pure subroutine wpfit(nd,np,x,y,w,a,rnorm,phi,phix,ierr)
+subroutine llsqmp(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
+!! <!-- nswc-ford:begin LLSQMP -->
+!! Reference for `llsqmp`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      dimension wk(mn + 2m + n)
+!! ```
+!! <!-- nswc-ford:end -->
 implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: nd, np
-real, intent(inout) :: rnorm
-real, intent(in) :: x(np), y(np), w(np)
-real, intent(inout) :: a(*), phi(2,*), phix(4,np)
+integer, intent(out) :: ierr
+integer, intent(inout) :: iwk
+integer, intent(in) :: ka, kb, m, n, nb
+real, intent(in) :: a(ka,n)
+real, intent(inout) :: b(kb,nb), wk(*)
+dimension iwk(n)
 !     beginning of local variable declarations
-integer :: k, la, lb, ls, m, mp1, nd1, nw
-real :: alpha, c, temp, xmax, xmin, za, zb, lambda, nswc_ai_r4
-double precision :: dalpha, dsum
-!     ******************************************************************
-!     Weighted least squares polynomial fit
-!     ******************************************************************
-!     ---------------------
-!                      Error checking
-if (nd < 1.or.np < 2) go to 200
-nw = 0
-dsum = 0.d0
-do k = 1,np
-   nswc_ai_r4 = w(k)
-   if (nswc_ai_r4 < 0) go to 202
-   if (nswc_ai_r4 == 0) go to 13
-   go to 10
-10 nw = nw + 1
-   dsum = dsum + dble(w(k))
-   if (nw > 1) go to 11
-   xmin = x(k)
-   xmax = x(k)
-   go to 13
-11 if (x(k) >= xmin) go to 12
-   xmin = x(k)
-   go to 13
-12 if (x(k) > xmax) xmax = x(k)
-13 continue
-end do
-if (nd >= nw) go to 200
-!                      Initialization
+integer :: i, j, lq, lr, ls, np1
+real :: rnorm
+logical :: exit
+!     -------------------
+!     dimension wk(mn + 2m + n)
+!     -------------------
 ierr = 0
-nd1 = nd + 1
-do k = 1,nd1
-   a(k) = 0.0
-   phi(1,k) = 0.0
-   phi(2,k) = 0.0
-end do
-!                SET Z=a+B*x WHERE abs(Z).LE.1
-zb = 2.0/(xmax - xmin)
-za = -xmin*zb - 1.0
-do k = 1,np
-   phix(3,k) = za + zb*x(k)
-end do
-!           Compute the closest polynomial of degree 0
-lambda = dsum
-phi(1,1) = 1.0/sqrt(lambda)
-dalpha = 0.d0
-dsum = 0.d0
-do k = 1,np
-   phix(1,k) = phi(1,1)
-   dalpha = dalpha + dble(w(k)*phix(3,k))
-   dsum = dsum + dble(w(k)*y(k))
-end do
-alpha = sngl(dalpha)/lambda
-a(1) = sngl(dsum)/lambda
-do k = 1,np
-   phix(4,k) = a(1)
-end do
-la = 2
-lb = 1
-do m = 1,nd
-   mp1 = m + 1
-!          Generate lambda(m)*phi(m) and evaluate it at Z
-   if (m /= 1) go to 50
-   phi(2,1) = -alpha*phi(1,1)
-   phi(2,2) = phi(1,1)
-   do k = 1,np
-      phix(2,k) = (phix(3,k) - alpha)*phi(1,1)
-   end do
-   go to 60
-50 c = 0.0
-   do k = 1,m
-      phi(la,k) = dble(c) - dble(alpha*phi(lb,k)) - dble(lambda*phi(la,k))
-      c = phi(lb,k)
-   end do
-   phi(la,mp1) = c
-   do k = 1,np
-      phix(la,k) = (phix(3,k) - alpha)*phix(lb,k) - lambda*phix(la,k)
-   end do
-!                Compute alpha(m) and lambda(m)
-60 dalpha = 0.d0
-   dsum = 0.d0
-   do k = 1,np
-      c = w(k)*phix(la,k)*phix(la,k)
-      dalpha = dalpha + dble(c*phix(3,k))
-      dsum = dsum + dble(c)
-   end do
-   lambda = dsum
-   alpha = sngl(dalpha)/lambda
-   lambda = sqrt(lambda)
-!              Generate phi(m) and evaluate it at Z
-   do k = 1,mp1
-      phi(la,k) = phi(la,k)/lambda
-   end do
-   do k = 1,np
-      phix(la,k) = phix(la,k)/lambda
-   end do
-!        Compute the closest polynomial of degree m or less
-!                     and evaluate it at Z
-   dsum = 0.d0
-   do k = 1,np
-      dsum = dsum + dble(w(k)*(y(k) - phix(4,k))*phix(la,k))
-   end do
-   c = dsum
-   do k = 1,mp1
-      a(k) = a(k) + c*phi(la,k)
-   end do
-   do k = 1,np
-      phix(4,k) = phix(4,k) + c*phix(la,k)
-   end do
-   ls = la
-   la = lb
-   lb = ls
-end do
-!                        Compute rnorm
-dsum = 0.d0
-do k = 1,np
-   dsum = dsum + dble(w(k)*(y(k) - phix(4,k))**2)
-end do
-rnorm = sqrt(sngl(dsum))
-!        Convert the closest polynomial from a polynomial
-!                  in Z to a polynomial in x
-a(1) = a(1) + za*a(2)
-a(2) = zb*a(2)
-if (nd == 1) return
-phi(1,1) = za
-phi(1,2) = zb
-do m = 2,nd
-   mp1 = m + 1
-   c = 0.0
-   do k = 1,m
-      temp = phi(1,k)*zb
-      phi(1,k) = phi(1,k)*za + c
-      c = temp
-   end do
-   phi(1,mp1) = c
-   do k = 1,m
-      a(k) = a(k) + a(mp1)*phi(1,k)
-   end do
-   a(mp1) = a(mp1)*phi(1,mp1)
-end do
+if (1 < n .and. n <= m) go to 10
+ierr = 2
 return
-!                        Error return
-200 ierr = 1
+10 np1 = n + 1
+lr = m + 1
+ls = lr + m
+lq = ls + n
+call mcopy(m, n, a, ka, wk(lq), m)
+call ortho(m, n, wk(lq), m, wk(ls), iwk, exit)
+if (exit) go to 20
+ierr = 3
 return
-202 ierr = 3
-end subroutine wpfit
+20 do j = 1,nb
+   do i = 1,m
+      wk(i) = b(i,j)
+   end do
+   call orsol(m, n, wk(lq), m, wk(ls), iwk, wk(1))
+   call orimp(m, n, a, ka, wk(lq), m, wk(ls), iwk, b(1,j), &
+      & wk(1), wk(lr), exit)
+   do i = 1,n
+      b(i,j) = wk(i)
+   end do
+   if (.not.exit) ierr = 1
+   if (m == n) go to 31
+   rnorm = 0.0
+   do i = np1,m
+      rnorm = rnorm + wk(i)*wk(i)
+   end do
+   b(np1,j) = sqrt(rnorm)
+31 continue
+end do
+end subroutine llsqmp
 
-pure subroutine cbspl(x, y, a, b, c, n, ibeg, iend, alpha, beta, ierr)
+pure subroutine ortho(m, n, qr, ms, s, ip, exit)
+!! <!-- nswc-ford:begin ORTHO -->
+!! Reference for `ortho`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!       Identification
+!!         ortho - Orthogonal transformation of a given general m by n
+!!                 matrix A to upper triangular form
+!!         Fortran subroutine subprogram
+!!         aerospace research laboratories
+!!         wright-patterson afb, ohio  45433
+!!       purpose
+!!         ortho computes an implicit orthogonal matrix Q and an explicit
+!!         upper triangular matrix R and a permutation matrix P satisfying
+!!         qr = PA given an m by n real matrix A.  ortho is intended for
+!!         use with the subroutine orsol to produce the least squares
+!!         solution of the equation AX = B.
+!!       Control
+!!         dimension qr(ms,n), s(n), ip(n)
+!!         logical exit
+!!
+!!         call ortho(m, n, qr, ms, s, ip, exit)
+!!         where
+!!         m    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
+!!         n    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A,
+!!              (1 .LT. n .LE. m).
+!!         QR   AS A REAL INPUT ARRAY IS MATRIX A TO BE TRIANGULARIZED.
+!!         QR   AS A REAL OUTPUT ARRAY IS THE UPPER TRIANGULAR FACTOR R IN
+!!              qr(i,j), i .LE. j, and the relevant parts of Q in qr(i,j),
+!!              i .GT. j.
+!!         ms   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
+!!              QR in the calling program.
+!!         s    IS A REAL OUTPUT ARRAY, THE RELEVANT PARTS OF Q.
+!!         ip   is an integer output array containing in ip(i), i=1,...,n,
+!!              the images of the permutation corresponding to the PERMU-
+!!              TATION matrix P.
+!!         Exit is set to the value .TRUE. if the rank of A is equal to n
+!!              and .FALSE. otherwise.
+!!       Method
+!!         the matrix A in the array qr is reduced to upper triangular
+!!         form using orthogonal transformation with partial pivoting.
+!!       References
+!!         (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!!             TIONS by Householder transformations, numer. Math. 7(1965),
+!!             269-276.
+!!         (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
+!!             transformations for linear least squares problems, ARL
+!!             technical report ARL TR 74-0124(1974).
+!! ```
+!! <!-- nswc-ford:end -->
 implicit none
-integer, intent(in) :: ibeg, iend
-integer, intent(inout) :: ierr
-integer, intent(in) :: n
-real, intent(in) :: alpha, beta
-real, intent(in) :: x(n), y(n)
-real, intent(inout) :: a(n), b(n), c(n)
+integer, intent(inout) :: ip
+integer, intent(in) :: m, ms, n
+real, intent(inout) :: qr(ms,n), s(n)
+logical, intent(out) :: exit
+dimension ip(n)
 !     beginning of local variable declarations
-integer :: i, j, m, nm1, nswc_ai_i4
-real :: del, h, r, t
-!-----------------------------------------------------------------------
-!                   Cubic spline interpolation
-!-----------------------------------------------------------------------
-if (n < 3) go to 200
-
-!     A tridiagonal linear system for the unknown slopes S(i) of
-!     F at x(i), i=1,...,n, is generated and then solved by Gauss
-!     elimination, with S(i) ending up in a(i) for all i. A, b, c
-!     are used initially for work spaces.
-do m = 2,n
-   b(m) = x(m) - x(m - 1)
-   if (b(m) <= 0.0) go to 210
-   c(m) = (y(m) - y(m - 1))/b(m)
-end do
-ierr = 0
-!     Construct the first equation from the boundary condition, of
-!     the form
-!             c(1)*S(1) + b(1)*S(2) = a(1)
-nswc_ai_i4 = ibeg - 1
-if (nswc_ai_i4 < 0) go to 20
-if (nswc_ai_i4 == 0) go to 30
-go to 40
-!     No condition at left end.
-20 c(1) = b(3)
-b(1) = x(3) - x(1)
-a(1) = ((b(2) + 2.0*b(1))*b(3)*c(2) + b(2)*b(2)*c(3))/b(1)
-go to 50
-!     Slope prescribed at left end.
-30 c(1) = 1.0
-b(1) = 0.0
-a(1) = alpha
-go to 50
-!     Second derivative prescribed at left end.
-40 c(1) = 2.0
-b(1) = 1.0
-a(1) = 3.0*c(2) - 0.5*alpha*b(2)
-!     For the interior knots, generate the corresponding equations and
-!     carry out the forward pass of Gauss elimination, after which the
-!     m-TH EQUATION READS  c(m)*S(m) + b(m)*S(m+1) = a(m).
-50 nm1 = n - 1
-do m = 2,nm1
-   t = -b(m + 1)/c(m - 1)
-   a(m) = t*a(m - 1) + 3.0*(b(m)*c(m + 1) + b(m + 1)*c(m))
-   c(m) = t*b(m - 1) + 2.0*(b(m) + b(m + 1))
-end do
-!     If the slope at the right end is given, then set a(n) to the
-!     slope and go to back substitution. Otherwise, construct the
-!     last equation from the second boundary condition, of the form
-!                r*S(n-1) + c(n)*S(n) = a(n)
-nswc_ai_i4 = iend - 1
-if (nswc_ai_i4 < 0) go to 60
-if (nswc_ai_i4 == 0) go to 80
-go to 90
-60 if (n == 3 .and. ibeg == 0) go to 70
-!     No condition at the right end. Either  n .GE. 4  or
-!     there is a condition at the left end.
-r = x(n) - x(n - 2)
-del = (y(nm1) - y(n - 2))/b(nm1)
-a(n) = ((b(n) + 2.0*r)*b(nm1)*c(n) + b(n)*b(n)*del)/r
-c(n) = b(nm1)
-go to 100
-!     No conditions at the end points and n = 3. In this case,
-!     the second boundary condition does not provide us with A
-!     new equation. For convenience, we use the following...
-70 a(n) = 2.0*c(n)
-c(n) = 1.0
-r = 1.0
-go to 100
-!     Slope prescribed at right end.
-80 a(n) = beta
-go to 110
-!     Second derivative prescribed at right end.
-90 a(n) = 3.0*c(n) + 0.5*beta*b(n)
-c(n) = 2.0
-r = 1.0
-!     Complete forward pass of Gauss elimination.
-100 t = -r/c(nm1)
-a(n) = (t*a(nm1) + a(n))/(t*b(nm1) + c(n))
-!     Carry out back substitution.
-110 do i = 1,nm1
-   j = n - i
-   a(j) = (a(j) - b(j)*a(j + 1))/c(j)
-end do
-!     Generate the cubic coefficients b(i) and c(i).
-do i = 1,nm1
-   h = b(i + 1)
-   del = (y(i + 1) - y(i))/h
-   t = a(i) + a(i + 1) - 2.0*del
-   b(i) = (del - a(i) - t)/h
-   c(i) = (t/h)/h
+integer :: i, j, jp, k, kj, nn
+real :: ajj, sav, ss, y
+!***********************************************************************
+!      Identification
+!        ortho - Orthogonal transformation of a given general m by n
+!                matrix A to upper triangular form
+!        Fortran subroutine subprogram
+!        aerospace research laboratories
+!        wright-patterson afb, ohio  45433
+!      purpose
+!        ortho computes an implicit orthogonal matrix Q and an explicit
+!        upper triangular matrix R and a permutation matrix P satisfying
+!        qr = PA given an m by n real matrix A.  ortho is intended for
+!        use with the subroutine orsol to produce the least squares
+!        solution of the equation AX = B.
+!      Control
+!        dimension qr(ms,n), s(n), ip(n)
+!        logical exit
+!        .
+!        .
+!        .
+!        call ortho(m, n, qr, ms, s, ip, exit)
+!        where
+!        m    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
+!        n    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A,
+!             (1 .LT. n .LE. m).
+!        QR   AS A REAL INPUT ARRAY IS MATRIX A TO BE TRIANGULARIZED.
+!        QR   AS A REAL OUTPUT ARRAY IS THE UPPER TRIANGULAR FACTOR R IN
+!             qr(i,j), i .LE. j, and the relevant parts of Q in qr(i,j),
+!             i .GT. j.
+!        ms   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
+!             QR in the calling program.
+!        s    IS A REAL OUTPUT ARRAY, THE RELEVANT PARTS OF Q.
+!        ip   is an integer output array containing in ip(i), i=1,...,n,
+!             the images of the permutation corresponding to the PERMU-
+!             TATION matrix P.
+!        Exit is set to the value .TRUE. if the rank of A is equal to n
+!             and .FALSE. otherwise.
+!      Method
+!        the matrix A in the array qr is reduced to upper triangular
+!        form using orthogonal transformation with partial pivoting.
+!      References
+!        (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!            TIONS by Householder transformations, numer. Math. 7(1965),
+!            269-276.
+!        (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
+!            transformations for linear least squares problems, ARL
+!            technical report ARL TR 74-0124(1974).
+!***********************************************************************
+exit = .true.
+nn = n
+if (n == m) nn = n - 1
+do j = 1, nn
+   ip(j) = j
+   jp = j + 1
+   kj = j
+!                                       Search for pivot in the j-TH
+!                                       column and interchange rows.
+   do k = jp, m
+      if (abs(qr(k,j)) > abs(qr(kj,j))) kj = k
+   end do
+   if (qr(kj,j) == 0.0) go to 90
+   if (kj == j) go to 30
+   ip(j) = kj
+   do i = j, n
+      sav = qr(j,i)
+      qr(j,i) = qr(kj,i)
+      qr(kj,i) = sav
+   end do
+!                                       Normalize the pivoting column
+!                                       and find its norm.
+30 ajj = qr(j,j)
+   do i = jp, m
+      qr(i,j) = qr(i,j)/ajj
+   end do
+   sav = 1.0
+   do i = jp, m
+      sav = sav + qr(i,j)*qr(i,j)
+   end do
+   s(j) = -sqrt(sav)
+   qr(j,j) = s(j)*ajj
+   if (jp > n) go to 80
+!                                       Premultiply QR with the j-TH
+!                                       orthogonal matrix.
+   y = 1.0 - s(j)
+   do k = jp, n
+      sav = qr(j,k)
+      do i = jp, m
+         sav = sav + qr(i,j)*qr(i,k)
+      end do
+      ss = qr(j,k)
+      qr(j,k) = sav/s(j)
+      ss = (ss - qr(j,k))/y
+      do i = jp, m
+         qr(i,k) = qr(i,k) - qr(i,j)*ss
+      end do
+   end do
+80 continue
 end do
 return
-!     Error return
-200 ierr = 1
-return
-210 ierr = 2
-end subroutine cbspl
+90 exit = .false.
+end subroutine ortho
 
-pure subroutine splift(x,y,yp,ypp,n,w,ierr,isx,a1,b1,an,bn)
+subroutine orsol(m, n, qr, ms, s, ip, x)
+!! <!-- nswc-ford:begin ORSOL -->
+!! Reference for `orsol`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!       Identification
+!!         orsol - Least squares solution of a linear system given an
+!!                 orthogonal-triangular factorization of the coefficient
+!!                 matrix produced by subroutine ortho
+!!         Fortran subroutine subprogram
+!!         aerospace research laboratories
+!!         wright-patterson afb, ohio  45433
+!!       purpose
+!!         orsol computes the least squares solution of the linear system
+!!         QRX = Pax = B where Q, R, and P are determined from a by ortho.
+!!       Control
+!!         dimension qr(ms,n), s(n), ip(n), x(m)
+!!
+!!         call orsol(m, n, qr, ms, s, ip, x)
+!!         where
+!!         m  is an integer input variable, the number of rows of A.
+!!         n  is an integer input variable, the number of columns of A
+!!              (1 .LT. n .LE. m).
+!!         QR is a real input array, the orthogonal and triangular factors
+!!            of a produced by ortho.
+!!         ms is an integer input variable, the leading dimension of
+!!            QR in the calling program.
+!!         s  is a real input array, the relevant parts of Q produced by
+!!            ortho.
+!!         ip is an integer input array, the permutation information
+!!            produced by ortho.
+!!         x  as a real input array is the right-hand side B of AX = B.
+!!         x  as a real output array is x(i), i = 1, ..., n, the least
+!!            squares solution, and x(j), j = n+1, ..., m, the vector
+!!            whose length is the minimum of all residual B - AX.
+!!       Method
+!!         the factored system QRX = Pax = PB are solved in the sequence
+!!         of QY = PB and RX = y. full rank for the matrix A is assumed
+!!         which can be checked by interrogating the logical output
+!!         variable produced by ortho.
+!!       References
+!!         (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!!             TIONS by Householder transformations, numer. Math. 7(1965),
+!!             269-276.
+!!         (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
+!!             transformations for linear least squares problems, ARL
+!!             technical report ARL TR 74-0124(1974).
+!! ```
+!! <!-- nswc-ford:end -->
 implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: isx, n
-real, intent(in) :: a1, an, b1, bn
-real, intent(in) :: x(n), y(n)
-real, intent(inout) :: yp(n), ypp(n), w(n,3)
+integer, intent(in) :: ip
+integer, intent(in) :: m, ms, n
+real :: qr(ms,n), s(n)
+real, intent(inout) :: x(m)
+dimension ip(n)
 !     beginning of local variable declarations
-integer :: i, j, nm1, nm2
-real :: dnew, dold, h
-!     Written by Rondall E. Jones
-!        Sandia Laboratories
-!        albuquerque, new mexico  87115
-!        January 1976
-!     abstract
-!         splift fits an interpolating cubic spline to the n data points
-!         given in x and y and returns the first and second derivatives
-!         in yp and ypp.
-!     Description of arguments
-!       --input--
-!         x    - Array of abscissas of data (in increasing order)
-!         y    - Array of ordinates of data
-!         n    - The number of data points.  The arrays x, y, yp, and
-!                ypp must be dimensioned at least n.  (n .GE. 4)
-!         isx  - Must be zero on the initial call to splift.
-!                If a spline is to be fitted to a second set of data
-!                that has the same set of abscissas as a previous set,
-!                and if the contents of w have not been changed since
-!                that previous fit was computed, then isx may be
-!                set to one for faster execution.
-!         a1,b1,an,bn - Specify the end conditions for the spline which
-!                are expressed as constraints on the second derivative
-!                of the spline at the end points (see ypp).
-!                The end condition constraints are
-!                        ypp(1) = a1*ypp(2) + b1
-!                and
-!                        ypp(n) = an*ypp(n-1) + bn
-!                where
-!                        abs(a1).LT. 1.0  AND  abs(an).LT. 1.0.
-!                The smoothest spline (I.E., least integral of square
-!                of second derivative) is obtained by a1=b1=an=bn=0.
-!                In this case there is an inflection at x(1) and x(n).
-!                If the data is to be extrapolated (say, by using splint
-!                to evaluate the spline outside the range x(1) to x(n)),
-!                then taking a1=an=0.5 and b1=bn=0 May yield better
-!                results.  In this case there is an inflection
-!                at x(1) - (x(2)-x(1)) and at x(n) + (x(n)-x(n-1)).
-!                In the more general case of a1=an=A  and b1=bn=0,
-!                there is an inflection at x(1) - (x(2)-x(1))*A/(1.0-A)
-!                and at x(n) + (x(n)-x(n-1))*A/(1.0-A).
-!                A spline that has a given first derivative YP1 at x(1)
-!                and YPN at y(n) may be defined by using the
-!                following conditions.
-!                a1=-0.5
-!                b1= 3.0*((y(2)-y(1))/(x(2)-x(1))-yp1)/(x(2)-x(1))
-!                an=-0.5
-!                bn=-3.0*((y(n)-y(n-1))/(x(n)-x(n-1))-ypn)/(x(n)-x(n-1))
-!       --output--
-!         yp   - Array of first derivatives of spline (at the x(i))
-!         ypp  - Array of second derivatives of spline (at the x(i))
-!         ierr - A status code
-!              --normal code
-!                 0 means that the requested spline was computed.
-!              --Abnormal codes
-!                 1 means that abs(a1) or abs(an) was .GE. 1.
-!                 2 Means that n, the number of points, was .LT. 4.
-!                 3 Means the abscissas were not strictly increasing.
-!       --Work--
-!         w    - Array of working storage dimensioned at least 3n.
-if (abs(a1) >= 1.0 .or. abs(an) >= 1.0) go to 100
-if (n < 4) go to 200
-nm1 = n - 1
-nm2 = n - 2
-if (isx > 0) go to 40
-do i = 2,n
-   if (x(i) <= x(i - 1)) go to 300
+integer :: i, ij, j, jp, k, ni, nm, nn
+real :: sav, ss, y
+!***********************************************************************
+!      Identification
+!        orsol - Least squares solution of a linear system given an
+!                orthogonal-triangular factorization of the coefficient
+!                matrix produced by subroutine ortho
+!        Fortran subroutine subprogram
+!        aerospace research laboratories
+!        wright-patterson afb, ohio  45433
+!      purpose
+!        orsol computes the least squares solution of the linear system
+!        QRX = Pax = B where Q, R, and P are determined from a by ortho.
+!      Control
+!        dimension qr(ms,n), s(n), ip(n), x(m)
+!        .
+!        .
+!        .
+!        call orsol(m, n, qr, ms, s, ip, x)
+!        where
+!        m  is an integer input variable, the number of rows of A.
+!        n  is an integer input variable, the number of columns of A
+!             (1 .LT. n .LE. m).
+!        QR is a real input array, the orthogonal and triangular factors
+!           of a produced by ortho.
+!        ms is an integer input variable, the leading dimension of
+!           QR in the calling program.
+!        s  is a real input array, the relevant parts of Q produced by
+!           ortho.
+!        ip is an integer input array, the permutation information
+!           produced by ortho.
+!        x  as a real input array is the right-hand side B of AX = B.
+!        x  as a real output array is x(i), i = 1, ..., n, the least
+!           squares solution, and x(j), j = n+1, ..., m, the vector
+!           whose length is the minimum of all residual B - AX.
+!      Method
+!        the factored system QRX = Pax = PB are solved in the sequence
+!        of QY = PB and RX = y. full rank for the matrix A is assumed
+!        which can be checked by interrogating the logical output
+!        variable produced by ortho.
+!      References
+!        (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!            TIONS by Householder transformations, numer. Math. 7(1965),
+!            269-276.
+!        (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
+!            transformations for linear least squares problems, ARL
+!            technical report ARL TR 74-0124(1974).
+!***********************************************************************
+nn = n
+if (n == m) nn = n - 1
+do j = 1, nn
+   jp = j + 1
+   ij = ip(j)
+   y = 1.0 - s(j)
+   sav = x(j)
+   x(j) = x(ij)
+   x(ij) = sav
+!                                       Premultiply x with the j-TH
+!                                       orthogonal matrix.
+   sav = x(j)
+   do k = jp, m
+      sav = sav + qr(k,j)*x(k)
+   end do
+   ss = x(j)
+   x(j) = sav/s(j)
+   ss = (ss - x(j))/y
+   do k = jp, m
+      x(k) = x(k) - qr(k,j)*ss
+   end do
 end do
-!     Define the tridiagonal matrix
-w(1,3) = x(2) - x(1)
-do i = 2,nm1
-   w(i,2) = w(i - 1,3)
-   w(i,3) = x(i + 1) - x(i)
-   w(i,1) = 2.0*(w(i,2) + w(i,3))
+!                                       Back substitute to find the
+!                                       least squares solution.
+x(n) = x(n)/qr(n,n)
+nm = n - 1
+do i = 1, nm
+   ni = n - i
+   nn = n
+   do j = 1, i
+      x(ni) = x(ni) - qr(ni,nn)*x(nn)
+      nn = nn - 1
+   end do
+   x(ni) = x(ni)/qr(ni,ni)
 end do
-w(1,1) = 4.0
-w(1,3) = -4.0*a1
-w(n,1) = 4.0
-w(n,2) = -4.0*an
-!     LU decomposition
-do i = 2,n
-   w(i - 1,3) = w(i - 1,3)/w(i - 1,1)
-   w(i,1) = w(i,1) - w(i,2)*w(i - 1,3)
-end do
-!     Define *constant* vector
-40 ypp(1) = 4.0*b1
-dold = (y(2) - y(1))/w(2,2)
-do i = 2,nm2
-   dnew = (y(i + 1) - y(i))/w(i + 1,2)
-   ypp(i) = 6.0*(dnew - dold)
-   yp(i) = dold
-   dold = dnew
-end do
-dnew = (y(n) - y(nm1))/(x(n) - x(nm1))
-ypp(nm1) = 6.0*(dnew - dold)
-ypp(n) = 4.0*bn
-yp(nm1) = dold
-yp(n) = dnew
-!     Forward substitution
-ypp(1) = ypp(1)/w(1,1)
-do i = 2,n
-   ypp(i) = (ypp(i) - w(i,2)*ypp(i - 1))/w(i,1)
-end do
-!     Backward substitution
-do j = 1,nm1
-   i = n - j
-   ypp(i) = ypp(i) - w(i,3)*ypp(i + 1)
-end do
-!     Compute first derivatives
-h = x(2) - x(1)
-yp(1) = (y(2) - y(1))/h - h*(2.0*ypp(1) + ypp(2))/6.0
-do i = 2,nm1
-   yp(i) = yp(i) + w(i,2)*(ypp(i - 1) + 2.0*ypp(i))/6.0
-end do
-yp(n) = yp(n) + (x(n) - x(nm1))*(ypp(nm1) + 2.0*ypp(n))/6.0
-ierr = 0
-return
-100 ierr = 1
-return
-200 ierr = 2
-return
-300 ierr = 3
-end subroutine splift
+end subroutine orsol
 
-pure subroutine spfit(x, y, wgt, m, break, l, z, a, b, c, wk, ierr)
+subroutine orimp(m, n, a, ka, qr, ms, s, ip, b, x, r, exit)
+!! <!-- nswc-ford:begin ORIMP -->
+!! Reference for `orimp`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!       Purpose
+!!         given an approximate least squares solution x of a linear
+!!         system AX = b obtained using orsol. orimp attempts to compute
+!!         an improved solution correct to machine precision.
+!!       Control
+!!         dimension a(ka,n), qr(ms,n), b(m), x(m), r(m), s(n), ip(n)
+!!         logical exit
+!!
+!!         call orimp(m, n, a, ka, qr, ms, s, ip, b, x, r, exit)
+!!         where
+!!         m    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
+!!         n    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A
+!!              (1 .LT. n .LE. m).
+!!         A    IS A REAL INPUT ARRAY, THE GIVEN m BY n MATRIX.
+!!         QR   IS A REAL INPUT ARRAY, THE ORTHOGONAL AND TRIANGULAR
+!!              factors of a produced by ortho.
+!!         b    is a real input array, the right hand side of AX = b.
+!!         x    AS A REAL INPUT ARRAY IS THE APPROXIMATE LEAST SQUARES
+!!              solution together with the residual information produced
+!!              BY orsol.
+!!         x    AS A REAL OUTPUT ARRAY IS THE IMPROVED LEAST SQUARES
+!!              solution with a residual of minimum length.
+!!         r    IS A REAL OUTPUT ARRAY, THE CORRECTION VECTOR ADDED TO x.
+!!         ka   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
+!!              of A in the calling program.
+!!         ms   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
+!!              of QR in the calling program.
+!!         s    IS A REAL INPUT ARRAY, A RELEVANT PART OF Q PRODUCED BY
+!!              ortho.
+!!         ip   IS AN INTEGER INPUT ARRAY, THE PERMUTATION INFORMATION
+!!              produced by ortho.
+!!         Exit is set to the value .TRUE. if improvement of x is success-
+!!              ful with a gain in accuracy of at least 50 per cent each
+!!              iteration and .FALSE. otherwise.
+!!       Method
+!!         orimp executes the iteration cycle
+!!               (1)  AR = b - AX
+!!               (2)  x = x + r
+!!         with a given initial x.  the residual vector b - AX is computed
+!!         to high accuracy by double precision.  orsol is then used to
+!!         solve (1).
+!!
+!!      ********** eps is a machine dependent parameter. Assign eps
+!!                 the value U where U is the smallest positive floating
+!!                 point number such that 1.0 + U .GT. 1.0.
+!! ```
+!! <!-- nswc-ford:end -->
 implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: l, m
-real, intent(in) :: x(m), y(m), wgt(m)
-real, intent(inout) :: break(l)
-real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
+integer, intent(in) :: ip
+integer, intent(in) :: ka, m, ms, n
+real, intent(in) :: a(ka,n), b(m)
+real :: qr(ms,n)
+real, intent(inout) :: r(m)
+real :: s(n)
+real, intent(inout) :: x(m)
+logical, intent(out) :: exit
+dimension ip(n)
 !     beginning of local variable declarations
-integer :: j, k, la, lm1, lq, lw, n
-real :: temp(20)
+integer :: i, j, k, np1
+real :: eps, eps2, rat, ratio, rnrm2, xnrm2
+double precision :: dsum
+real, parameter :: zero = 0.0
+real, parameter :: one = 1.0
+real, parameter :: four = 4.0
+real, parameter :: fourth = 0.25
 interface
-   pure subroutine bslsq(tau,gtau,wgt,ntau,t,n,k,a,wk,q,ierr)
+   pure elemental function spmpar(i)
       implicit none
-      integer, intent(in) :: k
-      integer, intent(in) :: n
-      integer, intent(in) :: ntau
-      real, intent(in) :: tau(ntau)
-      real, intent(in) :: gtau(ntau)
-      real, intent(in) :: wgt(ntau)
-      real, intent(in) :: t(*)
-      real, intent(inout) :: a(n)
-      real, intent(inout) :: wk(n)
-      real, intent(inout) :: q(k,n)
-      integer, intent(inout) :: ierr
-   end subroutine bslsq
-   pure subroutine bspp(t,a,n,k,break,c,l,wk)
-      implicit none
-      integer, intent(in) :: k
-      integer, intent(in) :: n
-      real, intent(in) :: t(*)
-      real, intent(in) :: a(n)
-      real, intent(inout) :: break(*)
-      real, intent(inout) :: c(k,*)
-      integer, intent(out) :: l
-      real, intent(inout) :: wk(k,*)
-   end subroutine bspp
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
 end interface
-!-----------------------------------------------------------------------
-!            Weighted least squares cubic spline fitting
-!-----------------------------------------------------------------------
-!---------------------
-!     real z(l-1), a(l-1), b(l-1), c(l-1), wk(7*l + 18)
-!---------------------
-if (l < 2) go to 100
-n = l + 2
-!                Define the knots for the b-splines
-wk(1) = break(1)
-wk(2) = break(1)
-wk(3) = break(1)
-wk(4) = break(1)
-do j = 2,l
-   if (break(j - 1) >= break(j)) go to 110
-   wk(j + 3) = break(j)
+! ----------------------------------------------------------------------
+!      Purpose
+!        given an approximate least squares solution x of a linear
+!        system AX = b obtained using orsol. orimp attempts to compute
+!        an improved solution correct to machine precision.
+!      Control
+!        dimension a(ka,n), qr(ms,n), b(m), x(m), r(m), s(n), ip(n)
+!        logical exit
+!        .
+!        .
+!        .
+!        call orimp(m, n, a, ka, qr, ms, s, ip, b, x, r, exit)
+!        where
+!        m    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
+!        n    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A
+!             (1 .LT. n .LE. m).
+!        A    IS A REAL INPUT ARRAY, THE GIVEN m BY n MATRIX.
+!        QR   IS A REAL INPUT ARRAY, THE ORTHOGONAL AND TRIANGULAR
+!             factors of a produced by ortho.
+!        b    is a real input array, the right hand side of AX = b.
+!        x    AS A REAL INPUT ARRAY IS THE APPROXIMATE LEAST SQUARES
+!             solution together with the residual information produced
+!             BY orsol.
+!        x    AS A REAL OUTPUT ARRAY IS THE IMPROVED LEAST SQUARES
+!             solution with a residual of minimum length.
+!        r    IS A REAL OUTPUT ARRAY, THE CORRECTION VECTOR ADDED TO x.
+!        ka   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
+!             of A in the calling program.
+!        ms   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
+!             of QR in the calling program.
+!        s    IS A REAL INPUT ARRAY, A RELEVANT PART OF Q PRODUCED BY
+!             ortho.
+!        ip   IS AN INTEGER INPUT ARRAY, THE PERMUTATION INFORMATION
+!             produced by ortho.
+!        Exit is set to the value .TRUE. if improvement of x is success-
+!             ful with a gain in accuracy of at least 50 per cent each
+!             iteration and .FALSE. otherwise.
+!      Method
+!        orimp executes the iteration cycle
+!              (1)  AR = b - AX
+!              (2)  x = x + r
+!        with a given initial x.  the residual vector b - AX is computed
+!        to high accuracy by double precision.  orsol is then used to
+!        solve (1).
+! ----------------------------------------------------------------------
+!     ********** eps is a machine dependent parameter. Assign eps
+!                the value U where U is the smallest positive floating
+!                point number such that 1.0 + U .GT. 1.0.
+eps = spmpar(1)
+exit = .true.
+np1 = n + 1
+eps2 = eps*eps
+xnrm2 = zero
+do i = 1,n
+   xnrm2 = xnrm2 + x(i)*x(i)
 end do
-wk(l + 4) = break(l)
-wk(l + 5) = break(l)
-wk(l + 6) = break(l)
-!     Obtain the b-spline coefficients of the least squares fit
-la = n + 5
-lw = la + n
-lq = lw + n
-call bslsq(x, y, wgt, m, wk(1), n, 4, wk(la), &
-   & wk(lw), wk(lq), ierr)
-if (ierr < 0) go to 120
-ierr = 0
-!     Obtain the coefficients of the fit in Taylor series form
-call bspp(wk(1), wk(la), n, 4, break, &
-   & wk(lq), lm1, temp)
-k = lq
-do j = 1,lm1
-   z(j) = wk(k)
-   a(j) = wk(k + 1)
-   b(j) = wk(k + 2)
-   c(j) = wk(k + 3)
-   k = k + 4
+if (xnrm2 == zero) return
+ratio = one
+!                                       Find the residual vector.
+20 do k = 1,m
+   dsum = b(k)
+   do j = 1,n
+      dsum = dsum - dble(a(k,j))*dble(x(j))
+   end do
+   r(k) = dsum
 end do
-return
-!                       Error return
-100 ierr = 1
-return
-110 ierr = 2
-return
-120 ierr = 3
-end subroutine spfit
-
-subroutine cspfit(x, y, m, break, l, xcon, con, nder, nc, &
-   & z, a, b, c, wk, iwk, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: l, m, nc
-real, intent(in) :: x(m), y(m)
-real, intent(inout) :: break(l)
-real, intent(in) :: xcon(*), con(*)
-real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
-integer, intent(in) :: nder(*)
-integer, intent(inout) :: iwk(*)
-!     beginning of local variable declarations
-integer :: j, k, la, lm1, lw, n
-real :: r, temp(20)
-!-----------------------------------------------------------------------
-!                Least squares cubic spline fitting with
-!                  equality and inequality constraints
-!-----------------------------------------------------------------------
-!---------------------
-!     xcon, con, nder are arrays of dimension max(1,nc).
-!     z, A, b, c are arrays of dimension l - 1.
-!     wk and iwk are arrays of dimension iwk(1) and iwk(2)
-!        respectively. It is required that iwk(2) .GE. 2
-!        and iwk(1) .GE. 7(l + 7) for all nc. If nc .GE. 1
-!        then more storage will be needed.
-!---------------------
-if (l < 2) go to 100
-n = l + 2
-!                Define the knots for the b-splines
-wk(1) = break(1)
-wk(2) = break(1)
-wk(3) = break(1)
-wk(4) = break(1)
-do j = 2,l
-   if (break(j - 1) >= break(j)) go to 110
-   wk(j + 3) = break(j)
+!                                       Find the correction vector.
+call orsol(m, n, qr, ms, s, ip, r)
+rnrm2 = zero
+do k = 1,n
+   rnrm2 = rnrm2 + r(k)*r(k)
 end do
-wk(l + 4) = break(l)
-wk(l + 5) = break(l)
-wk(l + 6) = break(l)
-!     Obtain the b-spline coefficients of the least squares fit
-k = 7*n + 35
-if (iwk(1) < k) go to 120
-la = n + 5
-lw = la + n
-ierr = 0
-k = lw - 1
-iwk(1) = iwk(1) - k
-call bfit(wk(1), n, 4, x, y, m, xcon, con, nder, nc, ierr, &
-   & wk(la), r, wk(lw), iwk)
-iwk(1) = iwk(1) + k
-if (ierr < 0 .or. ierr == 2) return
-!     Obtain the coefficients of the fit in Taylor series form
-call bspp(wk(1), wk(la), n, 4, break, &
-   & wk(lw), lm1, temp)
-k = lw
-do j = 1,lm1
-   z(j) = wk(k)
-   a(j) = wk(k + 1)
-   b(j) = wk(k + 2)
-   c(j) = wk(k + 3)
-   k = k + 4
+if (rnrm2 <= eps2*xnrm2) return
+!                                       Form new approximate solution.
+do k = 1,n
+   x(k) = x(k) + r(k)
 end do
-return
-!                       Error return
-100 ierr = -1
-return
-110 ierr = -3
-return
-120 ierr = -6
-iwk(1) = k
-end subroutine cspfit
+xnrm2 = zero
+do k = 1,n
+   xnrm2 = xnrm2 + x(k)*x(k)
+end do
+if (m == n) go to 50
+do k = np1,m
+   x(k) = r(k)
+end do
+50 if (xnrm2 == zero) return
+rat = ratio
+ratio = rnrm2/xnrm2
+if (ratio <= fourth*rat) go to 20
+if (ratio <= min(rat,four*eps2)) return
+exit = .false.
+end subroutine orimp
 
-pure subroutine scomp(x,y,a,b,c,n,xi,yi,ni,ierr)
+pure subroutine dllsq(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
+!! <!-- nswc-ford:begin DLLSQ -->
+!! Reference for `dllsq`.
+!!
+!! No introductory description is present in the original source.
+!! The signature below records the declared arguments and their available intents;
+!! consult the source and chapter manual for algorithm details.
+!! <!-- nswc-ford:end -->
 implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
-real, intent(inout) :: yi(ni)
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, m, n, nb
+double precision, intent(inout) :: a(ka,n), b(kb,nb), wk(n)
+integer, intent(inout) :: iwk(n)
 !     beginning of local variable declarations
-integer :: i, il, ir, k
-real :: dx, xx, nswc_ai_r4
-!     Abstract
-!         scomp evaluates a cubic spline at the abscissas in xi.
-!         It is assumed that the coefficients of the polynomials
-!         which form the spline are provided.
-!     Description of arguments
-!       --input--
-!         x   - Array of the first n abscissas (in increasing order)
-!               that define the spline.
-!         y   - Array of the first n ordinates that define the spline.
-!         A,b,c arrays that contain the coefficients of the polynomials
-!               which form the spline. If i = 1,...,n  then the spline
-!               has the value
-!                    y(i) + a(i)*dx + b(i)*dx**2 + c(i)*dx**3
-!               FOR x(i) .LE. xx .LE. x(i+1).  HERE dx = xx-x(i).
-!         n   - The number of polynomials that define the spline.
-!               The arrays x, y, A, b, c  must be dimensioned at
-!               least n.  n must be greater than or equal to 1.
-!         xi  - The abscissa or array of abscissas (in arbitrary order)
-!               at which the spline is to be evaluated.
-!         ni  - The number of abscissas at which the spline is to be
-!               evaluated.  If ni is greater than 1 then xi and yi
-!               must be arrays of dimension ni or larger.
-!               It is assumed that ni is greater than or equal to 1.
-!       --Output--
-!         yi  - Array of values of the spline (ordinates) at xi.
-!         ierr- status code
-!               0  the spline was evaluated at each abscissa in xi.
-!               1  Input error - ni is not positive.
-!     Check input
-if (ni > 0) go to 1
-ierr = 1
-return
-1 ierr = 0
-!     k is index on value of xi being worked on.  xx is that value.
-!     i is current index into x array.
-k = 1
-xx = xi(1)
-if (xx < x(1)) go to 90
-if (xx >= x(n)) go to 80
-il = 1
-ir = n
-!     Bisection search
-10 i = (il + ir)/2
-if (i == il) go to 100
-nswc_ai_r4 = xx - x(i)
-if (nswc_ai_r4 < 0) go to 20
-if (nswc_ai_r4 == 0) go to 100
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!     Linear forward search
-50 if (xx < x(i + 1)) go to 100
-i = i + 1
-go to 50
-!     xx is greater than x(n) or less than x(1)
-80 i = n
-go to 100
-90 i = 1
-!     Evaluation
-100 dx = xx - x(i)
-yi(k) = y(i) + dx*(a(i) + dx*(b(i) + dx*c(i)))
-!     Next point
-if (k >= ni) return
-k = k + 1
-xx = xi(k)
-if (xx < x(1)) go to 90
-if (xx >= x(n)) go to 80
-nswc_ai_r4 = xx - xi(k - 1)
-if (nswc_ai_r4 < 0) go to 110
-if (nswc_ai_r4 == 0) go to 100
-go to 50
-110 il = 1
-ir = min(i + 1,n)
-go to 10
-end subroutine scomp
-
-pure subroutine scomp1(x,y,yp,n,xi,yi,ni,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), yp(n), xi(ni)
-real, intent(inout) :: yi(ni)
-!     beginning of local variable declarations
-integer :: i, il, ir, k, nm1
-real :: a, b, c, d, dx, h, xx, nswc_ai_r4
-!     Abstract
-!         scomp1 evaluates a cubic spline at the abscissas in xi.
-!         It is assumed that the first derivatives at the nodes
-!         have been provided.
-!     Description of arguments
-!       --input--
-!         x   - Array of abscissas (in increasing order) that define the
-!               spline.
-!         y   - Array of ordinates that define the spline.
-!         yp  - Array of first derivatives that define the spline.
-!         n   - The number of data points that define the spline.
-!               The arrays x, y, and yp must be dimensioned at least n.
-!               n must be greater than or equal to 2.
-!         xi  - The abscissa or array of abscissas (in arbitrary order)
-!               at which the spline is to be evaluated.
-!         ni  - The number of abscissas at which the spline is to be
-!               evaluated.  If ni is greater than 1 then xi and yi
-!               must be arrays of dimension ni or larger.
-!               It is assumed that ni is greater than or equal to 1.
-!       --Output--
-!         yi  - Array of values of the spline (ordinates) at xi.
-!         ierr- status code
-!               0  the spline was evaluated at each abscissa in xi.
-!               1  Input error - ni is not positive.
-!     Check input
-if (ni > 0) go to 1
-ierr = 1
-return
-1 ierr = 0
-nm1 = n - 1
-!     k is index on value of xi being worked on.  xx is that value.
-!     i is current index into x array.
-k = 1
-xx = xi(1)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-il = 1
-ir = nm1
-!     Bisection search
-10 i = (il + ir)/2
-if (i == il) go to 100
-nswc_ai_r4 = xx - x(i)
-if (nswc_ai_r4 < 0) go to 20
-if (nswc_ai_r4 == 0) go to 100
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!     Linear forward search
-50 if (xx < x(i + 1)) go to 100
-i = i + 1
-go to 50
-!     xx is greater than x(n) or less than x(1)
-80 i = nm1
-go to 100
-90 i = 1
-!     Evaluation
-100 h = x(i + 1) - x(i)
-d = (y(i + 1) - y(i))/h
-a = yp(i) + yp(i + 1)
-b = (-a - yp(i) + 3.0*d)/h
-c = (a - d - d)/(h*h)
-dx = xx - x(i)
-yi(k) = y(i) + dx*(yp(i) + dx*(b + dx*c))
-!     Next point
-if (k >= ni) return
-k = k + 1
-xx = xi(k)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi(k - 1)
-if (nswc_ai_r4 < 0) go to 110
-if (nswc_ai_r4 == 0) go to 100
-go to 50
-110 il = 1
-ir = min(i + 1,nm1)
-go to 10
-end subroutine scomp1
-
-pure subroutine scomp2(x,y,ypp,n,xi,yi,ni,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
-real, intent(inout) :: yi(ni)
-!     beginning of local variable declarations
-integer :: i, il, ir, k, nm1
-real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
-!     Abstract
-!         scomp2 evaluates a cubic spline at the abscissas in xi.
-!         It is assumed that the second derivatives at the nodes
-!         have been provided.
-!     Description of arguments
-!       --input--
-!         x   - Array of abscissas (in increasing order) that define the
-!               spline.
-!         y   - Array of ordinates that define the spline.
-!         ypp - Array of second derivatives that define the spline.
-!         n   - The number of data points that define the spline.
-!               The arrays x, y, and ypp must be dimensioned at least n.
-!               n must be greater than or equal to 2.
-!         xi  - The abscissa or array of abscissas (in arbitrary order)
-!               at which the spline is to be evaluated.
-!         ni  - The number of abscissas at which the spline is to be
-!               evaluated.  If ni is greater than 1 then xi and yi
-!               must be arrays of dimension ni or larger.
-!               It is assumed that ni is greater than or equal to 1.
-!       --Output--
-!         yi  - Array of values of the spline (ordinates) at xi.
-!         ierr- status code
-!               0  the spline was evaluated at each abscissa in xi.
-!               1  Input error - ni is not positive.
-!     Check input
-if (ni > 0) go to 1
-ierr = 1
-return
-1 ierr = 0
-nm1 = n - 1
-!     k is index on value of xi being worked on.  xx is that value.
-!     i is current index into x array.
-k = 1
-xx = xi(1)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-il = 1
-ir = nm1
-!     Bisection search
-10 i = (il + ir)/2
-if (i == il) go to 100
-nswc_ai_r4 = xx - x(i)
-if (nswc_ai_r4 < 0) go to 20
-if (nswc_ai_r4 == 0) go to 100
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!     Linear forward search
-50 if (xx < x(i + 1)) go to 100
-i = i + 1
-go to 50
-!     xx is greater than x(n) or less than x(1)
-80 i = nm1
-go to 100
-90 i = 1
-!     Evaluation
-100 h = x(i + 1) - x(i)
-h2 = h*h
-xr = (x(i + 1) - xx)/h
-xr2 = xr*xr
-xr3 = xr*xr2
-xl = (xx - x(i))/h
-xl2 = xl*xl
-xl3 = xl*xl2
-yi(k) = y(i)*xr + y(i + 1)*xl &
-   & - h2*(ypp(i)*(xr - xr3) + ypp(i + 1)*(xl - xl3))/6.0
-!     Next point
-if (k >= ni) return
-k = k + 1
-xx = xi(k)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi(k - 1)
-if (nswc_ai_r4 < 0) go to 110
-if (nswc_ai_r4 == 0) go to 100
-go to 50
-110 il = 1
-ir = min(i + 1,nm1)
-go to 10
-end subroutine scomp2
-
-pure subroutine seval(x,y,a,b,c,n,xi,yi,ypi,yppi,ni,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
-real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
-!     beginning of local variable declarations
-integer :: i, il, ir, k
-real :: bi, ci, dx, xx, nswc_ai_r4
-!     Abstract
-!         seval evaluates a cubic spline and its first and second
-!         derivatives at the abscissas in xi.  It is assumed that
-!         the coefficients of the polynomials which form the spline
-!         are provided.
-!     Description of arguments
-!       --input--
-!         x   - Array of the first n abscissas (in increasing order)
-!               that define the spline.
-!         y   - Array of the first n ordinates that define the spline.
-!         A,b,c arrays that contain the coefficients of the polynomials
-!               which form the spline. If i = 1,...,n  then the spline
-!               has the value
-!                    y(i) + a(i)*dx + b(i)*dx**2 + c(i)*dx**3
-!               FOR x(i) .LE. xx .LE. x(i+1).  HERE dx = xx-x(i).
-!         n   - The number of polynomials that define the spline.
-!               The arrays x, y, A, b, c  must be dimensioned at
-!               least n.  n must be greater than or equal to 1.
-!         xi  - The abscissa or array of abscissas (in arbitrary order)
-!               at which the spline is to be evaluated.
-!         ni  - The number of abscissas at which the spline is to be
-!               evaluated.  If ni is greater than 1, then xi, yi, ypi,
-!               and yppi must be arrays dimensioned at least ni.
-!               ni must be greater than or equal to 1.
-!       --Output--
-!         yi  - Array of values of the spline (ordinates) at xi.
-!         ypi - Array of values of the first derivative of spline at xi.
-!         yppi- array of values of second derivatives of spline at xi.
-!         ierr- status code
-!               0  the spline was evaluated at each abscissa in xi.
-!               1  Input error - ni is not positive.
-!     Check input
-if (ni > 0) go to 1
-ierr = 1
-return
-1 ierr = 0
-!     k is index on value of xi being worked on.  xx is that value.
-!     i is current index into x array.
-k = 1
-xx = xi(1)
-if (xx < x(1)) go to 90
-if (xx >= x(n)) go to 80
-il = 1
-ir = n
-!     Bisection search
-10 i = (il + ir)/2
-if (i == il) go to 100
-nswc_ai_r4 = xx - x(i)
-if (nswc_ai_r4 < 0) go to 20
-if (nswc_ai_r4 == 0) go to 100
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!     Linear forward search
-50 if (xx < x(i + 1)) go to 100
-i = i + 1
-go to 50
-!     xx is greater than x(n) or less than x(1)
-80 i = n
-go to 100
-90 i = 1
-!     Evaluation
-100 dx = xx - x(i)
-yi(k) = y(i) + dx*(a(i) + dx*(b(i) + dx*c(i)))
-bi = b(i) + b(i)
-ci = 3.0*c(i)
-ypi(k) = a(i) + dx*(bi + dx*ci)
-yppi(k) = bi + dx*(ci + ci)
-!     Next point
-if (k >= ni) return
-k = k + 1
-xx = xi(k)
-if (xx < x(1)) go to 90
-if (xx >= x(n)) go to 80
-nswc_ai_r4 = xx - xi(k - 1)
-if (nswc_ai_r4 < 0) go to 110
-if (nswc_ai_r4 == 0) go to 100
-go to 50
-110 il = 1
-ir = min(i + 1,n)
-go to 10
-end subroutine seval
-
-pure subroutine seval1(x,y,yp,n,xi,yi,ypi,yppi,ni,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), yp(n), xi(ni)
-real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
-!     beginning of local variable declarations
-integer :: i, il, ir, k, nm1
-real :: a, b, c, d, dx, h, xx, nswc_ai_r4
-!     Abstract
-!         seval1 evaluates a cubic spline and its first and second
-!         derivatives at the abscissas in xi.  It is assumed that
-!         the first derivatives at the nodes have been provided.
-!     Description of arguments
-!       --input--
-!         x   - Array of abscissas (in increasing order) that define the
-!               spline.
-!         y   - Array of ordinates that define the spline.
-!         yp  - Array of first derivatives that define the spline.
-!         n   - The number of data points that define the spline.
-!               The arrays x, y, and yp must be dimensioned at least n.
-!               n must be greater than or equal to 2.
-!         xi  - The abscissa or array of abscissas (in arbitrary order)
-!               at which the spline is to be evaluated.
-!         ni  - The number of abscissas at which the spline is to be
-!               evaluated.  If ni is greater than 1, then xi, yi, ypi,
-!               and yppi must be arrays dimensioned at least ni.
-!               ni must be greater than or equal to 1.
-!       --Output--
-!         yi  - Array of values of the spline (ordinates) at xi.
-!         ypi - Array of values of the first derivative of spline at xi.
-!         yppi- array of values of second derivatives of spline at xi.
-!         ierr- status code
-!               0  the spline was evaluated at each abscissa in xi.
-!               1  Input error - ni is not positive.
-!     Check input
-if (ni > 0) go to 1
-ierr = 1
-return
-1 ierr = 0
-nm1 = n - 1
-!     k is index on value of xi being worked on.  xx is that value.
-!     i is current index into x array.
-k = 1
-xx = xi(1)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-il = 1
-ir = nm1
-!     Bisection search
-10 i = (il + ir)/2
-if (i == il) go to 100
-nswc_ai_r4 = xx - x(i)
-if (nswc_ai_r4 < 0) go to 20
-if (nswc_ai_r4 == 0) go to 100
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!     Linear forward search
-50 if (xx < x(i + 1)) go to 100
-i = i + 1
-go to 50
-!     xx is greater than x(n) or less than x(1)
-80 i = nm1
-go to 100
-90 i = 1
-!     Evaluation
-100 h = x(i + 1) - x(i)
-d = (y(i + 1) - y(i))/h
-a = yp(i) + yp(i + 1)
-b = (-a - yp(i) + 3.0*d)/h
-c = (a - d - d)/(h*h)
-dx = xx - x(i)
-yi(k) = y(i) + dx*(yp(i) + dx*(b + dx*c))
-b = b + b
-c = 3.0*c
-ypi(k) = yp(i) + dx*(b + dx*c)
-yppi(k) = b + dx*(c + c)
-!     Next point
-if (k >= ni) return
-k = k + 1
-xx = xi(k)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi(k - 1)
-if (nswc_ai_r4 < 0) go to 110
-if (nswc_ai_r4 == 0) go to 100
-go to 50
-110 il = 1
-ir = min(i + 1,nm1)
-go to 10
-end subroutine seval1
-
-pure subroutine seval2(x,y,ypp,n,xi,yi,ypi,yppi,ni,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
-real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
-!     beginning of local variable declarations
-integer :: i, il, ir, k, nm1
-real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
-!     Abstract
-!         seval2 evaluates a cubic spline and its first and second
-!         derivatives at the abscissas in xi.  It is assumed that
-!         the second derivatives at the nodes have been provided.
-!     Description of arguments
-!       --input--
-!         x   - Array of abscissas (in increasing order) that define the
-!               spline.
-!         y   - Array of ordinates that define the spline.
-!         ypp - Array of second derivatives that define the spline.
-!         n   - The number of data points that define the spline.
-!               The arrays x, y, and ypp must be dimensioned at least n.
-!               n must be greater than or equal to 2.
-!         xi  - The abscissa or array of abscissas (in arbitrary order)
-!               at which the spline is to be evaluated.
-!         ni  - The number of abscissas at which the spline is to be
-!               evaluated.  If ni is greater than 1, then xi, yi, ypi,
-!               and yppi must be arrays dimensioned at least ni.
-!               ni must be greater than or equal to 1.
-!       --Output--
-!         yi  - Array of values of the spline (ordinates) at xi.
-!         ypi - Array of values of the first derivative of spline at xi.
-!         yppi- array of values of second derivatives of spline at xi.
-!         ierr- status code
-!               0  the spline was evaluated at each abscissa in xi.
-!               1  Input error - ni is not positive.
-!     Check input
-if (ni > 0) go to 1
-ierr = 1
-return
-1 ierr = 0
-nm1 = n - 1
-!     k is index on value of xi being worked on.  xx is that value.
-!     i is current index into x array.
-k = 1
-xx = xi(1)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-il = 1
-ir = nm1
-!     Bisection search
-10 i = (il + ir)/2
-if (i == il) go to 100
-nswc_ai_r4 = xx - x(i)
-if (nswc_ai_r4 < 0) go to 20
-if (nswc_ai_r4 == 0) go to 100
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!     Linear forward search
-50 if (xx < x(i + 1)) go to 100
-i = i + 1
-go to 50
-!     xx is greater than x(n) or less than x(1)
-80 i = nm1
-go to 100
-90 i = 1
-!     Evaluation
-100 h = x(i + 1) - x(i)
-h2 = h*h
-xr = (x(i + 1) - xx)/h
-xr2 = xr*xr
-xr3 = xr*xr2
-xl = (xx - x(i))/h
-xl2 = xl*xl
-xl3 = xl*xl2
-yi(k) = y(i)*xr + y(i + 1)*xl &
-   & - h2*(ypp(i)*(xr - xr3) + ypp(i + 1)*(xl - xl3))/6.0
-ypi(k) = (y(i + 1) - y(i))/h &
-   & + h*(ypp(i)*(1.0 - 3.0*xr2) - ypp(i + 1)*(1.0 - 3.0*xl2))/6.0
-yppi(k) = ypp(i)*xr + ypp(i + 1)*xl
-!     Next point
-if (k >= ni) return
-k = k + 1
-xx = xi(k)
-if (xx < x(1)) go to 90
-if (xx >= x(nm1)) go to 80
-nswc_ai_r4 = xx - xi(k - 1)
-if (nswc_ai_r4 < 0) go to 110
-if (nswc_ai_r4 == 0) go to 100
-go to 50
-110 il = 1
-ir = min(i + 1,nm1)
-go to 10
-end subroutine seval2
-
-pure real function csint(x, y, a, b, c, n, alpha, beta)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: alpha, beta
-real, intent(in) :: x(n), y(n), a(n), b(n), c(n)
-!     beginning of local variable declarations
-integer :: i, k, kp1, l, lm1
-real :: a0, b0, d, d2, h, h2, r, s, sum
+integer :: i, j, np1
+double precision :: rnorm
+logical :: exit
 interface
-   pure function intrvl(x,t,m)
+   pure subroutine dorsol(m,n,qr,ms,s,ip,x)
       implicit none
-      integer, intent(in) :: m
-      real, intent(in) :: x
-      real, intent(in) :: t(m)
-      integer :: intrvl
-   end function intrvl
-end interface
-!-----------------------------------------------------------------------
-!                    Integrating a cubic spline
-!                         --------------
-!     x      ARRAY OF THE FIRST n ABSCISSAS (IN INCREASING ORDER)
-!            that define the spline.
-!     y      ARRAY OF THE FIRST n ORDINATES THAT DEFINE THE SPLINE.
-!     A,b,c  arrays that contain the coefficients of the polynomials
-!            which form the spline. If i = 1,...,n  then the spline
-!            has the value
-!                    y(i) + a(i)*DX + b(i)*DX**2 + c(i)*DX**3
-!            FOR x(i) .LE. XX .LE. x(i+1). HERE DX = XX - x(i).
-!     n      THE NUMBER OF POLYNOMIALS THAT DEFINE THE SPLINE.
-!            The arrays x, y, A, b, c  must be dimensioned at
-!            least n.  n must be greater than or equal to 1.
-!     alpha  lower limit of the integral.
-!     beta   UPPER LIMIT OF THE INTEGRAL. beta MAY BE LESS THAN
-!            or greater than alpha.
-!-----------------------------------------------------------------------
-csint = 0.0
-h = beta - alpha
-if (h == 0.0) return
-if (h > 0.0) go to 10
-a0 = beta
-b0 = alpha
-go to 20
-10 a0 = alpha
-b0 = beta
-!     Locate the intervals containing a0 and b0
-20 if (n == 1) go to 50
-if (a0 >= x(n)) go to 50
-k = intrvl(a0, x, n)
-l = intrvl(b0, x, n)
-if (b0 >= x(n)) l = n
-if (k == l) go to 51
-!     Integrate from a0 to x(k + 1)
-kp1 = k + 1
-h = x(kp1) - x(k)
-d = a0 - x(k)
-r = h + d
-h2 = h*h
-d2 = d*d
-s = h2 + d2
-sum = y(k) + 0.5*a(k)*r + b(k)*(s + h*d)/3.0 &
-   & + 0.25*c(k)*r*s
-sum = (x(kp1) - a0)*sum
-!     Integrate over the interior intervals
-if (kp1 == l) go to 40
-lm1 = l - 1
-do i = kp1,lm1
-   h = x(i + 1) - x(i)
-   s = (((0.25*c(i)*h + b(i)/3.0)*h + 0.5*a(i))*h + y(i))*h
-   sum = sum + s
-end do
-!     Integrate from x(l) to b0
-40 h = b0 - x(l)
-s = (((0.25*c(l)*h + b(l)/3.0)*h + 0.5*a(l))*h + y(l))*h
-csint = sum + s
-if (alpha > beta) csint = -csint
-return
-!     Case when a0 and b0 are in the same interval
-50 k = n
-51 h = b0 - x(k)
-d = a0 - x(k)
-r = h + d
-h2 = h*h
-d2 = d*d
-s = h2 + d2
-sum = y(k) + 0.5*a(k)*r + b(k)*(s + h*d)/3.0 &
-   & + 0.25*c(k)*r*s
-csint = (beta - alpha)*sum
-end function csint
-
-pure real function csint1(x, y, yp, n, a, b)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: a, b
-real, intent(in) :: x(n), y(n), yp(n)
-!     beginning of local variable declarations
-integer :: i, ip1, k, kp1, l, lm1, lp1
-real :: a0, b0, bi, ci, d, d2, h, h2, r, s, sum
-interface
-   pure function intrvl(x,t,m)
-      implicit none
-      integer, intent(in) :: m
-      real, intent(in) :: x
-      real, intent(in) :: t(m)
-      integer :: intrvl
-   end function intrvl
-end interface
-!-----------------------------------------------------------------------
-!                    Integrating a cubic spline
-!                         --------------
-!     x    ARRAY OF THE FIRST n ABSCISSAS (IN INCREASING ORDER)
-!          that define the spline.
-!     y    ARRAY OF THE FIRST n ORDINATES THAT DEFINE THE SPLINE.
-!     yp   ARRAY OF THE FIRST DERIVATIVES THAT DEFINE THE SPLINE.
-!     n    THE NUMBER OF KNOTS OF THE SPLINE. THE ARRAYS x, y,
-!          and yp must have dimension at least n where n .GE. 2.
-!     A    LOWER LIMIT OF THE INTEGRAL.
-!     b    UPPER LIMIT OF THE INTEGRAL. b MAY BE LESS THAN
-!          or greater than A.
-!-----------------------------------------------------------------------
-csint1 = 0.0
-h = b - a
-if (h == 0.0) return
-if (h > 0.0) go to 10
-a0 = b
-b0 = a
-go to 20
-10 a0 = a
-b0 = b
-!     Locate the intervals containing a0 and b0
-20 k = intrvl(a0, x, n)
-l = intrvl(b0, x, n)
-if (k == l) go to 50
-!     Integrate from a0 to x(k + 1)
-kp1 = k + 1
-h = x(kp1) - x(k)
-d = (y(kp1) - y(k))/h
-r = yp(k) + yp(kp1)
-bi = (-r - yp(k) + 3.0*d)/h
-ci = (r - d - d)/(h*h)
-d = a0 - x(k)
-r = h + d
-h2 = h*h
-d2 = d*d
-s = h2 + d2
-sum = y(k) + 0.5*yp(k)*r + bi*(s + h*d)/3.0 &
-   & + 0.25*ci*r*s
-sum = (x(kp1) - a0)*sum
-!     Integrate over the interior intervals
-if (kp1 == l) go to 40
-lm1 = l - 1
-do i = kp1,lm1
-   ip1 = i + 1
-   h = x(ip1) - x(i)
-   d = (y(ip1) - y(i))/h
-   r = yp(i) + yp(ip1)
-   bi = (-r - yp(i) + 3.0*d)/h
-   ci = (r - d - d)/(h*h)
-   s = (((0.25*ci*h + bi/3.0)*h + 0.5*yp(i))*h + y(i))*h
-   sum = sum + s
-end do
-!     Integrate from x(l) to b0
-40 lp1 = l + 1
-h = x(lp1) - x(l)
-d = (y(lp1) - y(l))/h
-r = yp(l) + yp(lp1)
-bi = (-r - yp(l) + 3.0*d)/h
-ci = (r - d - d)/(h*h)
-h = b0 - x(l)
-s = (((0.25*ci*h + bi/3.0)*h + 0.5*yp(l))*h + y(l))*h
-csint1 = sum + s
-if (a > b) csint1 = -csint1
-return
-!     Case when a0 and b0 are in the same interval
-50 kp1 = k + 1
-h = x(kp1) - x(k)
-d = (y(kp1) - y(k))/h
-r = yp(k) + yp(kp1)
-bi = (-r - yp(k) + 3.0*d)/h
-ci = (r - d - d)/(h*h)
-h = b0 - x(k)
-d = a0 - x(k)
-r = h + d
-h2 = h*h
-d2 = d*d
-s = h2 + d2
-sum = y(k) + 0.5*yp(k)*r + bi*(s + h*d)/3.0 &
-   & + 0.25*ci*r*s
-csint1 = (b - a)*sum
-end function csint1
-
-pure real function csint2(x, y, ypp, n, a, b)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: a, b
-real, intent(in) :: x(n), y(n), ypp(n)
-!     beginning of local variable declarations
-integer :: i, ip1, k, kp1, l, lm1, lp1
-real :: a0, b0, d, dma, dmb, dpa, dpb, h, r, s, sum
-interface
-   pure function intrvl(x,t,m)
-      implicit none
-      integer, intent(in) :: m
-      real, intent(in) :: x
-      real, intent(in) :: t(m)
-      integer :: intrvl
-   end function intrvl
-end interface
-!-----------------------------------------------------------------------
-!                    Integrating a cubic spline
-!                         --------------
-!     x    ARRAY OF THE FIRST n ABSCISSAS (IN INCREASING ORDER)
-!          that define the spline.
-!     y    ARRAY OF THE FIRST n ORDINATES THAT DEFINE THE SPLINE.
-!     ypp  array of the second derivatives that define the spline.
-!     n    THE NUMBER OF KNOTS OF THE SPLINE. THE ARRAYS x, y,
-!          and ypp must have dimension at least n where n .GE. 2.
-!     A    LOWER LIMIT OF THE INTEGRAL.
-!     b    UPPER LIMIT OF THE INTEGRAL. b MAY BE LESS THAN
-!          or greater than A.
-!-----------------------------------------------------------------------
-csint2 = 0.0
-h = b - a
-if (h == 0.0) return
-if (h > 0.0) go to 10
-a0 = b
-b0 = a
-go to 20
-10 a0 = a
-b0 = b
-!     Locate the intervals containing a0 and b0
-20 k = intrvl(a0, x, n)
-l = intrvl(b0, x, n)
-if (k == l) go to 50
-!     Integrate from a0 to x(k + 1)
-kp1 = k + 1
-h = x(kp1) - x(k)
-d = (x(kp1) - a0)/h
-r = y(k)*d + y(kp1)*(2.0 - d)
-s = ypp(k)*(2.0 - d*d) + ypp(kp1)*(2.0 - d)**2
-sum = h*d*(0.5*r - h*h*d*s/24.0)
-!     Integrate over the interior intervals
-if (kp1 == l) go to 40
-lm1 = l - 1
-do i = kp1,lm1
-   ip1 = i + 1
-   h = x(ip1) - x(i)
-   r = y(i) + y(ip1)
-   s = ypp(i) + ypp(ip1)
-   sum = sum + h*(0.5*r - h*h*s/24.0)
-end do
-!     Integrate from x(l) to b0
-40 lp1 = l + 1
-h = x(lp1) - x(l)
-d = (b0 - x(l))/h
-r = y(l)*(2.0 - d) + y(lp1)*d
-s = ypp(l)*(2.0 - d)**2 + ypp(lp1)*(2.0 - d*d)
-csint2 = sum + h*d*(0.5*r - h*h*d*s/24.0)
-if (a > b) csint2 = -csint2
-return
-!     Case when a0 and b0 are in the same interval
-50 kp1 = k + 1
-h = x(kp1) - x(k)
-dma = (a - x(k))/h
-dmb = (b - x(k))/h
-dpa = (x(kp1) - a)/h
-dpb = (x(kp1) - b)/h
-r = (dpa + dpb)*y(k) + (dma + dmb)*y(kp1)
-s = ypp(k) * (dpa + dpb)*(dma*(2.0 - dma) + dmb*(2.0 - dmb)) + &
-   & ypp(kp1)*(dma + dmb)*(dpa*(2.0 - dpa) + dpb*(2.0 - dpb))
-csint2 = (b - a)*(0.5*r - h*h*s/24.0)
-end function csint2
-
-pure subroutine pdspl(x, y, a, b, c, n, t, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: n
-real, intent(in) :: x(n), y(*)
-real, intent(inout) :: a(*), b(*), c(*), t(*)
-!     beginning of local variable declarations
-integer :: i, j, nm1, nm2, nm3
-real :: alpha, del, del0, deli, delta, e, h, hi, r, s, si, w
-!-----------------------------------------------------------------------
-!                Periodic cubic spline interpolation
-!-----------------------------------------------------------------------
-!----------------------
-!     real x(n), y(n-1), a(n-1), b(n-1), c(n-1), t(n-2)
-!----------------------
-if (n < 3) go to 100
-nm1 = n - 1
-nm2 = n - 2
-nm3 = n - 3
-!     A strictly diagonally dominant set of equations for the
-!     slopes s(i) of the spline at x(i) (i = 1,...,n-1) is
-!     generated and solved by Gauss elimination. The first of
-!     these equations is obtained from the requirement that
-!     the spline be periodic. This equation has the form ...
-!        a(1)*s(1) + b(1)*s(2) + c(1)*s(n-1) = t(1)
-b(1) = x(n) - x(nm1)
-h = x(2) - x(1)
-if (h <= 0.0 .or. b(1) <= 0.0) go to 110
-del = (y(1) - y(nm1))/b(1)
-deli = (y(2) - y(1))/h
-c(1) = h
-a(1) = 2.0*(h + b(1))
-t(1) = 3.0*(h*del + b(1)*deli)
-if (n == 3) go to 20
-!     For the knots x(i) (i = 2,...n-2) generate the correspond-
-!     ing equations and carry out the pivot reduction of Gauss
-!     elimination. Then the i-TH equation has the form ...
-!        a(i)*s(i) + b(i)*s(i+1) + c(i)*s(n-1) = t(i)
-do i = 2,nm2
-   b(i) = h
-   h = x(i + 1) - x(i)
-   if (h <= 0.0) go to 110
-   e = h/a(i - 1)
-   c(i) = - e*c(i - 1)
-   a(i) = 2.0*(b(i) + h) - e*b(i - 1)
-   del0 = deli
-   deli = (y(i + 1) - y(i))/h
-   t(i) = 3.0*(h*del0 + b(i)*deli) - e*t(i - 1)
-end do
-20 ierr = 0
-b(nm1) = h
-!     Since it is required that the spline be periodic, the
-!     equation for the knot x(n-1) has the form ...
-!        alpha*s(1) + b(1)*s(n-2) + delta*s(n-1) = r
-!     applying the pivots to this equation, one obtains after
-!     each pivot operation the modified equation ...
-!        alpha*s(i+1) + b(1)*s(n-2) + delta*s(n-1) = r
-!     thus, when this pivot reduction is complete, the (n-1)-ST
-!     equation to be solved has the form ...
-!        (alpha + b(1))*s(n-2) + delta*s(n-1) = r
-alpha = h
-delta = 2.0*(h + b(1))
-r = 3.0*(b(1)*deli + h*del)
-if (n == 3) go to 40
-do i = 1,nm3
-   e = alpha/a(i)
-   alpha = - e*b(i)
-   delta = delta - e*c(i)
-   r = r - e*t(i)
-end do
-!     Solve the last two equations for s(n-1) and s(n-2), and
-!     store these slopes in A.
-40 e = (alpha + b(1))/a(nm2)
-w = b(nm2) + c(nm2)
-s = (r - e*t(nm2))/(delta - e*w)
-a(nm1) = s
-a(nm2) = (t(nm2) - w*s)/a(nm2)
-if (n == 3) go to 60
-!     Back substitution to obtain the remaining slopes s(i).
-!     These slopes are stored in A.
-si = a(nm2)
-do j = 3,nm1
-   i = n - j
-   si = (t(i) - b(i)*si - c(i)*s)/a(i)
-   a(i) = si
-end do
-!     Generate the cubic coefficients b(i) and c(i)
-60 h = b(1)
-do i = 1,nm2
-   hi = b(i + 1)
-   deli = (y(i + 1) - y(i))/hi
-   w = a(i) + a(i + 1) - 2.0*deli
-   b(i) = (deli - a(i) - w)/hi
-   c(i) = (w/hi)/hi
-end do
-w = a(1) + a(nm1) - 2.0*del
-b(nm1) = (del - a(nm1) - w)/h
-c(nm1) = (w/h)/h
-return
-!     Error return
-100 ierr = 1
-return
-110 ierr = 2
-end subroutine pdspl
-
-subroutine pdfit(x, y, m, break, l, z, a, b, c, wk, iwk, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: l, m
-real, intent(in) :: x(m), y(m)
-real, intent(inout) :: break(l)
-real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
-integer, intent(inout) :: iwk(*)
-!     beginning of local variable declarations
-integer :: j, k, la, lm1, lw, n
-real :: r, temp(20), con(3), xcon(3)
-integer, parameter :: nder(3) = [3, 7, 11]
-!-----------------------------------------------------------------------
-!            Least squares periodic cubic spline fitting
-!-----------------------------------------------------------------------
-!--------------------
-!     real z(l-1), a(l-1), b(l-1), c(l-1)
-!     real wk((l + 6)*(l + 15) + 10)
-!     integer iwk(2*l + 6)
-!--------------------
-!--------------------
-!--------------------
-if (m <= 0 .or. l < 2) go to 100
-n = l + 2
-!                Define the nodes for the b-splines
-wk(1) = break(1)
-wk(2) = break(1)
-wk(3) = break(1)
-wk(4) = break(1)
-do j = 2,l
-   if (break(j - 1) >= break(j)) go to 110
-   wk(j + 3) = break(j)
-end do
-wk(l + 4) = break(l)
-wk(l + 5) = break(l)
-wk(l + 6) = break(l)
-!                Define the periodicity constraints
-con(1) = break(1)
-con(2) = break(1)
-con(3) = break(1)
-xcon(1) = break(l)
-xcon(2) = break(l)
-xcon(3) = break(l)
-!     Obtain the b-spline coefficients of the periodic spline
-ierr = 0
-la = n + 5
-lw = la + n
-iwk(1) = iwk(1) - (l + l + 8)
-call bfit(wk(1), n, 4, x, y, m, xcon, con, nder, 3, ierr, &
-   & wk(la), r, wk(lw), iwk)
-iwk(1) = iwk(1) + (l + l + 8)
-if (ierr /= 0) go to 30
-!     Obtain the coefficients of the spline in Taylor series form
-call bspp(wk(1), wk(la), n, 4, break, wk(lw), lm1, temp)
-k = lw
-do j = 1,lm1
-   z(j) = wk(k)
-   a(j) = wk(k + 1)
-   b(j) = wk(k + 2)
-   c(j) = wk(k + 3)
-   k = k + 4
-end do
-return
-!                The coefficients were not obtained
-30 if (ierr == -4) go to 120
-if (ierr == -6) go to 130
-if (ierr == -7) go to 140
-ierr = 1
-return
-!                           Error return
-100 ierr = 2
-return
-110 ierr = 3
-return
-120 ierr = 4
-return
-130 ierr = 5
-return
-140 ierr = 6
-end subroutine pdfit
-
-pure subroutine pscmp(x, y, a, b, c, n, xi, yi, m, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: m, n
-real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
-real, intent(inout) :: yi(m)
-!     beginning of local variable declarations
-integer :: i, il, ir, j, k
-real :: dx, h, t, t0, x1, xold, xx, nswc_ai_r4
-!-----------------------------------------------------------------------
-!              Evaluation of a periodic cubic spline
-!-----------------------------------------------------------------------
-!----------------------
-!     real x(n), y(n-1), a(n-1), b(n-1), c(n-1), xi(m), yi(m)
-!----------------------
-if (n >= 3 .and. m >= 1) go to 1
-ierr = 1
-return
-1 ierr = 0
-x1 = x(1)
-h = x(n) - x1
-!     Reduction of xi(k) to xx where x(1) .LE. xx .LT. x(n)
-k = 1
-t = (xi(1) - x1)/h
-j = t
-t0 = t - j
-if (t0 < 0.0) t0 = 1.0 + t0
-xx = x1 + t0*h
-if (xx >= x(n)) go to 120
-il = 1
-ir = n
-!     Bisection search
-10 i = (il + ir)/2
-if (i == il) go to 90
-nswc_ai_r4 = xx - x(i)
-if (nswc_ai_r4 < 0) go to 20
-if (nswc_ai_r4 == 0) go to 90
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!     Linear forward search
-40 if (xx < x(i + 1)) go to 90
-i = i + 1
-go to 40
-!     Computation when x(i) .LE. xx .LT. x(i+1)
-90 dx = xx - x(i)
-yi(k) = ((c(i)*dx + b(i))*dx + a(i))*dx + y(i)
-!     Next point
-100 if (k >= m) return
-xold = xx
-k = k + 1
-t = (xi(k) - x1)/h
-j = t
-t0 = t - j
-if (t0 < 0.0) t0 = 1.0 + t0
-xx = x1 + t0*h
-if (xx >= x(n)) go to 120
-nswc_ai_r4 = xx - xold
-if (nswc_ai_r4 < 0) go to 110
-if (nswc_ai_r4 == 0) go to 90
-go to 40
-110 il = 1
-ir = min(i + 1,n)
-go to 10
-!     Case when roundoff produces a value for xx where
-!     xx .GE. x(n). This case may never occur.
-120 i = 1
-xx = x1
-yi(k) = y(1)
-go to 100
-end subroutine pscmp
-
-pure subroutine psevl(x, y, a, b, c, n, xi, yi, ypi, yppi, m, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: m, n
-real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
-real, intent(inout) :: yi(m), ypi(m), yppi(m)
-!     beginning of local variable declarations
-integer :: i, il, ir, j, k
-real :: bi2, ci3, dx, h, t, t0, x1, xold, xx, nswc_ai_r4
-!-----------------------------------------------------------------------
-!     Evaluation and differentiation of a periodic cubic spline
-!-----------------------------------------------------------------------
-!----------------------
-!     real x(n), y(n-1), a(n-1), b(n-1), c(n-1), xi(m), yi(m), ypi(m),
-!    *     yppi(m)
-!----------------------
-if (n >= 3 .and. m >= 1) go to 1
-ierr = 1
-return
-1 ierr = 0
-x1 = x(1)
-h = x(n) - x1
-!     Reduction of xi(k) to xx where x(1) .LE. xx .LT. x(n)
-k = 1
-t = (xi(1) - x1)/h
-j = t
-t0 = t - j
-if (t0 < 0.0) t0 = 1.0 + t0
-xx = x1 + t0*h
-if (xx >= x(n)) go to 120
-il = 1
-ir = n
-!     Bisection search
-10 i = (il + ir)/2
-if (i == il) go to 90
-nswc_ai_r4 = xx - x(i)
-if (nswc_ai_r4 < 0) go to 20
-if (nswc_ai_r4 == 0) go to 90
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!     Linear forward search
-40 if (xx < x(i + 1)) go to 90
-i = i + 1
-go to 40
-!     Computation when x(i) .LE. xx .LT. x(i+1)
-90 dx = xx - x(i)
-yi(k) = ((c(i)*dx + b(i))*dx + a(i))*dx + y(i)
-bi2 = b(i) + b(i)
-ci3 = 3.0*c(i)
-ypi(k) = (ci3*dx + bi2)*dx + a(i)
-yppi(k) = bi2 + (ci3 + ci3)*dx
-!     Next point
-100 if (k >= m) return
-xold = xx
-k = k + 1
-t = (xi(k) - x1)/h
-j = t
-t0 = t - j
-if (t0 < 0.0) t0 = 1.0 + t0
-xx = x1 + t0*h
-if (xx >= x(n)) go to 120
-nswc_ai_r4 = xx - xold
-if (nswc_ai_r4 < 0) go to 110
-if (nswc_ai_r4 == 0) go to 90
-go to 40
-110 il = 1
-ir = min(i + 1,n)
-go to 10
-!     Case when roundoff produces a value for xx where
-!     xx .GE. x(n). This case may never occur.
-120 i = 1
-xx = x1
-yi(k) = y(1)
-ypi(k) = a(1)
-yppi(k) = b(1) + b(1)
-go to 100
-end subroutine psevl
-
-pure subroutine csloop(m, n, x, kx, t, dx, kdx, wk, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: kdx, kx, m, n
-real, intent(in) :: x(kx,n)
-real, intent(inout) :: t(m), dx(kdx,n), wk(*)
-!     beginning of local variable declarations
-integer :: ia, ib, ic, ie, mm1
-interface
-   pure subroutine cslop1(m,n,x,kx,t,dx,kdx,a,b,c,e,ierr)
-      implicit none
-      integer, intent(in) :: kdx
-      integer, intent(in) :: kx
+      integer, intent(in) :: ms
       integer, intent(in) :: n
       integer, intent(in) :: m
-      real, intent(in) :: x(kx,n)
-      real, intent(inout) :: t(m)
-      real, intent(inout) :: dx(kdx,n)
-      real, intent(inout) :: a(*)
-      real, intent(inout) :: b(m)
-      real, intent(inout) :: c(*)
-      real, intent(inout) :: e(*)
-      integer, intent(inout) :: ierr
-   end subroutine cslop1
+      double precision, intent(in) :: qr(ms,n)
+      double precision, intent(in) :: s(n)
+      integer, intent(in) :: ip(n)
+      double precision, intent(inout) :: x(m)
+   end subroutine dorsol
+   pure subroutine dortho(m,n,qr,ms,s,ip,exit)
+      implicit none
+      integer, intent(in) :: ms
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      double precision, intent(inout) :: qr(ms,n)
+      double precision, intent(inout) :: s(n)
+      integer, intent(inout) :: ip(n)
+      logical, intent(out) :: exit
+   end subroutine dortho
 end interface
-!-----------------------------------------------------------------------
-!               Closed curve cubic spline fitting
-!                    in n-dimensional space
-!-----------------------------------------------------------------------
-!     Written by
-!        Alfred H. Morris
-!        Naval Surface Warfare Center
-!        Dahlgren, Virginia
-!----------------------
-!----------------------
-!     m = The number of n-dimensional points given in x
-!     wk is an array of dimension 4*(m-1)
-!----------------------
-if (min(m, n) < 2) go to 10
-mm1 = m - 1
-ie = 1
-ia = mm1
-ib = ia + mm1
-ic = ib + m
-call cslop1(m, n, x, kx, t, dx, kdx, wk(ia), wk(ib), &
-   & wk(ic), wk(ie), ierr)
+!     --------------
+ierr = 0
+if (1 < n .and. n <= m) go to 10
+ierr = 1
 return
-!     Error return
-10 ierr = 1
-end subroutine csloop
+10 np1 = n + 1
+call dortho(m,n,a,ka,wk,iwk,exit)
+if (exit) go to 20
+ierr = 2
+return
+20 do j = 1,nb
+   call dorsol(m,n,a,ka,wk,iwk,b(1,j))
+   if (m == n) go to 22
+   rnorm = 0.d0
+   do i = np1,m
+      rnorm = rnorm + b(i,j)*b(i,j)
+   end do
+   b(np1,j) = sqrt(rnorm)
+22 continue
+end do
+end subroutine dllsq
 
-pure subroutine cslop1(m, n, x, kx, t, dx, kdx, a, b, c, e, ierr)
+pure subroutine dortho(m, n, qr, ms, s, ip, exit)
+!! <!-- nswc-ford:begin DORTHO -->
+!! Reference for `dortho`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!       Identification
+!!         dortho - Orthogonal transformation of a given general m by n
+!!                 matrix A to upper triangular form
+!!         Fortran subroutine subprogram
+!!         aerospace research laboratories
+!!         wright-patterson afb, ohio  45433
+!!       purpose
+!!         dortho computes an implicit orthogonal matrix Q and an explicit
+!!         upper triangular matrix R and a permutation matrix P satisfying
+!!         qr = PA given an m by n real matrix A.  dortho is intended for
+!!         use with the subroutine dorsol to produce the least squares
+!!         solution of the equation AX = B.
+!!       Control
+!!         dimension qr(ms,n), s(n), ip(n)
+!!         logical exit
+!!
+!!         call dortho(m, n, qr, ms, s, ip, exit)
+!!         where
+!!         m    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
+!!         n    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A,
+!!              (1 .LT. n .LE. m).
+!!         QR   AS A REAL INPUT ARRAY IS MATRIX A TO BE TRIANGULARIZED.
+!!         QR   AS A REAL OUTPUT ARRAY IS THE UPPER TRIANGULAR FACTOR R IN
+!!              qr(i,j), i .LE. j, and the relevant parts of Q in qr(i,j),
+!!              i .GT. j.
+!!         ms   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
+!!              QR in the calling program.
+!!         s    IS A REAL OUTPUT ARRAY, THE RELEVANT PARTS OF Q.
+!!         ip   is an integer output array containing in ip(i), i=1,...,n,
+!!              the images of the permutation corresponding to the PERMU-
+!!              TATION matrix P.
+!!         Exit is set to the value .TRUE. if the rank of A is equal to n
+!!              and .FALSE. otherwise.
+!!       Method
+!!         the matrix A in the array qr is reduced to upper triangular
+!!         form using orthogonal transformation with partial pivoting.
+!!       References
+!!         (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!!             TIONS by Householder transformations, numer. Math. 7(1965),
+!!             269-276.
+!!         (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
+!!             transformations for linear least squares problems, ARL
+!!             technical report ARL TR 74-0124(1974).
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: m, ms, n
+double precision, intent(inout) :: qr(ms,n), s(n)
+integer, intent(inout) :: ip(n)
+logical, intent(out) :: exit
+!     beginning of local variable declarations
+integer :: i, j, jp, k, kj, nn
+double precision :: ajj, sav, ss, y
+!***********************************************************************
+!      Identification
+!        dortho - Orthogonal transformation of a given general m by n
+!                matrix A to upper triangular form
+!        Fortran subroutine subprogram
+!        aerospace research laboratories
+!        wright-patterson afb, ohio  45433
+!      purpose
+!        dortho computes an implicit orthogonal matrix Q and an explicit
+!        upper triangular matrix R and a permutation matrix P satisfying
+!        qr = PA given an m by n real matrix A.  dortho is intended for
+!        use with the subroutine dorsol to produce the least squares
+!        solution of the equation AX = B.
+!      Control
+!        dimension qr(ms,n), s(n), ip(n)
+!        logical exit
+!        .
+!        .
+!        .
+!        call dortho(m, n, qr, ms, s, ip, exit)
+!        where
+!        m    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
+!        n    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A,
+!             (1 .LT. n .LE. m).
+!        QR   AS A REAL INPUT ARRAY IS MATRIX A TO BE TRIANGULARIZED.
+!        QR   AS A REAL OUTPUT ARRAY IS THE UPPER TRIANGULAR FACTOR R IN
+!             qr(i,j), i .LE. j, and the relevant parts of Q in qr(i,j),
+!             i .GT. j.
+!        ms   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
+!             QR in the calling program.
+!        s    IS A REAL OUTPUT ARRAY, THE RELEVANT PARTS OF Q.
+!        ip   is an integer output array containing in ip(i), i=1,...,n,
+!             the images of the permutation corresponding to the PERMU-
+!             TATION matrix P.
+!        Exit is set to the value .TRUE. if the rank of A is equal to n
+!             and .FALSE. otherwise.
+!      Method
+!        the matrix A in the array qr is reduced to upper triangular
+!        form using orthogonal transformation with partial pivoting.
+!      References
+!        (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!            TIONS by Householder transformations, numer. Math. 7(1965),
+!            269-276.
+!        (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
+!            transformations for linear least squares problems, ARL
+!            technical report ARL TR 74-0124(1974).
+!***********************************************************************
+exit = .true.
+nn = n
+if (n == m) nn = n - 1
+do j = 1, nn
+   ip(j) = j
+   jp = j + 1
+   kj = j
+!                                       Search for pivot in the j-TH
+!                                       column and interchange rows.
+   do k = jp, m
+      if (abs(qr(k,j)) > abs(qr(kj,j))) kj = k
+   end do
+   if (qr(kj,j) == 0.d0) go to 90
+   if (kj == j) go to 30
+   ip(j) = kj
+   do i = j, n
+      sav = qr(j,i)
+      qr(j,i) = qr(kj,i)
+      qr(kj,i) = sav
+   end do
+!                                       Normalize the pivoting column
+!                                       and find its norm.
+30 ajj = qr(j,j)
+   do i = jp, m
+      qr(i,j) = qr(i,j)/ajj
+   end do
+   sav = 1.d0
+   do i = jp, m
+      sav = sav + qr(i,j)*qr(i,j)
+   end do
+   s(j) = -sqrt(sav)
+   qr(j,j) = s(j)*ajj
+   if (jp > n) go to 80
+!                                       Premultiply QR with the j-TH
+!                                       orthogonal matrix.
+   y = 1.d0 - s(j)
+   do k = jp, n
+      sav = qr(j,k)
+      do i = jp, m
+         sav = sav + qr(i,j)*qr(i,k)
+      end do
+      ss = qr(j,k)
+      qr(j,k) = sav/s(j)
+      ss = (ss - qr(j,k))/y
+      do i = jp, m
+         qr(i,k) = qr(i,k) - qr(i,j)*ss
+      end do
+   end do
+80 continue
+end do
+return
+90 exit = .false.
+end subroutine dortho
+
+pure subroutine dorsol(m, n, qr, ms, s, ip, x)
+!! <!-- nswc-ford:begin DORSOL -->
+!! Reference for `dorsol`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!       Identification
+!!         dorsol - Least squares solution of a linear system given an
+!!                 orthogonal-triangular factorization of the coefficient
+!!                 matrix produced by subroutine dortho
+!!         Fortran subroutine subprogram
+!!         aerospace research laboratories
+!!         wright-patterson afb, ohio  45433
+!!       purpose
+!!         dorsol computes the least squares solution of the linear system
+!!         QRX = Pax = B where Q, R, and P are determined from a by dortho
+!!       control
+!!         dimension qr(ms,n), s(n), ip(n), x(m)
+!!
+!!         call dorsol(m, n, qr, ms, s, ip, x)
+!!         where
+!!         m  is an integer input variable, the number of rows of A.
+!!         n  is an integer input variable, the number of columns of A
+!!              (1 .LT. n .LE. m).
+!!         QR is a real input array, the orthogonal and triangular factors
+!!            of a produced by dortho.
+!!         ms is an integer input variable, the leading dimension of
+!!            QR in the calling program.
+!!         s  is a real input array, the relevant parts of Q produced by
+!!            dortho.
+!!         ip is an integer input array, the permutation information
+!!            produced by dortho.
+!!         x  as a real input array is the right-hand side B of AX = B.
+!!         x  as a real output array is x(i), i = 1, ..., n, the least
+!!            squares solution, and x(j), j = n+1, ..., m, the vector
+!!            whose length is the minimum of all residual B - AX.
+!!       Method
+!!         the factored system QRX = Pax = PB are solved in the sequence
+!!         of QY = PB and RX = y. full rank for the matrix A is assumed
+!!         which can be checked by interrogating the logical output
+!!         variable produced by dortho.
+!!       References
+!!         (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!!             TIONS by Householder transformations, numer. Math. 7(1965),
+!!             269-276.
+!!         (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
+!!             transformations for linear least squares problems, ARL
+!!             technical report ARL TR 74-0124(1974).
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: m, ms, n
+double precision, intent(in) :: qr(ms,n), s(n)
+double precision, intent(inout) :: x(m)
+integer, intent(in) :: ip(n)
+!     beginning of local variable declarations
+integer :: i, ij, j, jp, k, ni, nm, nn
+double precision :: sav, ss, y
+!***********************************************************************
+!      Identification
+!        dorsol - Least squares solution of a linear system given an
+!                orthogonal-triangular factorization of the coefficient
+!                matrix produced by subroutine dortho
+!        Fortran subroutine subprogram
+!        aerospace research laboratories
+!        wright-patterson afb, ohio  45433
+!      purpose
+!        dorsol computes the least squares solution of the linear system
+!        QRX = Pax = B where Q, R, and P are determined from a by dortho
+!      control
+!        dimension qr(ms,n), s(n), ip(n), x(m)
+!        .
+!        .
+!        .
+!        call dorsol(m, n, qr, ms, s, ip, x)
+!        where
+!        m  is an integer input variable, the number of rows of A.
+!        n  is an integer input variable, the number of columns of A
+!             (1 .LT. n .LE. m).
+!        QR is a real input array, the orthogonal and triangular factors
+!           of a produced by dortho.
+!        ms is an integer input variable, the leading dimension of
+!           QR in the calling program.
+!        s  is a real input array, the relevant parts of Q produced by
+!           dortho.
+!        ip is an integer input array, the permutation information
+!           produced by dortho.
+!        x  as a real input array is the right-hand side B of AX = B.
+!        x  as a real output array is x(i), i = 1, ..., n, the least
+!           squares solution, and x(j), j = n+1, ..., m, the vector
+!           whose length is the minimum of all residual B - AX.
+!      Method
+!        the factored system QRX = Pax = PB are solved in the sequence
+!        of QY = PB and RX = y. full rank for the matrix A is assumed
+!        which can be checked by interrogating the logical output
+!        variable produced by dortho.
+!      References
+!        (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!            TIONS by Householder transformations, numer. Math. 7(1965),
+!            269-276.
+!        (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
+!            transformations for linear least squares problems, ARL
+!            technical report ARL TR 74-0124(1974).
+!***********************************************************************
+nn = n
+if (n == m) nn = n - 1
+do j = 1, nn
+   jp = j + 1
+   ij = ip(j)
+   y = 1.d0 - s(j)
+   sav = x(j)
+   x(j) = x(ij)
+   x(ij) = sav
+!                                       Premultiply x with the j-TH
+!                                       orthogonal matrix.
+   sav = x(j)
+   do k = jp, m
+      sav = sav + qr(k,j)*x(k)
+   end do
+   ss = x(j)
+   x(j) = sav/s(j)
+   ss = (ss - x(j))/y
+   do k = jp, m
+      x(k) = x(k) - qr(k,j)*ss
+   end do
+end do
+!                                       Back substitute to find the
+!                                       least squares solution.
+x(n) = x(n)/qr(n,n)
+nm = n - 1
+do i = 1, nm
+   ni = n - i
+   nn = n
+   do j = 1, i
+      x(ni) = x(ni) - qr(ni,nn)*x(nn)
+      nn = nn - 1
+   end do
+   x(ni) = x(ni)/qr(ni,ni)
+end do
+end subroutine dorsol
+
+subroutine lsqr(ind, a, mda, m, n, b, mdb, nb, re, ae, krank, &
+   & ksure, rnorm, work, lw, iwork, liw, ierr)
+!! <!-- nswc-ford:begin LSQR -->
+!! Reference for `lsqr`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!               Least squares solution of linear equations
+!!
+!!      lsqr solves both underdetermined and overdetermined linear
+!!      systems AX = b, where A is an m by n matrix and b is an m by
+!!      nb matrix of right hand sides. If m .GE. n, the least squares
+!!      solution is computed by decomposing the matrix a into the
+!!      product of an orthogonal matrix Q and upper triangular matrix
+!!      R (QR factorization). If m .LT. n, the minimal length solution
+!!      is computed by factoring the matrix a into the product of a
+!!      lower triangular matrix L and orthogonal matrix Q (LQ factor-
+!!      ization). If the matrix a is determined to be rank deficient,
+!!      then the minimal length least squares solution is computed.
+!!      User input bounds on the uncertainty of the elements of A are
+!!      used to detect numerical rank deficiency. The algorithm uses
+!!      a row and column pivot strategy to minimize the growth of
+!!      uncertainty and round-off errors.
+!!
+!!    *         WARNING - ALL INPUT ARRAYS ARE CHANGED ON EXIT.        *
+!!
+!!      Input..
+!!      IND           INTEGER WHICH INDICATES IF THE ROUTINE IS BEING
+!!                    called for the first time.
+!!                       ind = 0      Original call
+!!                       ind .NE. 0   subsequent calls
+!!                    on subsequent calls a new set b of equations can
+!!                    be solved (using the same coefficient matrix a).
+!!                    It is assumed that A, mda, m, n, krank, iwork,
+!!                    liw, and the first 2*min(m,n) locations of work
+!!                    have not been modified by the user. re, ae, and
+!!                    ksure are not used.
+!!      a(,)          linear coefficient matrix of AX=b, with mda the
+!!       mda,m,n      ACTUAL FIRST DIMENSION OF A IN THE CALLING PROGRAM.
+!!                    m is the row dimension (no. of equations of the
+!!                    problem) and n the col dimension (no. of unknowns).
+!!                    Must have mda .GE. m.
+!!      b(,)          RIGHT HAND SIDE(S), WITH MDB THE ACTUAL FIRST
+!!       MDB,nb       DIMENSION OF b IN THE CALLING PROGRAM. nb IS THE
+!!                    number of m by 1 right hand sides. Must have
+!!                    mdb .GE. max(m,n). If nb .LE. 0 then b and mdb
+!!                    are ignored.
+!!      re            re IS THE MAXIMUM RELATIVE UNCERTAINTY OF THE
+!!                    elements of the matrix a (0 .le. re .LT. 1).
+!!      ae            ae IS THE MAXIMUM ABSOLUTE UNCERTAINTY OF THE
+!!                    elements of the matrix a (ae .GE. 0).
+!!      work()        A REAL WORK ARRAY DIMENSIONED 5*min(m,n).
+!!      lw            ACTUAL DIMENSION OF WORK
+!!      iwork()       INTEGER WORK ARRAY DIMENSIONED AT LEAST n+m.
+!!      liw           ACTUAL DIMENSION OF iwork.
+!!      Output..
+!!      a(,)          CONTAINS THE TRIANGULAR PART OF THE REDUCED MATRIX
+!!                    and the transformation information. A and the first
+!!                    2*min(m,n) elements of work (see below) completely
+!!                    specify the factorization of the matrix a.
+!!      b(,)          CONTAINS THE n BY nb SOLUTION MATRIX FOR X.
+!!      krank,ksure   THE NUMERICAL RANK OF A,  BASED UPON THE RELATIVE
+!!                    and absolute bounds on uncertainty, is bounded
+!!                    above by krank and below by ksure. The algorithm
+!!                    returns a solution based on krank. ksure provides
+!!                    an indication of the precision of the rank.
+!!      rnorm()       CONTAINS THE EUCLIDEAN LENGTH OF THE nb RESIDUAL
+!!                    VECTORS  b(i) - AX(i), i=1,...,nb.
+!!      work()        THE FIRST 2*min(m,n) LOCATIONS OF WORK CONTAIN
+!!                    the values necessary to reproduce the Householder
+!!                    factorization of A.
+!!      iwork()       AN ARRAY OF LENGTH m + n CONTAINING THE ORDERS IN
+!!                    which the rows and columns were used. If m .GE. n
+!!                    then the first n locations contain the order of
+!!                    the columns and the next m locations the order of
+!!                    the rows. If m .LT. n then the order of the rows
+!!                    precedes the order of the columns.
+!!      ierr          FLAG TO INDICATE THE STATUS OF THE RESULTS
+!!                      0     - Satisfactory completion
+!!                    .GT. 0  - Input error
+!!
+!!      The subroutines u11ls, u12ls, u11us, and u12us were written by
+!!      T. Manteuffel (LANL) in 1981. The driver routine lsqr was written
+!!      by A.H. Morris (NSWC) in 1991.
+!!
+!!      Reference.  Manteuffel, T., An interval analysis approach to rank
+!!                  determination in linear least squares problems,
+!!                  Sandia Laboratories report SAND80-0655, June, 1980.
+!!
+!!      np            if m .GE. n then the first np columns of A
+!!                    are never interchanged.
+!!                    If m .LT. n then the first np rows of A are
+!!                    never interchanged. np is not referenced on
+!!                    a continuation call to the routine.
+!!      MODE          THE INTEGER MODE INDICATES HOW THE ROUTINE
+!!                    is to react if rank deficiency is detected.
+!!                    If mode = 0 Return immediately, no solution
+!!                              1 compute truncated solution
+!!                              2 compute minimal length solution
+!!                    mode must not be modified on a continuation
+!!                    CALL TO THE ROUTINE. IF MODE LT. 2, ONLY THE
+!!                    first n locations of work are used.
+!! ```
+!! <!-- nswc-ford:end -->
 implicit none
 integer, intent(inout) :: ierr
-integer, intent(in) :: kdx, kx, m, n
-real, intent(in) :: x(kx,n)
-real, intent(inout) :: t(m), dx(kdx,n), a(*), b(m), c(*), e(*)
+integer, intent(in) :: ind
+integer, intent(inout) :: krank, ksure
+integer, intent(in) :: liw, lw, m, mda, mdb, n, nb
+real, intent(in) :: ae, re
+real, intent(inout) :: a(mda,n), b(mdb,*), rnorm(*), work(lw)
+integer, intent(inout) :: iwork(liw)
 !     beginning of local variable declarations
-integer :: i, im1, j, l, mm1, mm2
-real :: alpha, del, del0, del1, deli, delm, eta, h, hm, p, r, si, &
-   & sm, sum, tau
+integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
+real :: eps, rerr
 interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!-----------------------------------------------------------------------
+!              Least squares solution of linear equations
+!                            --------------
+!     lsqr solves both underdetermined and overdetermined linear
+!     systems AX = b, where A is an m by n matrix and b is an m by
+!     nb matrix of right hand sides. If m .GE. n, the least squares
+!     solution is computed by decomposing the matrix a into the
+!     product of an orthogonal matrix Q and upper triangular matrix
+!     R (QR factorization). If m .LT. n, the minimal length solution
+!     is computed by factoring the matrix a into the product of a
+!     lower triangular matrix L and orthogonal matrix Q (LQ factor-
+!     ization). If the matrix a is determined to be rank deficient,
+!     then the minimal length least squares solution is computed.
+!     User input bounds on the uncertainty of the elements of A are
+!     used to detect numerical rank deficiency. The algorithm uses
+!     a row and column pivot strategy to minimize the growth of
+!     uncertainty and round-off errors.
+!   ******************************************************************
+!   *                                                                *
+!   *         WARNING - ALL INPUT ARRAYS ARE CHANGED ON EXIT.        *
+!   *                                                                *
+!   ******************************************************************
+!     Input..
+!     IND           INTEGER WHICH INDICATES IF THE ROUTINE IS BEING
+!                   called for the first time.
+!                      ind = 0      Original call
+!                      ind .NE. 0   subsequent calls
+!                   on subsequent calls a new set b of equations can
+!                   be solved (using the same coefficient matrix a).
+!                   It is assumed that A, mda, m, n, krank, iwork,
+!                   liw, and the first 2*min(m,n) locations of work
+!                   have not been modified by the user. re, ae, and
+!                   ksure are not used.
+!     a(,)          linear coefficient matrix of AX=b, with mda the
+!      mda,m,n      ACTUAL FIRST DIMENSION OF A IN THE CALLING PROGRAM.
+!                   m is the row dimension (no. of equations of the
+!                   problem) and n the col dimension (no. of unknowns).
+!                   Must have mda .GE. m.
+!     b(,)          RIGHT HAND SIDE(S), WITH MDB THE ACTUAL FIRST
+!      MDB,nb       DIMENSION OF b IN THE CALLING PROGRAM. nb IS THE
+!                   number of m by 1 right hand sides. Must have
+!                   mdb .GE. max(m,n). If nb .LE. 0 then b and mdb
+!                   are ignored.
+!     re            re IS THE MAXIMUM RELATIVE UNCERTAINTY OF THE
+!                   elements of the matrix a (0 .le. re .LT. 1).
+!     ae            ae IS THE MAXIMUM ABSOLUTE UNCERTAINTY OF THE
+!                   elements of the matrix a (ae .GE. 0).
+!     work()        A REAL WORK ARRAY DIMENSIONED 5*min(m,n).
+!     lw            ACTUAL DIMENSION OF WORK
+!     iwork()       INTEGER WORK ARRAY DIMENSIONED AT LEAST n+m.
+!     liw           ACTUAL DIMENSION OF iwork.
+!     Output..
+!     a(,)          CONTAINS THE TRIANGULAR PART OF THE REDUCED MATRIX
+!                   and the transformation information. A and the first
+!                   2*min(m,n) elements of work (see below) completely
+!                   specify the factorization of the matrix a.
+!     b(,)          CONTAINS THE n BY nb SOLUTION MATRIX FOR X.
+!     krank,ksure   THE NUMERICAL RANK OF A,  BASED UPON THE RELATIVE
+!                   and absolute bounds on uncertainty, is bounded
+!                   above by krank and below by ksure. The algorithm
+!                   returns a solution based on krank. ksure provides
+!                   an indication of the precision of the rank.
+!     rnorm()       CONTAINS THE EUCLIDEAN LENGTH OF THE nb RESIDUAL
+!                   VECTORS  b(i) - AX(i), i=1,...,nb.
+!     work()        THE FIRST 2*min(m,n) LOCATIONS OF WORK CONTAIN
+!                   the values necessary to reproduce the Householder
+!                   factorization of A.
+!     iwork()       AN ARRAY OF LENGTH m + n CONTAINING THE ORDERS IN
+!                   which the rows and columns were used. If m .GE. n
+!                   then the first n locations contain the order of
+!                   the columns and the next m locations the order of
+!                   the rows. If m .LT. n then the order of the rows
+!                   precedes the order of the columns.
+!     ierr          FLAG TO INDICATE THE STATUS OF THE RESULTS
+!                     0     - Satisfactory completion
+!                   .GT. 0  - Input error
+!----------------
+!     The subroutines u11ls, u12ls, u11us, and u12us were written by
+!     T. Manteuffel (LANL) in 1981. The driver routine lsqr was written
+!     by A.H. Morris (NSWC) in 1991.
+!----------------
+!     Reference.  Manteuffel, T., An interval analysis approach to rank
+!                 determination in linear least squares problems,
+!                 Sandia Laboratories report SAND80-0655, June, 1980.
+!-----------------------------------------------------------------------
+!----------------
+!     np            if m .GE. n then the first np columns of A
+!                   are never interchanged.
+!                   If m .LT. n then the first np rows of A are
+!                   never interchanged. np is not referenced on
+!                   a continuation call to the routine.
+!     MODE          THE INTEGER MODE INDICATES HOW THE ROUTINE
+!                   is to react if rank deficiency is detected.
+!                   If mode = 0 Return immediately, no solution
+!                             1 compute truncated solution
+!                             2 compute minimal length solution
+!                   mode must not be modified on a continuation
+!                   CALL TO THE ROUTINE. IF MODE LT. 2, ONLY THE
+!                   first n locations of work are used.
+!----------------
+np = 0
+mode = 2
+!     Check the input
+if (nb <= 0 .and. ind /= 0) go to 200
+if (m < 1 .or. n < 1) go to 210
+if (mda < m) go to 220
+if (liw < m + n) go to 240
+m0 = min(m,n)
+n0 = max(m,n)
+!     num = 0
+if (nb <= 0) go to 10
+if (mdb < n0) go to 230
+if (ind /= 0) go to 100
+10 if (lw < 5*m0) go to 250
+if (re < 0.0 .or. ae < 0.0) go to 260
+!     Define the relative and absolute tolerance lists
+m1 = 1
+m2 = m1 + m0
+m3 = m2 + m0
+m4 = m3 + m0
+m5 = m4 + m0
+eps = 10.0*spmpar(1)
+rerr = max(eps,re)
+imax = m5 - 1
+do i = m4,imax
+   work(i) = rerr
+end do
+imax = imax + m0
+do i = m5,imax
+   work(i) = ae
+end do
+!     Factor the matrix a
+!     num = np
+if (m < n) go to 40
+call u11ls(a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
+   & work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
+go to 100
+40 call u11us(a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
+   & work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
+!     Solution phase
+100 ierr = 0
+info = 0
+if (krank == m0) go to 110
+if (krank == 0) go to 110
+!     if (krank .lt. num) go to 280
+!     if (mode .eq. 0) return
+info = mode
+110 if (nb <= 0) return
+m1 = 1
+m2 = 1 + m0
+if (info == 2) go to 130
+!     Only min(m,n) elements of work are needed
+if (lw < m0) go to 250
+if (m < n) go to 120
+call u12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+   & work(m1),work(m1),iwork(m1),iwork(m2))
+return
+120 call u12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+   & work(m1),work(m1),iwork(m1),iwork(m2))
+return
+!     Here 2*min(m,n) elements of work are needed
+130 if (lw < 2*m0) go to 250
+if (m < n) go to 140
+call u12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+   & work(m1),work(m2),iwork(m1),iwork(m2))
+return
+140 call u12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+   & work(m1),work(m2),iwork(m1),iwork(m2))
+return
+!     Error return
+!                             nb .LE. 0  on a continuation call
+200 ierr = 7
+return
+!                             m .LT. 1 OR n .LT. 1
+210 ierr = 1
+return
+!                             mda .LT. m
+220 ierr = 2
+return
+!                             mdb .LT. max(m,n)
+230 ierr = 3
+return
+!                             liw .LT. m + n
+240 ierr = 4
+return
+!                             lw too small
+250 ierr = 5
+return
+!                             re or ae is negative
+260 ierr = 6
+!                             0 .LT. krank .LT. np
+! 280 ierr = 8
+!     return
+end subroutine lsqr
+
+pure subroutine u11ls(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+   & ic,ir)
+!! <!-- nswc-ford:begin U11LS -->
+!! Reference for `u11ls`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!        This routine performs A QR factorization of A
+!!        using Householder transformations. Row and
+!!        column pivots are chosen to reduce the growth
+!!        of round-off and to help detect possible rank
+!!        deficiency.
+!!         Initialization
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(out) :: krank
+integer, intent(inout) :: ksure
+integer, intent(in) :: m, mda, mode, n, np
+real, intent(inout) :: a(mda,n), db(n), eb(n), h(n), ub(n), w(n)
+integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
+integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
+   & kp1, kz, l, lm1, mm, nmk
+real :: bb, r2, rmin, sum, t, temp, tn, tt
+interface
+   pure function isamax(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      integer :: isamax
+   end function isamax
+   pure subroutine iswap(n,ix,incx,iy,incy)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix(*)
+      integer, intent(in) :: incx
+      integer, intent(inout) :: iy(*)
+      integer, intent(in) :: incy
+   end subroutine iswap
+   pure subroutine saxpy(n,sa,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine saxpy
+   pure function sdot(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(in) :: sy(*)
+      integer, intent(in) :: incy
+      real :: sdot
+   end function sdot
    pure function snrm2(n,sx,incx)
       implicit none
       integer, intent(in) :: n
@@ -9625,916 +4975,6065 @@ interface
       integer, intent(in) :: incx
       real :: snrm2
    end function snrm2
+   pure subroutine sscal(n,sa,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+   end subroutine sscal
+   pure subroutine sswap(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine sswap
 end interface
-!-----------------------------------------------------------------------
-!               Closed curve cubic spline fitting
-!                    in n-dimensional space
-!-----------------------------------------------------------------------
-!----------------------
-!     real a(m-1), c(m-1), e(k)  (k = max0(1,m-2))
-!     the e array is not used when m = 2.
-!----------------------
-mm1 = m - 1
-mm2 = m - 2
-!     Definition of the knots t(i) (i = 1,...,m). Also t(m+1) = 1.
-!     This last knot is not stored.
-t(1) = 0.0
-do i = 2,m
-   im1 = i - 1
-   do j = 1,n
-      dx(i,j) = x(i,j) - x(im1,j)
-   end do
-   t(i) = t(im1) + snrm2(n,dx(i,1),kdx)
-   r = t(i) - t(im1)
-   if (r == 0.0) go to 200
+!       This routine performs A QR factorization of A
+!       using Householder transformations. Row and
+!       column pivots are chosen to reduce the growth
+!       of round-off and to help detect possible rank
+!       deficiency.
+!        Initialization
+j = 0
+krank = n
+do i = 1,n
+   ic(i) = i
 end do
-do j = 1,n
-   dx(1,j) = x(1,j) - x(m,j)
+do i = 1,m
+   ir(i) = i
 end do
-sum = t(m) + snrm2(n,dx(1,1),kdx)
-r = sum - t(m)
-if (r == 0.0) go to 210
-do i = 2,m
-   t(i) = t(i)/sum
+!        Determine rel and abs error vectors
+!        calculate col length
+do i = 1,n
+   h(i) = snrm2(m,a(1,i),1)
+   w(i) = h(i)
 end do
-ierr = 0
-!     For j = 1,...,n, a diagonally dominant set of equations
-!     for the slopes S(i,j) of the j-TH periodic spline at t(i)
-!     (i = 1,...,m) is generated and solved by Gauss elimination.
-!     The first equation is obtained from the requirement that
-!     the spline be periodic. This equation has the form ...
-!        a(1)*S(1,j) + b(1)*S(2,j) + c(1)*S(m,j) = dx(1,j)
-h = t(2)
-hm = 1.0 - t(m)
-c(1) = h
-b(1) = hm
-a(1) = 2.0*(h + hm)
-b(2) = h
-do j = 1,n
-   delm = dx(1,j)/hm
-   del1 = dx(2,j)/h
-   dx(1,j) = 3.0*(h*delm + hm*del1)
-   dx(2,j) = del1
+!         Initialize error bounds
+do i = 1,n
+   eb(i) = max(db(i),ub(i)*h(i))
+   ub(i) = eb(i)
+   db(i) = 0.0
 end do
-if (m == 2) go to 70
-!     For the knots t(i) (i = 2,...m-1), generate the correspond-
-!     ing equations and carry out the pivot reduction of Gauss
-!     elimination. Then the i-TH equation has the form ...
-!        a(i)*S(i,j) + b(i)*S(i+1,j) + c(i)*S(m,j) = dx(i,j)
-do i = 2,mm1
-   im1 = i - 1
-   b(i) = h
-   h = t(i + 1) - t(i)
-   e(im1) = h/a(im1)
-   c(i) = - e(im1)*c(im1)
-   a(i) = 2.0*(b(i) + h) - e(im1)*b(im1)
-end do
-b(m) = h
-do j = 1,n
-   deli = dx(2,j)
-   do i = 2,mm1
-      h = b(i + 1)
-      del0 = deli
-      deli = dx(i + 1,j)/h
-      dx(i,j) = 3.0*(h*del0 + b(i)*deli) - e(i - 1)*dx(i - 1,j)
-   end do
-   dx(m,j) = deli
-end do
-!     Since it is required that the spline be periodic, the
-!     equation for the knot t(m) has the form ...
-!        alpha*S(1,j) + hm*S(m-1,j) + eta*S(m,j) = dx(m,j)
-!     applying the pivots to this equation, one obtains after
-!     each pivot operation the modified equation ...
-!        alpha*S(i+1,j) + hm*S(m-1,j) + eta*S(m,j) = dx(m,j)
-!     thus, when this pivot reduction is complete, the m-TH
-!     equation to be solved has the form ...
-!        (alpha + hm)*S(m-1,j) + eta*S(m,j) = dx(m,j)
-70 alpha = h
-eta = 2.0*(h + hm)
-do j = 1,n
-   del = dx(m,j)
-   delm = (x(1,j) - x(m,j))/hm
-   dx(m,j) = 3.0*(hm*del + h*delm)
-end do
-if (m == 2) go to 90
-do i = 1,mm2
-   p = alpha/a(i)
-   alpha = - p*b(i)
-   eta = eta - p*c(i)
-   do j = 1,n
-      dx(m,j) = dx(m,j) - p*dx(i,j)
-   end do
-end do
-!     Solve the last two equations for S(m,j) and S(m-1,j),
-!     and store these slopes in dx.
-90 p = (alpha + hm)/a(mm1)
-tau = b(mm1) + c(mm1)
-do j = 1,n
-   sm = (dx(m,j) - p*dx(mm1,j))/(eta - p*tau)
-   dx(m,j) = sm
-   dx(mm1,j) = (dx(mm1,j) - tau*sm)/a(mm1)
-end do
-if (m == 2) return
-!     Back substitution to obtain the remaining slopes S(i,j).
-!     These slopes are stored in dx.
-do j = 1,n
-   sm = dx(m,j)
-   si = dx(mm1,j)
-   i = mm1
-   do l = 3,m
-      i = i - 1
-      si = (dx(i,j) - b(i)*si - c(i)*sm)/a(i)
-      dx(i,j) = si
-   end do
-end do
-return
-!     Error return
-200 ierr = 2
-return
-210 ierr = 3
-end subroutine cslop1
-
-pure subroutine lopcmp(m, n, t, x, kx, dx, kdx, l, ti, z, kz)
-implicit none
-integer, intent(in) :: kdx, kx, kz, l, m, n
-real, intent(in) :: t(m), x(kx,n), dx(kdx,n), ti(l)
-real, intent(inout) :: z(kz, n)
-!     beginning of local variable declarations
-integer :: i, il, ir, j, k
-real :: a, b, c, d, dt, h, t0, told, w, nswc_ai_r4
-!-----------------------------------------------------------------------
-!            Evaluation of a cubic spline closed curve
-!                     in n-dimensional space
-!-----------------------------------------------------------------------
-!     Reduction of ti(k) to t0 where 0 .LE. t0 .LT. 1
-k = 1
-j = ti(1)
-t0 = ti(1) - j
-if (t0 < 0.0) t0 = 1.0 + t0
-if (t0 >= t(m)) go to 60
-il = 1
-ir = m
-!     Bisection search
-10 i = (il + ir)/2
-if (i == il) go to 50
-nswc_ai_r4 = t0 - t(i)
-if (nswc_ai_r4 < 0) go to 20
-if (nswc_ai_r4 == 0) go to 50
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!     Linear forward search
-40 if (t0 < t(i + 1)) go to 50
+!          Discard self dependent columns
+i = 1
+50 if (eb(i) >= h(i)) go to 60
+if (i == krank) go to 70
 i = i + 1
-go to 40
-!     Computation when t(i) .LE. t0 .LT. t(i+1)
-50 h = t(i + 1) - t(i)
-dt = t0 - t(i)
-do j = 1,n
-   a = dx(i,j)
-   d = (x(i + 1,j) - x(i,j))/h
-   w = a + dx(i + 1,j)
-   b = (-w - a + 3.0*d)/h
-   c = ((w - d - d)/h)/h
-   z(k,j) = x(i,j) + dt*(a + dt*(b + dt*c))
+go to 50
+!          Matrix reduction
+60 kk = krank
+krank = krank - 1
+if (mode == 0) return
+if (i <= np) go to 400
+if (i > krank) go to 70
+call sswap(1,eb(i),1,eb(kk),1)
+call sswap(1,ub(i),1,ub(kk),1)
+call sswap(1,w(i),1,w(kk),1)
+call sswap(1,h(i),1,h(kk),1)
+call iswap(1,ic(i),1,ic(kk),1)
+call sswap(m,a(1,i),1,a(1,kk),1)
+go to 50
+!           Test for zero rank
+70 if (krank > 0) go to 100
+krank = 0
+ksure = 0
+return
+!        m A i n    L O O P
+100 j = j + 1
+jp1 = j + 1
+jm1 = j - 1
+kz = krank
+if (j <= np) kz = j
+!        Each col has MM=m-j+1 components
+mm = m - j + 1
+!         ub determines column pivot
+110 imin = j
+if (h(j) == 0.0) go to 170
+rmin = ub(j)/h(j)
+do i = j,kz
+   if (ub(i) >= h(i)*rmin) go to 120
+   rmin = ub(i)/h(i)
+   imin = i
+120 continue
+end do
+!     Test for rank deficiency
+if (rmin < 1.0) go to 200
+tt = (eb(imin) + abs(db(imin)))/h(imin)
+if (tt >= 1.0) go to 170
+!     Compute exact ub
+do i = 1,jm1
+   w(i) = a(i,imin)
+end do
+l = jm1
+130 w(l) = w(l)/a(l,l)
+if (l == 1) go to 150
+lm1 = l - 1
+do i = l,jm1
+   w(lm1) = w(lm1) - a(lm1,i)*w(i)
+end do
+l = lm1
+go to 130
+150 tt = eb(imin)
+do i = 1,jm1
+   tt = tt + abs(w(i))*eb(i)
+end do
+ub(imin) = tt
+if (ub(imin)/h(imin) >= 1.0) go to 170
+go to 200
+!        Matrix reduction
+170 kk = krank
+krank = krank - 1
+kz = krank
+if (mode == 0) return
+if (j <= np) go to 410
+if (imin > krank) go to 180
+call iswap(1,ic(imin),1,ic(kk),1)
+call sswap(m,a(1,imin),1,a(1,kk),1)
+call sswap(1,eb(imin),1,eb(kk),1)
+call sswap(1,ub(imin),1,ub(kk),1)
+call sswap(1,db(imin),1,db(kk),1)
+call sswap(1,w(imin),1,w(kk),1)
+call sswap(1,h(imin),1,h(kk),1)
+180 if (j > krank) go to 300
+go to 110
+!        Column pivot
+200 if (imin == j) go to 210
+call sswap(1,h(j),1,h(imin),1)
+call sswap(m,a(1,j),1,a(1,imin),1)
+call sswap(1,eb(j),1,eb(imin),1)
+call sswap(1,ub(j),1,ub(imin),1)
+call sswap(1,db(j),1,db(imin),1)
+call sswap(1,w(j),1,w(imin),1)
+call iswap(1,ic(j),1,ic(imin),1)
+!        Row pivot
+210 jmax = isamax(mm,a(j,j),1)
+jmax = jmax + j - 1
+if (jmax == j) go to 220
+call sswap(n,a(j,1),mda,a(jmax,1),mda)
+call iswap(1,ir(j),1,ir(jmax),1)
+!     Apply Householder transformation
+220 tn = snrm2(mm,a(j,j),1)
+if (tn == 0.0) go to 170
+if (a(j,j) /= 0.0) tn = sign(tn,a(j,j))
+call sscal(mm,1.0/tn,a(j,j),1)
+a(j,j) = a(j,j) + 1.0
+if (j == n) go to 250
+do i = jp1,n
+   bb = -sdot(mm,a(j,j),1,a(j,i),1)/a(j,j)
+   call saxpy(mm,bb,a(j,j),1,a(j,i),1)
+   if (i <= np) go to 240
+   if (h(i) == 0.0) go to 240
+   tt = 1.0 - (a(j,i)/h(i))**2
+   tt = max(tt,0.0)
+   t = tt
+   tt = 1.0 + 0.05*tt*(h(i)/w(i))**2
+   if (tt == 1.0) go to 230
+   h(i) = h(i)*sqrt(t)
+   go to 240
+230 h(i) = snrm2(m - j,a(j + 1,i),1)
+   w(i) = h(i)
+240 continue
+end do
+250 h(j) = a(j,j)
+a(j,j) = -tn
+!          Update ub, db
+ub(j) = ub(j)/abs(a(j,j))
+db(j) = (sign(eb(j),db(j)) + db(j))/a(j,j)
+if (j == krank) go to 300
+do i = jp1,krank
+   ub(i) = ub(i) + abs(a(j,i))*ub(j)
+   db(i) = db(i) - a(j,i)*db(j)
 end do
 go to 100
-!     Computation when t0 .GE. t(m)
-60 i = m
-h = 1.0 - t(m)
-dt = t0 - t(m)
-do j = 1,n
-   a = dx(m,j)
-   d = (x(1,j) - x(m,j))/h
-   w = a + dx(1,j)
-   b = (-w - a + 3.0*d)/h
-   c = ((w - d - d)/h)/h
-   z(k,j) = x(m,j) + dt*(a + dt*(b + dt*c))
+!        E n D    m A i n    L O O P
+300 continue
+!        Compute ksure
+km1 = krank - 1
+do i = 1,km1
+   is = 0
+   kmi = krank - i
+   do ii = 1,kmi
+      if (ub(ii) <= ub(ii + 1)) go to 310
+      is = 1
+      temp = ub(ii)
+      ub(ii) = ub(ii + 1)
+      ub(ii + 1) = temp
+310   continue
+   end do
+   if (is == 0) exit
 end do
-!     Next point
-100 if (k >= l) return
-told = t0
-k = k + 1
-j = ti(k)
-t0 = ti(k) - j
-if (t0 < 0.0) t0 = 1.0 + t0
-if (t0 >= t(m)) go to 60
-nswc_ai_r4 = t0 - told
-if (nswc_ai_r4 < 0) go to 110
-if (nswc_ai_r4 == 0) go to 50
+ksure = 0
+sum = 0.0
+do i = 1,krank
+   r2 = ub(i)*ub(i)
+   if (r2 + sum >= 1.0) exit
+   sum = sum + r2
+   ksure = ksure + 1
+end do
+!     If system is of reduced rank and mode = 2
+!     complete the decomposition for shortest least squares solution
+if (krank == n .or. mode < 2) return
+nmk = n - krank
+kp1 = krank + 1
+i = krank
+340 tn = snrm2(nmk,a(i,kp1),mda)/a(i,i)
+tn = a(i,i)*sqrt(1.0 + tn*tn)
+call sscal(nmk,1.0/tn,a(i,kp1),mda)
+w(i) = a(i,i)/tn + 1.0
+a(i,i) = -tn
+if (i == 1) go to 350
+im1 = i - 1
+do ii = 1,im1
+   tt = -sdot(nmk,a(ii,kp1),mda,a(i,kp1),mda)/w(i)
+   tt = tt - a(ii,i)
+   call saxpy(nmk,tt,a(i,kp1),mda,a(ii,kp1),mda)
+   a(ii,i) = a(ii,i) + tt*w(i)
+end do
+i = i - 1
+go to 340
+350 continue
+return
+!     First np columns are linearly dependent
+400 krank = i - 1
+return
+410 krank = j - 1
+end subroutine u11ls
+
+subroutine u12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic,ir)
+!! <!-- nswc-ford:begin U12LS -->
+!! Reference for `u12ls`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!         Given the Householder QR factorization of A, this
+!!         subroutine solves the system AX=b. if the system
+!!         is of reduced rank, this routine returns a solution
+!!         according to the selected mode.
+!!        Note - If mode.NE.2, w is never accessed.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
+real, intent(inout) :: a(mda,n), b(mdb,nb)
+real :: h(n)
+real, intent(inout) :: rnorm(nb)
+real :: w(n)
+integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
+integer :: i, ij, im1, j, jb, k, kp1, nmk
+real :: bb, tt
+real :: snrm2
+real :: sdot
+!        Given the Householder QR factorization of A, this
+!        subroutine solves the system AX=b. if the system
+!        is of reduced rank, this routine returns a solution
+!        according to the selected mode.
+!       Note - If mode.NE.2, w is never accessed.
+k = krank
+kp1 = k + 1
+if (k > 0) go to 30
+!        rank=0
+do jb = 1,nb
+   rnorm(jb) = snrm2(m,b(1,jb),1)
+end do
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.0
+   end do
+end do
+return
+30 i = 0
+!     Reorder b to reflect row interchanges
+40 i = i + 1
+if (i == m) go to 100
+j = ir(i)
+if (j == i) go to 40
+if (j < 0) go to 40
+ir(i) = -ir(i)
+do jb = 1,nb
+   rnorm(jb) = b(i,jb)
+end do
+ij = i
+60 do jb = 1,nb
+   b(ij,jb) = b(j,jb)
+end do
+ij = j
+j = ir(ij)
+ir(ij) = -ir(ij)
+if (j /= i) go to 60
+do jb = 1,nb
+   b(ij,jb) = rnorm(jb)
+end do
 go to 40
-110 il = 1
-ir = min(i + 1,m)
-go to 10
-end subroutine lopcmp
-
-pure subroutine lopdf(m, n, t, x, kx, dx, kdx, ti, z, dz, ddz)
-implicit none
-integer, intent(in) :: kdx, kx, m, n
-real, intent(in) :: ti
-real, intent(in) :: t(m), x(kx,n), dx(kdx,n)
-real, intent(inout) :: z(n), dz(n), ddz(n)
-!     beginning of local variable declarations
-integer :: i, il, ir, j
-real :: a, b, c, d, dt, h, t0, w, nswc_ai_r4
-!-----------------------------------------------------------------------
-!          Evaluation and differentiation of a cubic spline
-!                closed curve in n-dimensional space
-!-----------------------------------------------------------------------
-!     Reduction of ti to t0 where 0 .LE. t0 .LT. 1
-j = ti
-t0 = ti - j
-if (t0 < 0.0) t0 = 1.0 + t0
-if (t0 >= t(m)) go to 50
-il = 1
-ir = m
-!     Bisection search
-10 i = (il + ir)/2
-if (i == il) go to 40
-nswc_ai_r4 = t0 - t(i)
-if (nswc_ai_r4 < 0) go to 20
-if (nswc_ai_r4 == 0) go to 40
-go to 30
-20 ir = i
-go to 10
-30 il = i
-go to 10
-!     Computation when t(i) .LE. t0 .LT. t(i+1)
-40 h = t(i + 1) - t(i)
-dt = t0 - t(i)
-do j = 1,n
-   a = dx(i,j)
-   d = (x(i + 1,j) - x(i,j))/h
-   w = a + dx(i + 1,j)
-   b = (-w - a + 3.0*d)/h
-   c = ((w - d - d)/h)/h
-   z(j) = x(i,j) + dt*(a + dt*(b + dt*c))
-   b = b + b
-   c = 3.0*c
-   dz(j) = a + dt*(b + c*dt)
-   ddz(j) = b + (c + c)*dt
+100 do i = 1,m
+   ir(i) = abs(ir(i))
 end do
-return
-!     Computation when t0 .GE. t(m)
-50 h = 1.0 - t(m)
-dt = t0 - t(m)
-do j = 1,n
-   a = dx(m,j)
-   d = (x(1,j) - x(m,j))/h
-   w = a + dx(1,j)
-   b = (-w - a + 3.0*d)/h
-   c = ((w - d - d)/h)/h
-   z(j) = x(m,j) + dt*(a + dt*(b + dt*c))
-   b = b + b
-   c = 3.0*c
-   dz(j) = a + dt*(b + c*dt)
-   ddz(j) = b + (c + c)*dt
+!     Apply Householder transformations to b
+do j = 1,k
+   tt = a(j,j)
+   a(j,j) = h(j)
+   do i = 1,nb
+      bb = -sdot(m - j + 1,a(j,j),1,b(j,i),1)/h(j)
+      call saxpy(m - j + 1,bb,a(j,j),1,b(j,i),1)
+   end do
+   a(j,j) = tt
 end do
-end subroutine lopdf
+!        Find norms of residual vector(S)..(before overwrite b)
+do jb = 1,nb
+   rnorm(jb) = snrm2(m - k,b(kp1,jb),1)
+end do
+!     Back solve upper triangular R
+i = k
+150 do jb = 1,nb
+   b(i,jb) = b(i,jb)/a(i,i)
+end do
+if (i == 1) go to 200
+im1 = i - 1
+do jb = 1,nb
+   call saxpy(im1,-b(i,jb),a(1,i),1,b(1,jb),1)
+end do
+i = im1
+go to 150
+!     RANK LT n
+!      truncated solution
+200 if (k == n) go to 230
+do jb = 1,nb
+   do i = kp1,n
+      b(i,jb) = 0.0
+   end do
+end do
+if (mode == 1) go to 230
+!      Minimal length solution
+nmk = n - k
+do jb = 1,nb
+   do i = 1,k
+      tt = -sdot(nmk,a(i,kp1),mda,b(kp1,jb),1)/w(i)
+      tt = tt - b(i,jb)
+      call saxpy(nmk,tt,a(i,kp1),mda,b(kp1,jb),1)
+      b(i,jb) = b(i,jb) + tt*w(i)
+   end do
+end do
+!     Reorder b to reflect column interchanges
+230 i = 0
+240 i = i + 1
+if (i == n) go to 260
+j = ic(i)
+if (j == i) go to 240
+if (j < 0) go to 240
+ic(i) = -ic(i)
+250 call sswap(nb,b(j,1),mdb,b(i,1),mdb)
+ij = ic(j)
+ic(j) = -ic(j)
+j = ij
+if (j /= i) go to 250
+go to 240
+260 do i = 1,n
+   ic(i) = abs(ic(i))
+end do
+end subroutine u12ls
 
-pure subroutine curv1(n,x,y,slp1,slpn,islpsw,yp,temp, &
-   & sigma,ierr)
+pure subroutine u11us(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+   & ir,ic)
+!! <!-- nswc-ford:begin U11US -->
+!! Reference for `u11us`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!        This routine performs an LQ factorization of the
+!!        matrix a using Householder transformations. Row
+!!        and column pivots are chosen to reduce the growth
+!!        of round-off and to help detect possible rank
+!!        deficiency.
+!!         Initialization
+!! ```
+!! <!-- nswc-ford:end -->
 implicit none
-integer, intent(in) :: n, islpsw
-integer, intent(out) :: ierr
-real, intent(in) :: x(n), y(n), slp1, slpn
-real, intent(inout) :: yp(n), temp(n)
-real, intent(in) :: sigma
+integer, intent(out) :: krank
+integer, intent(inout) :: ksure
+integer, intent(in) :: m, mda, mode, n, np
+real, intent(inout) :: a(mda,n), db(m), eb(m), h(m), ub(m), w(m)
+integer, intent(inout) :: ic(n), ir(m)
 !     beginning of local variable declarations
-integer :: i, ibak, nm1, np1
-real :: c1, c2, c3, delx1, delx2, delxn, delxnm, diag, diag1, &
-   & diag2, dx1, dx2, sdiag1, sdiag2, sigmap, slpp1, slppn
+integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
+   & kp1, kz, l, lm1, mmk, nn
+real :: bb, r2, rmin, sum, t, temp, tn, tt
 interface
-   pure elemental subroutine ceez(del1,del2,sigma,c1,c2,c3,n)
+   pure function isamax(n,sx,incx)
       implicit none
-      real, intent(in) :: del1
-      real, intent(in) :: del2
-      real, intent(in) :: sigma
-      real, intent(inout) :: c1
-      real, intent(inout) :: c2
-      real, intent(inout) :: c3
       integer, intent(in) :: n
-   end subroutine ceez
-   pure elemental subroutine terms(diag,sdiag,sigma,del)
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      integer :: isamax
+   end function isamax
+   pure subroutine iswap(n,ix,incx,iy,incy)
       implicit none
-      real, intent(inout) :: diag
-      real, intent(inout) :: sdiag
-      real, intent(in) :: sigma
-      real, intent(in) :: del
-   end subroutine terms
-end interface
-!                      From the spline under tension package
-!                       coded by A. K. Cline and R. J. Renka
-!                            department of computer sciences
-!                              University of Texas at Austin
-! this subroutine determines the parameters necessary to
-! compute an interpolatory spline under tension through
-! a sequence of functional values. The slopes at the two
-! ends of the curve may be specified or omitted.  For actual
-! computation of points on the curve it is necessary to call
-! the function curv2.
-! On input--
-!   n is the number of values to be interpolated (n.GE.2).
-!   x is an array of the n increasing abscissae of the
-!   functional values.
-!   y is an array of the n ordinates of the values, (I. E.
-!   y(K) is the functional value corresponding to x(K) ).
-!   slp1 and slpn contain the desired values for the first
-!   derivative of the curve at x(1) and x(n), respectively.
-!   The user may omit values for either or both of these
-!   parameters and signal this with islpsw.
-!   islpsw contains a switch indicating which slope data
-!   should be used and which should be estimated by this
-!   subroutine,
-!          = 0 If slp1 and slpn are to be used,
-!          = 1 If slp1 is to be used but not slpn,
-!          = 2 If slpn is to be used but not slp1,
-!          = 3 If both slp1 and slpn are to be estimated
-!              internally.
-!   yp is an array of length at least n.
-!   Temp is an array of length at least n which is used for
-!   scratch storage.
-! And
-!   sigma contains the tension factor. This value indicates
-!   the curviness desired. If abs(sigma) is nearly zero
-!   (E.G. .001) the resulting curve is approximately A
-!   cubic spline. If abs(sigma) is large (E.G. 50.) The
-!   resulting curve is nearly a polygonal line. If sigma
-!   equals zero a cubic spline results.  A standard value
-!   for sigma is approximately 1. In absolute value.
-! On output--
-!   yp contains the values of the second derivative of the
-!   curve at the given nodes.
-!   ierr contains an error flag,
-!        = 0 For normal return,
-!        = 1 If n is less than 2,
-!        = 2 If x-values are not strictly increasing.
-! And
-!   n, x, y, slp1, slpn, islpsw and sigma are unaltered.
-! This subroutine references package modules ceez, terms,
-! and snhcsh.
-!-----------------------------------------------------------
-nm1 = n - 1
-np1 = n + 1
-ierr = 0
-if (n <= 1) go to 8
-if (x(n) <= x(1)) go to 9
-! Denormalize tension factor
-sigmap = abs(sigma)*float(n - 1)/(x(n) - x(1))
-! Approximate end slopes
-if (islpsw >= 2) go to 1
-slpp1 = slp1
-go to 2
-1 delx1 = x(2) - x(1)
-delx2 = delx1 + delx1
-if (n > 2) delx2 = x(3) - x(1)
-if (delx1 <= 0. .or. delx2 <= delx1) go to 9
-call ceez(delx1,delx2,sigmap,c1,c2,c3,n)
-slpp1 = c1*y(1) + c2*y(2)
-if (n > 2) slpp1 = slpp1 + c3*y(3)
-2 if (islpsw == 1 .or. islpsw == 3) go to 3
-slppn = slpn
-go to 4
-3 delxn = x(n) - x(nm1)
-delxnm = delxn + delxn
-if (n > 2) delxnm = x(n) - x(n - 2)
-if (delxn <= 0. .or. delxnm <= delxn) go to 9
-call ceez(-delxn,-delxnm,sigmap,c1,c2,c3,n)
-slppn = c1*y(n) + c2*y(nm1)
-if (n > 2) slppn = slppn + c3*y(n - 2)
-! Set up right hand side and tridiagonal system for yp and
-! perform forward elimination
-4 delx1 = x(2) - x(1)
-if (delx1 <= 0.) go to 9
-dx1 = (y(2) - y(1))/delx1
-call terms(diag1,sdiag1,sigmap,delx1)
-yp(1) = (dx1 - slpp1)/diag1
-temp(1) = sdiag1/diag1
-if (n == 2) go to 6
-do i = 2,nm1
-   delx2 = x(i + 1) - x(i)
-   if (delx2 <= 0.) go to 9
-   dx2 = (y(i + 1) - y(i))/delx2
-   call terms(diag2,sdiag2,sigmap,delx2)
-   diag = diag1 + diag2 - sdiag1*temp(i - 1)
-   yp(i) = (dx2 - dx1 - sdiag1*yp(i - 1))/diag
-   temp(i) = sdiag2/diag
-   dx1 = dx2
-   diag1 = diag2
-   sdiag1 = sdiag2
-end do
-6 diag = diag1 - sdiag1*temp(nm1)
-yp(n) = (slppn - dx1 - sdiag1*yp(nm1))/diag
-! Perform back substitution
-do i = 2,n
-   ibak = np1 - i
-   yp(ibak) = yp(ibak) - temp(ibak)*yp(ibak + 1)
-end do
-return
-! Too few points
-8 ierr = 1
-return
-! x-values not strictly increasing
-9 ierr = 2
-end subroutine curv1
-
-pure function curv2(t,n,x,y,yp,sigma)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: t, x(n), y(n), yp(n), sigma
-real :: curv2
-!     beginning of local variable declarations
-integer :: i, im1
-real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, &
-   & sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sum
-interface
-   pure function intrvl(x,t,m)
-      implicit none
-      integer, intent(in) :: m
-      real, intent(in) :: x
-      real, intent(in) :: t(m)
-      integer :: intrvl
-   end function intrvl
-   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
-      implicit none
-      real, intent(inout) :: sinhm
-      real, intent(inout) :: coshm
-      real, intent(in) :: x
-      integer, intent(in) :: isw
-   end subroutine snhcsh
-end interface
-!                      From the spline under tension package
-!                       coded by A. K. Cline and R. J. Renka
-!                            department of computer sciences
-!                              University of Texas at Austin
-! this function interpolates a curve at a given point
-! using a spline under tension. The subroutine curv1 should
-! be called earlier to determine certain necessary
-! parameters.
-! On input--
-!   t contains a real value to be mapped onto the interpo-
-!   LATING curve.
-!   n contains the number of points which were specified to
-!   determine the curve.
-!   x and y are arrays containing the abscissae and
-!   ordinates, respectively, of the specified points.
-!   yp is an array of second derivative values of the curve
-!   at the nodes.
-! And
-!   sigma contains the tension factor (its sign is ignored).
-! The parameters n, x, y, yp, and sigma should be input
-! unaltered from the output of curv1.
-! On output--
-!   curv2 contains the interpolated value.
-! None of the input parameters are altered.
-! This function references package modules intrvl and
-! snhcsh.
-!-----------------------------------------------------------
-! Determine interval
-im1 = intrvl(t,x,n)
-i = im1 + 1
-! Denormalize tension factor
-sigmap = abs(sigma)*float(n - 1)/(x(n) - x(1))
-! Set up and perform interpolation
-del1 = t - x(im1)
-del2 = x(i) - t
-dels = x(i) - x(im1)
-sum = (y(i)*del1 + y(im1)*del2)/dels
-if (sigmap /= 0.) go to 1
-curv2 = sum - del1*del2*(yp(i)*(del1 + dels) + yp(im1)* &
-   & (del2 + dels))/(6.*dels)
-return
-1 delp1 = sigmap*(del1 + dels)/2.
-delp2 = sigmap*(del2 + dels)/2.
-call snhcsh(sinhm1,dummy,sigmap*del1,-1)
-call snhcsh(sinhm2,dummy,sigmap*del2,-1)
-call snhcsh(sinhms,dummy,sigmap*dels,-1)
-call snhcsh(sinhp1,dummy,sigmap*del1/2.,-1)
-call snhcsh(sinhp2,dummy,sigmap*del2/2.,-1)
-call snhcsh(dummy,coshp1,delp1,1)
-call snhcsh(dummy,coshp2,delp2,1)
-curv2 = sum + (yp(i)*(sinhm1*del2 - del1*(2.*(coshp1 + 1.)* &
-   & sinhp2 + sigmap*coshp1*del2)) + yp(im1)*(sinhm2* &
-   & del1 - del2*(2.*(coshp2 + 1.)*sinhp1 + sigmap* &
-   & coshp2*del1)))/(sigmap*sigmap*dels*(sinhms + &
-   & sigmap*dels))
-end function curv2
-
-pure function curvd(t,n,x,y,yp,sigma)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: t, x(n), y(n), yp(n), sigma
-real :: curvd
-!     beginning of local variable declarations
-integer :: i, im1
-real :: coshm1, coshm2, del1, del2, dels, dummy, sigmap, sinhms, &
-   & sum
-interface
-   pure function intrvl(x,t,m)
-      implicit none
-      integer, intent(in) :: m
-      real, intent(in) :: x
-      real, intent(in) :: t(m)
-      integer :: intrvl
-   end function intrvl
-   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
-      implicit none
-      real, intent(inout) :: sinhm
-      real, intent(inout) :: coshm
-      real, intent(in) :: x
-      integer, intent(in) :: isw
-   end subroutine snhcsh
-end interface
-!                      From the spline under tension package
-!                       coded by A. K. Cline and R. J. Renka
-!                            department of computer sciences
-!                              University of Texas at Austin
-! this function differentiates a curve at a given point
-! using a spline under tension. The subroutine curv1 should
-! be called earlier to determine certain necessary
-! parameters.
-! On input--
-!   t contains a real value at which the derivative is to be
-!   determined.
-!   n contains the number of points which were specified to
-!   determine the curve.
-!   x and y are arrays containing the abscissae and
-!   ordinates, respectively, of the specified points.
-!   yp is an array of second derivative values of the curve
-!   at the nodes.
-! And
-!   sigma contains the tension factor (its sign is ignored).
-! The parameters n, x, y, yp, and sigma should be input
-! unaltered from the output of curv1.
-! On output--
-!   curvd contains the derivative value.
-! None of the input parameters are altered.
-! This function references package modules intrvl and
-! snhcsh.
-!-----------------------------------------------------------
-! Determine interval
-im1 = intrvl(t,x,n)
-i = im1 + 1
-! Denormalize tension factor
-sigmap = abs(sigma)*float(n - 1)/(x(n) - x(1))
-! Set up and perform differentiation
-del1 = t - x(im1)
-del2 = x(i) - t
-dels = x(i) - x(im1)
-sum = (y(i) - y(im1))/dels
-if (sigmap /= 0.) go to 1
-curvd = sum + (yp(i)*(2.*del1*del1 - del2*(del1 + dels)) - &
-   & yp(im1)*(2.*del2*del2 - del1*(del2 + dels))) &
-   & /(6.*dels)
-return
-1 call snhcsh(dummy,coshm1,sigmap*del1,1)
-call snhcsh(dummy,coshm2,sigmap*del2,1)
-call snhcsh(sinhms,dummy,sigmap*dels,-1)
-curvd = sum + (yp(i)*(dels*sigmap*coshm1 - sinhms) - &
-   & yp(im1)*(dels*sigmap*coshm2 - sinhms))/ &
-   & (sigmap*sigmap*dels*(sinhms + sigmap*dels))
-end function curvd
-
-pure function curvi(xl,xu,n,x,y,yp,sigma)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
-real :: curvi
-!     beginning of local variable declarations
-integer :: i, il, ilm1, ilp1, iu, ium1
-real :: c1, c2, cl1, cl2, cmm1, cmm2, cs, cu1, cu2, del1, del2, &
-   & deli, dell1, dell2, dels, delu1, delu2, dummy, sigmap, ss, ssign, &
-   & sum, t, t1, t2, xxl, xxu
-interface
-   pure function intrvl(x,t,m)
-      implicit none
-      integer, intent(in) :: m
-      real, intent(in) :: x
-      real, intent(in) :: t(m)
-      integer :: intrvl
-   end function intrvl
-   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
-      implicit none
-      real, intent(inout) :: sinhm
-      real, intent(inout) :: coshm
-      real, intent(in) :: x
-      integer, intent(in) :: isw
-   end subroutine snhcsh
-end interface
-!                      From the spline under tension package
-!                       coded by A. K. Cline and R. J. Renka
-!                            department of computer sciences
-!                              University of Texas at Austin
-! this function integrates a curve specified by a spline
-! under tension between two given limits. The subroutine
-! curv1 should be called earlier to determine necessary
-! parameters.
-! On input--
-!   xl and xu contain the lower and upper limits of inte-
-!   gration, respectively. (xl need not be less than or
-!   equal to xu, curvi (xl,xu,...) .EQ. -curvi (xu,xl,...) ).
-!   n contains the number of points which were specified to
-!   determine the curve.
-!   x and y are arrays containing the abscissae and
-!   ordinates, respectively, of the specified points.
-!   yp is an array of second derivative values of the curve
-!   at the nodes.
-! And
-!   sigma contains the tension factor (its sign is ignored).
-! The parameters n, x, y, yp, and sigma should be input
-! unaltered from the output of curv1.
-! On output--
-!   curvi contains the integral value.
-! None of the input parameters are altered.
-! This function references package modules intrvl and
-! snhcsh.
-!-----------------------------------------------------------
-! Statement function for coefficient associated with
-! derivative terms
-! Denormalize tension factor
-sigmap = abs(sigma)*float(n - 1)/(x(n) - x(1))
-! Determine actual upper and lower bounds
-xxl = xl
-xxu = xu
-ssign = 1.
-if (xl < xu) go to 1
-xxl = xu
-xxu = xl
-ssign = -1.
-if (xl > xu) go to 1
-! RETURN ZERO IF xl .EQ. xu
-curvi = 0.
-return
-! Search for proper intervals
-1 ilm1 = intrvl(xxl,x,n)
-il = ilm1 + 1
-ium1 = intrvl(xxu,x,n)
-iu = ium1 + 1
-if (il == iu) go to 8
-! Integrate from xxl to x(il)
-sum = 0.
-if (xxl == x(il)) go to 3
-del1 = xxl - x(ilm1)
-del2 = x(il) - xxl
-dels = x(il) - x(ilm1)
-t1 = (del1 + dels)*del2/(2.*dels)
-t2 = del2*del2/(2.*dels)
-sum = t1*y(il) + t2*y(ilm1)
-if (sigma == 0.) go to 2
-call snhcsh(dummy,c1,sigmap*del1,2)
-call snhcsh(dummy,c2,sigmap*del2,2)
-call snhcsh(ss,cs,sigmap*dels,3)
-sum = sum + term(cs,c1,t1)*yp(il) &
-   & + term(c2,0.,t2)*yp(ilm1)
-go to 3
-2 sum = sum - t1*t1*dels*yp(il)/6. &
-   & - t2*(del1*(del2 + dels) + dels*dels)*yp(ilm1)/12.
-! Integrate over interior intervals
-3 if (iu - il == 1) go to 6
-ilp1 = il + 1
-do i = ilp1,ium1
-   dels = x(i) - x(i - 1)
-   sum = sum + (y(i) + y(i - 1))*dels/2.
-   if (sigma == 0.) go to 4
-   call snhcsh(ss,cs,sigmap*dels,3)
-   sum = sum + (yp(i) + yp(i - 1))*(cs - ss*sigmap*dels/2.)/ &
-      & (sigmap*sigmap*sigmap*(ss + sigmap*dels))
-   go to 5
-4  sum = sum - (yp(i) + yp(i - 1))*dels*dels*dels/24.
-5  continue
-end do
-! Integrate from x(iu-1) to XXU
-6 if (xxu == x(ium1)) go to 10
-del1 = xxu - x(ium1)
-del2 = x(iu) - xxu
-dels = x(iu) - x(ium1)
-t1 = del1*del1/(2.*dels)
-t2 = (del2 + dels)*del1/(2.*dels)
-sum = sum + t1*y(iu) + t2*y(ium1)
-if (sigma == 0.) go to 7
-call snhcsh(dummy,c1,sigmap*del1,2)
-call snhcsh(dummy,c2,sigmap*del2,2)
-call snhcsh(ss,cs,sigmap*dels,3)
-sum = sum + term(c1,0.,t1)*yp(iu) &
-   & + term(cs,c2,t2)*yp(ium1)
-go to 10
-7 sum = sum - t1*(del2*(del1 + dels) + dels*dels)*yp(iu)/12. &
-   & - t2*t2*dels*yp(ium1)/6.
-go to 10
-! Integrate from xxl to XXU
-8 delu1 = xxu - x(ium1)
-delu2 = x(iu) - xxu
-dell1 = xxl - x(ium1)
-dell2 = x(iu) - xxl
-dels = x(iu) - x(ium1)
-deli = xxu - xxl
-t1 = (delu1 + dell1)*deli/(2.*dels)
-t2 = (delu2 + dell2)*deli/(2.*dels)
-sum = t1*y(iu) + t2*y(ium1)
-if (sigma == 0.) go to 9
-call snhcsh(dummy,cu1,sigmap*delu1,2)
-call snhcsh(dummy,cu2,sigmap*delu2,2)
-call snhcsh(dummy,cl1,sigmap*dell1,2)
-call snhcsh(dummy,cl2,sigmap*dell2,2)
-call snhcsh(ss,dummy,sigmap*dels,-1)
-sum = sum + term(cu1,cl1,t1)*yp(iu) &
-   & + term(cl2,cu2,t2)*yp(ium1)
-go to 10
-9 sum = sum - t1*(delu2*(dels + delu1) + dell2*(dels + dell1))* &
-   & yp(iu)/12. &
-   & - t2*(dell1*(dels + dell2) + delu1*(dels + delu2))* &
-   & yp(ium1)/12.
-! Correct sign and return
-10 curvi = ssign*sum
-contains
-   pure function term(cmm1, cmm2, t) result(nswc_sf_result)
-      implicit none
-      real, intent(in) :: cmm1
-      real, intent(in) :: cmm2
-      real, intent(in) :: t
-      real :: nswc_sf_result
-      nswc_sf_result = (cmm1 - cmm2 - sigmap*t*ss)/(sigmap*   sigmap*sigmap*(ss + sigmap*dels))
-   end function term
-end function curvi
-
-pure subroutine kurv1(n,x,y,slp1,slpn,islpsw,xp,yp,temp,s, &
-   & sigma,ierr)
-implicit none
-integer, intent(in) :: n, islpsw
-integer, intent(out) :: ierr
-real, intent(in) :: x(n), y(n), slp1, slpn
-real, intent(inout) :: xp(n), yp(n), temp(n), s(n)
-real, intent(in) :: sigma
-!     beginning of local variable declarations
-integer :: i, ibak, im1, nm1, np1
-real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
-   & diag1, diag2, diagin, dx1, dx2, dy1, dy2, sdiag1, sdiag2, sigmap, &
-   & slpp1x, slpp1y, slppnx, slppny, sx, sy
-interface
-   pure elemental subroutine ceez(del1,del2,sigma,c1,c2,c3,n)
-      implicit none
-      real, intent(in) :: del1
-      real, intent(in) :: del2
-      real, intent(in) :: sigma
-      real, intent(inout) :: c1
-      real, intent(inout) :: c2
-      real, intent(inout) :: c3
       integer, intent(in) :: n
-   end subroutine ceez
-   pure elemental subroutine terms(diag,sdiag,sigma,del)
+      integer, intent(inout) :: ix(*)
+      integer, intent(in) :: incx
+      integer, intent(inout) :: iy(*)
+      integer, intent(in) :: incy
+   end subroutine iswap
+   pure subroutine saxpy(n,sa,sx,incx,sy,incy)
       implicit none
-      real, intent(inout) :: diag
-      real, intent(inout) :: sdiag
-      real, intent(in) :: sigma
-      real, intent(in) :: del
-   end subroutine terms
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine saxpy
+   pure function sdot(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(in) :: sy(*)
+      integer, intent(in) :: incy
+      real :: sdot
+   end function sdot
+   pure function snrm2(n,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sx(*)
+      integer, intent(in) :: incx
+      real :: snrm2
+   end function snrm2
+   pure subroutine sscal(n,sa,sx,incx)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: sa
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+   end subroutine sscal
+   pure subroutine sswap(n,sx,incx,sy,incy)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(inout) :: sx(*)
+      integer, intent(in) :: incx
+      real, intent(inout) :: sy(*)
+      integer, intent(in) :: incy
+   end subroutine sswap
 end interface
-!                      From the spline under tension package
-!                       coded by A. K. Cline and R. J. Renka
-!                            department of computer sciences
-!                              University of Texas at Austin
-! this subroutine determines the parameters necessary to
-! compute a spline under tension forming a curve in the
-! plane and passing through a sequence of pairs (x(1),y(1)),
-! ...,(x(n),y(n)). For actual computation of points on the
-! curve it is necessary to call the subroutine kurv2.
-! On input--
-!   n is the number of points to be interpolated (n.GE.2).
-!   x is an array containing the n x-coordinates of the
-!   points.
-!   y is an array containing the n y-coordinates of the
-!   points. (Adjacent x-y pairs must be distinct, I. E.
-!   Either x(i) .NE. x(i+1) or y(i) .NE. y(i+1), for
-!   i = 1,...,n-1.)
-!   slp1 and slpn contain the desired values for the angles
-!   (in radians) of the slope at (x(1),y(1)) and (x(n),y(n))
-!   respectively. The angles are measured counter-clock-
-!   wise from the x-axis and the positive sense of the curve
-!   is assumed to be that moving from point 1 to point n.
-!   The user may omit values for either or both of these
-!   parameters and signal this with islpsw.
-!   islpsw contains a switch indicating which slope data
-!   should be used and which should be estimated by this
-!   subroutine,
-!          = 0 If slp1 and slpn are to be used,
-!          = 1 If slp1 is to be used but not slpn,
-!          = 2 If slpn is to be used but not slp1,
-!          = 3 If both slp1 and slpn are to be estimated
-!              internally.
-!   xp and yp are arrays of length at least n.
-!   Temp is an array of length at least n which is used
-!   for scratch storage.
-!   s is an array of length at least n.
-! And
-!   sigma contains the tension factor. This value indicates
-!   the curviness desired. If abs(sigma) is nearly zero
-!   (E.G. .001) the resulting curve is approximately a cubic
-!   spline. If abs(sigma) is large (E. G. 50.) The resulting
-!   curve is nearly a polygonal line. If sigma equals zero A
-!   cubic spline results. A standard value for sigma is
-!   approximately 1. In absolute value.
-! On output--
-!   xp and yp contain information about the curvature of the
-!   curve at the given nodes.
-!   s contains the polygonal arclengths of the curve.
-!   ierr contains an error flag,
-!        = 0 For normal return,
-!        = 1 If n is less than 2,
-!        = 2 If adjacent coordinate pairs coincide.
-! And
-!   n, x, y, slp1, slpn, islpsw, and sigma are unaltered.
-! This subroutine references package modules ceez, terms,
-! and snhcsh.
-!-----------------------------------------------------------
-nm1 = n - 1
+!       This routine performs an LQ factorization of the
+!       matrix a using Householder transformations. Row
+!       and column pivots are chosen to reduce the growth
+!       of round-off and to help detect possible rank
+!       deficiency.
+!        Initialization
+j = 0
+krank = m
+do i = 1,n
+   ic(i) = i
+end do
+do i = 1,m
+   ir(i) = i
+end do
+!        Determine rel and abs error vectors
+!        calculate row length
+do i = 1,m
+   h(i) = snrm2(n,a(i,1),mda)
+   w(i) = h(i)
+end do
+!         Initialize error bounds
+do i = 1,m
+   eb(i) = max(db(i),ub(i)*h(i))
+   ub(i) = eb(i)
+   db(i) = 0.0
+end do
+!          Discard self dependent rows
+i = 1
+50 if (eb(i) >= h(i)) go to 60
+if (i == krank) go to 70
+i = i + 1
+go to 50
+!          Matrix reduction
+60 kk = krank
+krank = krank - 1
+if (mode == 0) return
+if (i <= np) go to 400
+if (i > krank) go to 70
+call sswap(1,eb(i),1,eb(kk),1)
+call sswap(1,ub(i),1,ub(kk),1)
+call sswap(1,w(i),1,w(kk),1)
+call sswap(1,h(i),1,h(kk),1)
+call iswap(1,ir(i),1,ir(kk),1)
+call sswap(n,a(i,1),mda,a(kk,1),mda)
+go to 50
+!           Test for zero rank
+70 if (krank > 0) go to 100
+krank = 0
+ksure = 0
+return
+!        m A i n    L O O P
+100 j = j + 1
+jp1 = j + 1
+jm1 = j - 1
+kz = krank
+if (j <= np) kz = j
+!        Each row has NN=n-j+1 components
+nn = n - j + 1
+!         ub determines row pivot
+110 imin = j
+if (h(j) == 0.0) go to 170
+rmin = ub(j)/h(j)
+do i = j,kz
+   if (ub(i) >= h(i)*rmin) go to 120
+   rmin = ub(i)/h(i)
+   imin = i
+120 continue
+end do
+!     Test for rank deficiency
+if (rmin < 1.0) go to 200
+tt = (eb(imin) + abs(db(imin)))/h(imin)
+if (tt >= 1.0) go to 170
+!     Compute exact ub
+do i = 1,jm1
+   w(i) = a(imin,i)
+end do
+l = jm1
+130 w(l) = w(l)/a(l,l)
+if (l == 1) go to 150
+lm1 = l - 1
+do i = l,jm1
+   w(lm1) = w(lm1) - a(i,lm1)*w(i)
+end do
+l = lm1
+go to 130
+150 tt = eb(imin)
+do i = 1,jm1
+   tt = tt + abs(w(i))*eb(i)
+end do
+ub(imin) = tt
+if (ub(imin)/h(imin) >= 1.0) go to 170
+go to 200
+!        Matrix reduction
+170 kk = krank
+krank = krank - 1
+kz = krank
+if (mode == 0) return
+if (j <= np) go to 410
+if (imin > krank) go to 180
+call iswap(1,ir(imin),1,ir(kk),1)
+call sswap(n,a(imin,1),mda,a(kk,1),mda)
+call sswap(1,eb(imin),1,eb(kk),1)
+call sswap(1,ub(imin),1,ub(kk),1)
+call sswap(1,db(imin),1,db(kk),1)
+call sswap(1,w(imin),1,w(kk),1)
+call sswap(1,h(imin),1,h(kk),1)
+180 if (j > krank) go to 300
+go to 110
+!        Row pivot
+200 if (imin == j) go to 210
+call sswap(1,h(j),1,h(imin),1)
+call sswap(n,a(j,1),mda,a(imin,1),mda)
+call sswap(1,eb(j),1,eb(imin),1)
+call sswap(1,ub(j),1,ub(imin),1)
+call sswap(1,db(j),1,db(imin),1)
+call sswap(1,w(j),1,w(imin),1)
+call iswap(1,ir(j),1,ir(imin),1)
+!        Column pivot
+210 jmax = isamax(nn,a(j,j),mda)
+jmax = jmax + j - 1
+if (jmax == j) go to 220
+call sswap(m,a(1,j),1,a(1,jmax),1)
+call iswap(1,ic(j),1,ic(jmax),1)
+!     Apply Householder transformation
+220 tn = snrm2(nn,a(j,j),mda)
+if (tn == 0.0) go to 170
+if (a(j,j) /= 0.0) tn = sign(tn,a(j,j))
+call sscal(nn,1.0/tn,a(j,j),mda)
+a(j,j) = a(j,j) + 1.0
+if (j == m) go to 250
+do i = jp1,m
+   bb = -sdot(nn,a(j,j),mda,a(i,j),mda)/a(j,j)
+   call saxpy(nn,bb,a(j,j),mda,a(i,j),mda)
+   if (i <= np) go to 240
+   if (h(i) == 0.0) go to 240
+   tt = 1.0 - (a(i,j)/h(i))**2
+   tt = max(tt,0.0)
+   t = tt
+   tt = 1.0 + 0.05*tt*(h(i)/w(i))**2
+   if (tt == 1.0) go to 230
+   h(i) = h(i)*sqrt(t)
+   go to 240
+230 h(i) = snrm2(n - j,a(i,j + 1),mda)
+   w(i) = h(i)
+240 continue
+end do
+250 h(j) = a(j,j)
+a(j,j) = -tn
+!          Update ub, db
+ub(j) = ub(j)/abs(a(j,j))
+db(j) = (sign(eb(j),db(j)) + db(j))/a(j,j)
+if (j == krank) go to 300
+do i = jp1,krank
+   ub(i) = ub(i) + abs(a(i,j))*ub(j)
+   db(i) = db(i) - a(i,j)*db(j)
+end do
+go to 100
+!        E n D    m A i n    L O O P
+300 continue
+!        Compute ksure
+km1 = krank - 1
+do i = 1,km1
+   is = 0
+   kmi = krank - i
+   do ii = 1,kmi
+      if (ub(ii) <= ub(ii + 1)) go to 310
+      is = 1
+      temp = ub(ii)
+      ub(ii) = ub(ii + 1)
+      ub(ii + 1) = temp
+310   continue
+   end do
+   if (is == 0) exit
+end do
+ksure = 0
+sum = 0.0
+do i = 1,krank
+   r2 = ub(i)*ub(i)
+   if (r2 + sum >= 1.0) exit
+   sum = sum + r2
+   ksure = ksure + 1
+end do
+!     If system is of reduced rank and mode = 2
+!     complete the decomposition for shortest least squares solution
+if (krank == m .or. mode < 2) return
+mmk = m - krank
+kp1 = krank + 1
+i = krank
+340 tn = snrm2(mmk,a(kp1,i),1)/a(i,i)
+tn = a(i,i)*sqrt(1.0 + tn*tn)
+call sscal(mmk,1.0/tn,a(kp1,i),1)
+w(i) = a(i,i)/tn + 1.0
+a(i,i) = -tn
+if (i == 1) go to 350
+im1 = i - 1
+do ii = 1,im1
+   tt = -sdot(mmk,a(kp1,ii),1,a(kp1,i),1)/w(i)
+   tt = tt - a(i,ii)
+   call saxpy(mmk,tt,a(kp1,i),1,a(kp1,ii),1)
+   a(i,ii) = a(i,ii) + tt*w(i)
+end do
+i = i - 1
+go to 340
+350 continue
+return
+!     First np rows are linearly dependent
+400 krank = i - 1
+return
+410 krank = j - 1
+end subroutine u11us
+
+subroutine u12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
+!! <!-- nswc-ford:begin U12US -->
+!! Reference for `u12us`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!         Given the Householder LQ factorization of A, this
+!!         subroutine solves the system AX=b. if the system
+!!         is of reduced rank, this routine returns a solution
+!!         according to the selected mode.
+!!        Note - If mode.NE.2, w is never accessed.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
+real, intent(inout) :: a(mda,n), b(mdb,nb)
+real :: h(m)
+real, intent(inout) :: rnorm(nb)
+real :: w(m)
+integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
+integer :: i, ij, ip1, j, jb, k, kp1, mmk
+real :: bb, tt
+real :: snrm2
+real :: sdot
+!        Given the Householder LQ factorization of A, this
+!        subroutine solves the system AX=b. if the system
+!        is of reduced rank, this routine returns a solution
+!        according to the selected mode.
+!       Note - If mode.NE.2, w is never accessed.
+k = krank
+kp1 = k + 1
+if (k > 0) go to 30
+!        rank=0
+do jb = 1,nb
+   rnorm(jb) = snrm2(m,b(1,jb),1)
+end do
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.0
+   end do
+end do
+return
+30 i = 0
+!     Reorder b to reflect row interchanges
+40 i = i + 1
+if (i == m) go to 100
+j = ir(i)
+if (j == i) go to 40
+if (j < 0) go to 40
+ir(i) = -ir(i)
+do jb = 1,nb
+   rnorm(jb) = b(i,jb)
+end do
+ij = i
+60 do jb = 1,nb
+   b(ij,jb) = b(j,jb)
+end do
+ij = j
+j = ir(ij)
+ir(ij) = -ir(ij)
+if (j /= i) go to 60
+do jb = 1,nb
+   b(ij,jb) = rnorm(jb)
+end do
+go to 40
+100 do i = 1,m
+   ir(i) = abs(ir(i))
+end do
+!     If A is of reduced rank and mode=2,
+!     apply Householder transformations to b
+if (mode < 2 .or. k == m) go to 140
+mmk = m - k
+do jb = 1,nb
+   do j = 1,k
+      i = kp1 - j
+      tt = -sdot(mmk,a(kp1,i),1,b(kp1,jb),1)/w(i)
+      tt = tt - b(i,jb)
+      call saxpy(mmk,tt,a(kp1,i),1,b(kp1,jb),1)
+      b(i,jb) = b(i,jb) + tt*w(i)
+   end do
+end do
+!     Find norms of residual vector(S)..(before overwrite b)
+140 do jb = 1,nb
+   rnorm(jb) = snrm2(m - k,b(kp1,jb),1)
+end do
+!     Back solve lower triangular L
+do jb = 1,nb
+   do i = 1,k
+      b(i,jb) = b(i,jb)/a(i,i)
+      if (i == k) exit
+      ip1 = i + 1
+      call saxpy(k - i,-b(i,jb),a(ip1,i),1,b(ip1,jb),1)
+   end do
+end do
+!      Truncated solution
+if (k == n) go to 210
+do jb = 1,nb
+   do i = kp1,n
+      b(i,jb) = 0.0
+   end do
+end do
+!     Apply Householder transformations to b
+210 do i = 1,k
+   j = kp1 - i
+   tt = a(j,j)
+   a(j,j) = h(j)
+   do jb = 1,nb
+      bb = -sdot(n - j + 1,a(j,j),mda,b(j,jb),1)/h(j)
+      call saxpy(n - j + 1,bb,a(j,j),mda,b(j,jb),1)
+   end do
+   a(j,j) = tt
+end do
+!     Reorder b to reflect column interchanges
+i = 0
+240 i = i + 1
+if (i == n) go to 260
+j = ic(i)
+if (j == i) go to 240
+if (j < 0) go to 240
+ic(i) = -ic(i)
+250 call sswap(nb,b(j,1),mdb,b(i,1),mdb)
+ij = ic(j)
+ic(j) = -ic(j)
+j = ij
+if (j /= i) go to 250
+go to 240
+260 do i = 1,n
+   ic(i) = abs(ic(i))
+end do
+end subroutine u12us
+
+pure subroutine dlsqr(ind, a, mda, m, n, b, mdb, nb, re, ae, krank, &
+   & ksure, rnorm, work, lw, iwork, liw, ierr)
+!! <!-- nswc-ford:begin DLSQR -->
+!! Reference for `dlsqr`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!               Least squares solution of linear equations
+!!
+!!      dlsqr solves both underdetermined and overdetermined linear
+!!      systems AX = b, where A is an m by n matrix and b is an m by
+!!      nb matrix of right hand sides. If m .GE. n, the least squares
+!!      solution is computed by decomposing the matrix a into the
+!!      product of an orthogonal matrix Q and upper triangular matrix
+!!      R (QR factorization). If m .LT. n, the minimal length solution
+!!      is computed by factoring the matrix a into the product of a
+!!      lower triangular matrix L and orthogonal matrix Q (LQ factor-
+!!      ization). If the matrix a is determined to be rank deficient,
+!!      then the minimal length least squares solution is computed.
+!!      User input bounds on the uncertainty of the elements of A are
+!!      used to detect numerical rank deficiency. The algorithm uses
+!!      a row and column pivot strategy to minimize the growth of
+!!      uncertainty and round-off errors.
+!!
+!!    *         WARNING - ALL INPUT ARRAYS ARE CHANGED ON EXIT.        *
+!!
+!!      Input..
+!!      IND           INTEGER WHICH INDICATES IF THE ROUTINE IS BEING
+!!                    called for the first time.
+!!                       ind = 0      Original call
+!!                       ind .NE. 0   subsequent calls
+!!                    on subsequent calls a new set b of equations can
+!!                    be solved (using the same coefficient matrix a).
+!!                    It is assumed that A, mda, m, n, krank, iwork,
+!!                    liw, and the first 2*min(m,n) locations of work
+!!                    have not been modified by the user. re, ae, and
+!!                    ksure are not used.
+!!      a(,)          linear coefficient matrix of AX=b, with mda the
+!!       mda,m,n      ACTUAL FIRST DIMENSION OF A IN THE CALLING PROGRAM.
+!!                    m is the row dimension (no. of equations of the
+!!                    problem) and n the col dimension (no. of unknowns).
+!!                    Must have mda .GE. m.
+!!      b(,)          RIGHT HAND SIDE(S), WITH MDB THE ACTUAL FIRST
+!!       MDB,nb       DIMENSION OF b IN THE CALLING PROGRAM. nb IS THE
+!!                    number of m by 1 right hand sides. Must have
+!!                    mdb .GE. max(m,n). If nb .LE. 0 then b and mdb
+!!                    are ignored.
+!!      re            re IS THE MAXIMUM RELATIVE UNCERTAINTY OF THE
+!!                    elements of the matrix a (0 .le. re .LT. 1).
+!!      ae            ae IS THE MAXIMUM ABSOLUTE UNCERTAINTY OF THE
+!!                    elements of the matrix a (ae .GE. 0).
+!!      work()        A REAL WORK ARRAY DIMENSIONED 5*min(m,n).
+!!      lw            ACTUAL DIMENSION OF WORK
+!!      iwork()       INTEGER WORK ARRAY DIMENSIONED AT LEAST n+m.
+!!      liw           ACTUAL DIMENSION OF iwork.
+!!      Output..
+!!      a(,)          CONTAINS THE TRIANGULAR PART OF THE REDUCED MATRIX
+!!                    and the transformation information.Ind together with
+!!                    the first 2*min(m,n) elements of work (see below)
+!!                    completely specify the factorization of A.
+!!      b(,)          CONTAINS THE n BY nb SOLUTION MATRIX FOR X.
+!!      krank,ksure   THE NUMERICAL RANK OF A,  BASED UPON THE RELATIVE
+!!                    and absolute bounds on uncertainty, is bounded
+!!                    above by krank and below by ksure. The algorithm
+!!                    returns a solution based on krank. ksure provides
+!!                    an indication of the precision of the rank.
+!!      rnorm()       CONTAINS THE EUCLIDEAN LENGTH OF THE nb RESIDUAL
+!!                    VECTORS  b(i) - AX(i), i=1,...,nb.
+!!      work()        THE FIRST 2*min(m,n) LOCATIONS OF WORK CONTAIN
+!!                    the values necessary to reproduce the Householder
+!!                    factorization of A.
+!!      iwork()       AN ARRAY OF LENGTH m + n CONTAINING THE ORDERS IN
+!!                    which the rows and columns were used. If m .GE. n
+!!                    then the first n locations contain the order of
+!!                    the columns and the next m locations the order of
+!!                    the rows. If m .LT. n then the order of the rows
+!!                    precedes the order of the columns.
+!!      ierr          FLAG TO INDICATE THE STATUS OF THE RESULTS
+!!                      0     - Satisfactory completion
+!!                    .GT. 0  - Input error
+!!
+!!      The subroutines du11ls, du12ls, du11us, and du12us were written by
+!!      T. Manteuffel (LANL) in 1981. The driver routine dlsqr was written
+!!      by A.H. Morris (NSWC) in 1991.
+!!
+!!      Reference.  Manteuffel, T., *An interval analysis approach to rank
+!!                  determination in linear least squares problems*,
+!!                  Sandia Laboratories report SAND80-0655, June, 1980.
+!!
+!!      np            if m .GE. n then the first np columns of A
+!!                    are never interchanged.
+!!                    If m .LT. n then the first np rows of A are
+!!                    never interchanged. np is not referenced on
+!!                    a continuation call to the routine.
+!!      MODE          THE INTEGER MODE INDICATES HOW THE ROUTINE
+!!                    is to react if rank deficiency is detected.
+!!                    If mode = 0 Return immediately, no solution
+!!                              1 compute truncated solution
+!!                              2 compute minimal length solution
+!!                    mode must not be modified on a continuation
+!!                    CALL TO THE ROUTINE. IF MODE LT. 2, ONLY THE
+!!                    first n locations of work are used.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: ind
+integer, intent(inout) :: krank, ksure
+integer, intent(in) :: liw, lw, m, mda, mdb, n, nb
+double precision, intent(inout) :: a(mda,n), b(mdb,*)
+double precision, intent(in) :: re, ae
+double precision, intent(inout) :: rnorm(*), work(lw)
+integer, intent(inout) :: iwork(liw)
+!     beginning of local variable declarations
+integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
+double precision :: eps, rerr
+interface
+   pure elemental function dpmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      double precision :: dpmpar
+   end function dpmpar
+   pure subroutine du11ls(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb &
+      & ,ic,ir)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      integer, intent(in) :: mda
+      double precision, intent(inout) :: a(mda,n)
+      double precision, intent(inout) :: ub(n)
+      double precision, intent(inout) :: db(n)
+      integer, intent(in) :: mode
+      integer, intent(in) :: np
+      integer, intent(out) :: krank
+      integer, intent(inout) :: ksure
+      double precision, intent(inout) :: h(n)
+      double precision, intent(inout) :: w(n)
+      double precision, intent(inout) :: eb(n)
+      integer, intent(inout) :: ic(n)
+      integer, intent(inout) :: ir(m)
+   end subroutine du11ls
+   pure subroutine du11us(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb &
+      & ,ir,ic)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      integer, intent(in) :: mda
+      double precision, intent(inout) :: a(mda,n)
+      double precision, intent(inout) :: ub(m)
+      double precision, intent(inout) :: db(m)
+      integer, intent(in) :: mode
+      integer, intent(in) :: np
+      integer, intent(out) :: krank
+      integer, intent(inout) :: ksure
+      double precision, intent(inout) :: h(m)
+      double precision, intent(inout) :: w(m)
+      double precision, intent(inout) :: eb(m)
+      integer, intent(inout) :: ir(m)
+      integer, intent(inout) :: ic(n)
+   end subroutine du11us
+   pure subroutine du12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic &
+      & ,ir)
+      implicit none
+      integer, intent(in) :: nb
+      integer, intent(in) :: mdb
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      integer, intent(in) :: mda
+      double precision, intent(inout) :: a(mda,n)
+      double precision, intent(inout) :: b(mdb,nb)
+      integer, intent(in) :: mode
+      integer, intent(in) :: krank
+      double precision, intent(inout) :: rnorm(nb)
+      double precision, intent(in) :: h(n)
+      double precision, intent(in) :: w(n)
+      integer, intent(inout) :: ic(n)
+      integer, intent(inout) :: ir(m)
+   end subroutine du12ls
+   pure subroutine du12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir &
+      & ,ic)
+      implicit none
+      integer, intent(in) :: nb
+      integer, intent(in) :: mdb
+      integer, intent(in) :: n
+      integer, intent(in) :: m
+      integer, intent(in) :: mda
+      double precision, intent(inout) :: a(mda,n)
+      double precision, intent(inout) :: b(mdb,nb)
+      integer, intent(in) :: mode
+      integer, intent(in) :: krank
+      double precision, intent(inout) :: rnorm(nb)
+      double precision, intent(in) :: h(m)
+      double precision, intent(in) :: w(m)
+      integer, intent(inout) :: ir(m)
+      integer, intent(inout) :: ic(n)
+   end subroutine du12us
+end interface
+!-----------------------------------------------------------------------
+!              Least squares solution of linear equations
+!                            --------------
+!     dlsqr solves both underdetermined and overdetermined linear
+!     systems AX = b, where A is an m by n matrix and b is an m by
+!     nb matrix of right hand sides. If m .GE. n, the least squares
+!     solution is computed by decomposing the matrix a into the
+!     product of an orthogonal matrix Q and upper triangular matrix
+!     R (QR factorization). If m .LT. n, the minimal length solution
+!     is computed by factoring the matrix a into the product of a
+!     lower triangular matrix L and orthogonal matrix Q (LQ factor-
+!     ization). If the matrix a is determined to be rank deficient,
+!     then the minimal length least squares solution is computed.
+!     User input bounds on the uncertainty of the elements of A are
+!     used to detect numerical rank deficiency. The algorithm uses
+!     a row and column pivot strategy to minimize the growth of
+!     uncertainty and round-off errors.
+!   ******************************************************************
+!   *                                                                *
+!   *         WARNING - ALL INPUT ARRAYS ARE CHANGED ON EXIT.        *
+!   *                                                                *
+!   ******************************************************************
+!     Input..
+!     IND           INTEGER WHICH INDICATES IF THE ROUTINE IS BEING
+!                   called for the first time.
+!                      ind = 0      Original call
+!                      ind .NE. 0   subsequent calls
+!                   on subsequent calls a new set b of equations can
+!                   be solved (using the same coefficient matrix a).
+!                   It is assumed that A, mda, m, n, krank, iwork,
+!                   liw, and the first 2*min(m,n) locations of work
+!                   have not been modified by the user. re, ae, and
+!                   ksure are not used.
+!     a(,)          linear coefficient matrix of AX=b, with mda the
+!      mda,m,n      ACTUAL FIRST DIMENSION OF A IN THE CALLING PROGRAM.
+!                   m is the row dimension (no. of equations of the
+!                   problem) and n the col dimension (no. of unknowns).
+!                   Must have mda .GE. m.
+!     b(,)          RIGHT HAND SIDE(S), WITH MDB THE ACTUAL FIRST
+!      MDB,nb       DIMENSION OF b IN THE CALLING PROGRAM. nb IS THE
+!                   number of m by 1 right hand sides. Must have
+!                   mdb .GE. max(m,n). If nb .LE. 0 then b and mdb
+!                   are ignored.
+!     re            re IS THE MAXIMUM RELATIVE UNCERTAINTY OF THE
+!                   elements of the matrix a (0 .le. re .LT. 1).
+!     ae            ae IS THE MAXIMUM ABSOLUTE UNCERTAINTY OF THE
+!                   elements of the matrix a (ae .GE. 0).
+!     work()        A REAL WORK ARRAY DIMENSIONED 5*min(m,n).
+!     lw            ACTUAL DIMENSION OF WORK
+!     iwork()       INTEGER WORK ARRAY DIMENSIONED AT LEAST n+m.
+!     liw           ACTUAL DIMENSION OF iwork.
+!     Output..
+!     a(,)          CONTAINS THE TRIANGULAR PART OF THE REDUCED MATRIX
+!                   and the transformation information.Ind together with
+!                   the first 2*min(m,n) elements of work (see below)
+!                   completely specify the factorization of A.
+!     b(,)          CONTAINS THE n BY nb SOLUTION MATRIX FOR X.
+!     krank,ksure   THE NUMERICAL RANK OF A,  BASED UPON THE RELATIVE
+!                   and absolute bounds on uncertainty, is bounded
+!                   above by krank and below by ksure. The algorithm
+!                   returns a solution based on krank. ksure provides
+!                   an indication of the precision of the rank.
+!     rnorm()       CONTAINS THE EUCLIDEAN LENGTH OF THE nb RESIDUAL
+!                   VECTORS  b(i) - AX(i), i=1,...,nb.
+!     work()        THE FIRST 2*min(m,n) LOCATIONS OF WORK CONTAIN
+!                   the values necessary to reproduce the Householder
+!                   factorization of A.
+!     iwork()       AN ARRAY OF LENGTH m + n CONTAINING THE ORDERS IN
+!                   which the rows and columns were used. If m .GE. n
+!                   then the first n locations contain the order of
+!                   the columns and the next m locations the order of
+!                   the rows. If m .LT. n then the order of the rows
+!                   precedes the order of the columns.
+!     ierr          FLAG TO INDICATE THE STATUS OF THE RESULTS
+!                     0     - Satisfactory completion
+!                   .GT. 0  - Input error
+!----------------
+!     The subroutines du11ls, du12ls, du11us, and du12us were written by
+!     T. Manteuffel (LANL) in 1981. The driver routine dlsqr was written
+!     by A.H. Morris (NSWC) in 1991.
+!----------------
+!     Reference.  Manteuffel, T., *An interval analysis approach to rank
+!                 determination in linear least squares problems*,
+!                 Sandia Laboratories report SAND80-0655, June, 1980.
+!-----------------------------------------------------------------------
+!----------------
+!     np            if m .GE. n then the first np columns of A
+!                   are never interchanged.
+!                   If m .LT. n then the first np rows of A are
+!                   never interchanged. np is not referenced on
+!                   a continuation call to the routine.
+!     MODE          THE INTEGER MODE INDICATES HOW THE ROUTINE
+!                   is to react if rank deficiency is detected.
+!                   If mode = 0 Return immediately, no solution
+!                             1 compute truncated solution
+!                             2 compute minimal length solution
+!                   mode must not be modified on a continuation
+!                   CALL TO THE ROUTINE. IF MODE LT. 2, ONLY THE
+!                   first n locations of work are used.
+!----------------
+np = 0
+mode = 2
+!     Check the input
+if (nb <= 0 .and. ind /= 0) go to 200
+if (m < 1 .or. n < 1) go to 210
+if (mda < m) go to 220
+if (liw < m + n) go to 240
+m0 = min(m,n)
+n0 = max(m,n)
+!     num = 0
+if (nb <= 0) go to 10
+if (mdb < n0) go to 230
+if (ind /= 0) go to 100
+10 if (lw < 5*m0) go to 250
+if (re < 0.d0 .or. ae < 0.d0) go to 260
+!     Define the relative and absolute tolerance lists
+m1 = 1
+m2 = m1 + m0
+m3 = m2 + m0
+m4 = m3 + m0
+m5 = m4 + m0
+eps = 10.d0*dpmpar(1)
+rerr = max(eps,re)
+imax = m5 - 1
+do i = m4,imax
+   work(i) = rerr
+end do
+imax = imax + m0
+do i = m5,imax
+   work(i) = ae
+end do
+!     Factor the matrix a
+!     num = np
+if (m < n) go to 40
+call du11ls(a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
+   & work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
+go to 100
+40 call du11us(a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
+   & work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
+!     Solution phase
+100 ierr = 0
+info = 0
+if (krank == m0) go to 110
+if (krank == 0) go to 110
+!     if (krank .lt. num) go to 280
+!     if (mode .eq. 0) return
+info = mode
+110 if (nb <= 0) return
+m1 = 1
+m2 = 1 + m0
+if (info == 2) go to 130
+!     Only min(m,n) elements of work are needed
+if (lw < m0) go to 250
+if (m < n) go to 120
+call du12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+   & work(m1),work(m1),iwork(m1),iwork(m2))
+return
+120 call du12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+   & work(m1),work(m1),iwork(m1),iwork(m2))
+return
+!     Here 2*min(m,n) elements of work are needed
+130 if (lw < 2*m0) go to 250
+if (m < n) go to 140
+call du12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+   & work(m1),work(m2),iwork(m1),iwork(m2))
+return
+140 call du12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+   & work(m1),work(m2),iwork(m1),iwork(m2))
+return
+!     Error return
+!                             nb .LE. 0  on a continuation call
+200 ierr = 7
+return
+!                             m .LT. 1 OR n .LT. 1
+210 ierr = 1
+return
+!                             mda .LT. m
+220 ierr = 2
+return
+!                             mdb .LT. max(m,n)
+230 ierr = 3
+return
+!                             liw .LT. m + n
+240 ierr = 4
+return
+!                             lw too small
+250 ierr = 5
+return
+!                             re or ae is negative
+260 ierr = 6
+!                             0 .LT. krank .LT. np
+! 280 ierr = 8
+!     return
+end subroutine dlsqr
+
+pure subroutine du11ls(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+   & ic,ir)
+!! <!-- nswc-ford:begin DU11LS -->
+!! Reference for `du11ls`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!        This routine performs A QR factorization of A
+!!        using Householder transformations. Row and
+!!        column pivots are chosen to reduce the growth
+!!        of round-off and to help detect possible rank
+!!        deficiency.
+!!         Initialization
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(out) :: krank
+integer, intent(inout) :: ksure
+integer, intent(in) :: m, mda, mode, n, np
+double precision, intent(inout) :: a(mda,n), ub(n), db(n), h(n), &
+   & w(n), eb(n)
+integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
+integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
+   & kp1, kz, l, lm1, mm, nmk
+double precision :: bb, rmin, r2, sum, t, temp, tn, tt
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+   pure function dnrm2(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision :: dnrm2
+   end function dnrm2
+   pure subroutine dscal(n,da,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+   end subroutine dscal
+   pure subroutine dswap(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine dswap
+   pure function idamax(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      integer :: idamax
+   end function idamax
+   pure subroutine iswap(n,ix,incx,iy,incy)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix(*)
+      integer, intent(in) :: incx
+      integer, intent(inout) :: iy(*)
+      integer, intent(in) :: incy
+   end subroutine iswap
+end interface
+!       This routine performs A QR factorization of A
+!       using Householder transformations. Row and
+!       column pivots are chosen to reduce the growth
+!       of round-off and to help detect possible rank
+!       deficiency.
+!        Initialization
+j = 0
+krank = n
+do i = 1,n
+   ic(i) = i
+end do
+do i = 1,m
+   ir(i) = i
+end do
+!        Determine rel and abs error vectors
+!        calculate col length
+do i = 1,n
+   h(i) = dnrm2(m,a(1,i),1)
+   w(i) = h(i)
+end do
+!         Initialize error bounds
+do i = 1,n
+   eb(i) = max(db(i),ub(i)*h(i))
+   ub(i) = eb(i)
+   db(i) = 0.d0
+end do
+!          Discard self dependent columns
+i = 1
+50 if (eb(i) >= h(i)) go to 60
+if (i == krank) go to 70
+i = i + 1
+go to 50
+!          Matrix reduction
+60 kk = krank
+krank = krank - 1
+if (mode == 0) return
+if (i <= np) go to 400
+if (i > krank) go to 70
+call dswap(1,eb(i),1,eb(kk),1)
+call dswap(1,ub(i),1,ub(kk),1)
+call dswap(1,w(i),1,w(kk),1)
+call dswap(1,h(i),1,h(kk),1)
+call iswap(1,ic(i),1,ic(kk),1)
+call dswap(m,a(1,i),1,a(1,kk),1)
+go to 50
+!           Test for zero rank
+70 if (krank > 0) go to 100
+krank = 0
+ksure = 0
+return
+!        m A i n    L O O P
+100 j = j + 1
+jp1 = j + 1
+jm1 = j - 1
+kz = krank
+if (j <= np) kz = j
+!        Each col has MM=m-j+1 components
+mm = m - j + 1
+!         ub determines column pivot
+110 imin = j
+if (h(j) == 0.d0) go to 170
+rmin = ub(j)/h(j)
+do i = j,kz
+   if (ub(i) >= h(i)*rmin) go to 120
+   rmin = ub(i)/h(i)
+   imin = i
+120 continue
+end do
+!     Test for rank deficiency
+if (rmin < 1.d0) go to 200
+tt = (eb(imin) + abs(db(imin)))/h(imin)
+if (tt >= 1.d0) go to 170
+!     Compute exact ub
+do i = 1,jm1
+   w(i) = a(i,imin)
+end do
+l = jm1
+130 w(l) = w(l)/a(l,l)
+if (l == 1) go to 150
+lm1 = l - 1
+do i = l,jm1
+   w(lm1) = w(lm1) - a(lm1,i)*w(i)
+end do
+l = lm1
+go to 130
+150 tt = eb(imin)
+do i = 1,jm1
+   tt = tt + abs(w(i))*eb(i)
+end do
+ub(imin) = tt
+if (ub(imin)/h(imin) >= 1.d0) go to 170
+go to 200
+!        Matrix reduction
+170 kk = krank
+krank = krank - 1
+kz = krank
+if (mode == 0) return
+if (j <= np) go to 410
+if (imin > krank) go to 180
+call iswap(1,ic(imin),1,ic(kk),1)
+call dswap(m,a(1,imin),1,a(1,kk),1)
+call dswap(1,eb(imin),1,eb(kk),1)
+call dswap(1,ub(imin),1,ub(kk),1)
+call dswap(1,db(imin),1,db(kk),1)
+call dswap(1,w(imin),1,w(kk),1)
+call dswap(1,h(imin),1,h(kk),1)
+180 if (j > krank) go to 300
+go to 110
+!        Column pivot
+200 if (imin == j) go to 210
+call dswap(1,h(j),1,h(imin),1)
+call dswap(m,a(1,j),1,a(1,imin),1)
+call dswap(1,eb(j),1,eb(imin),1)
+call dswap(1,ub(j),1,ub(imin),1)
+call dswap(1,db(j),1,db(imin),1)
+call dswap(1,w(j),1,w(imin),1)
+call iswap(1,ic(j),1,ic(imin),1)
+!        Row pivot
+210 jmax = idamax(mm,a(j,j),1)
+jmax = jmax + j - 1
+if (jmax == j) go to 220
+call dswap(n,a(j,1),mda,a(jmax,1),mda)
+call iswap(1,ir(j),1,ir(jmax),1)
+!     Apply Householder transformation
+220 tn = dnrm2(mm,a(j,j),1)
+if (tn == 0.d0) go to 170
+if (a(j,j) /= 0.d0) tn = sign(tn,a(j,j))
+call dscal(mm,1.d0/tn,a(j,j),1)
+a(j,j) = a(j,j) + 1.d0
+if (j == n) go to 250
+do i = jp1,n
+   bb = -ddot(mm,a(j,j),1,a(j,i),1)/a(j,j)
+   call daxpy(mm,bb,a(j,j),1,a(j,i),1)
+   if (i <= np) go to 240
+   if (h(i) == 0.d0) go to 240
+   tt = 1.d0 - (a(j,i)/h(i))**2
+   tt = max(tt,0.d0)
+   t = tt
+   tt = 1.d0 + 0.05d0*tt*(h(i)/w(i))**2
+   if (tt == 1.d0) go to 230
+   h(i) = h(i)*sqrt(t)
+   go to 240
+230 h(i) = dnrm2(m - j,a(j + 1,i),1)
+   w(i) = h(i)
+240 continue
+end do
+250 h(j) = a(j,j)
+a(j,j) = -tn
+!          Update ub, db
+ub(j) = ub(j)/abs(a(j,j))
+db(j) = (sign(eb(j),db(j)) + db(j))/a(j,j)
+if (j == krank) go to 300
+do i = jp1,krank
+   ub(i) = ub(i) + abs(a(j,i))*ub(j)
+   db(i) = db(i) - a(j,i)*db(j)
+end do
+go to 100
+!        E n D    m A i n    L O O P
+300 continue
+!        Compute ksure
+km1 = krank - 1
+do i = 1,km1
+   is = 0
+   kmi = krank - i
+   do ii = 1,kmi
+      if (ub(ii) <= ub(ii + 1)) go to 310
+      is = 1
+      temp = ub(ii)
+      ub(ii) = ub(ii + 1)
+      ub(ii + 1) = temp
+310   continue
+   end do
+   if (is == 0) exit
+end do
+ksure = 0
+sum = 0.d0
+do i = 1,krank
+   r2 = ub(i)*ub(i)
+   if (r2 + sum >= 1.d0) exit
+   sum = sum + r2
+   ksure = ksure + 1
+end do
+!     If system is of reduced rank and mode = 2
+!     complete the decomposition for shortest least squares solution
+if (krank == n .or. mode < 2) return
+nmk = n - krank
+kp1 = krank + 1
+i = krank
+340 tn = dnrm2(nmk,a(i,kp1),mda)/a(i,i)
+tn = a(i,i)*sqrt(1.d0 + tn*tn)
+call dscal(nmk,1.d0/tn,a(i,kp1),mda)
+w(i) = a(i,i)/tn + 1.d0
+a(i,i) = -tn
+if (i == 1) go to 350
+im1 = i - 1
+do ii = 1,im1
+   tt = -ddot(nmk,a(ii,kp1),mda,a(i,kp1),mda)/w(i)
+   tt = tt - a(ii,i)
+   call daxpy(nmk,tt,a(i,kp1),mda,a(ii,kp1),mda)
+   a(ii,i) = a(ii,i) + tt*w(i)
+end do
+i = i - 1
+go to 340
+350 continue
+return
+!     First np columns are linearly dependent
+400 krank = i - 1
+return
+410 krank = j - 1
+end subroutine du11ls
+
+pure subroutine du12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic,ir)
+!! <!-- nswc-ford:begin DU12LS -->
+!! Reference for `du12ls`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!         Given the Householder QR factorization of A, this
+!!         subroutine solves the system AX=b. if the system
+!!         is of reduced rank, this routine returns a solution
+!!         according to the selected mode.
+!!        Note - If mode.NE.2, w is never accessed.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
+double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
+double precision, intent(in) :: h(n), w(n)
+integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
+integer :: i, ij, im1, j, jb, k, kp1, nmk
+double precision :: bb, tt
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+   pure function dnrm2(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision :: dnrm2
+   end function dnrm2
+   pure subroutine dswap(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine dswap
+end interface
+!        Given the Householder QR factorization of A, this
+!        subroutine solves the system AX=b. if the system
+!        is of reduced rank, this routine returns a solution
+!        according to the selected mode.
+!       Note - If mode.NE.2, w is never accessed.
+k = krank
+kp1 = k + 1
+if (k > 0) go to 30
+!        rank=0
+do jb = 1,nb
+   rnorm(jb) = dnrm2(m,b(1,jb),1)
+end do
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.d0
+   end do
+end do
+return
+30 i = 0
+!     Reorder b to reflect row interchanges
+40 i = i + 1
+if (i == m) go to 100
+j = ir(i)
+if (j == i) go to 40
+if (j < 0) go to 40
+ir(i) = -ir(i)
+do jb = 1,nb
+   rnorm(jb) = b(i,jb)
+end do
+ij = i
+60 do jb = 1,nb
+   b(ij,jb) = b(j,jb)
+end do
+ij = j
+j = ir(ij)
+ir(ij) = -ir(ij)
+if (j /= i) go to 60
+do jb = 1,nb
+   b(ij,jb) = rnorm(jb)
+end do
+go to 40
+100 do i = 1,m
+   ir(i) = abs(ir(i))
+end do
+!     Apply Householder transformations to b
+do j = 1,k
+   tt = a(j,j)
+   a(j,j) = h(j)
+   do i = 1,nb
+      bb = -ddot(m - j + 1,a(j,j),1,b(j,i),1)/h(j)
+      call daxpy(m - j + 1,bb,a(j,j),1,b(j,i),1)
+   end do
+   a(j,j) = tt
+end do
+!        Find norms of residual vector(S)..(before overwrite b)
+do jb = 1,nb
+   rnorm(jb) = dnrm2(m - k,b(kp1,jb),1)
+end do
+!     Back solve upper triangular R
+i = k
+150 do jb = 1,nb
+   b(i,jb) = b(i,jb)/a(i,i)
+end do
+if (i == 1) go to 200
+im1 = i - 1
+do jb = 1,nb
+   call daxpy(im1,-b(i,jb),a(1,i),1,b(1,jb),1)
+end do
+i = im1
+go to 150
+!     RANK LT n
+!      truncated solution
+200 if (k == n) go to 230
+do jb = 1,nb
+   do i = kp1,n
+      b(i,jb) = 0.d0
+   end do
+end do
+if (mode == 1) go to 230
+!      Minimal length solution
+nmk = n - k
+do jb = 1,nb
+   do i = 1,k
+      tt = -ddot(nmk,a(i,kp1),mda,b(kp1,jb),1)/w(i)
+      tt = tt - b(i,jb)
+      call daxpy(nmk,tt,a(i,kp1),mda,b(kp1,jb),1)
+      b(i,jb) = b(i,jb) + tt*w(i)
+   end do
+end do
+!     Reorder b to reflect column interchanges
+230 i = 0
+240 i = i + 1
+if (i == n) go to 260
+j = ic(i)
+if (j == i) go to 240
+if (j < 0) go to 240
+ic(i) = -ic(i)
+250 call dswap(nb,b(j,1),mdb,b(i,1),mdb)
+ij = ic(j)
+ic(j) = -ic(j)
+j = ij
+if (j /= i) go to 250
+go to 240
+260 do i = 1,n
+   ic(i) = abs(ic(i))
+end do
+end subroutine du12ls
+
+pure subroutine du11us(a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+   & ir,ic)
+!! <!-- nswc-ford:begin DU11US -->
+!! Reference for `du11us`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!        This routine performs an LQ factorization of the
+!!        matrix a using Householder transformations. Row
+!!        and column pivots are chosen to reduce the growth
+!!        of round-off and to help detect possible rank
+!!        deficiency.
+!!         Initialization
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(out) :: krank
+integer, intent(inout) :: ksure
+integer, intent(in) :: m, mda, mode, n, np
+double precision, intent(inout) :: a(mda,n), ub(m), db(m), h(m), &
+   & w(m), eb(m)
+integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
+integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
+   & kp1, kz, l, lm1, mmk, nn
+double precision :: bb, rmin, r2, sum, t, temp, tn, tt
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+   pure function dnrm2(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision :: dnrm2
+   end function dnrm2
+   pure subroutine dscal(n,da,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+   end subroutine dscal
+   pure subroutine dswap(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine dswap
+   pure function idamax(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      integer :: idamax
+   end function idamax
+   pure subroutine iswap(n,ix,incx,iy,incy)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: ix(*)
+      integer, intent(in) :: incx
+      integer, intent(inout) :: iy(*)
+      integer, intent(in) :: incy
+   end subroutine iswap
+end interface
+!       This routine performs an LQ factorization of the
+!       matrix a using Householder transformations. Row
+!       and column pivots are chosen to reduce the growth
+!       of round-off and to help detect possible rank
+!       deficiency.
+!        Initialization
+j = 0
+krank = m
+do i = 1,n
+   ic(i) = i
+end do
+do i = 1,m
+   ir(i) = i
+end do
+!        Determine rel and abs error vectors
+!        calculate row length
+do i = 1,m
+   h(i) = dnrm2(n,a(i,1),mda)
+   w(i) = h(i)
+end do
+!         Initialize error bounds
+do i = 1,m
+   eb(i) = max(db(i),ub(i)*h(i))
+   ub(i) = eb(i)
+   db(i) = 0.d0
+end do
+!          Discard self dependent rows
+i = 1
+50 if (eb(i) >= h(i)) go to 60
+if (i == krank) go to 70
+i = i + 1
+go to 50
+!          Matrix reduction
+60 kk = krank
+krank = krank - 1
+if (mode == 0) return
+if (i <= np) go to 400
+if (i > krank) go to 70
+call dswap(1,eb(i),1,eb(kk),1)
+call dswap(1,ub(i),1,ub(kk),1)
+call dswap(1,w(i),1,w(kk),1)
+call dswap(1,h(i),1,h(kk),1)
+call iswap(1,ir(i),1,ir(kk),1)
+call dswap(n,a(i,1),mda,a(kk,1),mda)
+go to 50
+!           Test for zero rank
+70 if (krank > 0) go to 100
+krank = 0
+ksure = 0
+return
+!        m A i n    L O O P
+100 j = j + 1
+jp1 = j + 1
+jm1 = j - 1
+kz = krank
+if (j <= np) kz = j
+!        Each row has NN=n-j+1 components
+nn = n - j + 1
+!         ub determines row pivot
+110 imin = j
+if (h(j) == 0.d0) go to 170
+rmin = ub(j)/h(j)
+do i = j,kz
+   if (ub(i) >= h(i)*rmin) go to 120
+   rmin = ub(i)/h(i)
+   imin = i
+120 continue
+end do
+!     Test for rank deficiency
+if (rmin < 1.d0) go to 200
+tt = (eb(imin) + abs(db(imin)))/h(imin)
+if (tt >= 1.d0) go to 170
+!     Compute exact ub
+do i = 1,jm1
+   w(i) = a(imin,i)
+end do
+l = jm1
+130 w(l) = w(l)/a(l,l)
+if (l == 1) go to 150
+lm1 = l - 1
+do i = l,jm1
+   w(lm1) = w(lm1) - a(i,lm1)*w(i)
+end do
+l = lm1
+go to 130
+150 tt = eb(imin)
+do i = 1,jm1
+   tt = tt + abs(w(i))*eb(i)
+end do
+ub(imin) = tt
+if (ub(imin)/h(imin) >= 1.d0) go to 170
+go to 200
+!        Matrix reduction
+170 kk = krank
+krank = krank - 1
+kz = krank
+if (mode == 0) return
+if (j <= np) go to 410
+if (imin > krank) go to 180
+call iswap(1,ir(imin),1,ir(kk),1)
+call dswap(n,a(imin,1),mda,a(kk,1),mda)
+call dswap(1,eb(imin),1,eb(kk),1)
+call dswap(1,ub(imin),1,ub(kk),1)
+call dswap(1,db(imin),1,db(kk),1)
+call dswap(1,w(imin),1,w(kk),1)
+call dswap(1,h(imin),1,h(kk),1)
+180 if (j > krank) go to 300
+go to 110
+!        Row pivot
+200 if (imin == j) go to 210
+call dswap(1,h(j),1,h(imin),1)
+call dswap(n,a(j,1),mda,a(imin,1),mda)
+call dswap(1,eb(j),1,eb(imin),1)
+call dswap(1,ub(j),1,ub(imin),1)
+call dswap(1,db(j),1,db(imin),1)
+call dswap(1,w(j),1,w(imin),1)
+call iswap(1,ir(j),1,ir(imin),1)
+!        Column pivot
+210 jmax = idamax(nn,a(j,j),mda)
+jmax = jmax + j - 1
+if (jmax == j) go to 220
+call dswap(m,a(1,j),1,a(1,jmax),1)
+call iswap(1,ic(j),1,ic(jmax),1)
+!     Apply Householder transformation
+220 tn = dnrm2(nn,a(j,j),mda)
+if (tn == 0.d0) go to 170
+if (a(j,j) /= 0.d0) tn = sign(tn,a(j,j))
+call dscal(nn,1.d0/tn,a(j,j),mda)
+a(j,j) = a(j,j) + 1.d0
+if (j == m) go to 250
+do i = jp1,m
+   bb = -ddot(nn,a(j,j),mda,a(i,j),mda)/a(j,j)
+   call daxpy(nn,bb,a(j,j),mda,a(i,j),mda)
+   if (i <= np) go to 240
+   if (h(i) == 0.d0) go to 240
+   tt = 1.0 - (a(i,j)/h(i))**2
+   tt = max(tt,0.d0)
+   t = tt
+   tt = 1.d0 + 0.05d0*tt*(h(i)/w(i))**2
+   if (tt == 1.d0) go to 230
+   h(i) = h(i)*sqrt(t)
+   go to 240
+230 h(i) = dnrm2(n - j,a(i,j + 1),mda)
+   w(i) = h(i)
+240 continue
+end do
+250 h(j) = a(j,j)
+a(j,j) = -tn
+!          Update ub, db
+ub(j) = ub(j)/abs(a(j,j))
+db(j) = (sign(eb(j),db(j)) + db(j))/a(j,j)
+if (j == krank) go to 300
+do i = jp1,krank
+   ub(i) = ub(i) + abs(a(i,j))*ub(j)
+   db(i) = db(i) - a(i,j)*db(j)
+end do
+go to 100
+!        E n D    m A i n    L O O P
+300 continue
+!        Compute ksure
+km1 = krank - 1
+do i = 1,km1
+   is = 0
+   kmi = krank - i
+   do ii = 1,kmi
+      if (ub(ii) <= ub(ii + 1)) go to 310
+      is = 1
+      temp = ub(ii)
+      ub(ii) = ub(ii + 1)
+      ub(ii + 1) = temp
+310   continue
+   end do
+   if (is == 0) exit
+end do
+ksure = 0
+sum = 0.d0
+do i = 1,krank
+   r2 = ub(i)*ub(i)
+   if (r2 + sum >= 1.d0) exit
+   sum = sum + r2
+   ksure = ksure + 1
+end do
+!     If system is of reduced rank and mode = 2
+!     complete the decomposition for shortest least squares solution
+if (krank == m .or. mode < 2) return
+mmk = m - krank
+kp1 = krank + 1
+i = krank
+340 tn = dnrm2(mmk,a(kp1,i),1)/a(i,i)
+tn = a(i,i)*sqrt(1.d0 + tn*tn)
+call dscal(mmk,1.d0/tn,a(kp1,i),1)
+w(i) = a(i,i)/tn + 1.d0
+a(i,i) = -tn
+if (i == 1) go to 350
+im1 = i - 1
+do ii = 1,im1
+   tt = -ddot(mmk,a(kp1,ii),1,a(kp1,i),1)/w(i)
+   tt = tt - a(i,ii)
+   call daxpy(mmk,tt,a(kp1,i),1,a(kp1,ii),1)
+   a(i,ii) = a(i,ii) + tt*w(i)
+end do
+i = i - 1
+go to 340
+350 continue
+return
+!     First np rows are linearly dependent
+400 krank = i - 1
+return
+410 krank = j - 1
+end subroutine du11us
+
+pure subroutine du12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
+!! <!-- nswc-ford:begin DU12US -->
+!! Reference for `du12us`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!         Given the Householder LQ factorization of A, this
+!!         subroutine solves the system AX=b. if the system
+!!         is of reduced rank, this routine returns a solution
+!!         according to the selected mode.
+!!        Note - If mode.NE.2, w is never accessed.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
+double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
+double precision, intent(in) :: h(m), w(m)
+integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
+integer :: i, ij, ip1, j, jb, k, kp1, mmk
+double precision :: bb, tt
+interface
+   pure subroutine daxpy(n,da,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: da
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine daxpy
+   pure function ddot(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(in) :: dy(*)
+      integer, intent(in) :: incy
+      double precision :: ddot
+   end function ddot
+   pure function dnrm2(n,dx,incx)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(in) :: dx(*)
+      integer, intent(in) :: incx
+      double precision :: dnrm2
+   end function dnrm2
+   pure subroutine dswap(n,dx,incx,dy,incy)
+      implicit none
+      integer, intent(in) :: n
+      double precision, intent(inout) :: dx(*)
+      integer, intent(in) :: incx
+      double precision, intent(inout) :: dy(*)
+      integer, intent(in) :: incy
+   end subroutine dswap
+end interface
+!        Given the Householder LQ factorization of A, this
+!        subroutine solves the system AX=b. if the system
+!        is of reduced rank, this routine returns a solution
+!        according to the selected mode.
+!       Note - If mode.NE.2, w is never accessed.
+k = krank
+kp1 = k + 1
+if (k > 0) go to 30
+!        rank=0
+do jb = 1,nb
+   rnorm(jb) = dnrm2(m,b(1,jb),1)
+end do
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.d0
+   end do
+end do
+return
+30 i = 0
+!     Reorder b to reflect row interchanges
+40 i = i + 1
+if (i == m) go to 100
+j = ir(i)
+if (j == i) go to 40
+if (j < 0) go to 40
+ir(i) = -ir(i)
+do jb = 1,nb
+   rnorm(jb) = b(i,jb)
+end do
+ij = i
+60 do jb = 1,nb
+   b(ij,jb) = b(j,jb)
+end do
+ij = j
+j = ir(ij)
+ir(ij) = -ir(ij)
+if (j /= i) go to 60
+do jb = 1,nb
+   b(ij,jb) = rnorm(jb)
+end do
+go to 40
+100 do i = 1,m
+   ir(i) = abs(ir(i))
+end do
+!     If A is of reduced rank and mode=2,
+!     apply Householder transformations to b
+if (mode < 2 .or. k == m) go to 140
+mmk = m - k
+do jb = 1,nb
+   do j = 1,k
+      i = kp1 - j
+      tt = -ddot(mmk,a(kp1,i),1,b(kp1,jb),1)/w(i)
+      tt = tt - b(i,jb)
+      call daxpy(mmk,tt,a(kp1,i),1,b(kp1,jb),1)
+      b(i,jb) = b(i,jb) + tt*w(i)
+   end do
+end do
+!     Find norms of residual vector(S)..(before overwrite b)
+140 do jb = 1,nb
+   rnorm(jb) = dnrm2(m - k,b(kp1,jb),1)
+end do
+!     Back solve lower triangular L
+do jb = 1,nb
+   do i = 1,k
+      b(i,jb) = b(i,jb)/a(i,i)
+      if (i == k) exit
+      ip1 = i + 1
+      call daxpy(k - i,-b(i,jb),a(ip1,i),1,b(ip1,jb),1)
+   end do
+end do
+!      Truncated solution
+if (k == n) go to 210
+do jb = 1,nb
+   do i = kp1,n
+      b(i,jb) = 0.d0
+   end do
+end do
+!     Apply Householder transformations to b
+210 do i = 1,k
+   j = kp1 - i
+   tt = a(j,j)
+   a(j,j) = h(j)
+   do jb = 1,nb
+      bb = -ddot(n - j + 1,a(j,j),mda,b(j,jb),1)/h(j)
+      call daxpy(n - j + 1,bb,a(j,j),mda,b(j,jb),1)
+   end do
+   a(j,j) = tt
+end do
+!     Reorder b to reflect column interchanges
+i = 0
+240 i = i + 1
+if (i == n) go to 260
+j = ic(i)
+if (j == i) go to 240
+if (j < 0) go to 240
+ic(i) = -ic(i)
+250 call dswap(nb,b(j,1),mdb,b(i,1),mdb)
+ij = ic(j)
+ic(j) = -ic(j)
+j = ij
+if (j /= i) go to 250
+go to 240
+260 do i = 1,n
+   ic(i) = abs(ic(i))
+end do
+end subroutine du12us
+
+pure subroutine hfti(a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
+!! <!-- nswc-ford:begin HFTI -->
+!! Reference for `hfti`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      dimension a(mda,n),(b(mdb,nb) or b(m)),rnorm(nb),h(n),g(n),ip(n)
+!!      written by C.L. Lawson and R.J. Hanson.
+!!      From the book solving least squares problems, Prentice-Hall, 1974.
+!!      For algorithmic details see algorithm hfti in chapter 14.
+!!      Abstract
+!!      this subroutine solves a linear least squares problem or a set of
+!!      linear least squares problems having the same matrix but different
+!!      right-side vectors.  The problem data consists of an m by n matrix
+!!      A, an m by nb matrix b, and an absolute tolerance parameter tau
+!!      whose usage is described below.  The nb column vectors of b
+!!      represent right-side vectors for nb distinct linear least squares
+!!      problems.
+!!      This set of problems can also be written as the matrix least
+!!      squares problem
+!!                        ax = b,
+!!      where X is the n by nb solution matrix.
+!!      Note that if b is the m by m identity matrix, then X will be the
+!!      pseudo-inverse of A.
+!!      This subroutine first transforms the augmented matrix (A b) to A
+!!      matrix (R C) using premultiplying Householder transformations with
+!!      column interchanges.  All subdiagonal elements in the matrix R are
+!!      zero and its diagonal elements satisfy
+!!                        abs(R(i,i)).GE.abs(R(i+1,i+1)),
+!!                        i = 1,...,l-1, where
+!!                        l = min(m,n).
+!!      The subroutine sets k to be the number of diagonal elements
+!!      of R that exceed tau in magnitude. Then the solution of minimum
+!!      Euclidean length is computed using the first k rows of (R C).
+!!      To be specific we suggest that the user consider an easily
+!!      computable matrix NORM, such as, the maximum of all column sums of
+!!      magnitudes.
+!!      Now if the relative uncertainty of b is eps, (norm of uncertainty/
+!!      norm of b), it is suggested that tau be set approximately equal to
+!!      eps*(norm of A).
+!!      The entire set of parameters for hfti are
+!!      input..
+!!      a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
+!!                        matrix a of the least squares problem AX = b.
+!!                        The first dimensioning parameter of the array
+!!                        a(*,*) is mda, which must satisfy mda.GE.m
+!!                        either m.GE.n or m.LT.n is permitted.  There
+!!                        is no restriction on the rank of A.  the
+!!                        condition mda.LT.m is considered an error.
+!!      b(*),mdb,nb       if nb = 0 The subroutine will perform the
+!!                        orthogonal decomposition but will make no
+!!                        references to the array b(*).  If nb.GT.0
+!!                        the array b(*) must initially contain the m by
+!!                        nb matrix b of the least squares problem AX =
+!!                        b.  if nb.GE.2 the array b(*) must be doubly
+!!                        subscripted with first dimensioning parameter
+!!                        mdb.GE.max(m,n).  If nb = 1 The array b(*) may
+!!                        be either doubly or singly subscripted.  In
+!!                        the latter case the value of mdb is arbitrary
+!!                        but it should be set to some valid integer
+!!                        value such as mdb = m.
+!!                        The condition of nb.GT.1.AND.mdb.LT. max(m,n)
+!!                        is considered an error.
+!!      tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
+!!                        for pseudorank determination.
+!!      h(*),g(*),ip(*)   ARRAYS OF WORKING SPACE USED BY hfti.
+!!      Output..
+!!      a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
+!!                        modified by the subroutine.  These contents
+!!                        are not generally required by the user.
+!!      b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
+!!                        nb solution matrix X.
+!!      k                 SET BY THE SUBROUTINE TO INDICATE THE
+!!                        pseudorank of A.
+!!      rnorm(*)          ON RETURN, rnorm(j) WILL CONTAIN THE EUCLIDEAN
+!!                        norm of the residual vector for the problem
+!!                        defined by the j-TH column vector of the array
+!!                        b(*,*) FOR j = 1,...,nb.
+!!      h(*),g(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
+!!                        elements of the pre- and post-multiplying
+!!                        Householder transformations used to compute
+!!                        the minimum Euclidean length solution.
+!!      ip(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
+!!                        describing the permutation of column vectors.
+!!                        The contents of arrays h(*),g(*) and ip(*)
+!!                        are not generally required by the user.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(out) :: k
+integer, intent(in) :: m, mda, mdb, n, nb
+real, intent(inout) :: a(mda,n), b(mdb,*), g(n), h(n), rnorm(*)
+real, intent(in) :: tau
+integer, intent(inout) :: ip(n)
+!     beginning of local variable declarations
+integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
+real :: hmax, sm1, tmp, z
+double precision :: sm
+real, parameter :: factor = 1.e-3
+interface
+   pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+      implicit none
+      integer, intent(in) :: iue
+      integer, intent(in) :: m
+      integer, intent(in) :: mode
+      integer, intent(in) :: lpivot
+      integer, intent(in) :: l1
+      real, intent(inout) :: u(iue,m)
+      real, intent(inout) :: up
+      real, intent(inout) :: c(*)
+      integer, intent(in) :: ice
+      integer, intent(in) :: icv
+      integer, intent(in) :: ncv
+   end subroutine h12
+end interface
+!-----------------------------------------------------------------------
+!     dimension a(mda,n),(b(mdb,nb) or b(m)),rnorm(nb),h(n),g(n),ip(n)
+!     written by C.L. Lawson and R.J. Hanson.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     For algorithmic details see algorithm hfti in chapter 14.
+!     Abstract
+!     this subroutine solves a linear least squares problem or a set of
+!     linear least squares problems having the same matrix but different
+!     right-side vectors.  The problem data consists of an m by n matrix
+!     A, an m by nb matrix b, and an absolute tolerance parameter tau
+!     whose usage is described below.  The nb column vectors of b
+!     represent right-side vectors for nb distinct linear least squares
+!     problems.
+!     This set of problems can also be written as the matrix least
+!     squares problem
+!                       ax = b,
+!     where X is the n by nb solution matrix.
+!     Note that if b is the m by m identity matrix, then X will be the
+!     pseudo-inverse of A.
+!     This subroutine first transforms the augmented matrix (A b) to A
+!     matrix (R C) using premultiplying Householder transformations with
+!     column interchanges.  All subdiagonal elements in the matrix R are
+!     zero and its diagonal elements satisfy
+!                       abs(R(i,i)).GE.abs(R(i+1,i+1)),
+!                       i = 1,...,l-1, where
+!                       l = min(m,n).
+!     The subroutine sets k to be the number of diagonal elements
+!     of R that exceed tau in magnitude. Then the solution of minimum
+!     Euclidean length is computed using the first k rows of (R C).
+!     To be specific we suggest that the user consider an easily
+!     computable matrix NORM, such as, the maximum of all column sums of
+!     magnitudes.
+!     Now if the relative uncertainty of b is eps, (norm of uncertainty/
+!     norm of b), it is suggested that tau be set approximately equal to
+!     eps*(norm of A).
+!     The entire set of parameters for hfti are
+!     input..
+!     a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
+!                       matrix a of the least squares problem AX = b.
+!                       The first dimensioning parameter of the array
+!                       a(*,*) is mda, which must satisfy mda.GE.m
+!                       either m.GE.n or m.LT.n is permitted.  There
+!                       is no restriction on the rank of A.  the
+!                       condition mda.LT.m is considered an error.
+!     b(*),mdb,nb       if nb = 0 The subroutine will perform the
+!                       orthogonal decomposition but will make no
+!                       references to the array b(*).  If nb.GT.0
+!                       the array b(*) must initially contain the m by
+!                       nb matrix b of the least squares problem AX =
+!                       b.  if nb.GE.2 the array b(*) must be doubly
+!                       subscripted with first dimensioning parameter
+!                       mdb.GE.max(m,n).  If nb = 1 The array b(*) may
+!                       be either doubly or singly subscripted.  In
+!                       the latter case the value of mdb is arbitrary
+!                       but it should be set to some valid integer
+!                       value such as mdb = m.
+!                       The condition of nb.GT.1.AND.mdb.LT. max(m,n)
+!                       is considered an error.
+!     tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
+!                       for pseudorank determination.
+!     h(*),g(*),ip(*)   ARRAYS OF WORKING SPACE USED BY hfti.
+!     Output..
+!     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
+!                       modified by the subroutine.  These contents
+!                       are not generally required by the user.
+!     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
+!                       nb solution matrix X.
+!     k                 SET BY THE SUBROUTINE TO INDICATE THE
+!                       pseudorank of A.
+!     rnorm(*)          ON RETURN, rnorm(j) WILL CONTAIN THE EUCLIDEAN
+!                       norm of the residual vector for the problem
+!                       defined by the j-TH column vector of the array
+!                       b(*,*) FOR j = 1,...,nb.
+!     h(*),g(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
+!                       elements of the pre- and post-multiplying
+!                       Householder transformations used to compute
+!                       the minimum Euclidean length solution.
+!     ip(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
+!                       describing the permutation of column vectors.
+!                       The contents of arrays h(*),g(*) and ip(*)
+!                       are not generally required by the user.
+!-----------------------------------------------------------------------
+!---------------------
+k = 0
+ldiag = min(m,n)
+if (ldiag <= 0) go to 270
+do j = 1,ldiag
+   if (j == 1) go to 20
+!     Update squared column lengths and find lmax
+!    ..
+   lmax = j
+   do l = j,n
+      h(l) = h(l) - a(j - 1,l)**2
+      if (h(l) > h(lmax)) lmax = l
+   end do
+   z = hmax + factor*h(lmax)
+   if (z > hmax) go to 50
+!     Compute squared column lengths and find lmax
+!    ..
+20 lmax = j
+   do l = j,n
+      h(l) = 0.0
+      do i = j,m
+         h(l) = h(l) + a(i,l)**2
+      end do
+      if (h(l) > h(lmax)) lmax = l
+   end do
+   hmax = h(lmax)
+!    ..
+!     lmax has been determined
+!     do column interchanges if needed.
+!    ..
+50 ip(j) = lmax
+   if (ip(j) == j) go to 70
+   do i = 1,m
+      tmp = a(i,j)
+      a(i,j) = a(i,lmax)
+      a(i,lmax) = tmp
+   end do
+   h(lmax) = h(j)
+!     Compute the j-TH transformation and apply it to A and b.
+!    ..
+70 call h12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
+   call h12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
+end do
+!     Determine the pseudorank, k, using the tolerance, tau.
+!    ..
+do j = 1,ldiag
+   if (abs(a(j,j)) <= tau) go to 100
+end do
+k = ldiag
+go to 110
+100 k = j - 1
+110 kp1 = k + 1
+!     Compute the norms of the residual vectors.
+if (nb <= 0) go to 140
+do jb = 1,nb
+   tmp = 0.0
+   if (kp1 > m) go to 130
+   do i = kp1,m
+      tmp = tmp + b(i,jb)**2
+   end do
+130 rnorm(jb) = sqrt(tmp)
+end do
+140 continue
+!                                           Special for pseudorank = 0
+if (k > 0) go to 160
+if (nb <= 0) go to 270
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.0
+   end do
+end do
+go to 270
+!     If the pseudorank is less than n compute Householder
+!     decomposition of first k rows.
+!    ..
+160 if (k == n) go to 180
+do ii = 1,k
+   i = kp1 - ii
+   call h12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
+end do
+180 continue
+if (nb <= 0) go to 270
+do jb = 1,nb
+!     Solve the k by k triangular system.
+!    ..
+   do l = 1,k
+      sm = 0.d0
+      i = kp1 - l
+      if (i == k) go to 200
+      ip1 = i + 1
+      do j = ip1,k
+         sm = sm + dble(a(i,j))*dble(b(j,jb))
+      end do
+200   sm1 = dble(b(i,jb)) - sm
+      b(i,jb) = sm1/a(i,i)
+   end do
+!     Complete computation of solution vector.
+!    ..
+   if (k == n) go to 240
+   do j = kp1,n
+      b(j,jb) = 0.0
+   end do
+   do i = 1,k
+      call h12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
+   end do
+!      RE-order the solution vector to compensate for the
+!      column interchanges.
+!    ..
+240 do jj = 1,ldiag
+      j = ldiag + 1 - jj
+      if (ip(j) == j) go to 250
+      l = ip(j)
+      tmp = b(l,jb)
+      b(l,jb) = b(j,jb)
+      b(j,jb) = tmp
+250   continue
+   end do
+end do
+!    ..
+!     The solution vectors, X, are now
+!     in the first  n  rows of the array b(,).
+270 return
+end subroutine hfti
+
+pure subroutine hfti2(a,mda,m,n,b,mdb,nb,d,tau,k,rnorm,h,g,ip,ierr)
+!! <!-- nswc-ford:begin HFTI2 -->
+!! Reference for `hfti2`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      dimension a(mda,n),(b(mdb,nb) or b(m))
+!!      dimension d(l) where l = min(m,n)
+!!      dimension rnorm(nb),h(n),g(n),ip(n)
+!!      written by C.L. Lawson and R.J. Hanson. Modified by A.H. Morris.
+!!      From the book solving least squares problems, Prentice-Hall, 1974.
+!!      For algorithmic details see algorithm hfti in chapter 14.
+!!      Abstract
+!!      this subroutine solves a linear least squares problem or a set of
+!!      linear least squares problems having the same matrix but different
+!!      right-side vectors.  The problem data consists of an m by n matrix
+!!      A, an m by nb matrix b, and an absolute tolerance parameter tau
+!!      whose usage is described below.  The nb column vectors of b
+!!      represent right-side vectors for nb distinct linear least squares
+!!      problems.
+!!      This set of problems can also be written as the matrix least
+!!      squares problem
+!!                        ax = b,
+!!      where X is the n by nb solution matrix.
+!!      Note that if b is the m by m identity matrix, then X will be the
+!!      pseudo-inverse of A.
+!!      This subroutine first transforms the augmented matrix (A b) to A
+!!      matrix (R C) using premultiplying Householder transformations with
+!!      column interchanges.  All subdiagonal elements in the matrix R are
+!!      zero and its diagonal elements satisfy
+!!                        abs(R(i,i)).GE.abs(R(i+1,i+1)),
+!!                        i = 1,...,l-1, where
+!!                        l = min(m,n).
+!!      The array d will contain the diagonal elements R(1,1),...,R(l,l).
+!!      The subroutine sets k to be the number of diagonal elements that
+!!      exceed tau in magnitude.  Then the solution of minimum Euclidean
+!!      length is computed using the first k rows of (R C).
+!!      To be specific we suggest that the user consider an easily
+!!      computable matrix NORM, such as, the maximum of all column sums of
+!!      magnitudes.
+!!      Now if the relative uncertainty of b is eps, (norm of uncertainty/
+!!      norm of b), it is suggested that tau be set approximately equal to
+!!      eps*(norm of A).
+!!      The entire set of parameters for hfti2 are
+!!      input..
+!!      a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
+!!                        matrix a of the least squares problem AX = b.
+!!                        The first dimensioning parameter of the array
+!!                        a(*,*) is mda, which must satisfy mda.GE.m
+!!                        either m.GE.n or m.LT.n is permitted.  There
+!!                        is no restriction on the rank of A.  the
+!!                        condition mda.LT.m is considered an error.
+!!      b(*),mdb,nb       if nb = 0 The subroutine will perform the
+!!                        orthogonal decomposition but will make no
+!!                        references to the array b(*).  If nb.GT.0
+!!                        the array b(*) must initially contain the m by
+!!                        nb matrix b of the least squares problem AX =
+!!                        b.  if nb.GE.2 the array b(*) must be doubly
+!!                        subscripted with first dimensioning parameter
+!!                        mdb.GE.max(m,n).  If nb = 1 The array b(*) may
+!!                        be either doubly or singly subscripted.  In
+!!                        the latter case the value of mdb is arbitrary
+!!                        but it should be set to some valid integer
+!!                        value such as mdb = m.
+!!                        The condition of nb.GT.1.AND.mdb.LT. max(m,n)
+!!                        is considered an error.
+!!      tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
+!!                        for pseudorank determination.
+!!      h(*),g(*),ip(*)   ARRAYS OF WORKING SPACE USED BY hfti2.
+!!      Output..
+!!      a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
+!!                        modified by the subroutine.  These contents
+!!                        are not generally required by the user.
+!!      b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
+!!                        nb solution matrix X.
+!!      d(*)              THE ARRAY OF DIAGONAL ELEMENTS OF THE
+!!                        triangular matrix R
+!!      k                 SET BY THE SUBROUTINE TO INDICATE THE
+!!                        pseudorank of A.
+!!      RNORM(*)          ON RETURN, RNORM(j) WILL CONTAIN THE EUCLIDEAN
+!!                        norm of the residual vector for the problem
+!!                        defined by the j-TH column vector of the array
+!!                        b(*,*) FOR j = 1,...,nb.
+!!      h(*),g(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
+!!                        elements of the pre- and post-multiplying
+!!                        Householder transformations used to compute
+!!                        the minimum Euclidean length solution.
+!!      ip(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
+!!                        describing the permutation of column vectors.
+!!                        The contents of arrays h(*),g(*) and ip(*)
+!!                        are not generally required by the user.
+!!      ierr              ERROR INDICATOR. IF NO INPUT ERRORS ARE
+!!                        detected then ierr is set to 0. Otherwise
+!!                           ierr = 1  IF mda.LT.m
+!!                           ierr = 2  If nb.GT.1 and mdb.LT.max(m,n)
+!!                        these errors are fatal.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(out) :: k
+integer, intent(in) :: m, mda, mdb, n, nb
+real, intent(inout) :: a(mda,n), b(mdb,*), d(*), g(n), h(n), &
+   & rnorm(*)
+real, intent(in) :: tau
+integer, intent(inout) :: ip(n)
+!     beginning of local variable declarations
+integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
+real :: hmax, sm1, tmp, z
+double precision :: sm
+real, parameter :: factor = 1.e-3
+interface
+   pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+      implicit none
+      integer, intent(in) :: iue
+      integer, intent(in) :: m
+      integer, intent(in) :: mode
+      integer, intent(in) :: lpivot
+      integer, intent(in) :: l1
+      real, intent(inout) :: u(iue,m)
+      real, intent(inout) :: up
+      real, intent(inout) :: c(*)
+      integer, intent(in) :: ice
+      integer, intent(in) :: icv
+      integer, intent(in) :: ncv
+   end subroutine h12
+end interface
+!-----------------------------------------------------------------------
+!     dimension a(mda,n),(b(mdb,nb) or b(m))
+!     dimension d(l) where l = min(m,n)
+!     dimension rnorm(nb),h(n),g(n),ip(n)
+!     written by C.L. Lawson and R.J. Hanson. Modified by A.H. Morris.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     For algorithmic details see algorithm hfti in chapter 14.
+!     Abstract
+!     this subroutine solves a linear least squares problem or a set of
+!     linear least squares problems having the same matrix but different
+!     right-side vectors.  The problem data consists of an m by n matrix
+!     A, an m by nb matrix b, and an absolute tolerance parameter tau
+!     whose usage is described below.  The nb column vectors of b
+!     represent right-side vectors for nb distinct linear least squares
+!     problems.
+!     This set of problems can also be written as the matrix least
+!     squares problem
+!                       ax = b,
+!     where X is the n by nb solution matrix.
+!     Note that if b is the m by m identity matrix, then X will be the
+!     pseudo-inverse of A.
+!     This subroutine first transforms the augmented matrix (A b) to A
+!     matrix (R C) using premultiplying Householder transformations with
+!     column interchanges.  All subdiagonal elements in the matrix R are
+!     zero and its diagonal elements satisfy
+!                       abs(R(i,i)).GE.abs(R(i+1,i+1)),
+!                       i = 1,...,l-1, where
+!                       l = min(m,n).
+!     The array d will contain the diagonal elements R(1,1),...,R(l,l).
+!     The subroutine sets k to be the number of diagonal elements that
+!     exceed tau in magnitude.  Then the solution of minimum Euclidean
+!     length is computed using the first k rows of (R C).
+!     To be specific we suggest that the user consider an easily
+!     computable matrix NORM, such as, the maximum of all column sums of
+!     magnitudes.
+!     Now if the relative uncertainty of b is eps, (norm of uncertainty/
+!     norm of b), it is suggested that tau be set approximately equal to
+!     eps*(norm of A).
+!     The entire set of parameters for hfti2 are
+!     input..
+!     a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
+!                       matrix a of the least squares problem AX = b.
+!                       The first dimensioning parameter of the array
+!                       a(*,*) is mda, which must satisfy mda.GE.m
+!                       either m.GE.n or m.LT.n is permitted.  There
+!                       is no restriction on the rank of A.  the
+!                       condition mda.LT.m is considered an error.
+!     b(*),mdb,nb       if nb = 0 The subroutine will perform the
+!                       orthogonal decomposition but will make no
+!                       references to the array b(*).  If nb.GT.0
+!                       the array b(*) must initially contain the m by
+!                       nb matrix b of the least squares problem AX =
+!                       b.  if nb.GE.2 the array b(*) must be doubly
+!                       subscripted with first dimensioning parameter
+!                       mdb.GE.max(m,n).  If nb = 1 The array b(*) may
+!                       be either doubly or singly subscripted.  In
+!                       the latter case the value of mdb is arbitrary
+!                       but it should be set to some valid integer
+!                       value such as mdb = m.
+!                       The condition of nb.GT.1.AND.mdb.LT. max(m,n)
+!                       is considered an error.
+!     tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
+!                       for pseudorank determination.
+!     h(*),g(*),ip(*)   ARRAYS OF WORKING SPACE USED BY hfti2.
+!     Output..
+!     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
+!                       modified by the subroutine.  These contents
+!                       are not generally required by the user.
+!     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
+!                       nb solution matrix X.
+!     d(*)              THE ARRAY OF DIAGONAL ELEMENTS OF THE
+!                       triangular matrix R
+!     k                 SET BY THE SUBROUTINE TO INDICATE THE
+!                       pseudorank of A.
+!     RNORM(*)          ON RETURN, RNORM(j) WILL CONTAIN THE EUCLIDEAN
+!                       norm of the residual vector for the problem
+!                       defined by the j-TH column vector of the array
+!                       b(*,*) FOR j = 1,...,nb.
+!     h(*),g(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
+!                       elements of the pre- and post-multiplying
+!                       Householder transformations used to compute
+!                       the minimum Euclidean length solution.
+!     ip(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
+!                       describing the permutation of column vectors.
+!                       The contents of arrays h(*),g(*) and ip(*)
+!                       are not generally required by the user.
+!     ierr              ERROR INDICATOR. IF NO INPUT ERRORS ARE
+!                       detected then ierr is set to 0. Otherwise
+!                          ierr = 1  IF mda.LT.m
+!                          ierr = 2  If nb.GT.1 and mdb.LT.max(m,n)
+!                       these errors are fatal.
+!-----------------------------------------------------------------------
+!---------------------
+k = 0
+ldiag = min(m,n)
+if (ldiag <= 0) go to 270
+if (m > mda) go to 300
+if (nb > 1 .and. max(m,n) > mdb) go to 310
+do j = 1,ldiag
+   if (j == 1) go to 20
+!     Update squared column lengths and find lmax
+!    ..
+   lmax = j
+   do l = j,n
+      h(l) = h(l) - a(j - 1,l)**2
+      if (h(l) > h(lmax)) lmax = l
+   end do
+   z = hmax + factor*h(lmax)
+   if (z > hmax) go to 50
+!     Compute squared column lengths and find lmax
+!    ..
+20 lmax = j
+   do l = j,n
+      h(l) = 0.0
+      do i = j,m
+         h(l) = h(l) + a(i,l)**2
+      end do
+      if (h(l) > h(lmax)) lmax = l
+   end do
+   hmax = h(lmax)
+!    ..
+!     lmax has been determined
+!     do column interchanges if needed.
+!    ..
+50 ip(j) = lmax
+   if (ip(j) == j) go to 70
+   do i = 1,m
+      tmp = a(i,j)
+      a(i,j) = a(i,lmax)
+      a(i,lmax) = tmp
+   end do
+   h(lmax) = h(j)
+!     Compute the j-TH transformation and apply it to A and b.
+!    ..
+70 call h12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
+   call h12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
+end do
+!     Determine the pseudorank, k, using the tolerance, tau.
+!     Also store the diagonal elements in the array d.
+!    ..
+do j = 1,ldiag
+   if (abs(a(j,j)) <= tau) go to 100
+   d(j) = a(j,j)
+end do
+k = ldiag
+kp1 = k + 1
+go to 110
+100 k = j - 1
+kp1 = j
+do j = kp1,ldiag
+   d(j) = a(j,j)
+end do
+!     Compute the norms of the residual vectors.
+110 if (nb <= 0) go to 140
+do jb = 1,nb
+   tmp = 0.0
+   if (kp1 > m) go to 130
+   do i = kp1,m
+      tmp = tmp + b(i,jb)**2
+   end do
+130 rnorm(jb) = sqrt(tmp)
+end do
+140 continue
+!                                           Special for pseudorank = 0
+if (k > 0) go to 160
+if (nb <= 0) go to 270
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.0
+   end do
+end do
+go to 270
+!     If the pseudorank is less than n compute Householder
+!     decomposition of first k rows.
+!    ..
+160 if (k == n) go to 180
+do ii = 1,k
+   i = kp1 - ii
+   call h12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
+end do
+180 continue
+if (nb <= 0) go to 270
+do jb = 1,nb
+!     Solve the k by k triangular system.
+!    ..
+   do l = 1,k
+      sm = 0.d0
+      i = kp1 - l
+      if (i == k) go to 200
+      ip1 = i + 1
+      do j = ip1,k
+         sm = sm + dble(a(i,j))*dble(b(j,jb))
+      end do
+200   sm1 = dble(b(i,jb)) - sm
+      b(i,jb) = sm1/a(i,i)
+   end do
+!     Complete computation of solution vector.
+!    ..
+   if (k == n) go to 240
+   do j = kp1,n
+      b(j,jb) = 0.0
+   end do
+   do i = 1,k
+      call h12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
+   end do
+!      RE-order the solution vector to compensate for the
+!      column interchanges.
+!    ..
+240 do jj = 1,ldiag
+      j = ldiag + 1 - jj
+      if (ip(j) == j) go to 250
+      l = ip(j)
+      tmp = b(l,jb)
+      b(l,jb) = b(j,jb)
+      b(j,jb) = tmp
+250   continue
+   end do
+end do
+!    ..
+!     The solution vectors, X, are now
+!     in the first  n  rows of the array b(,).
+270 ierr = 0
+return
+!     Error return
+300 ierr = 1
+return
+310 ierr = 2
+end subroutine hfti2
+
+pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+!! <!-- nswc-ford:begin H12 -->
+!! Reference for `h12`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
+!!      From the book solving least squares problems, Prentice-Hall, 1974.
+!!      Construction and/or application of a single
+!!      Householder transformation..     Q = i + u*(u**T)/b
+!!      mode    = 1 Or 2   to select algorithm  H1  or  H2 .
+!!      lpivot is the index of the pivot element.
+!!      l1,m   if l1 .LE. m   the transformation will be constructed to
+!!             ZERO ELEMENTS INDEXED FROM l1 THROUGH m.   IF l1 GT. m
+!!             the subroutine does an identity transformation.
+!!      u(),iue,UP    ON ENTRY TO H1 u() CONTAINS THE PIVOT VECTOR.
+!!                    iue is the storage increment between elements.
+!!                                        On exit from H1 u() and up
+!!                    contain quantities defining the vector u of the
+!!                    HOUSEHOLDER TRANSFORMATION.   ON ENTRY TO H2 u()
+!!                    and up should contain quantities previously computed
+!!                    by H1.  These will not be modified by H2.
+!!      c()    ON ENTRY TO H1 OR H2 c() CONTAINS A MATRIX WHICH WILL BE
+!!             regarded as a set of vectors to which the Householder
+!!             transformation is to be applied.  On exit c() contains the
+!!             set of transformed vectors.
+!!      ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN c().
+!!      icv    STORAGE INCREMENT BETWEEN VECTORS IN c().
+!!      ncv    number of vectors in c() to be transformed. If ncv .LE. 0
+!!             no operations will be done on c().
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
+real, intent(inout) :: c(*), u(iue,m), up
+!     beginning of local variable declarations
+integer :: i, i2, i3, i4, incr, j
+real :: cl, d, sm1
+double precision :: sm, b
+!-----------------------------------------------------------------------
+!     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     Construction and/or application of a single
+!     Householder transformation..     Q = i + u*(u**T)/b
+!     mode    = 1 Or 2   to select algorithm  H1  or  H2 .
+!     lpivot is the index of the pivot element.
+!     l1,m   if l1 .LE. m   the transformation will be constructed to
+!            ZERO ELEMENTS INDEXED FROM l1 THROUGH m.   IF l1 GT. m
+!            the subroutine does an identity transformation.
+!     u(),iue,UP    ON ENTRY TO H1 u() CONTAINS THE PIVOT VECTOR.
+!                   iue is the storage increment between elements.
+!                                       On exit from H1 u() and up
+!                   contain quantities defining the vector u of the
+!                   HOUSEHOLDER TRANSFORMATION.   ON ENTRY TO H2 u()
+!                   and up should contain quantities previously computed
+!                   by H1.  These will not be modified by H2.
+!     c()    ON ENTRY TO H1 OR H2 c() CONTAINS A MATRIX WHICH WILL BE
+!            regarded as a set of vectors to which the Householder
+!            transformation is to be applied.  On exit c() contains the
+!            set of transformed vectors.
+!     ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN c().
+!     icv    STORAGE INCREMENT BETWEEN VECTORS IN c().
+!     ncv    number of vectors in c() to be transformed. If ncv .LE. 0
+!            no operations will be done on c().
+!-----------------------------------------------------------------------
+if (0 >= lpivot .or. lpivot >= l1 .or. l1 > m) return
+cl = abs(u(1,lpivot))
+if (mode == 2) go to 60
+!                            ****** Construct the transformation. ******
+do j = l1,m
+   cl = max(abs(u(1,j)),cl)
+end do
+if (cl <= 0.0) go to 130
+d = u(1,lpivot)/cl
+sm = d*d
+do j = l1,m
+   d = u(1,j)/cl
+   sm = sm + dble(d*d)
+end do
+sm1 = sm
+cl = cl*sqrt(sm1)
+if (u(1,lpivot) > 0.0) cl = -cl
+up = u(1,lpivot) - cl
+u(1,lpivot) = cl
+go to 70
+!            ****** Apply the transformation  i+u*(u**T)/b  to c. ******
+60 if ((cl) <= 0) go to 130
+go to 70
+70 if (ncv <= 0) return
+b = dble(up)*dble(u(1,lpivot))
+!                       b  must be nonpositive here.  If b = 0., Return.
+if (b >= 0.d0) go to 130
+b = 1.d0/b
+i2 = 1 - icv + ice*(lpivot - 1)
+incr = ice*(l1 - lpivot)
+do j = 1,ncv
+   i2 = i2 + icv
+   i3 = i2 + incr
+   i4 = i3
+   sm = dble(c(i2))*dble(up)
+   do i = l1,m
+      sm = sm + dble(c(i3))*dble(u(1,i))
+      i3 = i3 + ice
+   end do
+   if (sm == 0.d0) go to 120
+   sm = sm*b
+   c(i2) = c(i2) + sm*dble(up)
+   do i = l1,m
+      c(i4) = c(i4) + sm*dble(u(1,i))
+      i4 = i4 + ice
+   end do
+120 continue
+end do
+130 return
+end subroutine h12
+
+pure subroutine dhfti(a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
+!! <!-- nswc-ford:begin DHFTI -->
+!! Reference for `dhfti`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      double precision a(mda,n),(b(mdb,nb) or b(m))
+!!      double precision tau,rnorm(nb),h(n),g(n)
+!!      integer ip(n)
+!!      written by C.L. Lawson and R.J. Hanson.
+!!      From the book solving least squares problems, Prentice-Hall, 1974.
+!!      For algorithmic details see algorithm hfti in chapter 14.
+!!      Abstract
+!!      this subroutine solves a linear least squares problem or a set of
+!!      linear least squares problems having the same matrix but different
+!!      right-side vectors.  The problem data consists of an m by n matrix
+!!      A, an m by nb matrix b, and an absolute tolerance parameter tau
+!!      whose usage is described below.  The nb column vectors of b
+!!      represent right-side vectors for nb distinct linear least squares
+!!      problems.
+!!      This set of problems can also be written as the matrix least
+!!      squares problem
+!!                        ax = b,
+!!      where X is the n by nb solution matrix.
+!!      Note that if b is the m by m identity matrix, then X will be the
+!!      pseudo-inverse of A.
+!!      This subroutine first transforms the augmented matrix (A b) to A
+!!      matrix (R C) using premultiplying Householder transformations with
+!!      column interchanges.  All subdiagonal elements in the matrix R are
+!!      zero and its diagonal elements satisfy
+!!                        dabs(R(i,i)).GE.dabs(R(i+1,i+1)),
+!!                        i = 1,...,l-1, where
+!!                        l = min(m,n).
+!!      The subroutine sets k to be the number of diagonal elements
+!!      of R that exceed tau in magnitude. Then the solution of minimum
+!!      Euclidean length is computed using the first k rows of (R C).
+!!      To be specific we suggest that the user consider an easily
+!!      computable matrix NORM, such as, the maximum of all column sums of
+!!      magnitudes.
+!!      Now if the relative uncertainty of b is eps, (norm of uncertainty/
+!!      norm of b), it is suggested that tau be set approximately equal to
+!!      eps*(norm of A).
+!!      The entire set of parameters for dhfti are
+!!      input..
+!!      a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
+!!                        matrix a of the least squares problem AX = b.
+!!                        The first dimensioning parameter of the array
+!!                        a(*,*) is mda, which must satisfy mda.GE.m
+!!                        either m.GE.n or m.LT.n is permitted.  There
+!!                        is no restriction on the rank of A.  the
+!!                        condition mda.LT.m is considered an error.
+!!      b(*),mdb,nb       if nb = 0 The subroutine will perform the
+!!                        orthogonal decomposition but will make no
+!!                        references to the array b(*).  If nb.GT.0
+!!                        the array b(*) must initially contain the m by
+!!                        nb matrix b of the least squares problem AX =
+!!                        b.  if nb.GE.2 the array b(*) must be doubly
+!!                        subscripted with first dimensioning parameter
+!!                        mdb.GE.max(m,n).  If nb = 1 The array b(*) may
+!!                        be either doubly or singly subscripted.  In
+!!                        the latter case the value of mdb is arbitrary
+!!                        but it should be set to some valid integer
+!!                        value such as mdb = m.
+!!                        The condition of nb.GT.1.AND.mdb.LT. max(m,n)
+!!                        is considered an error.
+!!      tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
+!!                        for pseudorank determination.
+!!      h(*),g(*),ip(*)   ARRAYS OF WORKING SPACE USED BY dhfti.
+!!      Output..
+!!      a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
+!!                        modified by the subroutine.  These contents
+!!                        are not generally required by the user.
+!!      b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
+!!                        nb solution matrix X.
+!!      k                 SET BY THE SUBROUTINE TO INDICATE THE
+!!                        pseudorank of A.
+!!      rnorm(*)          ON RETURN, rnorm(j) WILL CONTAIN THE EUCLIDEAN
+!!                        norm of the residual vector for the problem
+!!                        defined by the j-TH column vector of the array
+!!                        b(*,*) FOR j = 1,...,nb.
+!!      h(*),g(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
+!!                        elements of the pre- and post-multiplying
+!!                        Householder transformations used to compute
+!!                        the minimum Euclidean length solution.
+!!      ip(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
+!!                        describing the permutation of column vectors.
+!!                        The contents of arrays h(*),g(*) and ip(*)
+!!                        are not generally required by the user.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(out) :: k
+integer, intent(in) :: m, mda, mdb, n, nb
+double precision, intent(inout) :: a(mda,n), b(mdb,*)
+double precision, intent(in) :: tau
+double precision, intent(inout) :: rnorm(*), h(n), g(n)
+integer, intent(inout) :: ip(n)
+!     beginning of local variable declarations
+integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
+double precision :: hmax, sm, sm1, tmp, z
+double precision, parameter :: factor = 1.d-3
+interface
+   pure subroutine dh12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv &
+      & )
+      implicit none
+      integer, intent(in) :: iue
+      integer, intent(in) :: m
+      integer, intent(in) :: mode
+      integer, intent(in) :: lpivot
+      integer, intent(in) :: l1
+      double precision, intent(inout) :: u(iue,m)
+      double precision, intent(inout) :: up
+      double precision, intent(inout) :: c(*)
+      integer, intent(in) :: ice
+      integer, intent(in) :: icv
+      integer, intent(in) :: ncv
+   end subroutine dh12
+end interface
+!-----------------------------------------------------------------------
+!     double precision a(mda,n),(b(mdb,nb) or b(m))
+!     double precision tau,rnorm(nb),h(n),g(n)
+!     integer ip(n)
+!     written by C.L. Lawson and R.J. Hanson.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     For algorithmic details see algorithm hfti in chapter 14.
+!     Abstract
+!     this subroutine solves a linear least squares problem or a set of
+!     linear least squares problems having the same matrix but different
+!     right-side vectors.  The problem data consists of an m by n matrix
+!     A, an m by nb matrix b, and an absolute tolerance parameter tau
+!     whose usage is described below.  The nb column vectors of b
+!     represent right-side vectors for nb distinct linear least squares
+!     problems.
+!     This set of problems can also be written as the matrix least
+!     squares problem
+!                       ax = b,
+!     where X is the n by nb solution matrix.
+!     Note that if b is the m by m identity matrix, then X will be the
+!     pseudo-inverse of A.
+!     This subroutine first transforms the augmented matrix (A b) to A
+!     matrix (R C) using premultiplying Householder transformations with
+!     column interchanges.  All subdiagonal elements in the matrix R are
+!     zero and its diagonal elements satisfy
+!                       dabs(R(i,i)).GE.dabs(R(i+1,i+1)),
+!                       i = 1,...,l-1, where
+!                       l = min(m,n).
+!     The subroutine sets k to be the number of diagonal elements
+!     of R that exceed tau in magnitude. Then the solution of minimum
+!     Euclidean length is computed using the first k rows of (R C).
+!     To be specific we suggest that the user consider an easily
+!     computable matrix NORM, such as, the maximum of all column sums of
+!     magnitudes.
+!     Now if the relative uncertainty of b is eps, (norm of uncertainty/
+!     norm of b), it is suggested that tau be set approximately equal to
+!     eps*(norm of A).
+!     The entire set of parameters for dhfti are
+!     input..
+!     a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
+!                       matrix a of the least squares problem AX = b.
+!                       The first dimensioning parameter of the array
+!                       a(*,*) is mda, which must satisfy mda.GE.m
+!                       either m.GE.n or m.LT.n is permitted.  There
+!                       is no restriction on the rank of A.  the
+!                       condition mda.LT.m is considered an error.
+!     b(*),mdb,nb       if nb = 0 The subroutine will perform the
+!                       orthogonal decomposition but will make no
+!                       references to the array b(*).  If nb.GT.0
+!                       the array b(*) must initially contain the m by
+!                       nb matrix b of the least squares problem AX =
+!                       b.  if nb.GE.2 the array b(*) must be doubly
+!                       subscripted with first dimensioning parameter
+!                       mdb.GE.max(m,n).  If nb = 1 The array b(*) may
+!                       be either doubly or singly subscripted.  In
+!                       the latter case the value of mdb is arbitrary
+!                       but it should be set to some valid integer
+!                       value such as mdb = m.
+!                       The condition of nb.GT.1.AND.mdb.LT. max(m,n)
+!                       is considered an error.
+!     tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
+!                       for pseudorank determination.
+!     h(*),g(*),ip(*)   ARRAYS OF WORKING SPACE USED BY dhfti.
+!     Output..
+!     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
+!                       modified by the subroutine.  These contents
+!                       are not generally required by the user.
+!     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
+!                       nb solution matrix X.
+!     k                 SET BY THE SUBROUTINE TO INDICATE THE
+!                       pseudorank of A.
+!     rnorm(*)          ON RETURN, rnorm(j) WILL CONTAIN THE EUCLIDEAN
+!                       norm of the residual vector for the problem
+!                       defined by the j-TH column vector of the array
+!                       b(*,*) FOR j = 1,...,nb.
+!     h(*),g(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
+!                       elements of the pre- and post-multiplying
+!                       Householder transformations used to compute
+!                       the minimum Euclidean length solution.
+!     ip(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
+!                       describing the permutation of column vectors.
+!                       The contents of arrays h(*),g(*) and ip(*)
+!                       are not generally required by the user.
+!-----------------------------------------------------------------------
+!---------------------
+k = 0
+ldiag = min(m,n)
+if (ldiag <= 0) go to 270
+do j = 1,ldiag
+   if (j == 1) go to 20
+!     Update squared column lengths and find lmax
+!    ..
+   lmax = j
+   do l = j,n
+      h(l) = h(l) - a(j - 1,l)**2
+      if (h(l) > h(lmax)) lmax = l
+   end do
+   z = hmax + factor*h(lmax)
+   if (z > hmax) go to 50
+!     Compute squared column lengths and find lmax
+!    ..
+20 lmax = j
+   do l = j,n
+      h(l) = 0.d0
+      do i = j,m
+         h(l) = h(l) + a(i,l)**2
+      end do
+      if (h(l) > h(lmax)) lmax = l
+   end do
+   hmax = h(lmax)
+!    ..
+!     lmax has been determined
+!     do column interchanges if needed.
+!    ..
+50 ip(j) = lmax
+   if (ip(j) == j) go to 70
+   do i = 1,m
+      tmp = a(i,j)
+      a(i,j) = a(i,lmax)
+      a(i,lmax) = tmp
+   end do
+   h(lmax) = h(j)
+!     Compute the j-TH transformation and apply it to A and b.
+!    ..
+70 call dh12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
+   call dh12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
+end do
+!     Determine the pseudorank, k, using the tolerance, tau.
+!    ..
+do j = 1,ldiag
+   if (abs(a(j,j)) <= tau) go to 100
+end do
+k = ldiag
+go to 110
+100 k = j - 1
+110 kp1 = k + 1
+!     Compute the norms of the residual vectors.
+if (nb <= 0) go to 140
+do jb = 1,nb
+   tmp = 0.d0
+   if (kp1 > m) go to 130
+   do i = kp1,m
+      tmp = tmp + b(i,jb)**2
+   end do
+130 rnorm(jb) = sqrt(tmp)
+end do
+140 continue
+!                                           Special for pseudorank = 0
+if (k > 0) go to 160
+if (nb <= 0) go to 270
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.d0
+   end do
+end do
+go to 270
+!     If the pseudorank is less than n compute Householder
+!     decomposition of first k rows.
+!    ..
+160 if (k == n) go to 180
+do ii = 1,k
+   i = kp1 - ii
+   call dh12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
+end do
+180 continue
+if (nb <= 0) go to 270
+do jb = 1,nb
+!     Solve the k by k triangular system.
+!    ..
+   do l = 1,k
+      sm = 0.d0
+      i = kp1 - l
+      if (i == k) go to 200
+      ip1 = i + 1
+      do j = ip1,k
+         sm = sm + a(i,j)*b(j,jb)
+      end do
+200   sm1 = b(i,jb) - sm
+      b(i,jb) = sm1/a(i,i)
+   end do
+!     Complete computation of solution vector.
+!    ..
+   if (k == n) go to 240
+   do j = kp1,n
+      b(j,jb) = 0.d0
+   end do
+   do i = 1,k
+      call dh12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
+   end do
+!      RE-order the solution vector to compensate for the
+!      column interchanges.
+!    ..
+240 do jj = 1,ldiag
+      j = ldiag + 1 - jj
+      if (ip(j) == j) go to 250
+      l = ip(j)
+      tmp = b(l,jb)
+      b(l,jb) = b(j,jb)
+      b(j,jb) = tmp
+250   continue
+   end do
+end do
+!    ..
+!     The solution vectors, X, are now
+!     in the first  n  rows of the array b(,).
+270 return
+end subroutine dhfti
+
+pure subroutine dhfti2(a,mda,m,n,b,mdb,nb,d,tau,k,rnorm,h,g,ip,ierr)
+!! <!-- nswc-ford:begin DHFTI2 -->
+!! Reference for `dhfti2`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      double precision a(mda,n),(b(mdb,nb) or b(m))
+!!      double precision d(l) where l = min(m,n)
+!!      double precision tau,rnorm(nb),h(n),g(n)
+!!      integer ip(n)
+!!      written by C.L. Lawson and R.J. Hanson. Modified by A.H. Morris.
+!!      From the book solving least squares problems, Prentice-Hall, 1974.
+!!      For algorithmic details see algorithm hfti in chapter 14.
+!!      Abstract
+!!      this subroutine solves a linear least squares problem or a set of
+!!      linear least squares problems having the same matrix but different
+!!      right-side vectors.  The problem data consists of an m by n matrix
+!!      A, an m by nb matrix b, and an absolute tolerance parameter tau
+!!      whose usage is described below.  The nb column vectors of b
+!!      represent right-side vectors for nb distinct linear least squares
+!!      problems.
+!!      This set of problems can also be written as the matrix least
+!!      squares problem
+!!                        ax = b,
+!!      where X is the n by nb solution matrix.
+!!      Note that if b is the m by m identity matrix, then X will be the
+!!      pseudo-inverse of A.
+!!      This subroutine first transforms the augmented matrix (A b) to A
+!!      matrix (R C) using premultiplying Householder transformations with
+!!      column interchanges.  All subdiagonal elements in the matrix R are
+!!      zero and its diagonal elements satisfy
+!!                        dabs(R(i,i)).GE.dabs(R(i+1,i+1)),
+!!                        i = 1,...,l-1, where
+!!                        l = min(m,n).
+!!      The array d will contain the diagonal elements R(1,1),...,R(l,l).
+!!      The subroutine sets k to be the number of diagonal elements that
+!!      exceed tau in magnitude.  Then the solution of minimum Euclidean
+!!      length is computed using the first k rows of (R C).
+!!      To be specific we suggest that the user consider an easily
+!!      computable matrix NORM, such as, the maximum of all column sums of
+!!      magnitudes.
+!!      Now if the relative uncertainty of b is eps, (norm of uncertainty/
+!!      norm of b), it is suggested that tau be set approximately equal to
+!!      eps*(norm of A).
+!!      The entire set of parameters for dhfti2 are
+!!      input..
+!!      a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
+!!                        matrix a of the least squares problem AX = b.
+!!                        The first dimensioning parameter of the array
+!!                        a(*,*) is mda, which must satisfy mda.GE.m
+!!                        either m.GE.n or m.LT.n is permitted.  There
+!!                        is no restriction on the rank of A.  the
+!!                        condition mda.LT.m is considered an error.
+!!      b(*),mdb,nb       if nb = 0 The subroutine will perform the
+!!                        orthogonal decomposition but will make no
+!!                        references to the array b(*).  If nb.GT.0
+!!                        the array b(*) must initially contain the m by
+!!                        nb matrix b of the least squares problem AX =
+!!                        b.  if nb.GE.2 the array b(*) must be doubly
+!!                        subscripted with first dimensioning parameter
+!!                        mdb.GE.max(m,n).  If nb = 1 The array b(*) may
+!!                        be either doubly or singly subscripted.  In
+!!                        the latter case the value of mdb is arbitrary
+!!                        but it should be set to some valid integer
+!!                        value such as mdb = m.
+!!                        The condition of nb.GT.1.AND.mdb.LT. max(m,n)
+!!                        is considered an error.
+!!      tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
+!!                        for pseudorank determination.
+!!      h(*),g(*),ip(*)   ARRAYS OF WORKING SPACE USED BY dhfti2.
+!!      Output..
+!!      a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
+!!                        modified by the subroutine.  These contents
+!!                        are not generally required by the user.
+!!      b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
+!!                        nb solution matrix X.
+!!      d(*)              THE ARRAY OF DIAGONAL ELEMENTS OF THE
+!!                        triangular matrix R
+!!      k                 SET BY THE SUBROUTINE TO INDICATE THE
+!!                        pseudorank of A.
+!!      rnorm(*)          ON RETURN, rnorm(j) WILL CONTAIN THE EUCLIDEAN
+!!                        norm of the residual vector for the problem
+!!                        defined by the j-TH column vector of the array
+!!                        b(*,*) FOR j = 1,...,nb.
+!!      h(*),g(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
+!!                        elements of the pre- and post-multiplying
+!!                        Householder transformations used to compute
+!!                        the minimum Euclidean length solution.
+!!      ip(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
+!!                        describing the permutation of column vectors.
+!!                        The contents of arrays h(*),g(*) and ip(*)
+!!                        are not generally required by the user.
+!!      ierr              ERROR INDICATOR. IF NO INPUT ERRORS ARE
+!!                        detected then ierr is set to 0. Otherwise
+!!                           ierr = 1  IF mda.LT.m
+!!                           ierr = 2  If nb.GT.1 and mdb.LT.max(m,n)
+!!                        these errors are fatal.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(out) :: k
+integer, intent(in) :: m, mda, mdb, n, nb
+double precision, intent(inout) :: a(mda,n), b(mdb,*), d(*)
+double precision, intent(in) :: tau
+double precision, intent(inout) :: rnorm(*), h(n), g(n)
+integer, intent(inout) :: ip(n)
+!     beginning of local variable declarations
+integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
+double precision :: hmax, sm, sm1, tmp, z
+double precision, parameter :: factor = 1.d-3
+interface
+   pure subroutine dh12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv &
+      & )
+      implicit none
+      integer, intent(in) :: iue
+      integer, intent(in) :: m
+      integer, intent(in) :: mode
+      integer, intent(in) :: lpivot
+      integer, intent(in) :: l1
+      double precision, intent(inout) :: u(iue,m)
+      double precision, intent(inout) :: up
+      double precision, intent(inout) :: c(*)
+      integer, intent(in) :: ice
+      integer, intent(in) :: icv
+      integer, intent(in) :: ncv
+   end subroutine dh12
+end interface
+!-----------------------------------------------------------------------
+!     double precision a(mda,n),(b(mdb,nb) or b(m))
+!     double precision d(l) where l = min(m,n)
+!     double precision tau,rnorm(nb),h(n),g(n)
+!     integer ip(n)
+!     written by C.L. Lawson and R.J. Hanson. Modified by A.H. Morris.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     For algorithmic details see algorithm hfti in chapter 14.
+!     Abstract
+!     this subroutine solves a linear least squares problem or a set of
+!     linear least squares problems having the same matrix but different
+!     right-side vectors.  The problem data consists of an m by n matrix
+!     A, an m by nb matrix b, and an absolute tolerance parameter tau
+!     whose usage is described below.  The nb column vectors of b
+!     represent right-side vectors for nb distinct linear least squares
+!     problems.
+!     This set of problems can also be written as the matrix least
+!     squares problem
+!                       ax = b,
+!     where X is the n by nb solution matrix.
+!     Note that if b is the m by m identity matrix, then X will be the
+!     pseudo-inverse of A.
+!     This subroutine first transforms the augmented matrix (A b) to A
+!     matrix (R C) using premultiplying Householder transformations with
+!     column interchanges.  All subdiagonal elements in the matrix R are
+!     zero and its diagonal elements satisfy
+!                       dabs(R(i,i)).GE.dabs(R(i+1,i+1)),
+!                       i = 1,...,l-1, where
+!                       l = min(m,n).
+!     The array d will contain the diagonal elements R(1,1),...,R(l,l).
+!     The subroutine sets k to be the number of diagonal elements that
+!     exceed tau in magnitude.  Then the solution of minimum Euclidean
+!     length is computed using the first k rows of (R C).
+!     To be specific we suggest that the user consider an easily
+!     computable matrix NORM, such as, the maximum of all column sums of
+!     magnitudes.
+!     Now if the relative uncertainty of b is eps, (norm of uncertainty/
+!     norm of b), it is suggested that tau be set approximately equal to
+!     eps*(norm of A).
+!     The entire set of parameters for dhfti2 are
+!     input..
+!     a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
+!                       matrix a of the least squares problem AX = b.
+!                       The first dimensioning parameter of the array
+!                       a(*,*) is mda, which must satisfy mda.GE.m
+!                       either m.GE.n or m.LT.n is permitted.  There
+!                       is no restriction on the rank of A.  the
+!                       condition mda.LT.m is considered an error.
+!     b(*),mdb,nb       if nb = 0 The subroutine will perform the
+!                       orthogonal decomposition but will make no
+!                       references to the array b(*).  If nb.GT.0
+!                       the array b(*) must initially contain the m by
+!                       nb matrix b of the least squares problem AX =
+!                       b.  if nb.GE.2 the array b(*) must be doubly
+!                       subscripted with first dimensioning parameter
+!                       mdb.GE.max(m,n).  If nb = 1 The array b(*) may
+!                       be either doubly or singly subscripted.  In
+!                       the latter case the value of mdb is arbitrary
+!                       but it should be set to some valid integer
+!                       value such as mdb = m.
+!                       The condition of nb.GT.1.AND.mdb.LT. max(m,n)
+!                       is considered an error.
+!     tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
+!                       for pseudorank determination.
+!     h(*),g(*),ip(*)   ARRAYS OF WORKING SPACE USED BY dhfti2.
+!     Output..
+!     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
+!                       modified by the subroutine.  These contents
+!                       are not generally required by the user.
+!     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
+!                       nb solution matrix X.
+!     d(*)              THE ARRAY OF DIAGONAL ELEMENTS OF THE
+!                       triangular matrix R
+!     k                 SET BY THE SUBROUTINE TO INDICATE THE
+!                       pseudorank of A.
+!     rnorm(*)          ON RETURN, rnorm(j) WILL CONTAIN THE EUCLIDEAN
+!                       norm of the residual vector for the problem
+!                       defined by the j-TH column vector of the array
+!                       b(*,*) FOR j = 1,...,nb.
+!     h(*),g(*)         ON RETURN THESE ARRAYS RESPECTIVELY CONTAIN
+!                       elements of the pre- and post-multiplying
+!                       Householder transformations used to compute
+!                       the minimum Euclidean length solution.
+!     ip(*)             ARRAY IN WHICH THE SUBROUTINE RECORDS INDICES
+!                       describing the permutation of column vectors.
+!                       The contents of arrays h(*),g(*) and ip(*)
+!                       are not generally required by the user.
+!     ierr              ERROR INDICATOR. IF NO INPUT ERRORS ARE
+!                       detected then ierr is set to 0. Otherwise
+!                          ierr = 1  IF mda.LT.m
+!                          ierr = 2  If nb.GT.1 and mdb.LT.max(m,n)
+!                       these errors are fatal.
+!-----------------------------------------------------------------------
+!---------------------
+k = 0
+ldiag = min(m,n)
+if (ldiag <= 0) go to 270
+if (m > mda) go to 300
+if (nb > 1 .and. max(m,n) > mdb) go to 310
+do j = 1,ldiag
+   if (j == 1) go to 20
+!     Update squared column lengths and find lmax
+!    ..
+   lmax = j
+   do l = j,n
+      h(l) = h(l) - a(j - 1,l)**2
+      if (h(l) > h(lmax)) lmax = l
+   end do
+   z = hmax + factor*h(lmax)
+   if (z > hmax) go to 50
+!     Compute squared column lengths and find lmax
+!    ..
+20 lmax = j
+   do l = j,n
+      h(l) = 0.d0
+      do i = j,m
+         h(l) = h(l) + a(i,l)**2
+      end do
+      if (h(l) > h(lmax)) lmax = l
+   end do
+   hmax = h(lmax)
+!    ..
+!     lmax has been determined
+!     do column interchanges if needed.
+!    ..
+50 ip(j) = lmax
+   if (ip(j) == j) go to 70
+   do i = 1,m
+      tmp = a(i,j)
+      a(i,j) = a(i,lmax)
+      a(i,lmax) = tmp
+   end do
+   h(lmax) = h(j)
+!     Compute the j-TH transformation and apply it to A and b.
+!    ..
+70 call dh12(1,j,j + 1,m,a(1,j),1,h(j),a(1,j + 1),1,mda,n - j)
+   call dh12(2,j,j + 1,m,a(1,j),1,h(j),b,1,mdb,nb)
+end do
+!     Determine the pseudorank, k, using the tolerance, tau.
+!     Also store the diagonal elements in the array d.
+!    ..
+do j = 1,ldiag
+   if (abs(a(j,j)) <= tau) go to 100
+   d(j) = a(j,j)
+end do
+k = ldiag
+kp1 = k + 1
+go to 110
+100 k = j - 1
+kp1 = j
+do j = kp1,ldiag
+   d(j) = a(j,j)
+end do
+!     Compute the norms of the residual vectors.
+110 if (nb <= 0) go to 140
+do jb = 1,nb
+   tmp = 0.d0
+   if (kp1 > m) go to 130
+   do i = kp1,m
+      tmp = tmp + b(i,jb)**2
+   end do
+130 rnorm(jb) = sqrt(tmp)
+end do
+140 continue
+!                                           Special for pseudorank = 0
+if (k > 0) go to 160
+if (nb <= 0) go to 270
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.d0
+   end do
+end do
+go to 270
+!     If the pseudorank is less than n compute Householder
+!     decomposition of first k rows.
+!    ..
+160 if (k == n) go to 180
+do ii = 1,k
+   i = kp1 - ii
+   call dh12(1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i - 1)
+end do
+180 continue
+if (nb <= 0) go to 270
+do jb = 1,nb
+!     Solve the k by k triangular system.
+!    ..
+   do l = 1,k
+      sm = 0.d0
+      i = kp1 - l
+      if (i == k) go to 200
+      ip1 = i + 1
+      do j = ip1,k
+         sm = sm + a(i,j)*b(j,jb)
+      end do
+200   sm1 = b(i,jb) - sm
+      b(i,jb) = sm1/a(i,i)
+   end do
+!     Complete computation of solution vector.
+!    ..
+   if (k == n) go to 240
+   do j = kp1,n
+      b(j,jb) = 0.d0
+   end do
+   do i = 1,k
+      call dh12(2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
+   end do
+!      RE-order the solution vector to compensate for the
+!      column interchanges.
+!    ..
+240 do jj = 1,ldiag
+      j = ldiag + 1 - jj
+      if (ip(j) == j) go to 250
+      l = ip(j)
+      tmp = b(l,jb)
+      b(l,jb) = b(j,jb)
+      b(j,jb) = tmp
+250   continue
+   end do
+end do
+!    ..
+!     The solution vectors, X, are now
+!     in the first  n  rows of the array b(,).
+270 ierr = 0
+return
+!     Error return
+300 ierr = 1
+return
+310 ierr = 2
+end subroutine dhfti2
+
+pure subroutine dh12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+!! <!-- nswc-ford:begin DH12 -->
+!! Reference for `dh12`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
+!!      From the book solving least squares problems, Prentice-Hall, 1974.
+!!      Construction and/or application of a single
+!!      Householder transformation..     Q = i + u*(u**T)/b
+!!      mode    = 1 Or 2   to select algorithm  H1  or  H2 .
+!!      lpivot is the index of the pivot element.
+!!      l1,m   if l1 .LE. m   the transformation will be constructed to
+!!             ZERO ELEMENTS INDEXED FROM l1 THROUGH m.   IF l1 GT. m
+!!             the subroutine does an identity transformation.
+!!      u(),iue,UP    ON ENTRY TO H1 u() CONTAINS THE PIVOT VECTOR.
+!!                    iue is the storage increment between elements.
+!!                                        On exit from H1 u() and up
+!!                    contain quantities defining the vector u of the
+!!                    HOUSEHOLDER TRANSFORMATION.   ON ENTRY TO H2 u()
+!!                    and up should contain quantities previously computed
+!!                    by H1.  These will not be modified by H2.
+!!      c()    ON ENTRY TO H1 OR H2 c() CONTAINS A MATRIX WHICH WILL BE
+!!             regarded as a set of vectors to which the Householder
+!!             transformation is to be applied.  On exit c() contains the
+!!             set of transformed vectors.
+!!      ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN c().
+!!      icv    STORAGE INCREMENT BETWEEN VECTORS IN c().
+!!      ncv    number of vectors in c() to be transformed. If ncv .LE. 0
+!!             no operations will be done on c().
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
+double precision, intent(inout) :: u(iue,m), up, c(*)
+!     beginning of local variable declarations
+integer :: i, i2, i3, i4, incr, j
+double precision :: b, cl, d, sm
+!-----------------------------------------------------------------------
+!     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     Construction and/or application of a single
+!     Householder transformation..     Q = i + u*(u**T)/b
+!     mode    = 1 Or 2   to select algorithm  H1  or  H2 .
+!     lpivot is the index of the pivot element.
+!     l1,m   if l1 .LE. m   the transformation will be constructed to
+!            ZERO ELEMENTS INDEXED FROM l1 THROUGH m.   IF l1 GT. m
+!            the subroutine does an identity transformation.
+!     u(),iue,UP    ON ENTRY TO H1 u() CONTAINS THE PIVOT VECTOR.
+!                   iue is the storage increment between elements.
+!                                       On exit from H1 u() and up
+!                   contain quantities defining the vector u of the
+!                   HOUSEHOLDER TRANSFORMATION.   ON ENTRY TO H2 u()
+!                   and up should contain quantities previously computed
+!                   by H1.  These will not be modified by H2.
+!     c()    ON ENTRY TO H1 OR H2 c() CONTAINS A MATRIX WHICH WILL BE
+!            regarded as a set of vectors to which the Householder
+!            transformation is to be applied.  On exit c() contains the
+!            set of transformed vectors.
+!     ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN c().
+!     icv    STORAGE INCREMENT BETWEEN VECTORS IN c().
+!     ncv    number of vectors in c() to be transformed. If ncv .LE. 0
+!            no operations will be done on c().
+!-----------------------------------------------------------------------
+if (0 >= lpivot .or. lpivot >= l1 .or. l1 > m) return
+cl = abs(u(1,lpivot))
+if (mode == 2) go to 60
+!                            ****** Construct the transformation. ******
+do j = l1,m
+   cl = max(abs(u(1,j)),cl)
+end do
+if (cl <= 0.d0) go to 130
+d = u(1,lpivot)/cl
+sm = d*d
+do j = l1,m
+   d = u(1,j)/cl
+   sm = sm + d*d
+end do
+cl = cl*sqrt(sm)
+if (u(1,lpivot) > 0.d0) cl = -cl
+up = u(1,lpivot) - cl
+u(1,lpivot) = cl
+go to 70
+!            ****** Apply the transformation  i+u*(u**T)/b  to c. ******
+60 if ((cl) <= 0) go to 130
+go to 70
+70 if (ncv <= 0) return
+b = up*u(1,lpivot)
+!                       b  must be nonpositive here.  If b = 0., Return.
+if (b >= 0.d0) go to 130
+b = 1.d0/b
+i2 = 1 - icv + ice*(lpivot - 1)
+incr = ice*(l1 - lpivot)
+do j = 1,ncv
+   i2 = i2 + icv
+   i3 = i2 + incr
+   i4 = i3
+   sm = c(i2)*up
+   do i = l1,m
+      sm = sm + c(i3)*u(1,i)
+      i3 = i3 + ice
+   end do
+   if (sm == 0.d0) go to 120
+   sm = sm*b
+   c(i2) = c(i2) + sm*up
+   do i = l1,m
+      c(i4) = c(i4) + sm*u(1,i)
+      i4 = i4 + ice
+   end do
+120 continue
+end do
+130 return
+end subroutine dh12
+
+subroutine lsei(w, mdw, me, ma, mg, n, prgopt, x, rnorme, rnorml, &
+   & mode, ws, ip)
+!! <!-- nswc-ford:begin LSEI -->
+!! Reference for `lsei`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      dimension w(mdw,n+1),prgopt(*),x(n),
+!!      ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
+!!      ABOVE, k=max(ma+mg,n).
+!!      Written by R. J. Hanson and K. H. Haskell.  For further math.
+!!      And algorithmic details see Sandia Laboratories tech. REPTS.
+!!      SAND77-0552, (1978), and SAND78-1290, (1979), and math.
+!!      Programming (21), 1981, PP. 98-118. modified by A.H. Morris.
+!!      Abstract
+!!      this subprogram solves a linearly constrained least squares
+!!      problem with both equality and inequality constraints, and, if the
+!!      user requests, obtains a covariance matrix of the solution
+!!      parameters.
+!!      Suppose there are given matrices E, A and G of respective
+!!      dimensions me by n, ma by n and mg by n, and vectors F, B and H of
+!!      respective lengths me, ma and mg.  This subroutine solves the
+!!      linearly constrained least squares problem
+!!                    EX = F, (E me by n) (equations to be exactly
+!!                                        satisfied)
+!!                    AX = B, (A ma by n) (equations to be
+!!                                        approximately satisfied,
+!!                                        least squares sense)
+!!                    GX.GE.H,(G mg by n) (inequality constraints)
+!!      the inequalities GX.GE.H mean that every component of the product
+!!      GX must be .GE. the corresponding component of H.
+!!      In case the equality constraints cannot be satisfied, A
+!!      generalized inverse solution residual vector LENGTH is obtained
+!!      for F-EX. This is the minimal length possible for F-EX.
+!!      Any values me.GE.0, ma.GE.0, or mg.GE.0 are permitted.  The
+!!      rank of the matrix E is estimated during the computation. We call
+!!      this value kranke. It is an output parameter in ip(1) defined
+!!      below. Using a generalized inverse solution of EX=F, a reduced
+!!      least squares problem with inequality constraints is obtained.
+!!      The tolerances used in these tests for determining the rank
+!!      of E and the rank of the reduced least squares problem are
+!!      given in sandia tech. Rept. SAND78-1290. They can be
+!!      modified by the user if new values are provided in
+!!      the option list of the array prgopt(*).
+!!      The user must dimension all arrays appearing in the call list..
+!!      w(mdw,n+1),prgopt(*),x(n),ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
+!!      where k=max(ma+mg,n).  This allows for a solution of a range of
+!!      problems in the given working space.  The dimension of ws(*)
+!!      given is a necessary overestimate.  Once a particular problem
+!!      has been run, the output parameter ip(3) gives the actual
+!!      dimension required for that problem.
+!!      The parameters for lsei( ) are
+!!      input..
+!!      w(*,*),mdw,   THE ARRAY w(*,*) IS DOUBLY SUBSCRIPTED WITH
+!!      ME,ma,mg,n    FIRST DIMENSIONING PARAMETER EQUAL TO mdw.
+!!                    For this discussion let us call M = me+ma+mg.  Then
+!!                    mdw must satisfy mdw.GE.M.  the condition
+!!                    mdw.LT.M is an error.
+!!                    The array w(*,*) contains the matrices and vectors
+!!                                   (E  F)
+!!                                   (A  B)
+!!                                   (G  H)
+!!                    in rows and columns 1,...,M and 1,...,n+1
+!!                    respectively.
+!!                    The integers me, ma, and mg are the
+!!                    respective matrix ROW dimensions
+!!                    of E, A and G. each matrix HAS n columns.
+!!      prgopt(*)    THIS REAL-VALUED ARRAY IS THE OPTION VECTOR.
+!!                   If the user is satisfied with the nominal
+!!                   subprogram features set
+!!                   prgopt(1)=1 (OR prgopt(1)=1.0)
+!!                   otherwise prgopt(*) is a linked list consisting of
+!!                   groups of data of the following form
+!!                   link
+!!                   key
+!!                   data set
+!!                   the parameters link and key are each one word.
+!!                   The data set can be comprised of several words.
+!!                   The number of items depends on the value of key.
+!!                   The value of link points to the first
+!!                   entry of the next group of data within
+!!                   prgopt(*).  The exception is when there are
+!!                   no more options to change.  In that
+!!                   case link=1 And the values key and data set
+!!                   are not referenced. The general layout of
+!!                   prgopt(*) is as follows.
+!!                ...prgopt(1)=LINK1 (LINK TO FIRST ENTRY OF NEXT GROUP)
+!!                .  prgopt(2)=KEY1 (KEY TO THE OPTION CHANGE)
+!!                .  prgopt(3)=DATA VALUE (DATA VALUE FOR THIS CHANGE)
+!!
+!!                ...prgopt(LINK1)=LINK2 (link to the first entry of
+!!                .                       NEXT GROUP)
+!!                .  prgopt(LINK1+1)=KEY2 (KEY TO THE OPTION CHANGE)
+!!                .  prgopt(LINK1+2)=Data value
+!!
+!!                ...prgopt(LINK)=1 (NO MORE OPTIONS TO CHANGE)
+!!                   values of link that are nonpositive are errors.
+!!                   A value of link.GT.NLINK=100000 Is also an error.
+!!                   This helps prevent using invalid but positive
+!!                   values of link that will probably extend
+!!                   beyond the program limits of prgopt(*).
+!!                   Unrecognized values of key are ignored.  The
+!!                   order of the options is arbitrary and any number
+!!                   of options can be changed with the following
+!!                   restriction.  To prevent cycling in the
+!!                   processing of the option array A count of the
+!!                   number of options changed is maintained.
+!!                   Whenever this count exceeds NOPT=1000 The
+!!                   routine terminates.
+!!                   Options..
+!!                   key=1
+!!                          compute in w(*,*) the n by n
+!!                   covariance matrix of the solution variables
+!!                   as an output paramter.  Nominally the
+!!                   covariance matrix will not be computed.
+!!                   (This requires no user input.)
+!!                   the data set for this option is a single value.
+!!                   It must be nonzero when the covariance matrix
+!!                   is desired.  If it is zero, the covariance
+!!                   matrix is not computed.  When the covariance matrix
+!!                   is computed, the first dimensioning parameter
+!!                   of the array w(*,*) must satisfy mdw.GE.MAX0(M,n).
+!!                   key=2
+!!                          scale the nonzero columns of the
+!!                          entire data matrix.
+!!                   (E)
+!!                   (A)
+!!                   (G)
+!!                   to have length one.  The data set for this
+!!                   option is a single value.  It must be
+!!                   nonzero if unit length column scaling
+!!                   is desired.
+!!                   key=3
+!!                          scale columns of the entire data matrix
+!!                   (E)
+!!                   (A)
+!!                   (G)
+!!                   with a user-provided diagonal matrix.
+!!                   The data set for this option consists
+!!                   of the n diagonal scaling factors, one for
+!!                   each matrix column.
+!!                   key=4
+!!                          change the rank determination tolerance for
+!!                   the equality constraint equations from
+!!                   the nominal value of sqrt(SRELPR).  This quantity
+!!                   can be no smaller than SRELPR, the arithmetic-
+!!                   storage precision.  The quantity SRELPR is the
+!!                   largest positive number such that T=1.+SRELPR
+!!                   satisfies T.EQ.1.  the quantity used
+!!                   here is internally restricted to be at
+!!                   least SRELPR.  The data set for this option
+!!                   is the new tolerance.
+!!                   key=5
+!!                          change the rank determination tolerance for
+!!                   the reduced least squares equations from
+!!                   the nominal value of sqrt(SRELPR).  This quantity
+!!                   can be no smaller than SRELPR, the arithmetic-
+!!                   storage precision.  The quantity used
+!!                   here is internally restricted to be at
+!!                   least SRELPR.  The data set for this option
+!!                   is the new tolerance.
+!!                   For example, suppose we want to change
+!!                   the tolerance for the reduced least squares
+!!                   problem, compute the covariance matrix of
+!!                   the solution parameters, and provide
+!!                   column scaling for the data matrix.  For
+!!                   these options the dimension of prgopt(*)
+!!                   must be at least n+9.  The Fortran statements
+!!                   defining these options would be as follows.
+!!                   prgopt(1)=4 (LINK TO ENTRY 4 IN prgopt(*))
+!!                   prgopt(2)=1 (COVARIANCE MATRIX key)
+!!                   prgopt(3)=1 (COVARIANCE MATRIX WANTED)
+!!                   prgopt(4)=7 (LINK TO ENTRY 7 IN prgopt(*))
+!!                   prgopt(5)=5 (LEAST SQUARES EQUAS. TOLERANCE KEY)
+!!                   prgopt(6)=... (new value of the tolerance)
+!!                   prgopt(7)=n+9 (LINK TO ENTRY n+9 IN prgopt(*))
+!!                   prgopt(8)=3 (USER-PROVIDED COLUMN SCALING KEY)
+!!                   call scopy(n,d,1,prgopt(9),1)  (copy the n
+!!                     scaling factors from the user array D(*)
+!!                     to prgopt(9)-prgopt(n+8))
+!!                   prgopt(n+9)=1 (NO MORE OPTIONS TO CHANGE)
+!!                   the contents of prgopt(*) are not modified
+!!                   by the subprogram.
+!!                   The key 8 and 9 options for wnnls( ) can also
+!!                   be included in this array.  Their functions
+!!                   are documented in the usage instructions for
+!!                   subprogram wnnls( ).
+!!      Output..
+!!      x(*),rnorme,  the array x(*) contains the solution parameters
+!!      rnorml        if the integer output flag mode = 0 Or 1.
+!!                    The definition of mode is given directly below.
+!!                    When mode = 0 Or 1, rnorme and rnorml
+!!                    respectively contain the residual vector
+!!                    Euclidean lengths of F - EX and B - AX.  When
+!!                    mode=1 The equality constraint equations EX=F
+!!                    are contradictory, so rnorme.NE.0. The residual
+!!                    vector F-EX has minimal Euclidean length. For
+!!                    mode.GE.2, none of these parameters are
+!!                    defined.
+!!      MODE          INTEGER FLAG THAT INDICATES THE SUBPROGRAM
+!!                    status after completion.  If mode.GE.2, no
+!!                    solution has been computed.
+!!                    mode =
+!!                    0  both equality and inequality constraints
+!!                       are compatible and have been satisfied.
+!!                    1  Equality constraints are contradictory.
+!!                       A generalized inverse solution of EX=F was used
+!!                       to minimize the residual vector LENGTH F-EX.
+!!                       In this sense, the solution is still meaningful.
+!!                    2  No solution could be obtained. The constraints
+!!                       are contradictory.
+!!                    4  Usage error occurred.  The value
+!!                       of mdw is .LT. me+ma+mg, mdw is
+!!                       .LT. n and a covariance matrix is
+!!                       requested, or the option vector
+!!                       prgopt(*) is not properly defined.
+!!      w(*,*)        THE ARRAY w(*,*) CONTAINS THE n BY n SYMMETRIC
+!!                    covariance matrix of the solution parameters,
+!!                    provided this was requested on input with
+!!                    the option vector prgopt(*) and the output
+!!                    flag is returned with mode = 0 Or 1.
+!!      ip(*)         THE INTEGER WORKING ARRAY HAS THREE ENTRIES
+!!                    that provide rank and working array LENGTH
+!!                    information after completion.
+!!                       ip(1) = Rank of equality constraint
+!!                               matrix.  Define this quantity
+!!                               as kranke.
+!!                       ip(2) = Rank of reduced least squares
+!!                               problem.
+!!                       ip(3) = The amount of storage in the
+!!                               working array ws(*) that was
+!!                               actually used by the subprogram.
+!!                               The formula given above for the length
+!!                               of ws(*) is a necessary overestimate.
+!!      User designated
+!!      working arrays..
+!!      ws(*),ip(*)              THESE ARE RESPECTIVELY TYPE REAL
+!!                               and type integer working arrays.
+!!                               Their required minimal lengths are
+!!                               given above.
+!!      Subroutines called
+!!      lsi           PART OF THIS PACKAGE.  SOLVES A
+!!                    constrained least squares problem with
+!!                    inequality constraints.
+!!      sdot,sscal,   SUBROUTINES FROM THE BLAS PACKAGE.
+!!      saxpy,sasum,  see trans. Math software (5), P. 308.
+!!      scopy,snrm2,
+!!      sswap,isamax
+!!      h12           SUBROUTINE TO CONSTRUCT AND APPLY A
+!!                    Householder transformation.
+!!      spmpar        FUNCTION TO COMPUTE THE RELATIVE MACHINE
+!!                    precision.
+!!      Revised oct. 1, 1989.
+!!      Compute machine precision
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: ma, mdw, me, mg
+integer, intent(out) :: mode
+integer :: n
+real, intent(inout) :: rnorme, rnorml
+real, intent(inout) :: w(mdw,*)
+real, intent(in) :: prgopt(*)
+real, intent(inout) :: x(*), ws(*)
+integer, intent(inout) :: ip(*)
+!     beginning of local variable declarations
+integer :: i, ii, imax, j, jj, jp1, k, key, kk, kranke, l, last, &
+   & link, m, mapke1, mdeqc, mend, mep1, n1, n2, next, nlink, nopt, &
+   & np1, ntimes
+real :: enorm, fnorm, gam, rb, rn, rnmax, size, sn, snmax, srelpr, t, tau, uj, up, vj, xnorm, xnrme
+real :: snrm2
+real :: sasum
+real :: sdot
+logical :: cov
+real, parameter :: zero = 0.e0
+real, parameter :: one = 1.e0
+real, parameter :: half = 0.5e0
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!     dimension w(mdw,n+1),prgopt(*),x(n),
+!     ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
+!     ABOVE, k=max(ma+mg,n).
+!     Written by R. J. Hanson and K. H. Haskell.  For further math.
+!     And algorithmic details see Sandia Laboratories tech. REPTS.
+!     SAND77-0552, (1978), and SAND78-1290, (1979), and math.
+!     Programming (21), 1981, PP. 98-118. modified by A.H. Morris.
+!     Abstract
+!     this subprogram solves a linearly constrained least squares
+!     problem with both equality and inequality constraints, and, if the
+!     user requests, obtains a covariance matrix of the solution
+!     parameters.
+!     Suppose there are given matrices E, A and G of respective
+!     dimensions me by n, ma by n and mg by n, and vectors F, B and H of
+!     respective lengths me, ma and mg.  This subroutine solves the
+!     linearly constrained least squares problem
+!                   EX = F, (E me by n) (equations to be exactly
+!                                       satisfied)
+!                   AX = B, (A ma by n) (equations to be
+!                                       approximately satisfied,
+!                                       least squares sense)
+!                   GX.GE.H,(G mg by n) (inequality constraints)
+!     the inequalities GX.GE.H mean that every component of the product
+!     GX must be .GE. the corresponding component of H.
+!     In case the equality constraints cannot be satisfied, A
+!     generalized inverse solution residual vector LENGTH is obtained
+!     for F-EX. This is the minimal length possible for F-EX.
+!     Any values me.GE.0, ma.GE.0, or mg.GE.0 are permitted.  The
+!     rank of the matrix E is estimated during the computation. We call
+!     this value kranke. It is an output parameter in ip(1) defined
+!     below. Using a generalized inverse solution of EX=F, a reduced
+!     least squares problem with inequality constraints is obtained.
+!     The tolerances used in these tests for determining the rank
+!     of E and the rank of the reduced least squares problem are
+!     given in sandia tech. Rept. SAND78-1290. They can be
+!     modified by the user if new values are provided in
+!     the option list of the array prgopt(*).
+!     The user must dimension all arrays appearing in the call list..
+!     w(mdw,n+1),prgopt(*),x(n),ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
+!     where k=max(ma+mg,n).  This allows for a solution of a range of
+!     problems in the given working space.  The dimension of ws(*)
+!     given is a necessary overestimate.  Once a particular problem
+!     has been run, the output parameter ip(3) gives the actual
+!     dimension required for that problem.
+!     The parameters for lsei( ) are
+!     input..
+!     w(*,*),mdw,   THE ARRAY w(*,*) IS DOUBLY SUBSCRIPTED WITH
+!     ME,ma,mg,n    FIRST DIMENSIONING PARAMETER EQUAL TO mdw.
+!                   For this discussion let us call M = me+ma+mg.  Then
+!                   mdw must satisfy mdw.GE.M.  the condition
+!                   mdw.LT.M is an error.
+!                   The array w(*,*) contains the matrices and vectors
+!                                  (E  F)
+!                                  (A  B)
+!                                  (G  H)
+!                   in rows and columns 1,...,M and 1,...,n+1
+!                   respectively.
+!                   The integers me, ma, and mg are the
+!                   respective matrix ROW dimensions
+!                   of E, A and G. each matrix HAS n columns.
+!     prgopt(*)    THIS REAL-VALUED ARRAY IS THE OPTION VECTOR.
+!                  If the user is satisfied with the nominal
+!                  subprogram features set
+!                  prgopt(1)=1 (OR prgopt(1)=1.0)
+!                  otherwise prgopt(*) is a linked list consisting of
+!                  groups of data of the following form
+!                  link
+!                  key
+!                  data set
+!                  the parameters link and key are each one word.
+!                  The data set can be comprised of several words.
+!                  The number of items depends on the value of key.
+!                  The value of link points to the first
+!                  entry of the next group of data within
+!                  prgopt(*).  The exception is when there are
+!                  no more options to change.  In that
+!                  case link=1 And the values key and data set
+!                  are not referenced. The general layout of
+!                  prgopt(*) is as follows.
+!               ...prgopt(1)=LINK1 (LINK TO FIRST ENTRY OF NEXT GROUP)
+!               .  prgopt(2)=KEY1 (KEY TO THE OPTION CHANGE)
+!               .  prgopt(3)=DATA VALUE (DATA VALUE FOR THIS CHANGE)
+!               .       .
+!               .       .
+!               .       .
+!               ...prgopt(LINK1)=LINK2 (link to the first entry of
+!               .                       NEXT GROUP)
+!               .  prgopt(LINK1+1)=KEY2 (KEY TO THE OPTION CHANGE)
+!               .  prgopt(LINK1+2)=Data value
+!               ...     .
+!               .       .
+!               .       .
+!               ...prgopt(LINK)=1 (NO MORE OPTIONS TO CHANGE)
+!                  values of link that are nonpositive are errors.
+!                  A value of link.GT.NLINK=100000 Is also an error.
+!                  This helps prevent using invalid but positive
+!                  values of link that will probably extend
+!                  beyond the program limits of prgopt(*).
+!                  Unrecognized values of key are ignored.  The
+!                  order of the options is arbitrary and any number
+!                  of options can be changed with the following
+!                  restriction.  To prevent cycling in the
+!                  processing of the option array A count of the
+!                  number of options changed is maintained.
+!                  Whenever this count exceeds NOPT=1000 The
+!                  routine terminates.
+!                  Options..
+!                  key=1
+!                         compute in w(*,*) the n by n
+!                  covariance matrix of the solution variables
+!                  as an output paramter.  Nominally the
+!                  covariance matrix will not be computed.
+!                  (This requires no user input.)
+!                  the data set for this option is a single value.
+!                  It must be nonzero when the covariance matrix
+!                  is desired.  If it is zero, the covariance
+!                  matrix is not computed.  When the covariance matrix
+!                  is computed, the first dimensioning parameter
+!                  of the array w(*,*) must satisfy mdw.GE.MAX0(M,n).
+!                  key=2
+!                         scale the nonzero columns of the
+!                         entire data matrix.
+!                  (E)
+!                  (A)
+!                  (G)
+!                  to have length one.  The data set for this
+!                  option is a single value.  It must be
+!                  nonzero if unit length column scaling
+!                  is desired.
+!                  key=3
+!                         scale columns of the entire data matrix
+!                  (E)
+!                  (A)
+!                  (G)
+!                  with a user-provided diagonal matrix.
+!                  The data set for this option consists
+!                  of the n diagonal scaling factors, one for
+!                  each matrix column.
+!                  key=4
+!                         change the rank determination tolerance for
+!                  the equality constraint equations from
+!                  the nominal value of sqrt(SRELPR).  This quantity
+!                  can be no smaller than SRELPR, the arithmetic-
+!                  storage precision.  The quantity SRELPR is the
+!                  largest positive number such that T=1.+SRELPR
+!                  satisfies T.EQ.1.  the quantity used
+!                  here is internally restricted to be at
+!                  least SRELPR.  The data set for this option
+!                  is the new tolerance.
+!                  key=5
+!                         change the rank determination tolerance for
+!                  the reduced least squares equations from
+!                  the nominal value of sqrt(SRELPR).  This quantity
+!                  can be no smaller than SRELPR, the arithmetic-
+!                  storage precision.  The quantity used
+!                  here is internally restricted to be at
+!                  least SRELPR.  The data set for this option
+!                  is the new tolerance.
+!                  For example, suppose we want to change
+!                  the tolerance for the reduced least squares
+!                  problem, compute the covariance matrix of
+!                  the solution parameters, and provide
+!                  column scaling for the data matrix.  For
+!                  these options the dimension of prgopt(*)
+!                  must be at least n+9.  The Fortran statements
+!                  defining these options would be as follows.
+!                  prgopt(1)=4 (LINK TO ENTRY 4 IN prgopt(*))
+!                  prgopt(2)=1 (COVARIANCE MATRIX key)
+!                  prgopt(3)=1 (COVARIANCE MATRIX WANTED)
+!                  prgopt(4)=7 (LINK TO ENTRY 7 IN prgopt(*))
+!                  prgopt(5)=5 (LEAST SQUARES EQUAS. TOLERANCE KEY)
+!                  prgopt(6)=... (new value of the tolerance)
+!                  prgopt(7)=n+9 (LINK TO ENTRY n+9 IN prgopt(*))
+!                  prgopt(8)=3 (USER-PROVIDED COLUMN SCALING KEY)
+!                  call scopy(n,d,1,prgopt(9),1)  (copy the n
+!                    scaling factors from the user array D(*)
+!                    to prgopt(9)-prgopt(n+8))
+!                  prgopt(n+9)=1 (NO MORE OPTIONS TO CHANGE)
+!                  the contents of prgopt(*) are not modified
+!                  by the subprogram.
+!                  The key 8 and 9 options for wnnls( ) can also
+!                  be included in this array.  Their functions
+!                  are documented in the usage instructions for
+!                  subprogram wnnls( ).
+!     Output..
+!     x(*),rnorme,  the array x(*) contains the solution parameters
+!     rnorml        if the integer output flag mode = 0 Or 1.
+!                   The definition of mode is given directly below.
+!                   When mode = 0 Or 1, rnorme and rnorml
+!                   respectively contain the residual vector
+!                   Euclidean lengths of F - EX and B - AX.  When
+!                   mode=1 The equality constraint equations EX=F
+!                   are contradictory, so rnorme.NE.0. The residual
+!                   vector F-EX has minimal Euclidean length. For
+!                   mode.GE.2, none of these parameters are
+!                   defined.
+!     MODE          INTEGER FLAG THAT INDICATES THE SUBPROGRAM
+!                   status after completion.  If mode.GE.2, no
+!                   solution has been computed.
+!                   mode =
+!                   0  both equality and inequality constraints
+!                      are compatible and have been satisfied.
+!                   1  Equality constraints are contradictory.
+!                      A generalized inverse solution of EX=F was used
+!                      to minimize the residual vector LENGTH F-EX.
+!                      In this sense, the solution is still meaningful.
+!                   2  No solution could be obtained. The constraints
+!                      are contradictory.
+!                   4  Usage error occurred.  The value
+!                      of mdw is .LT. me+ma+mg, mdw is
+!                      .LT. n and a covariance matrix is
+!                      requested, or the option vector
+!                      prgopt(*) is not properly defined.
+!     w(*,*)        THE ARRAY w(*,*) CONTAINS THE n BY n SYMMETRIC
+!                   covariance matrix of the solution parameters,
+!                   provided this was requested on input with
+!                   the option vector prgopt(*) and the output
+!                   flag is returned with mode = 0 Or 1.
+!     ip(*)         THE INTEGER WORKING ARRAY HAS THREE ENTRIES
+!                   that provide rank and working array LENGTH
+!                   information after completion.
+!                      ip(1) = Rank of equality constraint
+!                              matrix.  Define this quantity
+!                              as kranke.
+!                      ip(2) = Rank of reduced least squares
+!                              problem.
+!                      ip(3) = The amount of storage in the
+!                              working array ws(*) that was
+!                              actually used by the subprogram.
+!                              The formula given above for the length
+!                              of ws(*) is a necessary overestimate.
+!     User designated
+!     working arrays..
+!     ws(*),ip(*)              THESE ARE RESPECTIVELY TYPE REAL
+!                              and type integer working arrays.
+!                              Their required minimal lengths are
+!                              given above.
+!     Subroutines called
+!     lsi           PART OF THIS PACKAGE.  SOLVES A
+!                   constrained least squares problem with
+!                   inequality constraints.
+!     sdot,sscal,   SUBROUTINES FROM THE BLAS PACKAGE.
+!     saxpy,sasum,  see trans. Math software (5), P. 308.
+!     scopy,snrm2,
+!     sswap,isamax
+!     h12           SUBROUTINE TO CONSTRUCT AND APPLY A
+!                   Householder transformation.
+!     spmpar        FUNCTION TO COMPUTE THE RELATIVE MACHINE
+!                   precision.
+!     Revised oct. 1, 1989.
+!     Compute machine precision
+srelpr = spmpar(1)
+!     Compute number of possible right multiplying Householder
+!     transformations.
+m = me + ma + mg
+mode = 0
+if (n <= 0 .or. me + ma <= 0) return
+if (.not.(mdw < m)) go to 80
+mode = 4
+return
+80 np1 = n + 1
+kranke = min(me,n)
+n1 = 2*kranke + 1
+n2 = n1 + n
+!     Process-option-vector
+go to 480
+90 if (.not.(cov .and. mdw < n)) go to 100
+mode = 4
+return
+100 l = kranke
+!     Compute norm of equality constraint matrix and RT side.
+enorm = zero
+do j = 1,n
+   enorm = max(enorm,sasum(me,w(1,j),1))
+end do
+fnorm = sasum(me,w(1,np1),1)
+if (.not.(l > 0)) go to 200
+snmax = zero
+rnmax = zero
+do i = 1,l
+!     Compute maximum ratio of vector lengths. Partition
+!     is at col. i.
+   do k = i,me
+      sn = sdot(n - i + 1,w(k,i),mdw,w(k,i),mdw)
+      rn = sdot(i - 1,w(k,1),mdw,w(k,1),mdw)
+      if (.not.(rn == zero .and. sn > snmax)) go to 120
+      snmax = sn
+      imax = k
+      go to 150
+120   if (.not.(k == i .or. (sn*rnmax > rn*snmax))) go to 150
+      snmax = sn
+      rnmax = rn
+      imax = k
+150   continue
+   end do
+!     Interchange rows if necessary.
+   if (i /= imax) call sswap(np1, w(i,1), mdw, w(imax,1), mdw)
+   if (.not.(snmax > tau**2*rnmax)) go to 160
+!     Eliminate elems i+1,...,n in row i.
+   call h12(1, i, i + 1, n, w(i,1), mdw, ws(i), w(i + 1,1), mdw, 1, &
+      & m - i)
+   go to 180
+160 kranke = i - 1
+   exit
+180 continue
+end do
+!     Save diag. Terms of lower trap. Matrix.
+200 call scopy(kranke, w, mdw + 1, ws(kranke + 1), 1)
+!     Use Householder trans from left to achieve kranke by kranke upper
+!     triangular form.
+if (.not.(kranke > 0 .and. kranke < me)) go to 220
+do kk = 1,kranke
+   k = kranke + 1 - kk
+!     Apply tranformation to matrix cols. 1,...,k-1.
+   call h12(1, k, kranke + 1, me, w(1,k), 1, up, w, 1, mdw, k - 1)
+!     Apply to RT side vector.
+   call h12(2, k, kranke + 1, me, w(1,k), 1, up, w(1,np1), 1, 1, 1)
+end do
+220 if (.not.(kranke > 0)) go to 240
+!     Solve for variables 1,...,kranke in new coordinates.
+call scopy(kranke, w(1,np1), 1, x, 1)
+do i = 1,kranke
+   x(i) = (x(i) - sdot(i - 1,w(i,1),mdw,x,1))/w(i,i)
+end do
+!     Compute residuals for reduced problem.
+240 mep1 = me + 1
+rnorml = zero
+if (.not.(me < m)) go to 270
+do i = mep1,m
+   w(i,np1) = w(i,np1) - sdot(kranke,w(i,1),mdw,x,1)
+   sn = sdot(kranke,w(i,1),mdw,w(i,1),mdw)
+   rn = sdot(n - kranke,w(i,kranke + 1),mdw,w(i,kranke + 1),mdw)
+   if (.not.(rn <= tau**2*sn .and. kranke < n)) go to 260
+   w(i,kranke + 1) = zero
+   call scopy(n - kranke, w(i,kranke + 1), 0, w(i,kranke + 1), mdw)
+260 continue
+end do
+!     Compute equal. Constraint equas. Residual length.
+270 rnorme = snrm2(me - kranke,w(kranke + 1,np1),1)
+!     Move reduced problem data upward if kranke.LT.me.
+if (.not.(kranke < me)) go to 290
+do j = 1,np1
+   call scopy(m - me, w(me + 1,j), 1, w(kranke + 1,j), 1)
+end do
+!     Compute soln of reduced problem.
+290 call lsi(w(kranke + 1,kranke + 1), mdw, ma, mg, n - kranke, prgopt, &
+   & x(kranke + 1), rnorml, mode, ws(n2), ip(2))
+if (mode > 1) go to 470
+if (.not.(me > 0)) go to 330
+!     Test for consistency of equality constraints.
+mdeqc = 0
+xnrme = sasum(kranke,w(1,np1),1)
+if (rnorme > tau*(enorm*xnrme + fnorm)) mdeqc = 1
+mode = mode + mdeqc
+!     Check if soln to equal. Constraints satisfies inequal.
+!     Constraints when there are no degrees of freedom left.
+if (.not.(kranke == n .and. mg > 0)) go to 330
+xnorm = sasum(n,x,1)
+mapke1 = ma + kranke + 1
+mend = ma + kranke + mg
+do i = mapke1,mend
+   size = sasum(n,w(i,1),mdw)*xnorm + abs(w(i,np1))
+   if (.not.(w(i,np1) > tau*size)) go to 310
+   mode = 2
+   go to 470
+310 continue
+end do
+330 if (.not.(kranke > 0)) go to 420
+!     Replace diag. Terms of lower trap. Matrix.
+call scopy(kranke, ws(kranke + 1), 1, w, mdw + 1)
+!     Reapply trans to put soln in original coordinates.
+do ii = 1,kranke
+   i = kranke + 1 - ii
+   call h12(2, i, i + 1, n, w(i,1), mdw, ws(i), x, 1, 1, 1)
+end do
+!     Compute cov matrix of equal. Constrained problem.
+if (.not.(cov)) go to 450
+do jj = 1,kranke
+   j = kranke + 1 - jj
+   if (.not.(j < n)) go to 400
+   rb = ws(j)*w(j,j)
+   if (rb /= zero) rb = one/rb
+   jp1 = j + 1
+   do i = jp1,n
+      w(i,j) = sdot(n - j,w(i,jp1),mdw,w(j,jp1),mdw)*rb
+   end do
+   gam = sdot(n - j,w(jp1,j),1,w(j,jp1),mdw)*rb
+   gam = half*gam
+   call saxpy(n - j, gam, w(j,jp1), mdw, w(jp1,j), 1)
+   do i = jp1,n
+      do k = i,n
+         w(i,k) = w(i,k) + w(j,i)*w(k,j) + w(i,j)*w(j,k)
+         w(k,i) = w(i,k)
+      end do
+   end do
+   uj = ws(j)
+   vj = gam*uj
+   w(j,j) = uj*vj + uj*vj
+   do i = jp1,n
+      w(j,i) = uj*w(i,j) + vj*w(j,i)
+   end do
+   call scopy(n - j, w(j,jp1), mdw, w(jp1,j), 1)
+400 continue
+end do
+!     Apply the scaling to the covariance matrix.
+420 if (.not.(cov)) go to 450
+do i = 1,n
+   l = n1 + i
+   call sscal(n, ws(l - 1), w(i,1), mdw)
+   call sscal(n, ws(l - 1), w(1,i), 1)
+end do
+!     Rescale soln. Vector.
+450 if (mode > 1) go to 470
+do j = 1,n
+   l = n1 + j
+   x(j) = x(j)*ws(l - 1)
+end do
+470 ip(1) = kranke
+ip(3) = ip(3) + 2*kranke + n
+return
+480 continue
+!     To process-option-vector
+!     the nominal tolerance used in the code
+!     for the equality constraint equations.
+tau = sqrt(srelpr)
+!     The nominal column scaling used in the code is
+!     the identity scaling.
+ws(n1) = one
+call scopy(n, ws(n1), 0, ws(n1), 1)
+!     No covariance matrix is nominally computed.
+cov = .false.
+!     Define bound for number of options to change.
+nopt = 1000
+ntimes = 0
+!     Define bound for positive values of link.
+nlink = 100000
+last = 1
+link = prgopt(1)
+if (.not.(link <= 0 .or. link > nlink)) go to 490
+mode = 4
+return
+490 if (.not.(link > 1)) go to 540
+ntimes = ntimes + 1
+if (.not.(ntimes > nopt)) go to 500
+mode = 4
+return
+500 key = prgopt(last + 1)
+if (key == 1) cov = prgopt(last + 2) /= zero
+if (.not.(key == 2 .and. prgopt(last + 2) /= zero)) go to 520
+do j = 1,n
+   t = snrm2(m,w(1,j),1)
+   if (t /= zero) t = one/t
+   l = n1 + j
+   ws(l - 1) = t
+end do
+520 if (key == 3) call scopy(n, prgopt(last + 2), 1, ws(n1), 1)
+if (key == 4) tau = max(srelpr,prgopt(last + 2))
+next = prgopt(link)
+if (.not.(next <= 0 .or. next > nlink)) go to 530
+mode = 4
+return
+530 last = link
+link = next
+go to 490
+540 do j = 1,n
+   l = n1 + j
+   call sscal(m, ws(l - 1), w(1,j), 1)
+end do
+go to 90
+end subroutine lsei
+
+subroutine lsi(w, mdw, ma, mg, n, prgopt, x, rnorm, mode, ws, ip)
+!! <!-- nswc-ford:begin LSI -->
+!! Reference for `lsi`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      This is a companion subprogram to lsei( ).
+!!      The documentation for lsei( ) has more complete
+!!      usage instructions.
+!!      Written by R. J. Hanson, sla.
+!!      Solve..
+!!               AX = B,  A  ma BY n  (LEAST SQUARES EQUATIONS)
+!!      subject to..
+!!               GX.GE.H, G  mg BY n  (INEQUALITY CONSTRAINTS)
+!!      input..
+!!       w(*,*) contains  (A B) in rows 1,...,ma+mg, cols 1,...,n+1.
+!!                        (G H)
+!!      mdw,ma,mg,n
+!!               contain (resp) var. Dimension of w(*,*),
+!!               and matrix dimensions.
+!!      prgopt(*),
+!!               program option vector.
+!!      Output..
+!!       x(*),rnorm
+!!               solution vector(unless mode=2), length of AX-B.
+!!       Mode
+!!               =0   Inequality constraints are compatible.
+!!               =2   Inequality constraints contradictory.
+!!       ws(*),
+!!               working storage of dimension k+n+(mg+2)*(n+7),
+!!               WHERE k=max(ma+mg,n).
+!!       ip(mg+2*n+1)
+!!               integer working storage
+!!      subroutines called
+!!      lpdp          THIS SUBPROGRAM MINIMIZES A SUM OF SQUARES
+!!                    of unknowns subject to linear inequality
+!!                    constraints.  Part of this package.
+!!      sdot,sscal    SUBROUTINES FROM THE BLAS PACKAGE.
+!!      saxpy,sasum,  see trans. Math software (5), P. 308.
+!!      scopy,sswap
+!!      hfti          SOLVES AN UNCONSTRAINED LINEAR LEAST SQUARES
+!!                    problem.
+!!      h12           SUBROUTINE TO CONSTRUCT AND APPLY A HOUSEHOLDER
+!!                    transformation.
+!!      spmpar        FUNCTION TO COMPUTE THE RELATIVE MACHINE
+!!                    precision.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: ma, mdw, mg
+integer, intent(out) :: mode
+integer :: n
+real, intent(out) :: rnorm
+real, intent(inout) :: w(mdw,*)
+real, intent(in) :: prgopt(*)
+real, intent(inout) :: x(*), ws(*)
+integer, intent(inout) :: ip(*)
+!     beginning of local variable declarations
+integer :: i, ii, il, im1, ip1, j, k, key, key8, key9, krank, &
+   & krm1, krp1, l, last, link, m, map1, mdlpdp, minman, n1, n2, n3, &
+   & next, np1
+real :: anorm, blowup, eps, fac, gam, rb, srelpr, tau, tol, xnorm
+real :: sasum
+real :: sdot
+real :: rnrm(1), opt(7)
+logical :: cov
+real, parameter :: zero = 0.e0
+real, parameter :: one = 1.e0
+real, parameter :: half = 0.5e0
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!     This is a companion subprogram to lsei( ).
+!     The documentation for lsei( ) has more complete
+!     usage instructions.
+!     Written by R. J. Hanson, sla.
+!     Solve..
+!              AX = B,  A  ma BY n  (LEAST SQUARES EQUATIONS)
+!     subject to..
+!              GX.GE.H, G  mg BY n  (INEQUALITY CONSTRAINTS)
+!     input..
+!      w(*,*) contains  (A B) in rows 1,...,ma+mg, cols 1,...,n+1.
+!                       (G H)
+!     mdw,ma,mg,n
+!              contain (resp) var. Dimension of w(*,*),
+!              and matrix dimensions.
+!     prgopt(*),
+!              program option vector.
+!     Output..
+!      x(*),rnorm
+!              solution vector(unless mode=2), length of AX-B.
+!      Mode
+!              =0   Inequality constraints are compatible.
+!              =2   Inequality constraints contradictory.
+!      ws(*),
+!              working storage of dimension k+n+(mg+2)*(n+7),
+!              WHERE k=max(ma+mg,n).
+!      ip(mg+2*n+1)
+!              integer working storage
+!     subroutines called
+!     lpdp          THIS SUBPROGRAM MINIMIZES A SUM OF SQUARES
+!                   of unknowns subject to linear inequality
+!                   constraints.  Part of this package.
+!     sdot,sscal    SUBROUTINES FROM THE BLAS PACKAGE.
+!     saxpy,sasum,  see trans. Math software (5), P. 308.
+!     scopy,sswap
+!     hfti          SOLVES AN UNCONSTRAINED LINEAR LEAST SQUARES
+!                   problem.
+!     h12           SUBROUTINE TO CONSTRUCT AND APPLY A HOUSEHOLDER
+!                   transformation.
+!     spmpar        FUNCTION TO COMPUTE THE RELATIVE MACHINE
+!                   precision.
+srelpr = spmpar(1)
+mode = 0
+rnorm = zero
+m = ma + mg
 np1 = n + 1
-ierr = 0
-if (n <= 1) go to 11
-! Determine polygonal arclengths
-s(1) = 0.
-do i = 2,n
-   im1 = i - 1
-   s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + &
-      & (y(i) - y(im1))**2)
+krank = 0
+if (n <= 0 .or. m <= 0) go to 70
+!     Process-option-vector
+go to 500
+!     Compute matrix NORM of least squares equas.
+40 anorm = zero
+do j = 1,n
+   anorm = max(anorm,sasum(ma,w(1,j),1))
 end do
-! Denormalize tension factor
-sigmap = abs(sigma)*float(n - 1)/s(n)
-! Approximate end slopes
-if (islpsw >= 2) go to 2
-slpp1x = cos(slp1)
-slpp1y = sin(slp1)
-go to 4
-2 dels1 = s(2) - s(1)
-dels2 = dels1 + dels1
-if (n > 2) dels2 = s(3) - s(1)
-if (dels1 == 0. .or. dels2 == 0.) go to 12
-call ceez(dels1,dels2,sigmap,c1,c2,c3,n)
-sx = c1*x(1) + c2*x(2)
-sy = c1*y(1) + c2*y(2)
-if (n == 2) go to 3
-sx = sx + c3*x(3)
-sy = sy + c3*y(3)
-3 delt = sqrt(sx*sx + sy*sy)
-slpp1x = sx/delt
-slpp1y = sy/delt
-4 if (islpsw == 1 .or. islpsw == 3) go to 5
-slppnx = cos(slpn)
-slppny = sin(slpn)
-go to 7
-5 delsn = s(n) - s(nm1)
-delsnm = delsn + delsn
-if (n > 2) delsnm = s(n) - s(n - 2)
-if (delsn == 0. .or. delsnm == 0.) go to 12
-call ceez(-delsn,-delsnm,sigmap,c1,c2,c3,n)
-sx = c1*x(n) + c2*x(nm1)
-sy = c1*y(n) + c2*y(nm1)
-if (n == 2) go to 6
-sx = sx + c3*x(n - 2)
-sy = sy + c3*y(n - 2)
-6 delt = sqrt(sx*sx + sy*sy)
-slppnx = sx/delt
-slppny = sy/delt
-! Set up right hand sides and tridiagonal system for xp and
-! yp and perform forward elimination
-7 dx1 = (x(2) - x(1))/s(2)
-dy1 = (y(2) - y(1))/s(2)
-call terms(diag1,sdiag1,sigmap,s(2))
-xp(1) = (dx1 - slpp1x)/diag1
-yp(1) = (dy1 - slpp1y)/diag1
-temp(1) = sdiag1/diag1
-if (n == 2) go to 9
-do i = 2,nm1
-   dels2 = s(i + 1) - s(i)
-   if (dels2 == 0.) go to 12
-   dx2 = (x(i + 1) - x(i))/dels2
-   dy2 = (y(i + 1) - y(i))/dels2
-   call terms(diag2,sdiag2,sigmap,dels2)
-   diag = diag1 + diag2 - sdiag1*temp(i - 1)
-   diagin = 1./diag
-   xp(i) = (dx2 - dx1 - sdiag1*xp(i - 1))*diagin
-   yp(i) = (dy2 - dy1 - sdiag1*yp(i - 1))*diagin
-   temp(i) = sdiag2*diagin
-   dx1 = dx2
-   dy1 = dy2
-   diag1 = diag2
-   sdiag1 = sdiag2
-end do
-9 diag = diag1 - sdiag1*temp(nm1)
-xp(n) = (slppnx - dx1 - sdiag1*xp(nm1))/diag
-yp(n) = (slppny - dy1 - sdiag1*yp(nm1))/diag
-! Perform back substitution
-do i = 2,n
-   ibak = np1 - i
-   xp(ibak) = xp(ibak) - temp(ibak)*xp(ibak + 1)
-   yp(ibak) = yp(ibak) - temp(ibak)*yp(ibak + 1)
-end do
+!     Set TOL for hfti( ) rank test.
+tau = tol*anorm
+!     Compute Householder orthogonal decomp of matrix.
+if (n > 0) ws(1) = zero
+call scopy(n, ws, 0, ws, 1)
+call scopy(ma, w(1,np1), 1, ws, 1)
+k = max(m,n)
+minman = min(ma,n)
+n1 = k + 1
+n2 = n1 + n
+call hfti(w, mdw, ma, n, ws, 1, 1, tau, krank, rnrm, ws(n2), &
+   & ws(n1), ip)
+rnorm = rnrm(1)
+fac = one
+gam = ma - krank
+if (krank < ma) fac = rnorm**2/gam
+go to 80
+!     Reduce-to-lpdp-and-solve
+70 ip(1) = krank
+ip(2) = n + max(m,n) + (mg + 2)*(n + 7)
 return
-! Too few points
-11 ierr = 1
+!     To reduce-to-lpdp-and-solve
+80 map1 = ma + 1
+!     Compute ineq. RT-hand side for lpdp.
+if (.not.(ma < m)) go to 260
+if (.not.(minman > 0)) go to 160
+do i = map1,m
+   w(i,np1) = w(i,np1) - sdot(n,w(i,1),mdw,ws,1)
+end do
+do i = 1,minman
+   j = ip(i)
+!     Apply permutations to cols of ineq. Constraint matrix.
+   call sswap(mg, w(map1,i), 1, w(map1,j), 1)
+end do
+!     Apply Householder transformations to constraint matrix.
+if (.not.(0 < krank .and. krank < n)) go to 120
+do ii = 1,krank
+   i = krank + 1 - ii
+   l = n1 + i
+   call h12(2, i, krank + 1, n, w(i,1), mdw, ws(l - 1), w(map1,1), &
+      & mdw, 1, mg)
+end do
+!     Compute permuted ineq. Constr. Matrix times R-inverse.
+120 do i = map1,m
+   if (.not.(0 < krank)) go to 150
+   do j = 1,krank
+      w(i,j) = (w(i,j) - sdot(j - 1,w(1,j),1,w(i,1),mdw))/w(j,j)
+   end do
+150 continue
+end do
+!     Solve the reduced problem with lpdp algorithm,
+!     the least projected distance problem.
+160 call lpdp(w(map1,1), mdw, mg, krank, n - krank, opt, x, xnorm, &
+   & mdlpdp, ws(n2), ip(n + 1))
+if (mdlpdp /= 1) go to 240
+if (.not.(krank > 0)) go to 180
+!     Compute soln in original coordinates.
+do ii = 1,krank
+   i = krank + 1 - ii
+   x(i) = (x(i) - sdot(ii - 1,w(i,i + 1),mdw,x(i + 1),1))/w(i,i)
+end do
+!     Apply Householder trans. To soln vector.
+180 if (.not.(0 < krank .and. krank < n)) go to 200
+do i = 1,krank
+   l = n1 + i
+   call h12(2, i, krank + 1, n, w(i,1), mdw, ws(l - 1), x, 1, 1, 1)
+end do
+200 if (.not.(minman > 0)) go to 270
+!     Repermute variables to their input order.
+do ii = 1,minman
+   i = minman + 1 - ii
+   j = ip(i)
+   call sswap(1, x(i), 1, x(j), 1)
+end do
+!     Variables are now in orig. Coordinates.
+!     Add soln of unsconstrained prob.
+do i = 1,n
+   x(i) = x(i) + ws(i)
+end do
+!     Compute the residual vector NORM.
+rnorm = sqrt(rnorm**2 + xnorm**2)
+go to 270
+240 mode = 2
+go to 270
+260 call scopy(n, ws, 1, x, 1)
+270 if (.not.(cov .and. krank > 0)) go to 70
+!     Compute covariance matrix based on the orthogonal decomp.
+!     FROM hfti( ).
+krm1 = krank - 1
+krp1 = krank + 1
+!     Copy diag. Terms to working array.
+call scopy(krank, w, mdw + 1, ws(n2), 1)
+!     Reciprocate diag. Terms.
+do j = 1,krank
+   w(j,j) = one/w(j,j)
+end do
+if (.not.(krank > 1)) go to 310
+!     Invert the upper triangular QR factor on itself.
+do i = 1,krm1
+   ip1 = i + 1
+   do j = ip1,krank
+      w(i,j) = -sdot(j - i,w(i,i),mdw,w(i,j),1)*w(j,j)
+   end do
+end do
+!     Compute the inverted factor times its transpose.
+310 do i = 1,krank
+   do j = i,krank
+      w(i,j) = sdot(krank + 1 - j,w(i,j),mdw,w(j,j),mdw)
+   end do
+end do
+if (.not.(krank < n)) go to 450
+!     Zero out lower trapezoidal part.
+!     Copy upper TRI. To lower TRI. Part.
+do j = 1,krank
+   call scopy(j, w(1,j), 1, w(j,1), mdw)
+end do
+do i = krp1,n
+   w(i,1) = zero
+   call scopy(i, w(i,1), 0, w(i,1), mdw)
+end do
+!     Apply right side transformations to lower TRI.
+n3 = n2 + krp1
+do i = 1,krank
+   l = n1 + i
+   k = n2 + i
+   rb = ws(l - 1)*ws(k - 1)
+   if (.not.(rb < zero)) go to 420
+!     If rb.GE.zero, transformation can be regarded as zero.
+   rb = one/rb
+!     Store unscaled rank-one Householder update in work array.
+   ws(n3) = zero
+   call scopy(n, ws(n3), 0, ws(n3), 1)
+   l = n1 + i
+   k = n3 + i
+   ws(k - 1) = ws(l - 1)
+   do j = krp1,n
+      k = n3 + j
+      ws(k - 1) = w(i,j)
+   end do
+   do j = 1,n
+      l = n3 + i
+      k = n3 + j
+      ws(j) = sdot(j - i,w(j,i),mdw,ws(l - 1),1) + sdot(n - j + 1,w(j,j),1, &
+         & ws(k - 1),1)
+      ws(j) = ws(j)*rb
+   end do
+   l = n3 + i
+   gam = sdot(n - i + 1,ws(l - 1),1,ws(i),1)*rb
+   gam = gam*half
+   call saxpy(n - i + 1, gam, ws(l - 1), 1, ws(i), 1)
+   do j = i,n
+      if (.not.(i > 1)) go to 390
+      im1 = i - 1
+      k = n3 + j
+      do l = 1,im1
+         w(j,l) = w(j,l) + ws(k - 1)*ws(l)
+      end do
+390   k = n3 + j
+      do l = i,j
+         il = n3 + l
+         w(j,l) = w(j,l) + ws(j)*ws(il - 1) + ws(l)*ws(k - 1)
+      end do
+   end do
+420 continue
+end do
+!     Copy lower TRI. To upper TRI. To symmetrize the covariance matrix.
+do i = 1,n
+   call scopy(i, w(i,1), mdw, w(1,i), 1)
+end do
+!     Repermute rows and cols.
+450 do ii = 1,minman
+   i = minman + 1 - ii
+   k = ip(i)
+   if (.not.(i /= k)) go to 470
+   call sswap(1, w(i,i), 1, w(k,k), 1)
+   call sswap(i - 1, w(1,i), 1, w(1,k), 1)
+   call sswap(k - i - 1, w(i,i + 1), mdw, w(i + 1,k), 1)
+   call sswap(n - k, w(i,k + 1), mdw, w(k,k + 1), mdw)
+470 continue
+end do
+!     Put in normalized residual sum of squares scale factor
+!     and symmetrize the resulting covariance marix.
+do j = 1,n
+   call sscal(j, fac, w(1,j), 1)
+   call scopy(j, w(1,j), 1, w(j,1), mdw)
+end do
+go to 70
+!     To process-option-vector
+!     the nominal tolerance used in the code,
+500 tol = sqrt(srelpr)
+cov = .false.
+last = 1
+link = prgopt(1)
+key8 = 0
+key9 = 0
+510 if (.not.(link > 1)) go to 540
+key = prgopt(last + 1)
+if (key == 1) cov = prgopt(last + 2) /= zero
+if (key == 5) tol = max(srelpr,prgopt(last + 2))
+if (key /= 8) go to 520
+key8 = 1
+eps = prgopt(last + 2)
+go to 530
+520 if (key /= 9) go to 530
+key9 = 1
+blowup = prgopt(last + 2)
+530 next = prgopt(link)
+last = link
+link = next
+go to 510
+!     Prepare the option vector for wnnls
+540 j = 1
+if (key8 == 0) go to 550
+opt(1) = 4.0
+opt(2) = 8.0
+opt(3) = eps
+j = 4
+550 if (key9 == 0) go to 560
+opt(j) = j + 3
+opt(j + 1) = 9.0
+opt(j + 2) = blowup
+j = j + 3
+560 opt(j) = 1.0
+go to 40
+end subroutine lsi
+
+subroutine lpdp(a, mda, m, n1, n2, prgopt, x, wnorm, mode, ws, is)
+!! <!-- nswc-ford:begin LPDP -->
+!! Reference for `lpdp`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      dimension a(mda,n+1),prgopt(*),x(n),ws((m+2)*(n+7)),is(m+n+1),
+!!      where n=n1+n2.  This is a slight overestimate for ws(*).
+!!      Written by R. J. Hanson and K. H. Haskell, sandia labs
+!!      determine an n1-vector W, and
+!!                an n2-vector Z
+!!      which minimizes the Euclidean length of W
+!!      subject to G*W+H*Z .GE. Y.
+!!      This is the least projected distance problem, lpdp.
+!!      The matrices G and H are of respective
+!!      dimensions m by n1 and m by n2.
+!!      Called by subprogram lsi( ).
+!!      The matrix
+!!                 (G H Y)
+!!      occupies rows 1,...,m and cols 1,...,n1+n2+1 of a(*,*).
+!!      The solution (W) is returned in x(*).
+!!                   (Z)
+!!      the value of mode indicates the status of
+!!      the computation after returning to the user.
+!!           mode=1  The solution was successfully obtained.
+!!           mode=2  The inequalities are inconsistent.
+!!      Subroutines called
+!!      wnnls         SOLVES A NONNEGATIVELY CONSTRAINED LINEAR LEAST
+!!                    squares problem with linear equality constraints.
+!!                    Part of this package.
+!!      sdot,scopy    SUBROUTINES FROM THE BLAS PACKAGE.
+!!      sscal,snrm2   SEE TRANS. MATH SOFTWARE (5), P. 308.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(inout) :: is(*)
+integer, intent(in) :: m, mda
+integer, intent(out) :: mode
+integer, intent(in) :: n1, n2
+real, intent(inout) :: a(mda,*)
+real :: prgopt(*)
+real, intent(inout) :: wnorm, ws(*), x(*)
+!     beginning of local variable declarations
+integer :: i, iw, ix, j, l, modew, n, np1
+real :: rnorm, sc, ynorm
+real :: snrm2
+real :: sdot
+real, parameter :: zero = 0.e0
+real, parameter :: one = 1.e0
+real, parameter :: fac = 0.1e0
+!     dimension a(mda,n+1),prgopt(*),x(n),ws((m+2)*(n+7)),is(m+n+1),
+!     where n=n1+n2.  This is a slight overestimate for ws(*).
+!     Written by R. J. Hanson and K. H. Haskell, sandia labs
+!     determine an n1-vector W, and
+!               an n2-vector Z
+!     which minimizes the Euclidean length of W
+!     subject to G*W+H*Z .GE. Y.
+!     This is the least projected distance problem, lpdp.
+!     The matrices G and H are of respective
+!     dimensions m by n1 and m by n2.
+!     Called by subprogram lsi( ).
+!     The matrix
+!                (G H Y)
+!     occupies rows 1,...,m and cols 1,...,n1+n2+1 of a(*,*).
+!     The solution (W) is returned in x(*).
+!                  (Z)
+!     the value of mode indicates the status of
+!     the computation after returning to the user.
+!          mode=1  The solution was successfully obtained.
+!          mode=2  The inequalities are inconsistent.
+!     Subroutines called
+!     wnnls         SOLVES A NONNEGATIVELY CONSTRAINED LINEAR LEAST
+!                   squares problem with linear equality constraints.
+!                   Part of this package.
+!     sdot,scopy    SUBROUTINES FROM THE BLAS PACKAGE.
+!     sscal,snrm2   SEE TRANS. MATH SOFTWARE (5), P. 308.
+n = n1 + n2
+mode = 1
+if (.not.(m <= 0)) go to 20
+if (.not.(n > 0)) go to 10
+x(1) = zero
+call scopy(n, x, 0, x, 1)
+10 wnorm = zero
 return
-! Coincident adjacent points
-12 ierr = 2
-end subroutine kurv1
+20 np1 = n + 1
+!     Scale nonzero rows of inequality matrix to have length one.
+do i = 1,m
+   sc = snrm2(n,a(i,1),mda)
+   if (sc == zero) go to 40
+   sc = one/sc
+   call sscal(np1, sc, a(i,1), mda)
+40 continue
+end do
+!     Scale RT.-Side vector to have length one (or zero).
+ynorm = snrm2(m,a(1,np1),1)
+if (ynorm == zero) go to 50
+sc = one/ynorm
+call sscal(m, sc, a(1,np1), 1)
+!     Scale cols of matrix H.
+50 j = n1 + 1
+60 if (j > n) go to 70
+sc = snrm2(m,a(1,j),1)
+if (sc /= zero) sc = one/sc
+call sscal(m, sc, a(1,j), 1)
+x(j) = sc
+j = j + 1
+go to 60
+70 if (.not.(n1 > 0)) go to 130
+!     Copy transpose of (H G Y) to work array ws(*).
+iw = 0
+do i = 1,m
+!     Move col of transpose of H into work array.
+   call scopy(n2, a(i,n1 + 1), mda, ws(iw + 1), 1)
+   iw = iw + n2
+!     Move col of transpose of G into work array.
+   call scopy(n1, a(i,1), mda, ws(iw + 1), 1)
+   iw = iw + n1
+!     Move component of vector Y into work array.
+   ws(iw + 1) = a(i,np1)
+   iw = iw + 1
+end do
+ws(iw + 1) = zero
+call scopy(n, ws(iw + 1), 0, ws(iw + 1), 1)
+iw = iw + n
+ws(iw + 1) = one
+iw = iw + 1
+!     SOLVE EU=F SUBJECT TO (TRANSPOSE OF H)U=0, U.GE.0.  THE
+!     MATRIX E = TRANSPOSE OF (G Y), AND THE (n+1)-VECTOR
+!     F = TRANSPOSE OF (0,...,0,1).
+ix = iw + 1
+iw = iw + m
+call wnnls(ws, np1, n2, np1 - n2, m, 0, prgopt, ws(ix), rnorm, &
+   & modew, is, ws(iw + 1))
+!     Compute the components of the soln denoted above by W.
+sc = one - sdot(m,a(1,np1),1,ws(ix),1)
+if (.not.(one + fac*abs(sc) /= one .and. rnorm > zero)) go to 110
+sc = one/sc
+do j = 1,n1
+   x(j) = sc*sdot(m,a(1,j),1,ws(ix),1)
+end do
+!     Compute the vector Q=Y-GW.  Overwrite Y with this vector.
+do i = 1,m
+   a(i,np1) = a(i,np1) - sdot(n1,a(i,1),mda,x,1)
+end do
+go to 130
+110 mode = 2
+return
+130 if (.not.(n2 > 0)) go to 180
+!     Copy transpose of (H Q) to work array ws(*).
+iw = 0
+do i = 1,m
+   call scopy(n2, a(i,n1 + 1), mda, ws(iw + 1), 1)
+   iw = iw + n2
+   ws(iw + 1) = a(i,np1)
+   iw = iw + 1
+end do
+ws(iw + 1) = zero
+call scopy(n2, ws(iw + 1), 0, ws(iw + 1), 1)
+iw = iw + n2
+ws(iw + 1) = one
+iw = iw + 1
+ix = iw + 1
+iw = iw + m
+!     Solve RV=S subject to V.GE.0.  The matrix R =(transpose
+!     OF (H Q)), WHERE Q=Y-GW.  THE (n2+1)-VECTOR S =(TRANSPOSE
+!     of (0,...,0,1)).
+call wnnls(ws, n2 + 1, 0, n2 + 1, m, 0, prgopt, ws(ix), rnorm, modew, &
+   & is, ws(iw + 1))
+!     Compute the components of the soln denoted above by Z.
+sc = one - sdot(m,a(1,np1),1,ws(ix),1)
+if (.not.(one + fac*abs(sc) /= one .and. rnorm > zero)) go to 160
+sc = one/sc
+do j = 1,n2
+   l = n1 + j
+   x(l) = sc*sdot(m,a(1,l),1,ws(ix),1)*x(l)
+end do
+go to 180
+160 mode = 2
+return
+!     Account for scaling of RT.-Side vector in solution.
+180 call sscal(n, ynorm, x, 1)
+wnorm = snrm2(n1,x,1)
+end subroutine lpdp
+
+subroutine wnnls(w, mdw, me, ma, n, l, prgopt, x, rnorm, mode, &
+   & iwork, work)
+!! <!-- nswc-ford:begin WNNLS -->
+!! Reference for `wnnls`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      dimension w(mdw,n+1),prgopt(*),x(n),iwork(m+n),work(m+5*n)
+!!      abstract
+!!      this subprogram solves a linearly constrained least squares
+!!      problem.  Suppose there are given matrices E and A of
+!!      respective dimensions me by n and ma by n, and vectors F
+!!      and B of respective lengths me and ma.  This subroutine
+!!      solves the problem
+!!                EX = F, (equations to be exactly satisfied)
+!!                AX = B, (equations to be approximately satisfied,
+!!                         in the least squares sense)
+!!                subject to components l+1,...,n nonnegative
+!!      any values me.GE.0, ma.GE.0 and 0.LE. l .LE.n are permitted.
+!!      The problem is reposed as problem wnnls
+!!                (WT*E)x = (WT*F)
+!!                (   A)    (   B), (LEAST SQUARES)
+!!                subject to components l+1,...,n nonnegative.
+!!      The subprogram chooses the heavy weight (or penalty parameter) WT.
+!!      The parameters for wnnls are
+!!      input..
+!!      w(*,*),mdw,  the array w(*,*) is double subscripted with first
+!!      ME,ma,n,l    DIMENSIONING PARAMETER EQUAL TO mdw.  FOR THIS
+!!                   discussion let us call M = me + ma.  Then mdw
+!!                   must satisfy mdw.GE.M.  the condition mdw.LT.M
+!!                   is an error.
+!!                   The array w(*,*) contains the matrices and vectors
+!!                        (E  F)
+!!                        (A  B)
+!!                   in rows and columns 1,...,M and 1,...,n+1
+!!                   respectively.  Columns 1,...,l correspond to
+!!                   unconstrained variables x(1),...,x(l).  The
+!!                   remaining variables are constrained to be
+!!                   nonnegative.  The condition l.LT.0 .OR. l.GT.n is
+!!                   an error.
+!!      prgopt(*)    THIS ARRAY IS THE OPTION VECTOR.
+!!                   If the user is satisfied with the nominal
+!!                   subprogram features set
+!!                   prgopt(1)=1 (OR prgopt(1)=1.0)
+!!                   otherwise prgopt(*) is a linked list consisting of
+!!                   groups of data of the following form
+!!                   link
+!!                   key
+!!                   data set
+!!                   the parameters link and key are each one word.
+!!                   The data set can be comprised of several words.
+!!                   The number of items depends on the value of key.
+!!                   The value of link points to the first
+!!                   entry of the next group of data within
+!!                   prgopt(*).  The exception is when there are
+!!                   no more options to change.  In that
+!!                   case link=1 And the values key and data set
+!!                   are not referenced. The general layout of
+!!                   prgopt(*) is as follows.
+!!                ...prgopt(1)=LINK1 (LINK TO FIRST ENTRY OF NEXT GROUP)
+!!                .  prgopt(2)=KEY1 (KEY TO THE OPTION CHANGE)
+!!                .  prgopt(3)=DATA VALUE (DATA VALUE FOR THIS CHANGE)
+!!
+!!                ...prgopt(LINK1)=LINK2 (link to the first entry of
+!!                .                       NEXT GROUP)
+!!                .  prgopt(LINK1+1)=KEY2 (KEY TO THE OPTION CHANGE)
+!!                .  prgopt(LINK1+2)=Data value
+!!
+!!                ...prgopt(LINK)=1 (NO MORE OPTIONS TO CHANGE)
+!!                   values of link that are nonpositive are errors.
+!!                   A value of link.GT.NLINK=100000 Is also an error.
+!!                   This helps prevent using invalid but positive
+!!                   values of link that will probably extend
+!!                   beyond the program limits of prgopt(*).
+!!                   Unrecognized values of key are ignored.  The
+!!                   order of the options is arbitrary and any number
+!!                   of options can be changed with the following
+!!                   restriction.  To prevent cycling in the
+!!                   processing of the option array A count of the
+!!                   number of options changed is maintained.
+!!                   Whenever this count exceeds NOPT=1000 The
+!!                   routine terminates.
+!!                   Options..
+!!                   key=6
+!!                          scale the nonzero columns of the
+!!                   entire data matrix
+!!                   (E)
+!!                   (A)
+!!                   to have length one.  The data set for
+!!                   this option is a single value.  It must
+!!                   be nonzero if unit length column scaling is
+!!                   desired.
+!!                   key=7
+!!                          scale columns of the entire data matrix
+!!                   (E)
+!!                   (A)
+!!                   with a user-provided diagonal matrix.
+!!                   The data set for this option consists
+!!                   of the n diagonal scaling factors, one for
+!!                   each matrix column.
+!!                   key=8
+!!                          change the rank determination tolerance from
+!!                   the nominal value of sqrt(EPS).  This quantity can
+!!                   be no smaller than eps, the arithmetic-
+!!                   storage precision.  The quantity used
+!!                   here is internally restricted to be at
+!!                   least eps.  The data set for this option
+!!                   is the new tolerance.
+!!                   key=9
+!!                          change the blow-up parameter from the
+!!                   nominal value of sqrt(EPS).  The reciprocal of
+!!                   this parameter is used in rejecting solution
+!!                   components as too large when a variable is
+!!                   first brought into the active set.  Too large
+!!                   means that the proposed component times the
+!!                   reciprocal of the parameteris not less than
+!!                   the ratio of the norms of the right-side
+!!                   vector and the data matrix.
+!!                   This parameter can be no smaller than eps,
+!!                   the arithmetic-storage precision.
+!!                   For example, suppose we want to provide
+!!                   a diagonal matrix to scale the problem
+!!                   matrix and change the tolerance used for
+!!                   determining linear dependence of dropped col
+!!                   vectors.  For these options the dimensions of
+!!                   prgopt(*) must be at least n+6.  The Fortran
+!!                   statements defining these options would
+!!                   be as follows.
+!!                   prgopt(1)=n+3 (LINK TO ENTRY n+3 IN prgopt(*))
+!!                   prgopt(2)=7 (USER-PROVIDED SCALING KEY)
+!!                   call scopy(n,d,1,prgopt(3),1) (copy the n
+!!                   scaling factors from a user array called D(*)
+!!                   into prgopt(3)-prgopt(n+2))
+!!                   prgopt(n+3)=n+6 (LINK TO ENTRY n+6 OF prgopt(*))
+!!                   prgopt(n+4)=8 (LINEAR DEPENDENCE TOLERANCE KEY)
+!!                   prgopt(n+5)=... (new value of the tolerance)
+!!                   prgopt(n+6)=1 (NO MORE OPTIONS TO CHANGE)
+!!      output..
+!!      x(*)         AN ARRAY DIMENSIONED AT LEAST n, WHICH WILL
+!!                   contain the n components of the solution vector
+!!                   on output.
+!!      rnorm        THE RESIDUAL NORM OF THE SOLUTION.  THE VALUE OF
+!!                   rnorm contains the residual vector LENGTH of the
+!!                   equality constraints and least squares equations.
+!!      MODE         THE VALUE OF MODE INDICATES THE SUCCESS OR FAILURE
+!!                   of the subprogram.
+!!                   mode = 0  Subprogram completed successfully.
+!!                        = 1  Max. Number of iterations (equal to
+!!                             3*(n-l)) exceeded. Nearly all problems
+!!                             should complete in fewer than this
+!!                             number of iterations. An approximate
+!!                             solution and its corresponding residual
+!!                             vector LENGTH are in x(*) and rnorm.
+!!                        = 2  Usage error occurred.  Either
+!!                             mdw .LT. me + ma, l .LT. 0, l .GT. n,
+!!                             or the option vector prgopt(*) is
+!!                             not properly defined.
+!!      User-designated
+!!      working arrays..
+!!      work(*)      A WORKING ARRAY OF LENGTH AT LEAST
+!!                   M + 5*n.
+!!      iwork(*)     AN INTEGER-VALUED WORKING ARRAY OF LENGTH AT LEAST
+!!                   M+n.
+!!      Written by karen H. Haskell, Sandia Laboratories,
+!!      and R.J. Hanson, Sandia Laboratories.
+!!      Revised oct. 1, 1989.
+!!      Subroutines called by wnnls( )
+!!      wnlsm         COMPANION SUBROUTINE TO wnnls( ), WHERE
+!!                    most of the computation takes place.
+!!      References
+!!      1. Solving least squares problems, by C.L. Lawson
+!!         and R.J. Hanson.  Prentice-Hall, inc. (1974).
+!!      2. BASIC linear algebra subprograms for Fortran usage, by
+!!         C.L. Lawson, R.J. Hanson, D.R. kincaid, and F.T. krogh.
+!!         Toms, V. 5, No. 3, P. 308.  Also available as
+!!         sandia technical report no. SAND77-0898.
+!!      3. An algorithm for linear least squares with equality
+!!         and nonnegativity constraints, by K.H. Haskell and
+!!         R.J. Hanson.  Available as sandia technical report no.
+!!         SAND77-0552, and math. Programming, vol. 21, (1981), P. 98-118.
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: l, ma, mdw, me
+integer, intent(out) :: mode
+integer, intent(in) :: n
+real, intent(inout) :: rnorm
+real, intent(inout) :: w(mdw,*)
+real, intent(in) :: prgopt(*)
+real, intent(inout) :: x(n), work(*)
+integer, intent(inout) :: iwork(*)
+!     beginning of local variable declarations
+integer :: l1, l2, l3, l4, l5
+!     dimension w(mdw,n+1),prgopt(*),x(n),iwork(m+n),work(m+5*n)
+!     abstract
+!     this subprogram solves a linearly constrained least squares
+!     problem.  Suppose there are given matrices E and A of
+!     respective dimensions me by n and ma by n, and vectors F
+!     and B of respective lengths me and ma.  This subroutine
+!     solves the problem
+!               EX = F, (equations to be exactly satisfied)
+!               AX = B, (equations to be approximately satisfied,
+!                        in the least squares sense)
+!               subject to components l+1,...,n nonnegative
+!     any values me.GE.0, ma.GE.0 and 0.LE. l .LE.n are permitted.
+!     The problem is reposed as problem wnnls
+!               (WT*E)x = (WT*F)
+!               (   A)    (   B), (LEAST SQUARES)
+!               subject to components l+1,...,n nonnegative.
+!     The subprogram chooses the heavy weight (or penalty parameter) WT.
+!     The parameters for wnnls are
+!     input..
+!     w(*,*),mdw,  the array w(*,*) is double subscripted with first
+!     ME,ma,n,l    DIMENSIONING PARAMETER EQUAL TO mdw.  FOR THIS
+!                  discussion let us call M = me + ma.  Then mdw
+!                  must satisfy mdw.GE.M.  the condition mdw.LT.M
+!                  is an error.
+!                  The array w(*,*) contains the matrices and vectors
+!                       (E  F)
+!                       (A  B)
+!                  in rows and columns 1,...,M and 1,...,n+1
+!                  respectively.  Columns 1,...,l correspond to
+!                  unconstrained variables x(1),...,x(l).  The
+!                  remaining variables are constrained to be
+!                  nonnegative.  The condition l.LT.0 .OR. l.GT.n is
+!                  an error.
+!     prgopt(*)    THIS ARRAY IS THE OPTION VECTOR.
+!                  If the user is satisfied with the nominal
+!                  subprogram features set
+!                  prgopt(1)=1 (OR prgopt(1)=1.0)
+!                  otherwise prgopt(*) is a linked list consisting of
+!                  groups of data of the following form
+!                  link
+!                  key
+!                  data set
+!                  the parameters link and key are each one word.
+!                  The data set can be comprised of several words.
+!                  The number of items depends on the value of key.
+!                  The value of link points to the first
+!                  entry of the next group of data within
+!                  prgopt(*).  The exception is when there are
+!                  no more options to change.  In that
+!                  case link=1 And the values key and data set
+!                  are not referenced. The general layout of
+!                  prgopt(*) is as follows.
+!               ...prgopt(1)=LINK1 (LINK TO FIRST ENTRY OF NEXT GROUP)
+!               .  prgopt(2)=KEY1 (KEY TO THE OPTION CHANGE)
+!               .  prgopt(3)=DATA VALUE (DATA VALUE FOR THIS CHANGE)
+!               .       .
+!               .       .
+!               .       .
+!               ...prgopt(LINK1)=LINK2 (link to the first entry of
+!               .                       NEXT GROUP)
+!               .  prgopt(LINK1+1)=KEY2 (KEY TO THE OPTION CHANGE)
+!               .  prgopt(LINK1+2)=Data value
+!               ...     .
+!               .       .
+!               .       .
+!               ...prgopt(LINK)=1 (NO MORE OPTIONS TO CHANGE)
+!                  values of link that are nonpositive are errors.
+!                  A value of link.GT.NLINK=100000 Is also an error.
+!                  This helps prevent using invalid but positive
+!                  values of link that will probably extend
+!                  beyond the program limits of prgopt(*).
+!                  Unrecognized values of key are ignored.  The
+!                  order of the options is arbitrary and any number
+!                  of options can be changed with the following
+!                  restriction.  To prevent cycling in the
+!                  processing of the option array A count of the
+!                  number of options changed is maintained.
+!                  Whenever this count exceeds NOPT=1000 The
+!                  routine terminates.
+!                  Options..
+!                  key=6
+!                         scale the nonzero columns of the
+!                  entire data matrix
+!                  (E)
+!                  (A)
+!                  to have length one.  The data set for
+!                  this option is a single value.  It must
+!                  be nonzero if unit length column scaling is
+!                  desired.
+!                  key=7
+!                         scale columns of the entire data matrix
+!                  (E)
+!                  (A)
+!                  with a user-provided diagonal matrix.
+!                  The data set for this option consists
+!                  of the n diagonal scaling factors, one for
+!                  each matrix column.
+!                  key=8
+!                         change the rank determination tolerance from
+!                  the nominal value of sqrt(EPS).  This quantity can
+!                  be no smaller than eps, the arithmetic-
+!                  storage precision.  The quantity used
+!                  here is internally restricted to be at
+!                  least eps.  The data set for this option
+!                  is the new tolerance.
+!                  key=9
+!                         change the blow-up parameter from the
+!                  nominal value of sqrt(EPS).  The reciprocal of
+!                  this parameter is used in rejecting solution
+!                  components as too large when a variable is
+!                  first brought into the active set.  Too large
+!                  means that the proposed component times the
+!                  reciprocal of the parameteris not less than
+!                  the ratio of the norms of the right-side
+!                  vector and the data matrix.
+!                  This parameter can be no smaller than eps,
+!                  the arithmetic-storage precision.
+!                  For example, suppose we want to provide
+!                  a diagonal matrix to scale the problem
+!                  matrix and change the tolerance used for
+!                  determining linear dependence of dropped col
+!                  vectors.  For these options the dimensions of
+!                  prgopt(*) must be at least n+6.  The Fortran
+!                  statements defining these options would
+!                  be as follows.
+!                  prgopt(1)=n+3 (LINK TO ENTRY n+3 IN prgopt(*))
+!                  prgopt(2)=7 (USER-PROVIDED SCALING KEY)
+!                  call scopy(n,d,1,prgopt(3),1) (copy the n
+!                  scaling factors from a user array called D(*)
+!                  into prgopt(3)-prgopt(n+2))
+!                  prgopt(n+3)=n+6 (LINK TO ENTRY n+6 OF prgopt(*))
+!                  prgopt(n+4)=8 (LINEAR DEPENDENCE TOLERANCE KEY)
+!                  prgopt(n+5)=... (new value of the tolerance)
+!                  prgopt(n+6)=1 (NO MORE OPTIONS TO CHANGE)
+!     output..
+!     x(*)         AN ARRAY DIMENSIONED AT LEAST n, WHICH WILL
+!                  contain the n components of the solution vector
+!                  on output.
+!     rnorm        THE RESIDUAL NORM OF THE SOLUTION.  THE VALUE OF
+!                  rnorm contains the residual vector LENGTH of the
+!                  equality constraints and least squares equations.
+!     MODE         THE VALUE OF MODE INDICATES THE SUCCESS OR FAILURE
+!                  of the subprogram.
+!                  mode = 0  Subprogram completed successfully.
+!                       = 1  Max. Number of iterations (equal to
+!                            3*(n-l)) exceeded. Nearly all problems
+!                            should complete in fewer than this
+!                            number of iterations. An approximate
+!                            solution and its corresponding residual
+!                            vector LENGTH are in x(*) and rnorm.
+!                       = 2  Usage error occurred.  Either
+!                            mdw .LT. me + ma, l .LT. 0, l .GT. n,
+!                            or the option vector prgopt(*) is
+!                            not properly defined.
+!     User-designated
+!     working arrays..
+!     work(*)      A WORKING ARRAY OF LENGTH AT LEAST
+!                  M + 5*n.
+!     iwork(*)     AN INTEGER-VALUED WORKING ARRAY OF LENGTH AT LEAST
+!                  M+n.
+!     Written by karen H. Haskell, Sandia Laboratories,
+!     and R.J. Hanson, Sandia Laboratories.
+!     Revised oct. 1, 1989.
+!     Subroutines called by wnnls( )
+!     wnlsm         COMPANION SUBROUTINE TO wnnls( ), WHERE
+!                   most of the computation takes place.
+!     References
+!     1. Solving least squares problems, by C.L. Lawson
+!        and R.J. Hanson.  Prentice-Hall, inc. (1974).
+!     2. BASIC linear algebra subprograms for Fortran usage, by
+!        C.L. Lawson, R.J. Hanson, D.R. kincaid, and F.T. krogh.
+!        Toms, V. 5, No. 3, P. 308.  Also available as
+!        sandia technical report no. SAND77-0898.
+!     3. An algorithm for linear least squares with equality
+!        and nonnegativity constraints, by K.H. Haskell and
+!        R.J. Hanson.  Available as sandia technical report no.
+!        SAND77-0552, and math. Programming, vol. 21, (1981), P. 98-118.
+mode = 0
+if (ma + me <= 0 .or. n <= 0) return
+if (.not.(mdw < me + ma)) go to 10
+mode = 2
+return
+10 if (0 <= l .and. l <= n) go to 20
+mode = 2
+return
+!     The purpose of this subroutine is to break up the arrays
+!     work(*) and iwork(*) into separate work arrays
+!     required by the main subroutine wnlsm( ).
+20 l1 = n + 1
+l2 = l1 + n
+l3 = l2 + me + ma
+l4 = l3 + n
+l5 = l4 + n
+call wnlsm(w, mdw, me, ma, n, l, prgopt, x, rnorm, mode, iwork, &
+   & iwork(l1), work(1), work(l1), work(l2), work(l3), work(l4), &
+   & work(l5))
+end subroutine wnnls
+
+subroutine wnlsm(w, mdw, mme, ma, n, l, prgopt, x, rnorm, mode, &
+   & ipivot, itype, wd, h, scale, z, temp, d)
+!! <!-- nswc-ford:begin WNLSM -->
+!! Reference for `wnlsm`.
+!!
+!! ### Original procedure notes
+!!
+!! Imported from the introductory source comments. These legacy notes
+!! have not been individually reconciled with later source changes.
+!!
+!! ```text
+!!      This is a companion subprogram to wnnls( ).
+!!      The documentation for wnnls( ) has more complete
+!!      usage instructions.
+!!      Written by karen h. Haskell, Sandia Laboratories,
+!!      with the help of R.J. Hanson, Sandia Laboratories.
+!!      In addition to the parameters discussed in the prologue to
+!!      subroutine wnnls, the following work arrays are used in
+!!      subroutine wnlsm  (they are passed through the calling
+!!      sequence from wnnls for purposes of variable dimensioning).
+!!      Their contents will in general be of no interest to the user.
+!!          ipivot(*)
+!!             an array of length n.  upon completion it contains the
+!!          pivoting information for the cols of w(*,*).
+!!          itype(*)
+!!             an array of length M which is used to keep track
+!!          of the classification of the equations.  itype(i)=0
+!!          denotes equation i as an equality constraint.
+!!          itype(i)=1 Denotes equation i as a least squares
+!!          equation.
+!!          wd(*)
+!!             an array of length n.  upon completion it contains the
+!!          dual solution vector.
+!!          h(*)
+!!             an array of length n.  upon completion it contains the
+!!          pivot scalars of the Householder transformations performed
+!!          in the case KRANK.LT.L.
+!!          scale(*)
+!!             an array of length M which is used by the subroutine
+!!          to store the diagonal matrix of weights.
+!!          These are used to apply the modified Givens
+!!          transformations.
+!!          z(*),temp(*)
+!!             working arrays of length n.
+!!          d(*)
+!!             an array of length n that contains the
+!!          column scaling for the matrix (E).
+!!                                        (A)
+!!      Initialize-variables
+!! ```
+!! <!-- nswc-ford:end -->
+implicit none
+integer, intent(in) :: l, ma, mdw, mme
+integer, intent(inout) :: mode
+integer, intent(in) :: n
+real, intent(inout) :: rnorm
+real, intent(inout) :: w(mdw,*), x(*), wd(*), h(*), scale(*)
+real, intent(inout) :: z(*), temp(*)
+real, intent(in) :: prgopt(*)
+real, intent(inout) :: d(*)
+integer, intent(inout) :: ipivot(*), itype(*)
+!     beginning of local variable declarations
+integer :: i, igo897, igo938, igo958, imax, isol, itemp, iter, &
+   & itmax, iwmax, j, jcon, jj, jm1, jp, key, krank, krp1, l1, last, &
+   & link, lp1, m, me, mep1, next, niv, niv1, nlink, nm1, nopt, np1, &
+   & nsoln, nsp1, ntimes
+real :: alamda, alpha, alsq, amax, blowup, bnorm, eanorm, fac, sm, srelpr, t, tau, wmax, z2, zz
+real :: snrm2
+real :: sasum
+integer :: isamax
+real :: dope(4), sparam(5)
+integer :: idope(8)
+logical :: hitcon, feasbl, done, pos
+real, parameter :: zero = 0.e0
+real, parameter :: one = 1.e0
+real, parameter :: two = 2.e0
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!     This is a companion subprogram to wnnls( ).
+!     The documentation for wnnls( ) has more complete
+!     usage instructions.
+!     Written by karen h. Haskell, Sandia Laboratories,
+!     with the help of R.J. Hanson, Sandia Laboratories.
+!     In addition to the parameters discussed in the prologue to
+!     subroutine wnnls, the following work arrays are used in
+!     subroutine wnlsm  (they are passed through the calling
+!     sequence from wnnls for purposes of variable dimensioning).
+!     Their contents will in general be of no interest to the user.
+!         ipivot(*)
+!            an array of length n.  upon completion it contains the
+!         pivoting information for the cols of w(*,*).
+!         itype(*)
+!            an array of length M which is used to keep track
+!         of the classification of the equations.  itype(i)=0
+!         denotes equation i as an equality constraint.
+!         itype(i)=1 Denotes equation i as a least squares
+!         equation.
+!         wd(*)
+!            an array of length n.  upon completion it contains the
+!         dual solution vector.
+!         h(*)
+!            an array of length n.  upon completion it contains the
+!         pivot scalars of the Householder transformations performed
+!         in the case KRANK.LT.L.
+!         scale(*)
+!            an array of length M which is used by the subroutine
+!         to store the diagonal matrix of weights.
+!         These are used to apply the modified Givens
+!         transformations.
+!         z(*),temp(*)
+!            working arrays of length n.
+!         d(*)
+!            an array of length n that contains the
+!         column scaling for the matrix (E).
+!                                       (A)
+!     Initialize-variables
+go to 180
+!     Perform initial triangularization in the submatrix
+!     corresponding to the unconstrained variables using
+!     the procedure initially-triangularize.
+10 go to 280
+!     Perform wnnls algorithm using the following steps.
+!     Until(done)
+!        compute-search-direction-and-feasible-point
+!        when (hitcon) add-constraints
+!        ELSE PERFORM-MULTIPLIER-TEST-AND-DROP-A-CONSTRAINT
+!        fin
+!     compute-final-solution
+20 if (done) go to 80
+go to 300
+!     Compute-search-direction-and-feasible-point
+30 if (.not.(hitcon)) go to 50
+go to 370
+!     When (hitcon) add-constraints
+50 go to 640
+!     ELSE PERFORM-MULTIPLIER-TEST-AND-DROP-A-CONSTRAINT
+80 go to 1000
+!     Compute-final-solution
+100 continue
+!     To process-option-vector
+fac = 1.e-4
+!     The nominal tolerance used in the code,
+tau = sqrt(srelpr)
+!     The nominal blow-up factor used in the code.
+blowup = tau
+!     The nominal column scaling used in the code is
+!     the identity scaling.
+d(1) = one
+call scopy(n, d, 0, d, 1)
+!     Define bound for number of options to change.
+nopt = 1000
+!     Define bound for positive value of link.
+nlink = 100000
+ntimes = 0
+last = 1
+link = prgopt(1)
+if (.not.(link <= 0 .or. link > nlink)) go to 110
+mode = 2
+return
+110 if (.not.(link > 1)) go to 160
+ntimes = ntimes + 1
+if (.not.(ntimes > nopt)) go to 120
+mode = 2
+return
+120 key = prgopt(last + 1)
+if (.not.(key == 6 .and. prgopt(last + 2) /= zero)) go to 140
+do j = 1,n
+   t = snrm2(m,w(1,j),1)
+   if (t /= zero) t = one/t
+   d(j) = t
+end do
+140 if (key == 7) call scopy(n, prgopt(last + 2), 1, d, 1)
+if (key == 8) tau = max(srelpr,prgopt(last + 2))
+if (key == 9) blowup = max(srelpr,prgopt(last + 2))
+next = prgopt(link)
+if (.not.(next <= 0 .or. next > nlink)) go to 150
+mode = 2
+return
+150 last = link
+link = next
+go to 110
+160 do j = 1,n
+   call sscal(m, d(j), w(1,j), 1)
+end do
+go to 220
+!     To initialize-variables
+!     SRELPR is the precision for the machine being used.
+180 srelpr = spmpar(1)
+m = ma + mme
+me = mme
+mep1 = me + 1
+go to 100
+!     Process-option-vector
+220 done = .false.
+iter = 0
+itmax = 3*(n - l)
+mode = 0
+lp1 = l + 1
+nsoln = l
+nsp1 = nsoln + 1
+np1 = n + 1
+nm1 = n - 1
+l1 = min(m,l)
+!     Compute scale factor to apply to equal. Constraint equas.
+do j = 1,n
+   wd(j) = sasum(m,w(1,j),1)
+end do
+imax = isamax(n,wd,1)
+eanorm = wd(imax)
+bnorm = sasum(m,w(1,np1),1)
+alamda = eanorm/(srelpr*fac)
+!     Define scaling diag matrix for mod Givens usage and
+!     classify equation types.
+alsq = alamda**2
+do i = 1,m
+!     When EQU i is heavily weighted itype(i)=0, else itype(i)=1.
+   if (.not.(i <= me)) go to 240
+   t = alsq
+   itemp = 0
+   go to 250
+240 t = one
+   itemp = 1
+250 scale(i) = t
+   itype(i) = itemp
+end do
+!     Set the soln vector x(*) to zero and the col interchange
+!     matrix to the identity.
+x(1) = zero
+call scopy(n, x, 0, x, 1)
+do i = 1,n
+   ipivot(i) = i
+end do
+go to 10
+280 continue
+!     To initially-triangularize
+!     set first l comps. Of dual vector to zero because
+!     these correspond to the unconstrained variables.
+if (.not.(l > 0)) go to 290
+wd(1) = zero
+call scopy(l, wd, 0, wd, 1)
+!     The arrays idope(*) and dope(*) are used to pass
+!     information to wnlit().  This was done to avoid
+!     a long calling sequence or the use of common.
+290 idope(1) = me
+idope(2) = mep1
+idope(3) = 0
+idope(4) = 1
+idope(5) = nsoln
+idope(6) = 0
+idope(7) = 1
+idope(8) = l1
+dope(1) = alsq
+dope(2) = eanorm
+dope(3) = fac
+dope(4) = tau
+call wnlit(w, mdw, m, n, l, ipivot, itype, h, scale, rnorm, &
+   & idope, dope, done)
+me = idope(1)
+mep1 = idope(2)
+krank = idope(3)
+krp1 = idope(4)
+nsoln = idope(5)
+niv = idope(6)
+niv1 = idope(7)
+l1 = idope(8)
+go to 20
+300 continue
+!     To compute-search-direction-and-feasible-point
+!     solve the triangular system of currently non-active
+!     variables and store the solution in z(*).
+!     Solve-system
+igo958 = 310
+go to 1110
+!     Increment iteration counter and check against max. Number
+!     of iterations.
+310 iter = iter + 1
+if (.not.(iter > itmax)) go to 320
+mode = 1
+done = .true.
+!     Check to see if any constraints have become active.
+!     If so, calculate an interpolation factor so that all
+!     active constraints are removed from the basis.
+320 alpha = two
+hitcon = .false.
+if (.not.(l < nsoln)) go to 360
+do j = lp1,nsoln
+   zz = z(j)
+   if (.not.(zz <= zero)) go to 350
+   t = x(j)/(x(j) - zz)
+   if (.not.(t < alpha)) go to 330
+   alpha = t
+   jcon = j
+330 hitcon = .true.
+350 continue
+end do
+360 go to 30
+370 continue
+!     To add-constraints
+!     use computed alpha to interpolate between last
+!     feasible solution x(*) and current unconstrained
+!     (and infeasible) solution z(*).
+if (.not.(lp1 <= nsoln)) go to 390
+do j = lp1,nsoln
+   x(j) = x(j) + alpha*(z(j) - x(j))
+end do
+390 feasbl = .false.
+go to 410
+400 if (feasbl) go to 20
+!     Remove col JCON and shift cols JCON+1 through n to the
+!     left. Swap col JCON into the n-TH position.  This achieves
+!     upper Hessenberg form for the nonactive constraints and
+!     leaves an upper Hessenberg matrix to retriangularize.
+410 do i = 1,m
+   t = w(i,jcon)
+   call scopy(n - jcon, w(i,jcon + 1), mdw, w(i,jcon), mdw)
+   w(i,n) = t
+end do
+!     Update permuted index vector to reflect this shift and swap.
+itemp = ipivot(jcon)
+if (.not.(jcon < n)) go to 440
+do i = jcon,nm1
+   ipivot(i) = ipivot(i + 1)
+end do
+440 ipivot(n) = itemp
+!     Similarly repermute x(*) vector.
+call scopy(n - jcon, x(jcon + 1), 1, x(jcon), 1)
+x(n) = zero
+nsp1 = nsoln
+nsoln = nsoln - 1
+niv1 = niv
+niv = niv - 1
+!     Retriangularize upper Hessenberg matrix after adding constraints.
+j = jcon
+i = krank + jcon - l
+450 if (.not.(j <= nsoln)) go to 570
+if (.not.(itype(i) == 0 .and. itype(i + 1) == 0)) go to 470
+igo938 = 460
+go to 620
+!     (itype(i).EQ.0 .AND. itype(i+1).EQ.0) ZERO-IP1-TO-i-IN-COL-J
+460 go to 560
+470 if (.not.(itype(i) == 1 .and. itype(i + 1) == 1)) go to 490
+igo938 = 480
+go to 620
+!     (itype(i).EQ.1 .AND. itype(i+1).EQ.1) ZERO-IP1-TO-i-IN-COL-J
+480 go to 560
+490 if (.not.(itype(i) == 1 .and. itype(i + 1) == 0)) go to 510
+call sswap(np1, w(i,1), mdw, w(i + 1,1), mdw)
+call sswap(1, scale(i), 1, scale(i + 1), 1)
+itemp = itype(i + 1)
+itype(i + 1) = itype(i)
+itype(i) = itemp
+!     Swapped row was formerly a pivot elt., So it will
+!     be large enough to perform ELIM.
+igo938 = 500
+go to 620
+!     Zero-IP1-to-i-in-col-J
+500 go to 560
+510 if (.not.(itype(i) == 0 .and. itype(i + 1) == 1)) go to 550
+t = scale(i)*w(i,j)**2/alsq
+if (.not.(t > tau**2*eanorm**2)) go to 530
+igo938 = 520
+go to 620
+520 go to 540
+530 call sswap(np1, w(i,1), mdw, w(i + 1,1), mdw)
+call sswap(1, scale(i), 1, scale(i + 1), 1)
+itemp = itype(i + 1)
+itype(i + 1) = itype(i)
+itype(i) = itemp
+w(i + 1,j) = zero
+540 continue
+550 continue
+560 i = i + 1
+j = j + 1
+go to 450
+!     See if the remaining coeffs in the soln set are feasible.  They
+!     should be because of the way alpha was determined.  If any are
+!     infeasible it is due to roundoff error.  Any that are non-
+!     positive will be set to zero and removed from the soln set.
+570 if (.not.(lp1 <= nsoln)) go to 590
+do jcon = lp1,nsoln
+   if (x(jcon) <= zero) go to 600
+end do
+590 feasbl = .true.
+600 continue
+go to 400
+620 continue
+!     To zero-IP1-to-i-in-col-J
+if (.not.(w(i + 1,j) /= zero)) go to 630
+call srotmg(scale(i), scale(i + 1), w(i,j), w(i + 1,j), sparam)
+w(i + 1,j) = zero
+call srotm(np1 - j, w(i,j + 1), mdw, w(i + 1,j + 1), mdw, sparam)
+630 go to 1290
+!     To perform-multiplier-test-and-drop-A-constraint
+640 call scopy(nsoln, z, 1, x, 1)
+if (.not.(nsoln < n)) go to 650
+x(nsp1) = zero
+call scopy(n - nsoln, x(nsp1), 0, x(nsp1), 1)
+650 i = niv1
+660 if (.not.(i <= me)) go to 690
+!     Reclassify least squares eqations as equalities as
+!     necessary.
+if (.not.(itype(i) == 0)) go to 670
+i = i + 1
+go to 680
+670 call sswap(np1, w(i,1), mdw, w(me,1), mdw)
+call sswap(1, scale(i), 1, scale(me), 1)
+itemp = itype(i)
+itype(i) = itype(me)
+itype(me) = itemp
+mep1 = me
+me = me - 1
+680 go to 660
+!     Form inner product vector wd(*) of dual coeffs.
+690 if (.not.(nsp1 <= n)) go to 730
+do j = nsp1,n
+   sm = zero
+   if (.not.(nsoln < m)) go to 710
+   do i = nsp1,m
+      sm = sm + scale(i)*w(i,j)*w(i,np1)
+   end do
+710 wd(j) = sm
+end do
+730 go to 750
+740 if (pos .or. done) go to 970
+!     Find J such that wd(J)=WMAX is maximum.  This determines
+!     that the incoming col J will reduce the residual vector
+!     and be positive.
+750 wmax = zero
+iwmax = nsp1
+if (.not.(nsp1 <= n)) go to 780
+do j = nsp1,n
+   if (.not.(wd(j) > wmax)) go to 760
+   wmax = wd(j)
+   iwmax = j
+760 continue
+end do
+780 if (.not.(wmax <= zero)) go to 790
+done = .true.
+go to 960
+!     Set dual COEFF to zero for incoming col.
+790 wd(iwmax) = zero
+!     WMAX .GT. zero, so okay to move col IWMAX to soln set.
+!     Perform transformation to retriangularize, and test
+!     for near linear dependence.
+!     Swap col IWMAX into NSOLN-TH position to maintain upper
+!     Hessenberg form of adjacent cols, and add new col to
+!     triangular decomposition.
+nsoln = nsp1
+nsp1 = nsoln + 1
+niv = niv1
+niv1 = niv + 1
+if (.not.(nsoln /= iwmax)) go to 800
+call sswap(m, w(1,nsoln), 1, w(1,iwmax), 1)
+wd(iwmax) = wd(nsoln)
+wd(nsoln) = zero
+itemp = ipivot(nsoln)
+ipivot(nsoln) = ipivot(iwmax)
+ipivot(iwmax) = itemp
+!     Reduce col NSOLN so that the matrix of nonactive
+!     constraints variables is triangular.
+800 j = m
+810 if (.not.(j > niv)) go to 870
+jm1 = j - 1
+jp = jm1
+!     When operating near the me line, test to see if the pivot elt.
+!     Is near zero.  If so, use the largest elt. Above it as the pivot.
+!     This is to maintain the sharp interface between weighted and
+!     non-weighted rows in all cases.
+if (.not.(j == mep1)) go to 850
+imax = me
+amax = scale(me)*w(me,nsoln)**2
+820 if (.not.(jp >= niv)) go to 840
+t = scale(jp)*w(jp,nsoln)**2
+if (.not.(t > amax)) go to 830
+imax = jp
+amax = t
+830 jp = jp - 1
+go to 820
+840 jp = imax
+850 if (.not.(w(j,nsoln) /= zero)) go to 860
+call srotmg(scale(jp), scale(j), w(jp,nsoln), w(j,nsoln), sparam)
+w(j,nsoln) = zero
+call srotm(np1 - nsoln, w(jp,nsp1), mdw, w(j,nsp1), mdw, sparam)
+860 j = jm1
+go to 810
+!     Solve for z(NSOLN)=Proposed new value for x(NSOLN).
+!     Test if this is nonpositive or too large.
+!     If this was true or if the pivot term was zero reject
+!     the col as dependent.
+870 if (.not.(w(niv,nsoln) /= zero)) go to 890
+isol = niv
+igo897 = 880
+go to 980
+!     Test-proposed-new-component
+880 go to 940
+890 if (.not.(niv <= me .and. w(mep1,nsoln) /= zero)) go to 920
+!     Try to add row MEP1 as an additional equality constraint.
+!     Check size of proposed new soln component.
+!     Reject it if it is too large.
+isol = mep1
+igo897 = 900
+go to 980
+!     Test-proposed-new-component
+900 if (.not.(pos)) go to 910
+!     Swap rows MEP1 and NIV, and scale factors for these rows.
+call sswap(np1, w(mep1,1), mdw, w(niv,1), mdw)
+call sswap(1, scale(mep1), 1, scale(niv), 1)
+itemp = itype(mep1)
+itype(mep1) = itype(niv)
+itype(niv) = itemp
+me = mep1
+mep1 = me + 1
+910 go to 930
+920 pos = .false.
+930 continue
+940 if (pos) go to 950
+nsp1 = nsoln
+nsoln = nsoln - 1
+niv1 = niv
+niv = niv - 1
+950 continue
+960 go to 740
+970 go to 20
+980 continue
+!     To test-proposed-new-component
+z2 = w(isol,np1)/w(isol,nsoln)
+z(nsoln) = z2
+pos = z2 > zero
+if (.not.(z2*eanorm >= bnorm .and. pos)) go to 990
+pos = .not.(blowup*z2*eanorm >= bnorm)
+990 go to 1280
+1000 continue
+!     To compute-final-solution
+!     solve system, store results in x(*).
+igo958 = 1010
+go to 1110
+!     Solve-system
+1010 call scopy(nsoln, z, 1, x, 1)
+!     Apply Householder transformations to x(*) if KRANK.LT.l
+if (.not.(0 < krank .and. krank < l)) go to 1030
+do i = 1,krank
+   call h12(2, i, krp1, l, w(i,1), mdw, h(i), x, 1, 1, 1)
+end do
+!     Fill in trailing zeroes for constrained variables not in soln.
+1030 if (.not.(nsoln < n)) go to 1040
+x(nsp1) = zero
+call scopy(n - nsoln, x(nsp1), 0, x(nsp1), 1)
+!     Repermute soln vector to natural order.
+1040 do i = 1,n
+   j = i
+1050 if (ipivot(j) == i) go to 1060
+   j = j + 1
+   go to 1050
+1060 ipivot(j) = ipivot(i)
+   ipivot(i) = j
+   call sswap(1, x(j), 1, x(i), 1)
+end do
+!     Rescale the soln using the col scaling.
+do j = 1,n
+   x(j) = x(j)*d(j)
+end do
+if (.not.(niv < m)) go to 1100
+do i = niv1,m
+   t = w(i,np1)
+   if (i <= me) t = t/alamda
+   t = (scale(i)*t)*t
+   rnorm = rnorm + t
+end do
+1100 rnorm = sqrt(rnorm)
+return
+!     To solve-system
+1110 continue
+if (.not.(done)) go to 1120
+isol = 1
+go to 1130
+1120 isol = lp1
+1130 if (.not.(nsoln >= isol)) go to 1270
+!     Copy RT. Hand side into temp vector to use overwriting method.
+call scopy(niv, w(1,np1), 1, temp, 1)
+do jj = isol,nsoln
+   j = nsoln - jj + isol
+   if (.not.(j > krank)) go to 1140
+   i = niv - jj + isol
+   go to 1150
+1140 i = j
+1150 if (.not.(j > krank .and. j <= l)) go to 1160
+   z(j) = zero
+   go to 1170
+1160 z(j) = temp(i)/w(i,j)
+   call saxpy(i - 1, -z(j), w(1,j), 1, temp, 1)
+1170 continue
+end do
+1270 select case (igo958)
+case (310)
+   go to 310
+case (1010)
+   go to 1010
+end select
+1280 select case (igo897)
+case (880)
+   go to 880
+case (900)
+   go to 900
+end select
+1290 select case (igo938)
+case (460)
+   go to 460
+case (480)
+   go to 480
+case (500)
+   go to 500
+case (520)
+   go to 520
+end select
+end subroutine wnlsm
 
