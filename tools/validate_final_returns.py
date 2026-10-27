@@ -12,7 +12,7 @@ from blktri_empty_factors import transform_fixed as correct_empty_factors
 from remove_unused_labels import transform as clean_unused_labels
 from source_comment_fixes import transform_fixed as fix_comments
 from goto_to_exit import transform as convert_exits
-from normalize_fixed_spacing import transform as normalize_spacing
+from structure_terminal_branches import finish_fixed
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -21,7 +21,7 @@ def main():
     original = fixed_stages()[3].data
     report = {}
     cleaned = transform_fixed(original, report)
-    if normalize_spacing(convert_exits(fix_comments(clean_unused_labels(correct_empty_factors(finish_remaining(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(cleaned)).data))))))) != (ROOT / 'nswc.f').read_bytes():
+    if finish_fixed(convert_exits(fix_comments(clean_unused_labels(correct_empty_factors(finish_remaining(modernize_arithmetic_if(modernize_deleted_loops(correct_workspace(cleaned)).data))))))) != (ROOT / 'nswc.f').read_bytes():
         raise ValueError('Maintained fixed-form source differs from final RETURN cleanup')
     if report != json.loads((ROOT / 'tools/final-return-cleanup.json').read_text()):
         raise ValueError('Fixed-form cleanup report does not reproduce')

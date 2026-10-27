@@ -507,14 +507,13 @@ complex, intent(in) :: z
 real :: nswc_ai_r4
 !     ----------
 nswc_ai_r4 = real(z)
-if (nswc_ai_r4 < 0) go to 10
-if (nswc_ai_r4 == 0) go to 20
-go to 30
-10 cflect = -z
-return
-20 cflect = cmplx(0.0, abs(aimag(z)))
-return
-30 cflect = z
+if (nswc_ai_r4 < 0) then
+   cflect = -z
+else if (nswc_ai_r4 == 0) then
+   cflect = cmplx(0.0, abs(aimag(z)))
+else
+   cflect = z
+end if
 end function cflect
 
 pure complex function km(k2)

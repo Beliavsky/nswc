@@ -2398,16 +2398,15 @@ C-----------------------------------------------------------------------
 C                   CUBE ROOT OF A REAL NUMBER
 C-----------------------------------------------------------------------
       NSWC_AI_R4 = X
-      IF (NSWC_AI_R4 .LT. 0) GO TO 30
-      IF (NSWC_AI_R4 .EQ. 0) GO TO 10
-      GO TO 20
-   10 CBRT = 0.0
-      RETURN
-   20 R = ALOG(X)/3.0
-      CBRT = EXP(R)
-      RETURN
-   30 R = ALOG(-X)/3.0
-      CBRT = -EXP(R)
+      IF (NSWC_AI_R4 .LT. 0) THEN
+         R = ALOG(-X)/3.0
+         CBRT = -EXP(R)
+      ELSE IF (NSWC_AI_R4 .EQ. 0) THEN
+         CBRT = 0.0
+      ELSE
+         R = ALOG(X)/3.0
+         CBRT = EXP(R)
+      END IF
       END FUNCTION CBRT
 
       DOUBLE PRECISION FUNCTION DCBRT(X)
@@ -2419,16 +2418,15 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION :: R
       DOUBLE PRECISION :: NSWC_AI_R8
       NSWC_AI_R8 = X
-      IF (NSWC_AI_R8 .LT. 0) GO TO 30
-      IF (NSWC_AI_R8 .EQ. 0) GO TO 10
-      GO TO 20
-   10 DCBRT = 0.D0
-      RETURN
-   20 R = DLOG(X)/3.D0
-      DCBRT = DEXP(R)
-      RETURN
-   30 R = DLOG(-X)/3.D0
-      DCBRT = -DEXP(R)
+      IF (NSWC_AI_R8 .LT. 0) THEN
+         R = DLOG(-X)/3.D0
+         DCBRT = -DEXP(R)
+      ELSE IF (NSWC_AI_R8 .EQ. 0) THEN
+         DCBRT = 0.D0
+      ELSE
+         R = DLOG(X)/3.D0
+         DCBRT = DEXP(R)
+      END IF
       END FUNCTION DCBRT
 
       FUNCTION ARTNQ(Y,X)
@@ -21191,14 +21189,13 @@ C---------------------------------------------------------
       REAL :: NSWC_AI_R4
 C     ----------
       NSWC_AI_R4 = REAL(Z)
-      IF (NSWC_AI_R4 .LT. 0) GO TO 10
-      IF (NSWC_AI_R4 .EQ. 0) GO TO 20
-      GO TO 30
-   10 CFLECT = -Z
-      RETURN
-   20 CFLECT = CMPLX(0.0, ABS(AIMAG(Z)))
-      RETURN
-   30 CFLECT = Z
+      IF (NSWC_AI_R4 .LT. 0) THEN
+         CFLECT = -Z
+      ELSE IF (NSWC_AI_R4 .EQ. 0) THEN
+         CFLECT = CMPLX(0.0, ABS(AIMAG(Z)))
+      ELSE
+         CFLECT = Z
+      END IF
       END FUNCTION CFLECT
 
       COMPLEX FUNCTION KM(K2)

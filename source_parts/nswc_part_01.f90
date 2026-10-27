@@ -2391,16 +2391,15 @@ real :: r, nswc_ai_r4
 !                   Cube root of a real number
 !-----------------------------------------------------------------------
 nswc_ai_r4 = x
-if (nswc_ai_r4 < 0) go to 30
-if (nswc_ai_r4 == 0) go to 10
-go to 20
-10 cbrt = 0.0
-return
-20 r = log(x)/3.0
-cbrt = exp(r)
-return
-30 r = log(-x)/3.0
-cbrt = -exp(r)
+if (nswc_ai_r4 < 0) then
+   r = log(-x)/3.0
+   cbrt = -exp(r)
+else if (nswc_ai_r4 == 0) then
+   cbrt = 0.0
+else
+   r = log(x)/3.0
+   cbrt = exp(r)
+end if
 end function cbrt
 
 pure elemental double precision function dcbrt(x)
@@ -2411,16 +2410,15 @@ implicit none
 double precision, intent(in) :: x
 double precision :: r, nswc_ai_r8
 nswc_ai_r8 = x
-if (nswc_ai_r8 < 0) go to 30
-if (nswc_ai_r8 == 0) go to 10
-go to 20
-10 dcbrt = 0.d0
-return
-20 r = log(x)/3.d0
-dcbrt = exp(r)
-return
-30 r = log(-x)/3.d0
-dcbrt = -exp(r)
+if (nswc_ai_r8 < 0) then
+   r = log(-x)/3.d0
+   dcbrt = -exp(r)
+else if (nswc_ai_r8 == 0) then
+   dcbrt = 0.d0
+else
+   r = log(x)/3.d0
+   dcbrt = exp(r)
+end if
 end function dcbrt
 
 pure elemental function artnq(y,x)

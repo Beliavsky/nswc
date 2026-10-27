@@ -1,0 +1,908 @@
+{
+  "input_sha256": "8a674af9b727df6421319b033a9a184f65699d2dac5e7c2ce4d55d72b4b60de6",
+  "output_sha256": "17028912468a815e5ec3616830e71762a495f23853114fffc69f843b91ce030a",
+  "converted": [
+    {
+      "procedure": "CBRT",
+      "line": 2401,
+      "temporary": "NSWC_AI_R4",
+      "targets": [
+        30,
+        10,
+        20
+      ]
+    },
+    {
+      "procedure": "DCBRT",
+      "line": 2422,
+      "temporary": "NSWC_AI_R8",
+      "targets": [
+        30,
+        10,
+        20
+      ]
+    },
+    {
+      "procedure": "CFLECT",
+      "line": 21194,
+      "temporary": "NSWC_AI_R4",
+      "targets": [
+        10,
+        20,
+        30
+      ]
+    }
+  ],
+  "skipped": [
+    {
+      "procedure": "ARTNQ",
+      "line": 2440,
+      "reason": "branch contains more than assignments"
+    },
+    {
+      "procedure": "ARTNQ",
+      "line": 2446,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "ARTNQ",
+      "line": 2454,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DARTNQ",
+      "line": 2469,
+      "reason": "branch contains more than assignments"
+    },
+    {
+      "procedure": "DARTNQ",
+      "line": 2475,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DARTNQ",
+      "line": 2483,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DCSQRT",
+      "line": 2642,
+      "reason": "branch contains more than assignments"
+    },
+    {
+      "procedure": "PAREA",
+      "line": 4353,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "HC1",
+      "line": 4554,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "EXPLI",
+      "line": 8154,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "EXPLI",
+      "line": 8270,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "GAMMA",
+      "line": 9823,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "GAM1",
+      "line": 10036,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DGAMMA",
+      "line": 10412,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DGAM1",
+      "line": 10623,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DPSI",
+      "line": 11263,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "GRATIO",
+      "line": 12373,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "GRATIO",
+      "line": 12419,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "BESJ",
+      "line": 15948,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "BESJ",
+      "line": 15954,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "BESJ",
+      "line": 15958,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "BESJ",
+      "line": 16071,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "BESJ",
+      "line": 16084,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "BESI",
+      "line": 17849,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "BESI",
+      "line": 17856,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "BESI",
+      "line": 17860,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "BESI",
+      "line": 18002,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "BESI",
+      "line": 18015,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "VALR2",
+      "line": 23552,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "PKILL",
+      "line": 24324,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "PKILL",
+      "line": 24335,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "PKILL",
+      "line": 24339,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "QTCRT",
+      "line": 26627,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DQTCRT",
+      "line": 26761,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "ISWAP",
+      "line": 28526,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SROTMG",
+      "line": 28927,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SROTM",
+      "line": 28971,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SROTM",
+      "line": 29012,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DROTMG",
+      "line": 29172,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DROTM",
+      "line": 29219,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DROTM",
+      "line": 29260,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "BADD",
+      "line": 43655,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "BADD",
+      "line": 43700,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DBADD",
+      "line": 43792,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "DBADD",
+      "line": 43837,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "CBADD",
+      "line": 43929,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "CBADD",
+      "line": 43974,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "BSUBT",
+      "line": 44066,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "BSUBT",
+      "line": 44111,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DBSUBT",
+      "line": 44203,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "DBSUBT",
+      "line": 44248,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "CBSUBT",
+      "line": 44340,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "CBSUBT",
+      "line": 44385,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "NSPIV1",
+      "line": 49008,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "NSPIV1",
+      "line": 49041,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "NSPIV1",
+      "line": 49048,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "SPLU",
+      "line": 49471,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "SPLU",
+      "line": 49500,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SPLU",
+      "line": 49507,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "DNSPIV",
+      "line": 49752,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "DNSPIV",
+      "line": 49785,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DNSPIV",
+      "line": 49792,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "DSPLU",
+      "line": 50218,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "DSPLU",
+      "line": 50247,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DSPLU",
+      "line": 50254,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "CNSPIV",
+      "line": 50871,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "CNSPIV",
+      "line": 50904,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "CNSPIV",
+      "line": 50911,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "CSPLU",
+      "line": 51340,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "CSPLU",
+      "line": 51369,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "CSPLU",
+      "line": 51376,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "EIGV",
+      "line": 51501,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "EIGV1",
+      "line": 51539,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "HQR2",
+      "line": 52843,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DEIGV",
+      "line": 53010,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DHQR2",
+      "line": 54016,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "COMQR2",
+      "line": 56352,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DCMQR2",
+      "line": 57304,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "XL1",
+      "line": 57790,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "XL1",
+      "line": 57803,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "FMIN",
+      "line": 65536,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "FMIN",
+      "line": 65631,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 68542,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 68629,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 68642,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 68683,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 68701,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 68709,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 68819,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 68840,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 68871,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 69014,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 69042,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 69388,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 69472,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 69485,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 69526,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 69544,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 69552,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 69665,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 69686,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 69717,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 69876,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 69904,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 69974,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "ASSGN1",
+      "line": 70244,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SKNP1",
+      "line": 71129,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SKNP1",
+      "line": 71173,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SFFT",
+      "line": 73077,
+      "reason": "comment between branches requires review"
+    },
+    {
+      "procedure": "COSQF",
+      "line": 73671,
+      "reason": "branch falls through"
+    },
+    {
+      "procedure": "COSQB",
+      "line": 73752,
+      "reason": "branch contains more than assignments"
+    },
+    {
+      "procedure": "RADB2",
+      "line": 74115,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "RADB4",
+      "line": 74239,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "RADF2",
+      "line": 74716,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "RADF4",
+      "line": 74836,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "ADCHK",
+      "line": 76350,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "TRP",
+      "line": 77054,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "LTRP",
+      "line": 77097,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "LTRP",
+      "line": 77108,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "LTRP",
+      "line": 77124,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "LTRP",
+      "line": 77135,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "LTRP",
+      "line": 77199,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "LTRP",
+      "line": 77203,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "LTRP",
+      "line": 77207,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 77466,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "CBSPL",
+      "line": 77631,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "CBSPL",
+      "line": 77662,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SCOMP",
+      "line": 78026,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SCOMP",
+      "line": 78051,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "SCOMP1",
+      "line": 78110,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SCOMP1",
+      "line": 78140,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "SCOMP2",
+      "line": 78199,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SCOMP2",
+      "line": 78232,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "SEVAL",
+      "line": 78297,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SEVAL",
+      "line": 78326,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "SEVAL1",
+      "line": 78387,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SEVAL1",
+      "line": 78421,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "SEVAL2",
+      "line": 78482,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "SEVAL2",
+      "line": 78518,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "PSCMP",
+      "line": 78993,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "PSCMP",
+      "line": 79018,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "PSEVL",
+      "line": 79068,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "PSEVL",
+      "line": 79097,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "LOPCMP",
+      "line": 79308,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "LOPCMP",
+      "line": 79352,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "LOPDF",
+      "line": 79384,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "INTRVL",
+      "line": 80695,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "PPVAL",
+      "line": 81110,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "PPVAL",
+      "line": 81141,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "BANFAC",
+      "line": 81503,
+      "reason": "another statement references a branch label"
+    },
+    {
+      "procedure": "CSURF",
+      "line": 82862,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "CSURF",
+      "line": 82883,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "CSURF",
+      "line": 82926,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "CSURF",
+      "line": 82957,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "CSRF",
+      "line": 83024,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "CSRF",
+      "line": 83045,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "CSRF",
+      "line": 83084,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "CSRF",
+      "line": 83114,
+      "reason": "branches are not contiguous with dispatch"
+    },
+    {
+      "procedure": "SURF",
+      "line": 83248,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "MEVAL",
+      "line": 87398,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "DMEVAL",
+      "line": 88077,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 96132,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 96140,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 96151,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 96186,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "PDEDGE",
+      "line": 100905,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "PDEDGE",
+      "line": 100918,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "INDXB",
+      "line": 102516,
+      "reason": "another statement references a branch label"
+    },
+    {
+      "procedure": "PPADD",
+      "line": 103244,
+      "reason": "another statement references a branch label"
+    },
+    {
+      "procedure": "PPADD",
+      "line": 103261,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "PPADD",
+      "line": 103276,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "PPADD",
+      "line": 103296,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "PPADD",
+      "line": 103366,
+      "reason": "unsupported preceding statement"
+    },
+    {
+      "procedure": "BSRH",
+      "line": 103430,
+      "reason": "another statement references a branch label"
+    }
+  ]
+}
