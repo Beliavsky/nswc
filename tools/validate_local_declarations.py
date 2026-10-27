@@ -19,7 +19,7 @@ def main():
     if modern != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
         raise ValueError('External declaration coalescing differs from maintained source')
     for name, before, after in [('nswc.f90', original, combined),
-                              ('nswc_mod.f90', module_source(original, coalesce=False, modern_state=False), module_source(combined, modern_state=False))]:
+                              ('nswc_mod.f90', module_source(original, coalesce=False, modern_state=False, named_kinds=False), module_source(combined, modern_state=False, named_kinds=False))]:
         expected = modern if name == 'nswc.f90' else module_source(modern)
         if expected != (ROOT / name).read_text(encoding='ascii'):
             raise ValueError(f'{name}: generated source differs')

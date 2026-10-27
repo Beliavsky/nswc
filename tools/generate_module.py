@@ -18,13 +18,14 @@ from procedure_purity import MANIFEST, code_hash
 from coalesce_local_declarations import transform as coalesce_locals
 from remove_final_returns import transform_free as remove_final_returns
 from storage_modernization import module_state
+from module_kinds import transform as named_module_kinds
 
 ROOT = Path(__file__).resolve().parents[1]
 BINDINGS = Path(__file__).with_name('module-bindings.json')
 INTRINSIC_ALIASES = {'DGAMMA': 'GAMMA'}
 
 
-def module_source(text, calls=None, intrinsics=None, coalesce=True, modern_state=True):
+def module_source(text, calls=None, intrinsics=None, coalesce=True, modern_state=True, named_kinds=True):
     if calls is None:
         calls = json.loads(MANIFEST.read_text())['calls']
         review = json.loads(BINDINGS.read_text())
@@ -139,7 +140,8 @@ def module_source(text, calls=None, intrinsics=None, coalesce=True, modern_state
             ''.join('public :: ' + n.lower() + '\n' for n, _, _ in spans) +
             'contains\n' + ''.join(renamed) + 'end module nswc_mod\n')
     generated = remove_final_returns(coalesce_locals(generated) if coalesce else generated)
-    return module_state(generated) if modern_state else generated
+    generated = module_state(generated) if modern_state else generated
+    return named_module_kinds(generated) if named_kinds else generated
 
 
 def review_intrinsics(text, compiler):

@@ -31,6 +31,21 @@ have different linker names, so `nswc_mod.o` cannot replace `nswc.o` in a progra
 that still uses external declarations. Change those callers to `use nswc_mod`.
 Choose one implementation per executable.
 
+The module uses private named kinds defined once:
+
+```fortran
+integer, parameter :: nswc_sp = kind(0.0), nswc_dp = kind(0.0d0)
+```
+
+Default real and complex declarations use `real(nswc_sp)` and
+`complex(nswc_sp)`; double precision declarations use `real(nswc_dp)`.
+Function results and callback interfaces use the same kinds. The prefixed
+names avoid existing local variables named `sp` and `dp`. These definitions
+retain the compiler's default and double precision choices, including its
+precision options. Literal constants and intrinsic conversion calls retain
+their original kinds. The external `nswc.f90`, fixed-form sources and optional
+external interface module retain their existing declarations.
+
 The module uses private saved variables instead of COMMON blocks. Programs or
 callbacks that access legacy COMMON directly should use the external
 implementation. Packed `RSCO`/`SVCO` state layouts are preserved. This change
@@ -79,6 +94,10 @@ procedure interfaces. These declarations retain implicit callback interfaces.
 The storage pass also replaces COMMON references and explicitly packs/unpacks
 ODE state. Argument order, types, shapes, intents and pure/elemental attributes
 are preserved.
+The final `tools/module_kinds.py` pass adds named kinds after the storage pass;
+callback interface bodies receive IMPORT statements where needed. Intermediate
+generation used by historical storage/declaration checks can disable this pass
+with `named_kinds=False`.
 Machine constants are unchanged.
 
 Dummy callback interfaces retain the historical contracts in the implementation.

@@ -2,6 +2,7 @@
 module nswc_mod
 implicit none
 private
+integer, parameter :: nswc_sp = kind(0.0), nswc_dp = kind(0.0d0)
 public :: ipmpar
 public :: mach
 public :: radix
@@ -1064,42 +1065,42 @@ public :: tran
 public :: dtran
 public :: rmk1
 public :: drmk1
-real, save, volatile :: nswc_state_spdata_d1
-real, save, volatile :: nswc_state_spdata_d2
-double precision, save, volatile :: nswc_state_dpdata_d1
-double precision, save, volatile :: nswc_state_dpdata_d2
-double precision, save :: nswc_state_global_sr
-double precision, save :: nswc_state_global_si
-double precision, save :: nswc_state_global_u
-double precision, save :: nswc_state_global_v
-double precision, save :: nswc_state_global_a
-double precision, save :: nswc_state_global_b
-double precision, save :: nswc_state_global_c
-double precision, save :: nswc_state_global_d
-double precision, save :: nswc_state_global_a1
-double precision, save :: nswc_state_global_a2
-double precision, save :: nswc_state_global_a3
-double precision, save :: nswc_state_global_a6
-double precision, save :: nswc_state_global_a7
-double precision, save :: nswc_state_global_e
-double precision, save :: nswc_state_global_f
-double precision, save :: nswc_state_global_g
-double precision, save :: nswc_state_global_h
-double precision, save :: nswc_state_global_szr
-double precision, save :: nswc_state_global_szi
-double precision, save :: nswc_state_global_lzr
-double precision, save :: nswc_state_global_lzi
-real, save :: nswc_state_global_eta
-real, save :: nswc_state_global_are
-real, save :: nswc_state_global_mre
-double precision, save :: nswc_state_inputz_a
-double precision, save :: nswc_state_inputz_b
-double precision, save :: nswc_state_inputz_accur
-double precision, save :: nswc_state_inputz_norm
-double precision, save :: nswc_state_inputz_charf
-double precision, save :: nswc_state_inputz_xbreak(20)
-double precision, save :: nswc_state_inputz_bleft(20)
-double precision, save :: nswc_state_inputz_bright(20)
+real(nswc_sp), save, volatile :: nswc_state_spdata_d1
+real(nswc_sp), save, volatile :: nswc_state_spdata_d2
+real(nswc_dp), save, volatile :: nswc_state_dpdata_d1
+real(nswc_dp), save, volatile :: nswc_state_dpdata_d2
+real(nswc_dp), save :: nswc_state_global_sr
+real(nswc_dp), save :: nswc_state_global_si
+real(nswc_dp), save :: nswc_state_global_u
+real(nswc_dp), save :: nswc_state_global_v
+real(nswc_dp), save :: nswc_state_global_a
+real(nswc_dp), save :: nswc_state_global_b
+real(nswc_dp), save :: nswc_state_global_c
+real(nswc_dp), save :: nswc_state_global_d
+real(nswc_dp), save :: nswc_state_global_a1
+real(nswc_dp), save :: nswc_state_global_a2
+real(nswc_dp), save :: nswc_state_global_a3
+real(nswc_dp), save :: nswc_state_global_a6
+real(nswc_dp), save :: nswc_state_global_a7
+real(nswc_dp), save :: nswc_state_global_e
+real(nswc_dp), save :: nswc_state_global_f
+real(nswc_dp), save :: nswc_state_global_g
+real(nswc_dp), save :: nswc_state_global_h
+real(nswc_dp), save :: nswc_state_global_szr
+real(nswc_dp), save :: nswc_state_global_szi
+real(nswc_dp), save :: nswc_state_global_lzr
+real(nswc_dp), save :: nswc_state_global_lzi
+real(nswc_sp), save :: nswc_state_global_eta
+real(nswc_sp), save :: nswc_state_global_are
+real(nswc_sp), save :: nswc_state_global_mre
+real(nswc_dp), save :: nswc_state_inputz_a
+real(nswc_dp), save :: nswc_state_inputz_b
+real(nswc_dp), save :: nswc_state_inputz_accur
+real(nswc_dp), save :: nswc_state_inputz_norm
+real(nswc_dp), save :: nswc_state_inputz_charf
+real(nswc_dp), save :: nswc_state_inputz_xbreak(20)
+real(nswc_dp), save :: nswc_state_inputz_bleft(20)
+real(nswc_dp), save :: nswc_state_inputz_bright(20)
 integer, save :: nswc_state_inputz_dbreak(20)
 integer, save :: nswc_state_inputz_degree
 integer, save :: nswc_state_inputz_smooth
@@ -1108,15 +1109,15 @@ integer, save :: nswc_state_inputz_edist
 integer, save :: nswc_state_inputz_nbreak
 integer, save :: nswc_state_inputz_kntdim
 integer, save :: nswc_state_inputz_npardm
-double precision, save :: nswc_state_resulz_error
+real(nswc_dp), save :: nswc_state_resulz_error
 integer, save :: nswc_state_resulz_knots
-double precision, save :: nswc_state_kontrl_dsctol
-double precision, save :: nswc_state_kontrl_errori
-double precision, save :: nswc_state_kontrl_xleft(50)
-double precision, save :: nswc_state_kontrl_xright(50)
+real(nswc_dp), save :: nswc_state_kontrl_dsctol
+real(nswc_dp), save :: nswc_state_kontrl_errori
+real(nswc_dp), save :: nswc_state_kontrl_xleft(50)
+real(nswc_dp), save :: nswc_state_kontrl_xright(50)
 integer, save :: nswc_state_kontrl_break
 integer, save :: nswc_state_kontrl_both
-double precision, save :: nswc_state_kontrl_factor(20)
+real(nswc_dp), save :: nswc_state_kontrl_factor(20)
 integer, save :: nswc_state_kontrl_ibreak
 integer, save :: nswc_state_kontrl_interp
 integer, save :: nswc_state_kontrl_left
@@ -1128,45 +1129,45 @@ integer, save :: nswc_state_kontrl_npar
 integer, save :: nswc_state_kontrl_nstack
 integer, save :: nswc_state_kontrl_right
 logical, save :: nswc_state_kontrl_discrd
-double precision, save :: nswc_state_kontrl_buffer
-double precision, save :: nswc_state_comdif_ddtemp(20,20)
-double precision, save :: nswc_state_comdif_fintrp(18)
-double precision, save :: nswc_state_comdif_fleft(10)
-double precision, save :: nswc_state_comdif_fright(10)
-double precision, save :: nswc_state_comdif_xdd(20)
-double precision, save :: nswc_state_comdif_xintrp(18)
+real(nswc_dp), save :: nswc_state_kontrl_buffer
+real(nswc_dp), save :: nswc_state_comdif_ddtemp(20,20)
+real(nswc_dp), save :: nswc_state_comdif_fintrp(18)
+real(nswc_dp), save :: nswc_state_comdif_fleft(10)
+real(nswc_dp), save :: nswc_state_comdif_fright(10)
+real(nswc_dp), save :: nswc_state_comdif_xdd(20)
+real(nswc_dp), save :: nswc_state_comdif_xintrp(18)
 integer, save :: nswc_state_comdif_leftx
 integer, save :: nswc_state_comdif_nintrp
 integer, save :: nswc_state_comdif_rightx
-double precision, save :: nswc_state_cubsta_tans
-double precision, save :: nswc_state_cubsta_terr
-real, save, volatile :: nswc_state_cubatb_s
-real, save, volatile :: nswc_state_cubatb_t
-real, save :: nswc_state_xxinfo_r1
-real, save :: nswc_state_xxinfo_r2
-real, save :: nswc_state_xxinfo_finlep
-real, save :: nswc_state_xxinfo_normk
+real(nswc_dp), save :: nswc_state_cubsta_tans
+real(nswc_dp), save :: nswc_state_cubsta_terr
+real(nswc_sp), save, volatile :: nswc_state_cubatb_s
+real(nswc_sp), save, volatile :: nswc_state_cubatb_t
+real(nswc_sp), save :: nswc_state_xxinfo_r1
+real(nswc_sp), save :: nswc_state_xxinfo_r2
+real(nswc_sp), save :: nswc_state_xxinfo_finlep
+real(nswc_sp), save :: nswc_state_xxinfo_normk
 integer, save :: nswc_state_xxinfo_nfinal
 integer, save :: nswc_state_xxinfo_mfinal
-real, save :: nswc_state_xxlin_elinsy
-real, save :: nswc_state_xxlin_relrsd
+real(nswc_sp), save :: nswc_state_xxlin_elinsy
+real(nswc_sp), save :: nswc_state_xxlin_relrsd
 integer, save :: nswc_state_xxlin_pivot(128)
-real, save :: nswc_state_debdf1_told
-real, save :: nswc_state_debdf1_conit
-real, save :: nswc_state_debdf1_crate
-real, save :: nswc_state_debdf1_el(13)
-real, save :: nswc_state_debdf1_elco(13,12)
-real, save :: nswc_state_debdf1_hold
-real, save :: nswc_state_debdf1_rc
-real, save :: nswc_state_debdf1_rmax
-real, save :: nswc_state_debdf1_tesco(3,12)
-real, save :: nswc_state_debdf1_el0
-real, save :: nswc_state_debdf1_h
-real, save :: nswc_state_debdf1_hmin
-real, save :: nswc_state_debdf1_hmxi
-real, save :: nswc_state_debdf1_hu
-real, save :: nswc_state_debdf1_tn
-real, save :: nswc_state_debdf1_u
+real(nswc_sp), save :: nswc_state_debdf1_told
+real(nswc_sp), save :: nswc_state_debdf1_conit
+real(nswc_sp), save :: nswc_state_debdf1_crate
+real(nswc_sp), save :: nswc_state_debdf1_el(13)
+real(nswc_sp), save :: nswc_state_debdf1_elco(13,12)
+real(nswc_sp), save :: nswc_state_debdf1_hold
+real(nswc_sp), save :: nswc_state_debdf1_rc
+real(nswc_sp), save :: nswc_state_debdf1_rmax
+real(nswc_sp), save :: nswc_state_debdf1_tesco(3,12)
+real(nswc_sp), save :: nswc_state_debdf1_el0
+real(nswc_sp), save :: nswc_state_debdf1_h
+real(nswc_sp), save :: nswc_state_debdf1_hmin
+real(nswc_sp), save :: nswc_state_debdf1_hmxi
+real(nswc_sp), save :: nswc_state_debdf1_hu
+real(nswc_sp), save :: nswc_state_debdf1_tn
+real(nswc_sp), save :: nswc_state_debdf1_u
 integer, save :: nswc_state_debdf1_iquit
 integer, save :: nswc_state_debdf1_init
 integer, save :: nswc_state_debdf1_iyh
@@ -1204,26 +1205,26 @@ integer, save :: nswc_state_splp_kswx
 integer, save :: nswc_state_splp_kswy
 integer, save :: nswc_state_splp_k
 integer, save :: nswc_state_splp_l
-real, save :: nswc_state_splp_ait
-real, save :: nswc_state_splp_bit
-real, save :: nswc_state_splp_cit
-real, save :: nswc_state_splp_dit
+real(nswc_sp), save :: nswc_state_splp_ait
+real(nswc_sp), save :: nswc_state_splp_bit
+real(nswc_sp), save :: nswc_state_splp_cit
+real(nswc_sp), save :: nswc_state_splp_dit
 integer, save :: nswc_state_splp_mit
 integer, save :: nswc_state_splp_nit
 integer, save :: nswc_state_splp_is
 integer, save :: nswc_state_splp_ms
 integer, save :: nswc_state_splp_js
 integer, save :: nswc_state_splp_ns
-real, save :: nswc_state_splp_dlx
-real, save :: nswc_state_splp_dly
-real, save :: nswc_state_splp_tdlx3
-real, save :: nswc_state_splp_tdly3
-real, save :: nswc_state_splp_dlx4
-real, save :: nswc_state_splp_dly4
+real(nswc_sp), save :: nswc_state_splp_dlx
+real(nswc_sp), save :: nswc_state_splp_dly
+real(nswc_sp), save :: nswc_state_splp_tdlx3
+real(nswc_sp), save :: nswc_state_splp_tdly3
+real(nswc_sp), save :: nswc_state_splp_dlx4
+real(nswc_sp), save :: nswc_state_splp_dly4
 integer, save :: nswc_state_cblkt_npp
 integer, save :: nswc_state_cblkt_k
-real, save :: nswc_state_cblkt_eps
-real, save :: nswc_state_cblkt_cnv
+real(nswc_sp), save :: nswc_state_cblkt_eps
+real(nswc_sp), save :: nswc_state_cblkt_cnv
 integer, save :: nswc_state_cblkt_nm
 integer, save :: nswc_state_cblkt_ncmplx
 integer, save :: nswc_state_cblkt_ik
@@ -1577,12 +1578,12 @@ subroutine mach(mo, n, ibeta, imax, idmax, imach, rmach, dmach)
 implicit none
 integer :: ibeta
 integer, intent(in) :: idmax, imax, mo, n
-real, intent(inout) :: rmach(3)
-double precision, intent(inout) :: dmach(3)
+real(nswc_sp), intent(inout) :: rmach(3)
+real(nswc_dp), intent(inout) :: dmach(3)
 integer, intent(inout) :: imach(10)
 integer :: m, maxexp, minexp, n0
-real :: eps, xint, xmax, xmin
-double precision :: deps, dint, dmin, dmax
+real(nswc_sp) :: eps, xint, xmax, xmin
+real(nswc_dp) :: deps, dint, dmin, dmax
 !-----------------------------------------------------------------------
 !-----------------------------------------------------------------------
 !          Computation of the environmental constants for the
@@ -1791,7 +1792,7 @@ end subroutine mach
 subroutine radix(ibeta)
 implicit none
 integer :: ibeta
-real :: a, b, one, y
+real(nswc_sp) :: a, b, one, y
 !-----------------------------------------------------------------------
 !     Set  ibeta = The radix of the floating point arithmetic
 !-----------------------------------------------------------------------
@@ -1812,9 +1813,9 @@ subroutine mach1(n, ibeta, m, minexp, maxexp, eps, xint, &
    & xmin, xmax)
 implicit none
 integer :: ibeta, m, maxexp, minexp, n
-real :: eps, xint, xmin, xmax
+real(nswc_sp) :: eps, xint, xmin, xmax
 integer :: j, k, km, l
-real :: b, b2, binv, bm1, one, p, q, t, x, z, zero
+real(nswc_sp) :: b, b2, binv, bm1, one, p, q, t, x, z, zero
 !-----------------------------------------------------------------------
 !                 Computation of the environmental constants
 !             for the single precision floating point arithmetic
@@ -2024,7 +2025,7 @@ end subroutine mach1
 
 subroutine store2(a, b)
 implicit none
-real :: a, b
+real(nswc_sp) :: a, b
 !-----------------------------------------------------------------------
 !     Storage of single precision information into memory
 !-----------------------------------------------------------------------
@@ -2036,9 +2037,9 @@ subroutine mach2(n, ibeta, m, minexp, maxexp, eps, xint, &
    & xmin, xmax)
 implicit none
 integer :: ibeta, m, maxexp, minexp, n
-double precision :: eps, xint, xmin, xmax
+real(nswc_dp) :: eps, xint, xmin, xmax
 integer :: j, k, km, l
-double precision :: b, b2, binv, bm1, one, p, q, t, x, z, zero
+real(nswc_dp) :: b, b2, binv, bm1, one, p, q, t, x, z, zero
 !-----------------------------------------------------------------------
 !                 Computation of the environmental constants
 !             for the double precision floating point arithmetic
@@ -2251,16 +2252,16 @@ implicit none
 !-----------------------------------------------------------------------
 !     Storage of double precision information into memory
 !-----------------------------------------------------------------------
-double precision :: a, b
+real(nswc_dp) :: a, b
 nswc_state_dpdata_d1 = a
 nswc_state_dpdata_d2 = b
 end subroutine dstor2
 
-pure elemental real function spmpar(i)
+pure elemental real(nswc_sp) function spmpar(i)
 implicit none
 integer, intent(in) :: i
 integer :: ibeta, m, emin, emax
-real :: b, binv, bm1, one, w, z
+real(nswc_sp) :: b, binv, bm1, one, w, z
 !-----------------------------------------------------------------------
 !     spmpar provides the single precision machine constants for
 !     the computer being used. It is assumed that the argument
@@ -2301,11 +2302,11 @@ z = b**(emax - 2)
 spmpar = ((w * z) * b) * b
 end function spmpar
 
-pure elemental double precision function dpmpar(i)
+pure elemental real(nswc_dp) function dpmpar(i)
 implicit none
 integer, intent(in) :: i
 integer :: ibeta, m, emin, emax
-double precision :: b, binv, bm1, one, w, z
+real(nswc_dp) :: b, binv, bm1, one, w, z
 !-----------------------------------------------------------------------
 !     dpmpar provides the double precision machine constants for
 !     the computer being used. It is assumed that the argument
@@ -2346,11 +2347,11 @@ z = b**(emax - 2)
 dpmpar = ((w * z) * b) * b
 end function dpmpar
 
-pure real function epsln(l)
+pure real(nswc_sp) function epsln(l)
 implicit none
 integer, intent(in) :: l
 integer :: m, b
-real :: lnb
+real(nswc_sp) :: lnb
 !--------------------------------------------------------------------
 !     The evaluation of LN(EPS) where eps is the smallest number
 !     such that 1.0 + eps .GT. 1.0 .  l is a dummy argument.
@@ -2370,11 +2371,11 @@ go to 50
 epsln = m * lnb
 end function epsln
 
-pure elemental double precision function depsln(l)
+pure elemental real(nswc_dp) function depsln(l)
 implicit none
 integer, intent(in) :: l
 integer :: b
-double precision :: db, lnb, m
+real(nswc_dp) :: db, lnb, m
 !--------------------------------------------------------------------
 !     The evaluation of LN(EPS) where eps is the smallest number
 !     such that 1.D0 + eps .GT. 1.D0 .  l is a dummy argument.
@@ -2395,11 +2396,11 @@ lnb = log(db)
 depsln = m * lnb
 end function depsln
 
-pure elemental real function exparg(l)
+pure elemental real(nswc_sp) function exparg(l)
 implicit none
 integer, intent(in) :: l
 integer :: m, b
-real :: lnb
+real(nswc_sp) :: lnb
 !--------------------------------------------------------------------
 !     If l = 0 Then  exparg(l) = The largest positive W for which
 !     exp(W) can be computed.
@@ -2426,11 +2427,11 @@ return
 exparg = 0.99999 * (m * lnb)
 end function exparg
 
-pure elemental double precision function dxparg(l)
+pure elemental real(nswc_dp) function dxparg(l)
 implicit none
 integer, intent(in) :: l
 integer :: m, b
-double precision :: db, lnb
+real(nswc_dp) :: db, lnb
 !--------------------------------------------------------------------
 !     If l = 0 Then  dxparg(l) = The largest positive W for which
 !     dexp(W) can be computed.
@@ -2502,9 +2503,9 @@ end subroutine ishell
 pure subroutine shell(a, n)
 implicit none
 integer, intent(in) :: n
-real, intent(inout) :: a(n)
+real(nswc_sp), intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
-real :: s
+real(nswc_sp) :: s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
@@ -2544,9 +2545,9 @@ end subroutine shell
 pure subroutine shell2(a, b, n)
 implicit none
 integer, intent(in) :: n
-real, intent(inout) :: a(n), b(n)
+real(nswc_sp), intent(inout) :: a(n), b(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
-real :: s, t
+real(nswc_sp) :: s, t
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
@@ -2590,9 +2591,9 @@ end subroutine shell2
 pure subroutine rsort(a, n)
 implicit none
 integer, intent(in) :: n
-real, intent(inout) :: a(n)
+real(nswc_sp), intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
-real :: s
+real(nswc_sp) :: s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
@@ -2632,10 +2633,10 @@ end subroutine rsort
 pure subroutine risort(a, m, n)
 implicit none
 integer, intent(in) :: n
-real, intent(inout) :: a(n)
+real(nswc_sp), intent(inout) :: a(n)
 integer, intent(inout) :: m(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll, t
-real :: s
+real(nswc_sp) :: s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
@@ -2679,9 +2680,9 @@ end subroutine risort
 pure subroutine rrsort(a, b, n)
 implicit none
 integer, intent(in) :: n
-real, intent(inout) :: a(n), b(n)
+real(nswc_sp), intent(inout) :: a(n), b(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
-real :: s, t
+real(nswc_sp) :: s, t
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
@@ -2725,9 +2726,9 @@ end subroutine rrsort
 pure subroutine dsort(a, n)
 implicit none
 integer, intent(in) :: n
-double precision, intent(inout) :: a(n)
+real(nswc_dp), intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
-double precision :: s
+real(nswc_dp) :: s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
@@ -2767,10 +2768,10 @@ end subroutine dsort
 pure subroutine disort(a, m, n)
 implicit none
 integer, intent(in) :: n
-double precision, intent(inout) :: a(n)
+real(nswc_dp), intent(inout) :: a(n)
 integer, intent(inout) :: m(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll, t
-double precision :: s
+real(nswc_dp) :: s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
@@ -2814,9 +2815,9 @@ end subroutine disort
 pure subroutine ddsort(a, b, n)
 implicit none
 integer, intent(in) :: n
-double precision, intent(inout) :: a(n), b(n)
+real(nswc_dp), intent(inout) :: a(n), b(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
-double precision :: s, t
+real(nswc_dp) :: s, t
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
@@ -2860,9 +2861,9 @@ end subroutine ddsort
 pure subroutine aord(a, n)
 implicit none
 integer, intent(in) :: n
-real, intent(inout) :: a(n)
+real(nswc_sp), intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
-real :: s
+real(nswc_sp) :: s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     The aord sorting procedure is used to reorder the elements of
@@ -2903,9 +2904,9 @@ end subroutine aord
 pure subroutine daord(a, n)
 implicit none
 integer, intent(in) :: n
-double precision, intent(inout) :: a(n)
+real(nswc_dp), intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
-double precision :: s
+real(nswc_dp) :: s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
 !     daord is used to reorder the elements of the double precision
@@ -2948,7 +2949,7 @@ implicit none
 integer, intent(in) :: n, x(n)
 integer, intent(inout) :: ind(n)
 integer :: iu(21), il(21), m, i, j, k, l, ij, it, itt, indx, t
-real :: r
+real(nswc_sp) :: r
 !***********************************************************
 !                                               Robert Renka
 !                                       Oak Ridge Natl. Lab.
@@ -3099,9 +3100,9 @@ pure subroutine qsortr(x, ind, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ind(n)
-real, intent(in) :: x(n)
+real(nswc_sp), intent(in) :: x(n)
 integer :: iu(21), il(21), m, i, j, k, l, ij, it, itt, indx
-real :: r, t
+real(nswc_sp) :: r, t
 !***********************************************************
 !                                               Robert Renka
 !                                       Oak Ridge Natl. Lab.
@@ -3252,10 +3253,10 @@ pure subroutine qsortd(x, ind, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ind(n)
-double precision, intent(in) :: x(n)
+real(nswc_dp), intent(in) :: x(n)
 integer :: iu(21), il(21), m, i, j, k, l, ij, it, itt, indx
-real :: r
-double precision :: t
+real(nswc_sp) :: r
+real(nswc_dp) :: t
 !***********************************************************
 !                                               Robert Renka
 !                                       Oak Ridge Natl. Lab.
@@ -3458,9 +3459,9 @@ pure subroutine rorder(a, ip, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ip(n)
-real, intent(inout) :: a(n)
+real(nswc_sp), intent(inout) :: a(n)
 integer :: nn, k, j, ipj
-real :: temp
+real(nswc_sp) :: temp
 !***********************************************************
 !                                               Robert Renka
 !                                       Oak Ridge Natl. Lab.
@@ -3512,9 +3513,9 @@ pure subroutine dorder(a, ip, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ip(n)
-double precision, intent(inout) :: a(n)
+real(nswc_dp), intent(inout) :: a(n)
 integer :: nn, k, j, ipj
-double precision :: temp
+real(nswc_dp) :: temp
 !***********************************************************
 !                                               Robert Renka
 !                                       Oak Ridge Natl. Lab.
@@ -3562,10 +3563,10 @@ go to 4
 end do
 end subroutine dorder
 
-pure elemental real function cbrt(x)
+pure elemental real(nswc_sp) function cbrt(x)
 implicit none
-real, intent(in) :: x
-real :: r, nswc_ai_r4
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: r, nswc_ai_r4
 !-----------------------------------------------------------------------
 !                   Cube root of a real number
 !-----------------------------------------------------------------------
@@ -3582,13 +3583,13 @@ return
 cbrt = -exp(r)
 end function cbrt
 
-pure elemental double precision function dcbrt(x)
+pure elemental real(nswc_dp) function dcbrt(x)
 implicit none
 !-----------------------------------------------------------------------
 !                   Cube root of a real number
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision :: r, nswc_ai_r8
+real(nswc_dp), intent(in) :: x
+real(nswc_dp) :: r, nswc_ai_r8
 nswc_ai_r8 = x
 if (nswc_ai_r8 < 0) go to 30
 if (nswc_ai_r8 == 0) go to 10
@@ -3604,9 +3605,9 @@ end function dcbrt
 
 pure elemental function artnq(y,x)
 implicit none
-real, intent(in) :: x, y
-real :: artnq
-real :: nswc_ai_r4
+real(nswc_sp), intent(in) :: x, y
+real(nswc_sp) :: artnq
+real(nswc_sp) :: nswc_ai_r4
 nswc_ai_r4 = x
 if (nswc_ai_r4 < 0) go to 1
 if (nswc_ai_r4 == 0) go to 2
@@ -3632,10 +3633,10 @@ return
 8 artnq = 0.
 end function artnq
 
-pure elemental double precision function dartnq(y,x)
+pure elemental real(nswc_dp) function dartnq(y,x)
 implicit none
-double precision, intent(in) :: x, y
-double precision :: nswc_ai_r8
+real(nswc_dp), intent(in) :: x, y
+real(nswc_dp) :: nswc_ai_r8
 nswc_ai_r8 = x
 if (nswc_ai_r8 < 0) go to 1
 if (nswc_ai_r8 == 0) go to 2
@@ -3661,10 +3662,10 @@ return
 8 dartnq = 0.d0
 end function dartnq
 
-pure elemental real function cpabs(x, y)
+pure elemental real(nswc_sp) function cpabs(x, y)
 implicit none
-real, intent(in) :: x, y
-real :: a
+real(nswc_sp), intent(in) :: x, y
+real(nswc_sp) :: a
 !     --------------------------------------
 !     Evaluation of sqrt(x*x + y*y)
 !     --------------------------------------
@@ -3679,10 +3680,10 @@ return
 20 cpabs = 0.0
 end function cpabs
 
-pure elemental double precision function dcpabs(x, y)
+pure elemental real(nswc_dp) function dcpabs(x, y)
 implicit none
-double precision, intent(in) :: x, y
-double precision :: a
+real(nswc_dp), intent(in) :: x, y
+real(nswc_dp) :: a
 !     --------------------------------------
 !     Evaluation of sqrt(x*x + y*y)
 !     --------------------------------------
@@ -3699,9 +3700,9 @@ end function dcpabs
 
 pure elemental subroutine crec(x, y, u, v)
 implicit none
-real, intent(inout) :: u, v
-real, intent(in) :: x, y
-real :: d, t
+real(nswc_sp), intent(inout) :: u, v
+real(nswc_sp), intent(in) :: x, y
+real(nswc_sp) :: d, t
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL u + I*v = 1/(x + I*y)
 !-----------------------------------------------------------------------
@@ -3722,9 +3723,9 @@ implicit none
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL u + I*v = 1/(x + I*y)
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x, y
-double precision, intent(inout) :: u, v
-double precision :: d, t
+real(nswc_dp), intent(in) :: x, y
+real(nswc_dp), intent(inout) :: u, v
+real(nswc_dp) :: d, t
 if (abs(x) > abs(y)) go to 10
 t = x/y
 d = y + t*x
@@ -3737,10 +3738,10 @@ u = 1.d0/d
 v = -t/d
 end subroutine dcrec
 
-pure elemental complex function cdiv(a, b)
+pure elemental complex(nswc_sp) function cdiv(a, b)
 implicit none
-complex, intent(in) :: a, b
-real :: ai, ar, bi, br, d, t, u, v
+complex(nswc_sp), intent(in) :: a, b
+real(nswc_sp) :: ai, ar, bi, br, d, t, u, v
 !-----------------------------------------------------------------------
 !              COMPLEX DIVISION a/b WHERE b IS NONZERO
 !-----------------------------------------------------------------------
@@ -3767,9 +3768,9 @@ implicit none
 !-----------------------------------------------------------------------
 !     Double precision complex division C = A/B avoiding overflow
 !-----------------------------------------------------------------------
-double precision, intent(in) :: ar, ai, br, bi
-double precision, intent(inout) :: cr, ci
-double precision :: d, t, u, v
+real(nswc_dp), intent(in) :: ar, ai, br, bi
+real(nswc_dp), intent(inout) :: cr, ci
+real(nswc_dp) :: d, t, u, v
 if (abs(br) <= abs(bi)) go to 10
 t = bi/br
 d = br + t*bi
@@ -3793,9 +3794,9 @@ end subroutine cdivid
 
 pure subroutine dcsqrt(z, w)
 implicit none
-double precision, intent(in) :: z(2)
-double precision, intent(inout) :: w(2)
-double precision :: x, y, r, nswc_ai_r8
+real(nswc_dp), intent(in) :: z(2)
+real(nswc_dp), intent(inout) :: w(2)
+real(nswc_dp) :: x, y, r, nswc_ai_r8
 ! ----------------------------------------------------------------------
 !        w = sqrt(z) for the double precision complex number z
 !                         -----------
@@ -3837,17 +3838,17 @@ end subroutine dcsqrt
 
 pure elemental subroutine poca(r,a,x,y)
 implicit none
-real, intent(in) :: a, r
-real, intent(out) :: x, y
+real(nswc_sp), intent(in) :: a, r
+real(nswc_sp), intent(out) :: x, y
 x = r*cos(a)
 y = r*sin(a)
 end subroutine poca
 
 pure elemental subroutine capo(x,y,r,theta)
 implicit none
-real, intent(inout) :: r, theta
-real, intent(in) :: x, y
-real :: a
+real(nswc_sp), intent(inout) :: r, theta
+real(nswc_sp), intent(in) :: x, y
+real(nswc_sp) :: a
 if (abs(x) <= abs(y)) go to 10
 a = y/x
 r = abs(x)*sqrt(1.0 + a*a)
@@ -3864,11 +3865,11 @@ end subroutine capo
 
 pure elemental subroutine rota(x1,y1,a,x2,y2)
 implicit none
-real, intent(in) :: a, x1
-real, intent(out) :: x2
-real, intent(in) :: y1
-real, intent(out) :: y2
-real :: cosa, sina
+real(nswc_sp), intent(in) :: a, x1
+real(nswc_sp), intent(out) :: x2
+real(nswc_sp), intent(in) :: y1
+real(nswc_sp), intent(out) :: y2
+real(nswc_sp) :: cosa, sina
 sina = sin(a)
 cosa = cos(a)
 x2 = x1*cosa + y1*sina
@@ -3877,8 +3878,8 @@ end subroutine rota
 
 pure elemental subroutine srotg(sa,sb,sc,ss)
 implicit none
-real, intent(inout) :: sa, sb, sc, ss
-real :: r, u, v
+real(nswc_sp), intent(inout) :: sa, sb, sc, ss
+real(nswc_sp) :: r, u, v
 !     Designed by C.L.Lawson, JPL, 1977 sept 08
 !     construct the Givens transformation
 !         ( sc  ss )
@@ -3943,8 +3944,8 @@ implicit none
 !     normally, the subprogram drot(N,DX,INCX,DY,INCY,dc,ds) will
 !     next be called to apply the transformation to A 2 by N matrix.
 ! ------------------------------------------------------------------
-double precision, intent(inout) :: da, db, dc, ds
-double precision :: u, v, r
+real(nswc_dp), intent(inout) :: da, db, dc, ds
+real(nswc_dp) :: u, v, r
 if (abs(da) <= abs(db)) go to 10
 ! *** HERE dabs(da) .GT. dabs(db) ***
 u = da + da
@@ -3979,10 +3980,10 @@ end subroutine drotg
 
 subroutine rot3(a, theta)
 implicit none
-real :: a(3,3)
-real, intent(inout) :: theta(3)
-real :: r, t, u, v
-real, parameter :: pihalf = 1.5707963267949
+real(nswc_sp) :: a(3,3)
+real(nswc_sp), intent(inout) :: theta(3)
+real(nswc_sp) :: r, t, u, v
+real(nswc_sp), parameter :: pihalf = 1.5707963267949
 !     --------------------
 if (abs(a(1,1)) > abs(a(2,1))) go to 10
 if (a(2,1) /= 0.0) go to 11
@@ -4015,9 +4016,9 @@ end subroutine rot3
 
 pure elemental subroutine constr(xk,yk,zk, cx,sx,cy,sy)
 implicit none
-real, intent(in) :: xk, yk, zk
-real, intent(inout) :: cx, sx
-real, intent(out) :: cy, sy
+real(nswc_sp), intent(in) :: xk, yk, zk
+real(nswc_sp), intent(inout) :: cx, sx
+real(nswc_sp), intent(out) :: cy, sy
 !***********************************************************
 !                                               Robert Renka
 !                                       Oak Ridge Natl. Lab.
@@ -4048,12 +4049,12 @@ return
 sx = 0.
 end subroutine constr
 
-pure real function ang(n, x, y)
+pure real(nswc_sp) function ang(n, x, y)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: x(n), y(n)
+real(nswc_sp), intent(in) :: x(n), y(n)
 integer :: i
-real :: d, rx, ry
+real(nswc_sp) :: d, rx, ry
 !-----------------------------------------------------------------------
 !           Computation of the angle between two vectors
 !-----------------------------------------------------------------------
@@ -4079,17 +4080,17 @@ return
 30 ang = -1.0
 end function ang
 
-pure elemental real function sin0(x)
+pure elemental real(nswc_sp) function sin0(x)
 implicit none
-real, intent(in) :: x
-real :: t
-real, parameter :: a0 = .157079632679490e+01
-real, parameter :: a1 = -.645964097506244e+00
-real, parameter :: a2 = .796926262460396e-01
-real, parameter :: a3 = -.468175413228242e-02
-real, parameter :: a4 = .160441150291651e-03
-real, parameter :: a5 = -.359864175444606e-05
-real, parameter :: a6 = .563372101191893e-07
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: t
+real(nswc_sp), parameter :: a0 = .157079632679490e+01
+real(nswc_sp), parameter :: a1 = -.645964097506244e+00
+real(nswc_sp), parameter :: a2 = .796926262460396e-01
+real(nswc_sp), parameter :: a3 = -.468175413228242e-02
+real(nswc_sp), parameter :: a4 = .160441150291651e-03
+real(nswc_sp), parameter :: a5 = -.359864175444606e-05
+real(nswc_sp), parameter :: a6 = .563372101191893e-07
 !-----------------------------------------------------------------------
 !          Computation of sin(x*PI/2) for abs(x) .LE. 0.5
 !-----------------------------------------------------------------------
@@ -4099,16 +4100,16 @@ sin0 = ((((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t &
    & + a1)*t + a0)*x
 end function sin0
 
-pure elemental real function cos0(x)
+pure elemental real(nswc_sp) function cos0(x)
 implicit none
-real, intent(in) :: x
-real :: t
-real, parameter :: a1 = -.123370055013615e+01
-real, parameter :: a2 = .253669507899753e+00
-real, parameter :: a3 = -.208634807330586e-01
-real, parameter :: a4 = .919259935580283e-03
-real, parameter :: a5 = -.252000841382533e-04
-real, parameter :: a6 = .465461768260405e-06
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: t
+real(nswc_sp), parameter :: a1 = -.123370055013615e+01
+real(nswc_sp), parameter :: a2 = .253669507899753e+00
+real(nswc_sp), parameter :: a3 = -.208634807330586e-01
+real(nswc_sp), parameter :: a4 = .919259935580283e-03
+real(nswc_sp), parameter :: a5 = -.252000841382533e-04
+real(nswc_sp), parameter :: a6 = .465461768260405e-06
 !-----------------------------------------------------------------------
 !          Computation of cos(x*PI/2) for abs(x) .LE. 0.5
 !-----------------------------------------------------------------------
@@ -4117,24 +4118,24 @@ t = x*x
 cos0 = (((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t + a1)*t + 1.0
 end function cos0
 
-pure elemental real function sin1(x)
+pure elemental real(nswc_sp) function sin1(x)
 implicit none
-real, intent(in) :: x
+real(nswc_sp), intent(in) :: x
 integer :: max, n
-real :: a, t
-real, parameter :: a0 = .314159265358979e+01
-real, parameter :: a1 = -.516771278004995e+01
-real, parameter :: a2 = .255016403987327e+01
-real, parameter :: a3 = -.599264528932149e+00
-real, parameter :: a4 = .821458689493251e-01
-real, parameter :: a5 = -.737001831310553e-02
-real, parameter :: a6 = .461514425296398e-03
-real, parameter :: b1 = -.493480220054460e+01
-real, parameter :: b2 = .405871212639605e+01
-real, parameter :: b3 = -.133526276691575e+01
-real, parameter :: b4 = .235330543508553e+00
-real, parameter :: b5 = -.258048861575714e-01
-real, parameter :: b6 = .190653140279462e-02
+real(nswc_sp) :: a, t
+real(nswc_sp), parameter :: a0 = .314159265358979e+01
+real(nswc_sp), parameter :: a1 = -.516771278004995e+01
+real(nswc_sp), parameter :: a2 = .255016403987327e+01
+real(nswc_sp), parameter :: a3 = -.599264528932149e+00
+real(nswc_sp), parameter :: a4 = .821458689493251e-01
+real(nswc_sp), parameter :: a5 = -.737001831310553e-02
+real(nswc_sp), parameter :: a6 = .461514425296398e-03
+real(nswc_sp), parameter :: b1 = -.493480220054460e+01
+real(nswc_sp), parameter :: b2 = .405871212639605e+01
+real(nswc_sp), parameter :: b3 = -.133526276691575e+01
+real(nswc_sp), parameter :: b4 = .235330543508553e+00
+real(nswc_sp), parameter :: b5 = -.258048861575714e-01
+real(nswc_sp), parameter :: b6 = .190653140279462e-02
 !-----------------------------------------------------------------------
 !                   Evaluation  of sin(x*PI)
 !-----------------------------------------------------------------------
@@ -4167,24 +4168,24 @@ sin1 = ((((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t &
 if (mod(n,2) /= 0) sin1 = - sin1
 end function sin1
 
-pure elemental real function cos1(x)
+pure elemental real(nswc_sp) function cos1(x)
 implicit none
-real, intent(in) :: x
+real(nswc_sp), intent(in) :: x
 integer :: max, n
-real :: a, t
-real, parameter :: a0 = .314159265358979e+01
-real, parameter :: a1 = -.516771278004995e+01
-real, parameter :: a2 = .255016403987327e+01
-real, parameter :: a3 = -.599264528932149e+00
-real, parameter :: a4 = .821458689493251e-01
-real, parameter :: a5 = -.737001831310553e-02
-real, parameter :: a6 = .461514425296398e-03
-real, parameter :: b1 = -.493480220054460e+01
-real, parameter :: b2 = .405871212639605e+01
-real, parameter :: b3 = -.133526276691575e+01
-real, parameter :: b4 = .235330543508553e+00
-real, parameter :: b5 = -.258048861575714e-01
-real, parameter :: b6 = .190653140279462e-02
+real(nswc_sp) :: a, t
+real(nswc_sp), parameter :: a0 = .314159265358979e+01
+real(nswc_sp), parameter :: a1 = -.516771278004995e+01
+real(nswc_sp), parameter :: a2 = .255016403987327e+01
+real(nswc_sp), parameter :: a3 = -.599264528932149e+00
+real(nswc_sp), parameter :: a4 = .821458689493251e-01
+real(nswc_sp), parameter :: a5 = -.737001831310553e-02
+real(nswc_sp), parameter :: a6 = .461514425296398e-03
+real(nswc_sp), parameter :: b1 = -.493480220054460e+01
+real(nswc_sp), parameter :: b2 = .405871212639605e+01
+real(nswc_sp), parameter :: b3 = -.133526276691575e+01
+real(nswc_sp), parameter :: b4 = .235330543508553e+00
+real(nswc_sp), parameter :: b5 = -.258048861575714e-01
+real(nswc_sp), parameter :: b6 = .190653140279462e-02
 !-----------------------------------------------------------------------
 !                   Evaluation  of cos(x*PI)
 !-----------------------------------------------------------------------
@@ -4217,38 +4218,38 @@ cos1 = ((((((b6*t + b5)*t + b4)*t + b3)*t + b2)*t &
 30 if (mod(n,2) /= 0) cos1 = - cos1
 end function cos1
 
-pure elemental double precision function dsin1(x)
+pure elemental real(nswc_dp) function dsin1(x)
 implicit none
-double precision, intent(in) :: x
+real(nswc_dp), intent(in) :: x
 integer :: max, n
-double precision :: a, t, w
-double precision, parameter :: pi = 3.141592653589793238462643383279502884197d+00
-double precision, parameter :: a1 = -.1028083791780141522795259479153765743002d+00
-double precision, parameter :: a2 = .3170868848763100170457042079710451905600d-02
-double precision, parameter :: a3 = -.4657026956105571623449026167864697920000d-04
-double precision, parameter :: a4 = .3989844942879455643410226655783424000000d-06
-double precision, parameter :: a5 = -.2237397227721999776371894030796800000000d-08
-double precision, parameter :: a6 = .8847045483056962709715066675200000000000d-11
-double precision, parameter :: a7 = -.2598715447506450292885585920000000000000d-13
-double precision, parameter :: a8 = .5893449774331011070033920000000000000000d-16
-double precision, parameter :: a9 = -.1062975472045522550784000000000000000000d-18
-double precision, parameter :: a10 = .1561182648301780992000000000000000000000d-21
-double precision, parameter :: a11 = -.1903193516670976000000000000000000000000d-24
-double precision, parameter :: a12 = .1956617650176000000000000000000000000000d-27
-double precision, parameter :: a13 = -.1711276032000000000000000000000000000000d-30
-double precision, parameter :: b1 = -.3084251375340424568385778437461297229882d+00
-double precision, parameter :: b2 = .1585434424381550085228521039855226435920d-01
-double precision, parameter :: b3 = -.3259918869273900136414318317506279360000d-03
-double precision, parameter :: b4 = .3590860448591510079069203991239232000000d-05
-double precision, parameter :: b5 = -.2461136950494199754009084061808640000000d-07
-double precision, parameter :: b6 = .1150115912797405152263195572224000000000d-09
-double precision, parameter :: b7 = -.3898073171259675439899172864000000000000d-12
-double precision, parameter :: b8 = .1001886461636271969091584000000000000000d-14
-double precision, parameter :: b9 = -.2019653396886572027084800000000000000000d-17
-double precision, parameter :: b10 = .3278483561466560512000000000000000000000d-20
-double precision, parameter :: b11 = -.4377345082051788800000000000000000000000d-23
-double precision, parameter :: b12 = .4891532381388800000000000000000000000000d-26
-double precision, parameter :: b13 = -.4617089843200000000000000000000000000000d-29
+real(nswc_dp) :: a, t, w
+real(nswc_dp), parameter :: pi = 3.141592653589793238462643383279502884197d+00
+real(nswc_dp), parameter :: a1 = -.1028083791780141522795259479153765743002d+00
+real(nswc_dp), parameter :: a2 = .3170868848763100170457042079710451905600d-02
+real(nswc_dp), parameter :: a3 = -.4657026956105571623449026167864697920000d-04
+real(nswc_dp), parameter :: a4 = .3989844942879455643410226655783424000000d-06
+real(nswc_dp), parameter :: a5 = -.2237397227721999776371894030796800000000d-08
+real(nswc_dp), parameter :: a6 = .8847045483056962709715066675200000000000d-11
+real(nswc_dp), parameter :: a7 = -.2598715447506450292885585920000000000000d-13
+real(nswc_dp), parameter :: a8 = .5893449774331011070033920000000000000000d-16
+real(nswc_dp), parameter :: a9 = -.1062975472045522550784000000000000000000d-18
+real(nswc_dp), parameter :: a10 = .1561182648301780992000000000000000000000d-21
+real(nswc_dp), parameter :: a11 = -.1903193516670976000000000000000000000000d-24
+real(nswc_dp), parameter :: a12 = .1956617650176000000000000000000000000000d-27
+real(nswc_dp), parameter :: a13 = -.1711276032000000000000000000000000000000d-30
+real(nswc_dp), parameter :: b1 = -.3084251375340424568385778437461297229882d+00
+real(nswc_dp), parameter :: b2 = .1585434424381550085228521039855226435920d-01
+real(nswc_dp), parameter :: b3 = -.3259918869273900136414318317506279360000d-03
+real(nswc_dp), parameter :: b4 = .3590860448591510079069203991239232000000d-05
+real(nswc_dp), parameter :: b5 = -.2461136950494199754009084061808640000000d-07
+real(nswc_dp), parameter :: b6 = .1150115912797405152263195572224000000000d-09
+real(nswc_dp), parameter :: b7 = -.3898073171259675439899172864000000000000d-12
+real(nswc_dp), parameter :: b8 = .1001886461636271969091584000000000000000d-14
+real(nswc_dp), parameter :: b9 = -.2019653396886572027084800000000000000000d-17
+real(nswc_dp), parameter :: b10 = .3278483561466560512000000000000000000000d-20
+real(nswc_dp), parameter :: b11 = -.4377345082051788800000000000000000000000d-23
+real(nswc_dp), parameter :: b12 = .4891532381388800000000000000000000000000d-26
+real(nswc_dp), parameter :: b13 = -.4617089843200000000000000000000000000000d-29
 !-----------------------------------------------------------------------
 !                Double precision evaluation of sin(pi*x)
 !                             --------------
@@ -4294,38 +4295,38 @@ dsin1 = pi*a*w
 if (mod(n,2) /= 0) dsin1 = - dsin1
 end function dsin1
 
-pure elemental double precision function dcos1(x)
+pure elemental real(nswc_dp) function dcos1(x)
 implicit none
-double precision, intent(in) :: x
+real(nswc_dp), intent(in) :: x
 integer :: max, n
-double precision :: a, t, w
-double precision, parameter :: pi = 3.141592653589793238462643383279502884197d+00
-double precision, parameter :: a1 = -.1028083791780141522795259479153765743002d+00
-double precision, parameter :: a2 = .3170868848763100170457042079710451905600d-02
-double precision, parameter :: a3 = -.4657026956105571623449026167864697920000d-04
-double precision, parameter :: a4 = .3989844942879455643410226655783424000000d-06
-double precision, parameter :: a5 = -.2237397227721999776371894030796800000000d-08
-double precision, parameter :: a6 = .8847045483056962709715066675200000000000d-11
-double precision, parameter :: a7 = -.2598715447506450292885585920000000000000d-13
-double precision, parameter :: a8 = .5893449774331011070033920000000000000000d-16
-double precision, parameter :: a9 = -.1062975472045522550784000000000000000000d-18
-double precision, parameter :: a10 = .1561182648301780992000000000000000000000d-21
-double precision, parameter :: a11 = -.1903193516670976000000000000000000000000d-24
-double precision, parameter :: a12 = .1956617650176000000000000000000000000000d-27
-double precision, parameter :: a13 = -.1711276032000000000000000000000000000000d-30
-double precision, parameter :: b1 = -.3084251375340424568385778437461297229882d+00
-double precision, parameter :: b2 = .1585434424381550085228521039855226435920d-01
-double precision, parameter :: b3 = -.3259918869273900136414318317506279360000d-03
-double precision, parameter :: b4 = .3590860448591510079069203991239232000000d-05
-double precision, parameter :: b5 = -.2461136950494199754009084061808640000000d-07
-double precision, parameter :: b6 = .1150115912797405152263195572224000000000d-09
-double precision, parameter :: b7 = -.3898073171259675439899172864000000000000d-12
-double precision, parameter :: b8 = .1001886461636271969091584000000000000000d-14
-double precision, parameter :: b9 = -.2019653396886572027084800000000000000000d-17
-double precision, parameter :: b10 = .3278483561466560512000000000000000000000d-20
-double precision, parameter :: b11 = -.4377345082051788800000000000000000000000d-23
-double precision, parameter :: b12 = .4891532381388800000000000000000000000000d-26
-double precision, parameter :: b13 = -.4617089843200000000000000000000000000000d-29
+real(nswc_dp) :: a, t, w
+real(nswc_dp), parameter :: pi = 3.141592653589793238462643383279502884197d+00
+real(nswc_dp), parameter :: a1 = -.1028083791780141522795259479153765743002d+00
+real(nswc_dp), parameter :: a2 = .3170868848763100170457042079710451905600d-02
+real(nswc_dp), parameter :: a3 = -.4657026956105571623449026167864697920000d-04
+real(nswc_dp), parameter :: a4 = .3989844942879455643410226655783424000000d-06
+real(nswc_dp), parameter :: a5 = -.2237397227721999776371894030796800000000d-08
+real(nswc_dp), parameter :: a6 = .8847045483056962709715066675200000000000d-11
+real(nswc_dp), parameter :: a7 = -.2598715447506450292885585920000000000000d-13
+real(nswc_dp), parameter :: a8 = .5893449774331011070033920000000000000000d-16
+real(nswc_dp), parameter :: a9 = -.1062975472045522550784000000000000000000d-18
+real(nswc_dp), parameter :: a10 = .1561182648301780992000000000000000000000d-21
+real(nswc_dp), parameter :: a11 = -.1903193516670976000000000000000000000000d-24
+real(nswc_dp), parameter :: a12 = .1956617650176000000000000000000000000000d-27
+real(nswc_dp), parameter :: a13 = -.1711276032000000000000000000000000000000d-30
+real(nswc_dp), parameter :: b1 = -.3084251375340424568385778437461297229882d+00
+real(nswc_dp), parameter :: b2 = .1585434424381550085228521039855226435920d-01
+real(nswc_dp), parameter :: b3 = -.3259918869273900136414318317506279360000d-03
+real(nswc_dp), parameter :: b4 = .3590860448591510079069203991239232000000d-05
+real(nswc_dp), parameter :: b5 = -.2461136950494199754009084061808640000000d-07
+real(nswc_dp), parameter :: b6 = .1150115912797405152263195572224000000000d-09
+real(nswc_dp), parameter :: b7 = -.3898073171259675439899172864000000000000d-12
+real(nswc_dp), parameter :: b8 = .1001886461636271969091584000000000000000d-14
+real(nswc_dp), parameter :: b9 = -.2019653396886572027084800000000000000000d-17
+real(nswc_dp), parameter :: b10 = .3278483561466560512000000000000000000000d-20
+real(nswc_dp), parameter :: b11 = -.4377345082051788800000000000000000000000d-23
+real(nswc_dp), parameter :: b12 = .4891532381388800000000000000000000000000d-26
+real(nswc_dp), parameter :: b13 = -.4617089843200000000000000000000000000000d-29
 !-----------------------------------------------------------------------
 !                Double precision evaluation of cos(pi*x)
 !                             --------------
@@ -4374,29 +4375,29 @@ end function dcos1
 pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
 implicit none
 integer, intent(in) :: isw
-real, intent(inout) :: sinhm, coshm
-real, intent(in) :: x
-real :: ax, expx, xs, xx
-real, parameter :: sp5 = .255251817302048e-09
-real, parameter :: sp4 = .723809046696880e-07
-real, parameter :: sp3 = .109233297700241e-04
-real, parameter :: sp2 = .954811583154274e-03
-real, parameter :: sp1 = .452867078563929e-01
-real, parameter :: sq1 = -.471329214363072e-02
-real, parameter :: cp5 = .116744361560051e-08
-real, parameter :: cp4 = .280407224259429e-06
-real, parameter :: cp3 = .344417983443219e-04
-real, parameter :: cp2 = .232293648552398e-02
-real, parameter :: cp1 = .778752378267155e-01
-real, parameter :: cq1 = -.545809550662099e-02
-real, parameter :: zp3 = 5.59297116264720e-07
-real, parameter :: zp2 = 1.77943488030894e-04
-real, parameter :: zp1 = 1.69800461894792e-02
-real, parameter :: zq4 = 1.33412535492375e-09
-real, parameter :: zq3 = -5.80858944138663e-07
-real, parameter :: zq2 = 1.27814964403863e-04
-real, parameter :: zq1 = -1.63532871439181e-02
-real, parameter :: cut(5) = [1.65, 1.2, 1.2, 2.7, 1.65]
+real(nswc_sp), intent(inout) :: sinhm, coshm
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: ax, expx, xs, xx
+real(nswc_sp), parameter :: sp5 = .255251817302048e-09
+real(nswc_sp), parameter :: sp4 = .723809046696880e-07
+real(nswc_sp), parameter :: sp3 = .109233297700241e-04
+real(nswc_sp), parameter :: sp2 = .954811583154274e-03
+real(nswc_sp), parameter :: sp1 = .452867078563929e-01
+real(nswc_sp), parameter :: sq1 = -.471329214363072e-02
+real(nswc_sp), parameter :: cp5 = .116744361560051e-08
+real(nswc_sp), parameter :: cp4 = .280407224259429e-06
+real(nswc_sp), parameter :: cp3 = .344417983443219e-04
+real(nswc_sp), parameter :: cp2 = .232293648552398e-02
+real(nswc_sp), parameter :: cp1 = .778752378267155e-01
+real(nswc_sp), parameter :: cq1 = -.545809550662099e-02
+real(nswc_sp), parameter :: zp3 = 5.59297116264720e-07
+real(nswc_sp), parameter :: zp2 = 1.77943488030894e-04
+real(nswc_sp), parameter :: zp1 = 1.69800461894792e-02
+real(nswc_sp), parameter :: zq4 = 1.33412535492375e-09
+real(nswc_sp), parameter :: zq3 = -5.80858944138663e-07
+real(nswc_sp), parameter :: zq2 = 1.27814964403863e-04
+real(nswc_sp), parameter :: zq1 = -1.63532871439181e-02
+real(nswc_sp), parameter :: cut(5) = [1.65, 1.2, 1.2, 2.7, 1.65]
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
 !                            department of computer sciences
@@ -4453,11 +4454,11 @@ return
 5 coshm = (((1./expx - 2.) - xs) + expx)/2.
 end subroutine snhcsh
 
-pure elemental real function esum(mu, x)
+pure elemental real(nswc_sp) function esum(mu, x)
 implicit none
 integer, intent(in) :: mu
-real, intent(in) :: x
-real :: w
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: w
 !-----------------------------------------------------------------------
 !                    Evaluation of exp(mu + x)
 !-----------------------------------------------------------------------
@@ -4476,11 +4477,11 @@ return
 esum = exp(w)*exp(x)
 end function esum
 
-pure elemental double precision function desum(mu, x)
+pure elemental real(nswc_dp) function desum(mu, x)
 implicit none
 integer, intent(in) :: mu
-double precision, intent(in) :: x
-double precision :: w
+real(nswc_dp), intent(in) :: x
+real(nswc_dp) :: w
 !-----------------------------------------------------------------------
 !                    Evaluation of exp(mu + x)
 !-----------------------------------------------------------------------
@@ -4499,16 +4500,16 @@ return
 desum = exp(w)*exp(x)
 end function desum
 
-pure elemental real function rexp(x)
+pure elemental real(nswc_sp) function rexp(x)
 implicit none
-real, intent(in) :: x
-real :: e
-real, parameter :: p1 = .914041914819518e-09
-real, parameter :: p2 = .238082361044469e-01
-real, parameter :: q1 = -.499999999085958e+00
-real, parameter :: q2 = .107141568980644e+00
-real, parameter :: q3 = -.119041179760821e-01
-real, parameter :: q4 = .595130811860248e-03
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: e
+real(nswc_sp), parameter :: p1 = .914041914819518e-09
+real(nswc_sp), parameter :: p2 = .238082361044469e-01
+real(nswc_sp), parameter :: q1 = -.499999999085958e+00
+real(nswc_sp), parameter :: q2 = .107141568980644e+00
+real(nswc_sp), parameter :: q3 = -.119041179760821e-01
+real(nswc_sp), parameter :: q4 = .595130811860248e-03
 !-----------------------------------------------------------------------
 !            Evaluation of the function exp(x) - 1
 !-----------------------------------------------------------------------
@@ -4527,27 +4528,27 @@ return
 30 rexp = -1.0
 end function rexp
 
-pure elemental double precision function drexp(x)
+pure elemental real(nswc_dp) function drexp(x)
 implicit none
 !-----------------------------------------------------------------------
 !            Evaluation of the function exp(x) - 1
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision :: e, w, z
-double precision, parameter :: a0 = .248015873015873015873016d-04
-double precision, parameter :: a1 = -.344452080605731005808147d-05
-double precision, parameter :: a2 = .206664230430046597475413d-06
-double precision, parameter :: a3 = -.447300111094328162971036d-08
-double precision, parameter :: a4 = .114734027080634968083920d-11
-double precision, parameter :: b1 = -.249994190011341852652396d+00
-double precision, parameter :: b2 = .249987228833107957725728d-01
-double precision, parameter :: b3 = -.119037506846942249362528d-02
-double precision, parameter :: b4 = .228908693387350391768682d-04
-double precision, parameter :: c1 = .1666666666666666666666666666666667d+00
-double precision, parameter :: c2 = .4166666666666666666666666666666667d-01
-double precision, parameter :: c3 = .8333333333333333333333333333333333d-02
-double precision, parameter :: c4 = .1388888888888888888888888888888889d-02
-double precision, parameter :: c5 = .1984126984126984126984126984126984d-03
+real(nswc_dp), intent(in) :: x
+real(nswc_dp) :: e, w, z
+real(nswc_dp), parameter :: a0 = .248015873015873015873016d-04
+real(nswc_dp), parameter :: a1 = -.344452080605731005808147d-05
+real(nswc_dp), parameter :: a2 = .206664230430046597475413d-06
+real(nswc_dp), parameter :: a3 = -.447300111094328162971036d-08
+real(nswc_dp), parameter :: a4 = .114734027080634968083920d-11
+real(nswc_dp), parameter :: b1 = -.249994190011341852652396d+00
+real(nswc_dp), parameter :: b2 = .249987228833107957725728d-01
+real(nswc_dp), parameter :: b3 = -.119037506846942249362528d-02
+real(nswc_dp), parameter :: b4 = .228908693387350391768682d-04
+real(nswc_dp), parameter :: c1 = .1666666666666666666666666666666667d+00
+real(nswc_dp), parameter :: c2 = .4166666666666666666666666666666667d-01
+real(nswc_dp), parameter :: c3 = .8333333333333333333333333333333333d-02
+real(nswc_dp), parameter :: c4 = .1388888888888888888888888888888889d-02
+real(nswc_dp), parameter :: c5 = .1984126984126984126984126984126984d-03
 !---------------------------
 !---------------------------
 !     ci = 1/factorial(i + 2)
@@ -4579,14 +4580,14 @@ end function drexp
 
 pure elemental subroutine rexp1(x, e, w)
 implicit none
-real, intent(inout) :: e, w
-real, intent(in) :: x
-real, parameter :: p1 = .914041914819518e-09
-real, parameter :: p2 = .238082361044469e-01
-real, parameter :: q1 = -.499999999085958e+00
-real, parameter :: q2 = .107141568980644e+00
-real, parameter :: q3 = -.119041179760821e-01
-real, parameter :: q4 = .595130811860248e-03
+real(nswc_sp), intent(inout) :: e, w
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), parameter :: p1 = .914041914819518e-09
+real(nswc_sp), parameter :: p2 = .238082361044469e-01
+real(nswc_sp), parameter :: q1 = -.499999999085958e+00
+real(nswc_sp), parameter :: q2 = .107141568980644e+00
+real(nswc_sp), parameter :: q3 = -.119041179760821e-01
+real(nswc_sp), parameter :: q4 = .595130811860248e-03
 !-----------------------------------------------------------------------
 !                  Evaluation of w = (exp(x) - 1)/x
 !     e is an input/output variable. If e .GE. 0 then it is assumed
@@ -4617,24 +4618,24 @@ implicit none
 !     that e = exp(x). In this case e is not modified. If e .LT. 0
 !     then e is set to exp(x) when this value is needed.
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision, intent(inout) :: e
-double precision, intent(out) :: w
-double precision :: z
-double precision, parameter :: a0 = .248015873015873015873016d-04
-double precision, parameter :: a1 = -.344452080605731005808147d-05
-double precision, parameter :: a2 = .206664230430046597475413d-06
-double precision, parameter :: a3 = -.447300111094328162971036d-08
-double precision, parameter :: a4 = .114734027080634968083920d-11
-double precision, parameter :: b1 = -.249994190011341852652396d+00
-double precision, parameter :: b2 = .249987228833107957725728d-01
-double precision, parameter :: b3 = -.119037506846942249362528d-02
-double precision, parameter :: b4 = .228908693387350391768682d-04
-double precision, parameter :: c1 = .1666666666666666666666666666666667d+00
-double precision, parameter :: c2 = .4166666666666666666666666666666667d-01
-double precision, parameter :: c3 = .8333333333333333333333333333333333d-02
-double precision, parameter :: c4 = .1388888888888888888888888888888889d-02
-double precision, parameter :: c5 = .1984126984126984126984126984126984d-03
+real(nswc_dp), intent(in) :: x
+real(nswc_dp), intent(inout) :: e
+real(nswc_dp), intent(out) :: w
+real(nswc_dp) :: z
+real(nswc_dp), parameter :: a0 = .248015873015873015873016d-04
+real(nswc_dp), parameter :: a1 = -.344452080605731005808147d-05
+real(nswc_dp), parameter :: a2 = .206664230430046597475413d-06
+real(nswc_dp), parameter :: a3 = -.447300111094328162971036d-08
+real(nswc_dp), parameter :: a4 = .114734027080634968083920d-11
+real(nswc_dp), parameter :: b1 = -.249994190011341852652396d+00
+real(nswc_dp), parameter :: b2 = .249987228833107957725728d-01
+real(nswc_dp), parameter :: b3 = -.119037506846942249362528d-02
+real(nswc_dp), parameter :: b4 = .228908693387350391768682d-04
+real(nswc_dp), parameter :: c1 = .1666666666666666666666666666666667d+00
+real(nswc_dp), parameter :: c2 = .4166666666666666666666666666666667d-01
+real(nswc_dp), parameter :: c3 = .8333333333333333333333333333333333d-02
+real(nswc_dp), parameter :: c4 = .1388888888888888888888888888888889d-02
+real(nswc_dp), parameter :: c5 = .1984126984126984126984126984126984d-03
 !---------------------------
 !---------------------------
 !     ci = 1/factorial(i + 2)
@@ -4666,16 +4667,16 @@ return
 30 w = -1.d0/x
 end subroutine drexp1
 
-pure elemental real function alnrel(a)
+pure elemental real(nswc_sp) function alnrel(a)
 implicit none
-real, intent(in) :: a
-real :: t, t2, w, x
-real, parameter :: p1 = -.129418923021993e+01
-real, parameter :: p2 = .405303492862024e+00
-real, parameter :: p3 = -.178874546012214e-01
-real, parameter :: q1 = -.162752256355323e+01
-real, parameter :: q2 = .747811014037616e+00
-real, parameter :: q3 = -.845104217945565e-01
+real(nswc_sp), intent(in) :: a
+real(nswc_sp) :: t, t2, w, x
+real(nswc_sp), parameter :: p1 = -.129418923021993e+01
+real(nswc_sp), parameter :: p2 = .405303492862024e+00
+real(nswc_sp), parameter :: p3 = -.178874546012214e-01
+real(nswc_sp), parameter :: q1 = -.162752256355323e+01
+real(nswc_sp), parameter :: q2 = .747811014037616e+00
+real(nswc_sp), parameter :: q3 = -.845104217945565e-01
 !-----------------------------------------------------------------------
 !            Evaluation of the function ln(1 + a)
 !-----------------------------------------------------------------------
@@ -4692,26 +4693,26 @@ if (a < 0.0) x = (a + 0.5) + 0.5
 alnrel = log(x)
 end function alnrel
 
-pure elemental double precision function dlnrel(a)
+pure elemental real(nswc_dp) function dlnrel(a)
 implicit none
 !-----------------------------------------------------------------------
 !            Evaluation of the function ln(1 + a)
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a
-double precision :: t, t2, w, z
-double precision, parameter :: p0 = .7692307692307692307680d-01
-double precision, parameter :: p1 = -.1505958055914600184836d+00
-double precision, parameter :: p2 = .9302355725278521726994d-01
-double precision, parameter :: p3 = -.1787900022182327735804d-01
-double precision, parameter :: q1 = -.2824412139355646910683d+01
-double precision, parameter :: q2 = .2892424216041495392509d+01
-double precision, parameter :: q3 = -.1263560605948009364422d+01
-double precision, parameter :: q4 = .1966769435894561313526d+00
-double precision, parameter :: c1 = .3333333333333333333333333333333d+00
-double precision, parameter :: c2 = .2000000000000000000000000000000d+00
-double precision, parameter :: c3 = .1428571428571428571428571428571d+00
-double precision, parameter :: c4 = .1111111111111111111111111111111d+00
-double precision, parameter :: c5 = .9090909090909090909090909090909d-01
+real(nswc_dp), intent(in) :: a
+real(nswc_dp) :: t, t2, w, z
+real(nswc_dp), parameter :: p0 = .7692307692307692307680d-01
+real(nswc_dp), parameter :: p1 = -.1505958055914600184836d+00
+real(nswc_dp), parameter :: p2 = .9302355725278521726994d-01
+real(nswc_dp), parameter :: p3 = -.1787900022182327735804d-01
+real(nswc_dp), parameter :: q1 = -.2824412139355646910683d+01
+real(nswc_dp), parameter :: q2 = .2892424216041495392509d+01
+real(nswc_dp), parameter :: q3 = -.1263560605948009364422d+01
+real(nswc_dp), parameter :: q4 = .1966769435894561313526d+00
+real(nswc_dp), parameter :: c1 = .3333333333333333333333333333333d+00
+real(nswc_dp), parameter :: c2 = .2000000000000000000000000000000d+00
+real(nswc_dp), parameter :: c3 = .1428571428571428571428571428571d+00
+real(nswc_dp), parameter :: c4 = .1111111111111111111111111111111d+00
+real(nswc_dp), parameter :: c5 = .9090909090909090909090909090909d-01
 !-------------------------
 !-------------------------
 !     ci = 1/(2i + 1)
@@ -4737,17 +4738,17 @@ z = ((((w*t2 + c5)*t2 + c4)*t2 + c3)*t2 + c2)*t2 + c1
 dlnrel = 2.d0*t*(1.d0 + t2*z)
 end function dlnrel
 
-pure elemental real function rlog(x)
+pure elemental real(nswc_sp) function rlog(x)
 implicit none
-real, intent(in) :: x
-real :: r, t, u, up2, w, w1
-real, parameter :: a = .566749439387324e-01
-real, parameter :: b = .456512608815524e-01
-real, parameter :: p0 = .333333333333333e+00
-real, parameter :: p1 = -.224696413112536e+00
-real, parameter :: p2 = .620886815375787e-02
-real, parameter :: q1 = -.127408923933623e+01
-real, parameter :: q2 = .354508718369557e+00
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: r, t, u, up2, w, w1
+real(nswc_sp), parameter :: a = .566749439387324e-01
+real(nswc_sp), parameter :: b = .456512608815524e-01
+real(nswc_sp), parameter :: p0 = .333333333333333e+00
+real(nswc_sp), parameter :: p1 = -.224696413112536e+00
+real(nswc_sp), parameter :: p2 = .620886815375787e-02
+real(nswc_sp), parameter :: q1 = -.127408923933623e+01
+real(nswc_sp), parameter :: q2 = .354508718369557e+00
 !-----------------------------------------------------------------------
 !             Evaluation of the function x - 1 - LN(x)
 !-----------------------------------------------------------------------
@@ -4782,17 +4783,17 @@ return
 rlog = r - log(x)
 end function rlog
 
-pure elemental real function rlog1(x)
+pure elemental real(nswc_sp) function rlog1(x)
 implicit none
-real, intent(in) :: x
-real :: r, t, u, up2, w, w1
-real, parameter :: a = .566749439387324e-01
-real, parameter :: b = .456512608815524e-01
-real, parameter :: p0 = .333333333333333e+00
-real, parameter :: p1 = -.224696413112536e+00
-real, parameter :: p2 = .620886815375787e-02
-real, parameter :: q1 = -.127408923933623e+01
-real, parameter :: q2 = .354508718369557e+00
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: r, t, u, up2, w, w1
+real(nswc_sp), parameter :: a = .566749439387324e-01
+real(nswc_sp), parameter :: b = .456512608815524e-01
+real(nswc_sp), parameter :: p0 = .333333333333333e+00
+real(nswc_sp), parameter :: p1 = -.224696413112536e+00
+real(nswc_sp), parameter :: p2 = .620886815375787e-02
+real(nswc_sp), parameter :: q1 = -.127408923933623e+01
+real(nswc_sp), parameter :: q2 = .354508718369557e+00
 !-----------------------------------------------------------------------
 !             Evaluation of the function x - LN(1 + x)
 !-----------------------------------------------------------------------
@@ -4827,28 +4828,28 @@ return
 rlog1 = x - log(w)
 end function rlog1
 
-pure elemental double precision function drlog(x)
+pure elemental real(nswc_dp) function drlog(x)
 implicit none
 !-----------------------------------------------------------------------
 !             Evaluation of the function x - 1 - LN(x)
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision :: r, t, u, up2, w, w1, z
-double precision, parameter :: a = .566749439387323789126387112411845d-01
-double precision, parameter :: b = .456512608815524058941143273395059d-01
-double precision, parameter :: p0 = .7692307692307692307680d-01
-double precision, parameter :: p1 = -.1505958055914600184836d+00
-double precision, parameter :: p2 = .9302355725278521726994d-01
-double precision, parameter :: p3 = -.1787900022182327735804d-01
-double precision, parameter :: q1 = -.2824412139355646910683d+01
-double precision, parameter :: q2 = .2892424216041495392509d+01
-double precision, parameter :: q3 = -.1263560605948009364422d+01
-double precision, parameter :: q4 = .1966769435894561313526d+00
-double precision, parameter :: c1 = .333333333333333333333333333333333d+00
-double precision, parameter :: c2 = .200000000000000000000000000000000d+00
-double precision, parameter :: c3 = .142857142857142857142857142857143d+00
-double precision, parameter :: c4 = .111111111111111111111111111111111d+00
-double precision, parameter :: c5 = .909090909090909090909090909090909d-01
+real(nswc_dp), intent(in) :: x
+real(nswc_dp) :: r, t, u, up2, w, w1, z
+real(nswc_dp), parameter :: a = .566749439387323789126387112411845d-01
+real(nswc_dp), parameter :: b = .456512608815524058941143273395059d-01
+real(nswc_dp), parameter :: p0 = .7692307692307692307680d-01
+real(nswc_dp), parameter :: p1 = -.1505958055914600184836d+00
+real(nswc_dp), parameter :: p2 = .9302355725278521726994d-01
+real(nswc_dp), parameter :: p3 = -.1787900022182327735804d-01
+real(nswc_dp), parameter :: q1 = -.2824412139355646910683d+01
+real(nswc_dp), parameter :: q2 = .2892424216041495392509d+01
+real(nswc_dp), parameter :: q3 = -.1263560605948009364422d+01
+real(nswc_dp), parameter :: q4 = .1966769435894561313526d+00
+real(nswc_dp), parameter :: c1 = .333333333333333333333333333333333d+00
+real(nswc_dp), parameter :: c2 = .200000000000000000000000000000000d+00
+real(nswc_dp), parameter :: c3 = .142857142857142857142857142857143d+00
+real(nswc_dp), parameter :: c4 = .111111111111111111111111111111111d+00
+real(nswc_dp), parameter :: c5 = .909090909090909090909090909090909d-01
 !-------------------------
 !     a = drlog (0.7)
 !     b = drlog (4/3)
@@ -4891,28 +4892,28 @@ return
 drlog = r - log(x)
 end function drlog
 
-pure elemental double precision function drlog1(x)
+pure elemental real(nswc_dp) function drlog1(x)
 implicit none
 !-----------------------------------------------------------------------
 !             Evaluation of the function x - LN(1 + x)
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision :: r, t, u, up2, w, w1, z
-double precision, parameter :: a = .566749439387323789126387112411845d-01
-double precision, parameter :: b = .456512608815524058941143273395059d-01
-double precision, parameter :: p0 = .7692307692307692307680d-01
-double precision, parameter :: p1 = -.1505958055914600184836d+00
-double precision, parameter :: p2 = .9302355725278521726994d-01
-double precision, parameter :: p3 = -.1787900022182327735804d-01
-double precision, parameter :: q1 = -.2824412139355646910683d+01
-double precision, parameter :: q2 = .2892424216041495392509d+01
-double precision, parameter :: q3 = -.1263560605948009364422d+01
-double precision, parameter :: q4 = .1966769435894561313526d+00
-double precision, parameter :: c1 = .333333333333333333333333333333333d+00
-double precision, parameter :: c2 = .200000000000000000000000000000000d+00
-double precision, parameter :: c3 = .142857142857142857142857142857143d+00
-double precision, parameter :: c4 = .111111111111111111111111111111111d+00
-double precision, parameter :: c5 = .909090909090909090909090909090909d-01
+real(nswc_dp), intent(in) :: x
+real(nswc_dp) :: r, t, u, up2, w, w1, z
+real(nswc_dp), parameter :: a = .566749439387323789126387112411845d-01
+real(nswc_dp), parameter :: b = .456512608815524058941143273395059d-01
+real(nswc_dp), parameter :: p0 = .7692307692307692307680d-01
+real(nswc_dp), parameter :: p1 = -.1505958055914600184836d+00
+real(nswc_dp), parameter :: p2 = .9302355725278521726994d-01
+real(nswc_dp), parameter :: p3 = -.1787900022182327735804d-01
+real(nswc_dp), parameter :: q1 = -.2824412139355646910683d+01
+real(nswc_dp), parameter :: q2 = .2892424216041495392509d+01
+real(nswc_dp), parameter :: q3 = -.1263560605948009364422d+01
+real(nswc_dp), parameter :: q4 = .1966769435894561313526d+00
+real(nswc_dp), parameter :: c1 = .333333333333333333333333333333333d+00
+real(nswc_dp), parameter :: c2 = .200000000000000000000000000000000d+00
+real(nswc_dp), parameter :: c3 = .142857142857142857142857142857143d+00
+real(nswc_dp), parameter :: c4 = .111111111111111111111111111111111d+00
+real(nswc_dp), parameter :: c5 = .909090909090909090909090909090909d-01
 !-------------------------
 !     a = drlog (0.7)
 !     b = drlog (4/3)
@@ -4959,10 +4960,10 @@ pure subroutine locpt(x0, y0, x, y, n, l, m)
 implicit none
 integer, intent(inout) :: l, m
 integer, intent(in) :: n
-real, intent(in) :: x0, y0
-real, intent(in) :: x(n), y(n)
+real(nswc_sp), intent(in) :: x0, y0
+real(nswc_sp), intent(in) :: x(n), y(n)
 integer :: i, n0
-real :: angle, eps, pi, pi2, sum, theta, theta1, thetai, tol, u, v
+real(nswc_sp) :: angle, eps, pi, pi2, sum, theta, theta1, thetai, tol, u, v
 !-----------------------------------------------------------------------
 !     Given a polygonal line connecting the vertices (x(i),y(i))
 !     (i = 1,...,n) taken in this order. It is assumed that the
@@ -5027,10 +5028,10 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
 integer, intent(out) :: num
-real, intent(in) :: a(2), b(2), x(n), y(n)
-real, intent(inout) :: u(m), v(m)
+real(nswc_sp), intent(in) :: a(2), b(2), x(n), y(n)
+real(nswc_sp), intent(inout) :: u(m), v(m)
 integer :: i, ind, nm1
-real :: d, diff, diff1, eps, h, hi, onem, onep, p, q, s, t, tmax, tmin, tol, tol0, k, ki
+real(nswc_sp) :: d, diff, diff1, eps, h, hi, onem, onep, p, q, s, t, tmax, tmin, tol, tol0, k, ki
 !-----------------------------------------------------------------------
 !                 Intersection of a stright line
 !                       and polygonal path
@@ -5162,11 +5163,11 @@ implicit none
 integer, intent(inout) :: k
 integer, intent(in) :: m
 integer, intent(inout) :: n
-real, intent(inout) :: x(m), y(m)
-real, intent(inout) :: bx(*), by(*), vx(*), vy(*)
+real(nswc_sp), intent(inout) :: x(m), y(m)
+real(nswc_sp), intent(inout) :: bx(*), by(*), vx(*), vy(*)
 integer :: i, ii, isav, j, j0, k0, kp1, ksav, l, lbeg, lmax, lmin, &
    & lsav, mm1, mp1, nn
-real :: dx, dx0, dy, dy0, eps, h, onep, r, x1, xm, xmax, xmin, &
+real(nswc_sp) :: dx, dx0, dy, dy0, eps, h, onep, r, x1, xm, xmax, xmin, &
    & ymax, ymin
 logical :: ibeg
 !-----------------------------------------------------------------------
@@ -5498,12 +5499,12 @@ vy(2) = y(m)
 vy(3) = y(1)
 end subroutine hull
 
-pure real function parea(x, y, nb)
+pure real(nswc_sp) function parea(x, y, nb)
 implicit none
 integer, intent(in) :: nb
-real, intent(in) :: x(nb), y(nb)
+real(nswc_sp), intent(in) :: x(nb), y(nb)
 integer :: i, n, nm1, nswc_ai_i4
-real :: a
+real(nswc_sp) :: a
 !*****************************************************************
 !   Given a sequence of nb points (x(i),y(i)). parea computes
 ! the area bounded by the closed polygonal curve which passes
@@ -5636,7 +5637,7 @@ integer, intent(inout) :: pc(np1), ar(m), ac(m), s(n), vr(n), &
    & vc(n), p(n), subr(n), rbus(n), tor(n)
 integer :: i, iend, iff, ipi, it1, it2, j, j1, j2, ja, jj, jl, jsubr, k1, k2, l, l1, l2, ll, ll1, ll2, maxe, minu, mp1, nbo, np, &
    & nswc_ai_i4
-real :: dens, score
+real(nswc_sp) :: dens, score
 ! Meaning of the work arrays ...
 ! pc(i)   = Sum of the in-degrees of vertices  1, ..., i-1
 !           ( pc(1) = 0 ).
@@ -6145,16 +6146,16 @@ end subroutine rarc
 pure elemental subroutine cerf(mo, z, w)
 implicit none
 integer, intent(in) :: mo
-complex, intent(in) :: z
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: w
 integer :: i
-real :: c2, dm, pm, qm, r, sn, ss, x, y, ef(2), qf(2), sm(2), sz(2), tm(2), ts(2)
-real, parameter :: c = .564189583547756
-real, parameter :: cd(18) = [0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
+real(nswc_sp) :: c2, dm, pm, qm, r, sn, ss, x, y, ef(2), qf(2), sm(2), sz(2), tm(2), ts(2)
+real(nswc_sp), parameter :: c = .564189583547756
+real(nswc_sp), parameter :: cd(18) = [0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
    & 3.27963479382361e-1, 5.12675279912828e-1, 7.45412958045105e-1, 1.03695067418297e00, 1.40378061255437e00, 1.86891662214001e00, &
    & 2.46314830523929e00, 3.22719383737352e00, 4.21534348280013e00, 5.50178873151549e00, 7.19258966683102e00, 9.45170208076408e00, &
    & 1.25710718314784e+1, 1.72483537216334e+1]
-real, parameter :: ce(18) = [8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
+real(nswc_sp), parameter :: ce(18) = [8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
    & 1.15690392878957e-1, 9.78580959447535e-2, 8.05908834297624e-2, 6.40204538609872e-2, 4.81445242767885e-2, 3.33540658473295e-2, &
    & 2.05548099470193e-2, 1.07847403887506e-2, 4.55634892214219e-3, 1.43984458138925e-3, 3.07056139834171e-4, 3.78156541168541e-5, &
    & 2.05173509616121e-6, 2.63564823682747e-8]
@@ -6273,16 +6274,16 @@ end subroutine cerf
 pure elemental subroutine cerfc(mo, z, w)
 implicit none
 integer, intent(in) :: mo
-complex, intent(in) :: z
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: w
 integer :: i
-real :: c2, dm, pm, qm, r, sn, ss, x, y, qf(2), sm(2), sz(2), tm(2), ts(2)
-real, parameter :: c = .564189583547756
-real, parameter :: cd(18) = [0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
+real(nswc_sp) :: c2, dm, pm, qm, r, sn, ss, x, y, qf(2), sm(2), sz(2), tm(2), ts(2)
+real(nswc_sp), parameter :: c = .564189583547756
+real(nswc_sp), parameter :: cd(18) = [0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
    & 3.27963479382361e-1, 5.12675279912828e-1, 7.45412958045105e-1, 1.03695067418297e00, 1.40378061255437e00, 1.86891662214001e00, &
    & 2.46314830523929e00, 3.22719383737352e00, 4.21534348280013e00, 5.50178873151549e00, 7.19258966683102e00, 9.45170208076408e00, &
    & 1.25710718314784e+1, 1.72483537216334e+1]
-real, parameter :: ce(18) = [8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
+real(nswc_sp), parameter :: ce(18) = [8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
    & 1.15690392878957e-1, 9.78580959447535e-2, 8.05908834297624e-2, 6.40204538609872e-2, 4.81445242767885e-2, 3.33540658473295e-2, &
    & 2.05548099470193e-2, 1.07847403887506e-2, 4.55634892214219e-3, 1.43984458138925e-3, 3.07056139834171e-4, 3.78156541168541e-5, &
    & 2.05173509616121e-6, 2.63564823682747e-8]
@@ -6416,21 +6417,21 @@ sm(2) = qm*sin(sz(2)) + sm(2)
 w = cmplx(sm(1),sm(2))
 end subroutine cerfc
 
-pure elemental real function erf(x)
+pure elemental real(nswc_sp) function erf(x)
 implicit none
-real, intent(in) :: x
-real :: ax, bot, t, top, x2
-real, parameter :: c = .564189583547756
-real, parameter :: a(5) = [.771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: ax, bot, t, top, x2
+real(nswc_sp), parameter :: c = .564189583547756
+real(nswc_sp), parameter :: a(5) = [.771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
    & .128379167095513e+00]
-real, parameter :: b(3) = [.301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
-real, parameter :: p(8) = [-1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
+real(nswc_sp), parameter :: b(3) = [.301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
+real(nswc_sp), parameter :: p(8) = [-1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
    & 1.52989285046940e+02, 3.39320816734344e+02, 4.51918953711873e+02, 3.00459261020162e+02]
-real, parameter :: q(8) = [1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
+real(nswc_sp), parameter :: q(8) = [1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
    & 6.38980264465631e+02, 9.31354094850610e+02, 7.90950925327898e+02, 3.00459260956983e+02]
-real, parameter :: r(5) = [2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
+real(nswc_sp), parameter :: r(5) = [2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
    & 2.82094791773523e-01]
-real, parameter :: s(4) = [9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
+real(nswc_sp), parameter :: s(4) = [9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
 !-----------------------------------------------------------------------
 !             Evaluation of the real error function
 !-----------------------------------------------------------------------
@@ -6466,22 +6467,22 @@ return
 30 erf = sign(1.0,x)
 end function erf
 
-pure elemental real function erfc(x)
+pure elemental real(nswc_sp) function erfc(x)
 implicit none
-real, intent(in) :: x
-real :: ax, bot, e, t, top
-double precision :: w
-real, parameter :: c = .564189583547756
-real, parameter :: a(5) = [.771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: ax, bot, e, t, top
+real(nswc_dp) :: w
+real(nswc_sp), parameter :: c = .564189583547756
+real(nswc_sp), parameter :: a(5) = [.771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
    & .128379167095513e+00]
-real, parameter :: b(3) = [.301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
-real, parameter :: p(8) = [-1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
+real(nswc_sp), parameter :: b(3) = [.301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
+real(nswc_sp), parameter :: p(8) = [-1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
    & 1.52989285046940e+02, 3.39320816734344e+02, 4.51918953711873e+02, 3.00459261020162e+02]
-real, parameter :: q(8) = [1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
+real(nswc_sp), parameter :: q(8) = [1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
    & 6.38980264465631e+02, 9.31354094850610e+02, 7.90950925327898e+02, 3.00459260956983e+02]
-real, parameter :: r(5) = [2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
+real(nswc_sp), parameter :: r(5) = [2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
    & 2.82094791773523e-01]
-real, parameter :: s(4) = [9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
+real(nswc_sp), parameter :: s(4) = [9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
 !-----------------------------------------------------------------------
 !         Evaluation of the complementary error function
 !-----------------------------------------------------------------------
@@ -6529,23 +6530,23 @@ return
 50 erfc = 0.0
 end function erfc
 
-pure elemental real function erfc1(ind, x)
+pure elemental real(nswc_sp) function erfc1(ind, x)
 implicit none
 integer, intent(in) :: ind
-real, intent(in) :: x
-real :: ax, bot, e, t, top
-double precision :: w
-real, parameter :: c = .564189583547756
-real, parameter :: a(5) = [.771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: ax, bot, e, t, top
+real(nswc_dp) :: w
+real(nswc_sp), parameter :: c = .564189583547756
+real(nswc_sp), parameter :: a(5) = [.771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
    & .128379167095513e+00]
-real, parameter :: b(3) = [.301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
-real, parameter :: p(8) = [-1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
+real(nswc_sp), parameter :: b(3) = [.301048631703895e-02, .538971687740286e-01, .375795757275549e+00]
+real(nswc_sp), parameter :: p(8) = [-1.36864857382717e-07, 5.64195517478974e-01, 7.21175825088309e+00, 4.31622272220567e+01, &
    & 1.52989285046940e+02, 3.39320816734344e+02, 4.51918953711873e+02, 3.00459261020162e+02]
-real, parameter :: q(8) = [1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
+real(nswc_sp), parameter :: q(8) = [1.00000000000000e+00, 1.27827273196294e+01, 7.70001529352295e+01, 2.77585444743988e+02, &
    & 6.38980264465631e+02, 9.31354094850610e+02, 7.90950925327898e+02, 3.00459260956983e+02]
-real, parameter :: r(5) = [2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
+real(nswc_sp), parameter :: r(5) = [2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
    & 2.82094791773523e-01]
-real, parameter :: s(4) = [9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
+real(nswc_sp), parameter :: s(4) = [9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
 !-----------------------------------------------------------------------
 !         Evaluation of the complementary error function
 !          erfc1(ind,x) = erfc(x)            if ind = 0
@@ -6604,11 +6605,11 @@ end function erfc1
 pure subroutine dcerf(mo, z, w)
 implicit none
 integer, intent(in) :: mo
-double precision, intent(in) :: z(2)
-double precision, intent(inout) :: w(2)
-double precision :: m, n, n2, n4, np1, c2, d, d2, e, eps, r, sn, tol, x, y, a0(2), an(2), b0(2), bn(2), g0(2), gn(2), h0(2), &
+real(nswc_dp), intent(in) :: z(2)
+real(nswc_dp), intent(inout) :: w(2)
+real(nswc_dp) :: m, n, n2, n4, np1, c2, d, d2, e, eps, r, sn, tol, x, y, a0(2), an(2), b0(2), bn(2), g0(2), gn(2), h0(2), &
    & hn(2), qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), wn(2)
-double precision, parameter :: c = .56418958354775628694807945156077d0
+real(nswc_dp), parameter :: c = .56418958354775628694807945156077d0
 !-----------------------------------------------------------------------
 !               Computation of the complex error function
 !                          -----------------
@@ -6843,9 +6844,9 @@ w(2) = - w(2)
 contains
    pure function anorm(x, y) result(nswc_sf_result)
       implicit none
-      double precision, intent(in) :: x
-      double precision, intent(in) :: y
-      double precision :: nswc_sf_result
+      real(nswc_dp), intent(in) :: x
+      real(nswc_dp), intent(in) :: y
+      real(nswc_dp) :: nswc_sf_result
       nswc_sf_result = max(abs(x),abs(y))
    end function anorm
 end subroutine dcerf
@@ -6853,11 +6854,11 @@ end subroutine dcerf
 pure subroutine dcerfc(mo, z, w)
 implicit none
 integer, intent(in) :: mo
-double precision, intent(in) :: z(2)
-double precision, intent(inout) :: w(2)
-double precision :: m, n, n2, n4, np1, c2, d, d2, e, eps, r, sn, tol, x, y, a0(2), an(2), b0(2), bn(2), g0(2), gn(2), h0(2), &
+real(nswc_dp), intent(in) :: z(2)
+real(nswc_dp), intent(inout) :: w(2)
+real(nswc_dp) :: m, n, n2, n4, np1, c2, d, d2, e, eps, r, sn, tol, x, y, a0(2), an(2), b0(2), bn(2), g0(2), gn(2), h0(2), &
    & hn(2), qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), wn(2)
-double precision, parameter :: c = .56418958354775628694807945156077d0
+real(nswc_dp), parameter :: c = .56418958354775628694807945156077d0
 !-----------------------------------------------------------------------
 !              Computation of the complex coerror function
 !                           ----------------
@@ -7095,9 +7096,9 @@ w(2) = e*sin(sz(2)) + sm(2)
 contains
    pure function anorm(x, y) result(nswc_sf_result)
       implicit none
-      double precision, intent(in) :: x
-      double precision, intent(in) :: y
-      double precision :: nswc_sf_result
+      real(nswc_dp), intent(in) :: x
+      real(nswc_dp), intent(in) :: y
+      real(nswc_dp) :: nswc_sf_result
       nswc_sf_result = max(abs(x),abs(y))
    end function anorm
 end subroutine dcerfc
@@ -7105,13 +7106,13 @@ end subroutine dcerfc
 pure subroutine erfcm2(mo, z, w)
 implicit none
 integer, intent(in) :: mo
-double precision, intent(in) :: z(2)
-double precision, intent(inout) :: w(2)
+real(nswc_dp), intent(in) :: z(2)
+real(nswc_dp), intent(inout) :: w(2)
 integer :: j, n
-double precision :: eps, h(2), t(2), tol, x, y
-double precision, parameter :: c = .20666985354092053857068941306585476d-01
-double precision, parameter :: e = .46777349810472658379307436327470714d-02
-double precision, parameter :: a(63) = [.20000000000000000000000000000000000d+01, &
+real(nswc_dp) :: eps, h(2), t(2), tol, x, y
+real(nswc_dp), parameter :: c = .20666985354092053857068941306585476d-01
+real(nswc_dp), parameter :: e = .46777349810472658379307436327470714d-02
+real(nswc_dp), parameter :: a(63) = [.20000000000000000000000000000000000d+01, &
    & .23333333333333333333333333333333333d+01, .16666666666666666666666666666666667d+01, .63333333333333333333333333333333333d+00, &
    & -.22222222222222222222222222222222222d-01, -.16349206349206349206349206349206349d+00, - &
    & .76984126984126984126984126984126984d-01, -.24250440917107583774250440917107584d-02, .12716049382716049382716049382716049d-01 &
@@ -7197,19 +7198,19 @@ w(2) = y
 contains
    pure function anorm(x, y) result(nswc_sf_result)
       implicit none
-      double precision, intent(in) :: x
-      double precision, intent(in) :: y
-      double precision :: nswc_sf_result
+      real(nswc_dp), intent(in) :: x
+      real(nswc_dp), intent(in) :: y
+      real(nswc_dp) :: nswc_sf_result
       nswc_sf_result = max(abs(x),abs(y))
    end function anorm
 end subroutine erfcm2
 
-pure elemental double precision function derf(x)
+pure elemental real(nswc_dp) function derf(x)
 implicit none
-double precision, intent(in) :: x
+real(nswc_dp), intent(in) :: x
 integer :: i, k
-double precision :: ax, t, w
-double precision, parameter :: a(21) = [.1283791670955125738961589031215d+00, - &
+real(nswc_dp) :: ax, t, w
+real(nswc_dp), parameter :: a(21) = [.1283791670955125738961589031215d+00, - &
    & .3761263890318375246320529677070d+00, .1128379167095512573896158902931d+00, -.2686617064513125175943235372542d-01, &
    & .5223977625442187842111812447877d-02, -.8548327023450852832540164081187d-03, .1205533298178966425020717182498d-03, - &
    & .1492565035840625090430728526820d-04, .1646211436588924261080723578109d-05, -.1636584469123468757408968429674d-06, &
@@ -7242,12 +7243,12 @@ return
 30 derf = sign(1.d0,x)
 end function derf
 
-pure elemental double precision function derfc(x)
+pure elemental real(nswc_dp) function derfc(x)
 implicit none
-double precision, intent(in) :: x
+real(nswc_dp), intent(in) :: x
 integer :: i, k
-double precision :: ax, t, w
-double precision, parameter :: a(21) = [.1283791670955125738961589031215d+00, - &
+real(nswc_dp) :: ax, t, w
+real(nswc_dp), parameter :: a(21) = [.1283791670955125738961589031215d+00, - &
    & .3761263890318375246320529677070d+00, .1128379167095512573896158902931d+00, -.2686617064513125175943235372542d-01, &
    & .5223977625442187842111812447877d-02, -.8548327023450852832540164081187d-03, .1205533298178966425020717182498d-03, - &
    & .1492565035840625090430728526820d-04, .1646211436588924261080723578109d-05, -.1636584469123468757408968429674d-06, &
@@ -7286,13 +7287,13 @@ if (t > -dxparg(1)) return
 derfc = exp(-t) * derfc0(x)
 end function derfc
 
-pure elemental double precision function derfc1(ind, x)
+pure elemental real(nswc_dp) function derfc1(ind, x)
 implicit none
 integer, intent(in) :: ind
-double precision, intent(in) :: x
+real(nswc_dp), intent(in) :: x
 integer :: i, k
-double precision :: ax, t, w
-double precision, parameter :: a(21) = [.1283791670955125738961589031215d+00, - &
+real(nswc_dp) :: ax, t, w
+real(nswc_dp), parameter :: a(21) = [.1283791670955125738961589031215d+00, - &
    & .3761263890318375246320529677070d+00, .1128379167095512573896158902931d+00, -.2686617064513125175943235372542d-01, &
    & .5223977625442187842111812447877d-02, -.8548327023450852832540164081187d-03, .1205533298178966425020717182498d-03, - &
    & .1492565035840625090430728526820d-04, .1646211436588924261080723578109d-05, -.1636584469123468757408968429674d-06, &
@@ -7342,7 +7343,7 @@ return
 if (ind /= 0) derfc1 = 2.d0*exp(x*x)
 end function derfc1
 
-pure elemental double precision function derfc0(x)
+pure elemental real(nswc_dp) function derfc0(x)
 implicit none
 !-----------------------------------------------------------------------
 !           Evaluation of exp(x**2)*erfc(x) for x .GE. 1
@@ -7352,86 +7353,86 @@ implicit none
 !        Dahlgren, Virginia
 !        April 1992
 !-------------------------------
-double precision, intent(in) :: x
-double precision :: t, u, v, z
-double precision, parameter :: rpinv = .56418958354775628694807945156077259d0
-double precision, parameter :: p0 = .16506148041280876191828601d-03
-double precision, parameter :: p1 = .15471455377139313353998665d-03
-double precision, parameter :: p2 = .44852548090298868465196794d-04
-double precision, parameter :: p3 = -.49177280017226285450486205d-05
-double precision, parameter :: p4 = -.69353602078656412367801676d-05
-double precision, parameter :: p5 = -.20508667787746282746857743d-05
-double precision, parameter :: p6 = -.28982842617824971177267380d-06
-double precision, parameter :: p7 = -.17272433544836633301127174d-07
-double precision, parameter :: q1 = .16272656776533322859856317d+01
-double precision, parameter :: q2 = .12040996037066026106794322d+01
-double precision, parameter :: q3 = .52400246352158386907601472d+00
-double precision, parameter :: q4 = .14497345252798672362384241d+00
-double precision, parameter :: q5 = .25592517111042546492590736d-01
-double precision, parameter :: q6 = .26869088293991371028123158d-02
-double precision, parameter :: q7 = .13133767840925681614496481d-03
-double precision, parameter :: r0 = .145589721275038539045668824025d+00
-double precision, parameter :: r1 = -.273421931495426482902320421863d+00
-double precision, parameter :: r2 = .226008066916621506788789064272d+00
-double precision, parameter :: r3 = -.163571895523923805648814425592d+00
-double precision, parameter :: r4 = .102604312032193978662297299832d+00
-double precision, parameter :: r5 = -.548023266949835519254211506880d-01
-double precision, parameter :: r6 = .241432239725390106956523668160d-01
-double precision, parameter :: r7 = -.822062115403915116036874169600d-02
-double precision, parameter :: r8 = .180296241564687154310619200000d-02
-double precision, parameter :: a0 = -.45894433406309678202825375d-03
-double precision, parameter :: a1 = -.12281298722544724287816236d-01
-double precision, parameter :: a2 = -.91144359512342900801764781d-01
-double precision, parameter :: a3 = -.28412489223839285652511367d-01
-double precision, parameter :: a4 = .14083827189977123530129812d+01
-double precision, parameter :: a5 = .11532175281537044570477189d+01
-double precision, parameter :: a6 = -.72170903389442152112483632d+01
-double precision, parameter :: a7 = -.19685597805218214001309225d+01
-double precision, parameter :: a8 = .93846891504541841150916038d+01
-double precision, parameter :: b1 = .25136329960926527692263725d+02
-double precision, parameter :: b2 = .15349442087145759184067981d+03
-double precision, parameter :: b3 = -.29971215958498680905476402d+03
-double precision, parameter :: b4 = -.33876477506888115226730368d+04
-double precision, parameter :: b5 = .28301829314924804988873701d+04
-double precision, parameter :: b6 = .22979620942196507068034887d+05
-double precision, parameter :: b7 = -.24280681522998071562462041d+05
-double precision, parameter :: b8 = -.36680620673264731899504580d+05
-double precision, parameter :: b9 = .42278731622295627627042436d+05
-double precision, parameter :: b10 = .28834257644413614344549790d+03
-double precision, parameter :: b11 = .70226293775648358646587341d+03
-double precision, parameter :: c0 = -.7040906288250128001000086d-04
-double precision, parameter :: c1 = -.3858822461760510359506941d-02
-double precision, parameter :: c2 = -.7708202127512212359395078d-01
-double precision, parameter :: c3 = -.6713655014557429480440263d+00
-double precision, parameter :: c4 = -.2081992124162995545731882d+01
-double precision, parameter :: c5 = .2898831421475282558867888d+01
-double precision, parameter :: c6 = .2199509380600429331650192d+02
-double precision, parameter :: c7 = .2907064664404115316722996d+01
-double precision, parameter :: c8 = -.4766208741588182425380950d+02
-double precision, parameter :: d1 = .5238852785508439144747174d+02
-double precision, parameter :: d2 = .9646843357714742409535148d+03
-double precision, parameter :: d3 = .7007152775135939601804416d+04
-double precision, parameter :: d4 = .8515386792259821780601162d+04
-double precision, parameter :: d5 = -.1002360095177164564992134d+06
-double precision, parameter :: d6 = -.2065250031331232815791912d+06
-double precision, parameter :: d7 = .5695324805290370358175984d+06
-double precision, parameter :: d8 = .6589752493461331195697873d+06
-double precision, parameter :: d9 = -.1192930193156561957631462d+07
-double precision, parameter :: e0 = .540464821348814822409610122136d+00
-double precision, parameter :: e1 = -.261515522487415653487049835220d-01
-double precision, parameter :: e2 = -.288573438386338758794591212600d-02
-double precision, parameter :: e3 = -.529353396945788057720258856000d-03
-double precision, parameter :: s1 = .75000000000000000000d+00
-double precision, parameter :: s2 = -.18750000000000000000d+01
-double precision, parameter :: s3 = .65625000000000000000d+01
-double precision, parameter :: s4 = -.29531250000000000000d+02
-double precision, parameter :: s5 = .16242187500000000000d+03
-double precision, parameter :: s6 = -.10557421875000000000d+04
-double precision, parameter :: s7 = .79180664062500000000d+04
-double precision, parameter :: s8 = -.67303564453125000000d+05
-double precision, parameter :: s9 = .63938386230468750000d+06
-double precision, parameter :: s10 = -.67135305541992187500d+07
-double precision, parameter :: s11 = .77205601373291015625d+08
+real(nswc_dp), intent(in) :: x
+real(nswc_dp) :: t, u, v, z
+real(nswc_dp), parameter :: rpinv = .56418958354775628694807945156077259d0
+real(nswc_dp), parameter :: p0 = .16506148041280876191828601d-03
+real(nswc_dp), parameter :: p1 = .15471455377139313353998665d-03
+real(nswc_dp), parameter :: p2 = .44852548090298868465196794d-04
+real(nswc_dp), parameter :: p3 = -.49177280017226285450486205d-05
+real(nswc_dp), parameter :: p4 = -.69353602078656412367801676d-05
+real(nswc_dp), parameter :: p5 = -.20508667787746282746857743d-05
+real(nswc_dp), parameter :: p6 = -.28982842617824971177267380d-06
+real(nswc_dp), parameter :: p7 = -.17272433544836633301127174d-07
+real(nswc_dp), parameter :: q1 = .16272656776533322859856317d+01
+real(nswc_dp), parameter :: q2 = .12040996037066026106794322d+01
+real(nswc_dp), parameter :: q3 = .52400246352158386907601472d+00
+real(nswc_dp), parameter :: q4 = .14497345252798672362384241d+00
+real(nswc_dp), parameter :: q5 = .25592517111042546492590736d-01
+real(nswc_dp), parameter :: q6 = .26869088293991371028123158d-02
+real(nswc_dp), parameter :: q7 = .13133767840925681614496481d-03
+real(nswc_dp), parameter :: r0 = .145589721275038539045668824025d+00
+real(nswc_dp), parameter :: r1 = -.273421931495426482902320421863d+00
+real(nswc_dp), parameter :: r2 = .226008066916621506788789064272d+00
+real(nswc_dp), parameter :: r3 = -.163571895523923805648814425592d+00
+real(nswc_dp), parameter :: r4 = .102604312032193978662297299832d+00
+real(nswc_dp), parameter :: r5 = -.548023266949835519254211506880d-01
+real(nswc_dp), parameter :: r6 = .241432239725390106956523668160d-01
+real(nswc_dp), parameter :: r7 = -.822062115403915116036874169600d-02
+real(nswc_dp), parameter :: r8 = .180296241564687154310619200000d-02
+real(nswc_dp), parameter :: a0 = -.45894433406309678202825375d-03
+real(nswc_dp), parameter :: a1 = -.12281298722544724287816236d-01
+real(nswc_dp), parameter :: a2 = -.91144359512342900801764781d-01
+real(nswc_dp), parameter :: a3 = -.28412489223839285652511367d-01
+real(nswc_dp), parameter :: a4 = .14083827189977123530129812d+01
+real(nswc_dp), parameter :: a5 = .11532175281537044570477189d+01
+real(nswc_dp), parameter :: a6 = -.72170903389442152112483632d+01
+real(nswc_dp), parameter :: a7 = -.19685597805218214001309225d+01
+real(nswc_dp), parameter :: a8 = .93846891504541841150916038d+01
+real(nswc_dp), parameter :: b1 = .25136329960926527692263725d+02
+real(nswc_dp), parameter :: b2 = .15349442087145759184067981d+03
+real(nswc_dp), parameter :: b3 = -.29971215958498680905476402d+03
+real(nswc_dp), parameter :: b4 = -.33876477506888115226730368d+04
+real(nswc_dp), parameter :: b5 = .28301829314924804988873701d+04
+real(nswc_dp), parameter :: b6 = .22979620942196507068034887d+05
+real(nswc_dp), parameter :: b7 = -.24280681522998071562462041d+05
+real(nswc_dp), parameter :: b8 = -.36680620673264731899504580d+05
+real(nswc_dp), parameter :: b9 = .42278731622295627627042436d+05
+real(nswc_dp), parameter :: b10 = .28834257644413614344549790d+03
+real(nswc_dp), parameter :: b11 = .70226293775648358646587341d+03
+real(nswc_dp), parameter :: c0 = -.7040906288250128001000086d-04
+real(nswc_dp), parameter :: c1 = -.3858822461760510359506941d-02
+real(nswc_dp), parameter :: c2 = -.7708202127512212359395078d-01
+real(nswc_dp), parameter :: c3 = -.6713655014557429480440263d+00
+real(nswc_dp), parameter :: c4 = -.2081992124162995545731882d+01
+real(nswc_dp), parameter :: c5 = .2898831421475282558867888d+01
+real(nswc_dp), parameter :: c6 = .2199509380600429331650192d+02
+real(nswc_dp), parameter :: c7 = .2907064664404115316722996d+01
+real(nswc_dp), parameter :: c8 = -.4766208741588182425380950d+02
+real(nswc_dp), parameter :: d1 = .5238852785508439144747174d+02
+real(nswc_dp), parameter :: d2 = .9646843357714742409535148d+03
+real(nswc_dp), parameter :: d3 = .7007152775135939601804416d+04
+real(nswc_dp), parameter :: d4 = .8515386792259821780601162d+04
+real(nswc_dp), parameter :: d5 = -.1002360095177164564992134d+06
+real(nswc_dp), parameter :: d6 = -.2065250031331232815791912d+06
+real(nswc_dp), parameter :: d7 = .5695324805290370358175984d+06
+real(nswc_dp), parameter :: d8 = .6589752493461331195697873d+06
+real(nswc_dp), parameter :: d9 = -.1192930193156561957631462d+07
+real(nswc_dp), parameter :: e0 = .540464821348814822409610122136d+00
+real(nswc_dp), parameter :: e1 = -.261515522487415653487049835220d-01
+real(nswc_dp), parameter :: e2 = -.288573438386338758794591212600d-02
+real(nswc_dp), parameter :: e3 = -.529353396945788057720258856000d-03
+real(nswc_dp), parameter :: s1 = .75000000000000000000d+00
+real(nswc_dp), parameter :: s2 = -.18750000000000000000d+01
+real(nswc_dp), parameter :: s3 = .65625000000000000000d+01
+real(nswc_dp), parameter :: s4 = -.29531250000000000000d+02
+real(nswc_dp), parameter :: s5 = .16242187500000000000d+03
+real(nswc_dp), parameter :: s6 = -.10557421875000000000d+04
+real(nswc_dp), parameter :: s7 = .79180664062500000000d+04
+real(nswc_dp), parameter :: s8 = -.67303564453125000000d+05
+real(nswc_dp), parameter :: s9 = .63938386230468750000d+06
+real(nswc_dp), parameter :: s10 = -.67135305541992187500d+07
+real(nswc_dp), parameter :: s11 = .77205601373291015625d+08
 !-------------------------------
 !     rpinv = 1/sqrt(pi)
 !-------------------------------
@@ -7482,28 +7483,28 @@ z = (((((((((((s11*t + s10)*t + s9)*t + s8)*t + s7)*t + &
 derfc0 = rpinv*(z/x)
 end function derfc0
 
-pure elemental real function erfi(p, q)
+pure elemental real(nswc_sp) function erfi(p, q)
 implicit none
-real, intent(in) :: p, q
-real :: eps, s, t, v, v1
-real, parameter :: c = .5625
-real, parameter :: c1 = .87890625
-real, parameter :: c2 = -.2302585092994046e+03
-real, parameter :: a(6) = [.1400216916161353e+03, -.7204275515686407e+03, .1296708621660511e+04, -.9697932901514031e+03, &
+real(nswc_sp), intent(in) :: p, q
+real(nswc_sp) :: eps, s, t, v, v1
+real(nswc_sp), parameter :: c = .5625
+real(nswc_sp), parameter :: c1 = .87890625
+real(nswc_sp), parameter :: c2 = -.2302585092994046e+03
+real(nswc_sp), parameter :: a(6) = [.1400216916161353e+03, -.7204275515686407e+03, .1296708621660511e+04, -.9697932901514031e+03, &
    & .2762427049269425e+03, -.2012940180552054e+02]
-real, parameter :: b(6) = [.1291046303114685e+03, -.7312308064260973e+03, .1494970492915789e+04, -.1337793793683419e+04, &
+real(nswc_sp), parameter :: b(6) = [.1291046303114685e+03, -.7312308064260973e+03, .1494970492915789e+04, -.1337793793683419e+04, &
    & .5033747142783567e+03, -.6220205554529216e+02]
-real, parameter :: a1(7) = [-.1690478046781745e+00, .3524374318100228e+01, -.2698143370550352e+02, .9340783041018743e+02, &
+real(nswc_sp), parameter :: a1(7) = [-.1690478046781745e+00, .3524374318100228e+01, -.2698143370550352e+02, .9340783041018743e+02, &
    & -.1455364428646732e+03, .8805852004723659e+02, -.1349018591231947e+02]
-real, parameter :: b1(7) = [-.1203221171313429e+00, .2684812231556632e+01, -.2242485268704865e+02, .8723495028643494e+02, &
+real(nswc_sp), parameter :: b1(7) = [-.1203221171313429e+00, .2684812231556632e+01, -.2242485268704865e+02, .8723495028643494e+02, &
    & -.1604352408444319e+03, .1259117982101525e+03, -.3184861786248824e+02]
-real, parameter :: a2(9) = [.3100808562552958e-04, .4097487603011940e-02, .1214902662897276e+00, .1109167694639028e+01, &
+real(nswc_sp), parameter :: a2(9) = [.3100808562552958e-04, .4097487603011940e-02, .1214902662897276e+00, .1109167694639028e+01, &
    & .3228379855663924e+01, .2881691815651599e+01, .2047972087262996e+01, .8545922081972148e+00, .3551095884622383e-02]
-real, parameter :: b2(8) = [.3100809298564522e-04, .4097528678663915e-02, .1215907800748757e+00, .1118627167631696e+01, &
+real(nswc_sp), parameter :: b2(8) = [.3100809298564522e-04, .4097528678663915e-02, .1215907800748757e+00, .1118627167631696e+01, &
    & .3432363984305290e+01, .4140284677116202e+01, .4119797271272204e+01, .2162961962641435e+01]
-real, parameter :: a3(9) = [.3205405422062050e-08, .1899479322632128e-05, .2814223189858532e-03, .1370504879067817e-01, &
+real(nswc_sp), parameter :: a3(9) = [.3205405422062050e-08, .1899479322632128e-05, .2814223189858532e-03, .1370504879067817e-01, &
    & .2268143542005976e+00, .1098421959892340e+01, .6791143397056208e+00, -.834334189167721e+00, .3421951267240343e+00]
-real, parameter :: b3(6) = [.3205405053282398e-08, .1899480592260143e-05, .2814349691098940e-03, .1371092249602266e-01, &
+real(nswc_sp), parameter :: b3(6) = [.3205405053282398e-08, .1899480592260143e-05, .2814349691098940e-03, .1371092249602266e-01, &
    & .2275172815174473e+00, .1125348514036959e+01]
 !-----------------------------------------------------------------------
 !              Evaluation of the inverse error function
@@ -7573,7 +7574,7 @@ return
 110 erfi = -2.0
 end function erfi
 
-pure elemental double precision function derfi(p, q)
+pure elemental real(nswc_dp) function derfi(p, q)
 implicit none
 intrinsic :: erf
 !-----------------------------------------------------------------------
@@ -7587,34 +7588,34 @@ intrinsic :: erf
 !     Reference. Mathematics of computation,oct.1976,PP.827-830.
 !                  J.M.Blair,C.A.Edwards,J.H.Johnson
 !-----------------------------------------------------------------------
-double precision, intent(in) :: p, q
-double precision :: eps, f, lnq, s, t, x
-double precision, parameter :: c = .5625d0
-double precision, parameter :: c1 = .87890625d0
-double precision, parameter :: c2 = -.2302585092994045684017991454684364d+03
-double precision, parameter :: r = .8862269254527580136490837416705726d+00
-double precision, parameter :: a(7) = [.841467547194693616d-01, .160499904248262200d+01, &
+real(nswc_dp), intent(in) :: p, q
+real(nswc_dp) :: eps, f, lnq, s, t, x
+real(nswc_dp), parameter :: c = .5625d0
+real(nswc_dp), parameter :: c1 = .87890625d0
+real(nswc_dp), parameter :: c2 = -.2302585092994045684017991454684364d+03
+real(nswc_dp), parameter :: r = .8862269254527580136490837416705726d+00
+real(nswc_dp), parameter :: a(7) = [.841467547194693616d-01, .160499904248262200d+01, &
    & .809451641478547505d+01, .164273396973002581d+02, .154297507839223692d+02, .669584134660994039d+01, .108455979679682472d+01]
-double precision, parameter :: b(7) = [.352281538790042405d-02, .293409069065309557d+00, &
+real(nswc_dp), parameter :: b(7) = [.352281538790042405d-02, .293409069065309557d+00, &
    & .326709873508963100d+01, .123611641257633210d+02, .207984023857547070d+02, .170791197367677668d+02, .669253523595376683d+01]
-double precision, parameter :: a1(7) = [.552755110179178015d+2, .657347545992519152d+3, .124276851197202733d+4 &
+real(nswc_dp), parameter :: a1(7) = [.552755110179178015d+2, .657347545992519152d+3, .124276851197202733d+4 &
    & , .818859792456464820d+3, .234425632359410093d+3, .299942187305427917d+2, .140496035731853946d+1]
-double precision, parameter :: b1(6) = [.179209835890172156d+3, .991315839349539886d+3, .138271033653003487d+4 &
+real(nswc_dp), parameter :: b1(6) = [.179209835890172156d+3, .991315839349539886d+3, .138271033653003487d+4 &
    & , .764020340925985926d+3, .194354053300991923d+3, .228139510050586581d+2]
-double precision, parameter :: a2(7) = [.500926197430588206d+1, .111349802614499199d+3, .353872732756132161d+3 &
+real(nswc_dp), parameter :: a2(7) = [.500926197430588206d+1, .111349802614499199d+3, .353872732756132161d+3 &
    & , .356000407341490731d+3, .143264457509959760d+3, .240823237485307567d+2, .140496035273226366d+1]
-double precision, parameter :: b2(6) = [.209004294324106981d+2, .198607335199741185d+3, .439311287748524270d+3 &
+real(nswc_dp), parameter :: b2(6) = [.209004294324106981d+2, .198607335199741185d+3, .439311287748524270d+3 &
    & , .355415991280861051d+3, .123303672628828521d+3, .186060775181898848d+2]
-double precision, parameter :: a3(11) = [.237121026548776092d4, .732899958728969905d6, .182063754893444775d7, &
+real(nswc_dp), parameter :: a3(11) = [.237121026548776092d4, .732899958728969905d6, .182063754893444775d7, &
    & .269191299062422172d7, .304817224671614253d7, .130643103351072345d7, .296799076241952125d6, .457006532030955554d5, &
    & .373449801680687213d4, .118062255483596543d3, .100000329157954960d1]
-double precision, parameter :: b3(10) = [.851911109952055378d6, .194746720192729966d7, .373640079258593694d7, &
+real(nswc_dp), parameter :: b3(10) = [.851911109952055378d6, .194746720192729966d7, .373640079258593694d7, &
    & .397271370110424145d7, .339457682064283712d7, .136888294898155938d7, .303357770911491406d6, .459721480357533823d5, &
    & .373762573565814355d4, .118064334590001264d3]
-double precision, parameter :: a4(9) = [.154269429680540807d12, .430207405012067454d12, .182623446525965017d12 &
+real(nswc_dp), parameter :: a4(9) = [.154269429680540807d12, .430207405012067454d12, .182623446525965017d12 &
    & , .248740194409838713d11, .133506080294978121d10, .302446226073105850d08, .285909602878724425d06, .101789226017835707d04, &
    & .100000004821118676d01]
-double precision, parameter :: b4(9) = [.220533001293836387d12, .347822938010402687d12, .468373326975152250d12 &
+real(nswc_dp), parameter :: b4(9) = [.220533001293836387d12, .347822938010402687d12, .468373326975152250d12 &
    & , .185251723580351631d12, .249464490520921771d11, .133587491840784926d10, .302480682561295591d08, .285913799407861384d06, &
    & .101789250893050230d04]
 !-----------------------------------------------------------------------
@@ -7696,14 +7697,14 @@ return
 110 derfi = -2.d0
 end function derfi
 
-pure elemental real function aerf(x, h)
+pure elemental real(nswc_sp) function aerf(x, h)
 implicit none
 intrinsic :: erf, erfc
-real, intent(in) :: h, x
+real(nswc_sp), intent(in) :: h, x
 integer :: j, n, n1
-real :: a2, ah, ax, dn2, e, eps, h2, h3, hf, hg, s, st, t, u, v, x2, xmh, xph, z
-real, parameter :: c = 1.12837916709551257
-real, parameter :: p = 2.76959
+real(nswc_sp) :: a2, ah, ax, dn2, e, eps, h2, h3, hf, hg, s, st, t, u, v, x2, xmh, xph, z
+real(nswc_sp), parameter :: c = 1.12837916709551257
+real(nswc_sp), parameter :: p = 2.76959
 !-----------------------------------------------------------------------
 !             Computation of erf(x + h) - erf(x - h)
 !-----------------------------------------------------------------------
@@ -7810,14 +7811,14 @@ return
 160 aerf = t*erf(h)
 end function aerf
 
-pure elemental double precision function daerf(x, h)
+pure elemental real(nswc_dp) function daerf(x, h)
 implicit none
 intrinsic :: erf, erfc
-double precision, intent(in) :: x, h
+real(nswc_dp), intent(in) :: x, h
 integer :: j
-double precision :: ah, ax, a2, dn2, e, eps, hf, hg, h2, h3, n, n1, s, st, t, u, v, xmh, xph, x2, z
-double precision, parameter :: c = 1.12837916709551257389615890312155d0
-double precision, parameter :: p = 2.76959d0
+real(nswc_dp) :: ah, ax, a2, dn2, e, eps, hf, hg, h2, h3, n, n1, s, st, t, u, v, xmh, xph, x2, z
+real(nswc_dp), parameter :: c = 1.12837916709551257389615890312155d0
+real(nswc_dp), parameter :: p = 2.76959d0
 !-----------------------------------------------------------------------
 !             Computation of erf(x + h) - erf(x - h)
 !-----------------------------------------------------------------------
@@ -7928,11 +7929,11 @@ end function daerf
 pure elemental function pndf(x,ind)
 implicit none
 integer, intent(in) :: ind
-real, intent(in) :: x
-real :: t
-real :: pndf
-real, parameter :: a = .707106781186548
-real, parameter :: c = .797884560802865
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: t
+real(nswc_sp) :: pndf
+real(nswc_sp), parameter :: a = .707106781186548
+real(nswc_sp), parameter :: c = .797884560802865
 !     ---------------
 !     a = 1/sqrt(2)
 !     c = sqrt(2/pi)
@@ -7954,10 +7955,10 @@ end function pndf
 pure elemental subroutine pni(p, q, d, w, ierr)
 implicit none
 integer, intent(inout) :: ierr
-real, intent(in) :: d, p, q
-real, intent(inout) :: w
-real :: eps, t, u, v
-real, parameter :: rt2 = 1.414213562373095
+real(nswc_sp), intent(in) :: d, p, q
+real(nswc_sp), intent(inout) :: w
+real(nswc_sp) :: eps, t, u, v
+real(nswc_sp), parameter :: rt2 = 1.414213562373095
 !-----------------------------------------------------------------------
 !         Evaluation of the inverse normal distribution function
 !                           ------------
@@ -7996,10 +7997,10 @@ end subroutine pni
 pure elemental subroutine dpni(p, q, d, w, ierr)
 implicit none
 integer, intent(inout) :: ierr
-double precision, intent(in) :: p, q, d
-double precision, intent(inout) :: w
-double precision :: eps, u, v, t
-double precision, parameter :: rt2 = 1.4142135623730950488016887242097d0
+real(nswc_dp), intent(in) :: p, q, d
+real(nswc_dp), intent(inout) :: w
+real(nswc_dp) :: eps, u, v, t
+real(nswc_dp), parameter :: rt2 = 1.4142135623730950488016887242097d0
 !-----------------------------------------------------------------------
 !         Evaluation of the inverse normal distribution function
 !                           ------------
@@ -8036,28 +8037,28 @@ return
 20 ierr = 2
 end subroutine dpni
 
-pure elemental real function daw(x)
+pure elemental real(nswc_sp) function daw(x)
 implicit none
-real, intent(in) :: x
+real(nswc_sp), intent(in) :: x
 integer :: i
-real :: frac, sump, sumq, w2, y
-real, parameter :: xlarge = 16777216.0
-real, parameter :: xsmall = .59604644775391e-07
-real, parameter :: p1(9) = [.100000000000000e+01, -.135599049815353e+00, .456738974064825e-01, -.258323495918050e-02, &
+real(nswc_sp) :: frac, sump, sumq, w2, y
+real(nswc_sp), parameter :: xlarge = 16777216.0
+real(nswc_sp), parameter :: xsmall = .59604644775391e-07
+real(nswc_sp), parameter :: p1(9) = [.100000000000000e+01, -.135599049815353e+00, .456738974064825e-01, -.258323495918050e-02, &
    & .360079463580992e-03, -.944375029163387e-05, .634674256878843e-06, -.711645839183817e-08, .977985913592343e-10]
-real, parameter :: q1(9) = [.100000000000000e+01, .531067616851310e+00, .133052308640737e+00, .206907491644210e-01, &
+real(nswc_sp), parameter :: q1(9) = [.100000000000000e+01, .531067616851310e+00, .133052308640737e+00, .206907491644210e-01, &
    & .220437428972266e-02, .166706801664365e-03, .887964712053131e-05, .311750854173480e-06, .574807177698046e-08]
-real, parameter :: p2(8) = [-.150695651187161e+01, .293365747395449e+02, -.400000893643550e+02, -.757931918089369e-01, - &
+real(nswc_sp), parameter :: p2(8) = [-.150695651187161e+01, .293365747395449e+02, -.400000893643550e+02, -.757931918089369e-01, - &
    & .889106479747812e+01, .152644099623699e+02, -.597678086823489e+01, .500236896088668e+00]
-real, parameter :: q2(7) = [-.673106069744813e+00, .124486788262252e+04, .721193217600229e+01, .112461662024575e+03, &
+real(nswc_sp), parameter :: q2(7) = [-.673106069744813e+00, .124486788262252e+04, .721193217600229e+01, .112461662024575e+03, &
    & .729177556415532e+02, .115840292551888e+03, .226064666074309e+00]
-real, parameter :: p3(8) = [.476405645273229e+01, -.266167674896399e+02, -.916804879813552e+01, -.150507703496692e+02, &
+real(nswc_sp), parameter :: p3(8) = [.476405645273229e+01, -.266167674896399e+02, -.916804879813552e+01, -.150507703496692e+02, &
    & .506460153742231e+01, -.498544802986608e+01, -.149838042036691e+01, .499999902705054e+00]
-real, parameter :: q3(7) = [.287776122973187e+03, .256105722342226e+02, .751701277744067e+02, .146515167783109e+03, &
+real(nswc_sp), parameter :: q3(7) = [.287776122973187e+03, .256105722342226e+02, .751701277744067e+02, .146515167783109e+03, &
    & .330707724676114e+02, -.148715811787195e+01, .250011459611839e+00]
-real, parameter :: p4(7) = [-.315576735766984e+02, -.100791496592972e+02, -.710713709224200e+01, -.596879853243925e+01, - &
+real(nswc_sp), parameter :: p4(7) = [-.315576735766984e+02, -.100791496592972e+02, -.710713709224200e+01, -.596879853243925e+01, - &
    & .449773645376092e+01, -.249999965398199e+01, .499999999999330e+00]
-real, parameter :: q4(6) = [.168874162155616e+03, .698280748271071e+01, -.213029621139181e+02, -.712157348463305e+01, - &
+real(nswc_sp), parameter :: q4(6) = [.168874162155616e+03, .698280748271071e+01, -.213029621139181e+02, -.712157348463305e+01, - &
    & .250005973192356e+01, .750000000715687e+00]
 !-----------------------------------------------------------------------
 !     This function computes single precision values of dawsons
@@ -8134,13 +8135,13 @@ go to 1000
 1000 return
 end function daw
 
-pure elemental double precision function dpdaw(x)
+pure elemental real(nswc_dp) function dpdaw(x)
 implicit none
-double precision, intent(in) :: x
+real(nswc_dp), intent(in) :: x
 integer :: i, k
-double precision :: ax, t, w
-double precision, parameter :: eps = 1.d-31
-double precision, parameter :: a(20) = [-.6666666666666666666666666666657d+00, &
+real(nswc_dp) :: ax, t, w
+real(nswc_dp), parameter :: eps = 1.d-31
+real(nswc_dp), parameter :: a(20) = [-.6666666666666666666666666666657d+00, &
    & .2666666666666666666666666665302d+00, -.7619047619047619047619046823290d-01, .1693121693121693121693097101950d-01, - &
    & .3078403078403078403073750370528d-02, .4736004736004736004148385001356d-03, -.6314672981339647953899064401849d-04, &
    & .7429027036870170692270376716931d-05, -.7820028459863171536925638117632d-06, .7447646152244351276445219666744d-07, - &
@@ -8148,7 +8149,7 @@ double precision, parameter :: a(20) = [-.6666666666666666666666666666657d+00, &
    & .2646727414301012080897585412600d-11, -.1707553348198261876085879075486d-12, .1034770025122653524451023758330d-13, - &
    & .5905667147861158816695814259561d-15, .3157018166820009192834256496230d-16, -.1501742103181747984387915732309d-17, &
    & .4921379778280206677674574916266d-19]
-double precision, parameter :: b(45) = [-.56886544105215527114160533733674d-01, - &
+real(nswc_dp), parameter :: b(45) = [-.56886544105215527114160533733674d-01, - &
    & .31811346996168131279322878048822d+00, .20873845413642236789741580198858d+00, -.12475409913779131214073498314784d+00, &
    & .67869305186676777092847516423676d-01, -.33659144895270939503068230966587d-01, .15260781271987971743682460381640d-01, - &
    & .63483709625962148230586094788535d-02, .24326740920748520596865966109343d-02, -.86219541491065032038526983549637d-03, &
@@ -8192,120 +8193,120 @@ return
 30 dpdaw = dpdaw0(ax)/x
 end function dpdaw
 
-pure elemental double precision function dpdaw0(x)
+pure elemental real(nswc_dp) function dpdaw0(x)
 implicit none
 !-----------------------------------------------------------------------
 !                Evaluation of x*daw(x) for x .GE. 4
 !                where daw(x) is the Dawson integral
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision :: t, u, v, w
-double precision, parameter :: a0 = .59682223611279114961181337d-06
-double precision, parameter :: a1 = .17685355947137064277328544d-05
-double precision, parameter :: a2 = .46539151619719879425847199d-05
-double precision, parameter :: a3 = .60206549750426063518629015d-05
-double precision, parameter :: a4 = .71968323029042065431569341d-05
-double precision, parameter :: a5 = .30632314265730271259576310d-05
-double precision, parameter :: a6 = .58023977792358623878717970d-06
-double precision, parameter :: a7 = -.79009104459686847104040749d-06
-double precision, parameter :: a8 = -.48136647436848802449955585d-06
-double precision, parameter :: a9 = .15516701696125663593787151d-05
-double precision, parameter :: a10 = .41907470564012404920368069d-05
-double precision, parameter :: a11 = .58027971313506864533128271d-05
-double precision, parameter :: a12 = .55370618938769991926278955d-05
-double precision, parameter :: a13 = .38921890500515083447099834d-05
-double precision, parameter :: a14 = .20373391058442140223632125d-05
-double precision, parameter :: a15 = .77894504402267231707108862d-06
-double precision, parameter :: a16 = .20671717275442647450228015d-06
-double precision, parameter :: a17 = .34163346266402336952767687d-07
-double precision, parameter :: a18 = .26550833614486808486653527d-08
-double precision, parameter :: b1 = .24655153970246619491575782d+01
-double precision, parameter :: b2 = .62943144539382480033771054d+01
-double precision, parameter :: b3 = .62122304537339562619049238d+01
-double precision, parameter :: b4 = .72256247680648550388609993d+01
-double precision, parameter :: c0 = .59682220964671964619429990d-06
-double precision, parameter :: c1 = .15714896176335781761895194d-05
-double precision, parameter :: c2 = .38969553030269966874001463d-05
-double precision, parameter :: c3 = .52383725295173020317044495d-05
-double precision, parameter :: c4 = .68105053752194312932660379d-05
-double precision, parameter :: c5 = .54424292166005622934118953d-05
-double precision, parameter :: c6 = .42426204827598626398351706d-05
-double precision, parameter :: c7 = .16034175582037599078896885d-05
-double precision, parameter :: c8 = .40869743822567069272296881d-06
-double precision, parameter :: c9 = -.28877279517645392833652391d-06
-double precision, parameter :: c10 = -.23330912423546272053845073d-06
-double precision, parameter :: c11 = -.52391219684126122047201575d-07
-double precision, parameter :: c12 = .21002079856304960793765863d-07
-double precision, parameter :: c13 = .15999459808634652894884878d-07
-double precision, parameter :: c14 = .30942877932880022278704223d-08
-double precision, parameter :: d1 = .21353586303464124681525146d+01
-double precision, parameter :: d2 = .51903635881846225790635588d+01
-double precision, parameter :: d3 = .55426108503039000945912263d+01
-double precision, parameter :: d4 = .72404445472735688881512590d+01
-double precision, parameter :: d5 = .42043425514299588216548098d+01
-double precision, parameter :: d6 = .39555198251457455938284071d+01
-double precision, parameter :: d7 = .96558431899415447517392039d+00
-double precision, parameter :: d8 = .85802563214754700974536646d+00
-double precision, parameter :: e0 = .59682220964671964619429989d-06
-double precision, parameter :: e1 = .84093250039847132132545694d-06
-double precision, parameter :: e2 = .21215362314612857942015465d-05
-double precision, parameter :: e3 = .17544801458346344458699925d-05
-double precision, parameter :: e4 = .23300467572238537581015267d-05
-double precision, parameter :: e5 = .10789302963153438789721000d-05
-double precision, parameter :: e6 = .84593690165753140097573765d-06
-double precision, parameter :: e7 = .58921927492401852305814815d-07
-double precision, parameter :: e8 = .88699252882391671775568852d-08
-double precision, parameter :: e9 = -.45367333700483839577191791d-07
-double precision, parameter :: e10 = -.57476692572774473717756092d-08
-double precision, parameter :: f1 = .91128032791938035312580060d+00
-double precision, parameter :: f2 = .28248447610354665352098820d+01
-double precision, parameter :: f3 = .12208226691968579661669930d+01
-double precision, parameter :: f4 = .26127044898109340807106578d+01
-double precision, parameter :: f5 = .34850941500747816686718301d+00
-double precision, parameter :: f6 = .11058424028893031129155960d+01
-double precision, parameter :: f7 = -.58583432304677947215235382d-01
-double precision, parameter :: f8 = .22235753204903993496120223d+00
-double precision, parameter :: f9 = -.22116625272550591073419658d-01
-double precision, parameter :: f10 = .14938281115881437851795141d-01
-double precision, parameter :: g0 = .59682220962853689178993039d-06
-double precision, parameter :: g1 = .10399202637216492921747166d-05
-double precision, parameter :: g2 = .20011159669496258291170369d-05
-double precision, parameter :: g3 = .19689301951834731308289277d-05
-double precision, parameter :: g4 = .18861506874082130108404839d-05
-double precision, parameter :: g5 = .10403672611266773427898830d-05
-double precision, parameter :: g6 = .42700287233074049241986613d-06
-double precision, parameter :: g7 = -.16199303908856237550380048d-07
-double precision, parameter :: g8 = -.73900110466591484816182863d-07
-double precision, parameter :: g9 = -.21369058482679700785965255d-07
-double precision, parameter :: g10 = .42853587024761116737793072d-08
-double precision, parameter :: g11 = -.27226352610679391576406666d-09
-double precision, parameter :: h1 = .12446924554654251972427023d+01
-double precision, parameter :: h2 = .24571243397858142676189669d+01
-double precision, parameter :: h3 = .16710488988253927773151334d+01
-double precision, parameter :: h4 = .17260859791081983044753913d+01
-double precision, parameter :: h5 = .67406536368694046314885196d+00
-double precision, parameter :: h6 = .47403526893401885333000527d+00
-double precision, parameter :: h7 = .96251479080923959509108658d-01
-double precision, parameter :: h8 = .53334517885765587426678624d-01
-double precision, parameter :: h9 = .39450307003297031975491216d-02
-double precision, parameter :: h10 = .20209221166462656808887976d-02
-double precision, parameter :: s0 = .8210986449041747719684610504710d-02
-double precision, parameter :: s1 = .8646073144815053170065230898334d-02
-double precision, parameter :: s2 = .4768322737615973285410030924398d-03
-double precision, parameter :: s3 = .4792593707378225992657970685396d-04
-double precision, parameter :: s4 = .7507677744363576693833551190204d-05
-double precision, parameter :: s5 = .1737929446861228512373840727547d-05
-double precision, parameter :: p0 = .29531250000000000000002d+02
-double precision, parameter :: p1 = -.14571781607273299440392d+04
-double precision, parameter :: p2 = .24285318385898860175073d+05
-double precision, parameter :: p3 = -.15843555052114168113822d+06
-double precision, parameter :: p4 = .32969397422638395586636d+06
-double precision, parameter :: p5 = -.55331506994311967089636d+04
-double precision, parameter :: q1 = -.54843599093412230906873d+02
-double precision, parameter :: q2 = .10882497826844164906477d+04
-double precision, parameter :: q3 = -.96578534881552358457185d+04
-double precision, parameter :: q4 = .37803382357862589384458d+05
-double precision, parameter :: q5 = -.51283783372259864777146d+05
+real(nswc_dp), intent(in) :: x
+real(nswc_dp) :: t, u, v, w
+real(nswc_dp), parameter :: a0 = .59682223611279114961181337d-06
+real(nswc_dp), parameter :: a1 = .17685355947137064277328544d-05
+real(nswc_dp), parameter :: a2 = .46539151619719879425847199d-05
+real(nswc_dp), parameter :: a3 = .60206549750426063518629015d-05
+real(nswc_dp), parameter :: a4 = .71968323029042065431569341d-05
+real(nswc_dp), parameter :: a5 = .30632314265730271259576310d-05
+real(nswc_dp), parameter :: a6 = .58023977792358623878717970d-06
+real(nswc_dp), parameter :: a7 = -.79009104459686847104040749d-06
+real(nswc_dp), parameter :: a8 = -.48136647436848802449955585d-06
+real(nswc_dp), parameter :: a9 = .15516701696125663593787151d-05
+real(nswc_dp), parameter :: a10 = .41907470564012404920368069d-05
+real(nswc_dp), parameter :: a11 = .58027971313506864533128271d-05
+real(nswc_dp), parameter :: a12 = .55370618938769991926278955d-05
+real(nswc_dp), parameter :: a13 = .38921890500515083447099834d-05
+real(nswc_dp), parameter :: a14 = .20373391058442140223632125d-05
+real(nswc_dp), parameter :: a15 = .77894504402267231707108862d-06
+real(nswc_dp), parameter :: a16 = .20671717275442647450228015d-06
+real(nswc_dp), parameter :: a17 = .34163346266402336952767687d-07
+real(nswc_dp), parameter :: a18 = .26550833614486808486653527d-08
+real(nswc_dp), parameter :: b1 = .24655153970246619491575782d+01
+real(nswc_dp), parameter :: b2 = .62943144539382480033771054d+01
+real(nswc_dp), parameter :: b3 = .62122304537339562619049238d+01
+real(nswc_dp), parameter :: b4 = .72256247680648550388609993d+01
+real(nswc_dp), parameter :: c0 = .59682220964671964619429990d-06
+real(nswc_dp), parameter :: c1 = .15714896176335781761895194d-05
+real(nswc_dp), parameter :: c2 = .38969553030269966874001463d-05
+real(nswc_dp), parameter :: c3 = .52383725295173020317044495d-05
+real(nswc_dp), parameter :: c4 = .68105053752194312932660379d-05
+real(nswc_dp), parameter :: c5 = .54424292166005622934118953d-05
+real(nswc_dp), parameter :: c6 = .42426204827598626398351706d-05
+real(nswc_dp), parameter :: c7 = .16034175582037599078896885d-05
+real(nswc_dp), parameter :: c8 = .40869743822567069272296881d-06
+real(nswc_dp), parameter :: c9 = -.28877279517645392833652391d-06
+real(nswc_dp), parameter :: c10 = -.23330912423546272053845073d-06
+real(nswc_dp), parameter :: c11 = -.52391219684126122047201575d-07
+real(nswc_dp), parameter :: c12 = .21002079856304960793765863d-07
+real(nswc_dp), parameter :: c13 = .15999459808634652894884878d-07
+real(nswc_dp), parameter :: c14 = .30942877932880022278704223d-08
+real(nswc_dp), parameter :: d1 = .21353586303464124681525146d+01
+real(nswc_dp), parameter :: d2 = .51903635881846225790635588d+01
+real(nswc_dp), parameter :: d3 = .55426108503039000945912263d+01
+real(nswc_dp), parameter :: d4 = .72404445472735688881512590d+01
+real(nswc_dp), parameter :: d5 = .42043425514299588216548098d+01
+real(nswc_dp), parameter :: d6 = .39555198251457455938284071d+01
+real(nswc_dp), parameter :: d7 = .96558431899415447517392039d+00
+real(nswc_dp), parameter :: d8 = .85802563214754700974536646d+00
+real(nswc_dp), parameter :: e0 = .59682220964671964619429989d-06
+real(nswc_dp), parameter :: e1 = .84093250039847132132545694d-06
+real(nswc_dp), parameter :: e2 = .21215362314612857942015465d-05
+real(nswc_dp), parameter :: e3 = .17544801458346344458699925d-05
+real(nswc_dp), parameter :: e4 = .23300467572238537581015267d-05
+real(nswc_dp), parameter :: e5 = .10789302963153438789721000d-05
+real(nswc_dp), parameter :: e6 = .84593690165753140097573765d-06
+real(nswc_dp), parameter :: e7 = .58921927492401852305814815d-07
+real(nswc_dp), parameter :: e8 = .88699252882391671775568852d-08
+real(nswc_dp), parameter :: e9 = -.45367333700483839577191791d-07
+real(nswc_dp), parameter :: e10 = -.57476692572774473717756092d-08
+real(nswc_dp), parameter :: f1 = .91128032791938035312580060d+00
+real(nswc_dp), parameter :: f2 = .28248447610354665352098820d+01
+real(nswc_dp), parameter :: f3 = .12208226691968579661669930d+01
+real(nswc_dp), parameter :: f4 = .26127044898109340807106578d+01
+real(nswc_dp), parameter :: f5 = .34850941500747816686718301d+00
+real(nswc_dp), parameter :: f6 = .11058424028893031129155960d+01
+real(nswc_dp), parameter :: f7 = -.58583432304677947215235382d-01
+real(nswc_dp), parameter :: f8 = .22235753204903993496120223d+00
+real(nswc_dp), parameter :: f9 = -.22116625272550591073419658d-01
+real(nswc_dp), parameter :: f10 = .14938281115881437851795141d-01
+real(nswc_dp), parameter :: g0 = .59682220962853689178993039d-06
+real(nswc_dp), parameter :: g1 = .10399202637216492921747166d-05
+real(nswc_dp), parameter :: g2 = .20011159669496258291170369d-05
+real(nswc_dp), parameter :: g3 = .19689301951834731308289277d-05
+real(nswc_dp), parameter :: g4 = .18861506874082130108404839d-05
+real(nswc_dp), parameter :: g5 = .10403672611266773427898830d-05
+real(nswc_dp), parameter :: g6 = .42700287233074049241986613d-06
+real(nswc_dp), parameter :: g7 = -.16199303908856237550380048d-07
+real(nswc_dp), parameter :: g8 = -.73900110466591484816182863d-07
+real(nswc_dp), parameter :: g9 = -.21369058482679700785965255d-07
+real(nswc_dp), parameter :: g10 = .42853587024761116737793072d-08
+real(nswc_dp), parameter :: g11 = -.27226352610679391576406666d-09
+real(nswc_dp), parameter :: h1 = .12446924554654251972427023d+01
+real(nswc_dp), parameter :: h2 = .24571243397858142676189669d+01
+real(nswc_dp), parameter :: h3 = .16710488988253927773151334d+01
+real(nswc_dp), parameter :: h4 = .17260859791081983044753913d+01
+real(nswc_dp), parameter :: h5 = .67406536368694046314885196d+00
+real(nswc_dp), parameter :: h6 = .47403526893401885333000527d+00
+real(nswc_dp), parameter :: h7 = .96251479080923959509108658d-01
+real(nswc_dp), parameter :: h8 = .53334517885765587426678624d-01
+real(nswc_dp), parameter :: h9 = .39450307003297031975491216d-02
+real(nswc_dp), parameter :: h10 = .20209221166462656808887976d-02
+real(nswc_dp), parameter :: s0 = .8210986449041747719684610504710d-02
+real(nswc_dp), parameter :: s1 = .8646073144815053170065230898334d-02
+real(nswc_dp), parameter :: s2 = .4768322737615973285410030924398d-03
+real(nswc_dp), parameter :: s3 = .4792593707378225992657970685396d-04
+real(nswc_dp), parameter :: s4 = .7507677744363576693833551190204d-05
+real(nswc_dp), parameter :: s5 = .1737929446861228512373840727547d-05
+real(nswc_dp), parameter :: p0 = .29531250000000000000002d+02
+real(nswc_dp), parameter :: p1 = -.14571781607273299440392d+04
+real(nswc_dp), parameter :: p2 = .24285318385898860175073d+05
+real(nswc_dp), parameter :: p3 = -.15843555052114168113822d+06
+real(nswc_dp), parameter :: p4 = .32969397422638395586636d+06
+real(nswc_dp), parameter :: p5 = -.55331506994311967089636d+04
+real(nswc_dp), parameter :: q1 = -.54843599093412230906873d+02
+real(nswc_dp), parameter :: q2 = .10882497826844164906477d+04
+real(nswc_dp), parameter :: q3 = -.96578534881552358457185d+04
+real(nswc_dp), parameter :: q4 = .37803382357862589384458d+05
+real(nswc_dp), parameter :: q5 = -.51283783372259864777146d+05
 !----------------------------
 !----------------------------
 !----------------------------
@@ -8369,17 +8370,17 @@ end function dpdaw0
 pure elemental subroutine cfrnli(mo, z, w)
 implicit none
 integer, intent(in) :: mo
-complex, intent(in) :: z
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: w
 integer :: i
-real :: dm, pm, qm, r, ss, x, y, qf(2), sm(2), tm(2), ts(2), zr(2)
-real, parameter :: c = .564189583547756
-real, parameter :: c0 = -.707106781186548
-real, parameter :: cd(18) = [0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
+real(nswc_sp) :: dm, pm, qm, r, ss, x, y, qf(2), sm(2), tm(2), ts(2), zr(2)
+real(nswc_sp), parameter :: c = .564189583547756
+real(nswc_sp), parameter :: c0 = -.707106781186548
+real(nswc_sp), parameter :: cd(18) = [0.00000000000000e00, 2.08605856013476e-2, 8.29806940495687e-2, 1.85421653326079e-1, &
    & 3.27963479382361e-1, 5.12675279912828e-1, 7.45412958045105e-1, 1.03695067418297e00, 1.40378061255437e00, 1.86891662214001e00, &
    & 2.46314830523929e00, 3.22719383737352e00, 4.21534348280013e00, 5.50178873151549e00, 7.19258966683102e00, 9.45170208076408e00, &
    & 1.25710718314784e+1, 1.72483537216334e+1]
-real, parameter :: ce(18) = [8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
+real(nswc_sp), parameter :: ce(18) = [8.15723083324096e-2, 1.59285285253437e-1, 1.48581625614499e-1, 1.33219670836245e-1, &
    & 1.15690392878957e-1, 9.78580959447535e-2, 8.05908834297624e-2, 6.40204538609872e-2, 4.81445242767885e-2, 3.33540658473295e-2, &
    & 2.05548099470193e-2, 1.07847403887506e-2, 4.55634892214219e-3, 1.43984458138925e-3, 3.07056139834171e-4, 3.78156541168541e-5, &
    & 2.05173509616121e-6, 2.63564823682747e-8]
@@ -8510,51 +8511,51 @@ end subroutine cfrnli
 
 pure elemental subroutine frnl(t, c, s)
 implicit none
-real, intent(inout) :: c, s
-real, intent(in) :: t
+real(nswc_sp), intent(inout) :: c, s
+real(nswc_sp), intent(in) :: t
 integer :: i, l, m, max
-real :: cy, f, fd, fn, g, gd, gn, pix, pixx, r, sy, x, xx, y, n
-real, parameter :: pi = 3.1415926535898
-real, parameter :: a(6) = [-.119278241233760e-05, .540730666359417e-04, -.160488306381990e-02, .281855008757077e-01, - &
+real(nswc_sp) :: cy, f, fd, fn, g, gd, gn, pix, pixx, r, sy, x, xx, y, n
+real(nswc_sp), parameter :: pi = 3.1415926535898
+real(nswc_sp), parameter :: a(6) = [-.119278241233760e-05, .540730666359417e-04, -.160488306381990e-02, .281855008757077e-01, - &
    & .246740110027210e+00, .100000000000000e+01]
-real, parameter :: b(6) = [-.155653074871090e-06, .844415353045065e-05, -.312116934326082e-03, .724478420395276e-02, - &
+real(nswc_sp), parameter :: b(6) = [-.155653074871090e-06, .844415353045065e-05, -.312116934326082e-03, .724478420395276e-02, - &
    & .922805853580325e-01, .523598775598300e+00]
-real, parameter :: cp(13) = [.114739945188034e-20, -.384444827287950e-18, .832125729394275e-16, -.142979507360076e-13, &
+real(nswc_sp), parameter :: cp(13) = [.114739945188034e-20, -.384444827287950e-18, .832125729394275e-16, -.142979507360076e-13, &
    & .198954961821465e-11, -.220226545457144e-09, .188434924092257e-07, -.120009722914157e-05, .540741337442140e-04, - &
    & .160488313553028e-02, .281855008777956e-01, -.246740110027196e+00, .999999999999996e+00]
-real, parameter :: sp(13) = [.705700784853927e-22, -.252757991492418e-19, .594117488940008e-17, -.112161631555448e-14, &
+real(nswc_sp), parameter :: sp(13) = [.705700784853927e-22, -.252757991492418e-19, .594117488940008e-17, -.112161631555448e-14, &
    & .173332189994074e-12, -.215742302078015e-10, .210821173208116e-08, -.156471443116560e-06, .844427287845253e-05, - &
    & .312116942346186e-03, .724478420418951e-02, -.922805853580323e-01, .523598775598300e+00]
-real, parameter :: pn(6) = [.318309816100920e+00, .134919391391516e+02, .158258097490377e+03, .598796451682535e+03, &
+real(nswc_sp), parameter :: pn(6) = [.318309816100920e+00, .134919391391516e+02, .158258097490377e+03, .598796451682535e+03, &
    & .632369782194966e+03, .967985390141920e+02]
-real, parameter :: pd(6) = [.100000000000000e+01, .426900960480796e+02, .509085485682426e+03, .200034664144742e+04, &
+real(nswc_sp), parameter :: pd(6) = [.100000000000000e+01, .426900960480796e+02, .509085485682426e+03, .200034664144742e+04, &
    & .231910140792937e+04, .486678558201084e+03]
-real, parameter :: qn(6) = [.101320876178478e+00, .490534697099052e+01, .652095157811808e+02, .274183825747887e+03, &
+real(nswc_sp), parameter :: qn(6) = [.101320876178478e+00, .490534697099052e+01, .652095157811808e+02, .274183825747887e+03, &
    & .305040725009211e+03, .364566615872326e+02]
-real, parameter :: qd(6) = [.100000000000000e+01, .499330024470621e+02, .709854097670206e+03, .343470762861172e+04, &
+real(nswc_sp), parameter :: qd(6) = [.100000000000000e+01, .499330024470621e+02, .709854097670206e+03, .343470762861172e+04, &
    & .522213879312684e+04, .168801831831851e+04]
-real, parameter :: an(6) = [.318309885869756e+00, .254179177393500e+02, .575003792540838e+03, .426673405867140e+04, &
+real(nswc_sp), parameter :: an(6) = [.318309885869756e+00, .254179177393500e+02, .575003792540838e+03, .426673405867140e+04, &
    & .891831887923938e+04, .267955736537967e+04]
-real, parameter :: ad(6) = [.100000000000000e+01, .801567066285184e+02, .182971463354850e+04, .138848884373420e+05, &
+real(nswc_sp), parameter :: ad(6) = [.100000000000000e+01, .801567066285184e+02, .182971463354850e+04, .138848884373420e+05, &
    & .309228411873207e+05, .120421274105856e+05]
-real, parameter :: bn(6) = [.101321181932417e+00, .925021984290547e+01, .240932023056602e+03, .206079616836437e+04, &
+real(nswc_sp), parameter :: bn(6) = [.101321181932417e+00, .925021984290547e+01, .240932023056602e+03, .206079616836437e+04, &
    & .484901973010149e+04, .130680669688315e+04]
-real, parameter :: bd(6) = [.100000000000000e+01, .928158182389149e+02, .250926840439955e+04, .233924458152954e+05, &
+real(nswc_sp), parameter :: bd(6) = [.100000000000000e+01, .928158182389149e+02, .250926840439955e+04, .233924458152954e+05, &
    & .685638896406835e+05, .418593101455019e+05]
-real, parameter :: cn(5) = [.318309886182000e+00, .299191968327887e+02, .691428839605668e+03, .394539800974744e+04, &
+real(nswc_sp), parameter :: cn(5) = [.318309886182000e+00, .299191968327887e+02, .691428839605668e+03, .394539800974744e+04, &
    & .290314254767015e+04]
-real, parameter :: cd(5) = [.100000000000000e+01, .942978925136851e+02, .219977296283666e+04, .129726479671006e+05, &
+real(nswc_sp), parameter :: cd(5) = [.100000000000000e+01, .942978925136851e+02, .219977296283666e+04, .129726479671006e+05, &
    & .114991427758165e+05]
-real, parameter :: dn(5) = [.101321183630876e+00, .110988033615242e+02, .306282306497228e+03, .213130259794164e+04, &
+real(nswc_sp), parameter :: dn(5) = [.101321183630876e+00, .110988033615242e+02, .306282306497228e+03, .213130259794164e+04, &
    & .171270676541694e+04]
-real, parameter :: dd(5) = [.100000000000000e+01, .111060616085627e+03, .318197586347414e+04, .249342095714049e+05, &
+real(nswc_sp), parameter :: dd(5) = [.100000000000000e+01, .111060616085627e+03, .318197586347414e+04, .249342095714049e+05, &
    & .359241903823488e+05]
-real, parameter :: fp(7) = [.449763389301234e+05, -.188763642051836e+04, .669261097103246e+02, -.343966606879114e+01, &
+real(nswc_sp), parameter :: fp(7) = [.449763389301234e+05, -.188763642051836e+04, .669261097103246e+02, -.343966606879114e+01, &
    & .343112896133346e+00, -.967546019461500e-01, .318309886183465e+00]
-real, parameter :: gp(7) = [.316642183365360e+06, -.120618995106638e+05, .359164749179351e+03, -.142252603258172e+02, &
+real(nswc_sp), parameter :: gp(7) = [.316642183365360e+06, -.120618995106638e+05, .359164749179351e+03, -.142252603258172e+02, &
    & .982934118445454e+00, -.153989722912325e+00, .101321183639714e+00]
-real, parameter :: p(6) = [-654729075.0, 2027025.0, -10395.0, 105.0, -3.0, 1.0]
-real, parameter :: q(6) = [-13749310575.0, 34459425.0, -135135.0, 945.0, -15.0, 1.0]
+real(nswc_sp), parameter :: p(6) = [-654729075.0, 2027025.0, -10395.0, 105.0, -3.0, 1.0]
+real(nswc_sp), parameter :: q(6) = [-13749310575.0, 34459425.0, -135135.0, 945.0, -15.0, 1.0]
 !-----------------------------------------------------------------------
 !             Evaluation of the real fresnel integrals
 !-----------------------------------------------------------------------
@@ -8686,18 +8687,19 @@ end subroutine frnl
 pure elemental subroutine cexpli(mo, z, w)
 implicit none
 integer, intent(in) :: mo
-complex, intent(in) :: z
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: w
 integer :: i
-real :: c, cy, d, e, eps, qm, r, ss, sy, tol, u, x, y, n, np1, qf(2), sm(2), tm(2), ts(2), g0(2), gn(2), h0(2), hn(2), wn(2)
+real(nswc_sp) :: c, cy, d, e, eps, qm, r, ss, sy, tol, u, x, y, n, np1, qf(2), sm(2), tm(2), ts(2), g0(2), gn(2), h0(2), hn(2), wn &
+   & (2)
 logical :: ind
-real, parameter :: pi = 3.14159265358979
-real, parameter :: euler = .577215664901533
-real, parameter :: cd(18) = [0.00000000000000e+00, .311105957086528e-01, .103661260539112e+00, .216532335244554e+00, &
+real(nswc_sp), parameter :: pi = 3.14159265358979
+real(nswc_sp), parameter :: euler = .577215664901533
+real(nswc_sp), parameter :: cd(18) = [0.00000000000000e+00, .311105957086528e-01, .103661260539112e+00, .216532335244554e+00, &
    & .369931427960192e+00, .566766259990589e+00, .814042066324748e+00, .112384247540813e+01, .151400478148512e+01, &
    & .200886795032284e+01, .264052411823592e+01, .345098449933392e+01, .449583360763202e+01, .585058263409822e+01, &
    & .762273501463380e+01, .997814501584578e+01, .132122064896408e+02, .180322948376021e+02]
-real, parameter :: ce(18) = [.850156516121093e-02, .505037465849058e-01, .836817368956407e-01, .107047582417607e+00, &
+real(nswc_sp), parameter :: ce(18) = [.850156516121093e-02, .505037465849058e-01, .836817368956407e-01, .107047582417607e+00, &
    & .120424719029462e+00, .125096631582229e+00, .122314435224685e+00, .112621417553907e+00, .963419407392582e-01, &
    & .747398422757511e-01, .508596135953441e-01, .290822706773628e-01, .132201640530101e-01, .443802939829067e-02, &
    & .992612478987576e-03, .126579795112011e-03, .702150908253350e-05, .910281532564632e-07]
@@ -8834,56 +8836,56 @@ if (.not. ind) sm(2) = sm(2) + c
 contains
    pure function anorm(x, y) result(nswc_sf_result)
       implicit none
-      real, intent(in) :: x
-      real, intent(in) :: y
-      real :: nswc_sf_result
+      real(nswc_sp), intent(in) :: x
+      real(nswc_sp), intent(in) :: y
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = max(abs(x),abs(y))
    end function anorm
 end subroutine cexpli
 
 pure elemental subroutine expli(int,arg,result,ierr)
 implicit none
-real, intent(in) :: arg
-real, intent(inout) :: result
+real(nswc_sp), intent(in) :: arg
+real(nswc_sp), intent(inout) :: result
 integer, intent(in) :: int
 integer, intent(out) :: ierr
 integer :: m, i
-real :: px(9), qx(9), frac, sump, sumq, t, w, x, xx0, xmx0, y, xmax, xmin, ei, nswc_ai_r4
-real, parameter :: dexp40 = .235385266837020e+18
-real, parameter :: x0 = .372507410781366
-double precision, parameter :: dx0 = .37250741078136663446199186658d0
-real, parameter :: a(6) = [-.577215664901531e+00, .758833087029943e+00, .125660818982053e+00, .204158408934305e-01, &
+real(nswc_sp) :: px(9), qx(9), frac, sump, sumq, t, w, x, xx0, xmx0, y, xmax, xmin, ei, nswc_ai_r4
+real(nswc_sp), parameter :: dexp40 = .235385266837020e+18
+real(nswc_sp), parameter :: x0 = .372507410781366
+real(nswc_dp), parameter :: dx0 = .37250741078136663446199186658d0
+real(nswc_sp), parameter :: a(6) = [-.577215664901531e+00, .758833087029943e+00, .125660818982053e+00, .204158408934305e-01, &
    & .825035122466538e-03, .962949813453924e-05]
-real, parameter :: b(5) = [.100000000000000e+01, .417810755380398e+00, .730228560396799e-01, .642720224671078e-02, &
+real(nswc_sp), parameter :: b(5) = [.100000000000000e+01, .417810755380398e+00, .730228560396799e-01, .642720224671078e-02, &
    & .245134203588369e-03]
-real, parameter :: c(7) = [.465627107975096e-06, .999979577051595e+00, .904161556946328e+01, .243784088791317e+02, &
+real(nswc_sp), parameter :: c(7) = [.465627107975096e-06, .999979577051595e+00, .904161556946328e+01, .243784088791317e+02, &
    & .230192559391334e+02, .690522522784443e+01, .430967839469389e+00]
-real, parameter :: d(7) = [.100000000000000e+01, .100411643829054e+02, .324264210695138e+02, .412807841891424e+02, &
+real(nswc_sp), parameter :: d(7) = [.100000000000000e+01, .100411643829054e+02, .324264210695138e+02, .412807841891424e+02, &
    & .204494785013794e+02, .331909213593302e+01, .103400130404874e+00]
-real, parameter :: e(7) = [-.999999999998447e+00, -.266271060431811e+02, -.241055827097015e+03, -.895927957772937e+03, - &
+real(nswc_sp), parameter :: e(7) = [-.999999999998447e+00, -.266271060431811e+02, -.241055827097015e+03, -.895927957772937e+03, - &
    & .129885688746484e+04, -.545374158883133e+03, -.566575206533869e+01]
-real, parameter :: f(7) = [.100000000000000e+01, .286271060422192e+02, .292310039388533e+03, .133278537748257e+04, &
+real(nswc_sp), parameter :: f(7) = [.100000000000000e+01, .286271060422192e+02, .292310039388533e+03, .133278537748257e+04, &
    & .277761949509163e+04, .240401713225909e+04, .631657483280800e+03]
-real, parameter :: p1(8) = [-.866937339951070e+01, -.549142265521085e+03, -.421001615357070e+04, -.249301393458648e+06, - &
+real(nswc_sp), parameter :: p1(8) = [-.866937339951070e+01, -.549142265521085e+03, -.421001615357070e+04, -.249301393458648e+06, - &
    & .119623669349247e+06, -.221744627758845e+08, .389280421311201e+07, -.195773036904548e+09]
-real, parameter :: q1(8) = [.341718750000000e+02, -.160708926587221e+04, .357300298058508e+05, -.483547436162164e+06, &
+real(nswc_sp), parameter :: q1(8) = [.341718750000000e+02, -.160708926587221e+04, .357300298058508e+05, -.483547436162164e+06, &
    & .428559624611749e+07, -.249033375740540e+08, .891925767575612e+08, -.826271498626055e+08]
-real, parameter :: r(20) = [.636295897967470e+00, -.130811686750676e+00, -.843674102130539e-02, .265684915310067e-02, &
+real(nswc_sp), parameter :: r(20) = [.636295897967470e+00, -.130811686750676e+00, -.843674102130539e-02, .265684915310067e-02, &
    & .328227217816581e-03, -.237834477714302e-04, -.114398043081001e-04, -.144059434332383e-05, .524159566511488e-08, &
    & .384073064078443e-07, .858802448602672e-08, .102192266258550e-08, .217491323232897e-10, -.220902381426231e-10, - &
    & .634575335449288e-11, -.108377465668577e-11, -.119098228722226e-12, -.284386823892656e-14, .250803270266868e-14, &
    & .787296415285598e-15]
-real, parameter :: p2(8) = [-.218086381520723e+01, -.219010233854881e+02, .930816385662165e+01, .250762811293560e+02, - &
+real(nswc_sp), parameter :: p2(8) = [-.218086381520723e+01, -.219010233854881e+02, .930816385662165e+01, .250762811293560e+02, - &
    & .331842531997221e+02, .601217990830080e+02, -.432531132878135e+02, .100443109228078e+01]
-real, parameter :: q2(7) = [.393707701852715e+01, .300892648372915e+03, -.625041161671876e+01, .100367439516726e+04, &
+real(nswc_sp), parameter :: q2(7) = [.393707701852715e+01, .300892648372915e+03, -.625041161671876e+01, .100367439516726e+04, &
    & .143256738121938e+02, .273624119889328e+04, .527468851962908e+00]
-real, parameter :: p3(8) = [-.348334653602852e+01, -.186545454883399e+02, -.828561994140641e+01, -.323467330305403e+02, &
+real(nswc_sp), parameter :: p3(8) = [-.348334653602852e+01, -.186545454883399e+02, -.828561994140641e+01, -.323467330305403e+02, &
    & .179601688769252e+02, .175656315469614e+01, -.195022321289660e+01, .999994296074708e+00]
-real, parameter :: q3(7) = [.695000655887434e+02, .572837193837324e+02, .257776384238440e+02, .760761148007735e+03, &
+real(nswc_sp), parameter :: q3(7) = [.695000655887434e+02, .572837193837324e+02, .257776384238440e+02, .760761148007735e+03, &
    & .289516727925135e+02, -.343942266899870e+01, .100083867402639e+01]
-real, parameter :: p4(8) = [-.531686623494482e+02, .891263822573708e+01, -.139381360364405e+01, -.308336269051763e+02, - &
+real(nswc_sp), parameter :: p4(8) = [-.531686623494482e+02, .891263822573708e+01, -.139381360364405e+01, -.308336269051763e+02, - &
    & .749289167792884e+01, -.500140345515924e+01, -.300000016782086e+01, .100000000000058e+01]
-real, parameter :: q4(7) = [.104745362652468e+04, -.674704580465832e+01, .295999399486831e+03, -.431325836146628e+01, - &
+real(nswc_sp), parameter :: q4(7) = [.104745362652468e+04, -.674704580465832e+01, .295999399486831e+03, -.431325836146628e+01, - &
    & .790404992298926e+01, -.299996432944446e+01, .199999999924131e+01]
 !-----------------------------------------------------------------------
 !     This subroutine computes the exponential integrals
@@ -9106,33 +9108,33 @@ return
 660 ierr = 4
 end subroutine expli
 
-pure elemental double precision function dei(x)
+pure elemental real(nswc_dp) function dei(x)
 implicit none
 !-----------------------------------------------------------------------
 !        Double precision evaluation of the exponential integral
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
+real(nswc_dp), intent(in) :: x
 dei = -de1e(-x)
 if (x > 4.d0 .or. x < -1.d0) dei = exp(x) * dei
 end function dei
 
-pure elemental double precision function dei1(x)
+pure elemental real(nswc_dp) function dei1(x)
 implicit none
 !-----------------------------------------------------------------------
 !          Double precision evaluation of exp(-x)*EI(x)
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
+real(nswc_dp), intent(in) :: x
 dei1 = -de1e(-x)
 if (x > 4.d0 .or. x < -1.d0) return
 dei1 = exp(-x) * dei1
 end function dei1
 
-pure elemental double precision function de1e(x)
+pure elemental real(nswc_dp) function de1e(x)
 implicit none
-double precision, intent(in) :: x
+real(nswc_dp), intent(in) :: x
 integer :: m
-double precision :: c, eps, t, w
-double precision, parameter :: a(50) = [.3284394579616699087873844201881d-01, - &
+real(nswc_dp) :: c, eps, t, w
+real(nswc_dp), parameter :: a(50) = [.3284394579616699087873844201881d-01, - &
    & .1669920452031362851476184343387d-01, .2845284724361346807424899853252d-03, -.7563944358516206489487866938533d-05, &
    & .2798971289450859157504843180879d-06, -.1357901828534531069525563926255d-07, .8343596202040469255856102904906d-09, - &
    & .6370971727640248438275242988532d-10, .6007247608811861235760831561584d-11, -.7022876174679773590750626150088d-12, &
@@ -9150,7 +9152,7 @@ double precision, parameter :: a(50) = [.3284394579616699087873844201881d-01, - 
    & .8453813992712336233411457493674d-29, .3565758433431291562816111116287d-29, .1383653872125634705539949098871d-29, - &
    & .6062167864451372436584533764778d-30, -.2447198043989313267437655119189d-30, .1006850640933998348011548180480d-30, &
    & .4623685555014869015664341461674d-31]
-double precision, parameter :: b(60) = [.20263150647078889499401236517381d+00, - &
+real(nswc_dp), parameter :: b(60) = [.20263150647078889499401236517381d+00, - &
    & .73655140991203130439536898728034d-01, .63909349118361915862753283840020d-02, -.60797252705247911780653153363999d-03, - &
    & .73706498620176629330681411493484d-04, .48732857449450183453464992488076d-04, -.23837064840448290766588489460235d-05, - &
    & .30518612628561521027027332246121d-05, .17050331572564559009688032992907d-06, .23834204527487747258601598136403d-06, &
@@ -9171,7 +9173,7 @@ double precision, parameter :: b(60) = [.20263150647078889499401236517381d+00, -
    & .10479325703300941711526430332245d-27, -.21654550252170342240854880201386d-28, -.75297125745288269994689298432000d-30, &
    & .19103179392798935768638084000426d-29, .11492104966530338547790728833706d-29, .43896970582661751514410359193600d-30, &
    & .12320883239205686471647157725866d-30, .22220174457553175317538581162666d-31]
-double precision, parameter :: d(41) = [.63629589796747038767129887806803d+00, - &
+real(nswc_dp), parameter :: d(41) = [.63629589796747038767129887806803d+00, - &
    & .13081168675067634385812671121135d+00, -.84367410213053930014487662129752d-02, .26568491531006685413029428068906d-02, &
    & .32822721781658133778792170142517d-03, -.23783447771430248269579807851050d-04, -.11439804308100055514447076797047d-04, - &
    & .14405943433238338455239717699323d-05, .52415956651148829963772818061664d-08, .38407306407844323480979203059716d-07, &
@@ -9186,7 +9188,7 @@ double precision, parameter :: d(41) = [.63629589796747038767129887806803d+00, -
    & .25105524765386733555198634666666d-26, .35886666387790890886583637333333d-27, .39886035156771301763317759999999d-28, &
    & .21763676947356220478805333333333d-29, -.46146998487618942367607466666666d-30, -.20713517877481987707153066666666d-30, - &
    & .51890378563534371596970666666666d-31]
-double precision, parameter :: e(29) = [-.16113461655571494025720663927566180d+02, &
+real(nswc_dp), parameter :: e(29) = [-.16113461655571494025720663927566180d+02, &
    & .77940727787426802769272245891741497d+01, -.19554058188631419507127283812814491d+01, .37337293866277945611517190865690209d+00 &
    & , -.56925031910929019385263892220051166d-01, .72110777696600918537847724812635813d-02, - &
    & .78104901449841593997715184089064148d-03, .73880933562621681878974881366177858d-04, -.62028618758082045134358133607909712d-05 &
@@ -9198,7 +9200,7 @@ double precision, parameter :: e(29) = [-.16113461655571494025720663927566180d+0
    & .49632746181648636830198442666666666d-22, -.16208612696636044604866560000000000d-23, .50721448038607422226431999999999999d-25 &
    & , -.15235811133372207813973333333333333d-26, .44001511256103618696533333333333333d-28, - &
    & .12236141945416231594666666666666666d-29, .32809216661066001066666666666666666d-31, -.84933452268306432000000000000000000d-33]
-double precision, parameter :: r(25) = [-.3739021479220279511668698204827d-01, &
+real(nswc_dp), parameter :: r(25) = [-.3739021479220279511668698204827d-01, &
    & .4272398606220957726049179176528d-01, -.130318207984970054415392055219726d+00, .144191240246988907341095893982137d-01, - &
    & .134617078051068022116121527983553d-02, .107310292530637799976115850970073d-03, -.742999951611943649610283062223163d-05, &
    & .453773256907537139386383211511827d-06, -.247641721139060131846547423802912d-07, .122076581374590953700228167846102d-08, - &
@@ -9207,7 +9209,7 @@ double precision, parameter :: r(25) = [-.3739021479220279511668698204827d-01, &
    & .923604240769240954484015923200000d-19, .255504267970814002440435029333333d-20, -.669912805684566847217882453333333d-22, &
    & .166925405435387319431987199999999d-23, -.396254925184379641856000000000000d-25, .898135896598511332010666666666666d-27, - &
    & .194763366993016433322666666666666d-28, .404836019024630033066666666666666d-30, -.807981567699845120000000000000000d-32]
-double precision, parameter :: p(50) = [-.60577324664060345999319382737747d+00, - &
+real(nswc_dp), parameter :: p(50) = [-.60577324664060345999319382737747d+00, - &
    & .11253524348366090030649768852718d+00, .13432266247902779492487859329414d-01, -.19268451873811457249246838991303d-02, &
    & .30911833772060318335586737475368d-03, -.53564132129618418776393559795147d-04, .98278128802474923952491882717237d-05, - &
    & .18853689849165182826902891938910d-05, .37494319356894735406964042190531d-06, -.76823455870552639273733465680556d-07, &
@@ -9225,7 +9227,7 @@ double precision, parameter :: p(50) = [-.60577324664060345999319382737747d+00, 
    & .17269132735340541122315987626666d-27, .46308611659151500715194231466666d-28, -.12448703637214131241755170133333d-28, &
    & .33544574090520678532907007999999d-29, -.90598868521070774437543935999999d-30, .24524147051474238587273216000000d-30, - &
    & .66528178733552062817107967999999d-31]
-double precision, parameter :: q(64) = [-.1892918000753016825495679942820d+00, - &
+real(nswc_dp), parameter :: q(64) = [-.1892918000753016825495679942820d+00, - &
    & .8648117855259871489968817056824d-01, .7224101543746594747021514839184d-02, -.8097559457557386197159655610181d-03, &
    & .1099913443266138867179251157002d-03, -.1717332998937767371495358814487d-04, .2985627514479283322825342495003d-05, - &
    & .5659649145771930056560167267155d-06, .1152680839714140019226583501663d-06, -.2495030440269338228842128765065d-07, &
@@ -9361,18 +9363,18 @@ if (abs(c) > eps) go to 81
 de1e = (1.d0 + w)/x
 end function de1e
 
-pure elemental double precision function dei0(x, eps)
+pure elemental real(nswc_dp) function dei0(x, eps)
 implicit none
-double precision, intent(in) :: eps
-double precision, intent(in) :: x
+real(nswc_dp), intent(in) :: eps
+real(nswc_dp), intent(in) :: x
 integer :: n
-double precision :: c, h, t, w, db2
-double precision, parameter :: dk1 = 25598514349.d0
-double precision, parameter :: dk2 = 12212826724.d0
-double precision, parameter :: dk3 = 52346020729.d0
-double precision, parameter :: db = 68719476736.d0
-double precision, parameter :: dx = .64725688445954142292644880487403537155379408215561d-33
-double precision, parameter :: a(40) = [.3896215733907167310156502703593482682018d+01, - &
+real(nswc_dp) :: c, h, t, w, db2
+real(nswc_dp), parameter :: dk1 = 25598514349.d0
+real(nswc_dp), parameter :: dk2 = 12212826724.d0
+real(nswc_dp), parameter :: dk3 = 52346020729.d0
+real(nswc_dp), parameter :: db = 68719476736.d0
+real(nswc_dp), parameter :: dx = .64725688445954142292644880487403537155379408215561d-33
+real(nswc_dp), parameter :: a(40) = [.3896215733907167310156502703593482682018d+01, - &
    & .3281607866398561670879044070702055058438d+01, .6522376145438925697728352767902339522245d+01, - &
    & .1296969738353651703636356975116693457132d+02, .2788629796294204997855360701398702087604d+02, - &
    & .6237880152891541873078526672920295283143d+02, .1435349488096750987841265647073135861344d+03, - &
@@ -9429,20 +9431,20 @@ end function dei0
 
 pure function si(x)
 implicit none
-real, intent(in) :: x
+real(nswc_sp), intent(in) :: x
 integer :: i, j
-real :: aic, amax, ax, b1, b2, bx, rc, temp, tx
-real :: si
+real(nswc_sp) :: aic, amax, ax, b1, b2, bx, rc, temp, tx
+real(nswc_sp) :: si
 integer, parameter :: n1 = 16
 integer, parameter :: n2 = 46
 integer, parameter :: m1 = 14
 integer, parameter :: m2 = 21
-real, parameter :: pio2 = 1.5707963267949
-real, parameter :: bb(16) = [6.84101190850653e-01, -3.74538448460062e-01, -2.82656062651542e-02, 3.06078454012071e-02, - &
+real(nswc_sp), parameter :: pio2 = 1.5707963267949
+real(nswc_sp), parameter :: bb(16) = [6.84101190850653e-01, -3.74538448460062e-01, -2.82656062651542e-02, 3.06078454012071e-02, - &
    & 8.99242948380352e-04, -1.09884251456048e-03, 5.81151604367358e-05, 2.28802638122969e-05, -1.35078982929539e-06, - &
    & 3.13213946132892e-07, 1.86619586786257e-08, 3.03991719607226e-09, -1.76437788946489e-10, -2.20236421792690e-11, &
    & 1.22710107703240e-12, 1.23680681116783e-13]
-real, parameter :: cc(46) = [9.76155271128712e-01, 8.96845854916423e-02, -3.04656658030696e-02, 8.50892472922945e-02, - &
+real(nswc_sp), parameter :: cc(46) = [9.76155271128712e-01, 8.96845854916423e-02, -3.04656658030696e-02, 8.50892472922945e-02, - &
    & 5.78073683148386e-03, -5.07182677775691e-03, 8.38643256650893e-04, -3.34223415981738e-04, -2.15746207281216e-05, &
    & 1.28560650086065e-04, -1.56456413510232e-05, -1.52025513597262e-05, 4.04001013843204e-06, -5.95896122752160e-07, - &
    & 4.34985305974340e-07, 7.13472533530840e-07, -5.34302186061100e-08, -1.76003581156610e-07, 3.85028855125900e-08, &
@@ -9521,20 +9523,20 @@ end function si
 
 pure elemental function cin(x)
 implicit none
-real, intent(in) :: x
+real(nswc_sp), intent(in) :: x
 integer :: i, j
-real :: aic, amax, ax, b1, b2, bx, rc, temp, tx
-real :: cin
+real(nswc_sp) :: aic, amax, ax, b1, b2, bx, rc, temp, tx
+real(nswc_sp) :: cin
 integer, parameter :: n1 = 16
 integer, parameter :: n2 = 46
 integer, parameter :: m1 = 14
 integer, parameter :: m2 = 21
-real, parameter :: econ = 5.77215664901533e-01
-real, parameter :: bb(16) = [1.82820351064538e-01, -8.23768704567135e-02, -1.03468764544958e-02, 5.05085201960312e-03, &
+real(nswc_sp), parameter :: econ = 5.77215664901533e-01
+real(nswc_sp), parameter :: bb(16) = [1.82820351064538e-01, -8.23768704567135e-02, -1.03468764544958e-02, 5.05085201960312e-03, &
    & 5.73772812356328e-05, -1.42717916181096e-04, 2.89263664732599e-06, 2.43068098304909e-06, -7.90337487433443e-08, - &
    & 2.80205535437371e-08, 1.05488738052065e-09, 2.34186901801115e-10, -9.27762554764014e-12, -1.48682586858284e-12, &
    & 5.95210263082868e-14, 7.42057835287916e-15]
-real, parameter :: cc(46) = [9.76155271128712e-01, 8.96845854916423e-02, -3.04656658030696e-02, 8.50892472922945e-02, - &
+real(nswc_sp), parameter :: cc(46) = [9.76155271128712e-01, 8.96845854916423e-02, -3.04656658030696e-02, 8.50892472922945e-02, - &
    & 5.78073683148386e-03, -5.07182677775691e-03, 8.38643256650893e-04, -3.34223415981738e-04, -2.15746207281216e-05, &
    & 1.28560650086065e-04, -1.56456413510232e-05, -1.52025513597262e-05, 4.04001013843204e-06, -5.95896122752160e-07, - &
    & 4.34985305974340e-07, 7.13472533530840e-07, -5.34302186061100e-08, -1.76003581156610e-07, 3.85028855125900e-08, &
@@ -9613,34 +9615,35 @@ end function cin
 
 pure elemental subroutine cexexi(z, w)
 implicit none
-complex, intent(in) :: z
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: w
 integer :: i
-real :: pm, qm, r, ss, x, y, ts(2), sr(2), sm(2), tm(2), qf(2), zl(2)
-real, parameter :: const = 2.46740110027234
-real, parameter :: euler = .577215664901533
-real, parameter :: zeta2 = 1.64493406684823
-real, parameter :: ed(18) = [0.00000000000000e+00, .311105957086528e-01, .103661260539112e+00, .216532335244554e+00, &
+real(nswc_sp) :: pm, qm, r, ss, x, y, ts(2), sr(2), sm(2), tm(2), qf(2), zl(2)
+real(nswc_sp), parameter :: const = 2.46740110027234
+real(nswc_sp), parameter :: euler = .577215664901533
+real(nswc_sp), parameter :: zeta2 = 1.64493406684823
+real(nswc_sp), parameter :: ed(18) = [0.00000000000000e+00, .311105957086528e-01, .103661260539112e+00, .216532335244554e+00, &
    & .369931427960192e+00, .566766259990589e+00, .814042066324748e+00, .112384247540813e+01, .151400478148512e+01, &
    & .200886795032284e+01, .264052411823592e+01, .345098449933392e+01, .449583360763202e+01, .585058263409822e+01, &
    & .762273501463380e+01, .997814501584578e+01, .132122064896408e+02, .180322948376021e+02]
-real, parameter :: ee(18) = [.850156516121093e-02, .505037465849058e-01, .836817368956407e-01, .107047582417607e+00, &
+real(nswc_sp), parameter :: ee(18) = [.850156516121093e-02, .505037465849058e-01, .836817368956407e-01, .107047582417607e+00, &
    & .120424719029462e+00, .125096631582229e+00, .122314435224685e+00, .112621417553907e+00, .963419407392582e-01, &
    & .747398422757511e-01, .508596135953441e-01, .290822706773628e-01, .132201640530101e-01, .443802939829067e-02, &
    & .992612478987576e-03, .126579795112011e-03, .702150908253350e-05, .910281532564632e-07]
-real, parameter :: dd(19) = [0.00000000000000e+00, .419556678374293e-01, .117533661648665e+00, .228560237455987e+00, &
+real(nswc_sp), parameter :: dd(19) = [0.00000000000000e+00, .419556678374293e-01, .117533661648665e+00, .228560237455987e+00, &
    & .375667350161240e+00, .791594846276672e+00, .107546889623058e+01, .142659208030841e+01, .186290554952377e+01, &
    & .240730009509856e+01, .308854035607524e+01, .394277605155259e+01, .501593196543981e+01, .636759180748651e+01, &
    & .807776193096055e+01, .102598961138887e+02, .130896768422610e+02, .168832169085916e+02, .224083240941713e+02]
-real, parameter :: de(19) = [-.346911733535892e-03, -.603787732461745e-02, -.152461305949249e-01, -.210582169827291e-01, - &
+real(nswc_sp), parameter :: de(19) = [-.346911733535892e-03, -.603787732461745e-02, -.152461305949249e-01, -.210582169827291e-01, &
+   & - &
    & .171894208720754e-01, .314323467033032e-01, .750898531566972e-01, .124689787807260e+00, .168579075090035e+00, &
    & .191715080699511e+00, .182600794550836e+00, .142345674307147e+00, .874862222419327e-01, .402175083288425e-01, &
    & .128575005680180e-01, .257673782598441e-02, .275955003784349e-03, .119139315517122e-04, .107292980199386e-06]
-real, parameter :: cd(18) = [0.00000000000000e+00, .237286128313683e-01, .854113210668760e-01, .185276627282059e+00, &
+real(nswc_sp), parameter :: cd(18) = [0.00000000000000e+00, .237286128313683e-01, .854113210668760e-01, .185276627282059e+00, &
    & .323741526616688e+00, .503045460381267e+00, .728806607587188e+00, .101122770102872e+01, .136598448171249e+01, &
    & .181510139038929e+01, .238824701955419e+01, .312490532008812e+01, .407802489894445e+01, .532033545554865e+01, &
    & .695624307290579e+01, .914759902547031e+01, .121829074388544e+02, .167511311969873e+02]
-real, parameter :: ce(18) = [.349517258926827e-01, .135849105925897e+00, .158850581552296e+00, .153001434535435e+00, &
+real(nswc_sp), parameter :: ce(18) = [.349517258926827e-01, .135849105925897e+00, .158850581552296e+00, .153001434535435e+00, &
    & .134520752856461e+00, .111913051619671e+00, .892008386656190e-01, .679227205472067e-01, .486723197887211e-01, &
    & .320170976532266e-01, .187008965021111e-01, .929708414427865e-02, .372604763161087e-02, .111989537559823e-02, &
    & .228057496872353e-03, .269596227781453e-04, .141255430224301e-05, .176352326808806e-07]
@@ -9802,13 +9805,13 @@ sm(2) = sr(2) + sm(2)
 130 w = cmplx(sm(1), sm(2))
 end subroutine cexexi
 
-pure elemental complex function cli(z)
+pure elemental complex(nswc_sp) function cli(z)
 implicit none
-complex, intent(in) :: z
+complex(nswc_sp), intent(in) :: z
 integer :: n
-real :: qf(2), dl(2), ds, zd(2), zl(2), az(2), pm, r, sm(2), tm(2), ts(2), sr(2)
-real, parameter :: c = 1.64493406684823
-real, parameter :: qb(25) = [2.77777777777778e-2, -1.00000000000000e-2, -1.70068027210884e-2, -1.94444444444444e-2, - &
+real(nswc_sp) :: qf(2), dl(2), ds, zd(2), zl(2), az(2), pm, r, sm(2), tm(2), ts(2), sr(2)
+real(nswc_sp), parameter :: c = 1.64493406684823
+real(nswc_sp), parameter :: qb(25) = [2.77777777777778e-2, -1.00000000000000e-2, -1.70068027210884e-2, -1.94444444444444e-2, - &
    & 2.06611570247934e-2, -2.14173006480699e-2, -2.19488663772311e-2, -2.23492338111715e-2, -2.26636891351914e-2, - &
    & 2.29178211549926e-2, -2.31276449354844e-2, -2.33038680700203e-2, -2.34539766464373e-2, -2.35833786876607e-2, - &
    & 2.36960832049849e-2, -2.37951264448373e-2, -2.38828504258091e-2, -2.39610907251825e-2, -2.40313063764460e-2, - &
@@ -9902,31 +9905,31 @@ return
 100 cli = cmplx(-c, 0.0)
 end function cli
 
-pure elemental real function ali(x)
+pure elemental real(nswc_sp) function ali(x)
 implicit none
-real, intent(in) :: x
+real(nswc_sp), intent(in) :: x
 integer :: i, l
-real :: t, w
-real, parameter :: const = 1.64493406684823
-double precision, parameter :: x0 = -12.5951703698450161286398965d0
-real, parameter :: a(5) = [.217590467528373e+01, .165569610692639e+01, .522944061702389e+00, .626073688152965e-01, &
+real(nswc_sp) :: t, w
+real(nswc_sp), parameter :: const = 1.64493406684823
+real(nswc_dp), parameter :: x0 = -12.5951703698450161286398965d0
+real(nswc_sp), parameter :: a(5) = [.217590467528373e+01, .165569610692639e+01, .522944061702389e+00, .626073688152965e-01, &
    & .187280204672313e-02]
-real, parameter :: b(6) = [.242590467528371e+01, .215106116463796e+01, .853664388896516e+00, .148635712775060e+00, &
+real(nswc_sp), parameter :: b(6) = [.242590467528371e+01, .215106116463796e+01, .853664388896516e+00, .148635712775060e+00, &
    & .936304016023909e-02, .115362459229893e-03]
-real, parameter :: c(10) = [-.139792925233661e+01, .368504569727477e+00, .467406917183686e-01, .113795257294490e-01, &
+real(nswc_sp), parameter :: c(10) = [-.139792925233661e+01, .368504569727477e+00, .467406917183686e-01, .113795257294490e-01, &
    & .369638462505741e-02, .140888669464352e-02, .580505641503297e-03, .279065584075104e-03, .727678355839120e-04, &
    & .941452067850052e-04]
-real, parameter :: d(2) = [-.164792925233634e+01, .669375771675355e+00]
-real, parameter :: e(18) = [-.194565741631859e+00, -.430017756528812e-02, -.129188263110634e-03, -.344864872694838e-05, &
+real(nswc_sp), parameter :: d(2) = [-.164792925233634e+01, .669375771675355e+00]
+real(nswc_sp), parameter :: e(18) = [-.194565741631859e+00, -.430017756528812e-02, -.129188263110634e-03, -.344864872694838e-05, &
    & .566899694553089e-09, .126641834906132e-07, .163966793864421e-08, .164221074630109e-09, .149644905021032e-10, &
    & .130214292886747e-11, .110415518123737e-12, .921674760163207e-14, .761646464974859e-15, .625216733700975e-16, &
    & .510910937990370e-17, .416215390793180e-18, .338357379188308e-19, .274674744366340e-20]
-real, parameter :: p(4) = [-.124827318209942e+01, -.593706951284264e-01, .368603360394688e-01, .243497524184253e-02]
-real, parameter :: q(8) = [.100000000000000e+01, .252618047164349e+00, .171618729068655e-01, .234444792844727e-03, - &
+real(nswc_sp), parameter :: p(4) = [-.124827318209942e+01, -.593706951284264e-01, .368603360394688e-01, .243497524184253e-02]
+real(nswc_sp), parameter :: q(8) = [.100000000000000e+01, .252618047164349e+00, .171618729068655e-01, .234444792844727e-03, - &
    & .174928841869743e-05, .347369010951250e-07, -.713275908929482e-09, .958397514026421e-11]
-real, parameter :: r(7) = [.265189940015693e+00, .230201018075415e+00, .315999623504943e-01, .154066621939470e-02, &
+real(nswc_sp), parameter :: r(7) = [.265189940015693e+00, .230201018075415e+00, .315999623504943e-01, .154066621939470e-02, &
    & .286697611038892e-04, .163031291368652e-06, .838957807732251e-10]
-real, parameter :: s(6) = [.100000000000000e+01, .177195068872258e+00, .110559275223905e-01, .291916852717175e-03, &
+real(nswc_sp), parameter :: s(6) = [.100000000000000e+01, .177195068872258e+00, .110559275223905e-01, .291916852717175e-03, &
    & .304793254397420e-05, .882114921507386e-08]
 !-----------------------------------------------------------------------
 !            Computation of the real dilogarithm function
@@ -10026,16 +10029,16 @@ end function ali
 pure elemental subroutine cgamma(mo, z, w)
 implicit none
 integer, intent(in) :: mo
-complex, intent(in) :: z
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: w
 integer :: j, k, l, m, max, n, nm1
-real :: a, a1, a2, c, cn, cut, d, e2t, eps, et, h1, h2, s, s1, s2, sn, t, t1, t2, u, u1, u2, v1, v2, w1, w2, x, y, y2
-complex :: eta, eta2, sum
-real, parameter :: pi = 3.14159265358979
-real, parameter :: pi2 = 6.28318530717959
-real, parameter :: alpi = 1.14472988584940
-real, parameter :: hl2p = .918938533204673
-real, parameter :: c0(12) = [.833333333333333e-01, -.277777777777778e-02, .793650793650794e-03, -.595238095238095e-03, &
+real(nswc_sp) :: a, a1, a2, c, cn, cut, d, e2t, eps, et, h1, h2, s, s1, s2, sn, t, t1, t2, u, u1, u2, v1, v2, w1, w2, x, y, y2
+complex(nswc_sp) :: eta, eta2, sum
+real(nswc_sp), parameter :: pi = 3.14159265358979
+real(nswc_sp), parameter :: pi2 = 6.28318530717959
+real(nswc_sp), parameter :: alpi = 1.14472988584940
+real(nswc_sp), parameter :: hl2p = .918938533204673
+real(nswc_sp), parameter :: c0(12) = [.833333333333333e-01, -.277777777777778e-02, .793650793650794e-03, -.595238095238095e-03, &
    & .841750841750842e-03, -.191752691752692e-02, .641025641025641e-02, -.295506535947712e-01, .179644372368831e+00, - &
    & .139243221690590e+01, .134028640441684e+02, -.156848284626002e+03]
 !-----------------------------------------------------------------------
@@ -10220,13 +10223,13 @@ return
 200 w = (0.0, 0.0)
 end subroutine cgamma
 
-pure elemental complex function cgam0(z)
+pure elemental complex(nswc_sp) function cgam0(z)
 implicit none
-complex, intent(in) :: z
+complex(nswc_sp), intent(in) :: z
 integer :: i, k, n
-real :: x, y
-complex :: w
-real, parameter :: a(25) = [.577215664901533e+00, -.655878071520254e+00, -.420026350340952e-01, .166538611382291e+00, - &
+real(nswc_sp) :: x, y
+complex(nswc_sp) :: w
+real(nswc_sp), parameter :: a(25) = [.577215664901533e+00, -.655878071520254e+00, -.420026350340952e-01, .166538611382291e+00, - &
    & .421977345555443e-01, -.962197152787697e-02, .721894324666310e-02, -.116516759185907e-02, -.215241674114951e-03, &
    & .128050282388116e-03, -.201348547807882e-04, -.125049348214267e-05, .113302723198170e-05, -.205633841697761e-06, &
    & .611609510448142e-08, .500200764446922e-08, -.118127457048702e-08, .104342671169110e-09, .778226343990507e-11, - &
@@ -10250,23 +10253,23 @@ end do
 cgam0 = 1.0 + z*w
 end function cgam0
 
-pure elemental real function gamma(a)
+pure elemental real(nswc_sp) function gamma(a)
 implicit none
-real, intent(in) :: a
+real(nswc_sp), intent(in) :: a
 integer :: i, j, m, n, nswc_ai_i4
-real :: bot, s, t, top, w, x
-double precision :: g, z, lnx
-real, parameter :: pi = 3.1415926535898
-double precision, parameter :: d = .41893853320467274178d0
-real, parameter :: p(7) = [.539637273585445e-03, .261939260042690e-02, .204493667594920e-01, .730981088720487e-01, &
+real(nswc_sp) :: bot, s, t, top, w, x
+real(nswc_dp) :: g, z, lnx
+real(nswc_sp), parameter :: pi = 3.1415926535898
+real(nswc_dp), parameter :: d = .41893853320467274178d0
+real(nswc_sp), parameter :: p(7) = [.539637273585445e-03, .261939260042690e-02, .204493667594920e-01, .730981088720487e-01, &
    & .279648642639792e+00, .553413866010467e+00, 1.0]
-real, parameter :: q(7) = [-.832979206704073e-03, .470059485860584e-02, .225211131035340e-01, -.170458969313360e+00, - &
+real(nswc_sp), parameter :: q(7) = [-.832979206704073e-03, .470059485860584e-02, .225211131035340e-01, -.170458969313360e+00, - &
    & .567902761974940e-01, .113062953091122e+01, 1.0]
-real, parameter :: r1 = .820756370353826e-03
-real, parameter :: r2 = -.595156336428591e-03
-real, parameter :: r3 = .793650663183693e-03
-real, parameter :: r4 = -.277777777770481e-02
-real, parameter :: r5 = .833333333333333e-01
+real(nswc_sp), parameter :: r1 = .820756370353826e-03
+real(nswc_sp), parameter :: r2 = -.595156336428591e-03
+real(nswc_sp), parameter :: r3 = .793650663183693e-03
+real(nswc_sp), parameter :: r4 = -.277777777770481e-02
+real(nswc_sp), parameter :: r5 = .833333333333333e-01
 !-----------------------------------------------------------------------
 !         Evaluation of the gamma function for real arguments
 !                           -----------
@@ -10363,16 +10366,16 @@ gamma = exp(w)*(1.0 + t)
 if (a < 0.0) gamma = (1.0/(gamma*s))/x
 end function gamma
 
-pure elemental double precision function glog(x)
+pure elemental real(nswc_dp) function glog(x)
 implicit none
-real, intent(in) :: x
+real(nswc_sp), intent(in) :: x
 integer :: n
-real :: t, t2
-double precision :: z
-real, parameter :: c1 = .286228750476730
-real, parameter :: c2 = .399999628131494
-real, parameter :: c3 = .666666666752663
-double precision, parameter :: w(163) = [.270805020110221007d+01, .277258872223978124d+01, &
+real(nswc_sp) :: t, t2
+real(nswc_dp) :: z
+real(nswc_sp), parameter :: c1 = .286228750476730
+real(nswc_sp), parameter :: c2 = .399999628131494
+real(nswc_sp), parameter :: c3 = .666666666752663
+real(nswc_dp), parameter :: w(163) = [.270805020110221007d+01, .277258872223978124d+01, &
    & .283321334405621608d+01, .289037175789616469d+01, .294443897916644046d+01, .299573227355399099d+01, .304452243772342300d+01, &
    & .309104245335831585d+01, .313549421592914969d+01, .317805383034794562d+01, .321887582486820075d+01, .325809653802148205d+01, &
    & .329583686600432907d+01, .333220451017520392d+01, .336729582998647403d+01, .340119738166215538d+01, .343398720448514625d+01, &
@@ -10423,18 +10426,18 @@ return
 10 glog = log(x)
 end function glog
 
-pure elemental real function gam1(a)
+pure elemental real(nswc_sp) function gam1(a)
 implicit none
-real, intent(in) :: a
-real :: bot, d, t, top, w, nswc_ai_r4
-real, parameter :: p(7) = [.577215664901533e+00, -.409078193005776e+00, -.230975380857675e+00, .597275330452234e-01, &
+real(nswc_sp), intent(in) :: a
+real(nswc_sp) :: bot, d, t, top, w, nswc_ai_r4
+real(nswc_sp), parameter :: p(7) = [.577215664901533e+00, -.409078193005776e+00, -.230975380857675e+00, .597275330452234e-01, &
    & .766968181649490e-02, -.514889771323592e-02, .589597428611429e-03]
-real, parameter :: q(5) = [.100000000000000e+01, .427569613095214e+00, .158451672430138e+00, .261132021441447e-01, &
+real(nswc_sp), parameter :: q(5) = [.100000000000000e+01, .427569613095214e+00, .158451672430138e+00, .261132021441447e-01, &
    & .423244297896961e-02]
-real, parameter :: r(9) = [-.422784335098468e+00, -.771330383816272e+00, -.244757765222226e+00, .118378989872749e+00, &
+real(nswc_sp), parameter :: r(9) = [-.422784335098468e+00, -.771330383816272e+00, -.244757765222226e+00, .118378989872749e+00, &
    & .930357293360349e-03, -.118290993445146e-01, .223047661158249e-02, .266505979058923e-03, -.132674909766242e-03]
-real, parameter :: s1 = .273076135303957e+00
-real, parameter :: s2 = .559398236957378e-01
+real(nswc_sp), parameter :: s1 = .273076135303957e+00
+real(nswc_sp), parameter :: s2 = .559398236957378e-01
 !-----------------------------------------------------------------------
 !     Computation of 1/gamma(a+1) - 1  For -0.5 .LE. a .LE. 1.5
 !-----------------------------------------------------------------------
@@ -10471,18 +10474,18 @@ return
 31 gam1 = t*w/a
 end function gam1
 
-pure elemental real function gamln(a)
+pure elemental real(nswc_sp) function gamln(a)
 implicit none
-real, intent(in) :: a
+real(nswc_sp), intent(in) :: a
 integer :: i, n
-real :: t, w
-real, parameter :: d = .418938533204673
-real, parameter :: c0 = .833333333333333e-01
-real, parameter :: c1 = -.277777777760991e-02
-real, parameter :: c2 = .793650666825390e-03
-real, parameter :: c3 = -.595202931351870e-03
-real, parameter :: c4 = .837308034031215e-03
-real, parameter :: c5 = -.165322962780713e-02
+real(nswc_sp) :: t, w
+real(nswc_sp), parameter :: d = .418938533204673
+real(nswc_sp), parameter :: c0 = .833333333333333e-01
+real(nswc_sp), parameter :: c1 = -.277777777760991e-02
+real(nswc_sp), parameter :: c2 = .793650666825390e-03
+real(nswc_sp), parameter :: c3 = -.595202931351870e-03
+real(nswc_sp), parameter :: c4 = .837308034031215e-03
+real(nswc_sp), parameter :: c5 = -.165322962780713e-02
 !-----------------------------------------------------------------------
 !            Evaluation of LN(gamma(a)) for positive A
 !-----------------------------------------------------------------------
@@ -10516,34 +10519,34 @@ w = (((((c5*t + c4)*t + c3)*t + c2)*t + c1)*t + c0)/a
 gamln = (d + w) + (a - 0.5)*(log(a) - 1.0)
 end function gamln
 
-pure elemental real function gamln1(a)
+pure elemental real(nswc_sp) function gamln1(a)
 implicit none
-real, intent(in) :: a
-real :: w, x
-real, parameter :: p0 = .577215664901533e+00
-real, parameter :: p1 = .844203922187225e+00
-real, parameter :: p2 = -.168860593646662e+00
-real, parameter :: p3 = -.780427615533591e+00
-real, parameter :: p4 = -.402055799310489e+00
-real, parameter :: p5 = -.673562214325671e-01
-real, parameter :: p6 = -.271935708322958e-02
-real, parameter :: q1 = .288743195473681e+01
-real, parameter :: q2 = .312755088914843e+01
-real, parameter :: q3 = .156875193295039e+01
-real, parameter :: q4 = .361951990101499e+00
-real, parameter :: q5 = .325038868253937e-01
-real, parameter :: q6 = .667465618796164e-03
-real, parameter :: r0 = .422784335098467e+00
-real, parameter :: r1 = .848044614534529e+00
-real, parameter :: r2 = .565221050691933e+00
-real, parameter :: r3 = .156513060486551e+00
-real, parameter :: r4 = .170502484022650e-01
-real, parameter :: r5 = .497958207639485e-03
-real, parameter :: s1 = .124313399877507e+01
-real, parameter :: s2 = .548042109832463e+00
-real, parameter :: s3 = .101552187439830e+00
-real, parameter :: s4 = .713309612391000e-02
-real, parameter :: s5 = .116165475989616e-03
+real(nswc_sp), intent(in) :: a
+real(nswc_sp) :: w, x
+real(nswc_sp), parameter :: p0 = .577215664901533e+00
+real(nswc_sp), parameter :: p1 = .844203922187225e+00
+real(nswc_sp), parameter :: p2 = -.168860593646662e+00
+real(nswc_sp), parameter :: p3 = -.780427615533591e+00
+real(nswc_sp), parameter :: p4 = -.402055799310489e+00
+real(nswc_sp), parameter :: p5 = -.673562214325671e-01
+real(nswc_sp), parameter :: p6 = -.271935708322958e-02
+real(nswc_sp), parameter :: q1 = .288743195473681e+01
+real(nswc_sp), parameter :: q2 = .312755088914843e+01
+real(nswc_sp), parameter :: q3 = .156875193295039e+01
+real(nswc_sp), parameter :: q4 = .361951990101499e+00
+real(nswc_sp), parameter :: q5 = .325038868253937e-01
+real(nswc_sp), parameter :: q6 = .667465618796164e-03
+real(nswc_sp), parameter :: r0 = .422784335098467e+00
+real(nswc_sp), parameter :: r1 = .848044614534529e+00
+real(nswc_sp), parameter :: r2 = .565221050691933e+00
+real(nswc_sp), parameter :: r3 = .156513060486551e+00
+real(nswc_sp), parameter :: r4 = .170502484022650e-01
+real(nswc_sp), parameter :: r5 = .497958207639485e-03
+real(nswc_sp), parameter :: s1 = .124313399877507e+01
+real(nswc_sp), parameter :: s2 = .548042109832463e+00
+real(nswc_sp), parameter :: s3 = .101552187439830e+00
+real(nswc_sp), parameter :: s4 = .713309612391000e-02
+real(nswc_sp), parameter :: s5 = .116165475989616e-03
 !-----------------------------------------------------------------------
 !     Evaluation of LN(gamma(1 + a)) for -0.2 .LE. a .LE. 1.25
 !-----------------------------------------------------------------------
@@ -10563,17 +10566,17 @@ end function gamln1
 pure subroutine dcgama(mo, z, w)
 implicit none
 integer, intent(in) :: mo
-double precision, intent(in) :: z(2)
-double precision, intent(inout) :: w(2)
+real(nswc_dp), intent(in) :: z(2)
+real(nswc_dp), intent(inout) :: w(2)
 integer :: j, k, max, n, nm1
-double precision :: a, a1, a2, c, cn, cut, d, eps, et, e2t, h1, &
+real(nswc_dp) :: a, a1, a2, c, cn, cut, d, eps, et, e2t, h1, &
    & h2, q1, q2, s, sn, s1, s2, t, t1, t2, u, u1, u2, v1, v2, w1, w2, &
    & x, y, y2
-double precision, parameter :: pi = 3.141592653589793238462643383279502884197d0
-double precision, parameter :: pi2 = 6.283185307179586476925286766559005768394d0
-double precision, parameter :: dlpi = 1.144729885849400174143427351353058711647d0
-double precision, parameter :: hl2p = .9189385332046727417803297364056176398614d0
-double precision, parameter :: c0(30) = [.8333333333333333333333333333333333333333d-01, - &
+real(nswc_dp), parameter :: pi = 3.141592653589793238462643383279502884197d0
+real(nswc_dp), parameter :: pi2 = 6.283185307179586476925286766559005768394d0
+real(nswc_dp), parameter :: dlpi = 1.144729885849400174143427351353058711647d0
+real(nswc_dp), parameter :: hl2p = .9189385332046727417803297364056176398614d0
+real(nswc_dp), parameter :: c0(30) = [.8333333333333333333333333333333333333333d-01, - &
    & .2777777777777777777777777777777777777778d-02, .7936507936507936507936507936507936507937d-03, - &
    & .5952380952380952380952380952380952380952d-03, .8417508417508417508417508417508417508418d-03, - &
    & .1917526917526917526917526917526917526918d-02, .6410256410256410256410256410256410256410d-02, - &
@@ -10783,13 +10786,13 @@ return
 w(2) = 0.d0
 end subroutine dcgama
 
-pure elemental double precision function dgamma(a)
+pure elemental real(nswc_dp) function dgamma(a)
 implicit none
-double precision, intent(in) :: a
+real(nswc_dp), intent(in) :: a
 integer :: j, n, nswc_ai_i4
-double precision :: s, t, x, w
-double precision, parameter :: pi = 3.14159265358979323846264338327950d0
-double precision, parameter :: d = 0.41893853320467274178032973640562d0
+real(nswc_dp) :: s, t, x, w
+real(nswc_dp), parameter :: pi = 3.14159265358979323846264338327950d0
+real(nswc_dp), parameter :: d = 0.41893853320467274178032973640562d0
 !-----------------------------------------------------------------------
 !                Evaluation of the gamma function for
 !                     double precision arguments
@@ -10869,12 +10872,12 @@ dgamma = exp(w)
 if (a < 0.d0) dgamma = (1.d0/(dgamma*s))/x
 end function dgamma
 
-pure elemental double precision function dpdel(x)
+pure elemental real(nswc_dp) function dpdel(x)
 implicit none
-double precision, intent(in) :: x
+real(nswc_dp), intent(in) :: x
 integer :: i, k
-double precision :: t, w
-double precision, parameter :: a(15) = [.833333333333333333333333333333d-01, - &
+real(nswc_dp) :: t, w
+real(nswc_dp), parameter :: a(15) = [.833333333333333333333333333333d-01, - &
    & .277777777777777777777777752282d-04, .793650793650793650791732130419d-07, -.595238095238095232389839236182d-09, &
    & .841750841750832853294451671990d-11, -.191752691751854612334149171243d-12, .641025640510325475730918472625d-14, - &
    & .295506514125338232839867823991d-15, .179643716359402238723287696452d-16, -.139228964661627791231203060395d-17, &
@@ -10899,7 +10902,7 @@ end do
 dpdel = w/x
 end function dpdel
 
-pure elemental double precision function dgam1(x)
+pure elemental real(nswc_dp) function dgam1(x)
 implicit none
 !-----------------------------------------------------------------------
 !     Evaluation of 1/gamma(1 + x) - 1  For -0.5 .LE. x .LE. 1.5
@@ -10964,44 +10967,44 @@ implicit none
 !     c = A(1) - 1 Is also frequently needed. c has the value ...
 !     data c /-.4227843350984671393934879099175975689578d+00/
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision :: d, t, w, z, nswc_ai_r8
-double precision, parameter :: a0 = .611609510448141581788d-08
-double precision, parameter :: a1 = .624730830116465516210d-08
-double precision, parameter :: b1 = .203610414066806987300d+00
-double precision, parameter :: b2 = .266205348428949217746d-01
-double precision, parameter :: b3 = .493944979382446875238d-03
-double precision, parameter :: b4 = -.851419432440314906588d-05
-double precision, parameter :: b5 = -.643045481779353022248d-05
-double precision, parameter :: b6 = .992641840672773722196d-06
-double precision, parameter :: b7 = -.607761895722825260739d-07
-double precision, parameter :: b8 = .195755836614639731882d-09
-double precision, parameter :: p0 = .6116095104481415817861d-08
-double precision, parameter :: p1 = .6871674113067198736152d-08
-double precision, parameter :: p2 = .6820161668496170657918d-09
-double precision, parameter :: p3 = .4686843322948848031080d-10
-double precision, parameter :: p4 = .1572833027710446286995d-11
-double precision, parameter :: p5 = -.1249441572276366213222d-12
-double precision, parameter :: p6 = .4343529937408594255178d-14
-double precision, parameter :: q1 = .3056961078365221025009d+00
-double precision, parameter :: q2 = .5464213086042296536016d-01
-double precision, parameter :: q3 = .4956830093825887312020d-02
-double precision, parameter :: q4 = .2692369466186361192876d-03
-double precision, parameter :: c = -.422784335098467139393487909917598d+00
-double precision, parameter :: c0 = .577215664901532860606512090082402d+00
-double precision, parameter :: c1 = -.655878071520253881077019515145390d+00
-double precision, parameter :: c2 = -.420026350340952355290039348754298d-01
-double precision, parameter :: c3 = .166538611382291489501700795102105d+00
-double precision, parameter :: c4 = -.421977345555443367482083012891874d-01
-double precision, parameter :: c5 = -.962197152787697356211492167234820d-02
-double precision, parameter :: c6 = .721894324666309954239501034044657d-02
-double precision, parameter :: c7 = -.116516759185906511211397108401839d-02
-double precision, parameter :: c8 = -.215241674114950972815729963053648d-03
-double precision, parameter :: c9 = .128050282388116186153198626328164d-03
-double precision, parameter :: c10 = -.201348547807882386556893914210218d-04
-double precision, parameter :: c11 = -.125049348214267065734535947383309d-05
-double precision, parameter :: c12 = .113302723198169588237412962033074d-05
-double precision, parameter :: c13 = -.205633841697760710345015413002057d-06
+real(nswc_dp), intent(in) :: x
+real(nswc_dp) :: d, t, w, z, nswc_ai_r8
+real(nswc_dp), parameter :: a0 = .611609510448141581788d-08
+real(nswc_dp), parameter :: a1 = .624730830116465516210d-08
+real(nswc_dp), parameter :: b1 = .203610414066806987300d+00
+real(nswc_dp), parameter :: b2 = .266205348428949217746d-01
+real(nswc_dp), parameter :: b3 = .493944979382446875238d-03
+real(nswc_dp), parameter :: b4 = -.851419432440314906588d-05
+real(nswc_dp), parameter :: b5 = -.643045481779353022248d-05
+real(nswc_dp), parameter :: b6 = .992641840672773722196d-06
+real(nswc_dp), parameter :: b7 = -.607761895722825260739d-07
+real(nswc_dp), parameter :: b8 = .195755836614639731882d-09
+real(nswc_dp), parameter :: p0 = .6116095104481415817861d-08
+real(nswc_dp), parameter :: p1 = .6871674113067198736152d-08
+real(nswc_dp), parameter :: p2 = .6820161668496170657918d-09
+real(nswc_dp), parameter :: p3 = .4686843322948848031080d-10
+real(nswc_dp), parameter :: p4 = .1572833027710446286995d-11
+real(nswc_dp), parameter :: p5 = -.1249441572276366213222d-12
+real(nswc_dp), parameter :: p6 = .4343529937408594255178d-14
+real(nswc_dp), parameter :: q1 = .3056961078365221025009d+00
+real(nswc_dp), parameter :: q2 = .5464213086042296536016d-01
+real(nswc_dp), parameter :: q3 = .4956830093825887312020d-02
+real(nswc_dp), parameter :: q4 = .2692369466186361192876d-03
+real(nswc_dp), parameter :: c = -.422784335098467139393487909917598d+00
+real(nswc_dp), parameter :: c0 = .577215664901532860606512090082402d+00
+real(nswc_dp), parameter :: c1 = -.655878071520253881077019515145390d+00
+real(nswc_dp), parameter :: c2 = -.420026350340952355290039348754298d-01
+real(nswc_dp), parameter :: c3 = .166538611382291489501700795102105d+00
+real(nswc_dp), parameter :: c4 = -.421977345555443367482083012891874d-01
+real(nswc_dp), parameter :: c5 = -.962197152787697356211492167234820d-02
+real(nswc_dp), parameter :: c6 = .721894324666309954239501034044657d-02
+real(nswc_dp), parameter :: c7 = -.116516759185906511211397108401839d-02
+real(nswc_dp), parameter :: c8 = -.215241674114950972815729963053648d-03
+real(nswc_dp), parameter :: c9 = .128050282388116186153198626328164d-03
+real(nswc_dp), parameter :: c10 = -.201348547807882386556893914210218d-04
+real(nswc_dp), parameter :: c11 = -.125049348214267065734535947383309d-05
+real(nswc_dp), parameter :: c12 = .113302723198169588237412962033074d-05
+real(nswc_dp), parameter :: c13 = -.205633841697760710345015413002057d-06
 !----------------------------
 !----------------------------
 !----------------------------
@@ -11049,12 +11052,12 @@ return
 50 dgam1 = t*z/x
 end function dgam1
 
-pure elemental double precision function dgamln(a)
+pure elemental real(nswc_dp) function dgamln(a)
 implicit none
-double precision, intent(in) :: a
+real(nswc_dp), intent(in) :: a
 integer :: i, n
-double precision :: x, w
-double precision, parameter :: d = 0.41893853320467274178032973640562d0
+real(nswc_dp) :: x, w
+real(nswc_dp), parameter :: d = 0.41893853320467274178032973640562d0
 !-----------------------------------------------------------------------
 !           Evaluation of LN(gamma(a)) for positive A
 !-----------------------------------------------------------------------
@@ -11088,13 +11091,13 @@ return
 dgamln = (d + w) + (a - 0.5d0)*(log(a) - 1.d0)
 end function dgamln
 
-pure elemental double precision function dgmln1(x)
+pure elemental real(nswc_dp) function dgmln1(x)
 implicit none
 !-----------------------------------------------------------------------
 !     Evaluation of LN(gamma(1 + x)) for -0.5 .LE. x .LE. 1.5
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision :: w
+real(nswc_dp), intent(in) :: x
+real(nswc_dp) :: w
 !-----------------------
 w = dgam1(x)
 dgmln1 = - dlnrel(w)
@@ -11102,15 +11105,15 @@ end function dgmln1
 
 pure elemental subroutine cpsi(z, w)
 implicit none
-complex, intent(in) :: z
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: w
 integer :: j, k, l, m, max
-real :: a, a1, a2, c1, c2, cn, eps, et, h1, h2, s, s1, s2, sn, t, u, w1, w2, x, y, y2
-complex :: eta, eta2, sum
-double precision :: ds1, ds2
-real, parameter :: pi = 3.14159265358979324
-real, parameter :: pi2 = 6.28318530717958648
-real, parameter :: c0(12) = [.833333333333333e-01, -.833333333333333e-02, .396825396825397e-02, -.416666666666667e-02, &
+real(nswc_sp) :: a, a1, a2, c1, c2, cn, eps, et, h1, h2, s, s1, s2, sn, t, u, w1, w2, x, y, y2
+complex(nswc_sp) :: eta, eta2, sum
+real(nswc_dp) :: ds1, ds2
+real(nswc_sp), parameter :: pi = 3.14159265358979324
+real(nswc_sp), parameter :: pi2 = 6.28318530717958648
+real(nswc_sp), parameter :: c0(12) = [.833333333333333e-01, -.833333333333333e-02, .396825396825397e-02, -.416666666666667e-02, &
    & .757575757575758e-02, -.210927960927961e-01, .833333333333333e-01, -.443259803921569e+00, .305395433027012e+01, - &
    & .264562121212121e+02, .281460144927536e+03, -.360751054639805e+04]
 !-----------------------------------------------------------------------
@@ -11214,19 +11217,19 @@ return
 100 w = (0.0, 0.0)
 end subroutine cpsi
 
-pure real function psi(xx)
+pure real(nswc_sp) function psi(xx)
 implicit none
-real, intent(in) :: xx
+real(nswc_sp), intent(in) :: xx
 integer :: i, m, n, nq
-real :: aug, den, sgn, upper, w, x, xmax1, xmx0, xsmall, z
-real, parameter :: piov4 = .785398163397448e0
-double precision, parameter :: dx0 = 1.461632144968362341262659542325721325d0
-real, parameter :: p1(7) = [.895385022981970e-02, .477762828042627e+01, .142441585084029e+03, .118645200713425e+04, &
+real(nswc_sp) :: aug, den, sgn, upper, w, x, xmax1, xmx0, xsmall, z
+real(nswc_sp), parameter :: piov4 = .785398163397448e0
+real(nswc_dp), parameter :: dx0 = 1.461632144968362341262659542325721325d0
+real(nswc_sp), parameter :: p1(7) = [.895385022981970e-02, .477762828042627e+01, .142441585084029e+03, .118645200713425e+04, &
    & .363351846806499e+04, .413810161269013e+04, .130560269827897e+04]
-real, parameter :: q1(6) = [.448452573429826e+02, .520752771467162e+03, .221000799247830e+04, .364127349079381e+04, &
+real(nswc_sp), parameter :: q1(6) = [.448452573429826e+02, .520752771467162e+03, .221000799247830e+04, .364127349079381e+04, &
    & .190831076596300e+04, .691091682714533e-05]
-real, parameter :: p2(4) = [-.212940445131011e+01, -.701677227766759e+01, -.448616543918019e+01, -.648157123766197e+00]
-real, parameter :: q2(4) = [.322703493791143e+02, .892920700481861e+02, .546117738103215e+02, .777788548522962e+01]
+real(nswc_sp), parameter :: p2(4) = [-.212940445131011e+01, -.701677227766759e+01, -.448616543918019e+01, -.648157123766197e+00]
+real(nswc_sp), parameter :: q2(4) = [.322703493791143e+02, .892920700481861e+02, .546117738103215e+02, .777788548522962e+01]
 !---------------------------------------------------------------------
 !                 Evaluation of the digamma function
 !                           -----------
@@ -11365,15 +11368,15 @@ end function psi
 
 pure subroutine dcpsi(z, w)
 implicit none
-double precision, intent(in) :: z(2)
-double precision, intent(inout) :: w(2)
+real(nswc_dp), intent(in) :: z(2)
+real(nswc_dp), intent(inout) :: w(2)
 integer :: j, k, m, max
-double precision :: a, a1, a2, cn, cut, c1, c2, eps, et, h1, h2, &
+real(nswc_dp) :: a, a1, a2, cn, cut, c1, c2, eps, et, h1, h2, &
    & q1, q2, s, sn, s1, s2, t, t1, t2, u, u1, u2, v1, v2, w1, w2, x, y, &
    & y2
-double precision, parameter :: pi = 3.141592653589793238462643383279502884197d0
-double precision, parameter :: pi2 = 6.283185307179586476925286766559005768394d0
-double precision, parameter :: c0(30) = [.8333333333333333333333333333333333333333d-01, - &
+real(nswc_dp), parameter :: pi = 3.141592653589793238462643383279502884197d0
+real(nswc_dp), parameter :: pi2 = 6.283185307179586476925286766559005768394d0
+real(nswc_dp), parameter :: c0(30) = [.8333333333333333333333333333333333333333d-01, - &
    & .8333333333333333333333333333333333333333d-02, .3968253968253968253968253968253968253968d-02, - &
    & .4166666666666666666666666666666666666667d-02, .7575757575757575757575757575757575757576d-02, - &
    & .2109279609279609279609279609279609279609d-01, .8333333333333333333333333333333333333333d-01, - &
@@ -11505,14 +11508,14 @@ return
 w(2) = 0.d0
 end subroutine dcpsi
 
-pure elemental double precision function dpsi(a)
+pure elemental real(nswc_dp) function dpsi(a)
 implicit none
-double precision, intent(in) :: a
+real(nswc_dp), intent(in) :: a
 integer :: j, k, l, max, n, nswc_ai_i4
-double precision :: eps, s, t, x, xmax, w
-double precision, parameter :: pi = 3.1415926535897932384626433832795d0
-double precision, parameter :: x0 = .46163214496836234126265954232572d0
-double precision, parameter :: c(42) = [-.38057080835217921520437677667039d-01, &
+real(nswc_dp) :: eps, s, t, x, xmax, w
+real(nswc_dp), parameter :: pi = 3.1415926535897932384626433832795d0
+real(nswc_dp), parameter :: x0 = .46163214496836234126265954232572d0
+real(nswc_dp), parameter :: c(42) = [-.38057080835217921520437677667039d-01, &
    & .49141539302938712748204699654277d+00, -.56815747821244730242892064734081d-01, .83578212259143131362775650747862d-02, - &
    & .13332328579943425998079274172393d-02, .22031328706930824892872397979521d-03, -.37040238178456883592889086949229d-04, &
    & .62837936548549898933651418717690d-05, -.10712639085061849855283541747074d-05, .18312839465484165805731589810378d-06, - &
@@ -11527,7 +11530,7 @@ double precision, parameter :: c(42) = [-.38057080835217921520437677667039d-01, 
    & .13236354761887702968102638933333d-25, .22709994362408300091277311999999d-26, -.38964190215374115954491391999999d-27, &
    & .66851981388855302310679893333333d-28, -.11469986654920864872529919999999d-28, .19679385886541405920515413333333d-29, - &
    & .33764488189750979801907200000000d-30, .57930703193214159246677333333333d-31]
-double precision, parameter :: p(15) = [.833333333333333333333333333147d-03, - &
+real(nswc_dp), parameter :: p(15) = [.833333333333333333333333333147d-03, - &
    & .833333333333333333333317475057d-06, .396825396825396825343072884056d-08, -.416666666666666570859890514548d-10, &
    & .757575757575654146210665696401d-12, -.210927960920616064592099772274d-13, .833333329719356554828382131321d-15, - &
    & .443259676504784387819140445894d-16, .305392145578967948828783519552d-17, -.264499326810660590871410866039d-18, &
@@ -11638,17 +11641,17 @@ dpsi = log(x) - s
 if (a < 0.d0) dpsi = dpsi - w
 end function dpsi
 
-pure elemental double precision function dpsi0(x)
+pure elemental real(nswc_dp) function dpsi0(x)
 implicit none
-double precision, intent(in) :: x
+real(nswc_dp), intent(in) :: x
 integer :: i, l, n, nm1
-double precision :: h, w, db2
-double precision, parameter :: dk1 = 100442596182.d0
-double precision, parameter :: dk2 = 51069247913.d0
-double precision, parameter :: dk3 = 53827985572.d0
-double precision, parameter :: db = 68719476736.d0
-double precision, parameter :: dx = .28939299282041499433886199389507989269636d-32
-double precision, parameter :: a(20) = [.967672245447621170427444761710d+00, - &
+real(nswc_dp) :: h, w, db2
+real(nswc_dp), parameter :: dk1 = 100442596182.d0
+real(nswc_dp), parameter :: dk2 = 51069247913.d0
+real(nswc_dp), parameter :: dk3 = 53827985572.d0
+real(nswc_dp), parameter :: db = 68719476736.d0
+real(nswc_dp), parameter :: dx = .28939299282041499433886199389507989269636d-32
+real(nswc_dp), parameter :: a(20) = [.967672245447621170427444761710d+00, - &
    & .442763168983592106092865281853d+00, .258499760955651010624401385701d+00, -.163942705442406527504251292747d+00, &
    & .107824050691262365757182948867d+00, -.721995612564547109261217836051d-01, .488042881641431072250925255079d-01, - &
    & .331611264748473592922583984045d-01, .225976482322181046596248251178d-01, -.154247659049489591388003168412d-01, &
@@ -11692,14 +11695,15 @@ pure subroutine psidf(x, n, m, ans, iflag)
 implicit none
 integer, intent(out) :: iflag
 integer, intent(in) :: m, n
-real, intent(in) :: x
-real, intent(inout) :: ans(m)
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), intent(inout) :: ans(m)
 integer :: i, j, k, mx, nn, np, nx
-real :: alpha, arg, beta, den, elim, eps, fln, fn, fnp, fns, fx, nd, rxsq, s, t, ta, tk, tol, tols, tss, tst, tt, t1, t2, wdtol, &
+real(nswc_sp) :: alpha, arg, beta, den, elim, eps, fln, fn, fnp, fns, fx, nd, rxsq, s, t, ta, tk, tol, tols, tss, tst, tt, t1, t2, &
+   & wdtol, &
    & xdmln, xdmy, xinc, xln, xm, xmin, trm(22), trmr(100)
-real, parameter :: c = .43429
+real(nswc_sp), parameter :: c = .43429
 integer, parameter :: nmax = 100
-real, parameter :: b(22) = [1.0, -5.00000000000000000e-01, 1.66666666666666667e-01, -3.33333333333333333e-02, &
+real(nswc_sp), parameter :: b(22) = [1.0, -5.00000000000000000e-01, 1.66666666666666667e-01, -3.33333333333333333e-02, &
    & 2.38095238095238095e-02, -3.33333333333333333e-02, 7.57575757575757576e-02, -2.53113553113553114e-01, 1.16666666666666667e+00 &
    & , -7.09215686274509804e+00, 5.49711779448621554e+01, -5.29124242424242424e+02, 6.19212318840579710e+03, - &
    & 8.65802531135531136e+04, 1.42551716666666667e+06, -2.72982310678160920e+07, 6.01580873900642368e+08, -1.51163157670921569e+10 &
@@ -11959,12 +11963,12 @@ return
 330 iflag = 4
 end subroutine psidf
 
-pure elemental real function betaln(a0, b0)
+pure elemental real(nswc_sp) function betaln(a0, b0)
 implicit none
-real, intent(in) :: a0, b0
+real(nswc_sp), intent(in) :: a0, b0
 integer :: i, n
-real :: a, b, c, h, u, v, w, z
-real, parameter :: e = .918938533204673
+real(nswc_sp) :: a, b, c, h, u, v, w, z
+real(nswc_sp), parameter :: e = .918938533204673
 !-----------------------------------------------------------------------
 !     Evaluation of the logarithm of the beta function
 !-----------------------------------------------------------------------
@@ -12039,10 +12043,10 @@ return
 61 betaln = (((-0.5*log(b) + e) + w) - u) - v
 end function betaln
 
-pure elemental real function gsumln(a, b)
+pure elemental real(nswc_sp) function gsumln(a, b)
 implicit none
-real, intent(in) :: a, b
-real :: x
+real(nswc_sp), intent(in) :: a, b
+real(nswc_sp) :: x
 !-----------------------------------------------------------------------
 !          Evaluation of the function ln(gamma(a + b))
 !          FOR 1 .LE. a .LE. 2  AND  1 .LE. b .LE. 2
@@ -12057,16 +12061,16 @@ return
 20 gsumln = gamln1(x - 1.0) + log(x*(1.0 + x))
 end function gsumln
 
-pure elemental real function bcorr(a0, b0)
+pure elemental real(nswc_sp) function bcorr(a0, b0)
 implicit none
-real, intent(in) :: a0, b0
-real :: a, b, c, h, s11, s3, s5, s7, s9, t, w, x, x2
-real, parameter :: c0 = .833333333333333e-01
-real, parameter :: c1 = -.277777777760991e-02
-real, parameter :: c2 = .793650666825390e-03
-real, parameter :: c3 = -.595202931351870e-03
-real, parameter :: c4 = .837308034031215e-03
-real, parameter :: c5 = -.165322962780713e-02
+real(nswc_sp), intent(in) :: a0, b0
+real(nswc_sp) :: a, b, c, h, s11, s3, s5, s7, s9, t, w, x, x2
+real(nswc_sp), parameter :: c0 = .833333333333333e-01
+real(nswc_sp), parameter :: c1 = -.277777777760991e-02
+real(nswc_sp), parameter :: c2 = .793650666825390e-03
+real(nswc_sp), parameter :: c3 = -.595202931351870e-03
+real(nswc_sp), parameter :: c4 = .837308034031215e-03
+real(nswc_sp), parameter :: c5 = -.165322962780713e-02
 !-----------------------------------------------------------------------
 !     Evaluation of  del(a0) + del(b0) - Del(a0 + b0)  where
 !     LN(gamma(a)) = (a - 0.5)*LN(a) - a + 0.5*LN(2*PI) + DEL(a).
@@ -12094,16 +12098,16 @@ t = (1.0/a)**2
 bcorr = (((((c5*t + c4)*t + c3)*t + c2)*t + c1)*t + c0)/a + w
 end function bcorr
 
-pure elemental real function algdiv(a, b)
+pure elemental real(nswc_sp) function algdiv(a, b)
 implicit none
-real, intent(in) :: a, b
-real :: c, d, h, s11, s3, s5, s7, s9, t, u, v, w, x, x2
-real, parameter :: c0 = .833333333333333e-01
-real, parameter :: c1 = -.277777777760991e-02
-real, parameter :: c2 = .793650666825390e-03
-real, parameter :: c3 = -.595202931351870e-03
-real, parameter :: c4 = .837308034031215e-03
-real, parameter :: c5 = -.165322962780713e-02
+real(nswc_sp), intent(in) :: a, b
+real(nswc_sp) :: c, d, h, s11, s3, s5, s7, s9, t, u, v, w, x, x2
+real(nswc_sp), parameter :: c0 = .833333333333333e-01
+real(nswc_sp), parameter :: c1 = -.277777777760991e-02
+real(nswc_sp), parameter :: c2 = .793650666825390e-03
+real(nswc_sp), parameter :: c3 = -.595202931351870e-03
+real(nswc_sp), parameter :: c4 = .837308034031215e-03
+real(nswc_sp), parameter :: c5 = -.165322962780713e-02
 !-----------------------------------------------------------------------
 !     Computation of LN(gamma(b)/gamma(a+b)) when b .GE. 8
 !                         --------
@@ -12141,12 +12145,12 @@ return
 30 algdiv = (w - u) - v
 end function algdiv
 
-pure elemental double precision function dbetln(a0, b0)
+pure elemental real(nswc_dp) function dbetln(a0, b0)
 implicit none
-double precision, intent(in) :: a0, b0
+real(nswc_dp), intent(in) :: a0, b0
 integer :: i, n
-double precision :: a, b, c, h, sn, u, v, w, z
-double precision, parameter :: e = .9189385332046727417803297364056d0
+real(nswc_dp) :: a, b, c, h, sn, u, v, w, z
+real(nswc_dp), parameter :: e = .9189385332046727417803297364056d0
 !-----------------------------------------------------------------------
 !     Evaluation of the logarithm of the beta function
 !-----------------------------------------------------------------------
@@ -12223,14 +12227,14 @@ return
 61 dbetln = (((-0.5d0*log(b) + e) + w) - u) - v
 end function dbetln
 
-pure elemental double precision function dgsmln(a, b)
+pure elemental real(nswc_dp) function dgsmln(a, b)
 implicit none
 !-----------------------------------------------------------------------
 !          Evaluation of the function ln(gamma(a + b))
 !          FOR 1 .LE. a .LE. 2  AND  1 .LE. b .LE. 2
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a, b
-double precision :: x
+real(nswc_dp), intent(in) :: a, b
+real(nswc_dp) :: x
 x = (a - 1.d0) + (b - 1.d0)
 if (x > 0.5d0) go to 10
 dgsmln = dgmln1(1.d0 + x)
@@ -12241,12 +12245,12 @@ return
 20 dgsmln = dgmln1(x - 1.d0) + log(x*(1.d0 + x))
 end function dgsmln
 
-pure elemental double precision function dbcorr(a0, b0)
+pure elemental real(nswc_dp) function dbcorr(a0, b0)
 implicit none
-double precision, intent(in) :: a0, b0
+real(nswc_dp), intent(in) :: a0, b0
 integer :: j, k
-double precision :: a, b, c, h, s(15), t, w, x, x2, z
-double precision, parameter :: e(15) = [.833333333333333333333333333333d-01, - &
+real(nswc_dp) :: a, b, c, h, s(15), t, w, x, x2, z
+real(nswc_dp), parameter :: e(15) = [.833333333333333333333333333333d-01, - &
    & .277777777777777777777777752282d-04, .793650793650793650791732130419d-07, -.595238095238095232389839236182d-09, &
    & .841750841750832853294451671990d-11, -.191752691751854612334149171243d-12, .641025640510325475730918472625d-14, - &
    & .295506514125338232839867823991d-15, .179643716359402238723287696452d-16, -.139228964661627791231203060395d-17, &
@@ -12293,12 +12297,12 @@ end do
 dbcorr = z/a + w
 end function dbcorr
 
-pure elemental double precision function dlgdiv(a, b)
+pure elemental real(nswc_dp) function dlgdiv(a, b)
 implicit none
-double precision, intent(in) :: a, b
+real(nswc_dp), intent(in) :: a, b
 integer :: j, k
-double precision :: c, d, h, s(15), t, u, v, w, x, x2
-double precision, parameter :: e(15) = [.833333333333333333333333333333d-01, - &
+real(nswc_dp) :: c, d, h, s(15), t, u, v, w, x, x2
+real(nswc_dp), parameter :: e(15) = [.833333333333333333333333333333d-01, - &
    & .277777777777777777777777752282d-04, .793650793650793650791732130419d-07, -.595238095238095232389839236182d-09, &
    & .841750841750832853294451671990d-11, -.191752691751854612334149171243d-12, .641025640510325475730918472625d-14, - &
    & .295506514125338232839867823991d-15, .179643716359402238723287696452d-16, -.139228964661627791231203060395d-17, &
@@ -12353,56 +12357,57 @@ pure elemental subroutine gratio(a, x, ans, qans, ind)
 implicit none
 intrinsic :: erf
 integer, intent(in) :: ind
-real, intent(in) :: a
-real, intent(inout) :: ans, qans
-real, intent(in) :: x
+real(nswc_sp), intent(in) :: a
+real(nswc_sp), intent(inout) :: ans, qans
+real(nswc_sp), intent(in) :: x
 integer :: i, iop, m, max, n, nswc_ai_i4
-real :: a2n, a2nm1, acc, amn, apn, b2n, b2nm1, c, c0, c1, c2, c3, c4, c5, c6, c7, c8, e, g, h, r, rta, rtx, s, sum, t, tol, twoa, &
+real(nswc_sp) :: a2n, a2nm1, acc, amn, apn, b2n, b2nm1, c, c0, c1, c2, c3, c4, c5, c6, c7, c8, e, g, h, r, rta, rtx, s, sum, t, &
+   & tol, twoa, &
    & u, w, y, z, j, l, wk(20)
-real, parameter :: acc0(3) = [5.e-15, 5.e-7, 5.e-4]
-real, parameter :: big(3) = [25.0, 14.0, 10.0]
-real, parameter :: e0(3) = [.25e-3, .25e-1, .14]
-real, parameter :: x0(3) = [31.0, 17.0, 9.7]
-real, parameter :: alog10 = 2.30258509299405
-real, parameter :: rt2pin = .398942280401433
-real, parameter :: rtpi = 1.77245385090552
-real, parameter :: a0(4) = [-.231272501940775e-02, -.335378520024220e-01, -.159840143443990e+00, -.333333333333333e+00]
-real, parameter :: b0(6) = [.633763414209504e-06, -.939001940478355e-05, .239521354917408e-02, .376245718289389e-01, &
+real(nswc_sp), parameter :: acc0(3) = [5.e-15, 5.e-7, 5.e-4]
+real(nswc_sp), parameter :: big(3) = [25.0, 14.0, 10.0]
+real(nswc_sp), parameter :: e0(3) = [.25e-3, .25e-1, .14]
+real(nswc_sp), parameter :: x0(3) = [31.0, 17.0, 9.7]
+real(nswc_sp), parameter :: alog10 = 2.30258509299405
+real(nswc_sp), parameter :: rt2pin = .398942280401433
+real(nswc_sp), parameter :: rtpi = 1.77245385090552
+real(nswc_sp), parameter :: a0(4) = [-.231272501940775e-02, -.335378520024220e-01, -.159840143443990e+00, -.333333333333333e+00]
+real(nswc_sp), parameter :: b0(6) = [.633763414209504e-06, -.939001940478355e-05, .239521354917408e-02, .376245718289389e-01, &
    & .238549219145773e+00, .729520430331981e+00]
-real, parameter :: a1(4) = [-.398783924370770e-05, -.587926036018402e-03, -.491687131726920e-02, -.185185185184291e-02]
-real, parameter :: b1(4) = [.386325038602125e-02, .506042559238939e-01, .283344278023803e+00, .780110511677243e+00]
-real, parameter :: a2(2) = [.669564126155663e-03, .413359788442192e-02]
-real, parameter :: b2(5) = [-.421924263980656e-03, .650837693041777e-02, .682034997401259e-01, .339173452092224e+00, &
+real(nswc_sp), parameter :: a1(4) = [-.398783924370770e-05, -.587926036018402e-03, -.491687131726920e-02, -.185185185184291e-02]
+real(nswc_sp), parameter :: b1(4) = [.386325038602125e-02, .506042559238939e-01, .283344278023803e+00, .780110511677243e+00]
+real(nswc_sp), parameter :: a2(2) = [.669564126155663e-03, .413359788442192e-02]
+real(nswc_sp), parameter :: b2(5) = [-.421924263980656e-03, .650837693041777e-02, .682034997401259e-01, .339173452092224e+00, &
    & .810647620703045e+00]
-real, parameter :: a3(2) = [.810586158563431e-03, .649434157619770e-03]
-real, parameter :: b3(5) = [-.632276587352120e-03, .905375887385478e-02, .906610359762969e-01, .406288930253881e+00, &
+real(nswc_sp), parameter :: a3(2) = [.810586158563431e-03, .649434157619770e-03]
+real(nswc_sp), parameter :: b3(5) = [-.632276587352120e-03, .905375887385478e-02, .906610359762969e-01, .406288930253881e+00, &
    & .894800593794972e+00]
-real, parameter :: a4(2) = [-.105014537920131e-03, -.861888301199388e-03]
-real, parameter :: b4(4) = [.322609381345173e-01, .178295773562970e+00, .591353097931237e+00, .103151890792185e+01]
-real, parameter :: a5(2) = [-.435211415445014e-03, -.336806989710598e-03]
-real, parameter :: b5(3) = [.178716720452422e+00, .600380376956324e+00, .108515217314415e+01]
-real, parameter :: a6(2) = [-.182503596367782e-03, .531279816209452e-03]
-real, parameter :: b6(2) = [.345608222411837e+00, .770341682526774e+00]
-real, parameter :: a7(2) = [.443219646726422e-03, .344430064306926e-03]
-real, parameter :: b7(2) = [.821824741357866e+00, .115029088777769e+01]
-real, parameter :: a8(2) = [.878371203603888e-03, -.686013280418038e-03]
-real, parameter :: d00 = -.333333333333333e+00
-real, parameter :: d0(6) = [.833333333333333e-01, -.148148148148148e-01, .115740740740741e-02, .352733686067019e-03, - &
+real(nswc_sp), parameter :: a4(2) = [-.105014537920131e-03, -.861888301199388e-03]
+real(nswc_sp), parameter :: b4(4) = [.322609381345173e-01, .178295773562970e+00, .591353097931237e+00, .103151890792185e+01]
+real(nswc_sp), parameter :: a5(2) = [-.435211415445014e-03, -.336806989710598e-03]
+real(nswc_sp), parameter :: b5(3) = [.178716720452422e+00, .600380376956324e+00, .108515217314415e+01]
+real(nswc_sp), parameter :: a6(2) = [-.182503596367782e-03, .531279816209452e-03]
+real(nswc_sp), parameter :: b6(2) = [.345608222411837e+00, .770341682526774e+00]
+real(nswc_sp), parameter :: a7(2) = [.443219646726422e-03, .344430064306926e-03]
+real(nswc_sp), parameter :: b7(2) = [.821824741357866e+00, .115029088777769e+01]
+real(nswc_sp), parameter :: a8(2) = [.878371203603888e-03, -.686013280418038e-03]
+real(nswc_sp), parameter :: d00 = -.333333333333333e+00
+real(nswc_sp), parameter :: d0(6) = [.833333333333333e-01, -.148148148148148e-01, .115740740740741e-02, .352733686067019e-03, - &
    & .178755144032922e-03, .391926317852244e-04]
-real, parameter :: d10 = -.185185185185185e-02
-real, parameter :: d1(4) = [-.347222222222222e-02, .264550264550265e-02, -.990226337448560e-03, .205761316872428e-03]
-real, parameter :: d20 = .413359788359788e-02
-real, parameter :: d2(2) = [-.268132716049383e-02, .771604938271605e-03]
-real, parameter :: d30 = .649434156378601e-03
-real, parameter :: d3(2) = [.229472093621399e-03, -.469189494395256e-03]
-real, parameter :: d40 = -.861888290916712e-03
-real, parameter :: d4(1) = [.784039221720067e-03]
-real, parameter :: d50 = -.336798553366358e-03
-real, parameter :: d5(1) = [-.697281375836586e-04]
-real, parameter :: d60 = .531307936463992e-03
-real, parameter :: d6(1) = [-.592166437353694e-03]
-real, parameter :: d70 = .344367606892378e-03
-real, parameter :: d80 = -.652623918595309e-03
+real(nswc_sp), parameter :: d10 = -.185185185185185e-02
+real(nswc_sp), parameter :: d1(4) = [-.347222222222222e-02, .264550264550265e-02, -.990226337448560e-03, .205761316872428e-03]
+real(nswc_sp), parameter :: d20 = .413359788359788e-02
+real(nswc_sp), parameter :: d2(2) = [-.268132716049383e-02, .771604938271605e-03]
+real(nswc_sp), parameter :: d30 = .649434156378601e-03
+real(nswc_sp), parameter :: d3(2) = [.229472093621399e-03, -.469189494395256e-03]
+real(nswc_sp), parameter :: d40 = -.861888290916712e-03
+real(nswc_sp), parameter :: d4(1) = [.784039221720067e-03]
+real(nswc_sp), parameter :: d50 = -.336798553366358e-03
+real(nswc_sp), parameter :: d5(1) = [-.697281375836586e-04]
+real(nswc_sp), parameter :: d60 = .531307936463992e-03
+real(nswc_sp), parameter :: d6(1) = [-.592166437353694e-03]
+real(nswc_sp), parameter :: d70 = .344367606892378e-03
+real(nswc_sp), parameter :: d80 = -.652623918595309e-03
 !-----------------------------------------------------------------------
 !        Evaluation of the incomplete gamma ratio functions
 !                      P(a,x) AND Q(a,x)
@@ -12709,12 +12714,12 @@ go to 310
 400 ans = 2.0
 end subroutine gratio
 
-pure elemental real function rcomp(a, x)
+pure elemental real(nswc_sp) function rcomp(a, x)
 implicit none
 intrinsic :: gamma
-real, intent(in) :: a, x
-real :: t, t1, u
-real, parameter :: rt2pin = .398942280401433
+real(nswc_sp), intent(in) :: a, x
+real(nswc_sp) :: t, t1, u
+real(nswc_sp), parameter :: rt2pin = .398942280401433
 !-----------------------------------------------------------------------
 !                Evaluation of exp(-x)*x**a/gamma(a)
 !-----------------------------------------------------------------------
@@ -12739,15 +12744,15 @@ t1 = t1 - a*rlog(u)
 if (t1 >= exparg(1)) rcomp = rt2pin*sqrt(a)*exp(t1)
 end function rcomp
 
-pure elemental double precision function drcomp(a, x)
+pure elemental real(nswc_dp) function drcomp(a, x)
 implicit none
 intrinsic :: gamma
 !-----------------------------------------------------------------------
 !              Evaluation of exp(-x)*x**a/gamma(a)
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a, x
-double precision :: t, w
-double precision, parameter :: c = .398942280401432677939946059934d0
+real(nswc_dp), intent(in) :: a, x
+real(nswc_dp) :: t, w
+real(nswc_dp), parameter :: c = .398942280401432677939946059934d0
 !--------------------------
 !     c = 1/sqrt(2*pi)
 !--------------------------
@@ -12772,17 +12777,18 @@ pure elemental subroutine gaminv(a, x, x0, p, q, ierr)
 implicit none
 intrinsic :: gamma
 integer, intent(inout) :: ierr
-real, intent(in) :: a, p, q
-real, intent(out) :: x
-real, intent(in) :: x0
+real(nswc_sp), intent(in) :: a, p, q
+real(nswc_sp), intent(out) :: x
+real(nswc_sp), intent(in) :: x0
 integer :: ier, iop
-real :: am1, amax, amin, ap1, ap2, ap3, apn, b, c1, c2, c3, c4, c5, d, e, e2, eps, g, h, pn, qg, qn, r, rta, s, s2, sum, t, u, w, &
+real(nswc_sp) :: am1, amax, amin, ap1, ap2, ap3, apn, b, c1, c2, c3, c4, c5, d, e, e2, eps, g, h, pn, qg, qn, r, rta, s, s2, sum, &
+   & t, u, w, &
    & xmin, xn, y, z
-real, parameter :: ln10 = 2.302585
-real, parameter :: c = .577215664901533
-real, parameter :: bmin(2) = [1.e-28, 1.e-13]
-real, parameter :: emin(2) = [2.e-03, 6.e-03]
-real, parameter :: tol = 1.e-5
+real(nswc_sp), parameter :: ln10 = 2.302585
+real(nswc_sp), parameter :: c = .577215664901533
+real(nswc_sp), parameter :: bmin(2) = [1.e-28, 1.e-13]
+real(nswc_sp), parameter :: emin(2) = [2.e-03, 6.e-03]
+real(nswc_sp), parameter :: tol = 1.e-5
 !-----------------------------------------------------------------------
 !             Inverse incomplete gamma ratio function
 !     given positive A, and NONEGATIVE p and q where p + q = 1.
@@ -13059,12 +13065,12 @@ pure elemental subroutine dgrat(a, x, ans, qans, ierr)
 implicit none
 intrinsic :: erf
 integer, intent(inout) :: ierr
-double precision, intent(in) :: a, x
-double precision, intent(inout) :: ans, qans
+real(nswc_dp), intent(in) :: a, x
+real(nswc_dp), intent(inout) :: ans, qans
 integer :: i, m, max, n
-double precision :: amn, apn, a2n, a2nm1, big, b2n, b2nm1, c, e, g, h, j, l, r, rta, rtx, s, sum, t, tol, twoa, u, x0, y, z, wk(20)
-double precision, parameter :: alog10 = 2.30258509299404568401799145468d0
-double precision, parameter :: rtpi = 1.77245385090551602729816748334d0
+real(nswc_dp) :: amn, apn, a2n, a2nm1, big, b2n, b2nm1, c, e, g, h, j, l, r, rta, rtx, s, sum, t, tol, twoa, u, x0, y, z, wk(20)
+real(nswc_dp), parameter :: alog10 = 2.30258509299404568401799145468d0
+real(nswc_dp), parameter :: rtpi = 1.77245385090551602729816748334d0
 !-----------------------------------------------------------------------
 !        Evaluation of the incomplete gamma ratio functions
 !                      P(a,x) AND Q(a,x)
@@ -13277,100 +13283,100 @@ implicit none
 !-----------------------------------------------------------------------
 !            Algorithm using minimax approximations
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a, y, l
-double precision, intent(inout) :: z
-double precision, intent(in) :: rta
-double precision, intent(inout) :: ans, qans
-double precision :: c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, e, t, u, w
-double precision, parameter :: rt2pin = .398942280401432677939946059934d0
-double precision, parameter :: d0(7) = [-.333333333333333333333333333333d+00, &
+real(nswc_dp), intent(in) :: a, y, l
+real(nswc_dp), intent(inout) :: z
+real(nswc_dp), intent(in) :: rta
+real(nswc_dp), intent(inout) :: ans, qans
+real(nswc_dp) :: c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, e, t, u, w
+real(nswc_dp), parameter :: rt2pin = .398942280401432677939946059934d0
+real(nswc_dp), parameter :: d0(7) = [-.333333333333333333333333333333d+00, &
    & .833333333333333333333333333333d-01, -.148148148148148148148148148148d-01, .115740740740740740740740740741d-02, &
    & .352733686067019400352733686067d-03, -.178755144032921810699588477366d-03, .391926317852243778169704095630d-04]
-double precision, parameter :: a0(7) = [-.234443848930188413698825870d-08, -.408902435641223939887180303d-07, &
+real(nswc_dp), parameter :: a0(7) = [-.234443848930188413698825870d-08, -.408902435641223939887180303d-07, &
    & -.327874000161065050049103731d-06, -.145717031728609218851588740d-05, -.372722892959910688597417881d-05, - &
    & .490033281596113358850307112d-05, -.218544851067999216147364227d-05]
-double precision, parameter :: b0(9) = [-.129786815987713980865910767d-09, .319268409139858531586963150d-08, &
+real(nswc_dp), parameter :: b0(9) = [-.129786815987713980865910767d-09, .319268409139858531586963150d-08, &
    & .597739416777031660496708557d-04, .131659965062389880196860991d-02, .138263099503103838517015533d-01, &
    & .866750030433403450681521877d-01, .349373447613102956696810725d+00, .902581259032419042347458484d+00, &
    & .139388806936391316154237713d+01]
-double precision, parameter :: a1(7) = [-.162671127226300802902860047d-05, -.359791514993122440319624428d-04, &
+real(nswc_dp), parameter :: a1(7) = [-.162671127226300802902860047d-05, -.359791514993122440319624428d-04, &
    & -.334816794629374699945489443d-03, -.167787748352827199882047653d-02, -.462960105006279850867332060d-02, - &
    & .627269388216833251971110268d-02, -.185185185185185185185185200d-02]
-double precision, parameter :: b1(9) = [.361538770500640888027927000d-09, .974094440943696092434381137d-05, &
+real(nswc_dp), parameter :: b1(9) = [.361538770500640888027927000d-09, .974094440943696092434381137d-05, &
    & .275463718595762102271929980d-03, .356903970692700621824901511d-02, .276755209895072417713430394d-01, &
    & .140741499324744724262767201d+00, .482173396010404307346794795d+00, .109307843990990308990473663d+01, &
    & .151225469637089956064399494d+01]
-double precision, parameter :: a2(7) = [.100841467329617467204527243d-06, .261809837060522545971782889d-05, &
+real(nswc_dp), parameter :: a2(7) = [.100841467329617467204527243d-06, .261809837060522545971782889d-05, &
    & .351658023234640143803014403d-04, .287368655528567495658887760d-03, .138385867950361368914038461d-02, &
    & .365985331203490698463644329d-02, .413359788359788359788359644d-02]
-double precision, parameter :: b2(8) = [.144996224602847932479320241d-04, .378705615967233119938297206d-03, &
+real(nswc_dp), parameter :: b2(8) = [.144996224602847932479320241d-04, .378705615967233119938297206d-03, &
    & .457258679387716305283282667d-02, .333036784835643463383606186d-01, .160392471625881407829191009d+00, &
    & .524238095721639512312120765d+00, .114320896084982707537755002d+01, .153405837991415136438992306d+01]
-double precision, parameter :: a3(7) = [.352304123782956092061364635d-06, .695396758348887902366951353d-05, &
+real(nswc_dp), parameter :: a3(7) = [.352304123782956092061364635d-06, .695396758348887902366951353d-05, &
    & .620467118988901865955998784d-04, .331552280167649130371474456d-03, .987931909328964685388525477d-03, &
    & .141844584435355290321010006d-02, .649434156378600823045102236d-03]
-double precision, parameter :: b3(8) = [.656342109234806261144233394d-04, .130398975231883219976260776d-02, &
+real(nswc_dp), parameter :: b3(8) = [.656342109234806261144233394d-04, .130398975231883219976260776d-02, &
    & .126418031281256648240652355d-01, .760733201461716525855765749d-01, .308149284260387354956024487d+00, &
    & .856743428738899911100227393d+00, .159678625605457556492814589d+01, .183078413578083710405050462d+01]
-double precision, parameter :: a4(7) = [-.260879135093022176005540138d-07, -.470448694272734954500324169d-06, &
+real(nswc_dp), parameter :: a4(7) = [-.260879135093022176005540138d-07, -.470448694272734954500324169d-06, &
    & -.487392507564453824976295590d-05, -.337525643163070607393381432d-04, -.173138093150706317400323103d-03, - &
    & .619343030286408407629007048d-03, -.861888290916711698604710684d-03]
-double precision, parameter :: b4(8) = [.561738585657138771286755470d-04, .104553622856827932853059322d-02, &
+real(nswc_dp), parameter :: b4(8) = [.561738585657138771286755470d-04, .104553622856827932853059322d-02, &
    & .990129468337836044520381371d-02, .590964360473404599955095091d-01, .241580582651643837306299024d+00, &
    & .686949677014349678482109368d+00, .133507902144433100426436242d+01, .162826466816694512158165085d+01]
-double precision, parameter :: a5(7) = [-.116166342948098688243985652d-07, .506465072067030007394288471d-08, - &
+real(nswc_dp), parameter :: a5(7) = [-.116166342948098688243985652d-07, .506465072067030007394288471d-08, - &
    & .556701576804390213081214801d-05, -.332229941748769925615918550d-04, -.171902547619915856635305717d-03, - &
    & .548868487607991087508092013d-03, -.336798553366358151161633777d-03]
-double precision, parameter :: b5(7) = [.106576106868815233442641444d-03, .280714123386276098548285440d-02, &
+real(nswc_dp), parameter :: b5(7) = [.106576106868815233442641444d-03, .280714123386276098548285440d-02, &
    & .254669201041872409738119341d-01, .136071713023783507468096673d+00, .462890328922621047510807887d+00, &
    & .103913867517817784825064299d+01, .142263185288429590449288300d+01]
-double precision, parameter :: a6(4) = [.118384620224413424936260301d-04, .694345283181981060040314140d-05, &
+real(nswc_dp), parameter :: a6(4) = [.118384620224413424936260301d-04, .694345283181981060040314140d-05, &
    & .209213745619758030399432459d-03, .531307936463992224884286210d-03]
-double precision, parameter :: b6(9) = [-.633002360430352916354621750d-05, -.248639208901374031411609873d-04, &
+real(nswc_dp), parameter :: b6(9) = [-.633002360430352916354621750d-05, -.248639208901374031411609873d-04, &
    & .151734058829700925162000373d-03, .477475914272399601740818883d-02, .384410125775084107229541456d-01, &
    & .184699876959596092801262547d+00, .571784440733980642101712125d+00, .118432122801495778365352945d+01, &
    & .150831585220968267709550582d+01]
-double precision, parameter :: a7(5) = [.972342656522493967167788395d-05, .462793722775687016808279009d-04, &
+real(nswc_dp), parameter :: a7(5) = [.972342656522493967167788395d-05, .462793722775687016808279009d-04, &
    & .208913588225005764102252127d-03, .605983804794748515383615779d-03, .344367606892381545765962366d-03]
-double precision, parameter :: b7(7) = [.215964480325937088444595990d-03, .621296161441756044580440529d-02, &
+real(nswc_dp), parameter :: b7(7) = [.215964480325937088444595990d-03, .621296161441756044580440529d-02, &
    & .497403555098433701440032746d-01, .230812334251394761909158355d+00, .682159830165959997577293001d+00, &
    & .133753662990343866552766613d+01, .160951809815647533045690195d+01]
-double precision, parameter :: a8(5) = [-.231069438570167401077137510d-05, -.192877995065652524742879002d-04, &
+real(nswc_dp), parameter :: a8(5) = [-.231069438570167401077137510d-05, -.192877995065652524742879002d-04, &
    & -.282551884312564905942488077d-04, -.353272052089782073130912603d-03, -.652623918595320914510590273d-03]
-double precision, parameter :: b8(7) = [.156052480203446255774109882d-02, .189231675289329563916597032d-01, &
+real(nswc_dp), parameter :: b8(7) = [.156052480203446255774109882d-02, .189231675289329563916597032d-01, &
    & .110127834209242088316741250d+00, .407929996207245634766606879d+00, .101702505946784412105505734d+01, &
    & .172269407630659768618234623d+01, .182765408802230546887514255d+01]
-double precision, parameter :: a9(5) = [-.203007139532451428594124139d-04, -.120148495117517992204095691d-03, &
+real(nswc_dp), parameter :: a9(5) = [-.203007139532451428594124139d-04, -.120148495117517992204095691d-03, &
    & -.377126645910917006921076652d-03, -.109151697941931403194363814d-02, -.596761290192642722092337263d-03]
-double precision, parameter :: b9(6) = [.108808775028021530146610124d-01, .803149717787956717154553908d-01, &
+real(nswc_dp), parameter :: b9(6) = [.108808775028021530146610124d-01, .803149717787956717154553908d-01, &
    & .335555306170768573903990019d+00, .881575022436158946373557744d+00, .156222230858412078350692234d+01, &
    & .170833470935668756293234818d+01]
-double precision, parameter :: a10(4) = [.475862254251166503473724173d-04, -.352503880413640910997936559d-04, &
+real(nswc_dp), parameter :: a10(4) = [.475862254251166503473724173d-04, -.352503880413640910997936559d-04, &
    & .580375987713106460207815603d-03, .133244544950730832649306319d-02]
-double precision, parameter :: b10(6) = [.161103572271541189817119144d-01, .114651544043625219459951640d+00, &
+real(nswc_dp), parameter :: b10(6) = [.161103572271541189817119144d-01, .114651544043625219459951640d+00, &
    & .448280675300097555552484502d+00, .110810715319704031415255670d+01, .183146436130501918547134176d+01, &
    & .187235769169449339141968881d+01]
-double precision, parameter :: a11(4) = [.121185049262809526794966703d-03, .717725173388339108430635016d-05, &
+real(nswc_dp), parameter :: a11(4) = [.121185049262809526794966703d-03, .717725173388339108430635016d-05, &
    & .246371734409638623215800502d-02, .157972766214718575927904484d-02]
-double precision, parameter :: b11(5) = [.794610889405176143379963912d-02, .131627017265860324219513170d+00, &
+real(nswc_dp), parameter :: b11(5) = [.794610889405176143379963912d-02, .131627017265860324219513170d+00, &
    & .505939635317477779328000706d+00, .116082103318559904744144217d+01, .145670749780693850410866175d+01]
-double precision, parameter :: a12(4) = [-.246294151509758620837749269d-03, .650624975008642297405944869d-03, &
+real(nswc_dp), parameter :: a12(4) = [-.246294151509758620837749269d-03, .650624975008642297405944869d-03, &
    & -.214376520139497301154749750d-03, -.407251199495291398243480255d-02]
-double precision, parameter :: b12(4) = [.168390445944818504703640731d+00, .653453590771198550320727688d+00, &
+real(nswc_dp), parameter :: b12(4) = [.168390445944818504703640731d+00, .653453590771198550320727688d+00, &
    & .140298208333879535577602171d+01, .162497775209192630951344224d+01]
-double precision, parameter :: a13(3) = [-.159520095187034545391135461d-02, -.109727312966041723997078734d-01, &
+real(nswc_dp), parameter :: a13(3) = [-.159520095187034545391135461d-02, -.109727312966041723997078734d-01, &
    & -.594758070915055362667114240d-02]
-double precision, parameter :: b13(4) = [.207815761771742289849225339d+00, .790935125477975506817064616d+00, &
+real(nswc_dp), parameter :: b13(4) = [.207815761771742289849225339d+00, .790935125477975506817064616d+00, &
    & .158706682625067673596619095d+01, .175409273929961597148916309d+01]
-double precision, parameter :: a14(3) = [.245543970647383469794050102d-02, -.119636668153843644820445054d-01, &
+real(nswc_dp), parameter :: a14(3) = [.245543970647383469794050102d-02, -.119636668153843644820445054d-01, &
    & .175722793448246103440764372d-01]
-double precision, parameter :: b14(2) = [.676925518749829493412063599d+00, .100158659226079685399214158d+01]
-double precision, parameter :: a15(2) = [.588261033368548917447688791d-01, .400765463491067514929787780d-01]
-double precision, parameter :: b15(2) = [.124266359850901469771032599d+01, .149189509890654955611528542d+01]
-double precision, parameter :: a16(2) = [.119522261141925960204472459d+00, -.100326700196947262548667584d+00]
-double precision, parameter :: b16(1) = [.536462039767059451769400255d+00]
-double precision, parameter :: a17(1) = [-.259949826752497731336860753d+00]
-double precision, parameter :: a18(1) = [.724036968309299822373280436d+00]
+real(nswc_dp), parameter :: b14(2) = [.676925518749829493412063599d+00, .100158659226079685399214158d+01]
+real(nswc_dp), parameter :: a15(2) = [.588261033368548917447688791d-01, .400765463491067514929787780d-01]
+real(nswc_dp), parameter :: b15(2) = [.124266359850901469771032599d+01, .149189509890654955611528542d+01]
+real(nswc_dp), parameter :: a16(2) = [.119522261141925960204472459d+00, -.100326700196947262548667584d+00]
+real(nswc_dp), parameter :: b16(1) = [.536462039767059451769400255d+00]
+real(nswc_dp), parameter :: a17(1) = [-.259949826752497731336860753d+00]
+real(nswc_dp), parameter :: a18(1) = [.724036968309299822373280436d+00]
 !---------------------------
 !     rt2pin = 1/dsqrt(2*pi)
 !---------------------------
@@ -13470,44 +13476,44 @@ implicit none
 !            Algorithm using minimax approximations
 !                        FOR c0,...,c10
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a, y, l
-double precision, intent(inout) :: z
-double precision, intent(in) :: rta
-double precision, intent(inout) :: ans, qans
-double precision :: e, t, u, w, c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10
-double precision, parameter :: rt2pin = .398942280401432678d0
-double precision, parameter :: a0(5) = [-.73324404807556026d-03, -.11758531313175796d-01, - &
+real(nswc_dp), intent(in) :: a, y, l
+real(nswc_dp), intent(inout) :: z
+real(nswc_dp), intent(in) :: rta
+real(nswc_dp), intent(inout) :: ans, qans
+real(nswc_dp) :: e, t, u, w, c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10
+real(nswc_dp), parameter :: rt2pin = .398942280401432678d0
+real(nswc_dp), parameter :: a0(5) = [-.73324404807556026d-03, -.11758531313175796d-01, - &
    & .76816029947195974d-01, -.24232172943558393d+00, -.33333333333333333d+00]
-double precision, parameter :: b0(6) = [.10555647473018528d-06, .73121701584237188d-03, .13250270182342259d-01 &
+real(nswc_dp), parameter :: b0(6) = [.10555647473018528d-06, .73121701584237188d-03, .13250270182342259d-01 &
    & , .10288837674434487d+00, .43024494247383254d+00, .97696518830675185d+00]
-double precision, parameter :: a1(4) = [-.16746784557475121d-03, -.16090334014223031d-02, - &
+real(nswc_dp), parameter :: a1(4) = [-.16746784557475121d-03, -.16090334014223031d-02, - &
    & .52949366601406939d-02, -.18518518518518417d-02]
-double precision, parameter :: b1(6) = [.12328086517283227d-05, .98671953445602142d-03, .15954049115266936d-01 &
+real(nswc_dp), parameter :: b1(6) = [.12328086517283227d-05, .98671953445602142d-03, .15954049115266936d-01 &
    & , .11439610256504704d+00, .45195109694529839d+00, .98426579647613593d+00]
-double precision, parameter :: a2(4) = [.12049855113125238d-04, .13743853858711134d-03, .15067356806896441d-02 &
+real(nswc_dp), parameter :: a2(4) = [.12049855113125238d-04, .13743853858711134d-03, .15067356806896441d-02 &
    & , .41335978835983393d-02]
-double precision, parameter :: b2(5) = [.15927093345670077d-02, .22316881460606523d-01, .14009848931638062d+00 &
+real(nswc_dp), parameter :: b2(5) = [.15927093345670077d-02, .22316881460606523d-01, .14009848931638062d+00 &
    & , .50379606871703058d+00, .10131761625405203d+01]
-double precision, parameter :: a3(4) = [.46318872971699924d-05, .13012396979747783d-04, .81804333975935872d-03 &
+real(nswc_dp), parameter :: a3(4) = [.46318872971699924d-05, .13012396979747783d-04, .81804333975935872d-03 &
    & , .64943415637082551d-03]
-double precision, parameter :: b3(4) = [.12414068921653593d-01, .10044290377295469d+00, .42226789458984594d+00 &
+real(nswc_dp), parameter :: b3(4) = [.12414068921653593d-01, .10044290377295469d+00, .42226789458984594d+00 &
    & , .90628317147366376d+00]
-double precision, parameter :: a4(3) = [-.37567394580525597d-05, -.82794205648271314d-04, - &
+real(nswc_dp), parameter :: a4(3) = [-.37567394580525597d-05, -.82794205648271314d-04, - &
    & .86188829773520181d-03]
-double precision, parameter :: b4(4) = [.31290397554562032d-01, .16988291247058802d+00, .57225859400072754d+00 &
+real(nswc_dp), parameter :: b4(4) = [.31290397554562032d-01, .16988291247058802d+00, .57225859400072754d+00 &
    & , .10057375981227881d+01]
-double precision, parameter :: a5(2) = [-.43263341886764011d-03, -.33679854644784478d-03]
-double precision, parameter :: b5(4) = [.22714615451529335d-01, .17081504060220639d+00, .60019022026983067d+00 &
+real(nswc_dp), parameter :: a5(2) = [-.43263341886764011d-03, -.33679854644784478d-03]
+real(nswc_dp), parameter :: b5(4) = [.22714615451529335d-01, .17081504060220639d+00, .60019022026983067d+00 &
    & , .10775200414676195d+01]
-double precision, parameter :: a6(2) = [-.12962670089753501d-03, .53130115408837152d-03]
-double precision, parameter :: b6(3) = [.65929776650152292d-01, .45957439582639129d+00, .87058903334443855d+00]
-double precision, parameter :: a7(2) = [.47861364421780889d-03, .34438428473168988d-03]
-double precision, parameter :: b7(3) = [.27176241899664174d+00, .78991370162247144d+00, .12396875725833093d+01]
-double precision, parameter :: a8(2) = [.27086391808339115d-03, -.65256615574219131d-03]
-double precision, parameter :: b8(2) = [.44207055629598579d+00, .87002402612484571d+00]
-double precision, parameter :: a9(3) = [.84725086921921823d-03, -.14838721516118744d-03, - &
+real(nswc_dp), parameter :: a6(2) = [-.12962670089753501d-03, .53130115408837152d-03]
+real(nswc_dp), parameter :: b6(3) = [.65929776650152292d-01, .45957439582639129d+00, .87058903334443855d+00]
+real(nswc_dp), parameter :: a7(2) = [.47861364421780889d-03, .34438428473168988d-03]
+real(nswc_dp), parameter :: b7(3) = [.27176241899664174d+00, .78991370162247144d+00, .12396875725833093d+01]
+real(nswc_dp), parameter :: a8(2) = [.27086391808339115d-03, -.65256615574219131d-03]
+real(nswc_dp), parameter :: b8(2) = [.44207055629598579d+00, .87002402612484571d+00]
+real(nswc_dp), parameter :: a9(3) = [.84725086921921823d-03, -.14838721516118744d-03, - &
    & .60335050249571475d-03]
-double precision, parameter :: a10(2) = [-.19144384985654775d-02, .13324454494800656d-02]
+real(nswc_dp), parameter :: a10(2) = [-.19144384985654775d-02, .13324454494800656d-02]
 !------------------------
 !     rt2pin = 1/dsqrt(2*pi)
 !------------------------
@@ -13561,16 +13567,16 @@ pure elemental subroutine dginv(a, x, p, q, ierr)
 implicit none
 intrinsic :: gamma
 integer, intent(inout) :: ierr
-double precision, intent(in) :: a
-double precision, intent(out) :: x
-double precision, intent(in) :: p, q
+real(nswc_dp), intent(in) :: a
+real(nswc_dp), intent(out) :: x
+real(nswc_dp), intent(in) :: p, q
 integer :: ier, ind
-real :: p0, q0, x0
-double precision :: am1, apn, ap1, ap2, ap3, b, c1, c2, c3, c4, c5, d, e, eps, g, h, pn, qg, qn, r, rta, s, sum, s2, t, u, w, xmin &
+real(nswc_sp) :: p0, q0, x0
+real(nswc_dp) :: am1, apn, ap1, ap2, ap3, b, c1, c2, c3, c4, c5, d, e, eps, g, h, pn, qg, qn, r, rta, s, sum, s2, t, u, w, xmin &
    & , xn, y, z, amin
-double precision, parameter :: ln10 = 2.302585d0
-double precision, parameter :: c = .577215664901533d0
-double precision, parameter :: tol = 1.d-10
+real(nswc_dp), parameter :: ln10 = 2.302585d0
+real(nswc_dp), parameter :: c = .577215664901533d0
+real(nswc_dp), parameter :: tol = 1.d-10
 !-----------------------------------------------------------------------
 !                        Double precision
 !             inverse incomplete gamma ratio function
@@ -13839,11 +13845,11 @@ end subroutine dginv
 pure elemental subroutine bratio(a, b, x, y, w, w1, ierr)
 implicit none
 integer, intent(inout) :: ierr
-real, intent(in) :: a, b
-real, intent(out) :: w, w1
-real, intent(in) :: x, y
+real(nswc_sp), intent(in) :: a, b
+real(nswc_sp), intent(out) :: w, w1
+real(nswc_sp), intent(in) :: x, y
 integer :: ierr1, ind, n
-real :: a0, b0, eps, t, x0, y0, z, lambda
+real(nswc_sp) :: a0, b0, eps, t, x0, y0, z, lambda
 !-----------------------------------------------------------------------
 !            Evaluation of the incomplete beta function ix(a,b)
 !                     --------------------
@@ -14013,10 +14019,10 @@ return
 360 ierr = 7
 end subroutine bratio
 
-pure elemental real function fpser(a, b, x, eps)
+pure elemental real(nswc_sp) function fpser(a, b, x, eps)
 implicit none
-real, intent(in) :: a, b, eps, x
-real :: an, c, s, t, tol
+real(nswc_sp), intent(in) :: a, b, eps, x
+real(nswc_sp) :: an, c, s, t, tol
 !-----------------------------------------------------------------------
 !                 Evaluation of I (a,b)
 !                                x
@@ -14043,11 +14049,11 @@ if (abs(c) > tol) go to 20
 fpser = fpser*(1.0 + a*s)
 end function fpser
 
-pure elemental real function apser(a, b, x, eps)
+pure elemental real(nswc_sp) function apser(a, b, x, eps)
 implicit none
-real, intent(in) :: a, b, eps, x
-real :: aj, bx, c, s, t, tol, j
-real, parameter :: g = .577215664901533
+real(nswc_sp), intent(in) :: a, b, eps, x
+real(nswc_sp) :: aj, bx, c, s, t, tol, j
+real(nswc_sp), parameter :: g = .577215664901533
 !-----------------------------------------------------------------------
 !     apser yields the incomplete beta ratio I(sub(1-x))(b,A) for
 !     a .LE. min(eps,eps*b), b*x .LE. 1, and x .LE. 0.5. Used when
@@ -14072,11 +14078,11 @@ if (abs(aj) > tol) go to 30
 apser = -a*(c + s)
 end function apser
 
-pure elemental real function bpser(a, b, x, eps)
+pure elemental real(nswc_sp) function bpser(a, b, x, eps)
 implicit none
-real, intent(in) :: a, b, eps, x
+real(nswc_sp), intent(in) :: a, b, eps, x
 integer :: i, m
-real :: a0, apb, b0, c, sum, t, tol, u, w, z, n
+real(nswc_sp) :: a0, apb, b0, c, sum, t, tol, u, w, z, n
 !-----------------------------------------------------------------------
 !     Power series expansion for evaluating IX(a,b) when b .LE. 1
 !     or b*x .LE. 0.7.  Eps is the tolerance used.
@@ -14146,12 +14152,12 @@ if (abs(w) > tol) go to 100
 bpser = bpser*(1.0 + a*sum)
 end function bpser
 
-pure elemental real function bup(a, b, x, y, n, eps)
+pure elemental real(nswc_sp) function bup(a, b, x, y, n, eps)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: a, b, eps, x, y
+real(nswc_sp), intent(in) :: a, b, eps, x, y
 integer :: i, k, kp1, mu, nm1
-real :: ap1, apb, d, r, t, w, l
+real(nswc_sp) :: ap1, apb, d, r, t, w, l
 !-----------------------------------------------------------------------
 !     Evaluation of IX(a,b) - IX(a+n,b) where n is a positive integer.
 !     Eps is the tolerance used.
@@ -14203,11 +14209,11 @@ end do
 50 bup = bup*w
 end function bup
 
-pure elemental real function bfrac(a, b, x, y, lambda, eps)
+pure elemental real(nswc_sp) function bfrac(a, b, x, y, lambda, eps)
 implicit none
-real, intent(in) :: a, b, eps, x, y
-real, intent(in) :: lambda
-real :: alpha, an, anp1, beta, bn, bnp1, c, c0, c1, e, p, r, r0, s, t, w, yp1, n
+real(nswc_sp), intent(in) :: a, b, eps, x, y
+real(nswc_sp), intent(in) :: lambda
+real(nswc_sp) :: alpha, an, anp1, beta, bn, bnp1, c, c0, c1, e, p, r, r0, s, t, w, yp1, n
 !-----------------------------------------------------------------------
 !     Continued fraction expansion for IX(a,b) when A,b .GT. 1.
 !     It is assumed that  lambda = (a + b)*y - b.
@@ -14257,12 +14263,12 @@ go to 10
 20 bfrac = bfrac*r
 end function bfrac
 
-pure elemental real function brcomp(a, b, x, y)
+pure elemental real(nswc_sp) function brcomp(a, b, x, y)
 implicit none
-real, intent(in) :: a, b, x, y
+real(nswc_sp), intent(in) :: a, b, x, y
 integer :: i, n
-real :: a0, apb, b0, c, e, h, t, u, v, x0, y0, z, lambda, lnx, lny
-real, parameter :: const = .398942280401433
+real(nswc_sp) :: a0, apb, b0, c, e, h, t, u, v, x0, y0, z, lambda, lnx, lny
+real(nswc_sp), parameter :: const = .398942280401433
 !-----------------------------------------------------------------------
 !               Evaluation of x**a*y**b/beta(a,b)
 !-----------------------------------------------------------------------
@@ -14357,13 +14363,13 @@ go to 130
 brcomp = const*sqrt(b*x0)*z*exp(-bcorr(a,b))
 end function brcomp
 
-pure elemental real function brcmp1(mu, a, b, x, y)
+pure elemental real(nswc_sp) function brcmp1(mu, a, b, x, y)
 implicit none
 integer, intent(in) :: mu
-real, intent(in) :: a, b, x, y
+real(nswc_sp), intent(in) :: a, b, x, y
 integer :: i, n
-real :: a0, apb, b0, c, e, h, t, u, v, x0, y0, z, lambda, lnx, lny
-real, parameter :: const = .398942280401433
+real(nswc_sp) :: a0, apb, b0, c, e, h, t, u, v, x0, y0, z, lambda, lnx, lny
+real(nswc_sp), parameter :: const = .398942280401433
 !-----------------------------------------------------------------------
 !          Evaluation of  exp(mu) * (x**a*y**b/beta(a,b))
 !-----------------------------------------------------------------------
@@ -14459,11 +14465,11 @@ end function brcmp1
 pure elemental subroutine bgrat(a, b, x, y, w, eps, ierr)
 implicit none
 integer, intent(inout) :: ierr
-real, intent(in) :: a, b, eps
-real, intent(inout) :: w
-real, intent(in) :: x, y
+real(nswc_sp), intent(in) :: a, b, eps
+real(nswc_sp), intent(inout) :: w
+real(nswc_sp), intent(in) :: x, y
 integer :: i, n, nm1
-real :: bm1, bp2n, cn, coef, dj, p, q, r, s, sum, t, t2, u, v, z, j, l, lnx, nu, n2, c(30), d(30)
+real(nswc_sp) :: bm1, bp2n, cn, coef, dj, p, q, r, s, sum, t, t2, u, v, z, j, l, lnx, nu, n2, c(30), d(30)
 !-----------------------------------------------------------------------
 !     Asymptotic expansion for IX(a,b) when A is larger than b.
 !     The result of the expansion is added to w. it is assumed
@@ -14526,10 +14532,10 @@ end subroutine bgrat
 pure elemental subroutine grat1(a,x,r,p,q,eps)
 implicit none
 intrinsic :: erf
-real, intent(in) :: a, eps
-real, intent(inout) :: p, q
-real, intent(in) :: r, x
-real :: a2n, a2nm1, am0, an, an0, b2n, b2nm1, c, cma, g, h, sum, t, tol, w, z, j, l
+real(nswc_sp), intent(in) :: a, eps
+real(nswc_sp), intent(inout) :: p, q
+real(nswc_sp), intent(in) :: r, x
+real(nswc_sp) :: a2n, a2nm1, am0, an, an0, b2n, b2nm1, c, cma, g, h, sum, t, tol, w, z, j, l
 !-----------------------------------------------------------------------
 !        Evaluation of the incomplete gamma ratio functions
 !                      p(a,x) AND q(a,x)
@@ -14604,15 +14610,16 @@ return
 go to 110
 end subroutine grat1
 
-pure elemental real function basym(a, b, lambda, eps)
+pure elemental real(nswc_sp) function basym(a, b, lambda, eps)
 implicit none
-real, intent(in) :: a, b, eps
-real, intent(in) :: lambda
+real(nswc_sp), intent(in) :: a, b, eps
+real(nswc_sp), intent(in) :: lambda
 integer :: i, im1, imj, j, m, mm1, mmj, n, np1
-real :: bsum, dsum, f, h, h2, hn, r, r0, r1, s, sum, t, t0, t1, u, w, w0, z, z0, z2, zn, znm1, j0, j1, a0(21), b0(21), c(21), d(21)
+real(nswc_sp) :: bsum, dsum, f, h, h2, hn, r, r0, r1, s, sum, t, t0, t1, u, w, w0, z, z0, z2, zn, znm1, j0, j1, a0(21), b0(21), c( &
+   & 21), d(21)
 integer, parameter :: num = 20
-real, parameter :: e0 = 1.12837916709551
-real, parameter :: e1 = .353553390593274
+real(nswc_sp), parameter :: e0 = 1.12837916709551
+real(nswc_sp), parameter :: e1 = .353553390593274
 !-----------------------------------------------------------------------
 !     Asymptotic expansion for IX(a,b) for large A and b.
 !     lambda = (a + b)*Y - b  and eps is the tolerance used.
@@ -14702,17 +14709,17 @@ end function basym
 pure elemental subroutine isubx(a0, b0, x0, p, ierr, eps)
 implicit none
 integer, intent(out) :: ierr
-real, intent(in) :: a0, b0, eps
-real, intent(out) :: p
-real, intent(in) :: x0
+real(nswc_sp), intent(in) :: a0, b0, eps
+real(nswc_sp), intent(out) :: p
+real(nswc_sp), intent(in) :: x0
 integer :: ind, l, max
-real :: a, afrac, am1, an, b, bfrac, c, gamrat, p0, rty, sum, t, temp, tol, x, y, i, j, k, lambda, m, n
-real, parameter :: w(10) = [6.6671344308688e-2, 1.4945134915058e-1, 2.1908636251598e-1, 2.6926671931000e-1, &
+real(nswc_sp) :: a, afrac, am1, an, b, bfrac, c, gamrat, p0, rty, sum, t, temp, tol, x, y, i, j, k, lambda, m, n
+real(nswc_sp), parameter :: w(10) = [6.6671344308688e-2, 1.4945134915058e-1, 2.1908636251598e-1, 2.6926671931000e-1, &
    & 2.9552422471475e-1, 2.9552422471475e-1, 2.6926671931000e-1, 2.1908636251598e-1, 1.4945134915058e-1, 6.6671344308688e-2]
-real, parameter :: z(10) = [1.3046735791414e-2, 6.7468316655507e-2, 1.6029521585049e-1, 2.8330230293538e-1, &
+real(nswc_sp), parameter :: z(10) = [1.3046735791414e-2, 6.7468316655507e-2, 1.6029521585049e-1, 2.8330230293538e-1, &
    & 4.2556283050918e-1, 5.7443716949081e-1, 7.1669769706462e-1, 8.3970478414951e-1, 9.3253168334449e-1, 9.8695326420859e-1]
-real, parameter :: pihalf = 1.5707963267949
-real, parameter :: rpinv = .56418958354776
+real(nswc_sp), parameter :: pihalf = 1.5707963267949
+real(nswc_sp), parameter :: rpinv = .56418958354776
 !     -------------------
 !     -------------------
 !     rpinv = 1/sqrt(pi)
@@ -14901,22 +14908,23 @@ return
 420 ierr = 4
 end subroutine isubx
 
-pure elemental real function blnd(a,b)
+pure elemental real(nswc_sp) function blnd(a,b)
 implicit none
-real, intent(in) :: a, b
+real(nswc_sp), intent(in) :: a, b
 if (a > 20.0) go to 10
 blnd = (logam(a) - logam(a + b)) + logam(b + 1.0)
 return
 10 blnd = algdiv(b,a) + logam(b + 1.0)
 end function blnd
 
-pure elemental real function logam(x)
+pure elemental real(nswc_sp) function logam(x)
 implicit none
-real, intent(in) :: x
+real(nswc_sp), intent(in) :: x
 integer :: n
-real :: t, z
-real, parameter :: d = .41893853320467
-real, parameter :: w(200) = [.57236494292470e+00, 0.0, -.12078223763525e+00, 0.0, .28468287047292e+00, .69314718055995e+00 &
+real(nswc_sp) :: t, z
+real(nswc_sp), parameter :: d = .41893853320467
+real(nswc_sp), parameter :: w(200) = [.57236494292470e+00, 0.0, -.12078223763525e+00, 0.0, .28468287047292e+00, &
+   & .69314718055995e+00 &
    & , .12009736023471e+01, .17917594692281e+01, .24537365708424e+01, .31780538303479e+01, .39578139676187e+01, &
    & .47874917427820e+01, .56625620598571e+01, .65792512120101e+01, .75343642367587e+01, .85251613610654e+01, .95492672573010e+01, &
    & .10604602902745e+02, .11689333420797e+02, .12801827480081e+02, .13940625219404e+02, .15104412573076e+02, .16292000476567e+02, &
@@ -14969,13 +14977,13 @@ end function logam
 subroutine cbsslj(z, cnu, w)
 implicit none
 intrinsic :: gamma
-complex :: z
-complex, intent(in) :: cnu
-complex, intent(inout) :: w
+complex(nswc_sp) :: z
+complex(nswc_sp), intent(in) :: cnu
+complex(nswc_sp), intent(inout) :: w
 integer :: i, k, m, n
-real :: a, cn1, cn2, e, fn, pn, qm, qn, qnp1, r, r2, rn2, sn, t1, t2, u, v, x, y
-complex :: c, nu, s, sm1, sm2, t, tsc, w0, w1, zn, zz
-real, parameter :: pi = 3.14159265358979
+real(nswc_sp) :: a, cn1, cn2, e, fn, pn, qm, qn, qnp1, r, r2, rn2, sn, t1, t2, u, v, x, y
+complex(nswc_sp) :: c, nu, s, sm1, sm2, t, tsc, w0, w1, zn, zz
+real(nswc_sp), parameter :: pi = 3.14159265358979
 !-----------------------------------------------------------------------
 !         EVALUATION OF THE COMPLEX BESSEL FUNCTION J   (z)
 !                                                    cnu
@@ -15132,12 +15140,12 @@ end subroutine cbsslj
 
 subroutine cbjm(z, cnu, w)
 implicit none
-complex, intent(in) :: cnu
-complex, intent(inout) :: w
-complex :: z
+complex(nswc_sp), intent(in) :: cnu
+complex(nswc_sp), intent(inout) :: w
+complex(nswc_sp) :: z
 integer :: i, imin, k, km1, km2
-real :: a, a0, eps, rnu, inu, m
-complex :: nu, nup1, p, s, sn, t, ti
+real(nswc_sp) :: a, a0, eps, rnu, inu, m
+complex(nswc_sp) :: nu, nup1, p, s, sn, t, ti
 !-----------------------------------------------------------------------
 !       COMPUTATION OF  (z/2)**(-cnu) * gamma(cnu + 1) * J(cnu,z)
 !                           -----------------
@@ -15214,26 +15222,27 @@ if (anorm(t) > eps*anorm(w)) go to 70
 contains
    pure function anorm(z) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: z
-      real :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: z
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = max(abs(real(z)),abs(aimag(z)))
    end function anorm
 end subroutine cbjm
 
 pure elemental subroutine cbdb(cz, cnu, fn, w)
 implicit none
-real, intent(in) :: fn
-complex, intent(in) :: cz, cnu
-complex, intent(inout) :: w
+real(nswc_sp), intent(in) :: fn
+complex(nswc_sp), intent(in) :: cz, cnu
+complex(nswc_sp), intent(inout) :: w
 integer :: ind, k, l, m
-real :: alpha, am, aq, ar, phi, sgn, theta, u, v, x, y, is, inu, izn
-complex :: c1, c2, eta, nu, p, p1, q, r, s, s1, s2, sm, t, z, zn
-complex, parameter :: j = (0.0, 1.0)
-real, parameter :: c = .398942280401433
-real, parameter :: pi = 3.14159265358979
-real, parameter :: pi2 = 6.28318530717959
-real, parameter :: bnd = 1.04719755119660
-real, parameter :: a(136) = [1.0, -.208333333333333e+00, .125000000000000e+00, .334201388888889e+00, -.401041666666667e+00 &
+real(nswc_sp) :: alpha, am, aq, ar, phi, sgn, theta, u, v, x, y, is, inu, izn
+complex(nswc_sp) :: c1, c2, eta, nu, p, p1, q, r, s, s1, s2, sm, t, z, zn
+complex(nswc_sp), parameter :: j = (0.0, 1.0)
+real(nswc_sp), parameter :: c = .398942280401433
+real(nswc_sp), parameter :: pi = 3.14159265358979
+real(nswc_sp), parameter :: pi2 = 6.28318530717959
+real(nswc_sp), parameter :: bnd = 1.04719755119660
+real(nswc_sp), parameter :: a(136) = [1.0, -.208333333333333e+00, .125000000000000e+00, .334201388888889e+00, - &
+   & .401041666666667e+00 &
    & , .703125000000000e-01, -.102581259645062e+01, .184646267361111e+01, -.891210937500000e+00, .732421875000000e-01, &
    & .466958442342625e+01, -.112070026162230e+02, .878912353515625e+01, -.236408691406250e+01, .112152099609375e+00, - &
    & .282120725582002e+02, .846362176746007e+02, -.918182415432400e+02, .425349987453885e+02, -.736879435947963e+01, &
@@ -15385,14 +15394,14 @@ end subroutine cbdb
 
 pure elemental subroutine cbja(cz, cnu, w)
 implicit none
-complex, intent(in) :: cz, cnu
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: cz, cnu
+complex(nswc_sp), intent(inout) :: w
 integer :: i, ind
-real :: eps, r, rnu, tol, u, v, x, y, inu, m
-complex :: a, a1, arg, e, eta, nu, p, q, t, z, zr, zz
-real, parameter :: pihalf = 1.5707963267949
-real, parameter :: c = 1.12837916709551
-complex, parameter :: j = (0.0, 1.0)
+real(nswc_sp) :: eps, r, rnu, tol, u, v, x, y, inu, m
+complex(nswc_sp) :: a, a1, arg, e, eta, nu, p, q, t, z, zr, zz
+real(nswc_sp), parameter :: pihalf = 1.5707963267949
+real(nswc_sp), parameter :: c = 1.12837916709551
+complex(nswc_sp), parameter :: j = (0.0, 1.0)
 !-----------------------------------------------------------------------
 !        Computation of j(nu,z) by the asymptotic expansion
 !-----------------------------------------------------------------------
@@ -15467,8 +15476,8 @@ w = w*cmplx(u,v)
 contains
    pure function anorm(z) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: z
-      real :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: z
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = max(abs(real(z)), abs(aimag(z)))
    end function anorm
 end subroutine cbja
@@ -15476,18 +15485,19 @@ end subroutine cbja
 pure elemental subroutine bsslj(a, in, w)
 implicit none
 integer, intent(in) :: in
-complex, intent(in) :: a
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: a
+complex(nswc_sp), intent(inout) :: w
 integer :: i, m, n
-real :: an, aq(2), az(2), fj(2), pm, pn, qf(2), qm, qn, qz(2), rm(4), rz(2), sm(4), sn, ss, sz(2), tm(2), ts(2), zm, zr(2), zs
-real, parameter :: cd(30) = [0.00000000000000e00, -1.64899505142212e-2, -7.18621880068536e-2, -1.67086878124866e-1, - &
+real(nswc_sp) :: an, aq(2), az(2), fj(2), pm, pn, qf(2), qm, qn, qz(2), rm(4), rz(2), sm(4), sn, ss, sz(2), tm(2), ts(2), zm, zr(2 &
+   & ), zs
+real(nswc_sp), parameter :: cd(30) = [0.00000000000000e00, -1.64899505142212e-2, -7.18621880068536e-2, -1.67086878124866e-1, - &
    & 3.02582250219469e-1, -4.80613945245927e-1, -7.07075239357898e-1, -9.92995790539516e-1, -1.35583925612592e00, - &
    & 1.82105907899132e00, -2.42482175310879e00, -3.21956655708750e00, -4.28658077248384e00, -5.77022816798128e00, - &
    & 8.01371260952526e00, 0.00000000000000e00, -5.57742429879505e-3, -4.99112944172476e-2, -1.37440911652397e-1, - &
    & 2.67233784710566e-1, -4.40380166808682e-1, -6.61813614872541e-1, -9.41861077665017e-1, -1.29754130468326e00, - &
    & 1.75407696719816e00, -2.34755299882276e00, -3.13041332689196e00, -4.18397120563729e00, -5.65251799214994e00, - &
    & 7.87863959810677e00]
-real, parameter :: ce(30) = [0.00000000000000e00, -4.80942336387447e-3, -1.31366200347759e-2, -1.94843834008458e-2, - &
+real(nswc_sp), parameter :: ce(30) = [0.00000000000000e00, -4.80942336387447e-3, -1.31366200347759e-2, -1.94843834008458e-2, - &
    & 2.19948900032003e-2, -2.09396625676519e-2, -1.74600268458650e-2, -1.27937813362085e-2, -8.05234421796592e-3, - &
    & 4.15817375002760e-3, -1.64317738747922e-3, -4.49175585314709e-4, -7.28594765574007e-5, -5.38265230658285e-6, - &
    & 9.93779048036289e-8, 0.00000000000000e00, 7.53805779200591e-2, 7.12293537403464e-2, 6.33116224228200e-2, 5.28240264523301e-2, &
@@ -15817,20 +15827,21 @@ implicit none
 !         UNDERFLOW  - A NON-FATAL ERROR (nz.GT.0)
 integer, intent(in) :: n
 integer, intent(inout) :: nz
-real, intent(in) :: alpha
-real :: x
-real, intent(inout) :: y(n)
+real(nswc_sp), intent(in) :: alpha
+real(nswc_sp) :: x
+real(nswc_sp), intent(inout) :: y(n)
 integer :: i, ialp, idalp, iflw, in, is, i1, i2, k, kk, km, kt, nn, ns, nswc_ai_i4
-real :: ak, akm, ans, ap, arg, coef, dalpha, dfn, dtm, earg, elim, etx, fidal, flgjy, fn, fnf, fni, fnp1, fnu, gln, rden, relb, &
+real(nswc_sp) :: ak, akm, ans, ap, arg, coef, dalpha, dfn, dtm, earg, elim, etx, fidal, flgjy, fn, fnf, fni, fnp1, fnu, gln, rden, &
+   & relb, &
    & rtx, rzden, s, sa, sb, sxo2, s1, s2, t, ta, tau, tb, temp(3), tfn, tm, tol, tolln, trx, tx, t1, t2, wk(7), xo2, xo2l, &
    & nswc_ai_r4
-real, parameter :: rtwo = 1.34839972492648e+00
-real, parameter :: pdf = 7.85398163397448e-01
-real, parameter :: rttp = 7.97884560802865e-01
-real, parameter :: pidt = 1.57079632679490e+00
-real, parameter :: pp(4) = [8.72909153935547e+00, 2.65693932265030e-01, 1.24578576865586e-01, 7.70133747430388e-04]
+real(nswc_sp), parameter :: rtwo = 1.34839972492648e+00
+real(nswc_sp), parameter :: pdf = 7.85398163397448e-01
+real(nswc_sp), parameter :: rttp = 7.97884560802865e-01
+real(nswc_sp), parameter :: pidt = 1.57079632679490e+00
+real(nswc_sp), parameter :: pp(4) = [8.72909153935547e+00, 2.65693932265030e-01, 1.24578576865586e-01, 7.70133747430388e-04]
 integer, parameter :: inlim = 150
-real, parameter :: fnulim(2) = [100.0e0, 60.0e0]
+real(nswc_sp), parameter :: fnulim(2) = [100.0e0, 60.0e0]
 !     -------------------
 !     ipmpar(8) replaces ipmpar(5) in a double precision code
 !     ipmpar(9) replaces ipmpar(6) in a double precision code
@@ -16257,11 +16268,12 @@ implicit none
 !         flgjy = -1 The Airy functions bi(x) and DBI(x) are
 !         supplied by the external funtion YAIRY.
 integer :: iflw, in
-real :: elim, flgjy, fnu, tol, wk(*), x, y(*)
+real(nswc_sp) :: elim, flgjy, fnu, tol, wk(*), x, y(*)
 external funjy
 integer :: i, j, jn, jr, ju, k, kb, klast, kmax(5), kp1, ks, ksp1, &
    & kstemp, l, lr, lrp1
-real :: abw2, akm, alfa(26,4), ap, ar(8), asum, az, beta(26,5), br(10), bsum, c(65), con1, con2, con3, con548, cr(10), crz32, dfi, &
+real(nswc_sp) :: abw2, akm, alfa(26,4), ap, ar(8), asum, az, beta(26,5), br(10), bsum, c(65), con1, con2, con3, con548, cr(10), &
+   & crz32, dfi, &
    & dr(10), fi, fn, fn2, gama(26), phi, rcz, rden, relb, rfn2, rtz, rzden, sa, sb, suma, sumb, s1, ta, tau, tb, tfn, tols, t2, &
    & upol(10), xx, z, z32
 data tols            /-6.90775527898214e+00/
@@ -16571,12 +16583,12 @@ end subroutine asjy
 
 pure subroutine jairy(x,rx,c,ai,dai)
 implicit none
-real, intent(inout) :: ai
-real, intent(in) :: c
-real, intent(inout) :: dai
-real, intent(in) :: rx, x
+real(nswc_sp), intent(inout) :: ai
+real(nswc_sp), intent(in) :: c
+real(nswc_sp), intent(inout) :: dai
+real(nswc_sp), intent(in) :: rx, x
 integer :: i, j
-real :: ccv, cv, e1, e2, ec, f1, f2, rtrx, scv, t, temp1, temp2, tt
+real(nswc_sp) :: ccv, cv, e1, e2, ec, f1, f2, rtrx, scv, t, temp1, temp2, tt
 integer, parameter :: n1 = 14
 integer, parameter :: n2 = 23
 integer, parameter :: n3 = 19
@@ -16585,36 +16597,36 @@ integer, parameter :: m1 = 12
 integer, parameter :: m2 = 21
 integer, parameter :: m3 = 17
 integer, parameter :: m4 = 13
-real, parameter :: fpi12 = 1.30899693899575e+00
-real, parameter :: con1 = 6.66666666666667e-01
-real, parameter :: con2 = 5.03154716196777e+00
-real, parameter :: con3 = 3.80004589867293e-01
-real, parameter :: con4 = 8.33333333333333e-01
-real, parameter :: con5 = 8.66025403784439e-01
-real, parameter :: ak1(14) = [2.20423090987793e-01, -1.25290242787700e-01, 1.03881163359194e-02, 8.22844152006343e-04, - &
+real(nswc_sp), parameter :: fpi12 = 1.30899693899575e+00
+real(nswc_sp), parameter :: con1 = 6.66666666666667e-01
+real(nswc_sp), parameter :: con2 = 5.03154716196777e+00
+real(nswc_sp), parameter :: con3 = 3.80004589867293e-01
+real(nswc_sp), parameter :: con4 = 8.33333333333333e-01
+real(nswc_sp), parameter :: con5 = 8.66025403784439e-01
+real(nswc_sp), parameter :: ak1(14) = [2.20423090987793e-01, -1.25290242787700e-01, 1.03881163359194e-02, 8.22844152006343e-04, - &
    & 2.34614345891226e-04, 1.63824280172116e-05, 3.06902589573189e-07, -1.29621999359332e-07, 8.22908158823668e-09, &
    & 1.53963968623298e-11, -3.39165465615682e-11, 2.03253257423626e-12, -1.10679546097884e-14, -5.16169497785080e-15]
-real, parameter :: ak2(23) = [2.74366150869598e-01, 5.39790969736903e-03, -1.57339220621190e-03, 4.27427528248750e-04, - &
+real(nswc_sp), parameter :: ak2(23) = [2.74366150869598e-01, 5.39790969736903e-03, -1.57339220621190e-03, 4.27427528248750e-04, - &
    & 1.12124917399925e-04, 2.88763171318904e-05, -7.36804225370554e-06, 1.87290209741024e-06, -4.75892793962291e-07, &
    & 1.21130416955909e-07, -3.09245374270614e-08, 7.92454705282654e-09, -2.03902447167914e-09, 5.26863056595742e-10, - &
    & 1.36704767639569e-10, 3.56141039013708e-11, -9.31388296548430e-12, 2.44464450473635e-12, -6.43840261990955e-13, &
    & 1.70106030559349e-13, -4.50760104503281e-14, 1.19774799164811e-14, -3.19077040865066e-15]
-real, parameter :: ak3(14) = [2.80271447340791e-01, -1.78127042844379e-03, 4.03422579628999e-05, -1.63249965269003e-06, &
+real(nswc_sp), parameter :: ak3(14) = [2.80271447340791e-01, -1.78127042844379e-03, 4.03422579628999e-05, -1.63249965269003e-06, &
    & 9.21181482476768e-08, -6.52294330229155e-09, 5.47138404576546e-10, -5.24408251800260e-11, 5.60477904117209e-12, - &
    & 6.56375244639313e-13, 8.31285761966247e-14, -1.12705134691063e-14, 1.62267976598129e-15, -2.46480324312426e-16]
-real, parameter :: ajp(19) = [7.78952966437581e-02, -1.84356363456801e-01, 3.01412605216174e-02, 3.05342724277608e-02, - &
+real(nswc_sp), parameter :: ajp(19) = [7.78952966437581e-02, -1.84356363456801e-01, 3.01412605216174e-02, 3.05342724277608e-02, - &
    & 4.95424702513079e-03, -1.72749552563952e-03, 2.43137637839190e-04, 5.04564777517082e-05, -6.16316582695208e-06, - &
    & 9.03986745510768e-07, 9.70243778355884e-08, 1.09639453305205e-08, -1.04716330588766e-09, -9.60359441344646e-11, &
    & 8.25358789454134e-12, 6.36123439018768e-13, -4.96629614116015e-14, -3.29810288929615e-15, 2.35798252031104e-16]
-real, parameter :: ajn(19) = [3.80497887617242e-02, -2.45319541845546e-01, 1.65820623702696e-01, 7.49330045818789e-02, - &
+real(nswc_sp), parameter :: ajn(19) = [3.80497887617242e-02, -2.45319541845546e-01, 1.65820623702696e-01, 7.49330045818789e-02, - &
    & 2.63476288106641e-02, -5.92535597304981e-03, 1.44744409589804e-03, 2.18311831322215e-04, -4.10662077680304e-05, - &
    & 4.66874994171766e-06, 7.15218807277160e-07, 6.52964770854633e-08, -8.44284027565946e-09, -6.44186158976978e-10, &
    & 7.20802286505285e-11, 4.72465431717846e-12, -4.66022632547045e-13, -2.67762710389189e-14, 2.36161316570019e-15]
-real, parameter :: a(15) = [4.90275424742791e-01, 1.57647277946204e-03, -9.66195963140306e-05, 1.35916080268815e-07, &
+real(nswc_sp), parameter :: a(15) = [4.90275424742791e-01, 1.57647277946204e-03, -9.66195963140306e-05, 1.35916080268815e-07, &
    & 2.98157342654859e-07, -1.86824767559979e-08, -1.03685737667141e-09, 3.28660818434328e-10, -2.57091410632780e-11, - &
    & 2.32357655300677e-12, 9.57523279048255e-13, -1.20340828049719e-13, -2.90907716770715e-15, 4.55656454580149e-15, - &
    & 9.99003874810259e-16]
-real, parameter :: b(15) = [2.78593552803079e-01, -3.52915691882584e-03, -2.31149677384994e-05, 4.71317842263560e-06, - &
+real(nswc_sp), parameter :: b(15) = [2.78593552803079e-01, -3.52915691882584e-03, -2.31149677384994e-05, 4.71317842263560e-06, - &
    & 1.12415907931333e-07, -2.00100301184339e-08, 2.60948075302193e-09, -3.55098136101216e-11, -3.50849978423875e-11, &
    & 5.83007187954202e-12, -2.04644828753326e-13, -1.10529179476742e-13, 2.87724778038775e-14, -2.88205111009939e-15, - &
    & 3.32656311696166e-16]
@@ -16626,30 +16638,31 @@ integer, parameter :: m1d = 12
 integer, parameter :: m2d = 22
 integer, parameter :: m3d = 17
 integer, parameter :: m4d = 13
-real, parameter :: dak1(14) = [2.04567842307887e-01, -6.61322739905664e-02, -8.49845800989287e-03, 3.12183491556289e-03, - &
+real(nswc_sp), parameter :: dak1(14) = [2.04567842307887e-01, -6.61322739905664e-02, -8.49845800989287e-03, 3.12183491556289e-03, &
+   & - &
    & 2.70016489829432e-04, -6.35636298679387e-06, 3.02397712409509e-06, -2.18311195330088e-07, -5.36194289332826e-10, &
    & 1.13098035622310e-09, -7.43023834629073e-11, 4.28804170826891e-13, 2.23810925754539e-13, -1.39140135641182e-14]
-real, parameter :: dak2(24) = [2.93332343883230e-01, -8.06196784743112e-03, 2.42540172333140e-03, -6.82297548850235e-04, &
+real(nswc_sp), parameter :: dak2(24) = [2.93332343883230e-01, -8.06196784743112e-03, 2.42540172333140e-03, -6.82297548850235e-04, &
    & 1.85786427751181e-04, -4.97457447684059e-05, 1.32090681239497e-05, -3.49528240444943e-06, 9.24362451078835e-07, - &
    & 2.44732671521867e-07, 6.49307837648910e-08, -1.72717621501538e-08, 4.60725763604656e-09, -1.23249055291550e-09, &
    & 3.30620409488102e-10, -8.89252099772401e-11, 2.39773319878298e-11, -6.48013921153450e-12, 1.75510132023731e-12, - &
    & 4.76303829833637e-13, 1.29498241100810e-13, -3.52679622210430e-14, 9.62005151585923e-15, -2.62786914342292e-15]
-real, parameter :: dak3(14) = [2.84675828811349e-01, 2.53073072619080e-03, -4.83481130337976e-05, 1.84907283946343e-06, - &
+real(nswc_sp), parameter :: dak3(14) = [2.84675828811349e-01, 2.53073072619080e-03, -4.83481130337976e-05, 1.84907283946343e-06, - &
    & 1.01418491178576e-07, 7.05925634457153e-09, -5.85325291400382e-10, 5.56357688831339e-11, -5.90889094779500e-12, &
    & 6.88574353784436e-13, -8.68588256452194e-14, 1.17374762617213e-14, -1.68523146510923e-15, 2.55374773097056e-16]
-real, parameter :: dajp(19) = [6.53219131311457e-02, -1.20262933688823e-01, 9.78010236263823e-03, 1.67948429230505e-02, - &
+real(nswc_sp), parameter :: dajp(19) = [6.53219131311457e-02, -1.20262933688823e-01, 9.78010236263823e-03, 1.67948429230505e-02, - &
    & 1.97146140182132e-03, -8.45560295098867e-04, 9.42889620701976e-05, 2.25827860945475e-05, -2.29067870915987e-06, - &
    & 3.76343991136919e-07, 3.45663933559565e-08, 4.29611332003007e-09, -3.58673691214989e-10, -3.57245881361895e-11, &
    & 2.72696091066336e-12, 2.26120653095771e-13, -1.58763205238303e-14, -1.12604374485125e-15, 7.31327529515367e-17]
-real, parameter :: dajn(19) = [1.08594539632967e-02, 8.53313194857091e-02, -3.15277068113058e-01, -8.78420725294257e-02, &
+real(nswc_sp), parameter :: dajn(19) = [1.08594539632967e-02, 8.53313194857091e-02, -3.15277068113058e-01, -8.78420725294257e-02, &
    & 5.53251906976048e-02, 9.41674060503241e-03, -3.32187026018996e-03, -4.11157343156826e-04, 1.01297326891346e-04, &
    & 9.87633682208396e-06, -1.87312969812393e-06, -1.50798500131468e-07, 2.32687669525394e-08, 1.59599917419225e-09, - &
    & 2.07665922668385e-10, -1.24103350500302e-11, 1.39631765331043e-12, 7.39400971155740e-14, -7.32887475627500e-15]
-real, parameter :: da(15) = [4.91627321104601e-01, 3.11164930427489e-03, 8.23140762854081e-05, -4.61769776172142e-06, - &
+real(nswc_sp), parameter :: da(15) = [4.91627321104601e-01, 3.11164930427489e-03, 8.23140762854081e-05, -4.61769776172142e-06, - &
    & 6.13158880534626e-08, 2.87295804656520e-08, -1.81959715372117e-09, -1.44752826642035e-10, 4.53724043420422e-11, - &
    & 3.99655065847223e-12, -3.24089119830323e-13, 1.62098952568741e-13, -2.40765247974057e-14, 1.69384811284491e-16, &
    & 8.17900786477396e-16]
-real, parameter :: db(15) = [-2.77571356944231e-01, 4.44212833419920e-03, -8.42328522190089e-05, -2.58040318418710e-06, &
+real(nswc_sp), parameter :: db(15) = [-2.77571356944231e-01, 4.44212833419920e-03, -8.42328522190089e-05, -2.58040318418710e-06, &
    & 3.42389720217621e-07, -6.24286894709776e-09, -2.36377836844577e-09, 3.16991042656673e-10, -4.40995691658191e-12, - &
    & 5.18674221093575e-12, 9.64874015137022e-13, -4.90190576608710e-14, -1.77253430678112e-14, 5.55950610442662e-15, - &
    & 7.11793337579530e-16]
@@ -16828,19 +16841,20 @@ end subroutine jairy
 pure elemental subroutine bssly(a, in, w)
 implicit none
 integer, intent(in) :: in
-complex, intent(in) :: a
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: a
+complex(nswc_sp), intent(inout) :: w
 integer :: i, la, lr, ly, m, n
-real :: an, aq(2), az(2), pm, pn, qf(2), qm, qn, qz(2), rm, rn, rz(2), sl(2), sm(4), sn, sq(2), sr(2), ss, sz(2), tm(4), ts(2), zl &
+real(nswc_sp) :: an, aq(2), az(2), pm, pn, qf(2), qm, qn, qz(2), rm, rn, rz(2), sl(2), sm(4), sn, sq(2), sr(2), ss, sz(2), tm(4), &
+   & ts(2), zl &
    & (2), zs
-real, parameter :: cd(30) = [0.00000000000000e00, -1.64899505142212e-2, -7.18621880068536e-2, -1.67086878124866e-1, - &
+real(nswc_sp), parameter :: cd(30) = [0.00000000000000e00, -1.64899505142212e-2, -7.18621880068536e-2, -1.67086878124866e-1, - &
    & 3.02582250219469e-1, -4.80613945245927e-1, -7.07075239357898e-1, -9.92995790539516e-1, -1.35583925612592e00, - &
    & 1.82105907899132e00, -2.42482175310879e00, -3.21956655708750e00, -4.28658077248384e00, -5.77022816798128e00, - &
    & 8.01371260952526e00, 0.00000000000000e00, -5.57742429879505e-3, -4.99112944172476e-2, -1.37440911652397e-1, - &
    & 2.67233784710566e-1, -4.40380166808682e-1, -6.61813614872541e-1, -9.41861077665017e-1, -1.29754130468326e00, - &
    & 1.75407696719816e00, -2.34755299882276e00, -3.13041332689196e00, -4.18397120563729e00, -5.65251799214994e00, - &
    & 7.87863959810677e00]
-real, parameter :: ce(30) = [0.00000000000000e00, -4.80942336387447e-3, -1.31366200347759e-2, -1.94843834008458e-2, - &
+real(nswc_sp), parameter :: ce(30) = [0.00000000000000e00, -4.80942336387447e-3, -1.31366200347759e-2, -1.94843834008458e-2, - &
    & 2.19948900032003e-2, -2.09396625676519e-2, -1.74600268458650e-2, -1.27937813362085e-2, -8.05234421796592e-3, - &
    & 4.15817375002760e-3, -1.64317738747922e-3, -4.49175585314709e-4, -7.28594765574007e-5, -5.38265230658285e-6, - &
    & 9.93779048036289e-8, 0.00000000000000e00, 7.53805779200591e-2, 7.12293537403464e-2, 6.33116224228200e-2, 5.28240264523301e-2, &
@@ -17152,11 +17166,11 @@ end subroutine bssly
 
 subroutine cbssli(z, cnu, w)
 implicit none
-complex, intent(in) :: z, cnu
-complex, intent(inout) :: w
-real :: t, x, y
-complex :: nu, z0
-real, parameter :: pihalf = 1.5707963267949
+complex(nswc_sp), intent(in) :: z, cnu
+complex(nswc_sp), intent(inout) :: w
+real(nswc_sp) :: t, x, y
+complex(nswc_sp) :: nu, z0
+real(nswc_sp), parameter :: pihalf = 1.5707963267949
 !------------------------------------------------------------
 !     Calculation of the modified Bessel function of the
 !     first kind for complex order cnu and complex argument
@@ -17183,18 +17197,19 @@ end subroutine cbssli
 pure elemental subroutine bssli(mo, a, in, w)
 implicit none
 integer, intent(in) :: in, mo
-complex, intent(in) :: a
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: a
+complex(nswc_sp), intent(inout) :: w
 integer :: i, m, n
-real :: an, aq(2), az(2), fi(2), pm, pn, qf(2), qm, qn, qz(2), rm(4), rz(2), sm(4), sn, ss, sz(2), tm(2), ts(2), zm, zr(2), zs
-real, parameter :: cd(30) = [0.00000000000000e00, -1.64899505142212e-2, -7.18621880068536e-2, -1.67086878124866e-1, - &
+real(nswc_sp) :: an, aq(2), az(2), fi(2), pm, pn, qf(2), qm, qn, qz(2), rm(4), rz(2), sm(4), sn, ss, sz(2), tm(2), ts(2), zm, zr(2 &
+   & ), zs
+real(nswc_sp), parameter :: cd(30) = [0.00000000000000e00, -1.64899505142212e-2, -7.18621880068536e-2, -1.67086878124866e-1, - &
    & 3.02582250219469e-1, -4.80613945245927e-1, -7.07075239357898e-1, -9.92995790539516e-1, -1.35583925612592e00, - &
    & 1.82105907899132e00, -2.42482175310879e00, -3.21956655708750e00, -4.28658077248384e00, -5.77022816798128e00, - &
    & 8.01371260952526e00, 0.00000000000000e00, -5.57742429879505e-3, -4.99112944172476e-2, -1.37440911652397e-1, - &
    & 2.67233784710566e-1, -4.40380166808682e-1, -6.61813614872541e-1, -9.41861077665017e-1, -1.29754130468326e00, - &
    & 1.75407696719816e00, -2.34755299882276e00, -3.13041332689196e00, -4.18397120563729e00, -5.65251799214994e00, - &
    & 7.87863959810677e00]
-real, parameter :: ce(30) = [0.00000000000000e00, -4.80942336387447e-3, -1.31366200347759e-2, -1.94843834008458e-2, - &
+real(nswc_sp), parameter :: ce(30) = [0.00000000000000e00, -4.80942336387447e-3, -1.31366200347759e-2, -1.94843834008458e-2, - &
    & 2.19948900032003e-2, -2.09396625676519e-2, -1.74600268458650e-2, -1.27937813362085e-2, -8.05234421796592e-3, - &
    & 4.15817375002760e-3, -1.64317738747922e-3, -4.49175585314709e-4, -7.28594765574007e-5, -5.38265230658285e-6, - &
    & 9.93779048036289e-8, 0.00000000000000e00, 7.53805779200591e-2, 7.12293537403464e-2, 6.33116224228200e-2, 5.28240264523301e-2, &
@@ -17558,13 +17573,14 @@ implicit none
 integer, intent(in) :: kode
 integer, intent(in) :: n
 integer, intent(inout) :: nz
-real, intent(in) :: alpha
-real, intent(in) :: x
-real, intent(inout) :: y(n)
+real(nswc_sp), intent(in) :: alpha
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), intent(inout) :: y(n)
 integer :: i, ialp, in, is, i1, i2, k, kk, km, kt, nn, ns, nswc_ai_i4
-real :: ain, ak, akm, ans, ap, arg, atol, tolln, dfn, dtm, dx, earg, elim, etx, flgik, fn, fnf, fni, fnp1, fnu, gln, ra, s, sx, &
+real(nswc_sp) :: ain, ak, akm, ans, ap, arg, atol, tolln, dfn, dtm, dx, earg, elim, etx, flgik, fn, fnf, fni, fnp1, fnu, gln, ra, &
+   & s, sx, &
    & sxo2, s1, s2, t, ta, tb, temp(3), tfn, tm, tol, trx, t2, xo2, xo2l, z, nswc_ai_r4
-real, parameter :: rttpi = 3.98942280401433e-01
+real(nswc_sp), parameter :: rttpi = 3.98942280401433e-01
 integer, parameter :: inlim = 80
 !     -------------------
 !     ipmpar(8) replaces ipmpar(5) in a double precision code
@@ -17976,17 +17992,17 @@ implicit none
 !         accomplished by means of the flag flgik = 1 Or -1.
 integer, intent(in) :: in
 integer, intent(in) :: kode
-real, intent(inout) :: arg
-real, intent(in) :: flgik
-real, intent(in) :: fnu
-real, intent(inout) :: ra
-real, intent(in) :: tol
-real, intent(in) :: x
-real, intent(inout) :: y(*)
+real(nswc_sp), intent(inout) :: arg
+real(nswc_sp), intent(in) :: flgik
+real(nswc_sp), intent(in) :: fnu
+real(nswc_sp), intent(inout) :: ra
+real(nswc_sp), intent(in) :: tol
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), intent(inout) :: y(*)
 integer :: j, jn, k, kk, l
-real :: ak, ap, coef, etx, fn, gln, s1, s2, t, t2, z
-real, parameter :: con(2) = [3.98942280401432678e-01, 1.25331413731550025e+00]
-real, parameter :: c(65) = [-2.08333333333333e-01, 1.25000000000000e-01, 3.34201388888889e-01, -4.01041666666667e-01, &
+real(nswc_sp) :: ak, ap, coef, etx, fn, gln, s1, s2, t, t2, z
+real(nswc_sp), parameter :: con(2) = [3.98942280401432678e-01, 1.25331413731550025e+00]
+real(nswc_sp), parameter :: c(65) = [-2.08333333333333e-01, 1.25000000000000e-01, 3.34201388888889e-01, -4.01041666666667e-01, &
    & 7.03125000000000e-02, -1.02581259645062e+00, 1.84646267361111e+00, -8.91210937500000e-01, 7.32421875000000e-02, &
    & 4.66958442342625e+00, -1.12070026162230e+01, 8.78912353515625e+00, -2.36408691406250e+00, 1.12152099609375e-01, - &
    & 2.82120725582002e+01, 8.46362176746007e+01, -9.18182415432400e+01, 4.25349987453885e+01, -7.36879435947963e+00, &
@@ -18040,11 +18056,11 @@ end subroutine asik
 
 subroutine cbesk(z, cnu, w)
 implicit none
-complex :: z
-complex, intent(in) :: cnu
-complex, intent(inout) :: w
-real :: a, b, c, e, rn, rz, s, tau, x, y
-complex :: nu
+complex(nswc_sp) :: z
+complex(nswc_sp), intent(in) :: cnu
+complex(nswc_sp), intent(inout) :: w
+real(nswc_sp) :: a, b, c, e, rn, rz, s, tau, x, y
+complex(nswc_sp) :: nu
 !-----------------------------------------------------------------------
 !        Calculation of the modified Bessel function of the
 !        second kind for complex order cnu and complex argument
@@ -18139,12 +18155,12 @@ end subroutine cbesk
 
 subroutine cbki(z, cnu, w)
 implicit none
-complex, intent(in) :: z, cnu
-complex, intent(inout) :: w
-real :: a, b, u1, u2
-complex :: w1, w2
-real, parameter :: pi = 3.14159265358979e+00
-real, parameter :: pihalf = 1.5707963267949e+00
+complex(nswc_sp), intent(in) :: z, cnu
+complex(nswc_sp), intent(inout) :: w
+real(nswc_sp) :: a, b, u1, u2
+complex(nswc_sp) :: w1, w2
+real(nswc_sp), parameter :: pi = 3.14159265358979e+00
+real(nswc_sp), parameter :: pihalf = 1.5707963267949e+00
 !------------------------------------------------------------
 !     Calculation of the modified Bessel function of the
 !     second kind with complex order and argument in terms
@@ -18161,13 +18177,13 @@ end subroutine cbki
 
 subroutine cbka(z, cnu, w)
 implicit none
-complex :: z
-complex, intent(in) :: cnu
-complex, intent(inout) :: w
+complex(nswc_sp) :: z
+complex(nswc_sp), intent(in) :: cnu
+complex(nswc_sp), intent(inout) :: w
 integer :: i
-real :: eps, u, v, m
-complex :: a, p, t, zr
-real, parameter :: c = 1.77245385090552e+00
+real(nswc_sp) :: eps, u, v, m
+complex(nswc_sp) :: a, p, t, zr
+real(nswc_sp), parameter :: c = 1.77245385090552e+00
 !-----------------------------------------------------------------------
 !        Computation of the Bessel function K for complex order
 !        cnu and complex argument z by the asymptotic expansion
@@ -18201,22 +18217,22 @@ w = c*t*p*exp(-z)
 contains
    pure function anorm(z) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: z
-      real :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: z
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = max(abs(real(z)), abs(aimag(z)))
    end function anorm
 end subroutine cbka
 
 subroutine cbkm(z, rz, cnu, w)
 implicit none
-real, intent(in) :: rz
-complex, intent(in) :: z, cnu
-complex, intent(inout) :: w
+real(nswc_sp), intent(in) :: rz
+complex(nswc_sp), intent(in) :: z, cnu
+complex(nswc_sp), intent(inout) :: w
 integer :: i, ind, m, n, n1
-real :: a, ai, b, c, t, x, y, znorm, zr1, zr2, nu
-complex :: cz, ex, r, r1, u1, u2, u3, w1, w2, zr
-real, parameter :: pi = 3.14159265358979
-real, parameter :: cpi = 1.25331413731550
+real(nswc_sp) :: a, ai, b, c, t, x, y, znorm, zr1, zr2, nu
+complex(nswc_sp) :: cz, ex, r, r1, u1, u2, u3, w1, w2, zr
+real(nswc_sp), parameter :: pi = 3.14159265358979
+real(nswc_sp), parameter :: cpi = 1.25331413731550
 !-------------------------------------------------------------------
 !     Calculation of the modified Bessel function of the second
 !     kind with complex order and argument BY means of Maclaurin
@@ -18310,17 +18326,17 @@ end subroutine cbkm
 
 subroutine ckps(z, r, zr, nu, w1, w2)
 implicit none
-real, intent(in) :: r
-complex, intent(in) :: z, zr
-complex :: nu
-complex, intent(inout) :: w1, w2
+real(nswc_sp), intent(in) :: r
+complex(nswc_sp), intent(in) :: z, zr
+complex(nswc_sp) :: nu
+complex(nswc_sp), intent(inout) :: w1, w2
 integer :: k
-real :: ak, eps, eps0, phi, s, u, x, y
-complex :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
+real(nswc_sp) :: ak, eps, eps0, phi, s, u, x, y
+complex(nswc_sp) :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
    & t2
-real, parameter :: tol = 1.e-10
-real, parameter :: pi = 3.14159265358979
-real, parameter :: d(7) = [.577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
+real(nswc_sp), parameter :: tol = 1.e-10
+real(nswc_sp), parameter :: pi = 3.14159265358979
+real(nswc_sp), parameter :: d(7) = [.577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
    & .215241674114951e-03, -.201348547807882e-04, .113302723198170e-05]
 !-----------------------------------------------------------------------
 !        Calculation of the modified Bessel functions
@@ -18406,8 +18422,8 @@ w2 = w2 * zr
 contains
    pure function anorm(t) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: t
-      real :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: t
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = max(abs(real(t)), abs(aimag(t)))
    end function anorm
 end subroutine ckps
@@ -18415,14 +18431,14 @@ end subroutine ckps
 pure elemental subroutine cbkml(z, r, zr, nu, n, w, w0)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: r
-complex, intent(in) :: z, zr, nu
-complex, intent(inout) :: w, w0
+real(nswc_sp), intent(in) :: r
+complex(nswc_sp), intent(in) :: z, zr, nu
+complex(nswc_sp), intent(inout) :: w, w0
 integer :: i, m, num
-real :: a, b, c, e, eps, eps0, f, rnu, t, th, x, y, inu, l
-complex :: al, bl, s, u1, u2, u3
-real, parameter :: c1 = 1.25331413731559e+00
-real, parameter :: c2 = 1.77245385090552e+00
+real(nswc_sp) :: a, b, c, e, eps, eps0, f, rnu, t, th, x, y, inu, l
+complex(nswc_sp) :: al, bl, s, u1, u2, u3
+real(nswc_sp), parameter :: c1 = 1.25331413731559e+00
+real(nswc_sp), parameter :: c2 = 1.77245385090552e+00
 !-----------------------------------------------------------------------
 !             Computation of the scaled Bessel function
 !                   w = (exp(z)*sqrt(z)) k  (z)
@@ -18508,14 +18524,14 @@ end subroutine cbkml
 
 subroutine cbsslk(z, r, w)
 implicit none
-real, intent(in) :: r
-complex :: z
-complex, intent(inout) :: w
+real(nswc_sp), intent(in) :: r
+complex(nswc_sp) :: z
+complex(nswc_sp), intent(inout) :: w
 integer :: i, ind, m, n, n1
-real :: a, ai, rz, t, x, y, znorm, zr1, zr2, nu, nu1
-complex :: cn, cz, ex, u1, u2, u3, w1, w2, zr
-real, parameter :: pi = 3.14159265358979
-real, parameter :: cpi = 1.25331413731550
+real(nswc_sp) :: a, ai, rz, t, x, y, znorm, zr1, zr2, nu, nu1
+complex(nswc_sp) :: cn, cz, ex, u1, u2, u3, w1, w2, zr
+real(nswc_sp), parameter :: pi = 3.14159265358979
+real(nswc_sp), parameter :: cpi = 1.25331413731550
 !-----------------------------------------------------------------------
 !         Calculation of the modified Bessel function of the
 !         second kind for real order r and complex argument z.
@@ -18611,13 +18627,13 @@ end subroutine cbsslk
 
 subroutine cka(z, nu, w)
 implicit none
-complex :: z
-complex, intent(inout) :: w
-real, intent(in) :: nu
+complex(nswc_sp) :: z
+complex(nswc_sp), intent(inout) :: w
+real(nswc_sp), intent(in) :: nu
 integer :: i
-real :: a, eps, u, v, m
-complex :: p, t, zr
-real, parameter :: c = 1.77245385090552
+real(nswc_sp) :: a, eps, u, v, m
+complex(nswc_sp) :: p, t, zr
+real(nswc_sp), parameter :: c = 1.77245385090552
 !-----------------------------------------------------------------------
 !        Computation of the Bessel function K for real order nu
 !        and complex argument z by the asymptotic expansion
@@ -18651,24 +18667,24 @@ w = c*t*p*exp(-z)
 contains
    pure function anorm(z) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: z
-      real :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: z
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = max(abs(real(z)), abs(aimag(z)))
    end function anorm
 end subroutine cka
 
 pure elemental subroutine ckm(z, r, zr, nu, w1, w2)
 implicit none
-real, intent(in) :: r
-complex, intent(in) :: z, zr
-complex, intent(inout) :: w1, w2
-real, intent(in) :: nu
+real(nswc_sp), intent(in) :: r
+complex(nswc_sp), intent(in) :: z, zr
+complex(nswc_sp), intent(inout) :: w1, w2
+real(nswc_sp), intent(in) :: nu
 integer :: k
-real :: a, ak, eps, eps0, g1, g2, gm1, gm2, phi, t, x, y
-complex :: c, ch, cl, f, mu, p, q, sh, t1, t2, w
-real, parameter :: tol = 1.e-10
-real, parameter :: pi = 3.14159265358979
-real, parameter :: d(7) = [.577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
+real(nswc_sp) :: a, ak, eps, eps0, g1, g2, gm1, gm2, phi, t, x, y
+complex(nswc_sp) :: c, ch, cl, f, mu, p, q, sh, t1, t2, w
+real(nswc_sp), parameter :: tol = 1.e-10
+real(nswc_sp), parameter :: pi = 3.14159265358979
+real(nswc_sp), parameter :: d(7) = [.577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
    & .215241674114951e-03, -.201348547807882e-04, .113302723198170e-05]
 !-----------------------------------------------------------------------
 !        Calculation of the modified Bessel functions
@@ -18748,22 +18764,22 @@ w2 = w2 * zr
 contains
    pure function anorm(w) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: w
-      real :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: w
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = max(abs(real(w)), abs(aimag(w)))
    end function anorm
 end subroutine ckm
 
 pure elemental subroutine ckml(z, r, zr, nu, k1, k2)
 implicit none
-real, intent(in) :: r
-complex, intent(in) :: z, zr
-complex, intent(inout) :: k1, k2
-real, intent(in) :: nu
+real(nswc_sp), intent(in) :: r
+complex(nswc_sp), intent(in) :: z, zr
+complex(nswc_sp), intent(inout) :: k1, k2
+real(nswc_sp), intent(in) :: nu
 integer :: i, m
-real :: a, al, b, c, e, eps, eps0, th, x, y, l, nu2
-complex :: bl, s, u1, u2, u3
-real, parameter :: c1 = 1.25331413731559
+real(nswc_sp) :: a, al, b, c, e, eps, eps0, th, x, y, l, nu2
+complex(nswc_sp) :: bl, s, u1, u2, u3
+real(nswc_sp), parameter :: c1 = 1.25331413731559
 !-----------------------------------------------------------------------
 !             Computation of the scaled Bessel functions
 !                   k1 = (exp(z)*sqrt(z)) k  (z)
@@ -18832,12 +18848,12 @@ k1 = c1*(u1/s)
 k2 = k1*(1.0 + 0.5*(nu + 0.5 - u2/u1)*zr)
 end subroutine ckml
 
-pure elemental complex function cxp(n, nu)
+pure elemental complex(nswc_sp) function cxp(n, nu)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: nu
+real(nswc_sp), intent(in) :: nu
 integer :: k
-real :: c, s
+real(nswc_sp) :: c, s
 !-----------------------------------------------------------------------
 !                 Computation of exp(-R*(pi/2)*I)
 !              where R = n + nu for abs(nu) .LE. 0.5
@@ -18861,18 +18877,19 @@ end function cxp
 pure elemental subroutine bsslk(mo, a, in, w)
 implicit none
 integer, intent(in) :: in, mo
-complex, intent(in) :: a
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: a
+complex(nswc_sp), intent(inout) :: w
 integer :: i, la, lk, lr, m, n
-real :: an, aq(2), az(2), pm, pn, qf(2), qm, qn, rm, rn, rz(2), sl(2), sm(2), sn, sq(2), sr(2), ss, sz(2), tm(2), ts(2), zl(2), zs
-real, parameter :: cd(30) = [0.00000000000000e00, -1.64899505142212e-2, -7.18621880068536e-2, -1.67086878124866e-1, - &
+real(nswc_sp) :: an, aq(2), az(2), pm, pn, qf(2), qm, qn, rm, rn, rz(2), sl(2), sm(2), sn, sq(2), sr(2), ss, sz(2), tm(2), ts(2), &
+   & zl(2), zs
+real(nswc_sp), parameter :: cd(30) = [0.00000000000000e00, -1.64899505142212e-2, -7.18621880068536e-2, -1.67086878124866e-1, - &
    & 3.02582250219469e-1, -4.80613945245927e-1, -7.07075239357898e-1, -9.92995790539516e-1, -1.35583925612592e00, - &
    & 1.82105907899132e00, -2.42482175310879e00, -3.21956655708750e00, -4.28658077248384e00, -5.77022816798128e00, - &
    & 8.01371260952526e00, 0.00000000000000e00, -5.57742429879505e-3, -4.99112944172476e-2, -1.37440911652397e-1, - &
    & 2.67233784710566e-1, -4.40380166808682e-1, -6.61813614872541e-1, -9.41861077665017e-1, -1.29754130468326e00, - &
    & 1.75407696719816e00, -2.34755299882276e00, -3.13041332689196e00, -4.18397120563729e00, -5.65251799214994e00, - &
    & 7.87863959810677e00]
-real, parameter :: ce(30) = [0.00000000000000e00, -4.80942336387447e-3, -1.31366200347759e-2, -1.94843834008458e-2, - &
+real(nswc_sp), parameter :: ce(30) = [0.00000000000000e00, -4.80942336387447e-3, -1.31366200347759e-2, -1.94843834008458e-2, - &
    & 2.19948900032003e-2, -2.09396625676519e-2, -1.74600268458650e-2, -1.27937813362085e-2, -8.05234421796592e-3, - &
    & 4.15817375002760e-3, -1.64317738747922e-3, -4.49175585314709e-4, -7.28594765574007e-5, -5.38265230658285e-6, - &
    & 9.93779048036289e-8, 0.00000000000000e00, 7.53805779200591e-2, 7.12293537403464e-2, 6.33116224228200e-2, 5.28240264523301e-2, &
@@ -19110,11 +19127,11 @@ subroutine cai(ind,z,ai,aip,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ind
-complex, intent(in) :: z
-complex, intent(inout) :: ai
-complex, intent(inout) :: aip
-real :: a, b, r
-complex :: bi, bip
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: ai
+complex(nswc_sp), intent(inout) :: aip
+real(nswc_sp) :: a, b, r
+complex(nswc_sp) :: bi, bip
 !------------------------------------------------------------
 !     Calculates the Airy function ai and its derivative aip
 !     for complex argument z.
@@ -19138,21 +19155,21 @@ end subroutine cai
 pure elemental subroutine airm(ind,z,ai,aip,bi,bip)
 implicit none
 integer, intent(in) :: ind
-complex, intent(inout) :: ai, aip, bi, bip
-complex, intent(in) :: z
+complex(nswc_sp), intent(inout) :: ai, aip, bi, bip
+complex(nswc_sp), intent(in) :: z
 integer :: i, n
-real :: x, y
-complex :: z1, z2, z3, zz, f, f1, g, g1, e, e1
-real, parameter :: c1 = 3.55028053887817e-01
-real, parameter :: c2 = 2.58819403792807e-01
-real, parameter :: sqt3 = 1.73205080756888e+00
-real, parameter :: a(8) = [.166666666666667e+00, .555555555555556e-02, .771604938271605e-04, .584549195660307e-06, &
+real(nswc_sp) :: x, y
+complex(nswc_sp) :: z1, z2, z3, zz, f, f1, g, g1, e, e1
+real(nswc_sp), parameter :: c1 = 3.55028053887817e-01
+real(nswc_sp), parameter :: c2 = 2.58819403792807e-01
+real(nswc_sp), parameter :: sqt3 = 1.73205080756888e+00
+real(nswc_sp), parameter :: a(8) = [.166666666666667e+00, .555555555555556e-02, .771604938271605e-04, .584549195660307e-06, &
    & .278356759838241e-08, .909662613850462e-11, .216586336631062e-13, .392366551867867e-16]
-real, parameter :: b(8) = [.833333333333333e-01, .198412698412698e-02, .220458553791887e-04, .141319585764030e-06, &
+real(nswc_sp), parameter :: b(8) = [.833333333333333e-01, .198412698412698e-02, .220458553791887e-04, .141319585764030e-06, &
    & .588831607350126e-09, .172172984605300e-11, .372668797846970e-14, .621114663078283e-17]
-real, parameter :: c(8) = [.333333333333333e-01, .694444444444444e-03, .701459034792368e-05, .417535139757362e-07, &
+real(nswc_sp), parameter :: c(8) = [.333333333333333e-01, .694444444444444e-03, .701459034792368e-05, .417535139757362e-07, &
    & .163739270493083e-09, .454831306925231e-12, .941679724482880e-15, .150910212256872e-17]
-real, parameter :: d(8) = [.333333333333333e+00, .138888888888889e-01, .220458553791887e-03, .183715461493239e-05, &
+real(nswc_sp), parameter :: d(8) = [.333333333333333e+00, .138888888888889e-01, .220458553791887e-03, .183715461493239e-05, &
    & .942130571760201e-08, .327128670750070e-10, .819871355263333e-13, .155278665769571e-15]
 !--------------------------------------------------------------
 !     Calculates the Airy functions ai and bi and their
@@ -19213,11 +19230,11 @@ subroutine aii(ind, z, ai, aip, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ind
-complex, intent(in) :: z
-complex, intent(inout) :: ai, aip
-real :: a, b, r
-complex :: z1, z2, z3, zm, w1, w2, w1m, w2m, e
-real, parameter :: c1 = 1.83776298473931e-01
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: ai, aip
+real(nswc_sp) :: a, b, r
+complex(nswc_sp) :: z1, z2, z3, zm, w1, w2, w1m, w2m, e
+real(nswc_sp), parameter :: c1 = 1.83776298473931e-01
 !------------------------------------------------------------
 !     Calculates the Airy function ai and its derivative aip
 !     for complex argument z in the intermediate range 1 .LE.
@@ -19258,27 +19275,27 @@ pure elemental subroutine aia(ind, z, ai, aip, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ind
-complex, intent(inout) :: ai, aip
-complex, intent(in) :: z
+complex(nswc_sp), intent(inout) :: ai, aip
+complex(nswc_sp), intent(in) :: z
 integer :: i, k, m, m2
-real :: eps, r, t, u, u1, v, v1, xm, xneg, xpos
-complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn, alpha, beta, j
-real, parameter :: c(30) = [.100000000000000e+01, .694444444444444e-01, .371334876543210e-01, .379930591278006e-01, &
+real(nswc_sp) :: eps, r, t, u, u1, v, v1, xm, xneg, xpos
+complex(nswc_sp) :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn, alpha, beta, j
+real(nswc_sp), parameter :: c(30) = [.100000000000000e+01, .694444444444444e-01, .371334876543210e-01, .379930591278006e-01, &
    & .576491904126697e-01, .116099064025515e+00, .291591399230751e+00, .877666969510017e+00, .307945303017317e+01, &
    & .123415733323452e+02, .556227853659171e+02, .278465080777603e+03, .153316943201280e+04, .920720659972641e+04, &
    & .598925135658791e+05, .419524875116551e+06, .314825741786683e+07, .251989198716024e+08, .214288036963680e+09, &
    & .192937554918249e+10, .183357669378906e+11, .183418303528833e+12, .192647115897045e+13, .211969993886476e+14, &
    & .243826826879716e+15, .292659921929793e+16, .365903070126431e+17, .475768102036307e+18, .642404935790194e+19, &
    & .899520742705838e+20]
-real, parameter :: d(30) = [.100000000000000e+01, -.972222222222222e-01, -.438850308641975e-01, -.424628307898948e-01, - &
+real(nswc_sp), parameter :: d(30) = [.100000000000000e+01, -.972222222222222e-01, -.438850308641975e-01, -.424628307898948e-01, - &
    & .626621634920323e-01, -.124105896027275e+00, -.308253764901079e+00, -.920479992412945e+00, -.321049358464862e+01, - &
    & .128072930807356e+02, -.575083035139143e+02, -.287033237109221e+03, -.157635730333710e+04, -.944635482309593e+04, - &
    & .613357066638521e+05, -.428952400400069e+06, -.321453652140086e+07, -.256979083839113e+08, -.218293420832160e+09, - &
    & .196352378899103e+10, -.186439310881072e+11, -.186352996385294e+12, -.195588293238984e+13, -.215064446351972e+14, - &
    & .247236992290621e+15, -.296588243029521e+16, -.370624400063547e+17, -.481678264794522e+18, -.650098408075106e+19, - &
    & .909919826436541e+20]
-real, parameter :: c1 = .564189583547756
-real, parameter :: c2 = .398942280401433
+real(nswc_sp), parameter :: c1 = .564189583547756
+real(nswc_sp), parameter :: c2 = .398942280401433
 !-----------------------------------------------------------------------
 !     Calculates the Airy function ai and its derivative aip for
 !     complex argument z by means of asymptotic expansions.
@@ -19403,11 +19420,11 @@ subroutine cbi(ind,z,bi,bip,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ind
-complex, intent(in) :: z
-complex, intent(inout) :: bi
-complex, intent(inout) :: bip
-real :: a, b, r
-complex :: ai, aip
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: bi
+complex(nswc_sp), intent(inout) :: bip
+real(nswc_sp) :: a, b, r
+complex(nswc_sp) :: ai, aip
 !------------------------------------------------------------
 !     Calculates the Airy function bi and its derivative bip
 !     for complex argument z.
@@ -19432,12 +19449,12 @@ subroutine bii(ind, z, bi, bip, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ind
-complex, intent(in) :: z
-complex, intent(inout) :: bi, bip
-real :: a, r, x, y
-complex :: z1, z2, zm, w1, w2, w1m, w2m, e, e1
-real, parameter :: c1 = 5.77350269189626e-01
-real, parameter :: sqt3 = 1.73205080756888e+00
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: bi, bip
+real(nswc_sp) :: a, r, x, y
+complex(nswc_sp) :: z1, z2, zm, w1, w2, w1m, w2m, e, e1
+real(nswc_sp), parameter :: c1 = 5.77350269189626e-01
+real(nswc_sp), parameter :: sqt3 = 1.73205080756888e+00
 !------------------------------------------------------------
 !     Calculates the Airy function bi and its derivative bip
 !     for complex argument z in the intermediate range 1 .LE.
@@ -19487,33 +19504,33 @@ pure elemental subroutine bia(ind,z,bi,bip,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ind
-complex, intent(in) :: z
-complex, intent(inout) :: bi, bip
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: bi, bip
 integer :: i, k, m, m2
-real :: ce, cf, eps, r, s, t, u, u1, v, v1, x, xneg, xpos, y
-complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn, cf1, cf2, alpha, beta, j, cz
-real, parameter :: c(30) = [.100000000000000e+01, .694444444444444e-01, .371334876543210e-01, .379930591278006e-01, &
+real(nswc_sp) :: ce, cf, eps, r, s, t, u, u1, v, v1, x, xneg, xpos, y
+complex(nswc_sp) :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn, cf1, cf2, alpha, beta, j, cz
+real(nswc_sp), parameter :: c(30) = [.100000000000000e+01, .694444444444444e-01, .371334876543210e-01, .379930591278006e-01, &
    & .576491904126697e-01, .116099064025515e+00, .291591399230751e+00, .877666969510017e+00, .307945303017317e+01, &
    & .123415733323452e+02, .556227853659171e+02, .278465080777603e+03, .153316943201280e+04, .920720659972641e+04, &
    & .598925135658791e+05, .419524875116551e+06, .314825741786683e+07, .251989198716024e+08, .214288036963680e+09, &
    & .192937554918249e+10, .183357669378906e+11, .183418303528833e+12, .192647115897045e+13, .211969993886476e+14, &
    & .243826826879716e+15, .292659921929793e+16, .365903070126431e+17, .475768102036307e+18, .642404935790194e+19, &
    & .899520742705838e+20]
-real, parameter :: d(30) = [.100000000000000e+01, -.972222222222222e-01, -.438850308641975e-01, -.424628307898948e-01, - &
+real(nswc_sp), parameter :: d(30) = [.100000000000000e+01, -.972222222222222e-01, -.438850308641975e-01, -.424628307898948e-01, - &
    & .626621634920323e-01, -.124105896027275e+00, -.308253764901079e+00, -.920479992412945e+00, -.321049358464862e+01, - &
    & .128072930807356e+02, -.575083035139143e+02, -.287033237109221e+03, -.157635730333710e+04, -.944635482309593e+04, - &
    & .613357066638521e+05, -.428952400400069e+06, -.321453652140086e+07, -.256979083839113e+08, -.218293420832160e+09, - &
    & .196352378899103e+10, -.186439310881072e+11, -.186352996385294e+12, -.195588293238984e+13, -.215064446351972e+14, - &
    & .247236992290621e+15, -.296588243029521e+16, -.370624400063547e+17, -.481678264794522e+18, -.650098408075106e+19, - &
    & .909919826436541e+20]
-real, parameter :: sqt3 = 1.73205080756888
-complex, parameter :: ex3c = (5.e-01, -8.66025403784439e-01)
-complex, parameter :: ex6 = (8.66025403784439e-01, 5.e-01)
-complex, parameter :: ex6c = (8.66025403784439e-01, -5.e-01)
-complex, parameter :: cln2 = (0.0, 3.46573590279973e-01)
-real, parameter :: c1 = 5.64189583547756e-01
-real, parameter :: c2 = 3.98942280401433e-01
-real, parameter :: c3 = 7.07106781186548e-01
+real(nswc_sp), parameter :: sqt3 = 1.73205080756888
+complex(nswc_sp), parameter :: ex3c = (5.e-01, -8.66025403784439e-01)
+complex(nswc_sp), parameter :: ex6 = (8.66025403784439e-01, 5.e-01)
+complex(nswc_sp), parameter :: ex6c = (8.66025403784439e-01, -5.e-01)
+complex(nswc_sp), parameter :: cln2 = (0.0, 3.46573590279973e-01)
+real(nswc_sp), parameter :: c1 = 5.64189583547756e-01
+real(nswc_sp), parameter :: c2 = 3.98942280401433e-01
+real(nswc_sp), parameter :: c3 = 7.07106781186548e-01
 !---------------------------------------------------------------
 !     Calculates the Airy function bi and its derivative bip for
 !     complex argument z by means of asymptotic expansions.
@@ -19706,13 +19723,13 @@ implicit none
 !     respectively, and i1m and i2m by the functions of orders
 !     -1/3 and -2/3, respectively.
 !-------------------------------------------------------------
-complex :: z
-complex, intent(inout) :: i1, i2, i1m, i2m
-complex :: cz
-complex, parameter :: ex13 = (5.0e-01, 8.66025403784439e-01)
-complex, parameter :: ex13c = (5.0e-01, -8.66025403784439e-01)
-complex, parameter :: ex23 = (-5.0e-01, 8.66025403784439e-01)
-complex, parameter :: ex23c = (-5.0e-01, -8.66025403784439e-01)
+complex(nswc_sp) :: z
+complex(nswc_sp), intent(inout) :: i1, i2, i1m, i2m
+complex(nswc_sp) :: cz
+complex(nswc_sp), parameter :: ex13 = (5.0e-01, 8.66025403784439e-01)
+complex(nswc_sp), parameter :: ex13c = (5.0e-01, -8.66025403784439e-01)
+complex(nswc_sp), parameter :: ex23 = (-5.0e-01, 8.66025403784439e-01)
+complex(nswc_sp), parameter :: ex23c = (-5.0e-01, -8.66025403784439e-01)
 !     ex13 = exp(i*pi/3)
 !     ex13c = exp(-i*pi/3)
 !     ex23 = exp(2*i*pi/3)
@@ -19738,15 +19755,15 @@ end subroutine ia
 
 subroutine imc(z, i1, i2, i1m, i2m)
 implicit none
-complex :: z
-complex, intent(inout) :: i1, i2, i1m, i2m
+complex(nswc_sp) :: z
+complex(nswc_sp), intent(inout) :: i1, i2, i1m, i2m
 integer :: i, n, n1
-real :: a, an, b, cfa, cfb, cn1, cn2, m
-complex :: ia1, ia2, ia3, ib1, ib2, ib3, sz, zh, e, cf1, cf2, cf3, cf4
-real, parameter :: c1 = .333333333333333e+00
-real, parameter :: c2 = .666666666666667e+00
-real, parameter :: gm1 = .892979511569248e+00
-real, parameter :: gm2 = .902745292950932e+00
+real(nswc_sp) :: a, an, b, cfa, cfb, cn1, cn2, m
+complex(nswc_sp) :: ia1, ia2, ia3, ib1, ib2, ib3, sz, zh, e, cf1, cf2, cf3, cf4
+real(nswc_sp), parameter :: c1 = .333333333333333e+00
+real(nswc_sp), parameter :: c2 = .666666666666667e+00
+real(nswc_sp), parameter :: gm1 = .892979511569248e+00
+real(nswc_sp), parameter :: gm2 = .902745292950932e+00
 !----------------------------------------------------------------
 !     Calculates the modified Bessel function of the first
 !     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
@@ -19799,11 +19816,11 @@ end subroutine imc
 
 subroutine bim(z,cn,w)
 implicit none
-real, intent(in) :: cn
-complex :: z
-complex, intent(inout) :: w
-real :: d, eps, m
-complex :: sz, t
+real(nswc_sp), intent(in) :: cn
+complex(nswc_sp) :: z
+complex(nswc_sp), intent(inout) :: w
+real(nswc_sp) :: d, eps, m
+complex(nswc_sp) :: sz, t
 !-------------------------------------------------------------
 !     Calculates the modified Bessel function of the first kind
 !     for real order cn .GT. -1 And complex argument z by means
@@ -19831,8 +19848,8 @@ w = w + 1.0
 contains
    pure function anorm(z) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: z
-      real :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: z
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = max(abs(real(z)),abs(aimag(z)))
    end function anorm
 end subroutine bim
@@ -19847,13 +19864,13 @@ implicit none
 !     i1m and i2m by functions of orders -1/3 and -2/3,
 !     respectively.
 !--------------------------------------------------------------
-complex :: z
-complex, intent(inout) :: i1, i2, i1m, i2m
-complex :: cz
-complex, parameter :: ex13 = (5.0e-01, 8.66025403784439e-01)
-complex, parameter :: ex13c = (5.0e-01, -8.66025403784439e-01)
-complex, parameter :: ex23 = (-5.0e-01, 8.66025403784439e-01)
-complex, parameter :: ex23c = (-5.0e-01, -8.66025403784439e-01)
+complex(nswc_sp) :: z
+complex(nswc_sp), intent(inout) :: i1, i2, i1m, i2m
+complex(nswc_sp) :: cz
+complex(nswc_sp), parameter :: ex13 = (5.0e-01, 8.66025403784439e-01)
+complex(nswc_sp), parameter :: ex13c = (5.0e-01, -8.66025403784439e-01)
+complex(nswc_sp), parameter :: ex23 = (-5.0e-01, 8.66025403784439e-01)
+complex(nswc_sp), parameter :: ex23c = (-5.0e-01, -8.66025403784439e-01)
 !     ex13 = exp(i*pi/3)
 !     ex13c = exp(-i*pi/3)
 !     ex23 = exp(2*i*pi/3)
@@ -19879,15 +19896,15 @@ end subroutine ja
 
 subroutine jmc(z, i1, i2, i1m, i2m)
 implicit none
-complex :: z
-complex, intent(inout) :: i1, i2, i1m, i2m
+complex(nswc_sp) :: z
+complex(nswc_sp), intent(inout) :: i1, i2, i1m, i2m
 integer :: i, n, n1
-real :: a, an, b, cfa, cfb, cn1, cn2, m
-complex :: ia1, ia2, ia3, ib1, ib2, ib3, sz, zh, e, cf1, cf2, cf3, cf4
-real, parameter :: c1 = .333333333333333e+00
-real, parameter :: c2 = .666666666666667e+00
-real, parameter :: gm1 = .892979511569248e+00
-real, parameter :: gm2 = .902745292950932e+00
+real(nswc_sp) :: a, an, b, cfa, cfb, cn1, cn2, m
+complex(nswc_sp) :: ia1, ia2, ia3, ib1, ib2, ib3, sz, zh, e, cf1, cf2, cf3, cf4
+real(nswc_sp), parameter :: c1 = .333333333333333e+00
+real(nswc_sp), parameter :: c2 = .666666666666667e+00
+real(nswc_sp), parameter :: gm1 = .892979511569248e+00
+real(nswc_sp), parameter :: gm2 = .902745292950932e+00
 !----------------------------------------------------------------
 !     Calculates the Bessel function of the first
 !     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
@@ -19940,11 +19957,11 @@ end subroutine jmc
 
 subroutine bjm(z,cn,w)
 implicit none
-real, intent(in) :: cn
-complex :: z
-complex, intent(inout) :: w
-real :: d, eps, m
-complex :: sz, t
+real(nswc_sp), intent(in) :: cn
+complex(nswc_sp) :: z
+complex(nswc_sp), intent(inout) :: w
+real(nswc_sp) :: d, eps, m
+complex(nswc_sp) :: sz, t
 !-------------------------------------------------------------
 !     Calculates the Bessel function of the first kind
 !     for real order cn .GT. -1 And complex argument z by means
@@ -19972,8 +19989,8 @@ w = w + 1.0
 contains
    pure function anorm(z) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: z
-      real :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: z
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = max(abs(real(z)),abs(aimag(z)))
    end function anorm
 end subroutine bjm
@@ -19981,15 +19998,15 @@ end subroutine bjm
 subroutine ka(ind, z, k1, k2)
 implicit none
 integer, intent(in) :: ind
-complex, intent(in) :: z
-complex, intent(inout) :: k1, k2
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: k1, k2
 integer :: ind1
-real :: a, b
-complex :: i1, i2, i1m, i2m, cz, e
-real, parameter :: pi = 3.14159265358979e+00
-complex, parameter :: ex13c = (5.0e-01, -8.66025403784439e-01)
-complex, parameter :: ex23c = (-5.0e-01, -8.66025403784439e-01)
-complex, parameter :: j = (0.0, 1.0)
+real(nswc_sp) :: a, b
+complex(nswc_sp) :: i1, i2, i1m, i2m, cz, e
+real(nswc_sp), parameter :: pi = 3.14159265358979e+00
+complex(nswc_sp), parameter :: ex13c = (5.0e-01, -8.66025403784439e-01)
+complex(nswc_sp), parameter :: ex23c = (-5.0e-01, -8.66025403784439e-01)
+complex(nswc_sp), parameter :: j = (0.0, 1.0)
 !------------------------------------------------------------
 !     Calculates the modified Bessel function of the second
 !     kind for orders 1/3 and 2/3 and for complex argument z,
@@ -20025,12 +20042,12 @@ end subroutine ka
 pure elemental subroutine kml(ind, z, k1, k2)
 implicit none
 integer, intent(in) :: ind
-complex, intent(in) :: z
-complex, intent(inout) :: k1, k2
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: k1, k2
 integer :: i, l, m
-real :: a, ai, al, b, c, eps, r, th, x1, x2
-complex :: bi, u1, u2, u3, s, e
-real, parameter :: c1 = 1.25331413731550e+00
+real(nswc_sp) :: a, ai, al, b, c, eps, r, th, x1, x2
+complex(nswc_sp) :: bi, u1, u2, u3, s, e
+real(nswc_sp), parameter :: c1 = 1.25331413731550e+00
 !------------------------------------------------------------
 !     Calculates the modified Bessel function of the second
 !     kind for orders 1/3 and 2/3 and for complex argument z
@@ -20074,75 +20091,75 @@ k1 = k1*e
 k2 = k2*e
 end subroutine kml
 
-pure real function ai(x)
+pure real(nswc_sp) function ai(x)
 implicit none
-real, intent(in) :: x
+real(nswc_sp), intent(in) :: x
 integer :: n, n2
-real :: phi, r, rtx, t, w
-real, parameter :: x0 = 1.58740105196820
-real, parameter :: c = 1.94773404105468
-real, parameter :: an0 = .355028053887818e+00
-real, parameter :: an1 = -.187394912983414e+00
-real, parameter :: an2 = -.383735973881972e-01
-real, parameter :: an3 = .491952571236878e-01
-real, parameter :: an4 = -.967017625191329e-02
-real, parameter :: an5 = -.205648610308316e-02
-real, parameter :: an6 = .114176040526844e-02
-real, parameter :: an7 = -.117114823456866e-03
-real, parameter :: an8 = -.270165470074755e-04
-real, parameter :: an9 = .789002965889206e-05
-real, parameter :: ad0 = .100000000000000e+01
-real, parameter :: ad1 = .201179850513612e+00
-real, parameter :: ad2 = .385762517106249e-01
-real, parameter :: ad3 = .230887443780120e-04
-real, parameter :: bn0 = .355028053887817e+00
-real, parameter :: bn1 = -.997169317338190e-01
-real, parameter :: bn2 = -.602216060213075e-01
-real, parameter :: bn3 = .297705337630730e-01
-real, parameter :: bn4 = -.152969932286570e-02
-real, parameter :: bn5 = -.147868368189372e-02
-real, parameter :: bn6 = .350518617006107e-03
-real, parameter :: bn7 = -.257766924610873e-04
-real, parameter :: bd0 = .100000000000000e+01
-real, parameter :: bd1 = .448140563306831e+00
-real, parameter :: bd2 = .157074537566686e+00
-real, parameter :: bd3 = .316964519364865e-01
-real, parameter :: bd4 = .485922740843953e-02
-real, parameter :: bd5 = .423326964456309e-03
-real, parameter :: pn0 = .282094378896566e+00
-real, parameter :: pn1 = .807868561687271e-01
-real, parameter :: pn2 = .630644564152247e-02
-real, parameter :: pn3 = .147116711467936e-03
-real, parameter :: pn4 = .750490748341483e-06
-real, parameter :: pd0 = .100000000000000e+01
-real, parameter :: pd1 = .292890323271551e+00
-real, parameter :: pd2 = .239376862143358e-01
-real, parameter :: pd3 = .612353984250624e-03
-real, parameter :: pd4 = .384461189764830e-05
-real, parameter :: pd5 = .123247804102182e-08
-real, parameter :: qn0 = .282094791017188e+00
-real, parameter :: qn1 = .149585822742689e+00
-real, parameter :: qn2 = .241876418864958e-01
-real, parameter :: qn3 = .138190913282142e-02
-real, parameter :: qn4 = .241862862465003e-04
-real, parameter :: qn5 = .709733720554615e-07
-real, parameter :: qd0 = .100000000000000e+01
-real, parameter :: qd1 = .536778341756648e+00
-real, parameter :: qd2 = .889112579703465e-01
-real, parameter :: qd3 = .533368703697049e-02
-real, parameter :: qd4 = .103812739863315e-03
-real, parameter :: qd5 = .408838544650398e-06
-real, parameter :: rn0 = .282094791773878e+00
-real, parameter :: rn1 = .203731967781874e+00
-real, parameter :: rn2 = .436660479870037e-01
-real, parameter :: rn3 = .306595563073142e-02
-real, parameter :: rn4 = .517398800281618e-04
-real, parameter :: rd0 = .100000000000000e+01
-real, parameter :: rd1 = .728721438361672e+00
-real, parameter :: rd2 = .159210021472267e+00
-real, parameter :: rd3 = .116985268534248e-01
-real, parameter :: rd4 = .225973894323078e-03
-real, parameter :: rd5 = .232707159780478e-06
+real(nswc_sp) :: phi, r, rtx, t, w
+real(nswc_sp), parameter :: x0 = 1.58740105196820
+real(nswc_sp), parameter :: c = 1.94773404105468
+real(nswc_sp), parameter :: an0 = .355028053887818e+00
+real(nswc_sp), parameter :: an1 = -.187394912983414e+00
+real(nswc_sp), parameter :: an2 = -.383735973881972e-01
+real(nswc_sp), parameter :: an3 = .491952571236878e-01
+real(nswc_sp), parameter :: an4 = -.967017625191329e-02
+real(nswc_sp), parameter :: an5 = -.205648610308316e-02
+real(nswc_sp), parameter :: an6 = .114176040526844e-02
+real(nswc_sp), parameter :: an7 = -.117114823456866e-03
+real(nswc_sp), parameter :: an8 = -.270165470074755e-04
+real(nswc_sp), parameter :: an9 = .789002965889206e-05
+real(nswc_sp), parameter :: ad0 = .100000000000000e+01
+real(nswc_sp), parameter :: ad1 = .201179850513612e+00
+real(nswc_sp), parameter :: ad2 = .385762517106249e-01
+real(nswc_sp), parameter :: ad3 = .230887443780120e-04
+real(nswc_sp), parameter :: bn0 = .355028053887817e+00
+real(nswc_sp), parameter :: bn1 = -.997169317338190e-01
+real(nswc_sp), parameter :: bn2 = -.602216060213075e-01
+real(nswc_sp), parameter :: bn3 = .297705337630730e-01
+real(nswc_sp), parameter :: bn4 = -.152969932286570e-02
+real(nswc_sp), parameter :: bn5 = -.147868368189372e-02
+real(nswc_sp), parameter :: bn6 = .350518617006107e-03
+real(nswc_sp), parameter :: bn7 = -.257766924610873e-04
+real(nswc_sp), parameter :: bd0 = .100000000000000e+01
+real(nswc_sp), parameter :: bd1 = .448140563306831e+00
+real(nswc_sp), parameter :: bd2 = .157074537566686e+00
+real(nswc_sp), parameter :: bd3 = .316964519364865e-01
+real(nswc_sp), parameter :: bd4 = .485922740843953e-02
+real(nswc_sp), parameter :: bd5 = .423326964456309e-03
+real(nswc_sp), parameter :: pn0 = .282094378896566e+00
+real(nswc_sp), parameter :: pn1 = .807868561687271e-01
+real(nswc_sp), parameter :: pn2 = .630644564152247e-02
+real(nswc_sp), parameter :: pn3 = .147116711467936e-03
+real(nswc_sp), parameter :: pn4 = .750490748341483e-06
+real(nswc_sp), parameter :: pd0 = .100000000000000e+01
+real(nswc_sp), parameter :: pd1 = .292890323271551e+00
+real(nswc_sp), parameter :: pd2 = .239376862143358e-01
+real(nswc_sp), parameter :: pd3 = .612353984250624e-03
+real(nswc_sp), parameter :: pd4 = .384461189764830e-05
+real(nswc_sp), parameter :: pd5 = .123247804102182e-08
+real(nswc_sp), parameter :: qn0 = .282094791017188e+00
+real(nswc_sp), parameter :: qn1 = .149585822742689e+00
+real(nswc_sp), parameter :: qn2 = .241876418864958e-01
+real(nswc_sp), parameter :: qn3 = .138190913282142e-02
+real(nswc_sp), parameter :: qn4 = .241862862465003e-04
+real(nswc_sp), parameter :: qn5 = .709733720554615e-07
+real(nswc_sp), parameter :: qd0 = .100000000000000e+01
+real(nswc_sp), parameter :: qd1 = .536778341756648e+00
+real(nswc_sp), parameter :: qd2 = .889112579703465e-01
+real(nswc_sp), parameter :: qd3 = .533368703697049e-02
+real(nswc_sp), parameter :: qd4 = .103812739863315e-03
+real(nswc_sp), parameter :: qd5 = .408838544650398e-06
+real(nswc_sp), parameter :: rn0 = .282094791773878e+00
+real(nswc_sp), parameter :: rn1 = .203731967781874e+00
+real(nswc_sp), parameter :: rn2 = .436660479870037e-01
+real(nswc_sp), parameter :: rn3 = .306595563073142e-02
+real(nswc_sp), parameter :: rn4 = .517398800281618e-04
+real(nswc_sp), parameter :: rd0 = .100000000000000e+01
+real(nswc_sp), parameter :: rd1 = .728721438361672e+00
+real(nswc_sp), parameter :: rd2 = .159210021472267e+00
+real(nswc_sp), parameter :: rd3 = .116985268534248e-01
+real(nswc_sp), parameter :: rd4 = .225973894323078e-03
+real(nswc_sp), parameter :: rd5 = .232707159780478e-06
 !-----------------------------------------------------------------------
 !     Evaluation of the Airy function ai(x)
 !-----------------------------------------------------------------------
@@ -20194,73 +20211,73 @@ return
 60 ai = 0.0
 end function ai
 
-pure elemental real function aie(x)
+pure elemental real(nswc_sp) function aie(x)
 implicit none
-real, intent(in) :: x
-real :: phi, r, rtx, t, w
-real, parameter :: x0 = .158740105196820e+01
-real, parameter :: an0 = .355028053887818e+00
-real, parameter :: an1 = -.187394912983414e+00
-real, parameter :: an2 = -.383735973881972e-01
-real, parameter :: an3 = .491952571236878e-01
-real, parameter :: an4 = -.967017625191329e-02
-real, parameter :: an5 = -.205648610308316e-02
-real, parameter :: an6 = .114176040526844e-02
-real, parameter :: an7 = -.117114823456866e-03
-real, parameter :: an8 = -.270165470074755e-04
-real, parameter :: an9 = .789002965889206e-05
-real, parameter :: ad0 = .100000000000000e+01
-real, parameter :: ad1 = .201179850513612e+00
-real, parameter :: ad2 = .385762517106249e-01
-real, parameter :: ad3 = .230887443780120e-04
-real, parameter :: bn0 = .355028053887817e+00
-real, parameter :: bn1 = -.997169317338190e-01
-real, parameter :: bn2 = -.602216060213075e-01
-real, parameter :: bn3 = .297705337630730e-01
-real, parameter :: bn4 = -.152969932286570e-02
-real, parameter :: bn5 = -.147868368189372e-02
-real, parameter :: bn6 = .350518617006107e-03
-real, parameter :: bn7 = -.257766924610873e-04
-real, parameter :: bd0 = .100000000000000e+01
-real, parameter :: bd1 = .448140563306831e+00
-real, parameter :: bd2 = .157074537566686e+00
-real, parameter :: bd3 = .316964519364865e-01
-real, parameter :: bd4 = .485922740843953e-02
-real, parameter :: bd5 = .423326964456309e-03
-real, parameter :: pn0 = .282094378896566e+00
-real, parameter :: pn1 = .807868561687271e-01
-real, parameter :: pn2 = .630644564152247e-02
-real, parameter :: pn3 = .147116711467936e-03
-real, parameter :: pn4 = .750490748341483e-06
-real, parameter :: pd0 = .100000000000000e+01
-real, parameter :: pd1 = .292890323271551e+00
-real, parameter :: pd2 = .239376862143358e-01
-real, parameter :: pd3 = .612353984250624e-03
-real, parameter :: pd4 = .384461189764830e-05
-real, parameter :: pd5 = .123247804102182e-08
-real, parameter :: qn0 = .282094791017188e+00
-real, parameter :: qn1 = .149585822742689e+00
-real, parameter :: qn2 = .241876418864958e-01
-real, parameter :: qn3 = .138190913282142e-02
-real, parameter :: qn4 = .241862862465003e-04
-real, parameter :: qn5 = .709733720554615e-07
-real, parameter :: qd0 = .100000000000000e+01
-real, parameter :: qd1 = .536778341756648e+00
-real, parameter :: qd2 = .889112579703465e-01
-real, parameter :: qd3 = .533368703697049e-02
-real, parameter :: qd4 = .103812739863315e-03
-real, parameter :: qd5 = .408838544650398e-06
-real, parameter :: rn0 = .282094791773878e+00
-real, parameter :: rn1 = .203731967781874e+00
-real, parameter :: rn2 = .436660479870037e-01
-real, parameter :: rn3 = .306595563073142e-02
-real, parameter :: rn4 = .517398800281618e-04
-real, parameter :: rd0 = .100000000000000e+01
-real, parameter :: rd1 = .728721438361672e+00
-real, parameter :: rd2 = .159210021472267e+00
-real, parameter :: rd3 = .116985268534248e-01
-real, parameter :: rd4 = .225973894323078e-03
-real, parameter :: rd5 = .232707159780478e-06
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: phi, r, rtx, t, w
+real(nswc_sp), parameter :: x0 = .158740105196820e+01
+real(nswc_sp), parameter :: an0 = .355028053887818e+00
+real(nswc_sp), parameter :: an1 = -.187394912983414e+00
+real(nswc_sp), parameter :: an2 = -.383735973881972e-01
+real(nswc_sp), parameter :: an3 = .491952571236878e-01
+real(nswc_sp), parameter :: an4 = -.967017625191329e-02
+real(nswc_sp), parameter :: an5 = -.205648610308316e-02
+real(nswc_sp), parameter :: an6 = .114176040526844e-02
+real(nswc_sp), parameter :: an7 = -.117114823456866e-03
+real(nswc_sp), parameter :: an8 = -.270165470074755e-04
+real(nswc_sp), parameter :: an9 = .789002965889206e-05
+real(nswc_sp), parameter :: ad0 = .100000000000000e+01
+real(nswc_sp), parameter :: ad1 = .201179850513612e+00
+real(nswc_sp), parameter :: ad2 = .385762517106249e-01
+real(nswc_sp), parameter :: ad3 = .230887443780120e-04
+real(nswc_sp), parameter :: bn0 = .355028053887817e+00
+real(nswc_sp), parameter :: bn1 = -.997169317338190e-01
+real(nswc_sp), parameter :: bn2 = -.602216060213075e-01
+real(nswc_sp), parameter :: bn3 = .297705337630730e-01
+real(nswc_sp), parameter :: bn4 = -.152969932286570e-02
+real(nswc_sp), parameter :: bn5 = -.147868368189372e-02
+real(nswc_sp), parameter :: bn6 = .350518617006107e-03
+real(nswc_sp), parameter :: bn7 = -.257766924610873e-04
+real(nswc_sp), parameter :: bd0 = .100000000000000e+01
+real(nswc_sp), parameter :: bd1 = .448140563306831e+00
+real(nswc_sp), parameter :: bd2 = .157074537566686e+00
+real(nswc_sp), parameter :: bd3 = .316964519364865e-01
+real(nswc_sp), parameter :: bd4 = .485922740843953e-02
+real(nswc_sp), parameter :: bd5 = .423326964456309e-03
+real(nswc_sp), parameter :: pn0 = .282094378896566e+00
+real(nswc_sp), parameter :: pn1 = .807868561687271e-01
+real(nswc_sp), parameter :: pn2 = .630644564152247e-02
+real(nswc_sp), parameter :: pn3 = .147116711467936e-03
+real(nswc_sp), parameter :: pn4 = .750490748341483e-06
+real(nswc_sp), parameter :: pd0 = .100000000000000e+01
+real(nswc_sp), parameter :: pd1 = .292890323271551e+00
+real(nswc_sp), parameter :: pd2 = .239376862143358e-01
+real(nswc_sp), parameter :: pd3 = .612353984250624e-03
+real(nswc_sp), parameter :: pd4 = .384461189764830e-05
+real(nswc_sp), parameter :: pd5 = .123247804102182e-08
+real(nswc_sp), parameter :: qn0 = .282094791017188e+00
+real(nswc_sp), parameter :: qn1 = .149585822742689e+00
+real(nswc_sp), parameter :: qn2 = .241876418864958e-01
+real(nswc_sp), parameter :: qn3 = .138190913282142e-02
+real(nswc_sp), parameter :: qn4 = .241862862465003e-04
+real(nswc_sp), parameter :: qn5 = .709733720554615e-07
+real(nswc_sp), parameter :: qd0 = .100000000000000e+01
+real(nswc_sp), parameter :: qd1 = .536778341756648e+00
+real(nswc_sp), parameter :: qd2 = .889112579703465e-01
+real(nswc_sp), parameter :: qd3 = .533368703697049e-02
+real(nswc_sp), parameter :: qd4 = .103812739863315e-03
+real(nswc_sp), parameter :: qd5 = .408838544650398e-06
+real(nswc_sp), parameter :: rn0 = .282094791773878e+00
+real(nswc_sp), parameter :: rn1 = .203731967781874e+00
+real(nswc_sp), parameter :: rn2 = .436660479870037e-01
+real(nswc_sp), parameter :: rn3 = .306595563073142e-02
+real(nswc_sp), parameter :: rn4 = .517398800281618e-04
+real(nswc_sp), parameter :: rd0 = .100000000000000e+01
+real(nswc_sp), parameter :: rd1 = .728721438361672e+00
+real(nswc_sp), parameter :: rd2 = .159210021472267e+00
+real(nswc_sp), parameter :: rd3 = .116985268534248e-01
+real(nswc_sp), parameter :: rd4 = .225973894323078e-03
+real(nswc_sp), parameter :: rd5 = .232707159780478e-06
 !-----------------------------------------------------------------------
 !                   Scaled Airy function ai(x)
 !             aie(x) = exp(ZETA)*ai(x)  WHEN x .GE. 0
@@ -20312,106 +20329,106 @@ return
 60 aie = rn0/sqrt(rtx)
 end function aie
 
-pure real function bi(x)
+pure real(nswc_sp) function bi(x)
 implicit none
-real, intent(in) :: x
+real(nswc_sp), intent(in) :: x
 integer :: n, n2
-real :: phi, r, rtx, t, w
-real, parameter :: x0 = 6.3496042078728
-real, parameter :: c = 1.94773404105468
-real, parameter :: an0 = .614926627446001e+00
-real, parameter :: an1 = .462726943978834e+00
-real, parameter :: an2 = .867811386408974e-02
-real, parameter :: an3 = .974670609357959e-01
-real, parameter :: an4 = .370856545413908e-01
-real, parameter :: an5 = .569193415071716e-03
-real, parameter :: an6 = .269172131237236e-02
-real, parameter :: an7 = .746473849872868e-03
-real, parameter :: an8 = .105638036899269e-04
-real, parameter :: an9 = .242726195973978e-04
-real, parameter :: an10 = .557260250681542e-05
-real, parameter :: ad0 = .100000000000000e+01
-real, parameter :: ad1 = .234801779278695e-01
-real, parameter :: ad2 = -.300487317759152e-02
-real, parameter :: ad3 = -.597414466459612e-02
-real, parameter :: bn0 = .614926627446001e+00
-real, parameter :: bn1 = .548653374523520e+00
-real, parameter :: bn2 = .582684047163842e-01
-real, parameter :: bn3 = .871954925712688e-01
-real, parameter :: bn4 = .508547058449004e-01
-real, parameter :: bn5 = .361412623711710e-02
-real, parameter :: bn6 = .177269722794511e-02
-real, parameter :: bn7 = .117774184027185e-02
-real, parameter :: bn8 = .627004834186143e-04
-real, parameter :: bn9 = .774782269814080e-06
-real, parameter :: bn10 = .118116474369315e-04
-real, parameter :: bd0 = .100000000000000e+01
-real, parameter :: bd1 = .163214622184402e+00
-real, parameter :: bd2 = -.242285981710408e-01
-real, parameter :: bd3 = -.720554280297616e-02
-real, parameter :: pn0 = .619911943572678e+00
-real, parameter :: pn1 = .100411558489626e+01
-real, parameter :: pn2 = .563659963795768e+00
-real, parameter :: pn3 = .274925508033015e+00
-real, parameter :: pn4 = .115641822943246e+00
-real, parameter :: pn5 = .120048517441127e-01
-real, parameter :: pn6 = .501838091254330e-02
-real, parameter :: pd0 = .100000000000000e+01
-real, parameter :: pd1 = .159751878026937e+01
-real, parameter :: pd2 = .104664867034140e+01
-real, parameter :: pd3 = .512560333664022e+00
-real, parameter :: pd4 = .159144727666995e+00
-real, parameter :: pd5 = .394456748956258e-01
-real, parameter :: pd6 = .529926873250079e-02
-real, parameter :: pd7 = .288921845412576e-03
-real, parameter :: qn0 = .595123543430856e+00
-real, parameter :: qn1 = .652692120245803e+00
-real, parameter :: qn2 = .436851872835894e+00
-real, parameter :: qn3 = .201626141057807e+00
-real, parameter :: qn4 = .649535170626944e-01
-real, parameter :: qn5 = .171798867787816e-01
-real, parameter :: qn6 = .287998748038892e-02
-real, parameter :: qn7 = .359634362348937e-03
-real, parameter :: qd0 = .100000000000000e+01
-real, parameter :: qd1 = .114259871204893e+01
-real, parameter :: qd2 = .766390439057101e+00
-real, parameter :: qd3 = .348287281255683e+00
-real, parameter :: qd4 = .117049276946157e+00
-real, parameter :: qd5 = .294545450289541e-01
-real, parameter :: qd6 = .523951773968125e-02
-real, parameter :: qd7 = .622692248774973e-03
-real, parameter :: qd8 = .674811395957744e-06
-real, parameter :: rn0 = .568067636505865e+00
-real, parameter :: rn1 = .462183136291541e-01
-real, parameter :: rn2 = .268519638203645e+00
-real, parameter :: rn3 = .199427104235673e-02
-real, parameter :: rn4 = .135599161332010e-03
-real, parameter :: rn5 = .229937707171804e-04
-real, parameter :: rn6 = .697888081361175e-05
-real, parameter :: rn7 = .153277172934286e-05
-real, parameter :: rn8 = -.149322381877245e-05
-real, parameter :: rn9 = -.113533571972859e-05
-real, parameter :: rn10 = .740721412702102e-06
-real, parameter :: rn11 = -.120160431596119e-06
-real, parameter :: rd0 = .100000000000000e+01
-real, parameter :: rd1 = .741293424676788e-01
-real, parameter :: rd2 = .471695968238457e+00
-real, parameter :: sn0 = .564189583547757e+00
-real, parameter :: sn1 = .112605519585866e+00
-real, parameter :: sn2 = .893329124921909e-03
-real, parameter :: sn3 = .532139134120350e-04
-real, parameter :: sn4 = .592725458717738e-05
-real, parameter :: sn5 = .921448923850546e-06
-real, parameter :: sn6 = .404558310611815e-06
-real, parameter :: sn7 = -.660517686759109e-06
-real, parameter :: sn8 = .174667472383815e-05
-real, parameter :: sn9 = -.287037710548882e-05
-real, parameter :: sn10 = .322304072982791e-05
-real, parameter :: sn11 = -.231569499551950e-05
-real, parameter :: sn12 = .963478964685941e-06
-real, parameter :: sn13 = -.173784488565533e-06
-real, parameter :: sd0 = .100000000000000e+01
-real, parameter :: sd1 = .193077670156841e+00
+real(nswc_sp) :: phi, r, rtx, t, w
+real(nswc_sp), parameter :: x0 = 6.3496042078728
+real(nswc_sp), parameter :: c = 1.94773404105468
+real(nswc_sp), parameter :: an0 = .614926627446001e+00
+real(nswc_sp), parameter :: an1 = .462726943978834e+00
+real(nswc_sp), parameter :: an2 = .867811386408974e-02
+real(nswc_sp), parameter :: an3 = .974670609357959e-01
+real(nswc_sp), parameter :: an4 = .370856545413908e-01
+real(nswc_sp), parameter :: an5 = .569193415071716e-03
+real(nswc_sp), parameter :: an6 = .269172131237236e-02
+real(nswc_sp), parameter :: an7 = .746473849872868e-03
+real(nswc_sp), parameter :: an8 = .105638036899269e-04
+real(nswc_sp), parameter :: an9 = .242726195973978e-04
+real(nswc_sp), parameter :: an10 = .557260250681542e-05
+real(nswc_sp), parameter :: ad0 = .100000000000000e+01
+real(nswc_sp), parameter :: ad1 = .234801779278695e-01
+real(nswc_sp), parameter :: ad2 = -.300487317759152e-02
+real(nswc_sp), parameter :: ad3 = -.597414466459612e-02
+real(nswc_sp), parameter :: bn0 = .614926627446001e+00
+real(nswc_sp), parameter :: bn1 = .548653374523520e+00
+real(nswc_sp), parameter :: bn2 = .582684047163842e-01
+real(nswc_sp), parameter :: bn3 = .871954925712688e-01
+real(nswc_sp), parameter :: bn4 = .508547058449004e-01
+real(nswc_sp), parameter :: bn5 = .361412623711710e-02
+real(nswc_sp), parameter :: bn6 = .177269722794511e-02
+real(nswc_sp), parameter :: bn7 = .117774184027185e-02
+real(nswc_sp), parameter :: bn8 = .627004834186143e-04
+real(nswc_sp), parameter :: bn9 = .774782269814080e-06
+real(nswc_sp), parameter :: bn10 = .118116474369315e-04
+real(nswc_sp), parameter :: bd0 = .100000000000000e+01
+real(nswc_sp), parameter :: bd1 = .163214622184402e+00
+real(nswc_sp), parameter :: bd2 = -.242285981710408e-01
+real(nswc_sp), parameter :: bd3 = -.720554280297616e-02
+real(nswc_sp), parameter :: pn0 = .619911943572678e+00
+real(nswc_sp), parameter :: pn1 = .100411558489626e+01
+real(nswc_sp), parameter :: pn2 = .563659963795768e+00
+real(nswc_sp), parameter :: pn3 = .274925508033015e+00
+real(nswc_sp), parameter :: pn4 = .115641822943246e+00
+real(nswc_sp), parameter :: pn5 = .120048517441127e-01
+real(nswc_sp), parameter :: pn6 = .501838091254330e-02
+real(nswc_sp), parameter :: pd0 = .100000000000000e+01
+real(nswc_sp), parameter :: pd1 = .159751878026937e+01
+real(nswc_sp), parameter :: pd2 = .104664867034140e+01
+real(nswc_sp), parameter :: pd3 = .512560333664022e+00
+real(nswc_sp), parameter :: pd4 = .159144727666995e+00
+real(nswc_sp), parameter :: pd5 = .394456748956258e-01
+real(nswc_sp), parameter :: pd6 = .529926873250079e-02
+real(nswc_sp), parameter :: pd7 = .288921845412576e-03
+real(nswc_sp), parameter :: qn0 = .595123543430856e+00
+real(nswc_sp), parameter :: qn1 = .652692120245803e+00
+real(nswc_sp), parameter :: qn2 = .436851872835894e+00
+real(nswc_sp), parameter :: qn3 = .201626141057807e+00
+real(nswc_sp), parameter :: qn4 = .649535170626944e-01
+real(nswc_sp), parameter :: qn5 = .171798867787816e-01
+real(nswc_sp), parameter :: qn6 = .287998748038892e-02
+real(nswc_sp), parameter :: qn7 = .359634362348937e-03
+real(nswc_sp), parameter :: qd0 = .100000000000000e+01
+real(nswc_sp), parameter :: qd1 = .114259871204893e+01
+real(nswc_sp), parameter :: qd2 = .766390439057101e+00
+real(nswc_sp), parameter :: qd3 = .348287281255683e+00
+real(nswc_sp), parameter :: qd4 = .117049276946157e+00
+real(nswc_sp), parameter :: qd5 = .294545450289541e-01
+real(nswc_sp), parameter :: qd6 = .523951773968125e-02
+real(nswc_sp), parameter :: qd7 = .622692248774973e-03
+real(nswc_sp), parameter :: qd8 = .674811395957744e-06
+real(nswc_sp), parameter :: rn0 = .568067636505865e+00
+real(nswc_sp), parameter :: rn1 = .462183136291541e-01
+real(nswc_sp), parameter :: rn2 = .268519638203645e+00
+real(nswc_sp), parameter :: rn3 = .199427104235673e-02
+real(nswc_sp), parameter :: rn4 = .135599161332010e-03
+real(nswc_sp), parameter :: rn5 = .229937707171804e-04
+real(nswc_sp), parameter :: rn6 = .697888081361175e-05
+real(nswc_sp), parameter :: rn7 = .153277172934286e-05
+real(nswc_sp), parameter :: rn8 = -.149322381877245e-05
+real(nswc_sp), parameter :: rn9 = -.113533571972859e-05
+real(nswc_sp), parameter :: rn10 = .740721412702102e-06
+real(nswc_sp), parameter :: rn11 = -.120160431596119e-06
+real(nswc_sp), parameter :: rd0 = .100000000000000e+01
+real(nswc_sp), parameter :: rd1 = .741293424676788e-01
+real(nswc_sp), parameter :: rd2 = .471695968238457e+00
+real(nswc_sp), parameter :: sn0 = .564189583547757e+00
+real(nswc_sp), parameter :: sn1 = .112605519585866e+00
+real(nswc_sp), parameter :: sn2 = .893329124921909e-03
+real(nswc_sp), parameter :: sn3 = .532139134120350e-04
+real(nswc_sp), parameter :: sn4 = .592725458717738e-05
+real(nswc_sp), parameter :: sn5 = .921448923850546e-06
+real(nswc_sp), parameter :: sn6 = .404558310611815e-06
+real(nswc_sp), parameter :: sn7 = -.660517686759109e-06
+real(nswc_sp), parameter :: sn8 = .174667472383815e-05
+real(nswc_sp), parameter :: sn9 = -.287037710548882e-05
+real(nswc_sp), parameter :: sn10 = .322304072982791e-05
+real(nswc_sp), parameter :: sn11 = -.231569499551950e-05
+real(nswc_sp), parameter :: sn12 = .963478964685941e-06
+real(nswc_sp), parameter :: sn13 = -.173784488565533e-06
+real(nswc_sp), parameter :: sd0 = .100000000000000e+01
+real(nswc_sp), parameter :: sd1 = .193077670156841e+00
 !-----------------------------------------------------------------------
 !             Evaluation of the Airy function bi(x)
 !     note... if x is a positive number where bi(x) is too large
@@ -20482,104 +20499,104 @@ return
 70 bi = 0.0
 end function bi
 
-pure elemental real function bie(x)
+pure elemental real(nswc_sp) function bie(x)
 implicit none
-real, intent(in) :: x
-real :: phi, r, rtx, t, w
-real, parameter :: x0 = 6.3496042078728
-real, parameter :: an0 = .614926627446001e+00
-real, parameter :: an1 = .462726943978834e+00
-real, parameter :: an2 = .867811386408974e-02
-real, parameter :: an3 = .974670609357959e-01
-real, parameter :: an4 = .370856545413908e-01
-real, parameter :: an5 = .569193415071716e-03
-real, parameter :: an6 = .269172131237236e-02
-real, parameter :: an7 = .746473849872868e-03
-real, parameter :: an8 = .105638036899269e-04
-real, parameter :: an9 = .242726195973978e-04
-real, parameter :: an10 = .557260250681542e-05
-real, parameter :: ad0 = .100000000000000e+01
-real, parameter :: ad1 = .234801779278695e-01
-real, parameter :: ad2 = -.300487317759152e-02
-real, parameter :: ad3 = -.597414466459612e-02
-real, parameter :: bn0 = .614926627446001e+00
-real, parameter :: bn1 = .548653374523520e+00
-real, parameter :: bn2 = .582684047163842e-01
-real, parameter :: bn3 = .871954925712688e-01
-real, parameter :: bn4 = .508547058449004e-01
-real, parameter :: bn5 = .361412623711710e-02
-real, parameter :: bn6 = .177269722794511e-02
-real, parameter :: bn7 = .117774184027185e-02
-real, parameter :: bn8 = .627004834186143e-04
-real, parameter :: bn9 = .774782269814080e-06
-real, parameter :: bn10 = .118116474369315e-04
-real, parameter :: bd0 = .100000000000000e+01
-real, parameter :: bd1 = .163214622184402e+00
-real, parameter :: bd2 = -.242285981710408e-01
-real, parameter :: bd3 = -.720554280297616e-02
-real, parameter :: pn0 = .619911943572678e+00
-real, parameter :: pn1 = .100411558489626e+01
-real, parameter :: pn2 = .563659963795768e+00
-real, parameter :: pn3 = .274925508033015e+00
-real, parameter :: pn4 = .115641822943246e+00
-real, parameter :: pn5 = .120048517441127e-01
-real, parameter :: pn6 = .501838091254330e-02
-real, parameter :: pd0 = .100000000000000e+01
-real, parameter :: pd1 = .159751878026937e+01
-real, parameter :: pd2 = .104664867034140e+01
-real, parameter :: pd3 = .512560333664022e+00
-real, parameter :: pd4 = .159144727666995e+00
-real, parameter :: pd5 = .394456748956258e-01
-real, parameter :: pd6 = .529926873250079e-02
-real, parameter :: pd7 = .288921845412576e-03
-real, parameter :: qn0 = .595123543430856e+00
-real, parameter :: qn1 = .652692120245803e+00
-real, parameter :: qn2 = .436851872835894e+00
-real, parameter :: qn3 = .201626141057807e+00
-real, parameter :: qn4 = .649535170626944e-01
-real, parameter :: qn5 = .171798867787816e-01
-real, parameter :: qn6 = .287998748038892e-02
-real, parameter :: qn7 = .359634362348937e-03
-real, parameter :: qd0 = .100000000000000e+01
-real, parameter :: qd1 = .114259871204893e+01
-real, parameter :: qd2 = .766390439057101e+00
-real, parameter :: qd3 = .348287281255683e+00
-real, parameter :: qd4 = .117049276946157e+00
-real, parameter :: qd5 = .294545450289541e-01
-real, parameter :: qd6 = .523951773968125e-02
-real, parameter :: qd7 = .622692248774973e-03
-real, parameter :: qd8 = .674811395957744e-06
-real, parameter :: rn0 = .568067636505865e+00
-real, parameter :: rn1 = .462183136291541e-01
-real, parameter :: rn2 = .268519638203645e+00
-real, parameter :: rn3 = .199427104235673e-02
-real, parameter :: rn4 = .135599161332010e-03
-real, parameter :: rn5 = .229937707171804e-04
-real, parameter :: rn6 = .697888081361175e-05
-real, parameter :: rn7 = .153277172934286e-05
-real, parameter :: rn8 = -.149322381877245e-05
-real, parameter :: rn9 = -.113533571972859e-05
-real, parameter :: rn10 = .740721412702102e-06
-real, parameter :: rn11 = -.120160431596119e-06
-real, parameter :: rd0 = .100000000000000e+01
-real, parameter :: rd1 = .741293424676788e-01
-real, parameter :: rd2 = .471695968238457e+00
-real, parameter :: sn0 = .564189583547757e+00
-real, parameter :: sn1 = .112605519585866e+00
-real, parameter :: sn2 = .893329124921909e-03
-real, parameter :: sn3 = .532139134120350e-04
-real, parameter :: sn4 = .592725458717738e-05
-real, parameter :: sn5 = .921448923850546e-06
-real, parameter :: sn6 = .404558310611815e-06
-real, parameter :: sn7 = -.660517686759109e-06
-real, parameter :: sn8 = .174667472383815e-05
-real, parameter :: sn9 = -.287037710548882e-05
-real, parameter :: sn10 = .322304072982791e-05
-real, parameter :: sn11 = -.231569499551950e-05
-real, parameter :: sn12 = .963478964685941e-06
-real, parameter :: sn13 = -.173784488565533e-06
-real, parameter :: sd0 = .100000000000000e+01
-real, parameter :: sd1 = .193077670156841e+00
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: phi, r, rtx, t, w
+real(nswc_sp), parameter :: x0 = 6.3496042078728
+real(nswc_sp), parameter :: an0 = .614926627446001e+00
+real(nswc_sp), parameter :: an1 = .462726943978834e+00
+real(nswc_sp), parameter :: an2 = .867811386408974e-02
+real(nswc_sp), parameter :: an3 = .974670609357959e-01
+real(nswc_sp), parameter :: an4 = .370856545413908e-01
+real(nswc_sp), parameter :: an5 = .569193415071716e-03
+real(nswc_sp), parameter :: an6 = .269172131237236e-02
+real(nswc_sp), parameter :: an7 = .746473849872868e-03
+real(nswc_sp), parameter :: an8 = .105638036899269e-04
+real(nswc_sp), parameter :: an9 = .242726195973978e-04
+real(nswc_sp), parameter :: an10 = .557260250681542e-05
+real(nswc_sp), parameter :: ad0 = .100000000000000e+01
+real(nswc_sp), parameter :: ad1 = .234801779278695e-01
+real(nswc_sp), parameter :: ad2 = -.300487317759152e-02
+real(nswc_sp), parameter :: ad3 = -.597414466459612e-02
+real(nswc_sp), parameter :: bn0 = .614926627446001e+00
+real(nswc_sp), parameter :: bn1 = .548653374523520e+00
+real(nswc_sp), parameter :: bn2 = .582684047163842e-01
+real(nswc_sp), parameter :: bn3 = .871954925712688e-01
+real(nswc_sp), parameter :: bn4 = .508547058449004e-01
+real(nswc_sp), parameter :: bn5 = .361412623711710e-02
+real(nswc_sp), parameter :: bn6 = .177269722794511e-02
+real(nswc_sp), parameter :: bn7 = .117774184027185e-02
+real(nswc_sp), parameter :: bn8 = .627004834186143e-04
+real(nswc_sp), parameter :: bn9 = .774782269814080e-06
+real(nswc_sp), parameter :: bn10 = .118116474369315e-04
+real(nswc_sp), parameter :: bd0 = .100000000000000e+01
+real(nswc_sp), parameter :: bd1 = .163214622184402e+00
+real(nswc_sp), parameter :: bd2 = -.242285981710408e-01
+real(nswc_sp), parameter :: bd3 = -.720554280297616e-02
+real(nswc_sp), parameter :: pn0 = .619911943572678e+00
+real(nswc_sp), parameter :: pn1 = .100411558489626e+01
+real(nswc_sp), parameter :: pn2 = .563659963795768e+00
+real(nswc_sp), parameter :: pn3 = .274925508033015e+00
+real(nswc_sp), parameter :: pn4 = .115641822943246e+00
+real(nswc_sp), parameter :: pn5 = .120048517441127e-01
+real(nswc_sp), parameter :: pn6 = .501838091254330e-02
+real(nswc_sp), parameter :: pd0 = .100000000000000e+01
+real(nswc_sp), parameter :: pd1 = .159751878026937e+01
+real(nswc_sp), parameter :: pd2 = .104664867034140e+01
+real(nswc_sp), parameter :: pd3 = .512560333664022e+00
+real(nswc_sp), parameter :: pd4 = .159144727666995e+00
+real(nswc_sp), parameter :: pd5 = .394456748956258e-01
+real(nswc_sp), parameter :: pd6 = .529926873250079e-02
+real(nswc_sp), parameter :: pd7 = .288921845412576e-03
+real(nswc_sp), parameter :: qn0 = .595123543430856e+00
+real(nswc_sp), parameter :: qn1 = .652692120245803e+00
+real(nswc_sp), parameter :: qn2 = .436851872835894e+00
+real(nswc_sp), parameter :: qn3 = .201626141057807e+00
+real(nswc_sp), parameter :: qn4 = .649535170626944e-01
+real(nswc_sp), parameter :: qn5 = .171798867787816e-01
+real(nswc_sp), parameter :: qn6 = .287998748038892e-02
+real(nswc_sp), parameter :: qn7 = .359634362348937e-03
+real(nswc_sp), parameter :: qd0 = .100000000000000e+01
+real(nswc_sp), parameter :: qd1 = .114259871204893e+01
+real(nswc_sp), parameter :: qd2 = .766390439057101e+00
+real(nswc_sp), parameter :: qd3 = .348287281255683e+00
+real(nswc_sp), parameter :: qd4 = .117049276946157e+00
+real(nswc_sp), parameter :: qd5 = .294545450289541e-01
+real(nswc_sp), parameter :: qd6 = .523951773968125e-02
+real(nswc_sp), parameter :: qd7 = .622692248774973e-03
+real(nswc_sp), parameter :: qd8 = .674811395957744e-06
+real(nswc_sp), parameter :: rn0 = .568067636505865e+00
+real(nswc_sp), parameter :: rn1 = .462183136291541e-01
+real(nswc_sp), parameter :: rn2 = .268519638203645e+00
+real(nswc_sp), parameter :: rn3 = .199427104235673e-02
+real(nswc_sp), parameter :: rn4 = .135599161332010e-03
+real(nswc_sp), parameter :: rn5 = .229937707171804e-04
+real(nswc_sp), parameter :: rn6 = .697888081361175e-05
+real(nswc_sp), parameter :: rn7 = .153277172934286e-05
+real(nswc_sp), parameter :: rn8 = -.149322381877245e-05
+real(nswc_sp), parameter :: rn9 = -.113533571972859e-05
+real(nswc_sp), parameter :: rn10 = .740721412702102e-06
+real(nswc_sp), parameter :: rn11 = -.120160431596119e-06
+real(nswc_sp), parameter :: rd0 = .100000000000000e+01
+real(nswc_sp), parameter :: rd1 = .741293424676788e-01
+real(nswc_sp), parameter :: rd2 = .471695968238457e+00
+real(nswc_sp), parameter :: sn0 = .564189583547757e+00
+real(nswc_sp), parameter :: sn1 = .112605519585866e+00
+real(nswc_sp), parameter :: sn2 = .893329124921909e-03
+real(nswc_sp), parameter :: sn3 = .532139134120350e-04
+real(nswc_sp), parameter :: sn4 = .592725458717738e-05
+real(nswc_sp), parameter :: sn5 = .921448923850546e-06
+real(nswc_sp), parameter :: sn6 = .404558310611815e-06
+real(nswc_sp), parameter :: sn7 = -.660517686759109e-06
+real(nswc_sp), parameter :: sn8 = .174667472383815e-05
+real(nswc_sp), parameter :: sn9 = -.287037710548882e-05
+real(nswc_sp), parameter :: sn10 = .322304072982791e-05
+real(nswc_sp), parameter :: sn11 = -.231569499551950e-05
+real(nswc_sp), parameter :: sn12 = .963478964685941e-06
+real(nswc_sp), parameter :: sn13 = -.173784488565533e-06
+real(nswc_sp), parameter :: sd0 = .100000000000000e+01
+real(nswc_sp), parameter :: sd1 = .193077670156841e+00
 !-----------------------------------------------------------------------
 !                    Scaled Airy function bi(x)
 !             bie(x) = exp(-ZETA)*bi(x)  WHEN x .GE. 0
@@ -20650,86 +20667,86 @@ end function bie
 
 pure elemental subroutine aimp(x, r, phi)
 implicit none
-real, intent(inout) :: phi, r
-real, intent(in) :: x
-real :: rtx, z
-real, parameter :: pi4 = .785398163397448
-real, parameter :: an0 = .297640916735064e+00
-real, parameter :: an1 = .772796814419809e+00
-real, parameter :: an2 = .764990563560236e+00
-real, parameter :: an3 = .375694096095838e+00
-real, parameter :: an4 = .978661044870204e-01
-real, parameter :: an5 = .110446639522696e-01
-real, parameter :: an6 = .145271249611697e-05
-real, parameter :: ad0 = .100000000000000e+01
-real, parameter :: ad1 = .247380029946443e+01
-real, parameter :: ad2 = .240125897828762e+01
-real, parameter :: ad3 = .118267264172257e+01
-real, parameter :: ad4 = .306942883081787e+00
-real, parameter :: ad5 = .347670057203535e-01
-real, parameter :: bn0 = .593601051670149e+00
-real, parameter :: bn1 = .223281495955754e+01
-real, parameter :: bn2 = .317718143418600e+01
-real, parameter :: bn3 = .229890914530923e+01
-real, parameter :: bn4 = .933580623665765e+00
-real, parameter :: bn5 = .209164380960390e+00
-real, parameter :: bn6 = .207910965366403e-01
-real, parameter :: bd0 = .100000000000000e+01
-real, parameter :: bd1 = .345985556561483e+01
-real, parameter :: bd2 = .479629661187354e+01
-real, parameter :: bd3 = .345429311552596e+01
-real, parameter :: bd4 = .140017214942186e+01
-real, parameter :: bd5 = .313770549939860e+00
-real, parameter :: bd6 = .311852186700025e-01
-real, parameter :: cn0 = .313541841678871e+00
-real, parameter :: cn1 = .470104287134296e+00
-real, parameter :: cn2 = .291795874641314e+00
-real, parameter :: cn3 = .962250689852768e-01
-real, parameter :: cn4 = .171024484244850e-01
-real, parameter :: cn5 = .134933201907052e-02
-real, parameter :: cd0 = .100000000000000e+01
-real, parameter :: cd1 = .148070947673639e+01
-real, parameter :: cd2 = .917484386216329e+00
-real, parameter :: cd3 = .302281922152536e+00
-real, parameter :: cd4 = .537309296828367e-01
-real, parameter :: cd5 = .423890576557513e-02
-real, parameter :: cd6 = .525954318463502e-08
-real, parameter :: dn0 = .654836896032068e+00
-real, parameter :: dn1 = .117099614856528e+01
-real, parameter :: dn2 = .831899010444840e+00
-real, parameter :: dn3 = .301060337976575e+00
-real, parameter :: dn4 = .564712748150658e-01
-real, parameter :: dn5 = .444134415666317e-02
-real, parameter :: dd0 = .100000000000000e+01
-real, parameter :: dd1 = .176306543768126e+01
-real, parameter :: dd2 = .124897609613487e+01
-real, parameter :: dd3 = .451576491257036e+00
-real, parameter :: dd4 = .847085955634988e-01
-real, parameter :: dd5 = .666188176245820e-02
-real, parameter :: dd6 = .537600060708764e-08
-real, parameter :: pn0 = .318309886183791e+00
-real, parameter :: pn1 = .100996327221962e+01
-real, parameter :: pn2 = .902315148591491e+00
-real, parameter :: pn3 = .259820640977615e+00
-real, parameter :: pn4 = .203717769716282e-01
-real, parameter :: pn5 = .216893438784765e-03
-real, parameter :: pd0 = .100000000000000e+01
-real, parameter :: pd1 = .317533460265059e+01
-real, parameter :: pd2 = .284232123705698e+01
-real, parameter :: pd3 = .822777439238360e+00
-real, parameter :: pd4 = .656865942543526e-01
-real, parameter :: pd5 = .775376048996392e-03
-real, parameter :: qn0 = .666666666666667e+00
-real, parameter :: qn1 = .141905542385598e+01
-real, parameter :: qn2 = .772778148352443e+00
-real, parameter :: qn3 = .115170415082442e+00
-real, parameter :: qn4 = .326457319318373e-02
-real, parameter :: qd0 = .100000000000000e+01
-real, parameter :: qd1 = .213102454203392e+01
-real, parameter :: qd2 = .116432601041188e+01
-real, parameter :: qd3 = .175509465791633e+00
-real, parameter :: qd4 = .528319849831061e-02
-real, parameter :: qd5 = .867802002275824e-05
+real(nswc_sp), intent(inout) :: phi, r
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: rtx, z
+real(nswc_sp), parameter :: pi4 = .785398163397448
+real(nswc_sp), parameter :: an0 = .297640916735064e+00
+real(nswc_sp), parameter :: an1 = .772796814419809e+00
+real(nswc_sp), parameter :: an2 = .764990563560236e+00
+real(nswc_sp), parameter :: an3 = .375694096095838e+00
+real(nswc_sp), parameter :: an4 = .978661044870204e-01
+real(nswc_sp), parameter :: an5 = .110446639522696e-01
+real(nswc_sp), parameter :: an6 = .145271249611697e-05
+real(nswc_sp), parameter :: ad0 = .100000000000000e+01
+real(nswc_sp), parameter :: ad1 = .247380029946443e+01
+real(nswc_sp), parameter :: ad2 = .240125897828762e+01
+real(nswc_sp), parameter :: ad3 = .118267264172257e+01
+real(nswc_sp), parameter :: ad4 = .306942883081787e+00
+real(nswc_sp), parameter :: ad5 = .347670057203535e-01
+real(nswc_sp), parameter :: bn0 = .593601051670149e+00
+real(nswc_sp), parameter :: bn1 = .223281495955754e+01
+real(nswc_sp), parameter :: bn2 = .317718143418600e+01
+real(nswc_sp), parameter :: bn3 = .229890914530923e+01
+real(nswc_sp), parameter :: bn4 = .933580623665765e+00
+real(nswc_sp), parameter :: bn5 = .209164380960390e+00
+real(nswc_sp), parameter :: bn6 = .207910965366403e-01
+real(nswc_sp), parameter :: bd0 = .100000000000000e+01
+real(nswc_sp), parameter :: bd1 = .345985556561483e+01
+real(nswc_sp), parameter :: bd2 = .479629661187354e+01
+real(nswc_sp), parameter :: bd3 = .345429311552596e+01
+real(nswc_sp), parameter :: bd4 = .140017214942186e+01
+real(nswc_sp), parameter :: bd5 = .313770549939860e+00
+real(nswc_sp), parameter :: bd6 = .311852186700025e-01
+real(nswc_sp), parameter :: cn0 = .313541841678871e+00
+real(nswc_sp), parameter :: cn1 = .470104287134296e+00
+real(nswc_sp), parameter :: cn2 = .291795874641314e+00
+real(nswc_sp), parameter :: cn3 = .962250689852768e-01
+real(nswc_sp), parameter :: cn4 = .171024484244850e-01
+real(nswc_sp), parameter :: cn5 = .134933201907052e-02
+real(nswc_sp), parameter :: cd0 = .100000000000000e+01
+real(nswc_sp), parameter :: cd1 = .148070947673639e+01
+real(nswc_sp), parameter :: cd2 = .917484386216329e+00
+real(nswc_sp), parameter :: cd3 = .302281922152536e+00
+real(nswc_sp), parameter :: cd4 = .537309296828367e-01
+real(nswc_sp), parameter :: cd5 = .423890576557513e-02
+real(nswc_sp), parameter :: cd6 = .525954318463502e-08
+real(nswc_sp), parameter :: dn0 = .654836896032068e+00
+real(nswc_sp), parameter :: dn1 = .117099614856528e+01
+real(nswc_sp), parameter :: dn2 = .831899010444840e+00
+real(nswc_sp), parameter :: dn3 = .301060337976575e+00
+real(nswc_sp), parameter :: dn4 = .564712748150658e-01
+real(nswc_sp), parameter :: dn5 = .444134415666317e-02
+real(nswc_sp), parameter :: dd0 = .100000000000000e+01
+real(nswc_sp), parameter :: dd1 = .176306543768126e+01
+real(nswc_sp), parameter :: dd2 = .124897609613487e+01
+real(nswc_sp), parameter :: dd3 = .451576491257036e+00
+real(nswc_sp), parameter :: dd4 = .847085955634988e-01
+real(nswc_sp), parameter :: dd5 = .666188176245820e-02
+real(nswc_sp), parameter :: dd6 = .537600060708764e-08
+real(nswc_sp), parameter :: pn0 = .318309886183791e+00
+real(nswc_sp), parameter :: pn1 = .100996327221962e+01
+real(nswc_sp), parameter :: pn2 = .902315148591491e+00
+real(nswc_sp), parameter :: pn3 = .259820640977615e+00
+real(nswc_sp), parameter :: pn4 = .203717769716282e-01
+real(nswc_sp), parameter :: pn5 = .216893438784765e-03
+real(nswc_sp), parameter :: pd0 = .100000000000000e+01
+real(nswc_sp), parameter :: pd1 = .317533460265059e+01
+real(nswc_sp), parameter :: pd2 = .284232123705698e+01
+real(nswc_sp), parameter :: pd3 = .822777439238360e+00
+real(nswc_sp), parameter :: pd4 = .656865942543526e-01
+real(nswc_sp), parameter :: pd5 = .775376048996392e-03
+real(nswc_sp), parameter :: qn0 = .666666666666667e+00
+real(nswc_sp), parameter :: qn1 = .141905542385598e+01
+real(nswc_sp), parameter :: qn2 = .772778148352443e+00
+real(nswc_sp), parameter :: qn3 = .115170415082442e+00
+real(nswc_sp), parameter :: qn4 = .326457319318373e-02
+real(nswc_sp), parameter :: qd0 = .100000000000000e+01
+real(nswc_sp), parameter :: qd1 = .213102454203392e+01
+real(nswc_sp), parameter :: qd2 = .116432601041188e+01
+real(nswc_sp), parameter :: qd3 = .175509465791633e+00
+real(nswc_sp), parameter :: qd4 = .528319849831061e-02
+real(nswc_sp), parameter :: qd5 = .867802002275824e-05
 !-----------------------------------------------------------------------
 !     Computation of the Airy modulus and phase for x .GE. 1
 !-----------------------------------------------------------------------
@@ -20773,38 +20790,38 @@ r = sqrt(r/rtx)
 phi = pi4 + x*rtx*phi
 end subroutine aimp
 
-pure complex function ck(k,l)
+pure complex(nswc_sp) function ck(k,l)
 implicit none
-complex, intent(in) :: k, l
+complex(nswc_sp), intent(in) :: k, l
 integer :: i, ind
-real :: eps, phi, r, t, tol, u, v, x, xx, y
-complex :: ak, al, ak1, al1, al2, ckk, ckp, f1, f2, f3, fxk, aktemp, ck1, z
+real(nswc_sp) :: eps, phi, r, t, tol, u, v, x, xx, y
+complex(nswc_sp) :: ak, al, ak1, al1, al2, ckk, ckp, f1, f2, f3, fxk, aktemp, ck1, z
 logical :: branch
-real, parameter :: x1(12) = [6.5487222790801e-03, 3.8946809560450e-02, 9.8150263106007e-02, 1.8113858159063e-01, &
+real(nswc_sp), parameter :: x1(12) = [6.5487222790801e-03, 3.8946809560450e-02, 9.8150263106007e-02, 1.8113858159063e-01, &
    & 2.8322006766737e-01, 3.9843443516344e-01, 5.1995262679235e-01, 6.4051091671611e-01, 7.5286501205183e-01, 8.5024002416230e-01, &
    & 9.2674968322391e-01, 9.7775612969000e-01]
-real, parameter :: w1(12) = [9.3192691443932e-02, 1.4975182757632e-01, 1.6655745436459e-01, 1.5963355943699e-01, &
+real(nswc_sp), parameter :: w1(12) = [9.3192691443932e-02, 1.4975182757632e-01, 1.6655745436459e-01, 1.5963355943699e-01, &
    & 1.3842483186484e-01, 1.1001657063572e-01, 7.9961821770829e-02, 5.2406954824642e-02, 3.0071088873761e-02, 1.4249245587998e-02, &
    & 4.8999245823217e-03, 8.3402903805690e-04]
-real, parameter :: fl(12) = [1.5708005371203e+00, 1.5709452753591e+00, 1.5717433742881e+00, 1.5740325056162e+00, &
+real(nswc_sp), parameter :: fl(12) = [1.5708005371203e+00, 1.5709452753591e+00, 1.5717433742881e+00, 1.5740325056162e+00, &
    & 1.5787613653341e+00, 1.5867393901613e+00, 1.5983969635617e+00, 1.6135762587884e+00, 1.6313677113831e+00, 1.6500349733510e+00, &
    & 1.6671202200919e+00, 1.6798403417359e+00]
-real, parameter :: x2(12) = [-9.8156063424672e-01, -9.0411725637048e-01, -7.6990267419431e-01, -5.8731795428662e-01, - &
+real(nswc_sp), parameter :: x2(12) = [-9.8156063424672e-01, -9.0411725637048e-01, -7.6990267419431e-01, -5.8731795428662e-01, - &
    & 3.6783149899818e-01, -1.2523340851147e-01, 1.2523340851147e-01, 3.6783149899818e-01, 5.8731795428662e-01, 7.6990267419431e-01 &
    & , 9.0411725637048e-01, 9.8156063424672e-01]
-real, parameter :: w2(12) = [4.7175336386512e-02, 1.0693932599532e-01, 1.6007832854335e-01, 2.0316742672307e-01, &
+real(nswc_sp), parameter :: w2(12) = [4.7175336386512e-02, 1.0693932599532e-01, 1.6007832854335e-01, 2.0316742672307e-01, &
    & 2.3349253653836e-01, 2.4914704581340e-01, 2.4914704581340e-01, 2.3349253653836e-01, 2.0316742672307e-01, 1.6007832854335e-01, &
    & 1.0693932599532e-01, 4.7175336386512e-02]
-real, parameter :: fa(12) = [2.0794472764428e+00, 2.0795966441739e+00, 2.0803359313463e+00, 2.0823286205438e+00, &
+real(nswc_sp), parameter :: fa(12) = [2.0794472764428e+00, 2.0795966441739e+00, 2.0803359313463e+00, 2.0823286205438e+00, &
    & 2.0862633195105e+00, 2.0926508621232e+00, 2.1016440761258e+00, 2.1128974786197e+00, 2.1254857173540e+00, 2.1379218133017e+00, &
    & 2.1483404506064e+00, 2.1548934173960e+00]
-real, parameter :: fb(12) = [1.5744273529551e+00, 1.5899097325063e+00, 1.6176685384410e+00, 1.6574605448620e+00, &
+real(nswc_sp), parameter :: fb(12) = [1.5744273529551e+00, 1.5899097325063e+00, 1.6176685384410e+00, 1.6574605448620e+00, &
    & 1.7087245795822e+00, 1.7703459462057e+00, 1.8403280188791e+00, 1.9154060277115e+00, 1.9907093877047e+00, 2.0596975322636e+00, &
    & 2.1146977530430e+00, 2.1482986855683e+00]
-complex, parameter :: j = (0.0, 1.0)
-real, parameter :: ln4 = 1.3862943611199
-real, parameter :: c1 = .20264236728467
-real, parameter :: c2 = .15915494309189
+complex(nswc_sp), parameter :: j = (0.0, 1.0)
+real(nswc_sp), parameter :: ln4 = 1.3862943611199
+real(nswc_sp), parameter :: c1 = .20264236728467
+real(nswc_sp), parameter :: c2 = .15915494309189
 !     ------------------------------------------------------------------
 !     This function calculates the complete elliptic integral F(k)
 !     for complex values of the modulus k. it is assumed that l.NE.0
@@ -20945,14 +20962,14 @@ return
 200 ck = (0.0, 0.0)
 end function ck
 
-pure elemental complex function cflect(z)
+pure elemental complex(nswc_sp) function cflect(z)
 implicit none
 !---------------------------------------------------------
 !     Reflects z with respect to the origin if real(z)
 !     .LT. 0.0 or if z is on the negative imaginary axis.
 !---------------------------------------------------------
-complex, intent(in) :: z
-real :: nswc_ai_r4
+complex(nswc_sp), intent(in) :: z
+real(nswc_sp) :: nswc_ai_r4
 !     ----------
 nswc_ai_r4 = real(z)
 if (nswc_ai_r4 < 0) go to 10
@@ -20965,13 +20982,13 @@ return
 30 cflect = z
 end function cflect
 
-pure complex function km(k2)
+pure complex(nswc_sp) function km(k2)
 implicit none
-complex, intent(in) :: k2
+complex(nswc_sp), intent(in) :: k2
 integer :: i
-real :: c, eps, ri, tol
-complex :: an, s1
-real, parameter :: hpi = 1.5707963267949
+real(nswc_sp) :: c, eps, ri, tol
+complex(nswc_sp) :: an, s1
+real(nswc_sp), parameter :: hpi = 1.5707963267949
 !---------------------------------------------------------------------
 !     km computes the complete elliptic integral F(K) for a given
 !     value of k2 = K**2 by use of the Maclaurin expansion.
@@ -20996,13 +21013,13 @@ end function km
 
 pure subroutine kl(l, fk, fl)
 implicit none
-complex, intent(in) :: l
-complex, intent(inout) :: fk, fl
+complex(nswc_sp), intent(in) :: l
+complex(nswc_sp), intent(inout) :: fk, fl
 integer :: i
-real :: bn, c, eps, ri, tol, u, x, y
-complex :: an, l2, s1, s2, w
-real, parameter :: hpi = 1.5707963267949
-real, parameter :: ln4 = 1.3862943611199
+real(nswc_sp) :: bn, c, eps, ri, tol, u, x, y
+complex(nswc_sp) :: an, l2, s1, s2, w
+real(nswc_sp), parameter :: hpi = 1.5707963267949
+real(nswc_sp), parameter :: ln4 = 1.3862943611199
 ! ----------------------------------------------------------------------
 !     kl computes the complete elliptic integrals F(K) and F(l) for
 !     a given value of l, where cabs(l) .LT. 1 and K**2 + l**2 = 1.
@@ -21055,38 +21072,39 @@ end subroutine kl
 pure elemental subroutine cke(k,l,ck,ce,ierr)
 implicit none
 integer, intent(inout) :: ierr
-complex, intent(in) :: k, l
-complex, intent(inout) :: ce, ck
+complex(nswc_sp), intent(in) :: k, l
+complex(nswc_sp), intent(inout) :: ce, ck
 integer :: i, ind
-real :: c, eps, phi, r, t, tol, u, v, x, xx, y
-complex :: ak, al, ak1, al1, ckk, ckp, f1, f2, f3, aktemp, ck1, cee, cep, ce1, e1, e2, e3, at, fx, fxk, k1, l1, ak2, al2, z, g, &
+real(nswc_sp) :: c, eps, phi, r, t, tol, u, v, x, xx, y
+complex(nswc_sp) :: ak, al, ak1, al1, ckk, ckp, f1, f2, f3, aktemp, ck1, cee, cep, ce1, e1, e2, e3, at, fx, fxk, k1, l1, ak2, al2, &
+   & z, g, &
    & g1, gg, gp
 logical :: branch
-real, parameter :: x1(12) = [6.5487222790801e-03, 3.8946809560450e-02, 9.8150263106007e-02, 1.8113858159063e-01, &
+real(nswc_sp), parameter :: x1(12) = [6.5487222790801e-03, 3.8946809560450e-02, 9.8150263106007e-02, 1.8113858159063e-01, &
    & 2.8322006766737e-01, 3.9843443516344e-01, 5.1995262679235e-01, 6.4051091671611e-01, 7.5286501205183e-01, 8.5024002416230e-01, &
    & 9.2674968322391e-01, 9.7775612969000e-01]
-real, parameter :: w1(12) = [9.3192691443932e-02, 1.4975182757632e-01, 1.6655745436459e-01, 1.5963355943699e-01, &
+real(nswc_sp), parameter :: w1(12) = [9.3192691443932e-02, 1.4975182757632e-01, 1.6655745436459e-01, 1.5963355943699e-01, &
    & 1.3842483186484e-01, 1.1001657063572e-01, 7.9961821770829e-02, 5.2406954824642e-02, 3.0071088873761e-02, 1.4249245587998e-02, &
    & 4.8999245823217e-03, 8.3402903805690e-04]
-real, parameter :: fl(12) = [1.5708005371203e+00, 1.5709452753591e+00, 1.5717433742881e+00, 1.5740325056162e+00, &
+real(nswc_sp), parameter :: fl(12) = [1.5708005371203e+00, 1.5709452753591e+00, 1.5717433742881e+00, 1.5740325056162e+00, &
    & 1.5787613653341e+00, 1.5867393901613e+00, 1.5983969635617e+00, 1.6135762587884e+00, 1.6313677113831e+00, 1.6500349733510e+00, &
    & 1.6671202200919e+00, 1.6798403417359e+00]
-real, parameter :: x2(12) = [-9.8156063424672e-01, -9.0411725637048e-01, -7.6990267419431e-01, -5.8731795428662e-01, - &
+real(nswc_sp), parameter :: x2(12) = [-9.8156063424672e-01, -9.0411725637048e-01, -7.6990267419431e-01, -5.8731795428662e-01, - &
    & 3.6783149899818e-01, -1.2523340851147e-01, 1.2523340851147e-01, 3.6783149899818e-01, 5.8731795428662e-01, 7.6990267419431e-01 &
    & , 9.0411725637048e-01, 9.8156063424672e-01]
-real, parameter :: w2(12) = [4.7175336386512e-02, 1.0693932599532e-01, 1.6007832854335e-01, 2.0316742672307e-01, &
+real(nswc_sp), parameter :: w2(12) = [4.7175336386512e-02, 1.0693932599532e-01, 1.6007832854335e-01, 2.0316742672307e-01, &
    & 2.3349253653836e-01, 2.4914704581340e-01, 2.4914704581340e-01, 2.3349253653836e-01, 2.0316742672307e-01, 1.6007832854335e-01, &
    & 1.0693932599532e-01, 4.7175336386512e-02]
-real, parameter :: fa(12) = [2.0794472764428e+00, 2.0795966441739e+00, 2.0803359313463e+00, 2.0823286205438e+00, &
+real(nswc_sp), parameter :: fa(12) = [2.0794472764428e+00, 2.0795966441739e+00, 2.0803359313463e+00, 2.0823286205438e+00, &
    & 2.0862633195105e+00, 2.0926508621232e+00, 2.1016440761258e+00, 2.1128974786197e+00, 2.1254857173540e+00, 2.1379218133017e+00, &
    & 2.1483404506064e+00, 2.1548934173960e+00]
-real, parameter :: fb(12) = [1.5744273529551e+00, 1.5899097325063e+00, 1.6176685384410e+00, 1.6574605448620e+00, &
+real(nswc_sp), parameter :: fb(12) = [1.5744273529551e+00, 1.5899097325063e+00, 1.6176685384410e+00, 1.6574605448620e+00, &
    & 1.7087245795822e+00, 1.7703459462057e+00, 1.8403280188791e+00, 1.9154060277115e+00, 1.9907093877047e+00, 2.0596975322636e+00, &
    & 2.1146977530430e+00, 2.1482986855683e+00]
-complex, parameter :: j = (0.0, 1.0)
-real, parameter :: ln4 = 1.3862943611199
-real, parameter :: c1 = .20264236728467
-real, parameter :: c2 = .15915494309189
+complex(nswc_sp), parameter :: j = (0.0, 1.0)
+real(nswc_sp), parameter :: ln4 = 1.3862943611199
+real(nswc_sp), parameter :: c1 = .20264236728467
+real(nswc_sp), parameter :: c2 = .15915494309189
 !     ------------------------------------------------------------------
 !     This function calculates the complete elliptic integrals F(k)
 !     and E(k) for complex values of the modulus k. it is assumed
@@ -21271,11 +21289,11 @@ return
 210 ierr = 2
 end subroutine cke
 
-pure elemental complex function atn(z)
+pure elemental complex(nswc_sp) function atn(z)
 implicit none
-complex, intent(in) :: z
-real :: atn1, atn2, d, da, db, t, x, y
-double precision :: dx, dy
+complex(nswc_sp), intent(in) :: z
+real(nswc_sp) :: atn1, atn2, d, da, db, t, x, y
+real(nswc_dp) :: dx, dy
 !---------------------------------------------------
 !     Calculates complex function atn(z) = z*atan(z)
 !     using double precision.
@@ -21295,12 +21313,12 @@ end function atn
 
 pure elemental subroutine ekm(k2, fk, ek)
 implicit none
-complex, intent(in) :: k2
-complex, intent(inout) :: fk, ek
+complex(nswc_sp), intent(in) :: k2
+complex(nswc_sp), intent(inout) :: fk, ek
 integer :: i
-real :: c, eps, ri, tol
-complex :: an, cn, s1, s2
-real, parameter :: hpi = 1.5707963267949
+real(nswc_sp) :: c, eps, ri, tol
+complex(nswc_sp) :: an, cn, s1, s2
+real(nswc_sp), parameter :: hpi = 1.5707963267949
 ! ----------------------------------------------------------------------
 !     ekm computes the complete elliptic integrals F(K) and E(K) for
 !     a given value of k2 = K**2 by use of the Maclaurin expansions.
@@ -21329,13 +21347,13 @@ end subroutine ekm
 
 pure elemental subroutine ekl(l,fk,fl,ek,el,gk,gl)
 implicit none
-complex, intent(in) :: l
-complex, intent(inout) :: fk, fl, ek, el, gk, gl
+complex(nswc_sp), intent(in) :: l
+complex(nswc_sp), intent(inout) :: fk, fl, ek, el, gk, gl
 integer :: i
-real :: bn, c, dn, eps, fn, gn, ri, tol, u, x, y
-complex :: l2, an, cn, en, s1, s2, s3, s4, s5, s6, s7, w
-real, parameter :: hpi = 1.5707963267949
-real, parameter :: ln4 = 1.3862943611199
+real(nswc_sp) :: bn, c, dn, eps, fn, gn, ri, tol, u, x, y
+complex(nswc_sp) :: l2, an, cn, en, s1, s2, s3, s4, s5, s6, s7, w
+real(nswc_sp), parameter :: hpi = 1.5707963267949
+real(nswc_sp), parameter :: ln4 = 1.3862943611199
 ! ----------------------------------------------------------------------
 !     ekl computes the complete elliptic integrals F(K), F(l), E(K),
 !     E(l) for a given value of l2, where l2 = l**2 and K**2 + l**2 = 1.
@@ -21412,14 +21430,15 @@ end subroutine ekl
 pure elemental subroutine ellpi(phi, cphi, k, l, f, e, ierr)
 implicit none
 integer, intent(inout) :: ierr
-real, intent(in) :: cphi
-real, intent(inout) :: e, f
-real, intent(in) :: phi
-real, intent(in) :: k, l
-real :: an, cn, d1, d2, d3, d4, dn, hn, p, pn, px, qn, qx, r, r0, r2, ri, rj, rk, rm, rn, s0, s1, s2, s3, s4, si, sj, sk, sn, ss, &
+real(nswc_sp), intent(in) :: cphi
+real(nswc_sp), intent(inout) :: e, f
+real(nswc_sp), intent(in) :: phi
+real(nswc_sp), intent(in) :: k, l
+real(nswc_sp) :: an, cn, d1, d2, d3, d4, dn, hn, p, pn, px, qn, qx, r, r0, r2, ri, rj, rk, rm, rn, s0, s1, s2, s3, s4, si, sj, sk, &
+   & sn, ss, &
    & t1, t2, td, tr, ts, w, k2, l2
-real, parameter :: ln4 = 1.3862943611199
-real, parameter :: th1 = .76159415595576
+real(nswc_sp), parameter :: ln4 = 1.3862943611199
+real(nswc_sp), parameter :: th1 = .76159415595576
 !-----------------------------------------------------------------------
 !          Real elliptic integrals of the first and second kinds
 !                        -----------------
@@ -21537,12 +21556,12 @@ end subroutine ellpi
 pure elemental subroutine dellpi(phi, cphi, k, l, f, e, ierr)
 implicit none
 integer, intent(inout) :: ierr
-double precision, intent(in) :: phi, cphi, k, l
-double precision, intent(inout) :: f, e
-double precision :: an, cn, dn, d1, d2, d3, d4, hn, k2, l2, p, pn, px, qn, qx, r, ri, rj, rk, rm, rn, r0, r2, si, sj, sk, sn, ss, &
+real(nswc_dp), intent(in) :: phi, cphi, k, l
+real(nswc_dp), intent(inout) :: f, e
+real(nswc_dp) :: an, cn, dn, d1, d2, d3, d4, hn, k2, l2, p, pn, px, qn, qx, r, ri, rj, rk, rm, rn, r0, r2, si, sj, sk, sn, ss, &
    & s0, s1, s2, s3, s4, td, tr, ts, t1, t2, w
-double precision, parameter :: ln4 = .1386294361119890618834464242916353136151d+01
-double precision, parameter :: th1 = .7615941559557648881194582826047935904128d+00
+real(nswc_dp), parameter :: ln4 = .1386294361119890618834464242916353136151d+01
+real(nswc_dp), parameter :: th1 = .7615941559557648881194582826047935904128d+00
 !-----------------------------------------------------------------------
 !                  Double precision computation of the
 !          real elliptic integrals of the first and second kinds
@@ -21661,10 +21680,10 @@ end subroutine dellpi
 pure elemental subroutine epi(phi, cphi, k2, l2, n, m, p, ierr)
 implicit none
 integer, intent(inout) :: ierr
-real, intent(in) :: phi, cphi, k2, l2, n, m
-real, intent(inout) :: p
-real :: a, b, c, eps, r, rf, s, s2, tol
-real, parameter :: pihalf = 1.5707963267948966192
+real(nswc_sp), intent(in) :: phi, cphi, k2, l2, n, m
+real(nswc_sp), intent(inout) :: p
+real(nswc_sp) :: a, b, c, eps, r, rf, s, s2, tol
+real(nswc_sp), parameter :: pihalf = 1.5707963267948966192
 !-----------------------------------------------------------------------
 !             Real elliptic integral of the third kind
 !-----------------------------------------------------------------------
@@ -21714,10 +21733,10 @@ end subroutine epi
 pure elemental subroutine depi(phi, cphi, k2, l2, n, m, p, ierr)
 implicit none
 integer, intent(inout) :: ierr
-double precision, intent(in) :: phi, cphi, k2, l2, n, m
-double precision, intent(inout) :: p
-double precision :: a, b, c, eps, r, rf, s, s2, tol
-double precision, parameter :: pihalf = 1.570796326794896619231321691639751442099d0
+real(nswc_dp), intent(in) :: phi, cphi, k2, l2, n, m
+real(nswc_dp), intent(inout) :: p
+real(nswc_dp) :: a, b, c, eps, r, rf, s, s2, tol
+real(nswc_dp), parameter :: pihalf = 1.570796326794896619231321691639751442099d0
 !-----------------------------------------------------------------------
 !               Double precision computation of the
 !             real elliptic integral of the third kind
@@ -21784,11 +21803,12 @@ implicit none
 !          March 1, 1980. Modified by A.H. Morris (NSWC).
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
-real, intent(inout) :: rf
-real, intent(in) :: x
-real, intent(in) :: y
-real, intent(in) :: z
-real :: c1, c2, c3, e2, e3, epslon, errtol, lamda, lolim, mu, s, uplim, xn, xndev, xnroot, yn, yndev, ynroot, zn, zndev, znroot
+real(nswc_sp), intent(inout) :: rf
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), intent(in) :: y
+real(nswc_sp), intent(in) :: z
+real(nswc_sp) :: c1, c2, c3, e2, e3, epslon, errtol, lamda, lolim, mu, s, uplim, xn, xndev, xnroot, yn, yndev, ynroot, zn, zndev, &
+   & znroot
 !-----------------------------------------------------------------------
 !          Input ...
 !          x, y, and z are the variables in the integral rf(x,y,z).
@@ -21873,11 +21893,11 @@ implicit none
 !          March 1, 1980. Modified by A.H. Morris (NSWC).
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
-double precision, intent(inout) :: rf
-double precision, intent(in) :: x
-double precision, intent(in) :: y
-double precision, intent(in) :: z
-double precision :: c1, c2, c3, e2, e3, epslon, errtol, lamda, lolim, mu, s, uplim, xn, xndev, xnroot, yn, yndev, ynroot, zn, &
+real(nswc_dp), intent(inout) :: rf
+real(nswc_dp), intent(in) :: x
+real(nswc_dp), intent(in) :: y
+real(nswc_dp), intent(in) :: z
+real(nswc_dp) :: c1, c2, c3, e2, e3, epslon, errtol, lamda, lolim, mu, s, uplim, xn, xndev, xnroot, yn, yndev, ynroot, zn, &
    & zndev, znroot
 !-----------------------------------------------------------------------
 !          Input ...
@@ -21963,11 +21983,12 @@ implicit none
 !          March 1, 1980. Modified by A.H. Morris (NSWC).
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
-real, intent(inout) :: rd
-real, intent(in) :: x
-real, intent(in) :: y
-real, intent(in) :: z
-real :: c1, c2, c3, c4, ea, eb, ec, ed, ef, epslon, errtol, lamda, lolim, mu, power4, sigma, s1, s2, uplim, xn, xndev, xnroot, yn, &
+real(nswc_sp), intent(inout) :: rd
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), intent(in) :: y
+real(nswc_sp), intent(in) :: z
+real(nswc_sp) :: c1, c2, c3, c4, ea, eb, ec, ed, ef, epslon, errtol, lamda, lolim, mu, power4, sigma, s1, s2, uplim, xn, xndev, &
+   & xnroot, yn, &
    & yndev, ynroot, zn, zndev, znroot
 !-----------------------------------------------------------------------
 !          Input ...
@@ -22064,11 +22085,11 @@ implicit none
 !          March 1, 1980. Modified by A.H. Morris (NSWC).
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
-double precision, intent(inout) :: rd
-double precision, intent(in) :: x
-double precision, intent(in) :: y
-double precision, intent(in) :: z
-double precision :: c1, c2, c3, c4, ea, eb, ec, ed, ef, epslon, errtol, lamda, lolim, mu, power4, sigma, s1, s2, uplim, xn, xndev, &
+real(nswc_dp), intent(inout) :: rd
+real(nswc_dp), intent(in) :: x
+real(nswc_dp), intent(in) :: y
+real(nswc_dp), intent(in) :: z
+real(nswc_dp) :: c1, c2, c3, c4, ea, eb, ec, ed, ef, epslon, errtol, lamda, lolim, mu, power4, sigma, s1, s2, uplim, xn, xndev, &
    & xnroot, yn, yndev, ynroot, zn, zndev, znroot
 !-----------------------------------------------------------------------
 !          Input ...
@@ -22166,12 +22187,13 @@ implicit none
 !          (NSWC).
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
-real, intent(inout) :: rj
-real, intent(in) :: p
-real, intent(in) :: x
-real, intent(in) :: y
-real, intent(in) :: z
-real :: rc, alfa, beta, c1, c2, c3, c4, ea, eb, ec, e2, e3, epslon, errtol, etolrc, lamda, lolim, mu, pn, pndev, power4, sigma, &
+real(nswc_sp), intent(inout) :: rj
+real(nswc_sp), intent(in) :: p
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), intent(in) :: y
+real(nswc_sp), intent(in) :: z
+real(nswc_sp) :: rc, alfa, beta, c1, c2, c3, c4, ea, eb, ec, e2, e3, epslon, errtol, etolrc, lamda, lolim, mu, pn, pndev, power4, &
+   & sigma, &
    & s1, s2, s3, uplim, xn, xndev, xnroot, yn, yndev, ynroot, zn, zndev, znroot
 !-----------------------------------------------------------------------
 !          Input ...
@@ -22283,12 +22305,12 @@ implicit none
 !          (NSWC).
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
-double precision, intent(inout) :: rj
-double precision, intent(in) :: p
-double precision, intent(in) :: x
-double precision, intent(in) :: y
-double precision, intent(in) :: z
-double precision :: rc, alfa, beta, c1, c2, c3, c4, ea, eb, ec, e2, e3, epslon, errtol, etolrc, lamda, lolim, mu, pn, pndev, &
+real(nswc_dp), intent(inout) :: rj
+real(nswc_dp), intent(in) :: p
+real(nswc_dp), intent(in) :: x
+real(nswc_dp), intent(in) :: y
+real(nswc_dp), intent(in) :: z
+real(nswc_dp) :: rc, alfa, beta, c1, c2, c3, c4, ea, eb, ec, e2, e3, epslon, errtol, etolrc, lamda, lolim, mu, pn, pndev, &
    & power4, sigma, s1, s2, s3, uplim, xn, xndev, xnroot, yn, yndev, ynroot, zn, zndev, znroot
 !-----------------------------------------------------------------------
 !          Input ...
@@ -22399,11 +22421,11 @@ implicit none
 !          (NSWC).
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
-real, intent(inout) :: rc
-real, intent(in) :: errtol
-real, intent(in) :: x
-real, intent(in) :: y
-real :: c1, c2, lamda, lolim, mu, s, sn, uplim, xn, yn
+real(nswc_sp), intent(inout) :: rc
+real(nswc_sp), intent(in) :: errtol
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), intent(in) :: y
+real(nswc_sp) :: c1, c2, lamda, lolim, mu, s, sn, uplim, xn, yn
 !-----------------------------------------------------------------------
 !          lolim and uplim determine the range of valid arguments.
 !          lolim is not less than the machine minimum multiplied by 5.
@@ -22481,11 +22503,11 @@ implicit none
 !          (NSWC).
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
-double precision, intent(inout) :: rc
-double precision, intent(in) :: errtol
-double precision, intent(in) :: x
-double precision, intent(in) :: y
-double precision :: c1, c2, lamda, lolim, mu, s, sn, uplim, xn, yn
+real(nswc_dp), intent(inout) :: rc
+real(nswc_dp), intent(in) :: errtol
+real(nswc_dp), intent(in) :: x
+real(nswc_dp), intent(in) :: y
+real(nswc_dp) :: c1, c2, lamda, lolim, mu, s, sn, uplim, xn, yn
 !-----------------------------------------------------------------------
 !          lolim and uplim determine the range of valid arguments.
 !          lolim is not less than the machine minimum multiplied by 5.
@@ -22540,12 +22562,12 @@ end subroutine drcvl1
 pure elemental subroutine ellpf(u,k,l,s,c,d,ierr)
 implicit none
 integer, intent(inout) :: ierr
-real, intent(inout) :: c, d, s
-real, intent(in) :: u
-real, intent(in) :: k, l
+real(nswc_sp), intent(inout) :: c, d, s
+real(nswc_sp), intent(in) :: u
+real(nswc_sp), intent(in) :: k, l
 integer :: max, n
-real :: e, eps, f, f2, r, sg, tol, u1, u2, z
-real, parameter :: pihalf = 1.5707963267949
+real(nswc_sp) :: e, eps, f, f2, r, sg, tol, u1, u2, z
+real(nswc_sp), parameter :: pihalf = 1.5707963267949
 !     -------------------------------------------------------------
 !     ellpf calculates the elliptic functions sn(u,k), CN(u,k), and
 !     DN(u,k) for real u and real modulus k.  it is assumed that
@@ -22611,14 +22633,14 @@ end subroutine ellpf
 
 pure elemental subroutine scd(u,k,l,f,s,c,d)
 implicit none
-real, intent(inout) :: c, d
-real, intent(in) :: f
-real, intent(inout) :: s
-real, intent(in) :: u
-real, intent(in) :: k, l
+real(nswc_sp), intent(inout) :: c, d
+real(nswc_sp), intent(in) :: f
+real(nswc_sp), intent(inout) :: s
+real(nswc_sp), intent(in) :: u
+real(nswc_sp), intent(in) :: k, l
 integer :: ierr
-real :: c1, d1, e1, f1, s1, v
-real, parameter :: pihalf = 1.5707963267949
+real(nswc_sp) :: c1, d1, e1, f1, s1, v
+real(nswc_sp), parameter :: pihalf = 1.5707963267949
 !     --------------------------------------------------------
 !     scd computes the elliptic functions sn(u,k), CN(u,k),
 !     and DN(u,k) for real u and real modulus k such that
@@ -22657,10 +22679,10 @@ end subroutine scd
 
 pure elemental subroutine scdm(u,k,s,c,d)
 implicit none
-real, intent(out) :: c, d, s
-real, intent(in) :: u
-real, intent(in) :: k
-real :: c1, c2, c3, c4, u2, k2
+real(nswc_sp), intent(out) :: c, d, s
+real(nswc_sp), intent(in) :: u
+real(nswc_sp), intent(in) :: k
+real(nswc_sp) :: c1, c2, c3, c4, u2, k2
 !     -------------------------------------------------
 !     Calculates SN(u,k), CN(u,k), and DN(u,k) for
 !     0.0 .LE. u .LE. 0.01 and for 0.0 .LE. k .LE. 1.0
@@ -22680,13 +22702,13 @@ end subroutine scdm
 
 pure elemental subroutine scdf(u,k,l,f,f1,s,c,d)
 implicit none
-real, intent(inout) :: c, d
-real, intent(in) :: f, f1
-real, intent(inout) :: s
-real, intent(in) :: u
-real, intent(in) :: k, l
-real :: a, ai, coef, eps, q1, q2, qd, qh, qn, sum, temp, tol, v, w, x, i
-real, parameter :: pihalf = 1.5707963267949
+real(nswc_sp), intent(inout) :: c, d
+real(nswc_sp), intent(in) :: f, f1
+real(nswc_sp), intent(inout) :: s
+real(nswc_sp), intent(in) :: u
+real(nswc_sp), intent(in) :: k, l
+real(nswc_sp) :: a, ai, coef, eps, q1, q2, qd, qh, qn, sum, temp, tol, v, w, x, i
+real(nswc_sp), parameter :: pihalf = 1.5707963267949
 !     -------------------------------------------------------------
 !     scdf computes SN(u,k), CN(u,k), and DN(u,k) for real u and
 !     k by use of the Fourier expansion for SN(u,k).  It is
@@ -22735,14 +22757,14 @@ end subroutine scdf
 
 pure elemental subroutine scdj(u,k,l,f,f1,s,c,d)
 implicit none
-real, intent(inout) :: c, d
-real, intent(in) :: f, f1
-real, intent(inout) :: s
-real, intent(in) :: u
-real, intent(in) :: k, l
-real :: a, ch, coef, e1, e1n, e2, e2n, eps, q1, q1n, q2, q2n, sh, sum, temp, tol, v, w, x, x2, xn, n
-real, parameter :: pihalf = 1.5707963267949
-real, parameter :: pi = 3.1415926535898
+real(nswc_sp), intent(inout) :: c, d
+real(nswc_sp), intent(in) :: f, f1
+real(nswc_sp), intent(inout) :: s
+real(nswc_sp), intent(in) :: u
+real(nswc_sp), intent(in) :: k, l
+real(nswc_sp) :: a, ch, coef, e1, e1n, e2, e2n, eps, q1, q1n, q2, q2n, sh, sum, temp, tol, v, w, x, x2, xn, n
+real(nswc_sp), parameter :: pihalf = 1.5707963267949
+real(nswc_sp), parameter :: pi = 3.1415926535898
 !     ----------------------------------------------------------------
 !     scdj computes SN(u,k), CN(u,k), and DN(u,k) for real u and
 !     k using the imaginary transformation of Jacobi and A
@@ -22805,10 +22827,10 @@ end subroutine scdj
 pure elemental subroutine elpfc1(u,k,l,s,c,d,ierr)
 implicit none
 integer, intent(inout) :: ierr
-complex, intent(in) :: u
-complex, intent(inout) :: s, c, d
-real, intent(in) :: k, l
-real :: c1, c2, ck, cl, coef, d1, d2, dk, dl, r, s1, s2, sk, sl, t, t1, t2, td1, td2, u1, u2, k2
+complex(nswc_sp), intent(in) :: u
+complex(nswc_sp), intent(inout) :: s, c, d
+real(nswc_sp), intent(in) :: k, l
+real(nswc_sp) :: c1, c2, ck, cl, coef, d1, d2, dk, dl, r, s1, s2, sk, sl, t, t1, t2, td1, td2, u1, u2, k2
 !     -------------------------------------------------------------
 !     elpfc1 calculates the elliptic functions sn(u,k), CN(u,k),
 !     DN(u,k) for complex u and real modulus k.  it is assumed that
@@ -22882,11 +22904,11 @@ pure elemental subroutine peq(z, w, ierr)
 implicit none
 !     Weierstrass P-function in the equianharmonic case
 !     for complex argument with unit period parallelogram
-complex, intent(in) :: z
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: w
 integer, intent(inout) :: ierr
-complex :: z1, z4, z6
-real :: zr, zi
+complex(nswc_sp) :: z1, z4, z6
+real(nswc_sp) :: zr, zi
 integer :: m, n
 !     Reduction to fundamental parallelogram
 zi = 1.1547005383792515e0*aimag(z) + 0.5e0
@@ -22920,11 +22942,11 @@ implicit none
 !     First derivative of Weierstrass P-function in the
 !     equianharmonic case for complex argument
 !     with unit period parallelogram
-complex, intent(in) :: z
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: w
 integer, intent(inout) :: ierr
-complex :: z1, z3, z6
-real :: zr, zi
+complex(nswc_sp) :: z1, z3, z6
+real(nswc_sp) :: zr, zi
 integer :: m, n
 !     Reduction to fundamental parallelogram
 zi = 1.1547005383792515e0*aimag(z) + 0.5e0
@@ -22958,11 +22980,11 @@ pure elemental subroutine plem(z, w, ierr)
 implicit none
 !     Weierstrass P-function in the lemniscatic case
 !     for complex argument with unit period parallelogram
-complex, intent(in) :: z
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: w
 integer, intent(inout) :: ierr
-complex :: z1, z4, z6
-real :: zr, zi
+complex(nswc_sp) :: z1, z4, z6
+real(nswc_sp) :: zr, zi
 integer :: m, n
 !     Reduction to fundamental parallelogram
 zr = real(z) + 0.5e0
@@ -22998,11 +23020,11 @@ implicit none
 !     First derivative of Weierstrass P-function in the
 !     lemniscatic case for complex argument
 !     with unit period parallelogram
-complex, intent(in) :: z
-complex, intent(inout) :: w
+complex(nswc_sp), intent(in) :: z
+complex(nswc_sp), intent(inout) :: w
 integer, intent(inout) :: ierr
-complex :: z1, z3, z4
-real :: zr, zi
+complex(nswc_sp) :: z1, z3, z4
+real(nswc_sp) :: zr, zi
 integer :: m, n
 !     Reduction to fundamental parallelogram
 zr = real(z) + 0.5e0
@@ -23042,30 +23064,31 @@ integer, intent(inout) :: ind
 integer, intent(in) :: iop
 integer, intent(inout) :: ko
 integer, intent(in) :: n0
-real, intent(inout) :: a, p, x(*), y(*)
+real(nswc_sp), intent(inout) :: a, p, x(*), y(*)
 integer :: k, m, n, nswc_ai_i4
-real :: aj0, aj1, b, bgd1, bgd2, c, cape, caph, capv, cee, circm, d1sq, d2sq, f, g(2), h(2), p1, psi1, sum, t, t1, tau, tausq, u, &
+real(nswc_sp) :: aj0, aj1, b, bgd1, bgd2, c, cape, caph, capv, cee, circm, d1sq, d2sq, f, g(2), h(2), p1, psi1, sum, t, t1, tau, &
+   & tausq, u, &
    & v, w, xk, yk, ykm1, z, kom, l
-real, parameter :: pi = 3.1415926535898
-real, parameter :: twopi = 6.28318530717958
-real, parameter :: alnpi = 1.14472988584940
-real, parameter :: rtpi = 1.77245385090552
-real, parameter :: rtpii = .56418958354776
-real, parameter :: e(5) = [.885777518572895e+00, -.981151952778050e+00, .759305502082485e+00, -.353644980686977e+00, &
+real(nswc_sp), parameter :: pi = 3.1415926535898
+real(nswc_sp), parameter :: twopi = 6.28318530717958
+real(nswc_sp), parameter :: alnpi = 1.14472988584940
+real(nswc_sp), parameter :: rtpi = 1.77245385090552
+real(nswc_sp), parameter :: rtpii = .56418958354776
+real(nswc_sp), parameter :: e(5) = [.885777518572895e+00, -.981151952778050e+00, .759305502082485e+00, -.353644980686977e+00, &
    & .695232092435207e-01]
-real, parameter :: e2(10) = [.886226470016632e+00, -.999950714561036e+00, .885348820003892e+00, -.660611239043357e+00, &
+real(nswc_sp), parameter :: e2(10) = [.886226470016632e+00, -.999950714561036e+00, .885348820003892e+00, -.660611239043357e+00, &
    & .421821197160099e+00, -.222898055667208e+00, .905057384150449e-01, -.254906111884287e-01, .430895168984138e-02, - &
    & .323377239693247e-03]
-real, parameter :: e3(15) = [.886226924931465e+00, -.999999899776252e+00, .886223733186722e+00, -.666626670510907e+00, &
+real(nswc_sp), parameter :: e3(15) = [.886226924931465e+00, -.999999899776252e+00, .886223733186722e+00, -.666626670510907e+00, &
    & .442851899328569e+00, -.265638206366025e+00, .145060043403014e+00, -.714909837799889e-01, .309199295521210e-01, - &
    & .112323532148441e-01, .324944543171185e-02, -.704260243309096e-03, .105787574480633e-03, -.971864864160461e-05, &
    & .408335517232165e-06]
-real, parameter :: aph1(3) = [2.02e-7, 2.08e-13, 2.71e-19]
-real, parameter :: aph2(3) = [1.22e-2, 1.23e-4, 1.34e-6]
-real, parameter :: aph4(3) = [.6962e-1, .6990e-2, .7311e-3]
-real, parameter :: rsq(3) = [6.0516, 12.60605, 19.201924]
-real, parameter :: a3d8(3) = [0.28125e-4, 0.285e-7, 0.32625e-10]
-real, parameter :: cst(3) = [.5625e-4, .57e-7, .6512e-10]
+real(nswc_sp), parameter :: aph1(3) = [2.02e-7, 2.08e-13, 2.71e-19]
+real(nswc_sp), parameter :: aph2(3) = [1.22e-2, 1.23e-4, 1.34e-6]
+real(nswc_sp), parameter :: aph4(3) = [.6962e-1, .6990e-2, .7311e-3]
+real(nswc_sp), parameter :: rsq(3) = [6.0516, 12.60605, 19.201924]
+real(nswc_sp), parameter :: a3d8(3) = [0.28125e-4, 0.285e-7, 0.32625e-10]
+real(nswc_sp), parameter :: cst(3) = [.5625e-4, .57e-7, .6512e-10]
 !     -------------------
 !     -------------------
 !     -------------------
@@ -23286,16 +23309,17 @@ implicit none
 intrinsic :: erf
 integer, intent(inout) :: ierr
 integer, intent(in) :: j
-real, intent(in) :: d
-real, intent(out) :: p
-real, intent(in) :: r
+real(nswc_sp), intent(in) :: d
+real(nswc_sp), intent(out) :: p
+real(nswc_sp), intent(in) :: r
 integer :: i, n
-real :: a, a1, an, anm1, bk2, c0, const, d2, delta, eps, eps0, expt, f, s, s0, s1, s2, sum, t, t0, t2, td, tn, tr, w, x, x0, y1, &
+real(nswc_sp) :: a, a1, an, anm1, bk2, c0, const, d2, delta, eps, eps0, expt, f, s, s0, s1, s2, sum, t, t0, t2, td, tn, tr, w, x, &
+   & x0, y1, &
    & z, zm, zp, zr, zrs, m, m0
-real, parameter :: e = 2.71828182845905
-real, parameter :: c1 = .707106781186548
-real, parameter :: c2 = .564189583547756
-real, parameter :: c3 = 6.28318530717959
+real(nswc_sp), parameter :: e = 2.71828182845905
+real(nswc_sp), parameter :: c1 = .707106781186548
+real(nswc_sp), parameter :: c2 = .564189583547756
+real(nswc_sp), parameter :: c3 = 6.28318530717959
 !-----------------------------------------------------------------------
 !       If j .NE. 0, output is p = Circular coverage function. p gives
 !       the probability of a shot falling, under a normal distribution
@@ -23511,21 +23535,21 @@ end subroutine circv
 pure elemental subroutine erfc0(ind, x, e, y)
 implicit none
 integer, intent(in) :: ind
-real, intent(inout) :: e
-real, intent(in) :: x
-real, intent(inout) :: y
-real :: ax, bot, eps, t, top
-double precision :: w
-real, parameter :: c = .564189583547756
-real, parameter :: a(4) = [-1.65581836870402e-4, 3.25324098357738e-2, 1.02201136918406e-1, 1.12837916709552e00]
-real, parameter :: b(4) = [4.64988945913179e-3, 7.01333417158511e-2, 4.23906732683201e-1, 1.00000000000000e00]
-real, parameter :: p(8) = [-1.36864857382717e-7, 5.64195517478974e-1, 7.21175825088309e00, 4.31622272220567e01, &
+real(nswc_sp), intent(inout) :: e
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), intent(inout) :: y
+real(nswc_sp) :: ax, bot, eps, t, top
+real(nswc_dp) :: w
+real(nswc_sp), parameter :: c = .564189583547756
+real(nswc_sp), parameter :: a(4) = [-1.65581836870402e-4, 3.25324098357738e-2, 1.02201136918406e-1, 1.12837916709552e00]
+real(nswc_sp), parameter :: b(4) = [4.64988945913179e-3, 7.01333417158511e-2, 4.23906732683201e-1, 1.00000000000000e00]
+real(nswc_sp), parameter :: p(8) = [-1.36864857382717e-7, 5.64195517478974e-1, 7.21175825088309e00, 4.31622272220567e01, &
    & 1.52989285046940e02, 3.39320816734344e02, 4.51918953711873e02, 3.00459261020162e02]
-real, parameter :: q(8) = [1.00000000000000e00, 1.27827273196294e01, 7.70001529352295e01, 2.77585444743988e02, &
+real(nswc_sp), parameter :: q(8) = [1.00000000000000e00, 1.27827273196294e01, 7.70001529352295e01, 2.77585444743988e02, &
    & 6.38980264465631e02, 9.31354094850610e02, 7.90950925327898e02, 3.00459260956983e02]
-real, parameter :: r(5) = [2.10144126479064e00, 2.62370141675169e01, 2.13688200555087e01, 4.65807828718470e00, &
+real(nswc_sp), parameter :: r(5) = [2.10144126479064e00, 2.62370141675169e01, 2.13688200555087e01, 4.65807828718470e00, &
    & 2.82094791773523e-1]
-real, parameter :: s(5) = [9.41537750555460e01, 1.87114811799590e02, 9.90191814623914e01, 1.80124575948747e01, &
+real(nswc_sp), parameter :: s(5) = [9.41537750555460e01, 1.87114811799590e02, 9.90191814623914e01, 1.80124575948747e01, &
    & 1.00000000000000e00]
 !-----------------------------------------------------------------------
 !         Evaluation of the complementary error function
@@ -23587,13 +23611,13 @@ return
 50 y = 0.0
 end subroutine erfc0
 
-pure elemental real function erfcr(x)
+pure elemental real(nswc_sp) function erfcr(x)
 implicit none
-real, intent(in) :: x
-real :: bot, t, top
-real, parameter :: r(5) = [2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
+real(nswc_sp), intent(in) :: x
+real(nswc_sp) :: bot, t, top
+real(nswc_sp), parameter :: r(5) = [2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
    & 2.82094791773523e-01]
-real, parameter :: s(4) = [9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
+real(nswc_sp), parameter :: s(4) = [9.41537750555460e+01, 1.87114811799590e+02, 9.90191814623914e+01, 1.80124575948747e+01]
 !-----------------------------------------------------------------------
 !     Computation of  1/sqrt(PI) - x*exp(x*x)*erfc(x)  for x .GE. 4
 !-----------------------------------------------------------------------
@@ -23608,25 +23632,26 @@ end function erfcr
 pure elemental subroutine pkill(r0, sx, sy, h, k, p)
 implicit none
 intrinsic :: erf, erfc
-real, intent(in) :: h
-real, intent(out) :: p
-real, intent(in) :: r0, sx, sy
-real, intent(in) :: k
+real(nswc_sp), intent(in) :: h
+real(nswc_sp), intent(out) :: p
+real(nswc_sp), intent(in) :: r0, sx, sy
+real(nswc_sp), intent(in) :: k
 integer :: i, ii, iy, iz, iz3, j, j8, n1, nt
-real :: a, a1, a2, a4, c8, d, d1, d2, dm, e3, e4, eps, f, g2, g3, h1, h2, h3, h5, h6, h8, q, q1, r, r8, s0, s1, s2, s9, sa, seps1, &
+real(nswc_sp) :: a, a1, a2, a4, c8, d, d1, d2, dm, e3, e4, eps, f, g2, g3, h1, h2, h3, h5, h6, h8, q, q1, r, r8, s0, s1, s2, s9, &
+   & sa, seps1, &
    & sqeps, t, t1, t2, t3, t4, t5, t9, u, x1, x5, yy, z, z1, z2, z3, z8, z9, k8, nswc_ai_r4
-real, parameter :: v(16) = [.4830766568773832e-01, .1444719615827965e+00, .2392873622521371e+00, .3318686022821276e+00, &
+real(nswc_sp), parameter :: v(16) = [.4830766568773832e-01, .1444719615827965e+00, .2392873622521371e+00, .3318686022821276e+00, &
    & .4213512761306353e+00, .5068999089322294e+00, .5877157572407623e+00, .6630442669302152e+00, .7321821187402897e+00, &
    & .7944837959679424e+00, .8493676137325700e+00, .8963211557660521e+00, .9349060759377397e+00, .9647622555875064e+00, &
    & .9856115115452683e+00, .9972638618494816e+00]
-real, parameter :: w(16) = [.9654008851472780e-01, .9563872007927486e-01, .9384439908080457e-01, .9117387869576388e-01, &
+real(nswc_sp), parameter :: w(16) = [.9654008851472780e-01, .9563872007927486e-01, .9384439908080457e-01, .9117387869576388e-01, &
    & .8765209300440381e-01, .8331192422694676e-01, .7819389578707031e-01, .7234579410884851e-01, .6582222277636185e-01, &
    & .5868409347853555e-01, .5099805926237618e-01, .4283589802222668e-01, .3427386291302143e-01, .2539206530926206e-01, &
    & .1627439473090567e-01, .7018610009470097e-02]
-real, parameter :: a3 = 20.0
-real, parameter :: c = .4638648042895004
-real, parameter :: rpi = .5641895835477563
-real, parameter :: rt2 = 1.414213562373095
+real(nswc_sp), parameter :: a3 = 20.0
+real(nswc_sp), parameter :: c = .4638648042895004
+real(nswc_sp), parameter :: rpi = .5641895835477563
+real(nswc_sp), parameter :: rt2 = 1.414213562373095
 !-----------------------------------------------------------------------
 !           Computation of the elliptical coverage function
 !                         ---------------
@@ -24041,8 +24066,8 @@ end subroutine pkill
 pure subroutine plcopy(a,ka,m,b,kb,n)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-real, intent(in) :: a(*)
-real, intent(inout) :: b(*)
+real(nswc_sp), intent(in) :: a(*)
+real(nswc_sp), intent(inout) :: b(*)
 integer :: j, jmax, la, lb, mp1
 !     ------------------------------------------------------------------
 !     Copying real polynomials
@@ -24066,8 +24091,8 @@ end subroutine plcopy
 pure subroutine dpcopy(a,ka,m,b,kb,n)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-double precision, intent(in) :: a(*)
-double precision, intent(inout) :: b(*)
+real(nswc_dp), intent(in) :: a(*)
+real(nswc_dp), intent(inout) :: b(*)
 integer :: j, jmax, la, lb, mp1
 !     ------------------------------------------------------------------
 !     Copying double precision polynomials
@@ -24091,8 +24116,8 @@ end subroutine dpcopy
 pure subroutine padd(a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*)
+real(nswc_sp), intent(in) :: a(*), b(*)
+real(nswc_sp), intent(inout) :: c(*)
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Addition of real polynomials
@@ -24113,8 +24138,8 @@ end subroutine padd
 pure subroutine dpadd(a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
-double precision, intent(in) :: a(*), b(*)
-double precision, intent(inout) :: c(*)
+real(nswc_dp), intent(in) :: a(*), b(*)
+real(nswc_dp), intent(inout) :: c(*)
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Addition of double precision polynomials
@@ -24135,8 +24160,8 @@ end subroutine dpadd
 pure subroutine psubt(a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*)
+real(nswc_sp), intent(in) :: a(*), b(*)
+real(nswc_sp), intent(inout) :: c(*)
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Subtraction of real polynomials
@@ -24157,8 +24182,8 @@ end subroutine psubt
 pure subroutine dpsubt(a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
-double precision, intent(in) :: a(*), b(*)
-double precision, intent(inout) :: c(*)
+real(nswc_dp), intent(in) :: a(*), b(*)
+real(nswc_dp), intent(inout) :: c(*)
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Subtraction of double precision polynomials
@@ -24179,10 +24204,10 @@ end subroutine dpsubt
 pure subroutine pmult(a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*)
+real(nswc_sp), intent(in) :: a(*), b(*)
+real(nswc_sp), intent(inout) :: c(*)
 integer :: i, imax, imin, j, jmax, jmin, la, lb, lc
-double precision :: dsum
+real(nswc_dp) :: dsum
 !     ------------------------------------------------------------------
 !     Multiplication of real polynomials
 !     ------------------------------------------------------------------
@@ -24218,10 +24243,10 @@ end subroutine pmult
 pure subroutine dpmult(a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
-double precision, intent(in) :: a(*), b(*)
-double precision, intent(inout) :: c(*)
+real(nswc_dp), intent(in) :: a(*), b(*)
+real(nswc_dp), intent(inout) :: c(*)
 integer :: i, imax, imin, j, jmax, jmin, la, lb, lc
-double precision :: sum
+real(nswc_dp) :: sum
 !     ------------------------------------------------------------------
 !     Multiplication of double precision polynomials
 !     ------------------------------------------------------------------
@@ -24258,11 +24283,11 @@ pure subroutine pdiv(a,ka,l,b,kb,m,c,kc,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m, n
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*)
+real(nswc_sp), intent(in) :: a(*), b(*)
+real(nswc_sp), intent(inout) :: c(*)
 integer :: i, ib, ic, imax, j, la, lc
-real :: b0
-double precision :: dsum
+real(nswc_sp) :: b0
+real(nswc_dp) :: dsum
 !     ------------------------------------------------------------------
 !     Division of real polynomials
 !     ------------------------------------------------------------------
@@ -24309,10 +24334,10 @@ pure subroutine dpdiv(a,ka,l,b,kb,m,c,kc,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m, n
-double precision, intent(in) :: a(*), b(*)
-double precision, intent(inout) :: c(*)
+real(nswc_dp), intent(in) :: a(*), b(*)
+real(nswc_dp), intent(inout) :: c(*)
 integer :: i, ib, ic, imax, j, la, lc
-double precision :: b0, sum
+real(nswc_dp) :: b0, sum
 !     ------------------------------------------------------------------
 !     Division of double precision polynomials
 !     ------------------------------------------------------------------
@@ -24359,12 +24384,12 @@ pure subroutine plpwr(r,a,ka,m,b,kb,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, n
-real, intent(in) :: r
-real, intent(in) :: a(*)
-real, intent(inout) :: b(*)
+real(nswc_sp), intent(in) :: r
+real(nswc_sp), intent(in) :: a(*)
+real(nswc_sp), intent(inout) :: b(*)
 integer :: i, ia, ib, imax, j, lb
-real :: a0, jm1
-double precision :: coeff, dsum, rp1
+real(nswc_sp) :: a0, jm1
+real(nswc_dp) :: coeff, dsum, rp1
 !     ------------------------------------------------------------------
 !     SET b = a**r WHERE A IS A REAL POLYNOMIAL
 !     ------------------------------------------------------------------
@@ -24409,11 +24434,11 @@ pure subroutine dplpwr(r,a,ka,m,b,kb,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, n
-double precision, intent(in) :: a(*)
-double precision, intent(inout) :: b(*)
-double precision, intent(in) :: r
+real(nswc_dp), intent(in) :: a(*)
+real(nswc_dp), intent(inout) :: b(*)
+real(nswc_dp), intent(in) :: r
 integer :: i, ia, ib, imax, j, lb
-double precision :: a0, coeff, jm1, rp1, sum
+real(nswc_dp) :: a0, coeff, jm1, rp1, sum
 !     ------------------------------------------------------------------
 !     Set b = a**r where A is a double precision polynomial
 !     ------------------------------------------------------------------
@@ -24457,10 +24482,10 @@ end subroutine dplpwr
 pure subroutine pinv(a, d, n, q)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: a(n)
-real, intent(inout) :: d(n), q(*)
+real(nswc_sp), intent(in) :: a(n)
+real(nswc_sp), intent(inout) :: d(n), q(*)
 integer :: i, j, jj, k, l, l0, ll, m
-real :: s, sum, t, u
+real(nswc_sp) :: s, sum, t, u
 !-----------------------------------------------------------------------
 !          Computation of the inverse of the power series
 !                  sum (a(i)*X**i, i = 1,2,...)
@@ -24513,10 +24538,10 @@ end subroutine pinv
 pure subroutine dpinv(a, d, n, q)
 implicit none
 integer, intent(in) :: n
-double precision, intent(in) :: a(n)
-double precision, intent(inout) :: d(n), q(*)
+real(nswc_dp), intent(in) :: a(n)
+real(nswc_dp), intent(inout) :: d(n), q(*)
 integer :: i, j, jj, k, l, l0, ll, m
-double precision :: s, sum, t, u
+real(nswc_dp) :: s, sum, t, u
 !-----------------------------------------------------------------------
 !          Computation of the inverse of the power series
 !                  sum (a(i)*X**i, i = 1,2,...)
@@ -24569,11 +24594,11 @@ end subroutine dpinv
 subroutine mplnmv(mo, au, nc, ac, fv)
 implicit none
 integer, intent(in) :: mo, nc
-real :: ac(*)
-real, intent(in) :: au
-real, intent(out) :: fv
+real(nswc_sp) :: ac(*)
+real(nswc_sp), intent(in) :: au
+real(nswc_sp), intent(out) :: fv
 integer :: k, l
-real :: ql
+real(nswc_sp) :: ql
 !     ******************************************************************
 !     Fortran subroutine for multiplex polynomial evaluation
 !     ******************************************************************
@@ -24622,13 +24647,13 @@ do k = 3,nc
 end do
 end subroutine mplnmv
 
-pure real function csevl(x, a, n)
+pure real(nswc_sp) function csevl(x, a, n)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: x
-real, intent(in) :: a(n)
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), intent(in) :: a(n)
 integer :: i, k
-real :: s0, s1, s2, x2
+real(nswc_sp) :: s0, s1, s2, x2
 !-----------------------------------------------------------------------
 !          Evaluate the n term Chebyshev series A at x.
 !          Only half of the first coefficient is used.
@@ -24648,12 +24673,12 @@ end do
 csevl = 0.5 * (s0 - s2)
 end function csevl
 
-pure double precision function dcsevl(x, a, n)
+pure real(nswc_dp) function dcsevl(x, a, n)
 implicit none
 integer, intent(in) :: n
-double precision, intent(in) :: a(n), x
+real(nswc_dp), intent(in) :: a(n), x
 integer :: i, k
-double precision :: x2, s0, s1, s2
+real(nswc_dp) :: x2, s0, s1, s2
 !-----------------------------------------------------------------------
 !          Evaluate the n term Chebyshev series A at x.
 !          Only half of the first coefficient is used.
@@ -24676,10 +24701,10 @@ end function dcsevl
 subroutine lgrngn(au, na, an)
 implicit none
 integer, intent(in) :: na
-real, intent(inout) :: an(*)
-real :: au(*)
+real(nswc_sp), intent(inout) :: an(*)
+real(nswc_sp) :: au(*)
 integer :: k, m
-real :: dm, tm
+real(nswc_sp) :: dm, tm
 !     ******************************************************************
 !     Fortran subroutine for Lagrangian normalization factors
 !     ******************************************************************
@@ -24701,12 +24726,12 @@ end subroutine lgrngn
 subroutine lgrngv(mo, na, qu, au, an, ff, df, sf)
 implicit none
 integer, intent(in) :: mo, na
-real :: an(*), au(*)
-real, intent(inout) :: df(*), ff(*)
-real, intent(in) :: qu
-real, intent(inout) :: sf(*)
+real(nswc_sp) :: an(*), au(*)
+real(nswc_sp), intent(inout) :: df(*), ff(*)
+real(nswc_sp), intent(in) :: qu
+real(nswc_sp), intent(inout) :: sf(*)
 integer :: k, l
-real :: dm, rm, sm, tm
+real(nswc_sp) :: dm, rm, sm, tm
 logical :: ln
 !     ******************************************************************
 !     Fortran subroutine for Lagrangian function evaluation
@@ -24818,10 +24843,10 @@ end subroutine lgrngv
 subroutine lgrngx(au, na, ac)
 implicit none
 integer, intent(in) :: na
-real, intent(inout) :: ac(*)
-real :: au(*)
+real(nswc_sp), intent(inout) :: ac(*)
+real(nswc_sp) :: au(*)
 integer :: i, j, k, l
-real :: sm, td, tm
+real(nswc_sp) :: sm, td, tm
 !     ******************************************************************
 !     Fortran subroutine for Lagrangian polynomial expansion
 !     ******************************************************************
@@ -24870,10 +24895,10 @@ end subroutine lgrngx
 subroutine orthos(au, ma, aa, na, ar)
 implicit none
 integer, intent(in) :: ma, na
-real, intent(inout) :: aa(*), ar(*)
-real :: au(*)
+real(nswc_sp), intent(inout) :: aa(*), ar(*)
+real(nswc_sp) :: au(*)
 integer :: i, j, k, l, m
-real :: rm, rn, sm, sn
+real(nswc_sp) :: rm, rn, sm, sn
 !     ******************************************************************
 !     Fortran subroutine for orthonormal polynomial synthesis
 !     ******************************************************************
@@ -24951,11 +24976,11 @@ end subroutine orthos
 subroutine orthov(mo, na, au, ar, nf, ff, df, sf)
 implicit none
 integer, intent(in) :: mo, na, nf
-real :: ar(*)
-real, intent(in) :: au
-real, intent(inout) :: df(*), ff(*), sf(*)
+real(nswc_sp) :: ar(*)
+real(nswc_sp), intent(in) :: au
+real(nswc_sp), intent(inout) :: df(*), ff(*), sf(*)
 integer :: k, l
-real :: rn, sn
+real(nswc_sp) :: rn, sn
 !     ******************************************************************
 !     Fortran subroutine for orthonormal polynomial evaluation
 !     ******************************************************************
@@ -25007,10 +25032,10 @@ end subroutine orthov
 subroutine orthox(na, ar, nc, ac)
 implicit none
 integer, intent(in) :: na, nc
-real, intent(inout) :: ac(*)
-real :: ar(*)
+real(nswc_sp), intent(inout) :: ac(*)
+real(nswc_sp) :: ar(*)
 integer :: j, k, l, m, n
-real :: rn, sn, tm
+real(nswc_sp) :: rn, sn, tm
 !     ******************************************************************
 !     Fortran subroutine for orthonormal polynomial expansion
 !     ******************************************************************
@@ -25046,7 +25071,7 @@ do m = 3,nc
 end do
 end subroutine orthox
 
-real function zeroin(f, ax, bx, aerr, rerr)
+real(nswc_sp) function zeroin(f, ax, bx, aerr, rerr)
 implicit none
 !-----------------------------------------------------------------------
 !         Finding a zero of the function f(X) in the interval (ax,bx)
@@ -25066,10 +25091,10 @@ implicit none
 !  zero given by richard Brent in algorithms for minimization without
 !  derivatives, Prentice-Hall, inc. (1973).
 !-----------------------------------------------------------------------
-real :: f
-real, intent(in) :: ax, bx, aerr, rerr
+real(nswc_sp) :: f
+real(nswc_sp), intent(in) :: ax, bx, aerr, rerr
 external f
-real :: a, b, c, d, e, eps, fa, fb, fc, tol, xm, p, q, r, s, atol, &
+real(nswc_sp) :: a, b, c, d, e, eps, fa, fb, fc, tol, xm, p, q, r, s, atol, &
    & rtol
 !  Compute eps, the relative machine precision
 eps = spmpar(1)
@@ -25137,7 +25162,7 @@ go to 20
 90 zeroin = b
 end function zeroin
 
-double precision function dzero(f, ax, bx, aerr, rerr)
+real(nswc_dp) function dzero(f, ax, bx, aerr, rerr)
 implicit none
 !-----------------------------------------------------------------------
 !         Finding a zero of the function f(X) in the interval (ax,bx)
@@ -25157,10 +25182,10 @@ implicit none
 !  zero given by richard Brent in algorithms for minimization without
 !  derivatives, Prentice-Hall, inc. (1973).
 !-----------------------------------------------------------------------
-double precision :: f
-double precision, intent(in) :: ax, bx, aerr, rerr
+real(nswc_dp) :: f
+real(nswc_dp), intent(in) :: ax, bx, aerr, rerr
 external f
-double precision :: a, b, c, d, e, eps, fa, fb, fc, tol, xm, p, q, &
+real(nswc_dp) :: a, b, c, d, e, eps, fa, fb, fc, tol, xm, p, q, &
    & r, s, atol, rtol
 !  Compute eps, the relative machine precision
 eps = dpmpar(1)
@@ -25233,14 +25258,14 @@ implicit none
 integer :: n
 integer, intent(out) :: info
 integer, intent(in) :: lwa
-real, intent(in) :: epsfcn, tol
-real, intent(inout) :: x(n), fvec(n), wa(lwa)
+real(nswc_sp), intent(in) :: epsfcn, tol
+real(nswc_sp), intent(inout) :: x(n), fvec(n), wa(lwa)
 external fcn
 integer :: index, j, lr, maxfev, ml, mode, mu, nfev, nprint
-real :: xtol
-real, parameter :: factor = 1.0e2
-real, parameter :: one = 1.0e0
-real, parameter :: zero = 0.0e0
+real(nswc_sp) :: xtol
+real(nswc_sp), parameter :: factor = 1.0e2
+real(nswc_sp), parameter :: one = 1.0e0
+real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     SUBROUTINE hbrd
 !       the purpose of hbrd is to find a zero of a system of
@@ -25339,20 +25364,20 @@ integer :: n
 integer, intent(in) :: maxfev, ml, mu, mode, nprint
 integer, intent(out) :: info, nfev
 integer, intent(in) :: ldfjac, lr
-real, intent(in) :: xtol, epsfcn, factor
-real, intent(inout) :: x(n), fvec(n), diag(n), fjac(ldfjac,n), &
+real(nswc_sp), intent(in) :: xtol, epsfcn, factor
+real(nswc_sp), intent(inout) :: x(n), fvec(n), diag(n), fjac(ldfjac,n), &
    & r(lr), qtf(n), wa1(n), wa2(n), wa3(n)
-real :: wa4(n)
+real(nswc_sp) :: wa4(n)
 external fcn
 integer :: i, iflag, iter, j, jm1, l, msum, ncfail, ncsuc, nslow1, nslow2, iwa(1)
 logical :: jeval, sing
-real :: actred, delta, epsmch, fnorm, fnorm1, pnorm, prered, ratio, sum, temp, xnorm
-real, parameter :: one = 1.0e0
-real, parameter :: p1 = 1.0e-1
-real, parameter :: p5 = 5.0e-1
-real, parameter :: p001 = 1.0e-3
-real, parameter :: p0001 = 1.0e-4
-real, parameter :: zero = 0.0e0
+real(nswc_sp) :: actred, delta, epsmch, fnorm, fnorm1, pnorm, prered, ratio, sum, temp, xnorm
+real(nswc_sp), parameter :: one = 1.0e0
+real(nswc_sp), parameter :: p1 = 1.0e-1
+real(nswc_sp), parameter :: p5 = 5.0e-1
+real(nswc_sp), parameter :: p001 = 1.0e-3
+real(nswc_sp), parameter :: p0001 = 1.0e-4
+real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     SUBROUTINE hybrd
 !     the purpose of hybrd is to find a zero of a system of
@@ -25684,9 +25709,9 @@ end subroutine hybrd
 
 pure subroutine qdcrt(a, z)
 implicit none
-real, intent(in) :: a(3)
-complex, intent(inout) :: z(2)
-real :: d, eps, r, w, x, y
+real(nswc_sp), intent(in) :: a(3)
+complex(nswc_sp), intent(inout) :: z(2)
+real(nswc_sp) :: d, eps, r, w, x, y
 !-----------------------------------------------------------------------
 !        qdcrt computes the roots of the real polynomial
 !              a(1) + a(2)*z + a(3)*z**2
@@ -25736,9 +25761,9 @@ implicit none
 !     and stores the results in zr and zi. It is assumed that
 !     a(3) is nonzero.
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(3)
-double precision, intent(inout) :: zr(2), zi(2)
-double precision :: d, eps, r, w
+real(nswc_dp), intent(in) :: a(3)
+real(nswc_dp), intent(inout) :: zr(2), zi(2)
+real(nswc_dp) :: d, eps, r, w
 !-----------------------------------------------------------------------
 !     ***** eps is a machine dependent constant. Eps is the
 !           smallest number such that 1.D0 + eps .GT. 1.D0.
@@ -25781,11 +25806,12 @@ end subroutine dqdcrt
 
 pure subroutine cbcrt(a, z)
 implicit none
-real, intent(in) :: a(4)
-complex, intent(inout) :: z(3)
-real :: arg, c, cf, d, eps, p, p1, q, q1, r, r1, ra, rb, rq, rt, s, sf, sq, sum, t, t1, tol, w, w1, w2, x, x1, x2, x3, y, y1, y2, &
+real(nswc_sp), intent(in) :: a(4)
+complex(nswc_sp), intent(inout) :: z(3)
+real(nswc_sp) :: arg, c, cf, d, eps, p, p1, q, q1, r, r1, ra, rb, rq, rt, s, sf, sq, sum, t, t1, tol, w, w1, w2, x, x1, x2, x3, y, &
+   & y1, y2, &
    & y3, aq(3)
-real, parameter :: rt3 = 1.7320508075689
+real(nswc_sp), parameter :: rt3 = 1.7320508075689
 !-----------------------------------------------------------------------
 !        cbcrt computes the roots of the real polynomial
 !              a(1) + a(2)*z + a(3)*z**2 + a(4)*z**3
@@ -25959,11 +25985,11 @@ implicit none
 !        naval surface weapons center
 !        Dahlgren, Virginia
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(4)
-double precision, intent(inout) :: zr(3), zi(3)
-double precision :: aq(3), arg, c, cf, d, eps, p, p1, q, q1, r, ra, rb, rq, rt, r1, s, sf, sq, sum, t, tol, t1, w, w1, w2, x, x1, &
+real(nswc_dp), intent(in) :: a(4)
+real(nswc_dp), intent(inout) :: zr(3), zi(3)
+real(nswc_dp) :: aq(3), arg, c, cf, d, eps, p, p1, q, q1, r, ra, rb, rq, rt, r1, s, sf, sq, sum, t, tol, t1, w, w1, w2, x, x1, &
    & x2, x3, y, y1, y2, y3
-double precision, parameter :: rt3 = 1.732050807568877293527446341505872366943d0
+real(nswc_dp), parameter :: rt3 = 1.732050807568877293527446341505872366943d0
 !-------------------
 !-----------------------------------------------------------------------
 !     ***** eps is a machine dependent constant. Eps is the
@@ -26138,10 +26164,10 @@ end subroutine dcbcrt
 
 pure subroutine qtcrt(a, z)
 implicit none
-real, intent(in) :: a(5)
-complex, intent(inout) :: z(4)
-real :: b, b2, c, d, e, h, p, q, r, t, u, v, v1, v2, x, x1, x2, x3, y, temp(4), nswc_ai_r4
-complex :: w
+real(nswc_sp), intent(in) :: a(5)
+complex(nswc_sp), intent(inout) :: z(4)
+real(nswc_sp) :: b, b2, c, d, e, h, p, q, r, t, u, v, v1, v2, x, x1, x2, x3, y, temp(4), nswc_ai_r4
+complex(nswc_sp) :: w
 !-----------------------------------------------------------------------
 !         qtcrt computes the roots of the real polynomial
 !               a(1) + a(2)*z + ... + a(5)*z**4
@@ -26281,9 +26307,9 @@ implicit none
 !        naval surface weapons center
 !        Dahlgren, Virginia
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(5)
-double precision, intent(inout) :: zr(4), zi(4)
-double precision :: b, b2, c, d, e, h, p, q, r, t, temp(4), u, v, v1, v2, w(2), x, x1, x2, x3, nswc_ai_r8
+real(nswc_dp), intent(in) :: a(5)
+real(nswc_dp), intent(inout) :: zr(4), zi(4)
+real(nswc_dp) :: b, b2, c, d, e, h, p, q, r, t, temp(4), u, v, v1, v2, w(2), x, x1, x2, x3, nswc_ai_r8
 if (a(1) == 0.d0) go to 100
 b = a(4)/(4.d0*a(5))
 c = a(3)/a(5)
@@ -26416,10 +26442,10 @@ subroutine drpoly(op, ideg, zeror, zeroi, num, wk, dwk)
 implicit none
 integer :: ideg
 integer, intent(inout) :: num
-double precision :: op(*)
-double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
+real(nswc_dp) :: op(*)
+real(nswc_dp), intent(inout) :: zeror(ideg), zeroi(ideg), &
    & dwk(*)
-real, intent(inout) :: wk(*)
+real(nswc_sp), intent(inout) :: wk(*)
 integer :: idp1, p, qp, k, qk, svk, tmp
 !     This subroutine finds the zeros of a real polynomial.
 !     op          - Double precision array of length ideg + 1.
@@ -26463,12 +26489,12 @@ subroutine drply1(op,ideg,idp1,zeror,zeroi,p,qp,k,qk,svk, &
    & temp,pt,num)
 implicit none
 integer :: ideg, idp1, num
-double precision :: op(idp1), zeror(ideg), zeroi(ideg), p(idp1), &
+real(nswc_dp) :: op(idp1), zeror(ideg), zeroi(ideg), p(idp1), &
    & qp(idp1), k(idp1), qk(idp1), svk(idp1), temp(idp1)
-real :: pt(idp1)
+real(nswc_sp) :: pt(idp1)
 integer :: i, j, jj, l, n, nm1, nn, nz, cnt
-double precision :: aa, bb, cc, factor, t
-real :: lo, max, min, xx, yy, cosr, sinr, x, xxx, sc, bnd, xm, ff, &
+real(nswc_dp) :: aa, bb, cc, factor, t
+real(nswc_sp) :: lo, max, min, xx, yy, cosr, sinr, x, xxx, sc, bnd, xm, ff, &
    & df, dx, base, smalno, infin
 logical :: zerok
 !-------------------------
@@ -26671,11 +26697,11 @@ end subroutine drply1
 subroutine fxshfr(l2, nz, nn, p, qp, k, qk, svk)
 implicit none
 integer :: nn
-double precision :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
+real(nswc_dp) :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
 integer :: l2, nz
 integer :: n, type, i, j, iflag
-double precision :: svu, svv, ui, vi, s
-real :: betas, betav, oss, ovv, ss, vv, ts, tv, ots, otv, tvv, tss
+real(nswc_dp) :: svu, svv, ui, vi, s
+real(nswc_sp) :: betas, betav, oss, ovv, ss, vv, ts, tv, ots, otv, tvv, tss
 logical :: vpass, spass, vtry, stry
 !     Computes up to  l2  fixed shift k-polynomials,
 !     testing for convergence in the linear or quadratic
@@ -26780,11 +26806,11 @@ end subroutine fxshfr
 subroutine quadit(uu, vv, nz, nn, p, qp, k, qk)
 implicit none
 integer :: nn
-double precision :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
+real(nswc_dp) :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
 integer :: nz
 integer :: n, type, i, j
-double precision :: ui, vi
-real :: mp, omp, ee, relstp, t, zm
+real(nswc_dp) :: ui, vi
+real(nswc_sp) :: mp, omp, ee, relstp, t, zm
 logical :: tried
 !     Variable-shift k-polynomial iteration for A
 !     quadratic factor converges only if the zeros are
@@ -26858,10 +26884,10 @@ end subroutine quadit
 subroutine realit(sss, nz, iflag, nn, p, qp, k, qk)
 implicit none
 integer :: iflag, nn, nz
-double precision :: sss, p(nn), qp(nn), k(nn), qk(nn)
+real(nswc_dp) :: sss, p(nn), qp(nn), k(nn), qk(nn)
 integer :: i, j, n
-double precision :: pv, kv, t, s
-real :: ms, mp, omp, ee
+real(nswc_dp) :: pv, kv, t, s
+real(nswc_sp) :: ms, mp, omp, ee
 !     Variable-shift H polynomial iteration for a real zero.
 !     sss   - Starting iterate
 !     nz    - Number of zero found
@@ -26943,8 +26969,8 @@ subroutine calcsc(type, n, k, qk)
 implicit none
 integer :: n
 integer :: type
-double precision :: k(n), qk(n)
-double precision :: tol
+real(nswc_dp) :: k(n), qk(n)
+real(nswc_dp) :: tol
 !     This routine calculates scalar quantities used to
 !     compute the next k polynomial and new estimates of
 !     the quadratic coefficients.
@@ -26986,9 +27012,9 @@ subroutine nextk(type, n, qp, k, qk)
 implicit none
 integer :: n
 integer :: type
-double precision :: qp(n), k(n), qk(n)
+real(nswc_dp) :: qp(n), k(n), qk(n)
 integer :: i
-double precision :: temp
+real(nswc_dp) :: temp
 !     Computes the next k polynomials using the scalars
 !     computed in calcsc.
 if (type == 3) go to 40
@@ -27024,9 +27050,9 @@ subroutine newest(type, uu, vv, nn, p, k)
 implicit none
 integer :: nn
 integer :: type
-double precision :: uu, vv, p(nn), k(nn)
+real(nswc_dp) :: uu, vv, p(nn), k(nn)
 integer :: n
-double precision :: a4, a5, b1, b2, c1, c2, c3, c4, temp
+real(nswc_dp) :: a4, a5, b1, b2, c1, c2, c3, c4, temp
 !     Compute new estimates of the quadratic coefficients
 !     using the scalars computed in calcsc.
 !     Use formulas appropriate to setting of type.
@@ -27059,12 +27085,12 @@ end subroutine newest
 pure subroutine quadsd(nn, u, v, p, q, a, b)
 implicit none
 integer, intent(in) :: nn
-double precision, intent(in) :: p(nn)
-double precision, intent(inout) :: q(nn)
-double precision, intent(in) :: u, v
-double precision, intent(out) :: a, b
+real(nswc_dp), intent(in) :: p(nn)
+real(nswc_dp), intent(inout) :: q(nn)
+real(nswc_dp), intent(in) :: u, v
+real(nswc_dp), intent(out) :: a, b
 integer :: i
-double precision :: c
+real(nswc_dp) :: c
 !     Divides p by the quadratic  1,u,v  placing the
 !     quotient in q and the remainder in A,b.
 b = p(1)
@@ -27087,9 +27113,9 @@ implicit none
 !     real, and both zeros if the zeros are complex.
 !     The smaller real zero is found directly from the
 !     product of the zeros c/a.
-double precision, intent(in) :: a, b1, c
-double precision, intent(inout) :: sr, si, lr, li
-double precision :: b, d, e
+real(nswc_dp), intent(in) :: a, b1, c
+real(nswc_dp), intent(inout) :: sr, si, lr, li
+real(nswc_dp) :: b, d, e
 if (a /= 0.d0) go to 20
 sr = 0.d0
 if (b1 /= 0.d0) sr = -c/b1
@@ -27129,8 +27155,8 @@ subroutine dcpoly(opr,opi,ideg,zeror,zeroi,num,wk)
 implicit none
 integer, intent(inout) :: num
 integer :: ideg
-double precision, intent(in) :: opr(*), opi(*)
-double precision, intent(inout) :: zeror(ideg), zeroi(ideg), wk(*)
+real(nswc_dp), intent(in) :: opr(*), opi(*)
+real(nswc_dp), intent(inout) :: zeror(ideg), zeroi(ideg), wk(*)
 integer :: idp1, pr, pi, qpr, qpi, hr, hi, qhr, qhi, shr, shi
 !     This subroutine finds the zeros of a complex polynomial.
 !     opr,opi     - DOUBLE PRECISION ARRAYS OF LENGTH ideg + 1.
@@ -27181,12 +27207,12 @@ implicit none
 integer :: ideg
 integer, intent(in) :: idp1
 integer, intent(out) :: num
-double precision, intent(in) :: opr(idp1), opi(idp1)
-double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
+real(nswc_dp), intent(in) :: opr(idp1), opi(idp1)
+real(nswc_dp), intent(inout) :: zeror(ideg), zeroi(ideg), &
    & pr(idp1), pi(idp1), qpr(idp1), qpi(idp1), hr(idp1), hi(idp1), &
    & qhr(idp1), qhi(idp1), shr(idp1), shi(idp1)
 integer :: i, nn, cnt1, cnt2
-double precision :: sr, si, tr, ti, pvr, pvi, are, mre, eta, infin, xx, yy, cosr, sinr, smalno, base, xxx, zr, zi, bnd
+real(nswc_dp) :: sr, si, tr, ti, pvr, pvi, are, mre, eta, infin, xx, yy, cosr, sinr, smalno, base, xxx, zr, zi, bnd
 logical :: conv
 !-------------------------
 !-------------------------
@@ -27287,12 +27313,12 @@ end do
 go to 40
 end subroutine dcply1
 
-pure double precision function scalcp(nn,pt,eta,infin,smalno,base)
+pure real(nswc_dp) function scalcp(nn,pt,eta,infin,smalno,base)
 implicit none
 integer, intent(in) :: nn
-double precision, intent(in) :: pt(nn), eta, infin, smalno, base
+real(nswc_dp), intent(in) :: pt(nn), eta, infin, smalno, base
 integer :: i, l
-double precision :: hi, lo, max, min, x, sc
+real(nswc_dp) :: hi, lo, max, min, x, sc
 !     Returns a scale factor to multiply the coefficients of the
 !     polynomial. The scaling is done to avoid overflow and to avoid
 !     undetected underflow interfering with the convergence criterion.
@@ -27325,10 +27351,10 @@ end function scalcp
 pure subroutine cauchy(nn,bnd,pt,q)
 implicit none
 integer, intent(in) :: nn
-double precision, intent(inout) :: q(nn), pt(nn)
-double precision, intent(inout) :: bnd
+real(nswc_dp), intent(inout) :: q(nn), pt(nn)
+real(nswc_dp), intent(inout) :: bnd
 integer :: i, n
-double precision :: x, xm, f, dx, df
+real(nswc_dp) :: x, xm, f, dx, df
 !     Cauchy computes a lower bound bnd on the moduli of the zeros
 !     of a polynomial. pt is the modulus of the coefficients.
 pt(nn) = -pt(nn)
@@ -27369,11 +27395,11 @@ end subroutine cauchy
 pure subroutine noshft(l1,nn,tr,ti,eta,pr,pi,hr,hi)
 implicit none
 integer, intent(in) :: l1, nn
-double precision, intent(inout) :: tr, ti
-double precision, intent(in) :: eta, pr(nn), pi(nn)
-double precision, intent(inout) :: hr(nn), hi(nn)
+real(nswc_dp), intent(inout) :: tr, ti
+real(nswc_dp), intent(in) :: eta, pr(nn), pi(nn)
+real(nswc_dp), intent(inout) :: hr(nn), hi(nn)
 integer :: i, j, jj, n, nm1
-double precision :: dn, t1, t2, xni
+real(nswc_dp) :: dn, t1, t2, xni
 !     Computes the derivative polynomial as the initial H
 !     polynomial and computes l1 no-shift H polynomials.
 n = nn - 1
@@ -27415,15 +27441,15 @@ pure subroutine fxshft(l2,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi, &
    & are,mre,eta,infin)
 implicit none
 integer, intent(in) :: l2, nn
-double precision, intent(inout) :: sr, si, tr, ti, pvr, pvi
-double precision, intent(in) :: are, mre, eta, infin, pr(nn), &
+real(nswc_dp), intent(inout) :: sr, si, tr, ti, pvr, pvi
+real(nswc_dp), intent(in) :: are, mre, eta, infin, pr(nn), &
    & pi(nn)
-double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
+real(nswc_dp), intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
    & hi(nn), qhr(nn), qhi(nn), shr(nn), shi(nn)
-double precision, intent(inout) :: zr, zi
+real(nswc_dp), intent(inout) :: zr, zi
 logical, intent(inout) :: conv
 integer :: i, j, n
-double precision :: otr, oti, svsr, svsi
+real(nswc_dp) :: otr, oti, svsr, svsi
 logical :: test, pasd, bool
 !     Computes l2 fixed-shift H polynomials and tests for convergence.
 !     Initiates a variable-shift iteration and returns with the
@@ -27492,16 +27518,16 @@ pure subroutine vrshft(l3,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr,qhi, &
    & sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
 implicit none
 integer, intent(in) :: l3, nn
-double precision, intent(out) :: sr, si
-double precision, intent(inout) :: tr, ti, pvr, pvi
-double precision, intent(in) :: are, mre, eta, infin, pr(nn), &
+real(nswc_dp), intent(out) :: sr, si
+real(nswc_dp), intent(inout) :: tr, ti, pvr, pvi
+real(nswc_dp), intent(in) :: are, mre, eta, infin, pr(nn), &
    & pi(nn)
-double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
+real(nswc_dp), intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
    & hi(nn), qhr(nn), qhi(nn)
-double precision, intent(inout) :: zr, zi
+real(nswc_dp), intent(inout) :: zr, zi
 logical, intent(out) :: conv
 integer :: i, j, n
-double precision :: mp, ms, omp, relstp, r1, r2, tp
+real(nswc_dp) :: mp, ms, omp, relstp, r1, r2, tp
 logical :: b, bool
 !     Carries out the third stage iteration.
 !     l3 - Limit of steps in stage 3.
@@ -27566,11 +27592,11 @@ pure subroutine calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
 implicit none
 integer, intent(in) :: n
 logical, intent(inout) :: bool
-double precision, intent(in) :: sr, si
-double precision, intent(inout) :: tr, ti
-double precision, intent(in) :: pvr, pvi, are, hr(n), hi(n)
-double precision, intent(inout) :: qhr(n), qhi(n)
-double precision :: hvr, hvi
+real(nswc_dp), intent(in) :: sr, si
+real(nswc_dp), intent(inout) :: tr, ti
+real(nswc_dp), intent(in) :: pvr, pvi, are, hr(n), hi(n)
+real(nswc_dp), intent(inout) :: qhr(n), qhi(n)
+real(nswc_dp) :: hvr, hvi
 !     This subroutine computes T = -P(S)/H(S)
 !     bool - Logical variable, which is set to .TRUE. if H(S) is
 !            essentially zero.
@@ -27588,11 +27614,11 @@ pure subroutine nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
 implicit none
 integer, intent(in) :: n
 logical, intent(in) :: bool
-double precision, intent(in) :: tr, ti
-double precision, intent(inout) :: hr(n), hi(n)
-double precision, intent(in) :: qpr(n), qpi(n), qhr(n), qhi(n)
+real(nswc_dp), intent(in) :: tr, ti
+real(nswc_dp), intent(inout) :: hr(n), hi(n)
+real(nswc_dp), intent(in) :: qpr(n), qpi(n), qhr(n), qhi(n)
 integer :: j
-double precision :: t1, t2
+real(nswc_dp) :: t1, t2
 !     Calculates the next shifted H polynomial.
 !     bool - Logical variable. If .TRUE. H(S) is essentially zero.
 if (bool) go to 20
@@ -27617,12 +27643,12 @@ end subroutine nexth
 pure subroutine polyev(n,sr,si,pr,pi,qr,qi,pvr,pvi)
 implicit none
 integer, intent(in) :: n
-double precision, intent(in) :: pr(n), pi(n)
-double precision, intent(inout) :: qr(n), qi(n)
-double precision, intent(in) :: sr, si
-double precision, intent(out) :: pvr, pvi
+real(nswc_dp), intent(in) :: pr(n), pi(n)
+real(nswc_dp), intent(inout) :: qr(n), qi(n)
+real(nswc_dp), intent(in) :: sr, si
+real(nswc_dp), intent(out) :: pvr, pvi
 integer :: i
-double precision :: t
+real(nswc_dp) :: t
 !     Evaluates a polynomial P at S by the Horner recurrence algo.,
 !     placing the partial sums in Q and the computed value in PV.
 qr(1) = pr(1)
@@ -27638,12 +27664,12 @@ do i = 2,n
 end do
 end subroutine polyev
 
-pure double precision function errev(nn,qr,qi,ms,mp,are,mre)
+pure real(nswc_dp) function errev(nn,qr,qi,ms,mp,are,mre)
 implicit none
 integer, intent(in) :: nn
-double precision, intent(in) :: qr(nn), qi(nn), ms, mp, are, mre
+real(nswc_dp), intent(in) :: qr(nn), qi(nn), ms, mp, are, mre
 integer :: i
-double precision :: e
+real(nswc_dp) :: e
 !     Bounds the error in evaluating the polynomial by the Horner
 !     recurrence algorithm.
 !     QR,qi   - THE PARTIAL SUMS
@@ -27661,14 +27687,14 @@ pure subroutine rbnd(n, c, w, abserr, relerr, klust, ker)
 implicit none
 integer, intent(inout) :: ker
 integer, intent(in) :: n
-complex, intent(in) :: w(n)
+complex(nswc_sp), intent(in) :: w(n)
 integer, intent(inout) :: klust(n)
-real, intent(in) :: c(*)
-real, intent(inout) :: abserr(n), relerr(n)
+real(nswc_sp), intent(in) :: c(*)
+real(nswc_sp), intent(inout) :: abserr(n), relerr(n)
 integer :: j, jp1, k, l, m, nm1, np1
-real :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
-complex :: z
-double precision :: xr, xi, vr, vi, vt
+real(nswc_sp) :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
+complex(nswc_sp) :: z
+real(nswc_dp) :: xr, xi, vr, vi, vt
 logical :: shrunk
 !-----------------------------------------------------------------------
 !     Abstract
@@ -27800,13 +27826,13 @@ pure subroutine cbnd(n, c, w, abserr, relerr, klust, ker)
 implicit none
 integer, intent(inout) :: ker
 integer, intent(in) :: n
-complex, intent(in) :: c(*), w(n)
+complex(nswc_sp), intent(in) :: c(*), w(n)
 integer, intent(inout) :: klust(n)
-real, intent(inout) :: abserr(n), relerr(n)
+real(nswc_sp), intent(inout) :: abserr(n), relerr(n)
 integer :: j, jp1, k, l, m, nm1, np1
-real :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
-complex :: z
-double precision :: xr, xi, vr, vi, vt
+real(nswc_sp) :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
+complex(nswc_sp) :: z
+real(nswc_dp) :: xr, xi, vr, vi, vt
 logical :: shrunk
 !-----------------------------------------------------------------------
 !     Abstract
@@ -27939,8 +27965,8 @@ implicit none
 !     Copies a vector, X, to a vector, Y.
 !     Uses unrolled loops for increments equal to 1.
 !     Jack dongarra, LINPACK, 3/11/78.
-real, intent(in) :: sx(*)
-real, intent(inout) :: sy(*)
+real(nswc_sp), intent(in) :: sx(*)
+real(nswc_sp), intent(inout) :: sy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 integer :: i, ix, iy, m, mp1
@@ -27983,8 +28009,8 @@ implicit none
 !     Copies a vector, X, to a vector, Y.
 !     Uses unrolled loops for increments equal to one.
 !     Jack dongarra, LINPACK, 3/11/78.
-double precision, intent(in) :: dx(*)
-double precision, intent(inout) :: dy(*)
+real(nswc_dp), intent(in) :: dx(*)
+real(nswc_dp), intent(inout) :: dy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 integer :: i, ix, iy, m, mp1
@@ -28026,8 +28052,8 @@ pure subroutine  ccopy(n,cx,incx,cy,incy)
 implicit none
 !     Copies a vector, X, to a vector, Y.
 !     Jack dongarra, LINPACK, 3/11/78.
-complex, intent(in) :: cx(*)
-complex, intent(inout) :: cy(*)
+complex(nswc_sp), intent(in) :: cx(*)
+complex(nswc_sp), intent(inout) :: cy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 integer :: i, ix, iy
@@ -28129,10 +28155,10 @@ implicit none
 !     Interchanges two vectors.
 !     Uses unrolled loops for increments equal to 1.
 !     Jack dongarra, LINPACK, 3/11/78.
-real, intent(inout) :: sx(*), sy(*)
+real(nswc_sp), intent(inout) :: sx(*), sy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-real :: stemp
+real(nswc_sp) :: stemp
 integer :: i, ix, iy, m, mp1
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -28179,10 +28205,10 @@ implicit none
 !     Interchanges two vectors.
 !     Uses unrolled loops for increments equal one.
 !     Jack dongarra, LINPACK, 3/11/78.
-double precision, intent(inout) :: dx(*), dy(*)
+real(nswc_dp), intent(inout) :: dx(*), dy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-double precision :: dtemp
+real(nswc_dp) :: dtemp
 integer :: i, ix, iy, m, mp1
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -28228,10 +28254,10 @@ pure subroutine  cswap(n,cx,incx,cy,incy)
 implicit none
 !     Interchanges two vectors.
 !     Jack dongarra, LINPACK, 3/11/78.
-complex, intent(inout) :: cx(*), cy(*)
+complex(nswc_sp), intent(inout) :: cx(*), cy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-complex :: ctemp
+complex(nswc_sp) :: ctemp
 integer :: i, ix, iy
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -28261,11 +28287,11 @@ pure subroutine  srot(n,sx,incx,sy,incy,c,s)
 implicit none
 !     Applies a plane rotation.
 !     Jack dongarra, LINPACK, 3/11/78.
-real, intent(inout) :: sx(*), sy(*)
-real, intent(in) :: c, s
+real(nswc_sp), intent(inout) :: sx(*), sy(*)
+real(nswc_sp), intent(in) :: c, s
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-real :: stemp
+real(nswc_sp) :: stemp
 integer :: i, ix, iy
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -28295,11 +28321,11 @@ pure subroutine  drot(n,dx,incx,dy,incy,c,s)
 implicit none
 !     Applies a plane rotation.
 !     Jack dongarra, LINPACK, 3/11/78.
-double precision, intent(inout) :: dx(*), dy(*)
-double precision, intent(in) :: c, s
+real(nswc_dp), intent(inout) :: dx(*), dy(*)
+real(nswc_dp), intent(in) :: c, s
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-double precision :: dtemp
+real(nswc_dp) :: dtemp
 integer :: i, ix, iy
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -28330,11 +28356,11 @@ implicit none
 !     Applies a plane rotation, where the cos and sin (c and s) are real
 !     and the vectors cx and cy are complex.
 !     Jack dongarra, LINPACK, 3/11/78.
-complex, intent(inout) :: cx(*), cy(*)
-real, intent(in) :: c, s
+complex(nswc_sp), intent(inout) :: cx(*), cy(*)
+real(nswc_sp), intent(in) :: c, s
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-complex :: ctemp
+complex(nswc_sp) :: ctemp
 integer :: i, ix, iy
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -28362,15 +28388,15 @@ end subroutine csrot
 
 pure subroutine srotmg(sd1,sd2,sx1,sy1,sparam)
 implicit none
-real, intent(inout) :: sd1, sd2, sparam(5), sx1
-real, intent(in) :: sy1
-real :: sflag, sh11, sh12, sh21, sh22, sp1, sp2, sq1, sq2, stemp, su, nswc_ai_r4
-real, parameter :: zero = 0.e0
-real, parameter :: one = 1.e0
-real, parameter :: two = 2.e0
-real, parameter :: gam = 4096.e0
-real, parameter :: gamsq = 1.67772e7
-real, parameter :: rgamsq = 5.96046e-8
+real(nswc_sp), intent(inout) :: sd1, sd2, sparam(5), sx1
+real(nswc_sp), intent(in) :: sy1
+real(nswc_sp) :: sflag, sh11, sh12, sh21, sh22, sp1, sp2, sq1, sq2, stemp, su, nswc_ai_r4
+real(nswc_sp), parameter :: zero = 0.e0
+real(nswc_sp), parameter :: one = 1.e0
+real(nswc_sp), parameter :: two = 2.e0
+real(nswc_sp), parameter :: gam = 4096.e0
+real(nswc_sp), parameter :: gamsq = 1.67772e7
+real(nswc_sp), parameter :: rgamsq = 5.96046e-8
 !     Construct the modified Givens transformation matrix H which zeros
 !     the second component of the 2-vector  (sqrt(sd1)*sx1,sqrt(sd2)*
 !     sy1)**T.
@@ -28495,12 +28521,12 @@ end subroutine srotmg
 subroutine srotm(n,sx,incx,sy,incy,sparam)
 implicit none
 integer, intent(in) :: incx, incy, n
-real :: sparam(5)
-real, intent(inout) :: sx(*), sy(*)
+real(nswc_sp) :: sparam(5)
+real(nswc_sp), intent(inout) :: sx(*), sy(*)
 integer :: i, kx, ky, nsteps
-real :: sflag, sh11, sh12, sh21, sh22, w, z, nswc_ai_r4
-real, parameter :: zero = 0.e0
-real, parameter :: two = 2.e0
+real(nswc_sp) :: sflag, sh11, sh12, sh21, sh22, w, z, nswc_ai_r4
+real(nswc_sp), parameter :: zero = 0.e0
+real(nswc_sp), parameter :: two = 2.e0
 !     Apply the modified Givens transformation, H, to the 2 by n matrix
 !     (sx**T), where **T indicates transpose. The elements of sx are in
 !     (sy**T)
@@ -28617,18 +28643,18 @@ implicit none
 !     The values of gamsq and rgamsq set in the data statement may be
 !     inexact.  This is OK as they are only used for testing the size
 !     of dd1 and dd2.  All actual scaling of data is done using gam.
-double precision, intent(inout) :: dd2
-double precision, intent(inout) :: dparam(5)
-double precision, intent(in) :: dy1
-double precision, intent(inout) :: dd1
-double precision, intent(inout) :: dx1
-double precision :: dh11, dh21, dp2, dq2, du, dflag, dh12, dh22, dp1, dq1, dtemp, nswc_ai_r8
-double precision, parameter :: zero = 0.d0
-double precision, parameter :: one = 1.d0
-double precision, parameter :: two = 2.d0
-double precision, parameter :: gam = 4096.d0
-double precision, parameter :: gamsq = 16777216.d0
-double precision, parameter :: rgamsq = 5.9604645d-8
+real(nswc_dp), intent(inout) :: dd2
+real(nswc_dp), intent(inout) :: dparam(5)
+real(nswc_dp), intent(in) :: dy1
+real(nswc_dp), intent(inout) :: dd1
+real(nswc_dp), intent(inout) :: dx1
+real(nswc_dp) :: dh11, dh21, dp2, dq2, du, dflag, dh12, dh22, dp1, dq1, dtemp, nswc_ai_r8
+real(nswc_dp), parameter :: zero = 0.d0
+real(nswc_dp), parameter :: one = 1.d0
+real(nswc_dp), parameter :: two = 2.d0
+real(nswc_dp), parameter :: gam = 4096.d0
+real(nswc_dp), parameter :: gamsq = 16777216.d0
+real(nswc_dp), parameter :: rgamsq = 5.9604645d-8
 if (dd1 < zero) go to 60
 dp2 = dd2*dy1
 if (dp2 /= zero) go to 20
@@ -28738,13 +28764,13 @@ end subroutine drotmg
 subroutine drotm(n,dx,incx,dy,incy,dparam)
 implicit none
 integer, intent(in) :: incx, incy, n
-double precision, intent(inout) :: dx(*)
-double precision :: dparam(5)
-double precision, intent(inout) :: dy(*)
+real(nswc_dp), intent(inout) :: dx(*)
+real(nswc_dp) :: dparam(5)
+real(nswc_dp), intent(inout) :: dy(*)
 integer :: i, kx, ky, nsteps
-double precision :: dflag, dh12, dh22, z, dh11, dh21, w, nswc_ai_r8
-double precision, parameter :: zero = 0.d0
-double precision, parameter :: two = 2.d0
+real(nswc_dp) :: dflag, dh12, dh22, z, dh11, dh21, w, nswc_ai_r8
+real(nswc_dp), parameter :: zero = 0.d0
+real(nswc_dp), parameter :: two = 2.d0
 !     Apply the modified Givens transformation, H, to the 2 by n matrix
 !     (dx**T), where **T indicates transpose. The elements of dx are in
 !     (dy**T)
@@ -28844,15 +28870,15 @@ end do
 140 continue
 end subroutine drotm
 
-pure real function sdot(n,sx,incx,sy,incy)
+pure real(nswc_sp) function sdot(n,sx,incx,sy,incy)
 implicit none
 !     Forms the dot product of two vectors.
 !     Uses unrolled loops for increments equal to one.
 !     Jack dongarra, LINPACK, 3/11/78.
-real, intent(in) :: sx(*), sy(*)
+real(nswc_sp), intent(in) :: sx(*), sy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-real :: stemp
+real(nswc_sp) :: stemp
 integer :: i, ix, iy, m, mp1
 stemp = 0.0e0
 sdot = 0.0e0
@@ -28887,15 +28913,15 @@ end do
 60 sdot = stemp
 end function sdot
 
-pure double precision function ddot(n,dx,incx,dy,incy)
+pure real(nswc_dp) function ddot(n,dx,incx,dy,incy)
 implicit none
 !     Forms the dot product of two vectors.
 !     Uses unrolled loops for increments equal to one.
 !     Jack dongarra, LINPACK, 3/11/78.
-double precision, intent(in) :: dx(*), dy(*)
+real(nswc_dp), intent(in) :: dx(*), dy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-double precision :: dtemp
+real(nswc_dp) :: dtemp
 integer :: i, ix, iy, m, mp1
 ddot = 0.0d0
 dtemp = 0.0d0
@@ -28930,15 +28956,15 @@ end do
 60 ddot = dtemp
 end function ddot
 
-pure complex function cdotc(n,cx,incx,cy,incy)
+pure complex(nswc_sp) function cdotc(n,cx,incx,cy,incy)
 implicit none
 !     Forms the dot product of two vectors, conjugating the first
 !     vector.
 !     Jack dongarra, LINPACK,  3/11/78.
-complex, intent(in) :: cx(*), cy(*)
+complex(nswc_sp), intent(in) :: cx(*), cy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-complex :: ctemp
+complex(nswc_sp) :: ctemp
 integer :: i, ix, iy
 ctemp = (0.0,0.0)
 cdotc = (0.0,0.0)
@@ -28964,14 +28990,14 @@ end do
 cdotc = ctemp
 end function cdotc
 
-pure complex function cdotu(n,cx,incx,cy,incy)
+pure complex(nswc_sp) function cdotu(n,cx,incx,cy,incy)
 implicit none
 !     Forms the dot product of two vectors.
 !     Jack dongarra, LINPACK, 3/11/78.
-complex, intent(in) :: cx(*), cy(*)
+complex(nswc_sp), intent(in) :: cx(*), cy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
-complex :: ctemp
+complex(nswc_sp) :: ctemp
 integer :: i, ix, iy
 ctemp = (0.0,0.0)
 cdotu = (0.0,0.0)
@@ -29002,8 +29028,8 @@ implicit none
 !     Scales a vector BY a constant.
 !     Uses unrolled loops for increment equal to 1.
 !     Jack dongarra, LINPACK, 3/11/78.
-real, intent(in) :: sa
-real, intent(inout) :: sx(*)
+real(nswc_sp), intent(in) :: sa
+real(nswc_sp), intent(inout) :: sx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
 integer :: i, m, mp1, nincx
@@ -29038,8 +29064,8 @@ implicit none
 !     Scales a vector BY a constant.
 !     Uses unrolled loops for increment equal to one.
 !     Jack dongarra, LINPACK, 3/11/78.
-double precision, intent(in) :: da
-double precision, intent(inout) :: dx(*)
+real(nswc_dp), intent(in) :: da
+real(nswc_dp), intent(inout) :: dx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
 integer :: i, m, mp1, nincx
@@ -29073,8 +29099,8 @@ pure subroutine  cscal(n,ca,cx,incx)
 implicit none
 !     Scales a vector BY a constant.
 !     Jack dongarra, LINPACK,  3/11/78.
-complex, intent(in) :: ca
-complex, intent(inout) :: cx(*)
+complex(nswc_sp), intent(in) :: ca
+complex(nswc_sp), intent(inout) :: cx(*)
 integer, intent(in) :: incx, n
 integer :: i, nincx
 if (n <= 0) return
@@ -29095,8 +29121,8 @@ pure subroutine  csscal(n,sa,cx,incx)
 implicit none
 !     Scales a complex vector BY a real constant.
 !     Jack dongarra, LINPACK, 3/11/78.
-complex, intent(inout) :: cx(*)
-real, intent(in) :: sa
+complex(nswc_sp), intent(inout) :: cx(*)
+real(nswc_sp), intent(in) :: sa
 integer, intent(in) :: incx, n
 integer :: i, nincx
 if (n <= 0) return
@@ -29118,9 +29144,9 @@ implicit none
 !     Constant times a vector plus a vector.
 !     Uses unrolled loop for increments equal to one.
 !     Jack dongarra, LINPACK, 3/11/78.
-real, intent(in) :: sx(*)
-real, intent(inout) :: sy(*)
-real, intent(in) :: sa
+real(nswc_sp), intent(in) :: sx(*)
+real(nswc_sp), intent(inout) :: sy(*)
+real(nswc_sp), intent(in) :: sa
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 integer :: i, ix, iy, m, mp1
@@ -29161,9 +29187,9 @@ implicit none
 !     Constant times a vector plus a vector.
 !     Uses unrolled loops for increments equal to one.
 !     Jack dongarra, LINPACK, 3/11/78.
-double precision, intent(in) :: dx(*)
-double precision, intent(inout) :: dy(*)
-double precision, intent(in) :: da
+real(nswc_dp), intent(in) :: dx(*)
+real(nswc_dp), intent(inout) :: dy(*)
+real(nswc_dp), intent(in) :: da
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 integer :: i, ix, iy, m, mp1
@@ -29203,9 +29229,9 @@ pure subroutine caxpy(n,ca,cx,incx,cy,incy)
 implicit none
 !     Constant times a vector plus a vector.
 !     Jack dongarra, LINPACK, 3/11/78.
-complex, intent(in) :: cx(*)
-complex, intent(inout) :: cy(*)
-complex, intent(in) :: ca
+complex(nswc_sp), intent(in) :: cx(*)
+complex(nswc_sp), intent(inout) :: cy(*)
+complex(nswc_sp), intent(in) :: ca
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
 integer :: i, ix, iy
@@ -29230,15 +29256,15 @@ return
 end do
 end subroutine caxpy
 
-pure real function sasum(n,sx,incx)
+pure real(nswc_sp) function sasum(n,sx,incx)
 implicit none
 !     Takes the sum of the absolute values.
 !     Uses unrolled loops for increment equal to one.
 !     Jack dongarra, LINPACK, 3/11/78.
-real, intent(in) :: sx(*)
+real(nswc_sp), intent(in) :: sx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
-real :: stemp
+real(nswc_sp) :: stemp
 integer :: i, m, mp1, nincx
 sasum = 0.0e0
 stemp = 0.0e0
@@ -29267,14 +29293,14 @@ end do
 60 sasum = stemp
 end function sasum
 
-pure double precision function dasum(n,dx,incx)
+pure real(nswc_dp) function dasum(n,dx,incx)
 implicit none
 !     Takes the sum of the absolute values.
 !     Jack dongarra, LINPACK, 3/11/78.
-double precision, intent(in) :: dx(*)
+real(nswc_dp), intent(in) :: dx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
-double precision :: dtemp
+real(nswc_dp) :: dtemp
 integer :: i, m, mp1, nincx
 dasum = 0.0d0
 dtemp = 0.0d0
@@ -29303,14 +29329,14 @@ end do
 60 dasum = dtemp
 end function dasum
 
-pure real function scasum(n,cx,incx)
+pure real(nswc_sp) function scasum(n,cx,incx)
 implicit none
 !     Takes the sum of the absolute values of a complex vector and
 !     returns a single precision result.
 !     Jack dongarra, LINPACK, 3/11/78.
-complex, intent(in) :: cx(*)
+complex(nswc_sp), intent(in) :: cx(*)
 integer, intent(in) :: incx, n
-real :: stemp
+real(nswc_sp) :: stemp
 integer :: i, nincx
 scasum = 0.0e0
 stemp = 0.0e0
@@ -29330,16 +29356,16 @@ end do
 scasum = stemp
 end function scasum
 
-pure real function snrm2(n, sx, incx)
+pure real(nswc_sp) function snrm2(n, sx, incx)
 implicit none
 integer, intent(in) :: incx, n
-real, intent(in) :: sx(*)
+real(nswc_sp), intent(in) :: sx(*)
 integer :: i, j, nn, next
-real :: hitest, sum, xmax
-real, parameter :: zero = 0.0e0
-real, parameter :: one = 1.0e0
-real, parameter :: cutlo = 4.441e-16
-real, parameter :: cuthi = 1.304e19
+real(nswc_sp) :: hitest, sum, xmax
+real(nswc_sp), parameter :: zero = 0.0e0
+real(nswc_sp), parameter :: one = 1.0e0
+real(nswc_sp), parameter :: cutlo = 4.441e-16
+real(nswc_sp), parameter :: cuthi = 1.304e19
 !     Euclidean norm of the n-vector stored in sx() with storage
 !     increment incx .
 !     If    n .LE. 0 return with result = 0.
@@ -29437,16 +29463,16 @@ snrm2 = xmax * sqrt(sum)
 300 continue
 end function snrm2
 
-pure double precision function dnrm2(n, dx, incx)
+pure real(nswc_dp) function dnrm2(n, dx, incx)
 implicit none
 integer, intent(in) :: incx, n
-double precision, intent(in) :: dx(*)
+real(nswc_dp), intent(in) :: dx(*)
 integer :: i, j, nn, next
-double precision :: hitest, sum, xmax
-double precision, parameter :: zero = 0.0d0
-double precision, parameter :: one = 1.0d0
-double precision, parameter :: cutlo = 8.232d-11
-double precision, parameter :: cuthi = 1.304d19
+real(nswc_dp) :: hitest, sum, xmax
+real(nswc_dp), parameter :: zero = 0.0d0
+real(nswc_dp), parameter :: one = 1.0d0
+real(nswc_dp), parameter :: cutlo = 8.232d-11
+real(nswc_dp), parameter :: cuthi = 1.304d19
 !     Euclidean norm of the n-vector stored in dx() with storage
 !     increment incx .
 !     If    n .LE. 0 return with result = 0.
@@ -29544,17 +29570,17 @@ dnrm2 = xmax * sqrt(sum)
 300 continue
 end function dnrm2
 
-pure real function scnrm2(n, cx, incx)
+pure real(nswc_sp) function scnrm2(n, cx, incx)
 implicit none
 integer, intent(in) :: incx, n
-complex, intent(in) :: cx(*)
+complex(nswc_sp), intent(in) :: cx(*)
 integer :: i, nn, next
 logical :: imag, scale
-real :: hitest, sum, xmax, absx
-real, parameter :: zero = 0.0e0
-real, parameter :: one = 1.0e0
-real, parameter :: cutlo = 4.441e-16
-real, parameter :: cuthi = 1.304e19
+real(nswc_sp) :: hitest, sum, xmax, absx
+real(nswc_sp), parameter :: zero = 0.0e0
+real(nswc_sp), parameter :: one = 1.0e0
+real(nswc_sp), parameter :: cutlo = 4.441e-16
+real(nswc_sp), parameter :: cuthi = 1.304e19
 !     Unitary norm of the complex n-vector stored in cx() with storage
 !     increment incx .
 !     If    n .LE. 0 return with result = 0.
@@ -29674,10 +29700,10 @@ pure integer function isamax(n,sx,incx)
 implicit none
 !     Finds the index of element having max. Absolute value.
 !     Jack dongarra, LINPACK, 3/11/78.
-real, intent(in) :: sx(*)
+real(nswc_sp), intent(in) :: sx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
-real :: smax
+real(nswc_sp) :: smax
 integer :: i, ix
 isamax = 0
 if (n < 1) return
@@ -29709,10 +29735,10 @@ pure integer function idamax(n,dx,incx)
 implicit none
 !     Finds the index of element having max. Absolute value.
 !     Jack dongarra, LINPACK, 3/11/78.
-double precision, intent(in) :: dx(*)
+real(nswc_dp), intent(in) :: dx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
-double precision :: dmax
+real(nswc_dp) :: dmax
 integer :: i, ix
 idamax = 0
 if (n < 1) return
@@ -29744,12 +29770,12 @@ integer function icamax(n,cx,incx)
 implicit none
 !     Finds the index of element having max. Absolute value.
 !     Jack dongarra, LINPACK, 3/11/78.
-complex :: cx(*)
+complex(nswc_sp) :: cx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
-real :: smax
+real(nswc_sp) :: smax
 integer :: i, ix
-complex :: zdum
+complex(nswc_sp) :: zdum
 icamax = 0
 if (n < 1) return
 icamax = 1
@@ -29777,8 +29803,8 @@ end do
 contains
    pure function cabs1(zdum) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: zdum
-      real :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: zdum
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
    end function cabs1
 end function icamax
@@ -29786,8 +29812,8 @@ end function icamax
 pure subroutine mcvfs(a,ka,n,b)
 implicit none
 integer, intent(in) :: ka, n
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: b(*)
+real(nswc_sp), intent(in) :: a(ka,n)
+real(nswc_sp), intent(inout) :: b(*)
 integer :: i, j, l
 l = 0
 do j = 1,n
@@ -29801,8 +29827,8 @@ end subroutine mcvfs
 pure subroutine dmcvfs(a,ka,n,b)
 implicit none
 integer, intent(in) :: ka, n
-double precision, intent(in) :: a(ka,n)
-double precision, intent(inout) :: b(*)
+real(nswc_dp), intent(in) :: a(ka,n)
+real(nswc_dp), intent(inout) :: b(*)
 integer :: i, j, l
 l = 0
 do j = 1,n
@@ -29816,8 +29842,8 @@ end subroutine dmcvfs
 pure subroutine mcvsf(a,ka,n,b)
 implicit none
 integer, intent(in) :: ka, n
-real, intent(inout) :: a(ka,n)
-real, intent(in) :: b(*)
+real(nswc_sp), intent(inout) :: a(ka,n)
+real(nswc_sp), intent(in) :: b(*)
 integer :: i, ii, im1, j, jj, l
 a(1,1) = b(1)
 if (n < 2) return
@@ -29843,8 +29869,8 @@ end subroutine mcvsf
 pure subroutine dmcvsf(a,ka,n,b)
 implicit none
 integer, intent(in) :: ka, n
-double precision, intent(inout) :: a(ka,n)
-double precision, intent(in) :: b(*)
+real(nswc_dp), intent(inout) :: a(ka,n)
+real(nswc_dp), intent(in) :: b(*)
 integer :: i, ii, im1, j, jj, l
 a(1,1) = b(1)
 if (n < 2) return
@@ -29870,8 +29896,8 @@ end subroutine dmcvsf
 pure subroutine mcvrd(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-real, intent(in) :: a(ka,n)
-double precision, intent(inout) :: b(kb,n)
+real(nswc_sp), intent(in) :: a(ka,n)
+real(nswc_dp), intent(inout) :: b(kb,n)
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -29883,8 +29909,8 @@ end subroutine mcvrd
 pure subroutine mcvdr(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-double precision, intent(in) :: a(ka,n)
-real, intent(inout) :: b(kb,n)
+real(nswc_dp), intent(in) :: a(ka,n)
+real(nswc_sp), intent(inout) :: b(kb,n)
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -29896,8 +29922,8 @@ end subroutine mcvdr
 pure subroutine mcvrc(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-real, intent(in) :: a(ka,n)
-complex, intent(inout) :: b(kb,n)
+real(nswc_sp), intent(in) :: a(ka,n)
+complex(nswc_sp), intent(inout) :: b(kb,n)
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -29909,8 +29935,8 @@ end subroutine mcvrc
 pure subroutine cmreal(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-complex, intent(in) :: a(ka,n)
-real, intent(inout) :: b(kb,n)
+complex(nswc_sp), intent(in) :: a(ka,n)
+real(nswc_sp), intent(inout) :: b(kb,n)
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -29922,8 +29948,8 @@ end subroutine cmreal
 pure subroutine cmimag(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-complex, intent(in) :: a(ka,n)
-real, intent(inout) :: b(kb,n)
+complex(nswc_sp), intent(in) :: a(ka,n)
+real(nswc_sp), intent(inout) :: b(kb,n)
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -29935,8 +29961,8 @@ end subroutine cmimag
 pure subroutine mcopy(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: b(kb,n)
+real(nswc_sp), intent(in) :: a(ka,n)
+real(nswc_sp), intent(inout) :: b(kb,n)
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -29948,8 +29974,8 @@ end subroutine mcopy
 pure subroutine smcopy(n,a,b)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: a(*)
-real, intent(inout) :: b(*)
+real(nswc_sp), intent(in) :: a(*)
+real(nswc_sp), intent(inout) :: b(*)
 integer :: k, l
 l = (n*(n + 1))/2
 do k = 1,l
@@ -29960,8 +29986,8 @@ end subroutine smcopy
 pure subroutine dmcopy(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-double precision, intent(in) :: a(ka,n)
-double precision, intent(inout) :: b(kb,n)
+real(nswc_dp), intent(in) :: a(ka,n)
+real(nswc_dp), intent(inout) :: b(kb,n)
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -29973,8 +29999,8 @@ end subroutine dmcopy
 pure subroutine cmcopy(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-complex, intent(in) :: a(ka,n)
-complex, intent(inout) :: b(kb,n)
+complex(nswc_sp), intent(in) :: a(ka,n)
+complex(nswc_sp), intent(inout) :: b(kb,n)
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -29986,8 +30012,8 @@ end subroutine cmcopy
 pure subroutine cmconj(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-complex, intent(in) :: a(ka,n)
-complex, intent(inout) :: b(kb,n)
+complex(nswc_sp), intent(in) :: a(ka,n)
+complex(nswc_sp), intent(inout) :: b(kb,n)
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -29999,8 +30025,8 @@ end subroutine cmconj
 pure subroutine tpose(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: b(kb,m)
+real(nswc_sp), intent(in) :: a(ka,n)
+real(nswc_sp), intent(inout) :: b(kb,m)
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -30012,8 +30038,8 @@ end subroutine tpose
 pure subroutine dtpose(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-double precision, intent(in) :: a(ka,n)
-double precision, intent(inout) :: b(kb,m)
+real(nswc_dp), intent(in) :: a(ka,n)
+real(nswc_dp), intent(inout) :: b(kb,m)
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -30025,8 +30051,8 @@ end subroutine dtpose
 pure subroutine ctpose(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-complex, intent(in) :: a(ka,n)
-complex, intent(inout) :: b(kb,m)
+complex(nswc_sp), intent(in) :: a(ka,n)
+complex(nswc_sp), intent(inout) :: b(kb,m)
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -30040,11 +30066,11 @@ implicit none
 integer, intent(in) :: n1, n2
 integer, intent(inout) :: ndim
 integer, intent(in) :: nwork
-real, intent(inout) :: a(*)
+real(nswc_sp), intent(inout) :: a(*)
 integer, intent(inout) :: moved(nwork)
 integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
    & npower, ifact(8), ipower(8), nexp(8), iexp(8)
-real :: atemp, btemp
+real(nswc_sp) :: atemp, btemp
 ! ----------------------------------------------------------
 ! Transposition of a rectangular matrix in situ.
 ! By norman brenner, mit, 1/72.  CF. Alg. 380, CACM, 5/70.
@@ -30155,11 +30181,11 @@ implicit none
 integer, intent(in) :: n1, n2
 integer, intent(inout) :: ndim
 integer, intent(in) :: nwork
-double precision, intent(inout) :: a(*)
+real(nswc_dp), intent(inout) :: a(*)
 integer, intent(inout) :: moved(nwork)
 integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
    & npower, ifact(8), ipower(8), nexp(8), iexp(8)
-double precision :: atemp, btemp
+real(nswc_dp) :: atemp, btemp
 ! ----------------------------------------------------------
 ! Transposition of a rectangular matrix in situ.
 ! By norman brenner, mit, 1/72.  CF. Alg. 380, CACM, 5/70.
@@ -30270,11 +30296,11 @@ implicit none
 integer, intent(in) :: n1, n2
 integer, intent(inout) :: ndim
 integer, intent(in) :: nwork
-complex, intent(inout) :: a(*)
+complex(nswc_sp), intent(inout) :: a(*)
 integer, intent(inout) :: moved(nwork)
 integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
    & npower, ifact(8), ipower(8), nexp(8), iexp(8)
-complex :: atemp, btemp
+complex(nswc_sp) :: atemp, btemp
 ! ----------------------------------------------------------
 ! Transposition of a rectangular matrix in situ.
 ! By norman brenner, mit, 1/72.  CF. Alg. 380, CACM, 5/70.
@@ -30433,8 +30459,8 @@ end subroutine infctr
 pure subroutine cmadj(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-complex, intent(in) :: a(ka,n)
-complex, intent(inout) :: b(kb,m)
+complex(nswc_sp), intent(in) :: a(ka,n)
+complex(nswc_sp), intent(inout) :: b(kb,m)
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -30454,9 +30480,9 @@ implicit none
 !     On return,
 !     a  contains its conjugate transpose.
 integer, intent(in) :: n, nm
-complex, intent(inout) :: a(nm,n)
+complex(nswc_sp), intent(inout) :: a(nm,n)
 integer :: i, j
-complex :: temp
+complex(nswc_sp) :: temp
 do i = 1,n
    do j = i,n
       temp = a(i,j)
@@ -30469,8 +30495,8 @@ end subroutine ctrans
 pure subroutine madd(m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
-real, intent(in) :: a(ka,n), b(kb,n)
-real, intent(inout) :: c(kc,n)
+real(nswc_sp), intent(in) :: a(ka,n), b(kb,n)
+real(nswc_sp), intent(inout) :: c(kc,n)
 integer :: i, j
 !-----------------------------------------------------------------------
 !                      Addition of real matrices
@@ -30485,8 +30511,8 @@ end subroutine madd
 pure subroutine dmadd(m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
-double precision, intent(in) :: a(ka,n), b(kb,n)
-double precision, intent(inout) :: c(kc,n)
+real(nswc_dp), intent(in) :: a(ka,n), b(kb,n)
+real(nswc_dp), intent(inout) :: c(kc,n)
 integer :: i, j
 !-----------------------------------------------------------------------
 !                Addition of double precision matrices
@@ -30501,8 +30527,8 @@ end subroutine dmadd
 pure subroutine cmadd(m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
-complex, intent(in) :: a(ka,n), b(kb,n)
-complex, intent(inout) :: c(kc,n)
+complex(nswc_sp), intent(in) :: a(ka,n), b(kb,n)
+complex(nswc_sp), intent(inout) :: c(kc,n)
 integer :: i, j
 !-----------------------------------------------------------------------
 !                   Addition of complex matrices
@@ -30517,8 +30543,8 @@ end subroutine cmadd
 pure subroutine smadd(n,a,b,c)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*)
+real(nswc_sp), intent(in) :: a(*), b(*)
+real(nswc_sp), intent(inout) :: c(*)
 integer :: k, m
 m = (n*(n + 1))/2
 do k = 1,m
@@ -30529,8 +30555,8 @@ end subroutine smadd
 pure subroutine msubt(m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
-real, intent(in) :: a(ka,n), b(kb,n)
-real, intent(inout) :: c(kc,n)
+real(nswc_sp), intent(in) :: a(ka,n), b(kb,n)
+real(nswc_sp), intent(inout) :: c(kc,n)
 integer :: i, j
 !-----------------------------------------------------------------------
 !                     Subtraction of real matrices
@@ -30545,8 +30571,8 @@ end subroutine msubt
 pure subroutine dmsubt(m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
-double precision, intent(in) :: a(ka,n), b(kb,n)
-double precision, intent(inout) :: c(kc,n)
+real(nswc_dp), intent(in) :: a(ka,n), b(kb,n)
+real(nswc_dp), intent(inout) :: c(kc,n)
 integer :: i, j
 !-----------------------------------------------------------------------
 !              Subtraction of double precision matrices
@@ -30561,8 +30587,8 @@ end subroutine dmsubt
 pure subroutine cmsubt(m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
-complex, intent(in) :: a(ka,n), b(kb,n)
-complex, intent(inout) :: c(kc,n)
+complex(nswc_sp), intent(in) :: a(ka,n), b(kb,n)
+complex(nswc_sp), intent(inout) :: c(kc,n)
 integer :: i, j
 !-----------------------------------------------------------------------
 !                  Subtraction of complex matrices
@@ -30577,8 +30603,8 @@ end subroutine cmsubt
 pure subroutine smsubt(n,a,b,c)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*)
+real(nswc_sp), intent(in) :: a(*), b(*)
+real(nswc_sp), intent(inout) :: c(*)
 integer :: k, m
 m = (n*(n + 1))/2
 do k = 1,m
@@ -30589,10 +30615,10 @@ end subroutine smsubt
 pure subroutine mtms(m, n, l, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
-real, intent(in) :: a(ka,n), b(kb,l)
-real, intent(inout) :: c(kc,l)
+real(nswc_sp), intent(in) :: a(ka,n), b(kb,l)
+real(nswc_sp), intent(inout) :: c(kc,l)
 integer :: i, j, k
-double precision :: w
+real(nswc_dp) :: w
 !-----------------------------------------------------------------------
 !                     Product of real matrices
 !-----------------------------------------------------------------------
@@ -30610,10 +30636,10 @@ end subroutine mtms
 pure subroutine dmtms(m, n, l, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
-double precision, intent(in) :: a(ka,n), b(kb,l)
-double precision, intent(inout) :: c(kc,l)
+real(nswc_dp), intent(in) :: a(ka,n), b(kb,l)
+real(nswc_dp), intent(inout) :: c(kc,l)
 integer :: i, j, k
-double precision :: w
+real(nswc_dp) :: w
 !-----------------------------------------------------------------------
 !                Product of double precision matrices
 !-----------------------------------------------------------------------
@@ -30631,10 +30657,10 @@ end subroutine dmtms
 pure subroutine cmtms(m, n, l, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
-complex, intent(in) :: a(ka,n), b(kb,l)
-complex, intent(inout) :: c(kc,l)
+complex(nswc_sp), intent(in) :: a(ka,n), b(kb,l)
+complex(nswc_sp), intent(inout) :: c(kc,l)
 integer :: i, j, k
-complex :: w
+complex(nswc_sp) :: w
 !-----------------------------------------------------------------------
 !                   Product of complex matrices
 !-----------------------------------------------------------------------
@@ -30652,10 +30678,10 @@ end subroutine cmtms
 subroutine mprod(m, n, l, a, ka, b, kb, c, kc, row)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
-real, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
+real(nswc_sp), intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
 integer :: i, j, k
-real :: save
-double precision :: w
+real(nswc_sp) :: save
+real(nswc_dp) :: w
 !-----------------------------------------------------------------------
 !                     Product of real matrices
 !-----------------------------------------------------------------------
@@ -30708,9 +30734,9 @@ end subroutine mprod
 
 logical function rloc(x, y)
 implicit none
-real, intent(in) :: x(*)
-real, intent(inout) :: y(*)
-real :: xold, yold
+real(nswc_sp), intent(in) :: x(*)
+real(nswc_sp), intent(inout) :: y(*)
+real(nswc_sp) :: xold, yold
 !-----------------------------------------------------------------------
 !     x and y are arrays. It is assumed that x(1) and y(1) contain data.
 !     rloc(x,y) = .TRUE.   if x and y begin in the same location
@@ -30734,9 +30760,9 @@ end function rloc
 
 pure subroutine ychg(x, y, yold)
 implicit none
-real, intent(in) :: yold
-real, intent(in) :: x(*)
-real, intent(inout) :: y(*)
+real(nswc_sp), intent(in) :: yold
+real(nswc_sp), intent(in) :: x(*)
+real(nswc_sp), intent(inout) :: y(*)
 y(1) = 0.0
 if (yold == 0.0) y(1) = 1.0
 end subroutine ychg
@@ -30744,10 +30770,10 @@ end subroutine ychg
 subroutine dmprod(m, n, l, a, ka, b, kb, c, kc, row)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
-double precision, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), &
+real(nswc_dp), intent(inout) :: a(ka,n), b(kb,l), c(kc,l), &
    & row(*)
 integer :: i, j, k
-double precision :: w
+real(nswc_dp) :: w
 !-----------------------------------------------------------------------
 !                Product of double precision matrices
 !-----------------------------------------------------------------------
@@ -30808,9 +30834,9 @@ implicit none
 !     the subroutine dychg. If it is optimized then dloc may not compile
 !     properly.
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x(*)
-double precision, intent(inout) :: y(*)
-double precision :: xold, yold
+real(nswc_dp), intent(in) :: x(*)
+real(nswc_dp), intent(inout) :: y(*)
+real(nswc_dp) :: xold, yold
 xold = x(1)
 yold = y(1)
 call dychg(x,y,yold)
@@ -30826,9 +30852,9 @@ end function dloc
 
 pure subroutine dychg(x, y, yold)
 implicit none
-double precision, intent(in) :: x(*)
-double precision, intent(inout) :: y(*)
-double precision, intent(in) :: yold
+real(nswc_dp), intent(in) :: x(*)
+real(nswc_dp), intent(inout) :: y(*)
+real(nswc_dp), intent(in) :: yold
 y(1) = 0.d0
 if (yold == 0.d0) y(1) = 1.d0
 end subroutine dychg
@@ -30836,9 +30862,9 @@ end subroutine dychg
 subroutine cmprod(m, n, l, a, ka, b, kb, c, kc, row)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
-complex, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
+complex(nswc_sp), intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
 integer :: i, j, k
-complex :: w
+complex(nswc_sp) :: w
 !-----------------------------------------------------------------------
 !                   Product of complex matrices
 !-----------------------------------------------------------------------
@@ -30899,9 +30925,9 @@ implicit none
 !     the subroutine cychg. If it is optimized then cloc may not compile
 !     properly.
 !-----------------------------------------------------------------------
-complex, intent(in) :: x(*)
-complex, intent(inout) :: y(*)
-complex :: xold, yold
+complex(nswc_sp), intent(in) :: x(*)
+complex(nswc_sp), intent(inout) :: y(*)
+complex(nswc_sp) :: xold, yold
 xold = x(1)
 yold = y(1)
 call cychg(x,y,yold)
@@ -30917,11 +30943,11 @@ end function cloc
 
 pure subroutine cychg(x, y, yold)
 implicit none
-complex, intent(in) :: x(*)
-complex, intent(inout) :: y(*)
-complex, intent(in) :: yold
-complex, parameter :: zero = (0.0,0.0)
-complex, parameter :: one = (1.0,0.0)
+complex(nswc_sp), intent(in) :: x(*)
+complex(nswc_sp), intent(inout) :: y(*)
+complex(nswc_sp), intent(in) :: yold
+complex(nswc_sp), parameter :: zero = (0.0,0.0)
+complex(nswc_sp), parameter :: one = (1.0,0.0)
 y(1) = zero
 if (yold == zero) y(1) = one
 end subroutine cychg
@@ -30929,10 +30955,10 @@ end subroutine cychg
 pure subroutine svprd(a,n,x,y)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: a(*), x(n)
-real, intent(inout) :: y(n)
+real(nswc_sp), intent(in) :: a(*), x(n)
+real(nswc_sp), intent(inout) :: y(n)
 integer :: i, k, km1, l
-real :: xk, yk
+real(nswc_sp) :: xk, yk
 y(1) = a(1)*x(1)
 if (n == 1) return
 l = 1
@@ -30953,10 +30979,10 @@ end subroutine svprd
 pure subroutine dsvprd(a,n,x,y)
 implicit none
 integer, intent(in) :: n
-double precision, intent(in) :: a(*), x(n)
-double precision, intent(inout) :: y(n)
+real(nswc_dp), intent(in) :: a(*), x(n)
+real(nswc_dp), intent(inout) :: y(n)
 integer :: i, k, km1, l
-double precision :: xk, yk
+real(nswc_dp) :: xk, yk
 y(1) = a(1)*x(1)
 if (n == 1) return
 l = 1
@@ -30977,10 +31003,10 @@ end subroutine dsvprd
 pure subroutine tmprod(m,n,l,a,ka,b,kb,c,kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
-real, intent(in) :: a(ka,n), b(kb,l)
-real, intent(inout) :: c(kc,l)
+real(nswc_sp), intent(in) :: a(ka,n), b(kb,l)
+real(nswc_sp), intent(inout) :: c(kc,l)
 integer :: i, j, k
-double precision :: s
+real(nswc_dp) :: s
 do j = 1,l
    do i = 1,n
       s = 0.d0
@@ -30995,10 +31021,10 @@ end subroutine tmprod
 pure subroutine smprod(m,n,a,ka,b)
 implicit none
 integer, intent(in) :: ka, m, n
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: b(*)
+real(nswc_sp), intent(in) :: a(ka,n)
+real(nswc_sp), intent(inout) :: b(*)
 integer :: i, ii, j, k
-double precision :: s
+real(nswc_dp) :: s
 ii = 1
 do i = 1,n
    do j = 1,i
@@ -31015,8 +31041,8 @@ end subroutine smprod
 pure subroutine kprod(a,ka,m,n,b,kb,k,l,c,kc)
 implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
-real, intent(in) :: a(ka,n), b(kb,l)
-real, intent(inout) :: c(kc,*)
+real(nswc_sp), intent(in) :: a(ka,n), b(kb,l)
+real(nswc_sp), intent(inout) :: c(kc,*)
 integer :: i, ii, j, jj, r, s
 !     ******************************************************************
 !     Kronecker product of real matrices A and b
@@ -31040,8 +31066,8 @@ end subroutine kprod
 pure subroutine dkprod(a,ka,m,n,b,kb,k,l,c,kc)
 implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
-double precision, intent(in) :: a(ka,n), b(kb,l)
-double precision, intent(inout) :: c(kc,*)
+real(nswc_dp), intent(in) :: a(ka,n), b(kb,l)
+real(nswc_dp), intent(inout) :: c(kc,*)
 integer :: i, ii, j, jj, r, s
 !     ******************************************************************
 !     Kronecker product of double precision matrices A and b
@@ -31065,8 +31091,8 @@ end subroutine dkprod
 pure subroutine ckprod(a,ka,m,n,b,kb,k,l,c,kc)
 implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
-complex, intent(in) :: a(ka,n), b(kb,l)
-complex, intent(inout) :: c(kc,*)
+complex(nswc_sp), intent(in) :: a(ka,n), b(kb,l)
+complex(nswc_sp), intent(inout) :: c(kc,*)
 integer :: i, ii, j, jj, r, s
 !     ******************************************************************
 !     Kronecker product of complex matrices A and b
@@ -31091,11 +31117,11 @@ pure subroutine rnk(a, mda, m, n, re, ae, krank, ksure, work, iwork)
 implicit none
 integer, intent(inout) :: krank, ksure
 integer, intent(in) :: m, mda, n
-real, intent(in) :: ae, re
-real, intent(inout) :: a(mda,n), work(*)
+real(nswc_sp), intent(in) :: ae, re
+real(nswc_sp), intent(inout) :: a(mda,n), work(*)
 integer, intent(inout) :: iwork(*)
 integer :: i, imax, m0, m1, m2, m3, m4, m5
-real :: eps, rerr
+real(nswc_sp) :: eps, rerr
 !-----------------------------------------------------------------------
 !          Upper and lower bounds of the rank of a real matrix
 !-----------------------------------------------------------------------
@@ -31132,12 +31158,12 @@ pure subroutine drnk(a, mda, m, n, re, ae, krank, ksure, work, iwork)
 implicit none
 integer, intent(inout) :: krank, ksure
 integer, intent(in) :: m, mda, n
-double precision, intent(inout) :: a(mda,n)
-double precision, intent(in) :: re, ae
-double precision, intent(inout) :: work(*)
+real(nswc_dp), intent(inout) :: a(mda,n)
+real(nswc_dp), intent(in) :: re, ae
+real(nswc_dp), intent(inout) :: work(*)
 integer, intent(inout) :: iwork(*)
 integer :: i, imax, m0, m1, m2, m3, m4, m5
-double precision :: eps, rerr
+real(nswc_dp) :: eps, rerr
 !-----------------------------------------------------------------------
 !              Upper and lower bounds of the rank of A
 !                      double precision matrix
@@ -31175,10 +31201,10 @@ pure subroutine crout(mo,n,m,a,ka,b,kb,d,index,temp)
 implicit none
 integer, intent(inout) :: index(*)
 integer, intent(in) :: ka, kb, m, mo, n
-real, intent(inout) :: a(ka,n), b(*), d, temp(*)
+real(nswc_sp), intent(inout) :: a(ka,n), b(*), d, temp(*)
 integer :: i, im1, j, jp1, k, kj, km1, kp1, l, lj, maxb, nj, nm1, nmj, nmk, onej
-real :: p, t
-double precision :: dsum
+real(nswc_sp) :: p, t
+real(nswc_dp) :: dsum
 !-----------------------------------------------------------------------
 !     crout procedure for inverting matrices and solving equations
 !-----------------------------------------------------------------------
@@ -31354,10 +31380,10 @@ pure subroutine krout(mo,n,m,a,ka,b,kb,ierr,index,temp)
 implicit none
 integer, intent(inout) :: ierr, index(*)
 integer, intent(in) :: ka, kb, m, mo, n
-real, intent(inout) :: a(ka,n), b(*), temp(*)
+real(nswc_sp), intent(inout) :: a(ka,n), b(*), temp(*)
 integer :: i, im1, j, jp1, k, kj, km1, kp1, l, lj, maxb, nj, nm1, nmj, nmk, onej
-real :: d, p, t
-double precision :: dsum
+real(nswc_sp) :: d, p, t
+real(nswc_dp) :: dsum
 !-----------------------------------------------------------------------
 !     crout procedure for inverting matrices and solving equations
 !-----------------------------------------------------------------------
@@ -31566,9 +31592,9 @@ implicit none
 integer, intent(out) :: ier
 integer, intent(inout) :: ip
 integer, intent(in) :: n, ndim
-real, intent(inout) :: a(ndim,n)
+real(nswc_sp), intent(inout) :: a(ndim,n)
 integer :: i, j, k, kp1, m, nm1
-real :: t
+real(nswc_sp) :: t
 dimension ip(n)
 ier = 0
 ip(n) = 1
@@ -31629,10 +31655,10 @@ implicit none
 !-----------------------------------------------------------------------
 integer :: ip
 integer, intent(in) :: n, ndim
-real :: a(ndim, n)
-real, intent(inout) :: b(n)
+real(nswc_sp) :: a(ndim, n)
+real(nswc_sp), intent(inout) :: b(n)
 integer :: i, k, kb, km1, kp1, m, nm1
-real :: t
+real(nswc_sp) :: t
 dimension ip(n)
 if (n == 1) go to 50
 nm1 = n - 1
@@ -31664,10 +31690,10 @@ pure subroutine npivot(n, m, a, ka, b, kb, d, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
-real, intent(inout) :: d
-real, intent(inout) :: a(ka,n), b(*)
+real(nswc_sp), intent(inout) :: d
+real(nswc_sp), intent(inout) :: a(ka,n), b(*)
 integer :: j, jl, k, kl, l, maxb
-real :: pivot, t
+real(nswc_sp) :: pivot, t
 !-----------------------------------------------------------------------
 !     Matrix inversion/equation solving without pivot search
 !-----------------------------------------------------------------------
@@ -31712,9 +31738,9 @@ pure subroutine slv(n, m, a, ka, b, kb, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
-real, intent(inout) :: a(ka,n), b(kb,m)
+real(nswc_sp), intent(inout) :: a(ka,n), b(kb,m)
 integer :: i, ip1, j, jp1, k, l, nm1
-real :: p, sum, t
+real(nswc_sp) :: p, sum, t
 !     ------------------------------------------------------------------
 !     Partial pivot solution of a*X = b where A is a matrix of
 !     order n and b is a matrix having n rows and m columns.
@@ -31797,9 +31823,9 @@ pure subroutine dpslv(n, m, a, ka, b, kb, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
-double precision, intent(inout) :: a(ka,n), b(kb,m)
+real(nswc_dp), intent(inout) :: a(ka,n), b(kb,m)
 integer :: i, j, k, km1, kp1, l, nm1
-double precision :: p, t
+real(nswc_dp) :: p, t
 !     ------------------------------------------------------------------
 !     Partial pivot solution of a*X = b where A is a matrix of
 !     order n and b is a matrix having n rows and m columns.
@@ -31882,12 +31908,12 @@ subroutine mslv(mo,n,m,a,ka,b,kb,det,rcond,ierr,ipvt,wk)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
-real, intent(inout) :: a(ka,n), b(*)
-real, intent(inout) :: det(2), rcond
-real, intent(inout) :: wk(n)
+real(nswc_sp), intent(inout) :: a(ka,n), b(*)
+real(nswc_sp), intent(inout) :: det(2), rcond
+real(nswc_sp), intent(inout) :: wk(n)
 integer, intent(inout) :: ipvt(n)
 integer :: j, job, onej
-real :: t
+real(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting real matrices
 !     and solving real equations
@@ -31917,10 +31943,10 @@ subroutine mslv1(mo,n,m,a,ka,b,kb,ierr,ipvt,wk)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
-real, intent(inout) :: a(ka,n), b(*), wk(*)
+real(nswc_sp), intent(inout) :: a(ka,n), b(*), wk(*)
 integer, intent(inout) :: ipvt(n)
 integer :: j, onej
-real :: det(2)
+real(nswc_sp) :: det(2)
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting real matrices
 !     and solving real equations
@@ -31949,8 +31975,8 @@ subroutine slvmp(mo, n, a, ka, b, x, wk, iwk, ierr)
 implicit none
 integer, intent(inout) :: ierr, iwk
 integer, intent(in) :: ka, mo, n
-real :: a(ka,n), b(n)
-real, intent(inout) :: wk(*), x(n)
+real(nswc_sp) :: a(ka,n), b(n)
+real(nswc_sp), intent(inout) :: wk(*), x(n)
 integer :: i, ir
 !     ******************************************************************
 !     Solution of real linear equations with iterative improvement
@@ -31980,11 +32006,11 @@ implicit none
 integer, intent(out) :: ind
 integer :: ipvt
 integer, intent(in) :: ka, kq, n
-real :: a(ka,n), b(n), q(kq,n)
-real, intent(inout) :: r(n), x(n)
+real(nswc_sp) :: a(ka,n), b(n), q(kq,n)
+real(nswc_sp), intent(inout) :: r(n), x(n)
 integer :: i, j
-real :: eps, eps2, rat, ratio, rnrm, xnrm
-double precision :: dsum
+real(nswc_sp) :: eps, eps2, rat, ratio, rnrm, xnrm
+real(nswc_dp) :: dsum
 ! ----------------------------------------------------------------------
 !     Purpose
 !       given an approximate solution x of a linear system AX = b
@@ -32060,9 +32086,9 @@ pure subroutine sgeco(a,lda,n,ipvt,rcond,z)
 implicit none
 integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
-real, intent(inout) :: a(lda,*), z(*)
-real, intent(inout) :: rcond
-real :: ek, t, wk, wkm, anorm, s, sm, ynorm
+real(nswc_sp), intent(inout) :: a(lda,*), z(*)
+real(nswc_sp), intent(inout) :: rcond
+real(nswc_sp) :: ek, t, wk, wkm, anorm, s, sm, ynorm
 integer :: info, j, k, kb, kp1, l
 !     sgeco factors a real matrix BY Gaussian elimination
 !     and estimates the condition of the matrix.
@@ -32223,8 +32249,8 @@ implicit none
 integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
-real, intent(inout) :: a(lda,*)
-real :: t
+real(nswc_sp), intent(inout) :: a(lda,*)
+real(nswc_sp) :: t
 integer :: j, k, kp1, l, nm1
 !     sgefa factors a real matrix BY Gaussian elimination.
 !     sgefa is usually called by sgeco, but it can be called
@@ -32299,9 +32325,9 @@ end subroutine sgefa
 pure subroutine sgesl(a,lda,n,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
-real, intent(in) :: a(lda,*)
-real, intent(inout) :: b(*)
-real :: t
+real(nswc_sp), intent(in) :: a(lda,*)
+real(nswc_sp), intent(inout) :: b(*)
+real(nswc_sp) :: t
 integer :: k, kb, l, nm1
 !     sgesl solves the real system
 !     a * X = b  OR  TRANS(a) * X = b
@@ -32391,8 +32417,8 @@ end subroutine sgesl
 subroutine sgedi(a,lda,n,ipvt,det,work,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
-real, intent(inout) :: a(lda,*), det(2), work(*)
-real :: t, ten
+real(nswc_sp), intent(inout) :: a(lda,*), det(2), work(*)
+real(nswc_sp) :: t, ten
 integer :: i, j, k, kb, kp1, l, nm1
 !     sgedi computes the determinant and inverse of a matrix
 !     using the factors computed by sgeco or sgefa.
@@ -32494,12 +32520,12 @@ subroutine dmslv(mo,n,m,a,ka,b,kb,det,rcond,ierr,ipvt,wk)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
-double precision, intent(inout) :: a(ka,n), b(*)
-double precision, intent(inout) :: det(2), rcond
-double precision, intent(inout) :: wk(n)
+real(nswc_dp), intent(inout) :: a(ka,n), b(*)
+real(nswc_dp), intent(inout) :: det(2), rcond
+real(nswc_dp), intent(inout) :: wk(n)
 integer, intent(inout) :: ipvt(n)
 integer :: j, job, onej
-double precision :: t
+real(nswc_dp) :: t
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting double precision
 !     real matrices and solving double precision real equations
@@ -32529,10 +32555,10 @@ subroutine dmslv1(mo,n,m,a,ka,b,kb,ierr,ipvt,wk)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
-double precision, intent(inout) :: a(ka,n), b(*), wk(*)
+real(nswc_dp), intent(inout) :: a(ka,n), b(*), wk(*)
 integer, intent(inout) :: ipvt(n)
 integer :: j, onej
-double precision :: det(2)
+real(nswc_dp) :: det(2)
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting double precision
 !     real matrices and solving double precision real equations
@@ -32561,9 +32587,9 @@ pure subroutine dgeco(a,lda,n,ipvt,rcond,z)
 implicit none
 integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
-double precision, intent(inout) :: a(lda,*), z(*)
-double precision, intent(inout) :: rcond
-double precision :: ek, t, wk, wkm, anorm, s, sm, ynorm
+real(nswc_dp), intent(inout) :: a(lda,*), z(*)
+real(nswc_dp), intent(inout) :: rcond
+real(nswc_dp) :: ek, t, wk, wkm, anorm, s, sm, ynorm
 integer :: info, j, k, kb, kp1, l
 !     dgeco factors a double precision matrix BY Gaussian elimination
 !     and estimates the condition of the matrix.
@@ -32724,8 +32750,8 @@ implicit none
 integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
-double precision, intent(inout) :: a(lda,*)
-double precision :: t
+real(nswc_dp), intent(inout) :: a(lda,*)
+real(nswc_dp) :: t
 integer :: j, k, kp1, l, nm1
 !     dgefa factors a double precision matrix BY Gaussian elimination.
 !     dgefa is usually called by dgeco, but it can be called
@@ -32800,9 +32826,9 @@ end subroutine dgefa
 pure subroutine dgesl(a,lda,n,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
-double precision, intent(in) :: a(lda,*)
-double precision, intent(inout) :: b(*)
-double precision :: t
+real(nswc_dp), intent(in) :: a(lda,*)
+real(nswc_dp), intent(inout) :: b(*)
+real(nswc_dp) :: t
 integer :: k, kb, l, nm1
 !     dgesl solves the double precision system
 !     a * X = b  OR  TRANS(a) * X = b
@@ -32892,8 +32918,8 @@ end subroutine dgesl
 subroutine dgedi(a,lda,n,ipvt,det,work,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
-double precision, intent(inout) :: a(lda,*), det(2), work(*)
-double precision :: t, ten
+real(nswc_dp), intent(inout) :: a(lda,*), det(2), work(*)
+real(nswc_dp) :: t, ten
 integer :: i, j, k, kb, kp1, l, nm1
 !     dgedi computes the determinant and inverse of a matrix
 !     using the factors computed by dgeco or dgefa.
@@ -32995,7 +33021,7 @@ subroutine arceco(n, array, mtrstr, nmblks, pivot, b, x, iflag)
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: n, nmblks
-real, intent(inout) :: array(*), b(*), x(*)
+real(nswc_sp), intent(inout) :: array(*), b(*), x(*)
 integer, intent(inout) :: mtrstr(3,*), pivot(*)
 !***************************************************************
 !  This program solves the linear system  A*x = b  where  A is
@@ -33105,12 +33131,12 @@ pure subroutine arcedc(n, array, mtrstr, nmblks, pivot, iflag)
 implicit none
 integer, intent(inout) :: iflag, mtrstr(3,*)
 integer, intent(in) :: n, nmblks
-real, intent(inout) :: array(*)
+real(nswc_sp), intent(inout) :: array(*)
 integer, intent(inout) :: pivot(*)
 integer :: index1, index2, index3, indpiv, isum1, isum2, k, &
    & nclblk, nclpiv, novrlp, nrwbk2, nrwblk, nrwpiv
-real :: pivmax
-real, parameter :: zero = 0.0
+real(nswc_sp) :: pivmax
+real(nswc_sp), parameter :: zero = 0.0
 !***************************************************************
 !  A R C E D C supervises the modified alternate row and column
 !  decomposition with partial pivoting of the almost block
@@ -33313,10 +33339,10 @@ implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: nclblk, nrwblk, nrwpiv
 integer, intent(inout) :: pivot(nrwblk)
-real, intent(inout) :: block(nrwblk,nclblk)
-real, intent(inout) :: pivmax
+real(nswc_sp), intent(inout) :: block(nrwblk,nclblk)
+real(nswc_sp), intent(inout) :: pivmax
 integer :: i1, j, j1, jplus1, l1, max
-real :: rowmax, tempiv, rowpiv, swap
+real(nswc_sp) :: rowmax, tempiv, rowpiv, swap
 !***************************************************************
 !  A R C E P R  performs  nrwpiv  row eliminations on the matrix
 !               block
@@ -33404,12 +33430,12 @@ pure subroutine arcepc(topblk, nrwtop, novrlp, botblk, nrwbot, nclpiv, &
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: nclpiv, novrlp, nrwbot, nrwtop
-real, intent(inout) :: topblk(nrwtop,novrlp), &
+real(nswc_sp), intent(inout) :: topblk(nrwtop,novrlp), &
    & botblk(nrwbot,novrlp)
-real, intent(inout) :: pivmax
+real(nswc_sp), intent(inout) :: pivmax
 integer, intent(inout) :: pivot(nrwtop)
 integer :: i, i1, i2, iplus1, j, j1, jplus1, l1, max
-real :: colmax, colmlt, tempiv, swap
+real(nswc_sp) :: colmax, colmlt, tempiv, swap
 !***************************************************************
 !     A R C E P C performs nclpiv column eliminations on the
 !                 matrices topblk and BOTBLK
@@ -33502,8 +33528,8 @@ subroutine arcesl(array, mtrstr, nmblks, pivot, b, x)
 implicit none
 integer :: mtrstr(3,*)
 integer, intent(in) :: nmblks
-real :: array(*)
-real, intent(inout) :: b(*), x(*)
+real(nswc_sp) :: array(*)
+real(nswc_sp), intent(inout) :: b(*), x(*)
 integer, intent(in) :: pivot(*)
 integer :: indexa, indpiv, k, ll, nclblk, nclpiv, novrlp, nrwblk, &
    & nrwpiv
@@ -33676,10 +33702,10 @@ end subroutine arcesl
 subroutine arcefs(block, nrwblk, nclpiv, novrlp, b, x)
 implicit none
 integer, intent(in) :: nclpiv, novrlp, nrwblk
-real :: block(nrwblk,novrlp)
-real, intent(inout) :: b(*), x(*)
+real(nswc_sp) :: block(nrwblk,novrlp)
+real(nswc_sp), intent(inout) :: b(*), x(*)
 integer :: i, iplusl, j, jplusl, l, long
-real :: xj
+real(nswc_sp) :: xj
 !***************************************************************
 !  A R C E F S performs the forward solution step in the
 !  solution phase of  A R C E C O.
@@ -33701,11 +33727,11 @@ end subroutine arcefs
 subroutine arcefm(block, nrwblk, nclpiv, b, x)
 implicit none
 integer, intent(in) :: nclpiv, nrwblk
-real :: block(nrwblk,nclpiv)
-real, intent(inout) :: b(*)
-real :: x(*)
+real(nswc_sp) :: block(nrwblk,nclpiv)
+real(nswc_sp), intent(inout) :: b(*)
+real(nswc_sp) :: x(*)
 integer :: j, l, nclpvl
-real :: xj
+real(nswc_sp) :: xj
 !***************************************************************
 !  A R C E F M  performs the forward modification step in the
 !  solution phase of  A R C E C O.
@@ -33722,11 +33748,11 @@ end subroutine arcefm
 subroutine arcefe(block, nrwblk, nrwpiv, pivot, b)
 implicit none
 integer, intent(in) :: nrwblk, nrwpiv
-real :: block(nrwblk,nrwpiv)
-real, intent(inout) :: b(*)
+real(nswc_sp) :: block(nrwblk,nrwpiv)
+real(nswc_sp), intent(inout) :: b(*)
 integer, intent(in) :: pivot(nrwpiv)
 integer :: i, iplus1, l, pivoti
-real :: bi, swap
+real(nswc_sp) :: bi, swap
 !***************************************************************
 !  A R C E F E  performs the forward elimination step in the
 !  solution phase of  A R C E C O.
@@ -33750,10 +33776,10 @@ end subroutine arcefe
 subroutine arcebs(block, nrwblk, nclblk, nrwpiv, b, x)
 implicit none
 integer, intent(in) :: nclblk, nrwblk, nrwpiv
-real :: block(nrwblk,nclblk)
-real, intent(inout) :: b(*), x(*)
+real(nswc_sp) :: block(nrwblk,nclblk)
+real(nswc_sp), intent(inout) :: b(*), x(*)
 integer :: j, jmin1, l, nj
-real :: xj
+real(nswc_sp) :: xj
 !***************************************************************
 !  A R C E b S performs the backward solution step in the
 !  solution phase of  A R C E C O.
@@ -33773,11 +33799,11 @@ end subroutine arcebs
 subroutine arcebm(block, nrwblk, nclblk, nrwpiv, b, x)
 implicit none
 integer, intent(in) :: nclblk, nrwblk, nrwpiv
-real :: block(nrwblk,nclblk)
-real, intent(inout) :: b(*)
-real :: x(*)
+real(nswc_sp) :: block(nrwblk,nclblk)
+real(nswc_sp), intent(inout) :: b(*)
+real(nswc_sp) :: x(*)
 integer :: j, l, nrwpv1
-real :: xj
+real(nswc_sp) :: xj
 !***************************************************************
 !  A R C E b M  performs the backward modification step in the
 !  solution phase of  A R C E C O.
@@ -33794,11 +33820,11 @@ end subroutine arcebm
 subroutine arcebe(block, nrwblk, nclpiv, novrlp, pivot, x)
 implicit none
 integer, intent(in) :: nclpiv, novrlp, nrwblk
-real :: block(nrwblk,novrlp)
-real, intent(inout) :: x(*)
+real(nswc_sp) :: block(nrwblk,novrlp)
+real(nswc_sp), intent(inout) :: x(*)
 integer, intent(in) :: pivot(nrwblk)
 integer :: i, j, j1, jplus1, nj, pivotj
-real :: dotprd, swap
+real(nswc_sp) :: dotprd, swap
 !***************************************************************
 !  A R C E B E performs the backward elimination step in the
 !  solution phase of  A R C E C O.
@@ -33829,7 +33855,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: mo, m
 integer :: n
 integer, intent(inout) :: ip(m,n)
-real, intent(inout) :: a(m,m,n), b(m,m,n), c(m,m,n), x(*)
+real(nswc_sp), intent(inout) :: a(m,m,n), b(m,m,n), c(m,m,n), x(*)
 !     Decompose the coefficient matrix
 if (mo /= 0) go to 10
 call decbt(m, n, a, b, c, ip, ierr)
@@ -33843,9 +33869,9 @@ implicit none
 integer, intent(in) :: m
 integer :: n
 integer, intent(inout) :: ip(m,n), ier
-real, intent(inout) :: a(m,m,n), b(m,m,n), c(m,m,n)
+real(nswc_sp), intent(inout) :: a(m,m,n), b(m,m,n), c(m,m,n)
 integer :: nm1, nm2, km1, i, j, k, l
-real :: dp
+real(nswc_sp) :: dp
 !-----------------------------------------------------------------------
 ! Block-tridiagonal matrix decomposition routine.
 ! Written by A. C. Hindmarsh.
@@ -33958,11 +33984,11 @@ subroutine solbt(m, n, a, b, c, y, ip)
 implicit none
 integer, intent(in) :: m
 integer :: n, ip(m,n)
-real :: a(m,m,n)
-real, intent(in) :: b(m,m,n), c(m,m,n)
-real, intent(inout) :: y(m,n)
+real(nswc_sp) :: a(m,m,n)
+real(nswc_sp), intent(in) :: b(m,m,n), c(m,m,n)
+real(nswc_sp), intent(inout) :: y(m,n)
 integer :: kb, kp1, nm1, nm2, km1, i, j, k
-real :: dp
+real(nswc_sp) :: dp
 !-----------------------------------------------------------------------
 ! Solution of block-tridiagonal linear system.
 ! Coefficient matrix must have been previously processed by decbt.
@@ -34030,12 +34056,12 @@ subroutine smslv(mo,n,m,a,b,kb,det,rcond,inert,ierr,ipvt,wk)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: kb, m, mo, n
-real, intent(inout) :: a(*), b(*)
-real, intent(inout) :: det(2), rcond
-real, intent(inout) :: wk(n)
+real(nswc_sp), intent(inout) :: a(*), b(*)
+real(nswc_sp), intent(inout) :: det(2), rcond
+real(nswc_sp), intent(inout) :: wk(n)
 integer, intent(inout) :: inert(3), ipvt(n)
 integer :: j, job, onej
-real :: t
+real(nswc_sp) :: t
 !     ------------------
 !     ------------------
 !          Matrix factorization and computation of rcond
@@ -34063,9 +34089,9 @@ pure subroutine sspco(ap,n,kpvt,rcond,z)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
-real, intent(inout) :: ap(*), z(*)
-real, intent(inout) :: rcond
-real :: ak, akm1, bk, bkm1, denom, ek, t, anorm, s, ynorm
+real(nswc_sp), intent(inout) :: ap(*), z(*)
+real(nswc_sp), intent(inout) :: rcond
+real(nswc_sp) :: ak, akm1, bk, bkm1, denom, ek, t, anorm, s, ynorm
 integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1, k, kk, km1k, km1km1, kp, kps, ks
 !     sspco factors a real symmetric matrix stored in packed
 !     form by elimination with symmetric pivoting and estimates
@@ -34315,8 +34341,8 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 integer, intent(out) :: info
-real, intent(inout) :: ap(*)
-real :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t, absakk, alpha, colmax, rowmax
+real(nswc_sp), intent(inout) :: ap(*)
+real(nswc_sp) :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t, absakk, alpha, colmax, rowmax
 integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk, j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, km2, kstep
 logical :: swap
 !     sspfa factors a real symmetric matrix stored in
@@ -34529,9 +34555,9 @@ end subroutine sspfa
 pure subroutine sspsl(ap,n,kpvt,b)
 implicit none
 integer, intent(in) :: n, kpvt(*)
-real, intent(in) :: ap(*)
-real, intent(inout) :: b(*)
-real :: ak, akm1, bk, bkm1, denom, temp
+real(nswc_sp), intent(in) :: ap(*)
+real(nswc_sp), intent(inout) :: b(*)
+real(nswc_sp) :: ak, akm1, bk, bkm1, denom, temp
 integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
 !     SSISL solves the real symmetric system
 !     A * X = b
@@ -34663,11 +34689,11 @@ end subroutine sspsl
 subroutine sspdi(ap,n,kpvt,det,inert,work,job)
 implicit none
 integer, intent(in) :: n, job
-real, intent(inout) :: ap(*), work(*)
-real, intent(inout) :: det(2)
+real(nswc_sp), intent(inout) :: ap(*), work(*)
+real(nswc_sp), intent(inout) :: det(2)
 integer, intent(in) :: kpvt(*)
 integer, intent(inout) :: inert(3)
-real :: akkp1, temp, ten, d, t, ak, akp1
+real(nswc_sp) :: akkp1, temp, ten, d, t, ak, akp1
 integer :: ij, ik, ikp1, iks, j, jb, jk, jkp1, k, kk, kkp1, km1, ks, ksj, kskp1, kstep
 logical :: noinv, nodet, noert
 !     sspdi computes the determinant, inertia and inverse
@@ -34867,12 +34893,12 @@ subroutine dsmslv(mo,n,m,a,b,kb,det,rcond,inert,ierr,ipvt,wk)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: kb, m, mo, n
-double precision, intent(inout) :: a(*), b(*)
-double precision, intent(inout) :: det(2), rcond
-double precision, intent(inout) :: wk(n)
+real(nswc_dp), intent(inout) :: a(*), b(*)
+real(nswc_dp), intent(inout) :: det(2), rcond
+real(nswc_dp), intent(inout) :: wk(n)
 integer, intent(inout) :: inert(3), ipvt(n)
 integer :: j, job, onej
-double precision :: t
+real(nswc_dp) :: t
 !     ------------------
 !     ------------------
 !          Matrix factorization and computation of rcond
@@ -34900,9 +34926,9 @@ pure subroutine dspco(ap,n,kpvt,rcond,z)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
-double precision, intent(inout) :: ap(*), z(*)
-double precision, intent(inout) :: rcond
-double precision :: ak, akm1, bk, bkm1, denom, ek, t, anorm, s, ynorm
+real(nswc_dp), intent(inout) :: ap(*), z(*)
+real(nswc_dp), intent(inout) :: rcond
+real(nswc_dp) :: ak, akm1, bk, bkm1, denom, ek, t, anorm, s, ynorm
 integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1, k, kk, km1k, km1km1, kp, kps, ks
 !     dspco factors a double precision symmetric matrix stored in
 !     packed form by elimination with symmetric pivoting and estimates
@@ -35152,8 +35178,8 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 integer, intent(out) :: info
-double precision, intent(inout) :: ap(*)
-double precision :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t, absakk, alpha, colmax, rowmax
+real(nswc_dp), intent(inout) :: ap(*)
+real(nswc_dp) :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t, absakk, alpha, colmax, rowmax
 integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk, j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, km2, kstep
 logical :: swap
 !     dspfa factors a double precision symmetric matrix stored in
@@ -35366,9 +35392,9 @@ end subroutine dspfa
 pure subroutine dspsl(ap,n,kpvt,b)
 implicit none
 integer, intent(in) :: n, kpvt(*)
-double precision, intent(in) :: ap(*)
-double precision, intent(inout) :: b(*)
-double precision :: ak, akm1, bk, bkm1, denom, temp
+real(nswc_dp), intent(in) :: ap(*)
+real(nswc_dp), intent(inout) :: b(*)
+real(nswc_dp) :: ak, akm1, bk, bkm1, denom, temp
 integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
 !     DSISL solves the double precision symmetric system
 !     A * X = b
@@ -35500,11 +35526,11 @@ end subroutine dspsl
 subroutine dspdi(ap,n,kpvt,det,inert,work,job)
 implicit none
 integer, intent(in) :: n, job
-double precision, intent(inout) :: ap(*), work(*)
-double precision, intent(inout) :: det(2)
+real(nswc_dp), intent(inout) :: ap(*), work(*)
+real(nswc_dp), intent(inout) :: det(2)
 integer, intent(in) :: kpvt(*)
 integer, intent(inout) :: inert(3)
-double precision :: akkp1, temp, ten, d, t, ak, akp1
+real(nswc_dp) :: akkp1, temp, ten, d, t, ak, akp1
 integer :: ij, ik, ikp1, iks, j, jb, jk, jkp1, k, kk, kkp1, km1, ks, ksj, kskp1, kstep
 logical :: noinv, nodet, noert
 !     dspdi computes the determinant, inertia and inverse
@@ -35704,9 +35730,9 @@ subroutine pchol(mo,n,m,a,b,kb,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kb, m, mo, n
-real, intent(inout) :: a(*), b(*)
+real(nswc_sp), intent(inout) :: a(*), b(*)
 integer :: j, onej
-real :: d(2)
+real(nswc_sp) :: d(2)
 !     -----------------
 !     -----------------
 !              Matrix factorization
@@ -35727,8 +35753,8 @@ pure subroutine sppfa(ap,n,info)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: info
-real, intent(inout) :: ap(*)
-real :: t, s
+real(nswc_sp), intent(inout) :: ap(*)
+real(nswc_sp) :: t, s
 integer :: j, jj, jm1, k, kj, kk
 !     sppfa factors a real symmetric positive definite matrix
 !     stored in packed form.
@@ -35797,9 +35823,9 @@ end subroutine sppfa
 pure subroutine sppsl(ap,n,b)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: ap(*)
-real, intent(inout) :: b(*)
-real :: t
+real(nswc_sp), intent(in) :: ap(*)
+real(nswc_sp), intent(inout) :: b(*)
+real(nswc_sp) :: t
 integer :: k, kb, kk
 !     sppsl solves the real symmetric positive definite system
 !     A * X = b
@@ -35849,9 +35875,9 @@ end subroutine sppsl
 subroutine sppdi(ap,n,det,job)
 implicit none
 integer, intent(in) :: n, job
-real, intent(inout) :: ap(*)
-real, intent(inout) :: det(2)
-real :: t, s
+real(nswc_sp), intent(inout) :: ap(*)
+real(nswc_sp), intent(inout) :: det(2)
+real(nswc_sp) :: t, s
 integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !     sppdi computes the determinant and inverse
 !     of a real symmetric positive definite matrix
@@ -35955,9 +35981,9 @@ subroutine dpchol(mo,n,m,a,b,kb,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kb, m, mo, n
-double precision, intent(inout) :: a(*), b(*)
+real(nswc_dp), intent(inout) :: a(*), b(*)
 integer :: j, onej
-double precision :: d(2)
+real(nswc_dp) :: d(2)
 !     -----------------
 !     -----------------
 !              Matrix factorization
@@ -35978,8 +36004,8 @@ pure subroutine dppfa(ap,n,info)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: info
-double precision, intent(inout) :: ap(*)
-double precision :: t, s
+real(nswc_dp), intent(inout) :: ap(*)
+real(nswc_dp) :: t, s
 integer :: j, jj, jm1, k, kj, kk
 !     dppfa factors a double precision symmetric positive definite
 !     matrix stored in packed form.
@@ -36048,9 +36074,9 @@ end subroutine dppfa
 pure subroutine dppsl(ap,n,b)
 implicit none
 integer, intent(in) :: n
-double precision, intent(in) :: ap(*)
-double precision, intent(inout) :: b(*)
-double precision :: t
+real(nswc_dp), intent(in) :: ap(*)
+real(nswc_dp), intent(inout) :: b(*)
+real(nswc_dp) :: t
 integer :: k, kb, kk
 !     dppsl solves the double precision symmetric positive definite
 !     SYSTEM A * X = b
@@ -36100,9 +36126,9 @@ end subroutine dppsl
 subroutine dppdi(ap,n,det,job)
 implicit none
 integer, intent(in) :: n, job
-double precision, intent(inout) :: ap(*)
-double precision, intent(inout) :: det(2)
-double precision :: t, s
+real(nswc_dp), intent(inout) :: ap(*)
+real(nswc_dp), intent(inout) :: det(2)
+real(nswc_dp) :: t, s
 integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !     dppdi computes the determinant and inverse
 !     of a double precision symmetric positive definite matrix
@@ -36206,10 +36232,10 @@ pure subroutine toplx(a, b, x, n, g, h, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
-real, intent(in) :: a(*), b(n)
-real, intent(inout) :: x(n), g(n), h(n)
+real(nswc_sp), intent(in) :: a(*), b(n)
+real(nswc_sp), intent(inout) :: x(n), g(n), h(n)
 integer :: j, k, l, m, max, mp1, nml, npl
-real :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
+real(nswc_sp) :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
 !-----------------------------------------------------------------------
 !            Solution of the Toeplitz system of equations
 !               sum(j = 1,...,n) a(n+I-j)*x(j) = b(I)
@@ -36286,10 +36312,10 @@ pure subroutine dtoplx(a, b, x, n, g, h, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
-double precision, intent(in) :: a(*), b(n)
-double precision, intent(inout) :: x(n), g(n), h(n)
+real(nswc_dp), intent(in) :: a(*), b(n)
+real(nswc_dp), intent(inout) :: x(n), g(n), h(n)
 integer :: j, k, l, m, max, mp1, nml, npl
-double precision :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
+real(nswc_dp) :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
 !-----------------------------------------------------------------------
 !            Solution of the Toeplitz system of equations
 !               sum(j = 1,...,n) a(n+I-j)*x(j) = b(I)
@@ -36367,11 +36393,11 @@ implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, mo
 integer :: n
-complex, intent(inout) :: a(ka,n), b(*), det(2), wk(n)
-real, intent(inout) :: rcond
+complex(nswc_sp), intent(inout) :: a(ka,n), b(*), det(2), wk(n)
+real(nswc_sp), intent(inout) :: rcond
 integer, intent(inout) :: ipvt(n)
 integer :: j, job, onej
-real :: t
+real(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting complex matrices
 !     and solving complex equations
@@ -36402,10 +36428,10 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo
 integer :: n
-complex, intent(inout) :: a(ka,n), b(*), wk(*)
+complex(nswc_sp), intent(inout) :: a(ka,n), b(*), wk(*)
 integer, intent(inout) :: ipvt(n)
 integer :: j, onej
-complex :: d(2)
+complex(nswc_sp) :: d(2)
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting complex matrices
 !     and solving complex equations
@@ -36435,8 +36461,8 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, mo
 integer :: n
-complex, intent(in) :: a(ka,n), b(n)
-complex, intent(inout) :: x(n), wk(*)
+complex(nswc_sp), intent(in) :: a(ka,n), b(n)
+complex(nswc_sp), intent(inout) :: x(n), wk(*)
 integer, intent(inout) :: iwk(n)
 integer :: i, ir
 !     ******************************************************************
@@ -36465,12 +36491,12 @@ pure subroutine cluimp(a, ka, n, q, kq, ipvt, b, x, r, ind)
 implicit none
 integer, intent(out) :: ind
 integer, intent(in) :: ka, kq, n
-complex, intent(in) :: a(ka,n), q(kq,n), b(n)
-complex, intent(inout) :: x(n), r(n)
+complex(nswc_sp), intent(in) :: a(ka,n), q(kq,n), b(n)
+complex(nswc_sp), intent(inout) :: x(n), r(n)
 integer, intent(in) :: ipvt(n)
 integer :: i, j
-real :: eps, eps2, rat, ratio, rnrm, xnrm
-double precision :: ra, ia, rx, ix, rsum, isum
+real(nswc_sp) :: eps, eps2, rat, ratio, rnrm, xnrm
+real(nswc_dp) :: ra, ia, rx, ix, rsum, isum
 ! ----------------------------------------------------------------------
 !     Purpose
 !       given an approximate solution x of a complex system AX = b
@@ -36545,10 +36571,10 @@ implicit none
 integer, intent(in) :: lda
 integer :: n
 integer, intent(inout) :: ipvt(*)
-complex, intent(inout) :: a(lda,*), z(*)
-real, intent(inout) :: rcond
-complex :: ek, t, wk, wkm, zdum, zdum1, zdum2
-real :: anorm, s, sm, ynorm
+complex(nswc_sp), intent(inout) :: a(lda,*), z(*)
+real(nswc_sp), intent(inout) :: rcond
+complex(nswc_sp) :: ek, t, wk, wkm, zdum, zdum1, zdum2
+real(nswc_sp) :: anorm, s, sm, ynorm
 integer :: info, j, k, kb, kp1, l
 !     cgeco factors a complex matrix BY Gaussian elimination
 !     and estimates the condition of the matrix.
@@ -36705,15 +36731,15 @@ if (anorm == 0.0e0) rcond = 0.0e0
 contains
    pure function cabs1(zdum) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: zdum
-      real :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: zdum
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
    end function cabs1
    pure function csign1(zdum1, zdum2) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: zdum1
-      complex, intent(in) :: zdum2
-      complex :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: zdum1
+      complex(nswc_sp), intent(in) :: zdum2
+      complex(nswc_sp) :: nswc_sf_result
       nswc_sf_result = cabs1(zdum1)*(zdum2/cabs1(zdum2))
    end function csign1
 end subroutine cgeco
@@ -36723,8 +36749,8 @@ implicit none
 integer, intent(in) :: lda
 integer :: n
 integer, intent(inout) :: ipvt(*), info
-complex, intent(inout) :: a(lda,*)
-complex :: t, zdum
+complex(nswc_sp), intent(inout) :: a(lda,*)
+complex(nswc_sp) :: t, zdum
 integer :: j, k, kp1, l, nm1
 !     cgefa factors a complex matrix BY Gaussian elimination.
 !     cgefa is usually called by cgeco, but it can be called
@@ -36798,8 +36824,8 @@ if (cabs1(a(n,n)) == 0.0e0) info = n
 contains
    pure function cabs1(zdum) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: zdum
-      real :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: zdum
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
    end function cabs1
 end subroutine cgefa
@@ -36807,9 +36833,9 @@ end subroutine cgefa
 pure subroutine cgesl(a,lda,n,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
-complex, intent(in) :: a(lda,*)
-complex, intent(inout) :: b(*)
-complex :: t
+complex(nswc_sp), intent(in) :: a(lda,*)
+complex(nswc_sp), intent(inout) :: b(*)
+complex(nswc_sp) :: t
 integer :: k, kb, l, nm1
 !     cgesl solves the complex system
 !     a * X = b  OR  ctrans(a) * X = b
@@ -36900,9 +36926,9 @@ end subroutine cgesl
 subroutine cgedi(a,lda,n,ipvt,det,work,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
-complex, intent(inout) :: a(lda,*), det(2), work(*)
-complex :: t, zdum
-real :: ten
+complex(nswc_sp), intent(inout) :: a(lda,*), det(2), work(*)
+complex(nswc_sp) :: t, zdum
+real(nswc_sp) :: ten
 integer :: i, j, k, kb, kp1, l, nm1
 !     cgedi computes the determinant and inverse of a matrix
 !     using the factors computed by cgeco or cgefa.
@@ -37001,8 +37027,8 @@ end do
 contains
    pure function cabs1(zdum) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: zdum
-      real :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: zdum
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
    end function cabs1
 end subroutine cgedi
@@ -37012,7 +37038,7 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo
 integer :: n
-double precision, intent(inout) :: ar(ka,n), ai(ka,n), br(*), &
+real(nswc_dp), intent(inout) :: ar(ka,n), ai(ka,n), br(*), &
    & bi(*), wk(*)
 integer, intent(inout) :: ipvt(n)
 !-----------------------------------------------------------------------
@@ -37039,10 +37065,10 @@ pure subroutine dcfact(ar, ai, ka, n, ipvt, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, n
-double precision, intent(inout) :: ar(ka,n), ai(ka,n)
+real(nswc_dp), intent(inout) :: ar(ka,n), ai(ka,n)
 integer, intent(inout) :: ipvt(n)
 integer :: i, j, k, kp1, l, nm1
-double precision :: p, pr, pi, t, tr, ti
+real(nswc_dp) :: p, pr, pi, t, tr, ti
 !-----------------------------------------------------------------------
 !     Decomposes a complex matrix BY partial pivot Gauss elimination
 !-----------------------------------------------------------------------
@@ -37124,11 +37150,11 @@ end subroutine dcfact
 pure subroutine dcsol(n, m, ar, ai, ka, br, bi, kb, ipvt)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-double precision, intent(in) :: ar(ka,n), ai(ka,n)
-double precision, intent(inout) :: br(kb,m), bi(kb,m)
+real(nswc_dp), intent(in) :: ar(ka,n), ai(ka,n)
+real(nswc_dp), intent(inout) :: br(kb,m), bi(kb,m)
 integer, intent(in) :: ipvt(n)
 integer :: i, j, k, km1, kp1, l, nm1
-double precision :: pr, pi, tr, ti
+real(nswc_dp) :: pr, pi, tr, ti
 !-----------------------------------------------------------------------
 !     Solution of the system of m equations A*X = B using the
 !     decomposition obtained by dcfact. This routine CANNOT be
@@ -37201,10 +37227,10 @@ subroutine dcminv(ar, ai, ka, n, ipvt, temp)
 implicit none
 integer, intent(in) :: ka
 integer :: n
-double precision, intent(inout) :: ar(ka,n), ai(ka,n), temp(2,n)
+real(nswc_dp), intent(inout) :: ar(ka,n), ai(ka,n), temp(2,n)
 integer, intent(in) :: ipvt(n)
 integer :: i, ip1, j, jb, k, kp1, l, nm1, nmi, nmk, np1
-double precision :: sr, si, tr, ti
+real(nswc_dp) :: sr, si, tr, ti
 !-----------------------------------------------------------------------
 !     Computation of the inverse of A matrix A using the LU
 !     decomposition obtained by dcfact. This routine CANNOT
@@ -37279,11 +37305,11 @@ pure subroutine ssvdc(x,ldx,n,p,s,e,u,ldu,v,ldv,work,job,info)
 implicit none
 integer, intent(in) :: ldx, n, p, ldu, ldv, job
 integer, intent(inout) :: info
-real, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), v(ldv,*), &
+real(nswc_sp), intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), v(ldv,*), &
    & work(*)
 integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
    & ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
-real :: t, b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
+real(nswc_sp) :: t, b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
 logical :: wantu, wantv
 !     ssvdc is a subroutine to reduce a real NXP matrix x by
 !     orthogonal transformations u and v to diagonal form.  The
@@ -37690,11 +37716,11 @@ pure subroutine dsvdc(x,ldx,n,p,s,e,u,ldu,v,ldv,work,job,info)
 implicit none
 integer, intent(in) :: ldx, n, p, ldu, ldv, job
 integer, intent(inout) :: info
-double precision, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
+real(nswc_dp), intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
    & v(ldv,*), work(*)
 integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
    & ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
-double precision :: t, b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
+real(nswc_dp) :: t, b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
 logical :: wantu, wantv
 !     dsvdc is a subroutine to reduce a double precision NXP matrix x
 !     by orthogonal transformations u and V to diagonal form.  The
@@ -38101,12 +38127,12 @@ pure subroutine csvdc(x,ldx,n,p,s,e,u,ldu,v,ldv,work,job,info)
 implicit none
 integer, intent(in) :: ldx, n, p, ldu, ldv, job
 integer, intent(inout) :: info
-complex, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
+complex(nswc_sp), intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
    & v(ldv,*), work(*)
 integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
    & ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
-complex :: t, r, zdum, zdum1, zdum2
-real :: b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
+complex(nswc_sp) :: t, r, zdum, zdum1, zdum2
+real(nswc_sp) :: b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
 logical :: wantu, wantv
 !     csvdc is a subroutine to reduce a complex NXP matrix x by
 !     unitary transformations u and V to diagonal form.  The
@@ -38531,15 +38557,15 @@ go to 400
 contains
    pure function cabs1(zdum) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: zdum
-      real :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: zdum
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = abs(real(zdum)) + abs(aimag(zdum))
    end function cabs1
    pure function csign(zdum1, zdum2) result(nswc_sf_result)
       implicit none
-      complex, intent(in) :: zdum1
-      complex, intent(in) :: zdum2
-      complex :: nswc_sf_result
+      complex(nswc_sp), intent(in) :: zdum1
+      complex(nswc_sp), intent(in) :: zdum2
+      complex(nswc_sp) :: nswc_sf_result
       nswc_sf_result = abs(zdum1)*(zdum2/abs(zdum2))
    end function csign
 end subroutine csvdc
@@ -38547,11 +38573,11 @@ end subroutine csvdc
 function det(a,ka,n,x)
 implicit none
 integer, intent(in) :: ka, n
-real, intent(inout) :: a(ka,n)
-real, intent(in) :: x
+real(nswc_sp), intent(inout) :: a(ka,n)
+real(nswc_sp), intent(in) :: x
 integer :: i, j, k, kp1, l, nm1
-real :: c, pivot, s
-real :: det
+real(nswc_sp) :: c, pivot, s
+real(nswc_sp) :: det
 !     -------------------
 !     Evaluation of the determinant of a-xi where A is an NXN matrix,
 !     x is a scalar, and i is the NXN identity matrix.
@@ -38606,13 +38632,13 @@ end do
 det = det*a(n,n)
 end function det
 
-double precision function dpdet(a,ka,n,x)
+real(nswc_dp) function dpdet(a,ka,n,x)
 implicit none
 integer, intent(in) :: ka, n
-double precision, intent(inout) :: a(ka,n)
-double precision, intent(in) :: x
+real(nswc_dp), intent(inout) :: a(ka,n)
+real(nswc_dp), intent(in) :: x
 integer :: i, j, k, kp1, l, nm1
-double precision :: pivot, s, c
+real(nswc_dp) :: pivot, s, c
 !     -------------------
 !     Evaluation of the determinant of a-xi where A is an NXN matrix,
 !     x is a scalar, and i is the NXN identity matrix.
@@ -38667,15 +38693,15 @@ end do
 dpdet = dpdet*a(n,n)
 end function dpdet
 
-complex function cdet(a,ka,n,x)
+complex(nswc_sp) function cdet(a,ka,n,x)
 implicit none
 integer, intent(in) :: ka, n
-complex, intent(inout) :: a(ka,n)
-complex, intent(in) :: x
+complex(nswc_sp), intent(inout) :: a(ka,n)
+complex(nswc_sp), intent(in) :: x
 integer :: i, j, k, kp1, l, nm1
-complex :: pivot, t
-real :: s, c
-complex, parameter :: zero = (0.0,0.0)
+complex(nswc_sp) :: pivot, t
+real(nswc_sp) :: s, c
+complex(nswc_sp), parameter :: zero = (0.0,0.0)
 !     -------------------
 !     Evaluation of the determinant of a-xi where A is an NXN matrix,
 !     x is a scalar, and i is the NXN identity matrix.
@@ -38737,7 +38763,7 @@ integer :: m
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nb, nc
-real, intent(inout) :: a(na,m), b(nb,n), c(nc,n), wk(*)
+real(nswc_sp), intent(inout) :: a(na,m), b(nb,n), c(nc,n), wk(*)
 integer :: iu, iv, iw
 ! ----------------------------------------------------------------------
 !     abslv solves the real matrix equation AX + XB = c. A is reduced
@@ -38809,11 +38835,11 @@ integer :: m
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nb, nc, nu, nv
-real, intent(inout) :: a(na,m), b(nb,n), c(nc,n)
-real, intent(inout) :: u(nu,m), v(nv,n)
-real, intent(inout) :: wk(*)
+real(nswc_sp), intent(inout) :: a(na,m), b(nb,n), c(nc,n)
+real(nswc_sp), intent(inout) :: u(nu,m), v(nv,n)
+real(nswc_sp), intent(inout) :: wk(*)
 integer :: i, j, k
-real :: temp
+real(nswc_sp) :: temp
 ! ----------------------------------------------------------------------
 !     abslv1 solves the real matrix equation AX + XB = c. A is reduced
 !     to lower Schur form, b is reduced to upper Schur form, and the
@@ -38911,9 +38937,9 @@ integer, intent(in) :: n
 integer, intent(in) :: nh, nz, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
-real, intent(inout) :: h(nh,n), wr(n), wi(n), z(nz,n)
+real(nswc_sp), intent(inout) :: h(nh,n), wr(n), wi(n), z(nz,n)
 integer :: ip1, i, j, k, l, m, en, ll, mm, na, its, mp2, enm2
-real :: p, q, r, s, t, w, x, y, zz, norm, s1, s2
+real(nswc_sp) :: p, q, r, s, t, w, x, y, zz, norm, s1, s2
 logical :: notlas
 ! ----------------------------------------------------------------------
 !     It is assumed that h is an upper Hessenberg matrix. Schur
@@ -39168,9 +39194,9 @@ implicit none
 !     ------------------------------------------------------------------
 integer, intent(in) :: m, n, na, nb, nc
 integer, intent(inout) :: ierr
-real, intent(in) :: a(na,m), b(nb,n)
-real, intent(inout) :: c(nc,n)
-real :: sum, p(4), t(4,4)
+real(nswc_sp), intent(in) :: a(na,m), b(nb,n)
+real(nswc_sp), intent(inout) :: c(nc,n)
+real(nswc_sp) :: sum, p(4), t(4,4)
 integer :: dk, dl, i, ib, j, ja, k, km1, kk, l, lm1, ll
 l = 1
 10 lm1 = l - 1
@@ -39276,7 +39302,7 @@ integer :: m
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nb, nc
-double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n), &
+real(nswc_dp), intent(inout) :: a(na,m), b(nb,n), c(nc,n), &
    & wk(*)
 integer :: iu, iv, iw
 ! ----------------------------------------------------------------------
@@ -39349,11 +39375,11 @@ integer :: m
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nb, nc, nu, nv
-double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n)
-double precision, intent(inout) :: u(nu,m), v(nv,n)
-double precision, intent(inout) :: wk(*)
+real(nswc_dp), intent(inout) :: a(na,m), b(nb,n), c(nc,n)
+real(nswc_dp), intent(inout) :: u(nu,m), v(nv,n)
+real(nswc_dp), intent(inout) :: wk(*)
 integer :: i, j, k
-double precision :: temp
+real(nswc_dp) :: temp
 ! ----------------------------------------------------------------------
 !     dabsv1 solves the real matrix equation AX + XB = c. A is reduced
 !     to lower Schur form, b is reduced to upper Schur form, and the
@@ -39451,9 +39477,9 @@ integer, intent(in) :: n
 integer, intent(in) :: nh, nz, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
-double precision, intent(inout) :: h(nh,n), wr(n), wi(n), z(nz,n)
+real(nswc_dp), intent(inout) :: h(nh,n), wr(n), wi(n), z(nz,n)
 integer :: ip1, i, j, k, l, m, en, ll, mm, na, its, mp2, enm2
-double precision :: p, q, r, s, t, w, x, y, zz, norm, s1, s2
+real(nswc_dp) :: p, q, r, s, t, w, x, y, zz, norm, s1, s2
 logical :: notlas
 ! ----------------------------------------------------------------------
 !     It is assumed that h is an upper Hessenberg matrix. dschur
@@ -39708,9 +39734,9 @@ implicit none
 !     ------------------------------------------------------------------
 integer, intent(in) :: m, n, na, nb, nc
 integer, intent(inout) :: ierr
-double precision, intent(in) :: a(na,m), b(nb,n)
-double precision, intent(inout) :: c(nc,n)
-double precision :: sum, p(4), t(4,4)
+real(nswc_dp), intent(in) :: a(na,m), b(nb,n)
+real(nswc_dp), intent(inout) :: c(nc,n)
+real(nswc_dp) :: sum, p(4), t(4,4)
 integer :: dk, dl, i, ib, j, ja, k, km1, kk, l, lm1, ll
 l = 1
 10 lm1 = l - 1
@@ -39815,7 +39841,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nc
-real, intent(inout) :: a(na,n), c(nc,n), wk(*)
+real(nswc_sp), intent(inout) :: a(na,n), c(nc,n), wk(*)
 integer :: iw
 ! ----------------------------------------------------------------------
 !     taslv solves the real matrix equation transpose(a)*X + X*a = c
@@ -39871,7 +39897,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nc, nu
-real, intent(inout) :: a(na,n), u(nu,n), c(nc,n), wk(*)
+real(nswc_sp), intent(inout) :: a(na,n), u(nu,n), c(nc,n), wk(*)
 integer :: i, j, k
 ! ----------------------------------------------------------------------
 !     taslv1 solves the real matrix equation transpose(a)*X + X*a = c
@@ -39966,9 +39992,9 @@ implicit none
 ! ----------------------------------------------------------------------
 integer, intent(in) :: n, na, nc
 integer, intent(inout) :: ierr
-real, intent(in) :: a(na,n)
-real, intent(inout) :: c(nc,n)
-real :: sum, p(4), t(4,4)
+real(nswc_sp), intent(in) :: a(na,n)
+real(nswc_sp), intent(inout) :: c(nc,n)
+real(nswc_sp) :: sum, p(4), t(4,4)
 integer :: dk, dl, i, ia, j, k, kk, km1, l, ll, ldl
 l = 1
 10 dl = 1
@@ -40094,7 +40120,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nc
-double precision, intent(inout) :: a(na,n), c(nc,n), wk(*)
+real(nswc_dp), intent(inout) :: a(na,n), c(nc,n), wk(*)
 integer :: iw
 ! ----------------------------------------------------------------------
 !     dtaslv solves the real matrix equation transpose(a)*X + X*a = c
@@ -40150,7 +40176,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nc, nu
-double precision, intent(inout) :: a(na,n), u(nu,n), c(nc,n), &
+real(nswc_dp), intent(inout) :: a(na,n), u(nu,n), c(nc,n), &
    & wk(*)
 integer :: i, j, k
 ! ----------------------------------------------------------------------
@@ -40246,9 +40272,9 @@ implicit none
 ! ----------------------------------------------------------------------
 integer, intent(in) :: n, na, nc
 integer, intent(inout) :: ierr
-double precision, intent(in) :: a(na,n)
-double precision, intent(inout) :: c(nc,n)
-double precision :: sum, p(4), t(4,4)
+real(nswc_dp), intent(in) :: a(na,n)
+real(nswc_dp), intent(inout) :: c(nc,n)
+real(nswc_dp) :: sum, p(4), t(4,4)
 integer :: dk, dl, i, ia, j, k, kk, km1, l, ll, ldl
 l = 1
 10 dl = 1
@@ -40425,9 +40451,9 @@ integer, intent(in) :: nm, n
 integer, intent(inout) :: iguess
 integer, intent(in) :: nw
 integer, intent(inout) :: maxits, ierr
-complex, intent(inout) :: work(nw)
-complex, intent(inout) :: a(nm,n), b(nm,n), c(nm,n), s(nm,n)
-real, intent(in) :: tol
+complex(nswc_sp), intent(inout) :: work(nw)
+complex(nswc_sp), intent(inout) :: a(nm,n), b(nm,n), c(nm,n), s(nm,n)
+real(nswc_sp), intent(in) :: tol
 integer :: i1, i2, i3, i4, i5, i6, i7
 i1 = n*n + 1
 i2 = n*n + i1
@@ -40479,13 +40505,13 @@ integer, intent(in) :: nm, n
 integer, intent(inout) :: iguess
 integer, intent(in) :: nw
 integer, intent(inout) :: maxits, ierr
-complex, intent(inout) :: a(nm,n), b(nm,n), c(nm,n), s(nm,n), &
+complex(nswc_sp), intent(inout) :: a(nm,n), b(nm,n), c(nm,n), s(nm,n), &
    & l(nm,n), u(nm,n)
-complex, intent(inout) :: v(nm,n), z(nm,n), r(nm,n), xold(nm,n), &
+complex(nswc_sp), intent(inout) :: v(nm,n), z(nm,n), r(nm,n), xold(nm,n), &
    & eye(nm,n), temp(n)
-real, intent(in) :: tol
+real(nswc_sp), intent(in) :: tol
 integer :: its, mats, i, j, k
-real :: anorm, ani, bnorm, bni, cnorm, cni, xnorm, xni, fxnorm, fxni, gnorm, tnorm, t
+real(nswc_sp) :: anorm, ani, bnorm, bni, cnorm, cni, xnorm, xni, fxnorm, fxni, gnorm, tnorm, t
 !     real sqrt, cabs, float
 !     complex cmplx, conjg
 k = 7*n*n + n
@@ -40697,14 +40723,14 @@ implicit none
 !     f, g and h are updated, if desired.
 integer, intent(in) :: n
 integer, intent(in) :: nm
-complex, intent(inout) :: a(nm,n), b(nm,n), z(nm,n)
-complex, intent(inout) :: f(nm,n)
-complex, intent(inout) :: g(nm,n)
-complex, intent(inout) :: h(nm,n)
+complex(nswc_sp), intent(inout) :: a(nm,n), b(nm,n), z(nm,n)
+complex(nswc_sp), intent(inout) :: f(nm,n)
+complex(nswc_sp), intent(inout) :: g(nm,n)
+complex(nswc_sp), intent(inout) :: h(nm,n)
 integer, intent(in) :: mats
 integer :: i, j, k, l, lb, l1, nk1, nm1, nm2
-complex :: rr, t, u1, u2, v1, v2, rho, tf, tg, th
-real :: r, s
+complex(nswc_sp) :: rr, t, u1, u2, v1, v2, rho, tf, tg, th
+real(nswc_sp) :: r, s
 !     real sqrt, cabs
 !     complex cmplx, conjg
 if (mats == 0) go to 30
@@ -40893,13 +40919,13 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(out) :: ierr
-complex, intent(inout) :: a(nm,n), b(nm,n), z(nm,n)
-complex, intent(inout) :: f(nm,n)
-real, intent(in) :: eps1
+complex(nswc_sp), intent(inout) :: a(nm,n), b(nm,n), z(nm,n)
+complex(nswc_sp), intent(inout) :: f(nm,n)
+real(nswc_sp), intent(in) :: eps1
 integer, intent(in) :: mats
 integer :: i, j, k, l, en, jj, k1, k2, ld, ll, l1, na, ish, its, km1, lm1, enm2, lor1, enorn
-complex :: a11, a21, a33, a34, a43, a44, b11, b22, b33, b34, b44, a1, a2, u1, u2, v1, v2, t, rr, sh, ss, tf
-real :: epsa, epsb, anorm, bnorm, ani, bni, srelpr, r, s
+complex(nswc_sp) :: a11, a21, a33, a34, a43, a44, b11, b22, b33, b34, b44, a1, a2, u1, u2, v1, v2, t, rr, sh, ss, tf
+real(nswc_sp) :: epsa, epsb, anorm, bnorm, ani, bni, srelpr, r, s
 !     integer max0, min0
 !     real sqrt, cabs
 !     complex cmplx, conjg, csqrt
@@ -41113,12 +41139,12 @@ implicit none
 !          ierr.EQ.1 if the triangular system is inconsistent.
 integer, intent(out) :: ierr
 integer, intent(in) :: n, nm
-complex, intent(in) :: u(nm,n), v(nm,n), l(nm,n)
-complex, intent(inout) :: f(nm,n)
-complex, intent(inout) :: temp(n)
+complex(nswc_sp), intent(in) :: u(nm,n), v(nm,n), l(nm,n)
+complex(nswc_sp), intent(inout) :: f(nm,n)
+complex(nswc_sp), intent(inout) :: temp(n)
 integer :: i, j, jp1, k, kk, km1, m, nm1
-complex :: denom, sum
-real :: s, t
+complex(nswc_sp) :: denom, sum
+real(nswc_sp) :: s, t
 !     real cabs
 !     complex cmplx
 ierr = 0
@@ -41180,10 +41206,10 @@ implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kz
 integer :: n
-real, intent(inout) :: a(ka,n), z(kz,n), wk(n,*)
+real(nswc_sp), intent(inout) :: a(ka,n), z(kz,n), wk(n,*)
 integer :: i, igh, j, k, kp1, l, ll, low, m, np1, np6
-real :: anorm, anorm1, factor, p, q, s, s1
-real, parameter :: c(8) = [.500000000000000e+00, .116666666666667e+00, .166666666666667e-01, .160256410256410e-02, &
+real(nswc_sp) :: anorm, anorm1, factor, p, q, s, s1
+real(nswc_sp), parameter :: c(8) = [.500000000000000e+00, .116666666666667e+00, .166666666666667e-01, .160256410256410e-02, &
    & .106837606837607e-03, .485625485625486e-05, .138750138750139e-06, .192708526041859e-08]
 ! ----------------------------------------------------------------------
 !     mexp computes exp(a) and stores it in z where A is a matrix
@@ -41318,10 +41344,10 @@ implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kz
 integer :: n
-double precision, intent(inout) :: a(ka,n), z(kz,n), wk(n,*)
+real(nswc_dp), intent(inout) :: a(ka,n), z(kz,n), wk(n,*)
 integer :: i, igh, j, k, kp1, l, ll, low, m, np1, np10
-double precision :: anorm, anorm1, factor, p, q, s, s1
-double precision, parameter :: c(12) = [.500000000000000000000000000000d+00, &
+real(nswc_dp) :: anorm, anorm1, factor, p, q, s, s1
+real(nswc_dp), parameter :: c(12) = [.500000000000000000000000000000d+00, &
    & .119565217391304347826086956522d+00, .181159420289855072463768115942d-01, .194099378881987577639751552795d-02, &
    & .155279503105590062111801242236d-03, .953470633104500381388253241800d-05, .454033634811666848280120591333d-06, &
    & .166924130445465753044161982108d-07, .463678140126293758456005505855d-09, .927356280252587516912011011710d-11, &
@@ -41458,14 +41484,14 @@ subroutine le(rowk,n,b,c,d,ip,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer :: n
-real, intent(in) :: b(n)
-real, intent(inout) :: c(n), d(*)
+real(nswc_sp), intent(in) :: b(n)
+real(nswc_sp), intent(inout) :: c(n), d(*)
 integer, intent(inout) :: ip(*)
 external rowk
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
-real :: bk, c1, cj, ck, dkj
-real, parameter :: zero = 0.0
+real(nswc_sp) :: bk, c1, cj, ck, dkj
+real(nswc_sp), parameter :: zero = 0.0
 !     ******************************************************************
 !     Solution of linear equations with reduced storage
 !     ******************************************************************
@@ -41598,14 +41624,14 @@ subroutine dple(rowk,n,b,c,d,ip,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer :: n
-double precision, intent(in) :: b(n)
-double precision, intent(inout) :: c(n), d(*)
+real(nswc_dp), intent(in) :: b(n)
+real(nswc_dp), intent(inout) :: c(n), d(*)
 integer, intent(inout) :: ip(*)
 external rowk
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
-double precision :: bk, cj, ck, c1, dkj
-double precision, parameter :: zero = 0.d0
+real(nswc_dp) :: bk, cj, ck, c1, dkj
+real(nswc_dp), parameter :: zero = 0.d0
 !     ******************************************************************
 !     Solution of linear equations with reduced storage
 !     ******************************************************************
@@ -41738,15 +41764,15 @@ subroutine cle(rowk,n,b,c,d,ip,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer :: n
-complex, intent(in) :: b(n)
-complex, intent(inout) :: c(n), d(*)
+complex(nswc_sp), intent(in) :: b(n)
+complex(nswc_sp), intent(inout) :: c(n), d(*)
 integer, intent(inout) :: ip(*)
 external rowk
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
-real :: s, si
-complex :: bk, cj, ck, c1, dkj
-complex, parameter :: zero = (0.0,0.0)
+real(nswc_sp) :: s, si
+complex(nswc_sp) :: bk, cj, ck, c1, dkj
+complex(nswc_sp), parameter :: zero = (0.0,0.0)
 !     ******************************************************************
 !     Solution of complex linear equations with reduced storage
 !     ******************************************************************
@@ -41888,8 +41914,8 @@ end subroutine cle
 pure subroutine cvbr(b,kb,m,n,ml,mu,a,ka)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
-real, intent(inout) :: a(ka,n)
-real, intent(in) :: b(kb,*)
+real(nswc_sp), intent(inout) :: a(ka,n)
+real(nswc_sp), intent(in) :: b(kb,*)
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !           Conversion of real matrices from banded to
@@ -41952,8 +41978,8 @@ end subroutine cvbr
 pure subroutine cvrb(a,ka,m,n,ml,mu,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: b(kb,*)
+real(nswc_sp), intent(in) :: a(ka,n)
+real(nswc_sp), intent(inout) :: b(kb,*)
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of real matrices from standard to banded
@@ -42019,8 +42045,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m
 integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: b(kb,nb)
+real(nswc_sp), intent(in) :: a(ka,n)
+real(nswc_sp), intent(inout) :: b(kb,nb)
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 !-----------------------------------------------------------------------
 !           Conversion of real matrices from standard
@@ -42066,8 +42092,8 @@ end subroutine cvrb1
 pure subroutine cvbd(b,kb,m,n,ml,mu,a,ka)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
-double precision, intent(inout) :: a(ka,n)
-double precision, intent(in) :: b(kb,*)
+real(nswc_dp), intent(inout) :: a(ka,n)
+real(nswc_dp), intent(in) :: b(kb,*)
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of double precision matrices from banded
@@ -42130,8 +42156,8 @@ end subroutine cvbd
 pure subroutine cvdb(a,ka,m,n,ml,mu,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
-double precision, intent(in) :: a(ka,n)
-double precision, intent(inout) :: b(kb,*)
+real(nswc_dp), intent(in) :: a(ka,n)
+real(nswc_dp), intent(inout) :: b(kb,*)
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of double precision matrices from standard
@@ -42197,8 +42223,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m
 integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
-double precision, intent(in) :: a(ka,n)
-double precision, intent(inout) :: b(kb,nb)
+real(nswc_dp), intent(in) :: a(ka,n)
+real(nswc_dp), intent(inout) :: b(kb,nb)
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 !-----------------------------------------------------------------------
 !        Conversion of double precision matrices from standard
@@ -42244,8 +42270,8 @@ end subroutine cvdb1
 pure subroutine cvbc(b,kb,m,n,ml,mu,a,ka)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
-complex, intent(inout) :: a(ka,n)
-complex, intent(in) :: b(kb,*)
+complex(nswc_sp), intent(inout) :: a(ka,n)
+complex(nswc_sp), intent(in) :: b(kb,*)
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !          Conversion of complex matrices from banded to
@@ -42308,8 +42334,8 @@ end subroutine cvbc
 pure subroutine cvcb(a,ka,m,n,ml,mu,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
-complex, intent(in) :: a(ka,n)
-complex, intent(inout) :: b(kb,*)
+complex(nswc_sp), intent(in) :: a(ka,n)
+complex(nswc_sp), intent(inout) :: b(kb,*)
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of complex matrices from standard to banded
@@ -42375,8 +42401,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m
 integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
-complex, intent(in) :: a(ka,n)
-complex, intent(inout) :: b(kb,nb)
+complex(nswc_sp), intent(in) :: a(ka,n)
+complex(nswc_sp), intent(inout) :: b(kb,nb)
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 !-----------------------------------------------------------------------
 !           Conversion of complex matrices from standard
@@ -42423,8 +42449,8 @@ pure subroutine mcvbs(a,ka,m,n,ml,mu,b,ib,jb,num,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
-real, intent(in) :: a(ka,*)
-real, intent(inout) :: b(*)
+real(nswc_sp), intent(in) :: a(ka,*)
+real(nswc_sp), intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
@@ -42480,8 +42506,8 @@ pure subroutine dmcvbs(a,ka,m,n,ml,mu,b,ib,jb,num,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
-double precision, intent(in) :: a(ka,*)
-double precision, intent(inout) :: b(*)
+real(nswc_dp), intent(in) :: a(ka,*)
+real(nswc_dp), intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
@@ -42537,8 +42563,8 @@ pure subroutine cmcvbs(a,ka,m,n,ml,mu,b,ib,jb,num,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
-complex, intent(in) :: a(ka,*)
-complex, intent(inout) :: b(*)
+complex(nswc_sp), intent(in) :: a(ka,*)
+complex(nswc_sp), intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
@@ -42596,8 +42622,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: kb, m
 integer, intent(out) :: ml, mu
 integer, intent(in) :: n, nb
-real, intent(in) :: a(*)
-real, intent(inout) :: b(kb,nb)
+real(nswc_sp), intent(in) :: a(*)
+real(nswc_sp), intent(inout) :: b(kb,nb)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
@@ -42655,8 +42681,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: kb, m
 integer, intent(out) :: ml, mu
 integer, intent(in) :: n, nb
-double precision, intent(in) :: a(*)
-double precision, intent(inout) :: b(kb,nb)
+real(nswc_dp), intent(in) :: a(*)
+real(nswc_dp), intent(inout) :: b(kb,nb)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
@@ -42714,8 +42740,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: kb, m
 integer, intent(out) :: ml, mu
 integer, intent(in) :: n, nb
-complex, intent(in) :: a(*)
-complex, intent(inout) :: b(kb,nb)
+complex(nswc_sp), intent(in) :: a(*)
+complex(nswc_sp), intent(inout) :: b(kb,nb)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
@@ -42770,8 +42796,8 @@ end subroutine cmcvsb
 pure subroutine bcvrd(a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
-real, intent(in) :: a(ka,*)
-double precision, intent(inout) :: b(kb,*)
+real(nswc_sp), intent(in) :: a(ka,*)
+real(nswc_dp), intent(inout) :: b(kb,*)
 integer :: i, j, num
 !-----------------------------------------------------------------------
 !        Conversion of banded matrices from single to double
@@ -42788,8 +42814,8 @@ end subroutine bcvrd
 pure subroutine bcvdr(a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
-double precision, intent(in) :: a(ka,*)
-real, intent(inout) :: b(kb,*)
+real(nswc_dp), intent(in) :: a(ka,*)
+real(nswc_sp), intent(inout) :: b(kb,*)
 integer :: i, j, num
 !-----------------------------------------------------------------------
 !        Conversion of banded matrices from double to single
@@ -42809,8 +42835,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, l, m, ml, mu, n
 integer, intent(out) :: nl
 integer, intent(inout) :: nu
-complex, intent(in) :: a(ka,*)
-real, intent(inout) :: b(kb,l)
+complex(nswc_sp), intent(in) :: a(ka,*)
+real(nswc_sp), intent(inout) :: b(kb,l)
 integer :: i, imin, j, k, num
 !-----------------------------------------------------------------------
 !              Real part of a banded complex matrix
@@ -42858,8 +42884,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, l, m, ml, mu, n
 integer, intent(out) :: nl
 integer, intent(inout) :: nu
-complex, intent(in) :: a(ka,*)
-real, intent(inout) :: b(kb,l)
+complex(nswc_sp), intent(in) :: a(ka,*)
+real(nswc_sp), intent(inout) :: b(kb,l)
 integer :: i, imin, j, k, num
 !-----------------------------------------------------------------------
 !            Imaginary part of a banded complex matrix
@@ -42907,8 +42933,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(out) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
-real, intent(in) :: a(ka,*), b(kb,*)
-complex, intent(inout) :: c(kc,l)
+real(nswc_sp), intent(in) :: a(ka,*), b(kb,*)
+complex(nswc_sp), intent(inout) :: c(kc,l)
 integer :: i, j, ja, jb, jc, jmax, k, num
 !-----------------------------------------------------------------------
 !        Compute a + bi for the banded real matrices A and b
@@ -42978,8 +43004,8 @@ end subroutine bcvrc
 pure subroutine bpose(a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
-real, intent(in) :: a(ka,*)
-real, intent(inout) :: b(kb,*)
+real(nswc_sp), intent(in) :: a(ka,*)
+real(nswc_sp), intent(inout) :: b(kb,*)
 integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !-----------------------------------------------------------------------
 !                Transposition of real banded matrices
@@ -43028,8 +43054,8 @@ end subroutine bpose
 pure subroutine dbpose(a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
-double precision, intent(in) :: a(ka,*)
-double precision, intent(inout) :: b(kb,*)
+real(nswc_dp), intent(in) :: a(ka,*)
+real(nswc_dp), intent(inout) :: b(kb,*)
 integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !-----------------------------------------------------------------------
 !          Transposition of double precision banded matrices
@@ -43078,8 +43104,8 @@ end subroutine dbpose
 pure subroutine cbpose(a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
-complex, intent(in) :: a(ka,*)
-complex, intent(inout) :: b(kb,*)
+complex(nswc_sp), intent(in) :: a(ka,*)
+complex(nswc_sp), intent(inout) :: b(kb,*)
 integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !-----------------------------------------------------------------------
 !              Transposition of complex banded matrices
@@ -43131,8 +43157,8 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
-real, intent(in) :: a(ka,*), b(kb,*)
-real, intent(inout) :: c(kc,l)
+real(nswc_sp), intent(in) :: a(ka,*), b(kb,*)
+real(nswc_sp), intent(inout) :: c(kc,l)
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !                 Addition of real banded matrices
@@ -43265,8 +43291,8 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
-double precision, intent(in) :: a(ka,*), b(kb,*)
-double precision, intent(inout) :: c(kc,l)
+real(nswc_dp), intent(in) :: a(ka,*), b(kb,*)
+real(nswc_dp), intent(inout) :: c(kc,l)
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !           Addition of double precision banded matrices
@@ -43399,8 +43425,8 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
-complex, intent(in) :: a(ka,*), b(kb,*)
-complex, intent(inout) :: c(kc,l)
+complex(nswc_sp), intent(in) :: a(ka,*), b(kb,*)
+complex(nswc_sp), intent(inout) :: c(kc,l)
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !                Addition of complex banded matrices
@@ -43534,8 +43560,8 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
-real, intent(in) :: a(ka,*), b(kb,*)
-real, intent(inout) :: c(kc,l)
+real(nswc_sp), intent(in) :: a(ka,*), b(kb,*)
+real(nswc_sp), intent(inout) :: c(kc,l)
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !                Subtraction of real banded matrices
@@ -43668,8 +43694,8 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
-double precision, intent(in) :: a(ka,*), b(kb,*)
-double precision, intent(inout) :: c(kc,l)
+real(nswc_dp), intent(in) :: a(ka,*), b(kb,*)
+real(nswc_dp), intent(inout) :: c(kc,l)
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !          Subtraction of double precision banded matrices
@@ -43802,8 +43828,8 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
-complex, intent(in) :: a(ka,*), b(kb,*)
-complex, intent(inout) :: c(kc,l)
+complex(nswc_sp), intent(in) :: a(ka,*), b(kb,*)
+complex(nswc_sp), intent(inout) :: c(kc,l)
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !             Subtraction of complex banded matrices
@@ -43938,11 +43964,11 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nc, nl, nu
-real, intent(in) :: a(ka,*), b(kb,*)
-real, intent(inout) :: c(kc,nc)
+real(nswc_sp), intent(in) :: a(ka,*), b(kb,*)
+real(nswc_sp), intent(inout) :: c(kc,nc)
 integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
    & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
-real :: sum
+real(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !                Multiplication of real banded matrices
 !-----------------------------------------------------------------------
@@ -44076,11 +44102,11 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nc, nl, nu
-double precision, intent(in) :: a(ka,*), b(kb,*)
-double precision, intent(inout) :: c(kc,nc)
+real(nswc_dp), intent(in) :: a(ka,*), b(kb,*)
+real(nswc_dp), intent(inout) :: c(kc,nc)
 integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
    & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
-double precision :: sum
+real(nswc_dp) :: sum
 !-----------------------------------------------------------------------
 !          Multiplication of double precision banded matrices
 !-----------------------------------------------------------------------
@@ -44214,11 +44240,11 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nc, nl, nu
-complex, intent(in) :: a(ka,*), b(kb,*)
-complex, intent(inout) :: c(kc,nc)
+complex(nswc_sp), intent(in) :: a(ka,*), b(kb,*)
+complex(nswc_sp), intent(inout) :: c(kc,nc)
 integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
    & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
-complex :: sum
+complex(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !             Multiplication of complex banded matrices
 !-----------------------------------------------------------------------
@@ -44348,10 +44374,10 @@ end subroutine cbprod
 pure subroutine bvprd(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-real, intent(in) :: a(ka,*), x(n)
-real, intent(inout) :: y(m)
+real(nswc_sp), intent(in) :: a(ka,*), x(n)
+real(nswc_sp), intent(inout) :: y(m)
 integer :: i, imax, imin, jmin, k, kk, kmax, kmin, mlp1
-real :: sum
+real(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !         Product of a real banded matrix and a real vector
 !-----------------------------------------------------------------------
@@ -44394,10 +44420,10 @@ end subroutine bvprd
 pure subroutine bvprd1(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-real, intent(in) :: a(ka,*), x(n)
-real, intent(inout) :: y(m)
+real(nswc_sp), intent(in) :: a(ka,*), x(n)
+real(nswc_sp), intent(inout) :: y(m)
 integer :: i, imax, jmin, k, kk, kmax, kmin, mlp1
-real :: sum
+real(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !        Setting y = a*x + y where A is a real banded matrix
 !                     and x,y are real vectors
@@ -44435,10 +44461,10 @@ end subroutine bvprd1
 pure subroutine dbvpd(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-double precision, intent(in) :: a(ka,*), x(n)
-double precision, intent(inout) :: y(m)
+real(nswc_dp), intent(in) :: a(ka,*), x(n)
+real(nswc_dp), intent(inout) :: y(m)
 integer :: i, imax, imin, jmin, k, kk, kmax, kmin, mlp1
-double precision :: sum
+real(nswc_dp) :: sum
 !-----------------------------------------------------------------------
 !           Product of a double precision banded matrix
 !                  and a double precision vector
@@ -44482,10 +44508,10 @@ end subroutine dbvpd
 pure subroutine dbvpd1(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-double precision, intent(in) :: a(ka,*), x(n)
-double precision, intent(inout) :: y(m)
+real(nswc_dp), intent(in) :: a(ka,*), x(n)
+real(nswc_dp), intent(inout) :: y(m)
 integer :: i, imax, jmin, k, kk, kmax, kmin, mlp1
-double precision :: sum
+real(nswc_dp) :: sum
 !-----------------------------------------------------------------------
 !         SETTING y = a*x + y WHERE A IS A DOUBLE PRECISION
 !         banded matrix and x,y are double precision vectors
@@ -44523,10 +44549,10 @@ end subroutine dbvpd1
 pure subroutine cbvpd(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-complex, intent(in) :: a(ka,*), x(n)
-complex, intent(inout) :: y(m)
+complex(nswc_sp), intent(in) :: a(ka,*), x(n)
+complex(nswc_sp), intent(inout) :: y(m)
 integer :: i, imax, imin, jmin, k, kk, kmax, kmin, mlp1
-complex :: sum
+complex(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !        Product of a complex banded matrix and a complex vector
 !-----------------------------------------------------------------------
@@ -44569,10 +44595,10 @@ end subroutine cbvpd
 pure subroutine cbvpd1(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-complex, intent(in) :: a(ka,*), x(n)
-complex, intent(inout) :: y(m)
+complex(nswc_sp), intent(in) :: a(ka,*), x(n)
+complex(nswc_sp), intent(inout) :: y(m)
 integer :: i, imax, jmin, k, kk, kmax, kmin, mlp1
-complex :: sum
+complex(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !        Setting y = a*x + y where A is a complex banded matrix
 !                     and x,y are complex vectors
@@ -44610,10 +44636,10 @@ end subroutine cbvpd1
 pure subroutine btprd(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-real, intent(in) :: a(ka,*), x(m)
-real, intent(inout) :: y(n)
+real(nswc_sp), intent(in) :: a(ka,*), x(m)
+real(nswc_sp), intent(inout) :: y(n)
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
-real :: sum
+real(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !         Product of a real vector and a real banded matrix
 !-----------------------------------------------------------------------
@@ -44655,10 +44681,10 @@ end subroutine btprd
 pure subroutine btprd1(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-real, intent(in) :: a(ka,*), x(m)
-real, intent(inout) :: y(n)
+real(nswc_sp), intent(in) :: a(ka,*), x(m)
+real(nswc_sp), intent(inout) :: y(n)
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
-real :: sum
+real(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !        Setting y = x*a + y where A is a real banded matrix
 !                     and x,y are real vectors
@@ -44695,10 +44721,10 @@ end subroutine btprd1
 pure subroutine dbtpd(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-double precision, intent(in) :: a(ka,*), x(m)
-double precision, intent(inout) :: y(n)
+real(nswc_dp), intent(in) :: a(ka,*), x(m)
+real(nswc_dp), intent(inout) :: y(n)
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
-double precision :: sum
+real(nswc_dp) :: sum
 !-----------------------------------------------------------------------
 !              Product of a double precision vector and
 !                  a double precision banded matrix
@@ -44741,10 +44767,10 @@ end subroutine dbtpd
 pure subroutine dbtpd1(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-double precision, intent(in) :: a(ka,*), x(m)
-double precision, intent(inout) :: y(n)
+real(nswc_dp), intent(in) :: a(ka,*), x(m)
+real(nswc_dp), intent(inout) :: y(n)
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
-double precision :: sum
+real(nswc_dp) :: sum
 !-----------------------------------------------------------------------
 !         SETTING y = x*a + y WHERE A IS A DOUBLE PRECISION
 !         banded matrix and x,y are double precision vectors
@@ -44781,10 +44807,10 @@ end subroutine dbtpd1
 pure subroutine cbtpd(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-complex, intent(in) :: a(ka,*), x(m)
-complex, intent(inout) :: y(n)
+complex(nswc_sp), intent(in) :: a(ka,*), x(m)
+complex(nswc_sp), intent(inout) :: y(n)
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
-complex :: sum
+complex(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !        Product of a complex vector and a complex banded matrix
 !-----------------------------------------------------------------------
@@ -44826,10 +44852,10 @@ end subroutine cbtpd
 pure subroutine cbtpd1(m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-complex, intent(in) :: a(ka,*), x(m)
-complex, intent(inout) :: y(n)
+complex(nswc_sp), intent(in) :: a(ka,*), x(m)
+complex(nswc_sp), intent(inout) :: y(n)
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
-complex :: sum
+complex(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !        Setting y = x*a + y where A is a complex banded matrix
 !                     and x,y are complex vectors
@@ -44863,12 +44889,12 @@ do j = jmin,jmax
 end do
 end subroutine cbtpd1
 
-pure real function bnrm(a, ka, m, n, ml, mu)
+pure real(nswc_sp) function bnrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-real, intent(in) :: a(ka,*)
+real(nswc_sp), intent(in) :: a(ka,*)
 integer :: i, j, num
-real :: sum
+real(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !             Computation of the L-infinity norm of A
 !                      real banded matrix a
@@ -44884,10 +44910,10 @@ do i = 1,m
 end do
 end function bnrm
 
-pure real function b1nrm(a, ka, m, n, ml, mu)
+pure real(nswc_sp) function b1nrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-real, intent(in) :: a(*)
+real(nswc_sp), intent(in) :: a(*)
 integer :: i, imax, imin, incr, j, jmax, jmin, num
 !-----------------------------------------------------------------------
 !            Computation of the L1 norm of a banded matrix a
@@ -44930,12 +44956,12 @@ b1nrm = max(b1nrm, sasum(num,a(i),incr))
 go to 50
 end function b1nrm
 
-pure double precision function dbnrm(a, ka, m, n, ml, mu)
+pure real(nswc_dp) function dbnrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-double precision, intent(in) :: a(ka,*)
+real(nswc_dp), intent(in) :: a(ka,*)
 integer :: i, j, num
-double precision :: sum
+real(nswc_dp) :: sum
 !-----------------------------------------------------------------------
 !             Computation of the L-infinity norm of A
 !                double precision banded matrix a
@@ -44951,10 +44977,10 @@ do i = 1,m
 end do
 end function dbnrm
 
-pure double precision function db1nrm(a, ka, m, n, ml, mu)
+pure real(nswc_dp) function db1nrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
-double precision, intent(in) :: a(*)
+real(nswc_dp), intent(in) :: a(*)
 integer :: i, imax, imin, incr, j, jmax, jmin, num
 !-----------------------------------------------------------------------
 !            Computation of the L1 norm of a double precision
@@ -45002,7 +45028,7 @@ pure subroutine bslv(m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
-real, intent(inout) :: a(ka,*), b(n)
+real(nswc_sp), intent(inout) :: a(ka,*), b(n)
 integer, intent(inout) :: iwk(n)
 ! ----------------------------------------------------------------------
 !     bslv employs Gauss elimination with row interchanges to solve
@@ -45060,7 +45086,7 @@ pure subroutine bslv1(m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
-real, intent(inout) :: a(ka,*), b(n)
+real(nswc_sp), intent(inout) :: a(ka,*), b(n)
 integer, intent(inout) :: iwk(n)
 ! ----------------------------------------------------------------------
 !     bslv1 employs Gauss elimination with row interchanges to solve
@@ -45118,11 +45144,11 @@ pure subroutine snbfa(a, lda, n, ml, mu, ipvt, info)
 implicit none
 integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
-real, intent(inout) :: a(lda,*)
+real(nswc_sp), intent(inout) :: a(lda,*)
 integer, intent(inout) :: ipvt(n)
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
    & ml1, mp, n1
-real :: t
+real(nswc_sp) :: t
 ! ----------------------------------------------------------------------
 !               snbfa factors a real band matrix BY elimination.
 !                               --------
@@ -45252,11 +45278,11 @@ end subroutine snbfa
 pure subroutine snbsl(a,lda,n,ml,mu,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ml, mu, job
-real, intent(in) :: a(lda,*)
-real, intent(inout) :: b(n)
+real(nswc_sp), intent(in) :: a(lda,*)
+real(nswc_sp), intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
 integer :: ml1, ml2, k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
-real :: t
+real(nswc_sp) :: t
 ! ----------------------------------------------------------------------
 !     snbsl solves the real band system a*X = b or trans(a)*X = b
 !     using the factors computed by snbfa.
@@ -45363,7 +45389,7 @@ pure subroutine dbslv(m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
-double precision, intent(inout) :: a(ka,*), b(n)
+real(nswc_dp), intent(inout) :: a(ka,*), b(n)
 integer, intent(inout) :: iwk(n)
 ! ----------------------------------------------------------------------
 !     dbslv employs Gauss elimination with row interchanges to solve
@@ -45421,7 +45447,7 @@ pure subroutine dbslv1(m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
-double precision, intent(inout) :: a(ka,*), b(n)
+real(nswc_dp), intent(inout) :: a(ka,*), b(n)
 integer, intent(inout) :: iwk(n)
 ! ----------------------------------------------------------------------
 !     dbslv1 employs Gauss elimination with row interchanges to solve
@@ -45479,11 +45505,11 @@ pure subroutine dbfa(a, lda, n, ml, mu, ipvt, info)
 implicit none
 integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
-double precision, intent(inout) :: a(lda,*)
+real(nswc_dp), intent(inout) :: a(lda,*)
 integer, intent(inout) :: ipvt(n)
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
    & ml1, mp, n1
-double precision :: t
+real(nswc_dp) :: t
 ! ----------------------------------------------------------------------
 !               dbfa factors a real band matrix BY elimination.
 !                               --------
@@ -45613,11 +45639,11 @@ end subroutine dbfa
 pure subroutine dbsl(a,lda,n,ml,mu,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ml, mu, job
-double precision, intent(in) :: a(lda,*)
-double precision, intent(inout) :: b(n)
+real(nswc_dp), intent(in) :: a(lda,*)
+real(nswc_dp), intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
 integer :: ml1, ml2, k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
-double precision :: t
+real(nswc_dp) :: t
 ! ----------------------------------------------------------------------
 !     dbsl solves the real band system a*X = b or trans(a)*X = b
 !     using the factors computed by dbfa.
@@ -45724,11 +45750,11 @@ pure subroutine b1cnd(a, ka, n, ml, mu, cond, iwk, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, ml, mu, n
-real, intent(out) :: cond
-real, intent(inout) :: a(ka,*), wk(*)
+real(nswc_sp), intent(out) :: cond
+real(nswc_sp), intent(inout) :: a(ka,*), wk(*)
 integer, intent(inout) :: iwk(*)
 integer :: isgn, iter, iv, ix, j, jump, kase
-real :: ainorm, anorm
+real(nswc_sp) :: ainorm, anorm
 !-----------------------------------------------------------------------
 !              Computation of the L1 condition number
 !                       of a banded matrix a
@@ -45781,12 +45807,12 @@ pure subroutine db1cnd(a, ka, n, ml, mu, cond, iwk, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, ml, mu, n
-double precision, intent(inout) :: a(ka,*)
-double precision, intent(out) :: cond
-double precision, intent(inout) :: wk(*)
+real(nswc_dp), intent(inout) :: a(ka,*)
+real(nswc_dp), intent(out) :: cond
+real(nswc_dp), intent(inout) :: wk(*)
 integer, intent(inout) :: iwk(*)
 integer :: isgn, iter, iv, ix, j, jump, kase
-double precision :: anorm, ainorm
+real(nswc_dp) :: anorm, ainorm
 !-----------------------------------------------------------------------
 !            Computation of the L1 condition number of
 !               a double precision banded matrix a
@@ -45839,7 +45865,7 @@ subroutine cbslv(m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
-complex, intent(inout) :: a(ka,*), b(n)
+complex(nswc_sp), intent(inout) :: a(ka,*), b(n)
 integer, intent(inout) :: iwk(n)
 ! ----------------------------------------------------------------------
 !     cbslv employs Gauss elimination with row interchanges to solve
@@ -45898,7 +45924,7 @@ subroutine cbslv1(m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
-complex, intent(inout) :: a(ka,*), b(n)
+complex(nswc_sp), intent(inout) :: a(ka,*), b(n)
 integer, intent(inout) :: iwk(n)
 ! ----------------------------------------------------------------------
 !     cbslv1 employs Gauss elimination with row interchanges to solve
@@ -45957,11 +45983,11 @@ subroutine cbfa(a, lda, n, ml, mu, ipvt, info)
 implicit none
 integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
-complex, intent(inout) :: a(lda,*)
+complex(nswc_sp), intent(inout) :: a(lda,*)
 integer, intent(inout) :: ipvt(n)
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
    & ml1, mp, n1
-complex :: t
+complex(nswc_sp) :: t
 ! ----------------------------------------------------------------------
 !               cbfa factors a complex band matrix BY elimination.
 !                              ----------
@@ -46091,11 +46117,11 @@ end subroutine cbfa
 pure subroutine cbsl(a,lda,n,ml,mu,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ml, mu, job
-complex, intent(in) :: a(lda,*)
-complex, intent(inout) :: b(n)
+complex(nswc_sp), intent(in) :: a(lda,*)
+complex(nswc_sp), intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
 integer :: ml1, ml2, k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
-complex :: t
+complex(nswc_sp) :: t
 ! ----------------------------------------------------------------------
 !     cbsl solves the complex band system a*X = b or trans(a)*X = b
 !     using the factors computed by cbfa.
@@ -46202,8 +46228,8 @@ pure subroutine cvrs(a, ka, m, n, b, ib, jb, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, n, num
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: b(*)
+real(nswc_sp), intent(in) :: a(ka,n)
+real(nswc_sp), intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ip, j
 !                 Store the i-TH row
@@ -46231,8 +46257,8 @@ pure subroutine cvds(a, ka, m, n, b, ib, jb, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, n, num
-double precision, intent(in) :: a(ka,n)
-double precision, intent(inout) :: b(*)
+real(nswc_dp), intent(in) :: a(ka,n)
+real(nswc_dp), intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ip, j
 !                 Store the i-TH row
@@ -46260,11 +46286,11 @@ pure subroutine cvcs(a, ka, m, n, b, ib, jb, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, n, num
-complex, intent(in) :: a(ka,n)
-complex, intent(inout) :: b(*)
+complex(nswc_sp), intent(in) :: a(ka,n)
+complex(nswc_sp), intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ip, j
-complex, parameter :: zero = (0.0,0.0)
+complex(nswc_sp), parameter :: zero = (0.0,0.0)
 !                 Store the i-TH row
 ip = 1
 do i = 1,m
@@ -46289,8 +46315,8 @@ end subroutine cvcs
 subroutine cvsr(a, ia, ja, b, kb, m, n)
 implicit none
 integer, intent(in) :: kb, m, n
-real, intent(in) :: a(*)
-real, intent(inout) :: b(kb,n)
+real(nswc_sp), intent(in) :: a(*)
+real(nswc_sp), intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, ip, ipmax, ipmin, j
 do i = 1,m
@@ -46313,8 +46339,8 @@ end subroutine cvsr
 subroutine cvsd(a, ia, ja, b, kb, m, n)
 implicit none
 integer, intent(in) :: kb, m, n
-double precision, intent(in) :: a(*)
-double precision, intent(inout) :: b(kb,n)
+real(nswc_dp), intent(in) :: a(*)
+real(nswc_dp), intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, ip, ipmax, ipmin, j
 do i = 1,m
@@ -46337,8 +46363,8 @@ end subroutine cvsd
 subroutine cvsc(a, ia, ja, b, kb, m, n)
 implicit none
 integer, intent(in) :: kb, m, n
-complex, intent(in) :: a(*)
-complex, intent(inout) :: b(kb,n)
+complex(nswc_sp), intent(in) :: a(*)
+complex(nswc_sp), intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, ip, ipmax, ipmin, j
 do i = 1,m
@@ -46361,8 +46387,8 @@ end subroutine cvsc
 subroutine scvrd(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
-real, intent(in) :: a(*)
-double precision, intent(inout) :: b(*)
+real(nswc_sp), intent(in) :: a(*)
+real(nswc_dp), intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ibeg, iend, ip, l
@@ -46387,8 +46413,8 @@ end subroutine scvrd
 subroutine scvdr(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
-double precision, intent(in) :: a(*)
-real, intent(inout) :: b(*)
+real(nswc_dp), intent(in) :: a(*)
+real(nswc_sp), intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ibeg, iend, ip, l
@@ -46413,12 +46439,12 @@ end subroutine scvdr
 subroutine csreal(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
-complex, intent(in) :: a(*)
-real, intent(inout) :: b(*)
+complex(nswc_sp), intent(in) :: a(*)
+real(nswc_sp), intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ibeg, iend, ip, l
-real :: t
+real(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !              Real part of a sparse complex matrix
 !-----------------------------------------------------------------------
@@ -46444,12 +46470,12 @@ end subroutine csreal
 subroutine csimag(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
-complex, intent(in) :: a(*)
-real, intent(inout) :: b(*)
+complex(nswc_sp), intent(in) :: a(*)
+real(nswc_sp), intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ibeg, iend, ip, l
-real :: t
+real(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !            Imaginary part of a sparse complex matrix
 !-----------------------------------------------------------------------
@@ -46476,13 +46502,13 @@ subroutine scvrc(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: wk(n)
-complex, intent(inout) :: c(*)
+real(nswc_sp), intent(in) :: a(*), b(*)
+real(nswc_sp), intent(inout) :: wk(n)
+complex(nswc_sp), intent(inout) :: c(*)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, l, maxa, maxb, mina, minb
-complex :: t
+complex(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !       Compute a + bi for the sparse real matrices A and b
 !-----------------------------------------------------------------------
@@ -46538,8 +46564,8 @@ end subroutine scvrc
 subroutine rscopy(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
-real, intent(in) :: a(*)
-real, intent(inout) :: b(*)
+real(nswc_sp), intent(in) :: a(*)
+real(nswc_sp), intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ibeg, iend, ip, l
@@ -46567,8 +46593,8 @@ end subroutine rscopy
 subroutine dscopy(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
-double precision, intent(in) :: a(*)
-double precision, intent(inout) :: b(*)
+real(nswc_dp), intent(in) :: a(*)
+real(nswc_dp), intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ibeg, iend, ip, l
@@ -46596,12 +46622,12 @@ end subroutine dscopy
 subroutine cscopy(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
-complex, intent(in) :: a(*)
-complex, intent(inout) :: b(*)
+complex(nswc_sp), intent(in) :: a(*)
+complex(nswc_sp), intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ibeg, iend, ip, l
-complex, parameter :: zero = (0.0,0.0)
+complex(nswc_sp), parameter :: zero = (0.0,0.0)
 !-----------------------------------------------------------------------
 !                 Copying a sparse complex matrix
 !-----------------------------------------------------------------------
@@ -46626,8 +46652,8 @@ end subroutine cscopy
 subroutine sconj(a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
-complex, intent(in) :: a(*)
-complex, intent(inout) :: b(*)
+complex(nswc_sp), intent(in) :: a(*)
+complex(nswc_sp), intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ibeg, iend, ip, l, mp1
@@ -46653,8 +46679,8 @@ end subroutine sconj
 subroutine rpose(a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
-real, intent(in) :: a(*)
-real, intent(inout) :: b(*)
+real(nswc_sp), intent(in) :: a(*)
+real(nswc_sp), intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
@@ -46710,8 +46736,8 @@ subroutine rpose1(p, a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
 integer, intent(in) :: p(m)
-real, intent(in) :: a(*)
-real, intent(inout) :: b(*)
+real(nswc_sp), intent(in) :: a(*)
+real(nswc_sp), intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
@@ -46768,8 +46794,8 @@ end subroutine rpose1
 subroutine dpose(a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
-double precision, intent(in) :: a(*)
-double precision, intent(inout) :: b(*)
+real(nswc_dp), intent(in) :: a(*)
+real(nswc_dp), intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
@@ -46825,8 +46851,8 @@ subroutine dpose1(p, a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
 integer, intent(in) :: p(m)
-double precision, intent(in) :: a(*)
-double precision, intent(inout) :: b(*)
+real(nswc_dp), intent(in) :: a(*)
+real(nswc_dp), intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
@@ -46883,8 +46909,8 @@ end subroutine dpose1
 subroutine cpose(a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
-complex, intent(in) :: a(*)
-complex, intent(inout) :: b(*)
+complex(nswc_sp), intent(in) :: a(*)
+complex(nswc_sp), intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
@@ -46940,8 +46966,8 @@ subroutine cpose1(p, a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
 integer, intent(in) :: p(m)
-complex, intent(in) :: a(*)
-complex, intent(inout) :: b(*)
+complex(nswc_sp), intent(in) :: a(*)
+complex(nswc_sp), intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
@@ -46999,12 +47025,12 @@ subroutine sadd(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*), wk(n)
+real(nswc_sp), intent(in) :: a(*), b(*)
+real(nswc_sp), intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, l, maxa, maxb, mina, minb
-real :: t
+real(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !               Addition of sparse real matrices
 !-----------------------------------------------------------------------
@@ -47061,12 +47087,12 @@ subroutine dsadd(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
-double precision, intent(in) :: a(*), b(*)
-double precision, intent(inout) :: c(*), wk(n)
+real(nswc_dp), intent(in) :: a(*), b(*)
+real(nswc_dp), intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, l, maxa, maxb, mina, minb
-double precision :: t
+real(nswc_dp) :: t
 !-----------------------------------------------------------------------
 !         Addition of sparse double precision matrices
 !-----------------------------------------------------------------------
@@ -47123,12 +47149,12 @@ subroutine csadd(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
-complex, intent(in) :: a(*), b(*)
-complex, intent(inout) :: c(*), wk(n)
+complex(nswc_sp), intent(in) :: a(*), b(*)
+complex(nswc_sp), intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, l, maxa, maxb, mina, minb
-complex :: t
+complex(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !              Addition of sparse complex matrices
 !-----------------------------------------------------------------------
@@ -47185,12 +47211,12 @@ subroutine ssubt(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*), wk(n)
+real(nswc_sp), intent(in) :: a(*), b(*)
+real(nswc_sp), intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, l, maxa, maxb, mina, minb
-real :: t
+real(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !             Subtraction of sparse real matrices
 !-----------------------------------------------------------------------
@@ -47247,12 +47273,12 @@ subroutine dssubt(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
-double precision, intent(in) :: a(*), b(*)
-double precision, intent(inout) :: c(*), wk(n)
+real(nswc_dp), intent(in) :: a(*), b(*)
+real(nswc_dp), intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, l, maxa, maxb, mina, minb
-double precision :: t
+real(nswc_dp) :: t
 !-----------------------------------------------------------------------
 !        Subtraction of sparse double precision matrices
 !-----------------------------------------------------------------------
@@ -47309,12 +47335,12 @@ subroutine cssubt(a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
-complex, intent(in) :: a(*), b(*)
-complex, intent(inout) :: c(*), wk(n)
+complex(nswc_sp), intent(in) :: a(*), b(*)
+complex(nswc_sp), intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, l, maxa, maxb, mina, minb
-complex :: t
+complex(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !            Subtraction of sparse complex matrices
 !-----------------------------------------------------------------------
@@ -47371,12 +47397,12 @@ subroutine sprod(a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, n, num
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*), wk(n)
+real(nswc_sp), intent(in) :: a(*), b(*)
+real(nswc_sp), intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, jp, jpmax, jpmin, k, kp, kpmax, kpmin
-real :: t
+real(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !               Multiplication of sparse real matrices
 !-----------------------------------------------------------------------
@@ -47426,12 +47452,12 @@ subroutine dsprod(a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, n, num
-double precision, intent(in) :: a(*), b(*)
-double precision, intent(inout) :: c(*), wk(n)
+real(nswc_dp), intent(in) :: a(*), b(*)
+real(nswc_dp), intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, jp, jpmax, jpmin, k, kp, kpmax, kpmin
-double precision :: t
+real(nswc_dp) :: t
 !-----------------------------------------------------------------------
 !         Multiplication of sparse double precision matrices
 !-----------------------------------------------------------------------
@@ -47481,12 +47507,12 @@ subroutine csprod(a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, n, num
-complex, intent(in) :: a(*), b(*)
-complex, intent(inout) :: c(*), wk(n)
+complex(nswc_sp), intent(in) :: a(*), b(*)
+complex(nswc_sp), intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, jp, jpmax, jpmin, k, kp, kpmax, kpmin
-complex :: t
+complex(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !             Multiplication of sparse complex matrices
 !-----------------------------------------------------------------------
@@ -47535,11 +47561,11 @@ end subroutine csprod
 subroutine mvprd(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
-real, intent(in) :: a(*), x(n)
-real, intent(inout) :: y(m)
+real(nswc_sp), intent(in) :: a(*), x(n)
+real(nswc_sp), intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
-real :: sum
+real(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !              Product of a sparse matrix and a vector
 !-----------------------------------------------------------------------
@@ -47559,11 +47585,11 @@ end subroutine mvprd
 subroutine mvprd1(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
-real, intent(in) :: a(*), x(n)
-real, intent(inout) :: y(m)
+real(nswc_sp), intent(in) :: a(*), x(n)
+real(nswc_sp), intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
-real :: sum
+real(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !     Set y = a*x + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
@@ -47583,11 +47609,11 @@ end subroutine mvprd1
 subroutine mtprd(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
-real, intent(in) :: a(*), x(m)
-real, intent(inout) :: y(n)
+real(nswc_sp), intent(in) :: a(*), x(m)
+real(nswc_sp), intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
-real :: t
+real(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !              Product of a vector and a sparse matrix
 !-----------------------------------------------------------------------
@@ -47610,11 +47636,11 @@ end subroutine mtprd
 subroutine mtprd1(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
-real, intent(in) :: a(*), x(m)
-real, intent(inout) :: y(n)
+real(nswc_sp), intent(in) :: a(*), x(m)
+real(nswc_sp), intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
-real :: t
+real(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !     Set y = x*a + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
@@ -47634,11 +47660,11 @@ end subroutine mtprd1
 subroutine dvprd(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
-double precision, intent(in) :: a(*), x(n)
-double precision, intent(inout) :: y(m)
+real(nswc_dp), intent(in) :: a(*), x(n)
+real(nswc_dp), intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
-double precision :: sum
+real(nswc_dp) :: sum
 !-----------------------------------------------------------------------
 !              Product of a sparse matrix and a vector
 !-----------------------------------------------------------------------
@@ -47658,11 +47684,11 @@ end subroutine dvprd
 subroutine dvprd1(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
-double precision, intent(in) :: a(*), x(n)
-double precision, intent(inout) :: y(m)
+real(nswc_dp), intent(in) :: a(*), x(n)
+real(nswc_dp), intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
-double precision :: sum
+real(nswc_dp) :: sum
 !-----------------------------------------------------------------------
 !     Set y = a*x + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
@@ -47682,11 +47708,11 @@ end subroutine dvprd1
 subroutine dtprd(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
-double precision, intent(in) :: a(*), x(m)
-double precision, intent(inout) :: y(n)
+real(nswc_dp), intent(in) :: a(*), x(m)
+real(nswc_dp), intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
-double precision :: t
+real(nswc_dp) :: t
 !-----------------------------------------------------------------------
 !              Product of a vector and a sparse matrix
 !-----------------------------------------------------------------------
@@ -47709,11 +47735,11 @@ end subroutine dtprd
 subroutine dtprd1(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
-double precision, intent(in) :: a(*), x(m)
-double precision, intent(inout) :: y(n)
+real(nswc_dp), intent(in) :: a(*), x(m)
+real(nswc_dp), intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
-double precision :: t
+real(nswc_dp) :: t
 !-----------------------------------------------------------------------
 !     Set y = x*a + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
@@ -47733,11 +47759,11 @@ end subroutine dtprd1
 subroutine cvprd(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
-complex, intent(in) :: a(*), x(n)
-complex, intent(inout) :: y(m)
+complex(nswc_sp), intent(in) :: a(*), x(n)
+complex(nswc_sp), intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
-complex :: sum
+complex(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !              Product of a sparse matrix and a vector
 !-----------------------------------------------------------------------
@@ -47757,11 +47783,11 @@ end subroutine cvprd
 subroutine cvprd1(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
-complex, intent(in) :: a(*), x(n)
-complex, intent(inout) :: y(m)
+complex(nswc_sp), intent(in) :: a(*), x(n)
+complex(nswc_sp), intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
-complex :: sum
+complex(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !     Set y = a*x + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
@@ -47781,11 +47807,11 @@ end subroutine cvprd1
 subroutine ctprd(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
-complex, intent(in) :: a(*), x(m)
-complex, intent(inout) :: y(n)
+complex(nswc_sp), intent(in) :: a(*), x(m)
+complex(nswc_sp), intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
-complex :: t
+complex(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !              Product of a vector and a sparse matrix
 !-----------------------------------------------------------------------
@@ -47808,11 +47834,11 @@ end subroutine ctprd
 subroutine ctprd1(m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
-complex, intent(in) :: a(*), x(m)
-complex, intent(inout) :: y(n)
+complex(nswc_sp), intent(in) :: a(*), x(m)
+complex(nswc_sp), intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
-complex :: t
+complex(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !     Set y = x*a + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
@@ -47829,13 +47855,13 @@ do i = 1,m
 end do
 end subroutine ctprd1
 
-real function snrm(a, ia, ja, m, n)
+real(nswc_sp) function snrm(a, ia, ja, m, n)
 implicit none
 integer, intent(in) :: m, n
-real, intent(in) :: a(*)
+real(nswc_sp), intent(in) :: a(*)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, ip, ipmax, ipmin
-real :: sum
+real(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !             Computation of the L-infinity norm of A
 !                      real sparse matrix a
@@ -47857,9 +47883,9 @@ end function snrm
 subroutine s1nrm(a, ia, ja, m, n, anorm, wk)
 implicit none
 integer, intent(in) :: m, n
-real, intent(out) :: anorm
-real, intent(in) :: a(*)
-real, intent(inout) :: wk(n)
+real(nswc_sp), intent(out) :: anorm
+real(nswc_sp), intent(in) :: a(*)
+real(nswc_sp), intent(inout) :: wk(n)
 integer, intent(in) :: ia(*), ja(*)
 integer :: ip, ipmax, ipmin, j
 !-----------------------------------------------------------------------
@@ -47882,13 +47908,13 @@ do j = 1,n
 end do
 end subroutine s1nrm
 
-double precision function dsnrm(a, ia, ja, m, n)
+real(nswc_dp) function dsnrm(a, ia, ja, m, n)
 implicit none
 integer, intent(in) :: m, n
-double precision, intent(in) :: a(*)
+real(nswc_dp), intent(in) :: a(*)
 integer, intent(in) :: ia(*), ja(*)
 integer :: i, ip, ipmax, ipmin
-double precision :: sum
+real(nswc_dp) :: sum
 !-----------------------------------------------------------------------
 !             Computation of the L-infinity norm of A
 !                double precision sparse matrix a
@@ -47910,9 +47936,9 @@ end function dsnrm
 subroutine ds1nrm(a, ia, ja, m, n, anorm, wk)
 implicit none
 integer, intent(in) :: m, n
-double precision, intent(in) :: a(*)
-double precision, intent(out) :: anorm
-double precision, intent(inout) :: wk(n)
+real(nswc_dp), intent(in) :: a(*)
+real(nswc_dp), intent(out) :: anorm
+real(nswc_dp), intent(inout) :: wk(n)
 integer, intent(in) :: ia(*), ja(*)
 integer :: ip, ipmax, ipmin, j
 !-----------------------------------------------------------------------
@@ -48295,8 +48321,8 @@ subroutine spslv(n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: max, n
-real, intent(in) :: a(*), b(n)
-real, intent(inout) :: x(n), rtemp(*)
+real(nswc_sp), intent(in) :: a(*), b(n)
+real(nswc_sp), intent(inout) :: x(n), rtemp(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), itemp(*)
 integer :: k, l, iu, ju, u, y, p
@@ -48381,8 +48407,8 @@ subroutine nspiv1(n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
-real, intent(in) :: a(*), b(n)
-real, intent(inout) :: u(max), x(n), y(n)
+real(nswc_sp), intent(in) :: a(*), b(n)
+real(nswc_sp), intent(inout) :: u(max), x(n), y(n)
 integer, intent(inout) :: c(n)
 integer, intent(in) :: ia(*)
 integer, intent(inout) :: ic(n), iu(*)
@@ -48390,7 +48416,7 @@ integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk, nswc_ai_i4
-real :: dk, lki, xpv, xpvmax, yk
+real(nswc_sp) :: dk, lki, xpv, xpvmax, yk
 !  nspiv1 uses sparse Gaussian elimination with
 !  column interchanges to solve the linear system A x = b.  the
 !  elimination phase performs row operations on A and b to obtain
@@ -48604,8 +48630,8 @@ subroutine rslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
-real, intent(in) :: a(*), b(n)
-real, intent(inout) :: x(n), wk(*)
+real(nswc_sp), intent(in) :: a(*), b(n)
+real(nswc_sp), intent(inout) :: x(n), wk(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
@@ -48682,10 +48708,10 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
-real, intent(in) :: b(n), d(n), t(*)
-real, intent(inout) :: x(n), y(n)
+real(nswc_sp), intent(in) :: b(n), d(n), t(*)
+real(nswc_sp), intent(inout) :: x(n), y(n)
 integer :: i, j, jj, jmax, jmin, k, lj, lk
-real :: sum
+real(nswc_sp) :: sum
 !            Solve LY = b by forward substitution
 do k = 1,n
    lk = r(k)
@@ -48724,8 +48750,8 @@ subroutine tslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
-real, intent(in) :: a(*), b(n)
-real, intent(inout) :: x(n), wk(*)
+real(nswc_sp), intent(in) :: a(*), b(n)
+real(nswc_sp), intent(inout) :: x(n), wk(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
@@ -48802,8 +48828,8 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
-real, intent(in) :: b(n), d(n), t(*)
-real, intent(inout) :: x(n), y(n)
+real(nswc_sp), intent(in) :: b(n), d(n), t(*)
+real(nswc_sp), intent(inout) :: x(n), y(n)
 integer :: i, j, jj, jmax, jmin, k, lj, lk
 !            Solve YU = b by forward substitution
 do k = 1,n
@@ -48849,15 +48875,15 @@ subroutine splu(a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
-real, intent(in) :: a(*)
-real, intent(inout) :: d(n), t(max), w(n)
+real(nswc_sp), intent(in) :: a(*)
+real(nswc_sp), intent(inout) :: d(n), t(max), w(n)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm, nswc_ai_i4
-real :: const, wi, wmax
+real(nswc_sp) :: const, wi, wmax
 !-----------------------------------------------------------------------
 !     splu employs Gaussian elimination with column interchanges
 !     to perform the LU decomposition of a real sparse matrix.
@@ -49027,8 +49053,8 @@ subroutine dspslv(n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: max, n
-double precision, intent(in) :: a(*), b(n)
-double precision, intent(inout) :: x(n), rtemp(*)
+real(nswc_dp), intent(in) :: a(*), b(n)
+real(nswc_dp), intent(inout) :: x(n), rtemp(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), itemp(*)
 integer :: k, l, iu, ju, u, y, p
@@ -49116,8 +49142,8 @@ subroutine dnspiv(n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
-double precision, intent(in) :: a(*), b(n)
-double precision, intent(inout) :: u(max), x(n), y(n)
+real(nswc_dp), intent(in) :: a(*), b(n)
+real(nswc_dp), intent(inout) :: u(max), x(n), y(n)
 integer, intent(inout) :: c(n)
 integer, intent(in) :: ia(*)
 integer, intent(inout) :: ic(n), iu(*)
@@ -49125,7 +49151,7 @@ integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk, nswc_ai_i4
-double precision :: dk, lki, xpv, xpvmax, yk
+real(nswc_dp) :: dk, lki, xpv, xpvmax, yk
 !  dnspiv uses sparse Gaussian elimination with
 !  column interchanges to solve the linear system A x = b.  the
 !  elimination phase performs row operations on A and b to obtain
@@ -49339,8 +49365,8 @@ subroutine dslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
-double precision, intent(in) :: a(*), b(n)
-double precision, intent(inout) :: x(n), wk(*)
+real(nswc_dp), intent(in) :: a(*), b(n)
+real(nswc_dp), intent(inout) :: x(n), wk(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
@@ -49418,10 +49444,10 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
-double precision, intent(in) :: b(n), d(n), t(*)
-double precision, intent(inout) :: x(n), y(n)
+real(nswc_dp), intent(in) :: b(n), d(n), t(*)
+real(nswc_dp), intent(inout) :: x(n), y(n)
 integer :: i, j, jj, jmax, jmin, k, lj, lk
-double precision :: sum
+real(nswc_dp) :: sum
 !            Solve LY = b by forward substitution
 do k = 1,n
    lk = r(k)
@@ -49460,8 +49486,8 @@ subroutine dtslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
-double precision, intent(in) :: a(*), b(n)
-double precision, intent(inout) :: x(n), wk(*)
+real(nswc_dp), intent(in) :: a(*), b(n)
+real(nswc_dp), intent(inout) :: x(n), wk(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
@@ -49539,8 +49565,8 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
-double precision, intent(in) :: b(n), d(n), t(*)
-double precision, intent(inout) :: x(n), y(n)
+real(nswc_dp), intent(in) :: b(n), d(n), t(*)
+real(nswc_dp), intent(inout) :: x(n), y(n)
 integer :: i, j, jj, jmax, jmin, k, lj, lk
 !            Solve YU = b by forward substitution
 do k = 1,n
@@ -49586,15 +49612,15 @@ subroutine dsplu(a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
-double precision, intent(in) :: a(*)
-double precision, intent(inout) :: d(n), t(max), w(n)
+real(nswc_dp), intent(in) :: a(*)
+real(nswc_dp), intent(inout) :: d(n), t(max), w(n)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm, nswc_ai_i4
-double precision :: const, wi, wmax
+real(nswc_dp) :: const, wi, wmax
 !-----------------------------------------------------------------------
 !     dsplu employs Gaussian elimination with column interchanges
 !     to perform the LU decomposition of a double precision sparse
@@ -49765,13 +49791,13 @@ subroutine s1cnd(n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
-real, intent(out) :: cond
-real, intent(in) :: a(*)
-real, intent(inout) :: wk(*)
+real(nswc_sp), intent(out) :: cond
+real(nswc_sp), intent(in) :: a(*)
+real(nswc_sp), intent(inout) :: wk(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), iwk(*)
 integer :: isgn, iter, iv, ix, j, jump, kase
-real :: ainorm, anorm
+real(nswc_sp) :: ainorm, anorm
 !-----------------------------------------------------------------------
 !              Computation of the L1 condition number
 !                       of a sparse matrix a
@@ -49823,13 +49849,13 @@ subroutine ds1cnd(n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
-double precision, intent(in) :: a(*)
-double precision, intent(out) :: cond
-double precision, intent(inout) :: wk(*)
+real(nswc_dp), intent(in) :: a(*)
+real(nswc_dp), intent(out) :: cond
+real(nswc_dp), intent(inout) :: wk(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), iwk(*)
 integer :: isgn, iter, iv, ix, j, jump, kase
-double precision :: anorm, ainorm
+real(nswc_dp) :: anorm, ainorm
 !-----------------------------------------------------------------------
 !              Computation of the L1 condition number
 !                       of a sparse matrix a
@@ -49881,11 +49907,11 @@ pure subroutine sonest(n, v, x, isgn, anorm, kase, iter, j, jump)
 implicit none
 integer, intent(inout) :: iter, j, jump, kase
 integer, intent(in) :: n
-real, intent(inout) :: anorm
-real, intent(inout) :: v(n), x(n)
+real(nswc_sp), intent(inout) :: anorm
+real(nswc_sp), intent(inout) :: v(n), x(n)
 integer, intent(inout) :: isgn(n)
 integer :: i, jlast, l
-real :: altsgn, anrm, t
+real(nswc_sp) :: altsgn, anrm, t
 integer, parameter :: itmax = 5
 !-----------------------------------------------------------------------
 !     sonest estimates the 1-norm of A square, real matrix  A.
@@ -50017,10 +50043,10 @@ pure subroutine donest(n, v, x, isgn, anorm, kase, iter, j, jump)
 implicit none
 integer, intent(inout) :: iter, j, jump, kase
 integer, intent(in) :: n
-double precision, intent(inout) :: anorm, v(n), x(n)
+real(nswc_dp), intent(inout) :: anorm, v(n), x(n)
 integer, intent(inout) :: isgn(n)
 integer :: i, jlast, l
-double precision :: altsgn, an, anm1, anrm, t
+real(nswc_dp) :: altsgn, an, anm1, anrm, t
 integer, parameter :: itmax = 5
 !-----------------------------------------------------------------------
 !     donest estimates the 1-norm of A square, real matrix  A.
@@ -50155,8 +50181,8 @@ subroutine cspslv(n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: max, n
-complex, intent(in) :: a(*), b(n)
-complex, intent(inout) :: x(n), rtemp(*)
+complex(nswc_sp), intent(in) :: a(*), b(n)
+complex(nswc_sp), intent(inout) :: x(n), rtemp(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), itemp(*)
 integer :: k, l, iu, ju, u, y, p
@@ -50241,8 +50267,8 @@ subroutine cnspiv(n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
-complex, intent(in) :: a(*), b(n)
-complex, intent(inout) :: u(max), x(n), y(n)
+complex(nswc_sp), intent(in) :: a(*), b(n)
+complex(nswc_sp), intent(inout) :: u(max), x(n), y(n)
 integer, intent(inout) :: c(n)
 integer, intent(in) :: ia(*)
 integer, intent(inout) :: ic(n), iu(*)
@@ -50250,8 +50276,8 @@ integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk, nswc_ai_i4
-complex :: dk, lki, one, yk, zero
-real :: xpv, xpvmax
+complex(nswc_sp) :: dk, lki, one, yk, zero
+real(nswc_sp) :: xpv, xpvmax
 !  cnspiv uses sparse Gaussian elimination with
 !  column interchanges to solve the linear system A x = b.  the
 !  elimination phase performs row operations on A and b to obtain
@@ -50467,8 +50493,8 @@ subroutine cslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
-complex, intent(in) :: a(*), b(n)
-complex, intent(inout) :: x(n), wk(*)
+complex(nswc_sp), intent(in) :: a(*), b(n)
+complex(nswc_sp), intent(inout) :: x(n), wk(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
@@ -50546,10 +50572,10 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
-complex, intent(in) :: b(n), d(n), t(*)
-complex, intent(inout) :: x(n), y(n)
+complex(nswc_sp), intent(in) :: b(n), d(n), t(*)
+complex(nswc_sp), intent(inout) :: x(n), y(n)
 integer :: i, j, jj, jmax, jmin, k, lj, lk
-complex :: sum
+complex(nswc_sp) :: sum
 !            Solve LY = b by forward substitution
 do k = 1,n
    lk = r(k)
@@ -50588,8 +50614,8 @@ subroutine ctslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
-complex, intent(in) :: a(*), b(n)
-complex, intent(inout) :: x(n), wk(*)
+complex(nswc_sp), intent(in) :: a(*), b(n)
+complex(nswc_sp), intent(inout) :: x(n), wk(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
@@ -50667,8 +50693,8 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
-complex, intent(in) :: b(n), d(n), t(*)
-complex, intent(inout) :: x(n), y(n)
+complex(nswc_sp), intent(in) :: b(n), d(n), t(*)
+complex(nswc_sp), intent(inout) :: x(n), y(n)
 integer :: i, j, jj, jmax, jmin, k, lj, lk
 !            Solve YU = b by forward substitution
 do k = 1,n
@@ -50714,17 +50740,17 @@ subroutine csplu(a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
-complex, intent(in) :: a(*)
-complex, intent(inout) :: d(n), t(max), w(n)
+complex(nswc_sp), intent(in) :: a(*)
+complex(nswc_sp), intent(inout) :: d(n), t(max), w(n)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm, nswc_ai_i4
-complex :: const
-real :: wi, wmax
-complex, parameter :: zero = (0.0, 0.0)
+complex(nswc_sp) :: const
+real(nswc_sp) :: wi, wmax
+complex(nswc_sp), parameter :: zero = (0.0, 0.0)
 !-----------------------------------------------------------------------
 !     csplu employs Gaussian elimination with column interchanges
 !     to perform the LU decomposition of a complex sparse matrix.
@@ -50897,7 +50923,7 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
-real, intent(inout) :: a(ka,n), wr(n), wi(n)
+real(nswc_sp), intent(inout) :: a(ka,n), wr(n), wi(n)
 integer :: igh, low
 !-----------------------------------------------------------------------
 !                    Eigenvalues of real matrices
@@ -50914,7 +50940,7 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
-real, intent(inout) :: a(ka,n), wr(n), wi(n)
+real(nswc_sp), intent(inout) :: a(ka,n), wr(n), wi(n)
 integer :: igh, low
 !-----------------------------------------------------------------------
 !                    Eigenvalues of real matrices
@@ -50931,9 +50957,9 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
-real, intent(inout) :: a(ka,n), wr(n), wi(n), zr(ka,n), zi(ka,n)
+real(nswc_sp), intent(inout) :: a(ka,n), wr(n), wi(n), zr(ka,n), zi(ka,n)
 integer :: igh, j, k, kp1, low
-real :: nswc_ai_r4
+real(nswc_sp) :: nswc_ai_r4
 !-----------------------------------------------------------------------
 !           Eigenvalues and eigenvectors of real matrices
 !-----------------------------------------------------------------------
@@ -50969,9 +50995,9 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
-real, intent(inout) :: a(ka,n), wr(n), wi(n), zr(ka,n), zi(ka,n)
+real(nswc_sp), intent(inout) :: a(ka,n), wr(n), wi(n), zr(ka,n), zi(ka,n)
 integer :: igh, j, k, kp1, low
-real :: nswc_ai_r4
+real(nswc_sp) :: nswc_ai_r4
 !-----------------------------------------------------------------------
 !           Eigenvalues and eigenvectors of real matrices
 !-----------------------------------------------------------------------
@@ -51007,9 +51033,9 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
-real, intent(inout) :: a(nm,n), scale(n)
+real(nswc_sp), intent(inout) :: a(nm,n), scale(n)
 integer :: i, j, k, l, m, jj, iexc
-real :: c, f, g, r, s, b2, radix
+real(nswc_sp) :: c, f, g, r, s, b2, radix
 logical :: noconv
 !     real abs
 !-----------------------------------------------------------------------
@@ -51157,10 +51183,10 @@ pure subroutine balinv(nz,n,z,low,igh,scale)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nz, igh, low
-real, intent(inout) :: z(nz,n)
-real, intent(in) :: scale(n)
+real(nswc_sp), intent(inout) :: z(nz,n)
+real(nswc_sp), intent(in) :: scale(n)
 integer :: i, j, k, ii
-real :: s
+real(nswc_sp) :: s
 !-----------------------------------------------------------------------
 !        Given A matrix A of order n. balanc transforms A into
 !     the matrix B by the similarity transformation
@@ -51222,10 +51248,10 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
-real, intent(inout) :: a(nm,n)
+real(nswc_sp), intent(inout) :: a(nm,n)
 integer, intent(inout) :: int(igh)
 integer :: i, j, m, la, kp1, mm1, mp1
-real :: x, y
+real(nswc_sp) :: x, y
 !     real abs
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure elmhes,
@@ -51304,10 +51330,10 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
-real, intent(inout) :: a(nm,n)
-real, intent(inout) :: int(igh)
+real(nswc_sp), intent(inout) :: a(nm,n)
+real(nswc_sp), intent(inout) :: int(igh)
 integer :: i, j, m, la, kp1, mm1, mp1
-real :: x, y
+real(nswc_sp) :: x, y
 !     real abs
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure elmhes,
@@ -51386,9 +51412,9 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
-real, intent(inout) :: a(nm,n), ort(igh)
+real(nswc_sp), intent(inout) :: a(nm,n), ort(igh)
 integer :: i, j, m, ii, jj, la, mp, kp1
-real :: f, g, h, scale
+real(nswc_sp) :: f, g, h, scale
 !     real sqrt,abs
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure orthes,
@@ -51477,9 +51503,9 @@ integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
-real, intent(inout) :: h(nm,n), wr(n), wi(n)
+real(nswc_sp), intent(inout) :: h(nm,n), wr(n), wi(n)
 integer :: i, j, k, l, m, en, ll, mm, na, its, mp2, enm2
-real :: p, q, r, s, t, w, x, y, zz, norm, machep
+real(nswc_sp) :: p, q, r, s, t, w, x, y, zz, norm, machep
 logical :: notlas
 !     real sqrt,abs
 !     integer min0
@@ -51682,10 +51708,10 @@ pure subroutine balbak(nm,n,low,igh,scale,m,z)
 implicit none
 integer, intent(in) :: m, n
 integer, intent(in) :: nm, igh, low
-real, intent(in) :: scale(n)
-real, intent(inout) :: z(nm,m)
+real(nswc_sp), intent(in) :: scale(n)
+real(nswc_sp), intent(inout) :: z(nm,m)
 integer :: i, j, k, ii
-real :: s
+real(nswc_sp) :: s
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure balbak,
 !     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
@@ -51741,8 +51767,8 @@ pure subroutine eltran(nm,n,low,igh,a,int,z)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm, igh, low
-real, intent(in) :: a(nm,igh)
-real, intent(inout) :: z(nm,n)
+real(nswc_sp), intent(in) :: a(nm,igh)
+real(nswc_sp), intent(inout) :: z(nm,n)
 integer, intent(in) :: int(igh)
 integer :: i, j, kl, mm, mp, mp1
 !-----------------------------------------------------------------------
@@ -51802,9 +51828,9 @@ pure subroutine eltrn0(nm,n,low,igh,a,int,z)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm, igh, low
-real, intent(in) :: a(nm,igh)
-real, intent(inout) :: z(nm,n)
-real, intent(in) :: int(igh)
+real(nswc_sp), intent(in) :: a(nm,igh)
+real(nswc_sp), intent(inout) :: z(nm,n)
+real(nswc_sp), intent(in) :: int(igh)
 integer :: i, j, kl, mm, mp, mp1
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure ELMTRANS,
@@ -51863,10 +51889,10 @@ pure subroutine ortran(nm,n,low,igh,a,ort,z)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm, igh, low
-real, intent(in) :: a(nm,igh)
-real, intent(inout) :: ort(igh), z(nm,n)
+real(nswc_sp), intent(in) :: a(nm,igh)
+real(nswc_sp), intent(inout) :: ort(igh), z(nm,n)
 integer :: i, j, kl, mm, mp, mp1
-real :: g
+real(nswc_sp) :: g
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure ORTRANS,
 !     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
@@ -51932,10 +51958,10 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: na, igh, low
 integer, intent(in) :: nz
-real, intent(in) :: a(na,igh)
-real, intent(inout) :: ort(igh), z(nz,n)
+real(nswc_sp), intent(in) :: a(na,igh)
+real(nswc_sp), intent(inout) :: ort(igh), z(nz,n)
 integer :: i, j, kl, mm, mp, mp1
-real :: g
+real(nswc_sp) :: g
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure ORTRANS,
 !     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
@@ -52006,11 +52032,11 @@ integer, intent(in) :: nm
 integer, intent(in) :: igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
-real, intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
+real(nswc_sp), intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
 integer :: i, j, k, l, m, en, ii, jj, ll, mm, na, nn, its, mp2, enm2
-real :: p, q, r, s, t, w, x, y, ra, sa, vi, vr, zz, norm, machep, nswc_ai_r4
+real(nswc_sp) :: p, q, r, s, t, w, x, y, ra, sa, vi, vr, zz, norm, machep, nswc_ai_r4
 logical :: notlas
-complex :: z3
+complex(nswc_sp) :: z3
 !     real sqrt,abs
 !     integer min0
 !     complex cmplx
@@ -52397,7 +52423,7 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
-double precision, intent(inout) :: a(ka,n), wr(n), wi(n)
+real(nswc_dp), intent(inout) :: a(ka,n), wr(n), wi(n)
 integer :: igh, low
 !-----------------------------------------------------------------------
 !                Eigenvalues of double precision matrices
@@ -52414,10 +52440,10 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
-double precision, intent(inout) :: a(ka,n), wr(n), wi(n), &
+real(nswc_dp), intent(inout) :: a(ka,n), wr(n), wi(n), &
    & zr(ka,n), zi(ka,n)
 integer :: igh, j, k, kp1, low
-double precision :: nswc_ai_r8
+real(nswc_dp) :: nswc_ai_r8
 !-----------------------------------------------------------------------
 !     Eigenvalues and eigenvectors of double precision matrices
 !-----------------------------------------------------------------------
@@ -52453,9 +52479,9 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
-double precision, intent(inout) :: a(nm,n), scale(n)
+real(nswc_dp), intent(inout) :: a(nm,n), scale(n)
 integer :: i, j, k, l, m, jj, iexc
-double precision :: c, f, g, r, s, b2, radix
+real(nswc_dp) :: c, f, g, r, s, b2, radix
 logical :: noconv
 !     double precision dabs
 !-----------------------------------------------------------------------
@@ -52603,10 +52629,10 @@ pure subroutine dbalnv(nz,n,z,low,igh,scale)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nz, igh, low
-double precision, intent(inout) :: z(nz,n)
-double precision, intent(in) :: scale(n)
+real(nswc_dp), intent(inout) :: z(nz,n)
+real(nswc_dp), intent(in) :: scale(n)
 integer :: i, j, k, ii
-double precision :: s
+real(nswc_dp) :: s
 !-----------------------------------------------------------------------
 !        Given A matrix A of order n. dbal transforms A into
 !     the matrix B by the similarity transformation
@@ -52668,9 +52694,9 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
-double precision, intent(inout) :: a(nm,n), ort(igh)
+real(nswc_dp), intent(inout) :: a(nm,n), ort(igh)
 integer :: i, j, m, ii, jj, la, mp, kp1
-double precision :: f, g, h, scale
+real(nswc_dp) :: f, g, h, scale
 !     double precision dsqrt,dabs
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure orthes,
@@ -52759,9 +52785,9 @@ integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
-double precision, intent(inout) :: h(nm,n), wr(n), wi(n)
+real(nswc_dp), intent(inout) :: h(nm,n), wr(n), wi(n)
 integer :: i, j, k, l, m, en, ll, mm, na, its, mp2, enm2
-double precision :: p, q, r, s, t, w, x, y, zz, norm, machep
+real(nswc_dp) :: p, q, r, s, t, w, x, y, zz, norm, machep
 logical :: notlas
 !     double precision dsqrt,dabs
 !     integer min0
@@ -52965,10 +52991,10 @@ pure subroutine dbabk(nm,n,low,igh,scale,m,z)
 implicit none
 integer, intent(in) :: m, n
 integer, intent(in) :: nm, igh, low
-double precision, intent(in) :: scale(n)
-double precision, intent(inout) :: z(nm,m)
+real(nswc_dp), intent(in) :: scale(n)
+real(nswc_dp), intent(inout) :: z(nm,m)
 integer :: i, j, k, ii
-double precision :: s
+real(nswc_dp) :: s
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure balbak,
 !     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
@@ -53024,10 +53050,10 @@ pure subroutine dortrn(nm,n,low,igh,a,ort,z)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm, igh, low
-double precision, intent(in) :: a(nm,igh)
-double precision, intent(inout) :: ort(igh), z(nm,n)
+real(nswc_dp), intent(in) :: a(nm,igh)
+real(nswc_dp), intent(inout) :: ort(igh), z(nm,n)
 integer :: i, j, kl, mm, mp, mp1
-double precision :: g
+real(nswc_dp) :: g
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure ORTRANS,
 !     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
@@ -53093,10 +53119,10 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: na, igh, low
 integer, intent(in) :: nz
-double precision, intent(in) :: a(na,igh)
-double precision, intent(inout) :: ort(igh), z(nz,n)
+real(nswc_dp), intent(in) :: a(na,igh)
+real(nswc_dp), intent(inout) :: ort(igh), z(nz,n)
 integer :: i, j, kl, mm, mp, mp1
-double precision :: g
+real(nswc_dp) :: g
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure ORTRANS,
 !     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
@@ -53167,9 +53193,9 @@ integer, intent(in) :: nm
 integer, intent(in) :: igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
-double precision, intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
+real(nswc_dp), intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
 integer :: i, j, k, l, m, en, ii, jj, ll, mm, na, nn, its, mp2, enm2
-double precision :: a, b, d, p, q, r, s, t, u, w, x, y, ra, sa, vi, vr, zz, norm, machep, nswc_ai_r8
+real(nswc_dp) :: a, b, d, p, q, r, s, t, u, w, x, y, ra, sa, vi, vr, zz, norm, machep, nswc_ai_r8
 logical :: notlas
 !     integer min0
 !     double precision dsqrt,dabs
@@ -53558,7 +53584,7 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka
 integer :: n
-real, intent(inout) :: a(*), w(n), t(*)
+real(nswc_sp), intent(inout) :: a(*), w(n), t(*)
 integer :: l
 !-----------------------------------------------------------------------
 !               Eigenvalues of symmetric real matrices
@@ -53577,7 +53603,7 @@ pure subroutine seig1(a, ka, n, w, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
-real, intent(inout) :: a(*), w(n), t(n)
+real(nswc_sp), intent(inout) :: a(*), w(n), t(n)
 integer :: l
 !-----------------------------------------------------------------------
 !               Eigenvalues of symmetric real matrices
@@ -53596,8 +53622,8 @@ pure subroutine seigv(a, ka, n, w, z, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: w(n), z(ka,n), t(n)
+real(nswc_sp), intent(in) :: a(ka,n)
+real(nswc_sp), intent(inout) :: w(n), z(ka,n), t(n)
 !-----------------------------------------------------------------------
 !        Eigenvalues and eigenvectors of symmetric real matrices
 !-----------------------------------------------------------------------
@@ -53609,8 +53635,8 @@ pure subroutine seigv1(a, ka, n, w, z, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: w(n), z(ka,n), t(n)
+real(nswc_sp), intent(in) :: a(ka,n)
+real(nswc_sp), intent(inout) :: w(n), z(ka,n), t(n)
 !-----------------------------------------------------------------------
 !        Eigenvalues and eigenvectors of symmetric real matrices
 !-----------------------------------------------------------------------
@@ -53622,9 +53648,9 @@ pure subroutine tred1(nm,n,a,d,e,e2)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
-real, intent(inout) :: a(nm,n), d(n), e(n), e2(n)
+real(nswc_sp), intent(inout) :: a(nm,n), d(n), e(n), e2(n)
 integer :: i, j, k, l, ii, jp1
-real :: f, g, h, scale
+real(nswc_sp) :: f, g, h, scale
 !     real sqrt,abs
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure tred1,
@@ -53720,9 +53746,9 @@ pure subroutine tred3(n,nv,a,d,e,e2)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nv
-real, intent(inout) :: a(nv), d(n), e(n), e2(n)
+real(nswc_sp), intent(inout) :: a(nv), d(n), e(n), e2(n)
 integer :: i, j, k, l, ii, iz, jk
-real :: f, g, h, hh, scale
+real(nswc_sp) :: f, g, h, hh, scale
 !     real sqrt,abs
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure tred3,
@@ -53814,9 +53840,9 @@ pure subroutine tqlrat(n,d,e2,ierr)
 implicit none
 integer, intent(in) :: n
 integer, intent(out) :: ierr
-real, intent(inout) :: d(n), e2(n)
+real(nswc_sp), intent(inout) :: d(n), e2(n)
 integer :: i, j, l, m, ii, l1, mml
-real :: b, c, f, g, h, p, r, s, machep
+real(nswc_sp) :: b, c, f, g, h, p, r, s, machep
 !     real sqrt,abs,spmpar
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure tqlrat,
@@ -53929,9 +53955,9 @@ pure subroutine imtql1(n,d,e,ierr)
 implicit none
 integer, intent(in) :: n
 integer, intent(out) :: ierr
-real, intent(inout) :: d(n), e(n)
+real(nswc_sp), intent(inout) :: d(n), e(n)
 integer :: i, j, l, m, ii, mml
-real :: b, c, f, g, p, r, s, machep
+real(nswc_sp) :: b, c, f, g, p, r, s, machep
 !     real sqrt,abs,spmpar
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure imtql1,
@@ -54038,10 +54064,10 @@ pure subroutine tred2(nm,n,a,d,e,z)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
-real, intent(in) :: a(nm,n)
-real, intent(inout) :: d(n), e(n), z(nm,n)
+real(nswc_sp), intent(in) :: a(nm,n)
+real(nswc_sp), intent(inout) :: d(n), e(n), z(nm,n)
 integer :: i, j, k, l, ii, jp1
-real :: f, g, h, hh, scale
+real(nswc_sp) :: f, g, h, hh, scale
 !     real sqrt,abs
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure tred2,
@@ -54156,9 +54182,9 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(out) :: ierr
-real, intent(inout) :: d(n), e(n), z(nm,n)
+real(nswc_sp), intent(inout) :: d(n), e(n), z(nm,n)
 integer :: i, j, k, l, m, ii, l1, mml
-real :: b, c, f, g, h, p, r, s, machep
+real(nswc_sp) :: b, c, f, g, h, p, r, s, machep
 !     real sqrt,abs,spmpar
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure tql2,
@@ -54304,9 +54330,9 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(out) :: ierr
-real, intent(inout) :: d(n), e(n), z(nm,n)
+real(nswc_sp), intent(inout) :: d(n), e(n), z(nm,n)
 integer :: i, j, k, l, m, ii, mml
-real :: b, c, f, g, p, r, s, machep
+real(nswc_sp) :: b, c, f, g, p, r, s, machep
 !     real sqrt,abs,spmpar
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure imtql2,
@@ -54445,7 +54471,7 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka
 integer :: n
-double precision, intent(inout) :: a(*), w(n), t(*)
+real(nswc_dp), intent(inout) :: a(*), w(n), t(*)
 integer :: l
 !-----------------------------------------------------------------------
 !                Double precision computation of the
@@ -54465,8 +54491,8 @@ pure subroutine dseigv(a, ka, n, w, z, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
-double precision, intent(in) :: a(ka,n)
-double precision, intent(inout) :: w(n), z(ka,n), t(n)
+real(nswc_dp), intent(in) :: a(ka,n)
+real(nswc_dp), intent(inout) :: w(n), z(ka,n), t(n)
 !-----------------------------------------------------------------------
 !                 Double precision computation of
 !                 eigenvalues and eigenvectors of
@@ -54480,9 +54506,9 @@ pure subroutine dtred1(nm,n,a,d,e,e2)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
-double precision, intent(inout) :: a(nm,n), d(n), e(n), e2(n)
+real(nswc_dp), intent(inout) :: a(nm,n), d(n), e(n), e2(n)
 integer :: i, j, k, l, ii, jp1
-double precision :: f, g, h, scale
+real(nswc_dp) :: f, g, h, scale
 !     double precision dsqrt,dabs
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure tred1,
@@ -54578,9 +54604,9 @@ pure subroutine dtred3(n,nv,a,d,e,e2)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nv
-double precision, intent(inout) :: a(nv), d(n), e(n), e2(n)
+real(nswc_dp), intent(inout) :: a(nv), d(n), e(n), e2(n)
 integer :: i, j, k, l, ii, iz, jk
-double precision :: f, g, h, hh, scale
+real(nswc_dp) :: f, g, h, hh, scale
 !     double precision dsqrt,dabs
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure tred3,
@@ -54672,9 +54698,9 @@ pure subroutine dtql(n,d,e2,ierr)
 implicit none
 integer, intent(in) :: n
 integer, intent(out) :: ierr
-double precision, intent(inout) :: d(n), e2(n)
+real(nswc_dp), intent(inout) :: d(n), e2(n)
 integer :: i, j, l, m, ii, l1, mml
-double precision :: b, c, f, g, h, p, r, s, machep
+real(nswc_dp) :: b, c, f, g, h, p, r, s, machep
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure tqlrat,
 !     algorithm 464, comm. ACM 16, 689(1973) by Reinsch.
@@ -54786,10 +54812,10 @@ pure subroutine dtred2(nm,n,a,d,e,z)
 implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
-double precision, intent(in) :: a(nm,n)
-double precision, intent(inout) :: d(n), e(n), z(nm,n)
+real(nswc_dp), intent(in) :: a(nm,n)
+real(nswc_dp), intent(inout) :: d(n), e(n), z(nm,n)
 integer :: i, j, k, l, ii, jp1
-double precision :: f, g, h, hh, scale
+real(nswc_dp) :: f, g, h, hh, scale
 !     double precision dsqrt,dabs
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure tred2,
@@ -54904,9 +54930,9 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(out) :: ierr
-double precision, intent(inout) :: d(n), e(n), z(nm,n)
+real(nswc_dp), intent(inout) :: d(n), e(n), z(nm,n)
 integer :: i, j, k, l, m, ii, l1, mml
-double precision :: b, c, f, g, h, p, r, s, machep
+real(nswc_dp) :: b, c, f, g, h, p, r, s, machep
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure tql2,
 !     NUM. Math. 11, 293-306(1968) By Bowdler, Martin, Reinsch, and
@@ -55051,7 +55077,7 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
-real, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n)
+real(nswc_sp), intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n)
 integer :: igh, low
 !-----------------------------------------------------------------------
 !                Eigenvalues of complex matrices
@@ -55068,7 +55094,7 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
-real, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n), zr(ka,n), &
+real(nswc_sp), intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n), zr(ka,n), &
    & zi(ka,n), temp(*)
 integer :: i1, i2, i3, igh, low
 !-----------------------------------------------------------------------
@@ -55096,9 +55122,9 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
-real, intent(inout) :: ar(nm,n), ai(nm,n), scale(n)
+real(nswc_sp), intent(inout) :: ar(nm,n), ai(nm,n), scale(n)
 integer :: i, j, k, l, m, jj, iexc
-real :: c, f, g, r, s, b2, radix
+real(nswc_sp) :: c, f, g, r, s, b2, radix
 logical :: noconv
 !     real abs
 !-----------------------------------------------------------------------
@@ -55259,9 +55285,9 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
-real, intent(inout) :: ar(nm,n), ai(nm,n), ortr(igh), orti(igh)
+real(nswc_sp), intent(inout) :: ar(nm,n), ai(nm,n), ortr(igh), orti(igh)
 integer :: i, j, m, ii, jj, la, mp, kp1
-real :: f, g, h, fi, fr, scale
+real(nswc_sp) :: f, g, h, fi, fr, scale
 !     real sqrt,cabs,abs
 !     complex cmplx
 !-----------------------------------------------------------------------
@@ -55373,10 +55399,10 @@ integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
-real, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n)
+real(nswc_sp), intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n)
 integer :: i, j, l, en, ll, its, lp1, enm1
-real :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
-complex :: z3
+real(nswc_sp) :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
+complex(nswc_sp) :: z3
 !     integer min0
 !     real sqrt,cabs,abs,real,aimag
 !     complex csqrt,cmplx
@@ -55574,10 +55600,10 @@ pure subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi)
 implicit none
 integer, intent(in) :: m, n
 integer, intent(in) :: nm, igh, low
-real, intent(in) :: scale(n)
-real, intent(inout) :: zr(nm,m), zi(nm,m)
+real(nswc_sp), intent(in) :: scale(n)
+real(nswc_sp), intent(inout) :: zr(nm,m), zi(nm,m)
 integer :: i, j, k, ii
-real :: s
+real(nswc_sp) :: s
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure
 !     cbabk2, which is a complex version of balbak,
@@ -55644,11 +55670,11 @@ integer, intent(in) :: nm
 integer, intent(in) :: igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
-real, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n), zr(nm,n), &
+real(nswc_sp), intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n), zr(nm,n), &
    & zi(nm,n), ortr(igh), orti(igh)
 integer :: i, j, k, l, m, en, ii, jj, ll, nn, ip1, its, lp1, enm1, iend, nswc_ai_i4
-real :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
-complex :: z3
+real(nswc_sp) :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
+complex(nswc_sp) :: z3
 !     integer min0
 !     real sqrt,cabs,abs,real,aimag
 !     complex csqrt,cmplx
@@ -55996,7 +56022,7 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
-double precision, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
+real(nswc_dp), intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
    & wi(n)
 integer :: igh, low
 !-----------------------------------------------------------------------
@@ -56014,7 +56040,7 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
-double precision, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
+real(nswc_dp), intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
    & wi(n), zr(ka,n), zi(ka,n), temp(*)
 integer :: i1, i2, i3, igh, low
 !-----------------------------------------------------------------------
@@ -56044,9 +56070,9 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
-double precision, intent(inout) :: ar(nm,n), ai(nm,n), scale(n)
+real(nswc_dp), intent(inout) :: ar(nm,n), ai(nm,n), scale(n)
 integer :: i, j, k, l, m, jj, iexc
-double precision :: c, f, g, r, s, b2, radix
+real(nswc_dp) :: c, f, g, r, s, b2, radix
 logical :: noconv
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure
@@ -56206,10 +56232,10 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
-double precision, intent(inout) :: ar(nm,n), ai(nm,n), ortr(igh), &
+real(nswc_dp), intent(inout) :: ar(nm,n), ai(nm,n), ortr(igh), &
    & orti(igh)
 integer :: i, j, m, ii, jj, la, mp, kp1
-double precision :: f, g, h, fi, fr, scale
+real(nswc_dp) :: f, g, h, fi, fr, scale
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of a complex analogue of
 !     the Algol procedure orthes, NUM. Math. 12, 349-368(1968)
@@ -56319,10 +56345,10 @@ integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
-double precision, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
+real(nswc_dp), intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
    & wi(n)
 integer :: i, j, l, en, ll, its, lp1, enm1
-double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep, r2, w(2), z(2)
+real(nswc_dp) :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep, r2, w(2), z(2)
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of a unitary analogue of the
 !     Algol procedure  COMLR, NUM. Math. 12, 369-376(1968) By Martin
@@ -56517,10 +56543,10 @@ pure subroutine dcbabk(nm,n,low,igh,scale,m,zr,zi)
 implicit none
 integer, intent(in) :: m, n
 integer, intent(in) :: nm, igh, low
-double precision, intent(in) :: scale(n)
-double precision, intent(inout) :: zr(nm,m), zi(nm,m)
+real(nswc_dp), intent(in) :: scale(n)
+real(nswc_dp), intent(inout) :: zr(nm,m), zi(nm,m)
 integer :: i, j, k, ii
-double precision :: s
+real(nswc_dp) :: s
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure
 !     cbabk2, which is a complex version of balbak,
@@ -56587,10 +56613,10 @@ integer, intent(in) :: nm
 integer, intent(in) :: igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
-double precision, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
+real(nswc_dp), intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
    & wi(n), zr(nm,n), zi(nm,n), ortr(igh), orti(igh)
 integer :: i, j, k, l, m, en, ii, jj, ll, nn, ip1, its, lp1, enm1, iend, nswc_ai_i4
-double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep, r2, w(2), z(2)
+real(nswc_dp) :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep, r2, w(2), z(2)
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of a unitary analogue of the
 !     Algol procedure  COMLR2, NUM. Math. 16, 181-204(1970) By peters
@@ -56938,9 +56964,9 @@ integer, intent(inout) :: iter, iwk(*)
 integer, intent(in) :: k
 integer, intent(inout) :: kode
 integer, intent(in) :: kq, l, m, n
-real, intent(inout) :: error, q(kq,*), res(*)
-real, intent(in) :: toler
-real, intent(inout) :: wk(*), x(*)
+real(nswc_sp), intent(inout) :: error, q(kq,*), res(*)
+real(nswc_sp), intent(in) :: toler
+real(nswc_sp), intent(inout) :: wk(*), x(*)
 integer :: klm
 !     -------------------
 klm = k + l + m
@@ -57057,11 +57083,11 @@ implicit none
 !     end
 ! see comments following statement labelled 440 for
 ! instructions on the implementation of this modification.
-real, intent(inout) :: q, x
-real, intent(inout) :: cu
-real, intent(inout) :: res
-real, intent(inout) :: error
-real, intent(in) :: toler
+real(nswc_sp), intent(inout) :: q, x
+real(nswc_sp), intent(inout) :: cu
+real(nswc_sp), intent(inout) :: res
+real(nswc_sp), intent(inout) :: error
+real(nswc_sp), intent(in) :: toler
 integer, intent(in) :: k, l, m, n
 integer, intent(inout) :: s
 integer, intent(inout) :: iu
@@ -57071,8 +57097,8 @@ integer, intent(in) :: klmd
 integer, intent(inout) :: kode
 integer, intent(in) :: klm2d
 integer, intent(in) :: nklmd
-double precision :: sum
-real :: z, sn, zu, zv, cuv, xmax, xmin, pivot, tpivot, nswc_ai_r4
+real(nswc_dp) :: sum
+real(nswc_sp) :: z, sn, zu, zv, cuv, xmax, xmin, pivot, tpivot, nswc_ai_r4
 integer :: i, j, ia, ii, in, js, kk, nk, n1, n2, jmn, jpn, klm, nkl, nk1, iimn, iout, klm1, klm2, nklm, nkl1, maxit, iphase, &
    & kforce, iineg
 dimension q(klm2d,n2d), x(n2d), res(klmd), &
@@ -57384,9 +57410,9 @@ implicit none
 integer, intent(out) :: ierr
 integer, intent(inout) :: iwk
 integer, intent(in) :: ka, kb, m, n, nb
-real, intent(inout) :: a(ka,n), b(kb,nb), wk(n)
+real(nswc_sp), intent(inout) :: a(ka,n), b(kb,nb), wk(n)
 integer :: i, j, np1
-real :: rnorm
+real(nswc_sp) :: rnorm
 logical :: exit
 dimension iwk(n)
 !     --------------
@@ -57416,10 +57442,10 @@ implicit none
 integer, intent(out) :: ierr
 integer, intent(inout) :: iwk
 integer, intent(in) :: ka, kb, m, n, nb
-real :: a(ka,n)
-real, intent(inout) :: b(kb,nb), wk(*)
+real(nswc_sp) :: a(ka,n)
+real(nswc_sp), intent(inout) :: b(kb,nb), wk(*)
 integer :: i, j, lq, lr, ls, np1
-real :: rnorm
+real(nswc_sp) :: rnorm
 logical :: exit
 dimension iwk(n)
 !     -------------------
@@ -57463,10 +57489,10 @@ pure subroutine ortho(m, n, qr, ms, s, ip, exit)
 implicit none
 integer, intent(inout) :: ip
 integer, intent(in) :: m, ms, n
-real, intent(inout) :: qr(ms,n), s(n)
+real(nswc_sp), intent(inout) :: qr(ms,n), s(n)
 logical, intent(out) :: exit
 integer :: i, j, jp, k, kj, nn
-real :: ajj, sav, ss, y
+real(nswc_sp) :: ajj, sav, ss, y
 !***********************************************************************
 !      Identification
 !        ortho - Orthogonal transformation of a given general m by n
@@ -57573,10 +57599,10 @@ subroutine orsol(m, n, qr, ms, s, ip, x)
 implicit none
 integer :: ip
 integer, intent(in) :: m, ms, n
-real :: qr(ms,n), s(n)
-real, intent(inout) :: x(m)
+real(nswc_sp) :: qr(ms,n), s(n)
+real(nswc_sp), intent(inout) :: x(m)
 integer :: i, ij, j, jp, k, ni, nm, nn
-real :: sav, ss, y
+real(nswc_sp) :: sav, ss, y
 !***********************************************************************
 !      Identification
 !        orsol - Least squares solution of a linear system given an
@@ -57665,18 +57691,18 @@ subroutine orimp(m, n, a, ka, qr, ms, s, ip, b, x, r, exit)
 implicit none
 integer :: ip
 integer, intent(in) :: ka, m, ms, n
-real :: a(ka,n), b(m), qr(ms,n)
-real, intent(inout) :: r(m)
-real :: s(n)
-real, intent(inout) :: x(m)
+real(nswc_sp) :: a(ka,n), b(m), qr(ms,n)
+real(nswc_sp), intent(inout) :: r(m)
+real(nswc_sp) :: s(n)
+real(nswc_sp), intent(inout) :: x(m)
 logical, intent(out) :: exit
 integer :: i, j, k, np1
-real :: eps, eps2, rat, ratio, rnrm2, xnrm2
-double precision :: dsum
-real, parameter :: zero = 0.0
-real, parameter :: one = 1.0
-real, parameter :: four = 4.0
-real, parameter :: fourth = 0.25
+real(nswc_sp) :: eps, eps2, rat, ratio, rnrm2, xnrm2
+real(nswc_dp) :: dsum
+real(nswc_sp), parameter :: zero = 0.0
+real(nswc_sp), parameter :: one = 1.0
+real(nswc_sp), parameter :: four = 4.0
+real(nswc_sp), parameter :: fourth = 0.25
 ! ----------------------------------------------------------------------
 !      Purpose
 !        given an approximate least squares solution x of a linear
@@ -57775,10 +57801,10 @@ pure subroutine dllsq(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n, nb
-double precision, intent(inout) :: a(ka,n), b(kb,nb), wk(n)
+real(nswc_dp), intent(inout) :: a(ka,n), b(kb,nb), wk(n)
 integer, intent(inout) :: iwk(n)
 integer :: i, j, np1
-double precision :: rnorm
+real(nswc_dp) :: rnorm
 logical :: exit
 !     --------------
 ierr = 0
@@ -57805,11 +57831,11 @@ end subroutine dllsq
 pure subroutine dortho(m, n, qr, ms, s, ip, exit)
 implicit none
 integer, intent(in) :: m, ms, n
-double precision, intent(inout) :: qr(ms,n), s(n)
+real(nswc_dp), intent(inout) :: qr(ms,n), s(n)
 integer, intent(inout) :: ip(n)
 logical, intent(out) :: exit
 integer :: i, j, jp, k, kj, nn
-double precision :: ajj, sav, ss, y
+real(nswc_dp) :: ajj, sav, ss, y
 !***********************************************************************
 !      Identification
 !        dortho - Orthogonal transformation of a given general m by n
@@ -57914,11 +57940,11 @@ end subroutine dortho
 pure subroutine dorsol(m, n, qr, ms, s, ip, x)
 implicit none
 integer, intent(in) :: m, ms, n
-double precision, intent(in) :: qr(ms,n), s(n)
-double precision, intent(inout) :: x(m)
+real(nswc_dp), intent(in) :: qr(ms,n), s(n)
+real(nswc_dp), intent(inout) :: x(m)
 integer, intent(in) :: ip(n)
 integer :: i, ij, j, jp, k, ni, nm, nn
-double precision :: sav, ss, y
+real(nswc_dp) :: sav, ss, y
 !***********************************************************************
 !      Identification
 !        dorsol - Least squares solution of a linear system given an
@@ -58009,11 +58035,11 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ind
 integer, intent(inout) :: krank, ksure
 integer, intent(in) :: liw, lw, m, mda, mdb, n, nb
-real, intent(in) :: ae, re
-real, intent(inout) :: a(mda,n), b(mdb,*), rnorm(*), work(lw)
+real(nswc_sp), intent(in) :: ae, re
+real(nswc_sp), intent(inout) :: a(mda,n), b(mdb,*), rnorm(*), work(lw)
 integer, intent(inout) :: iwork(liw)
 integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
-real :: eps, rerr
+real(nswc_sp) :: eps, rerr
 !-----------------------------------------------------------------------
 !              Least squares solution of linear equations
 !                            --------------
@@ -58215,11 +58241,11 @@ implicit none
 integer, intent(out) :: krank
 integer, intent(inout) :: ksure
 integer, intent(in) :: m, mda, mode, n, np
-real, intent(inout) :: a(mda,n), db(n), eb(n), h(n), ub(n), w(n)
+real(nswc_sp), intent(inout) :: a(mda,n), db(n), eb(n), h(n), ub(n), w(n)
 integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
    & kp1, kz, l, lm1, mm, nmk
-real :: bb, r2, rmin, sum, t, temp, tn, tt
+real(nswc_sp) :: bb, r2, rmin, sum, t, temp, tn, tt
 !       This routine performs A QR factorization of A
 !       using Householder transformations. Row and
 !       column pivots are chosen to reduce the growth
@@ -58434,13 +58460,13 @@ end subroutine u11ls
 subroutine u12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic,ir)
 implicit none
 integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
-real, intent(inout) :: a(mda,n), b(mdb,nb)
-real :: h(n)
-real, intent(inout) :: rnorm(nb)
-real :: w(n)
+real(nswc_sp), intent(inout) :: a(mda,n), b(mdb,nb)
+real(nswc_sp) :: h(n)
+real(nswc_sp), intent(inout) :: rnorm(nb)
+real(nswc_sp) :: w(n)
 integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ij, im1, j, jb, k, kp1, nmk
-real :: bb, tt
+real(nswc_sp) :: bb, tt
 !        Given the Householder QR factorization of A, this
 !        subroutine solves the system AX=b. if the system
 !        is of reduced rank, this routine returns a solution
@@ -58555,11 +58581,11 @@ implicit none
 integer, intent(out) :: krank
 integer, intent(inout) :: ksure
 integer, intent(in) :: m, mda, mode, n, np
-real, intent(inout) :: a(mda,n), db(m), eb(m), h(m), ub(m), w(m)
+real(nswc_sp), intent(inout) :: a(mda,n), db(m), eb(m), h(m), ub(m), w(m)
 integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
    & kp1, kz, l, lm1, mmk, nn
-real :: bb, r2, rmin, sum, t, temp, tn, tt
+real(nswc_sp) :: bb, r2, rmin, sum, t, temp, tn, tt
 !       This routine performs an LQ factorization of the
 !       matrix a using Householder transformations. Row
 !       and column pivots are chosen to reduce the growth
@@ -58774,13 +58800,13 @@ end subroutine u11us
 subroutine u12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
 implicit none
 integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
-real, intent(inout) :: a(mda,n), b(mdb,nb)
-real :: h(m)
-real, intent(inout) :: rnorm(nb)
-real :: w(m)
+real(nswc_sp), intent(inout) :: a(mda,n), b(mdb,nb)
+real(nswc_sp) :: h(m)
+real(nswc_sp), intent(inout) :: rnorm(nb)
+real(nswc_sp) :: w(m)
 integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ij, ip1, j, jb, k, kp1, mmk
-real :: bb, tt
+real(nswc_sp) :: bb, tt
 !        Given the Householder LQ factorization of A, this
 !        subroutine solves the system AX=b. if the system
 !        is of reduced rank, this routine returns a solution
@@ -58895,12 +58921,12 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ind
 integer, intent(inout) :: krank, ksure
 integer, intent(in) :: liw, lw, m, mda, mdb, n, nb
-double precision, intent(inout) :: a(mda,n), b(mdb,*)
-double precision, intent(in) :: re, ae
-double precision, intent(inout) :: rnorm(*), work(lw)
+real(nswc_dp), intent(inout) :: a(mda,n), b(mdb,*)
+real(nswc_dp), intent(in) :: re, ae
+real(nswc_dp), intent(inout) :: rnorm(*), work(lw)
 integer, intent(inout) :: iwork(liw)
 integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
-double precision :: eps, rerr
+real(nswc_dp) :: eps, rerr
 !-----------------------------------------------------------------------
 !              Least squares solution of linear equations
 !                            --------------
@@ -59102,12 +59128,12 @@ implicit none
 integer, intent(out) :: krank
 integer, intent(inout) :: ksure
 integer, intent(in) :: m, mda, mode, n, np
-double precision, intent(inout) :: a(mda,n), ub(n), db(n), h(n), &
+real(nswc_dp), intent(inout) :: a(mda,n), ub(n), db(n), h(n), &
    & w(n), eb(n)
 integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
    & kp1, kz, l, lm1, mm, nmk
-double precision :: bb, rmin, r2, sum, t, temp, tn, tt
+real(nswc_dp) :: bb, rmin, r2, sum, t, temp, tn, tt
 !       This routine performs A QR factorization of A
 !       using Householder transformations. Row and
 !       column pivots are chosen to reduce the growth
@@ -59322,11 +59348,11 @@ end subroutine du11ls
 pure subroutine du12ls(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic,ir)
 implicit none
 integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
-double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
-double precision, intent(in) :: h(n), w(n)
+real(nswc_dp), intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
+real(nswc_dp), intent(in) :: h(n), w(n)
 integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ij, im1, j, jb, k, kp1, nmk
-double precision :: bb, tt
+real(nswc_dp) :: bb, tt
 !        Given the Householder QR factorization of A, this
 !        subroutine solves the system AX=b. if the system
 !        is of reduced rank, this routine returns a solution
@@ -59441,12 +59467,12 @@ implicit none
 integer, intent(out) :: krank
 integer, intent(inout) :: ksure
 integer, intent(in) :: m, mda, mode, n, np
-double precision, intent(inout) :: a(mda,n), ub(m), db(m), h(m), &
+real(nswc_dp), intent(inout) :: a(mda,n), ub(m), db(m), h(m), &
    & w(m), eb(m)
 integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
    & kp1, kz, l, lm1, mmk, nn
-double precision :: bb, rmin, r2, sum, t, temp, tn, tt
+real(nswc_dp) :: bb, rmin, r2, sum, t, temp, tn, tt
 !       This routine performs an LQ factorization of the
 !       matrix a using Householder transformations. Row
 !       and column pivots are chosen to reduce the growth
@@ -59661,11 +59687,11 @@ end subroutine du11us
 pure subroutine du12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
 implicit none
 integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
-double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
-double precision, intent(in) :: h(m), w(m)
+real(nswc_dp), intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
+real(nswc_dp), intent(in) :: h(m), w(m)
 integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ij, ip1, j, jb, k, kp1, mmk
-double precision :: bb, tt
+real(nswc_dp) :: bb, tt
 !        Given the Householder LQ factorization of A, this
 !        subroutine solves the system AX=b. if the system
 !        is of reduced rank, this routine returns a solution
@@ -59777,13 +59803,13 @@ pure subroutine hfti(a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
 implicit none
 integer, intent(out) :: k
 integer, intent(in) :: m, mda, mdb, n, nb
-real, intent(inout) :: a(mda,n), b(mdb,*), g(n), h(n), rnorm(*)
-real, intent(in) :: tau
+real(nswc_sp), intent(inout) :: a(mda,n), b(mdb,*), g(n), h(n), rnorm(*)
+real(nswc_sp), intent(in) :: tau
 integer, intent(inout) :: ip(n)
 integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
-real :: hmax, sm1, tmp, z
-double precision :: sm
-real, parameter :: factor = 1.e-3
+real(nswc_sp) :: hmax, sm1, tmp, z
+real(nswc_dp) :: sm
+real(nswc_sp), parameter :: factor = 1.e-3
 !-----------------------------------------------------------------------
 !     dimension a(mda,n),(b(mdb,nb) or b(m)),rnorm(nb),h(n),g(n),ip(n)
 !     written by C.L. Lawson and R.J. Hanson.
@@ -59995,14 +60021,14 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(out) :: k
 integer, intent(in) :: m, mda, mdb, n, nb
-real, intent(inout) :: a(mda,n), b(mdb,*), d(*), g(n), h(n), &
+real(nswc_sp), intent(inout) :: a(mda,n), b(mdb,*), d(*), g(n), h(n), &
    & rnorm(*)
-real, intent(in) :: tau
+real(nswc_sp), intent(in) :: tau
 integer, intent(inout) :: ip(n)
 integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
-real :: hmax, sm1, tmp, z
-double precision :: sm
-real, parameter :: factor = 1.e-3
+real(nswc_sp) :: hmax, sm1, tmp, z
+real(nswc_dp) :: sm
+real(nswc_sp), parameter :: factor = 1.e-3
 !-----------------------------------------------------------------------
 !     dimension a(mda,n),(b(mdb,nb) or b(m))
 !     dimension d(l) where l = min(m,n)
@@ -60235,10 +60261,10 @@ end subroutine hfti2
 pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
 implicit none
 integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
-real, intent(inout) :: c(*), u(iue,m), up
+real(nswc_sp), intent(inout) :: c(*), u(iue,m), up
 integer :: i, i2, i3, i4, incr, j
-real :: cl, d, sm1
-double precision :: sm, b
+real(nswc_sp) :: cl, d, sm1
+real(nswc_dp) :: sm, b
 !-----------------------------------------------------------------------
 !     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
 !     From the book solving least squares problems, Prentice-Hall, 1974.
@@ -60320,13 +60346,13 @@ pure subroutine dhfti(a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
 implicit none
 integer, intent(out) :: k
 integer, intent(in) :: m, mda, mdb, n, nb
-double precision, intent(inout) :: a(mda,n), b(mdb,*)
-double precision, intent(in) :: tau
-double precision, intent(inout) :: rnorm(*), h(n), g(n)
+real(nswc_dp), intent(inout) :: a(mda,n), b(mdb,*)
+real(nswc_dp), intent(in) :: tau
+real(nswc_dp), intent(inout) :: rnorm(*), h(n), g(n)
 integer, intent(inout) :: ip(n)
 integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
-double precision :: hmax, sm, sm1, tmp, z
-double precision, parameter :: factor = 1.d-3
+real(nswc_dp) :: hmax, sm, sm1, tmp, z
+real(nswc_dp), parameter :: factor = 1.d-3
 !-----------------------------------------------------------------------
 !     double precision a(mda,n),(b(mdb,nb) or b(m))
 !     double precision tau,rnorm(nb),h(n),g(n)
@@ -60540,13 +60566,13 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(out) :: k
 integer, intent(in) :: m, mda, mdb, n, nb
-double precision, intent(inout) :: a(mda,n), b(mdb,*), d(*)
-double precision, intent(in) :: tau
-double precision, intent(inout) :: rnorm(*), h(n), g(n)
+real(nswc_dp), intent(inout) :: a(mda,n), b(mdb,*), d(*)
+real(nswc_dp), intent(in) :: tau
+real(nswc_dp), intent(inout) :: rnorm(*), h(n), g(n)
 integer, intent(inout) :: ip(n)
 integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
-double precision :: hmax, sm, sm1, tmp, z
-double precision, parameter :: factor = 1.d-3
+real(nswc_dp) :: hmax, sm, sm1, tmp, z
+real(nswc_dp), parameter :: factor = 1.d-3
 !-----------------------------------------------------------------------
 !     double precision a(mda,n),(b(mdb,nb) or b(m))
 !     double precision d(l) where l = min(m,n)
@@ -60780,9 +60806,9 @@ end subroutine dhfti2
 pure subroutine dh12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
 implicit none
 integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
-double precision, intent(inout) :: u(iue,m), up, c(*)
+real(nswc_dp), intent(inout) :: u(iue,m), up, c(*)
 integer :: i, i2, i3, i4, incr, j
-double precision :: b, cl, d, sm
+real(nswc_dp) :: b, cl, d, sm
 !-----------------------------------------------------------------------
 !     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
 !     From the book solving least squares problems, Prentice-Hall, 1974.
@@ -60865,19 +60891,19 @@ implicit none
 integer, intent(in) :: ma, mdw, me, mg
 integer, intent(out) :: mode
 integer :: n
-real, intent(inout) :: rnorme, rnorml
-real, intent(inout) :: w(mdw,*)
-real, intent(in) :: prgopt(*)
-real, intent(inout) :: x(*), ws(*)
+real(nswc_sp), intent(inout) :: rnorme, rnorml
+real(nswc_sp), intent(inout) :: w(mdw,*)
+real(nswc_sp), intent(in) :: prgopt(*)
+real(nswc_sp), intent(inout) :: x(*), ws(*)
 integer, intent(inout) :: ip(*)
 integer :: i, ii, imax, j, jj, jp1, k, key, kk, kranke, l, last, &
    & link, m, mapke1, mdeqc, mend, mep1, n1, n2, next, nlink, nopt, &
    & np1, ntimes
-real :: enorm, fnorm, gam, rb, rn, rnmax, size, sn, snmax, srelpr, t, tau, uj, up, vj, xnorm, xnrme
+real(nswc_sp) :: enorm, fnorm, gam, rb, rn, rnmax, size, sn, snmax, srelpr, t, tau, uj, up, vj, xnorm, xnrme
 logical :: cov
-real, parameter :: zero = 0.e0
-real, parameter :: one = 1.e0
-real, parameter :: half = 0.5e0
+real(nswc_sp), parameter :: zero = 0.e0
+real(nswc_sp), parameter :: one = 1.e0
+real(nswc_sp), parameter :: half = 0.5e0
 !     dimension w(mdw,n+1),prgopt(*),x(n),
 !     ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
 !     ABOVE, k=max(ma+mg,n).
@@ -61354,19 +61380,19 @@ implicit none
 integer, intent(in) :: ma, mdw, mg
 integer, intent(out) :: mode
 integer :: n
-real, intent(out) :: rnorm
-real, intent(inout) :: w(mdw,*)
-real, intent(in) :: prgopt(*)
-real, intent(inout) :: x(*), ws(*)
+real(nswc_sp), intent(out) :: rnorm
+real(nswc_sp), intent(inout) :: w(mdw,*)
+real(nswc_sp), intent(in) :: prgopt(*)
+real(nswc_sp), intent(inout) :: x(*), ws(*)
 integer, intent(inout) :: ip(*)
 integer :: i, ii, il, im1, ip1, j, k, key, key8, key9, krank, &
    & krm1, krp1, l, last, link, m, map1, mdlpdp, minman, n1, n2, n3, &
    & next, np1
-real :: anorm, blowup, eps, fac, gam, rb, srelpr, tau, tol, xnorm, rnrm(1), opt(7)
+real(nswc_sp) :: anorm, blowup, eps, fac, gam, rb, srelpr, tau, tol, xnorm, rnrm(1), opt(7)
 logical :: cov
-real, parameter :: zero = 0.e0
-real, parameter :: one = 1.e0
-real, parameter :: half = 0.5e0
+real(nswc_sp), parameter :: zero = 0.e0
+real(nswc_sp), parameter :: one = 1.e0
+real(nswc_sp), parameter :: half = 0.5e0
 !     This is a companion subprogram to lsei( ).
 !     The documentation for lsei( ) has more complete
 !     usage instructions.
@@ -61653,14 +61679,14 @@ integer, intent(inout) :: is(*)
 integer, intent(in) :: m, mda
 integer, intent(out) :: mode
 integer, intent(in) :: n1, n2
-real, intent(inout) :: a(mda,*)
-real :: prgopt(*)
-real, intent(inout) :: wnorm, ws(*), x(*)
+real(nswc_sp), intent(inout) :: a(mda,*)
+real(nswc_sp) :: prgopt(*)
+real(nswc_sp), intent(inout) :: wnorm, ws(*), x(*)
 integer :: i, iw, ix, j, l, modew, n, np1
-real :: rnorm, sc, ynorm
-real, parameter :: zero = 0.e0
-real, parameter :: one = 1.e0
-real, parameter :: fac = 0.1e0
+real(nswc_sp) :: rnorm, sc, ynorm
+real(nswc_sp), parameter :: zero = 0.e0
+real(nswc_sp), parameter :: one = 1.e0
+real(nswc_sp), parameter :: fac = 0.1e0
 !     dimension a(mda,n+1),prgopt(*),x(n),ws((m+2)*(n+7)),is(m+n+1),
 !     where n=n1+n2.  This is a slight overestimate for ws(*).
 !     Written by R. J. Hanson and K. H. Haskell, sandia labs
@@ -61801,10 +61827,10 @@ implicit none
 integer, intent(in) :: l, ma, mdw, me
 integer, intent(out) :: mode
 integer, intent(in) :: n
-real, intent(inout) :: rnorm
-real, intent(inout) :: w(mdw,*)
-real, intent(in) :: prgopt(*)
-real, intent(inout) :: x(n), work(*)
+real(nswc_sp), intent(inout) :: rnorm
+real(nswc_sp), intent(inout) :: w(mdw,*)
+real(nswc_sp), intent(in) :: prgopt(*)
+real(nswc_sp), intent(inout) :: x(n), work(*)
 integer, intent(inout) :: iwork(*)
 integer :: l1, l2, l3, l4, l5
 !     dimension w(mdw,n+1),prgopt(*),x(n),iwork(m+n),work(m+5*n)
@@ -62011,19 +62037,19 @@ implicit none
 integer, intent(in) :: l, ma, mdw, mme
 integer, intent(inout) :: mode
 integer, intent(in) :: n
-real, intent(inout) :: rnorm
-real, intent(inout) :: w(mdw,*), x(*), wd(*), h(*), scale(*)
-real, intent(inout) :: z(*), temp(*)
-real, intent(in) :: prgopt(*)
-real, intent(inout) :: d(*)
+real(nswc_sp), intent(inout) :: rnorm
+real(nswc_sp), intent(inout) :: w(mdw,*), x(*), wd(*), h(*), scale(*)
+real(nswc_sp), intent(inout) :: z(*), temp(*)
+real(nswc_sp), intent(in) :: prgopt(*)
+real(nswc_sp), intent(inout) :: d(*)
 integer, intent(inout) :: ipivot(*), itype(*)
 integer :: i, igo897, igo938, igo958, imax, isol, itemp, iter, itmax, iwmax, j, jcon, jj, jm1, jp, key, krank, krp1, l1, last, &
    & link, lp1, m, me, mep1, next, niv, niv1, nlink, nm1, nopt, np1, nsoln, nsp1, ntimes, idope(8)
-real :: alamda, alpha, alsq, amax, blowup, bnorm, eanorm, fac, sm, srelpr, t, tau, wmax, z2, zz, dope(4), sparam(5)
+real(nswc_sp) :: alamda, alpha, alsq, amax, blowup, bnorm, eanorm, fac, sm, srelpr, t, tau, wmax, z2, zz, dope(4), sparam(5)
 logical :: hitcon, feasbl, done, pos
-real, parameter :: zero = 0.e0
-real, parameter :: one = 1.e0
-real, parameter :: two = 2.e0
+real(nswc_sp), parameter :: zero = 0.e0
+real(nswc_sp), parameter :: one = 1.e0
+real(nswc_sp), parameter :: two = 2.e0
 !     This is a companion subprogram to wnnls( ).
 !     The documentation for wnnls( ) has more complete
 !     usage instructions.
@@ -62566,19 +62592,19 @@ subroutine wnlit(w, mdw, m, n, l, ipivot, itype, h, scale, rnorm, &
    & idope, dope, done)
 implicit none
 integer, intent(in) :: l, m, mdw, n
-real, intent(out) :: rnorm
-real, intent(inout) :: w(mdw,*), h(*), scale(*)
-real, intent(in) :: dope(*)
+real(nswc_sp), intent(out) :: rnorm
+real(nswc_sp), intent(inout) :: w(mdw,*), h(*), scale(*)
+real(nswc_sp), intent(in) :: dope(*)
 integer, intent(inout) :: itype(*), ipivot(*), idope(*)
 logical, intent(inout) :: done
 integer :: i, i1, ic, igo990, igo993, igo996, ip1, ir, irp1, &
    & itemp, j, j1, jj, jm1, jp, k, kk, krank, krp1, l1, lb, lend, lp1, &
    & max, me, mend, mep1, niv, niv1, np1, nsoln
-real :: alsq, eanorm, fac, factor, hbar, rn, sn, t, tau, sparam(5)
+real(nswc_sp) :: alsq, eanorm, fac, factor, hbar, rn, sn, t, tau, sparam(5)
 logical :: indep, recalc
-real, parameter :: tenm3 = 1.e-3
-real, parameter :: zero = 0.e0
-real, parameter :: one = 1.e0
+real(nswc_sp), parameter :: tenm3 = 1.e-3
+real(nswc_sp), parameter :: zero = 0.e0
+real(nswc_sp), parameter :: one = 1.e0
 !     This is a companion subprogram to wnnls( ).
 !     The documentation for wnnls( ) has more complete
 !     usage instructions.
@@ -62934,12 +62960,12 @@ integer, intent(in) :: l, m, m1, mb, mm, mmpnn, mr, n
 integer, intent(inout) :: n1
 integer, intent(in) :: nn
 integer, intent(inout) :: ipivot(n)
-real, intent(in) :: a(mm,n), b(mb,l)
-real, intent(inout) :: c(*)
-real, intent(inout) :: qr(mmpnn,n), res(mr,l), tol, w(m), x(nn,l)
+real(nswc_sp), intent(in) :: a(mm,n), b(mb,l)
+real(nswc_sp), intent(inout) :: c(*)
+real(nswc_sp), intent(inout) :: qr(mmpnn,n), res(mr,l), tol, w(m), x(nn,l)
 integer :: i, iter, j, jm1, k, k0, k1, k10, k11, k12, k2, k3, k4, &
    & k5, k6, k7, k8, k9, ksum, m1p1, mp1, mpi, mpn, numit
-real :: eta, digitx
+real(nswc_sp) :: eta, digitx
 logical :: fail, sing
 ! ** PURPOSE **
 ! subroutine l2slv computes least squares solutions to overdetermined
@@ -63320,15 +63346,15 @@ implicit none
 integer, intent(in) :: m, m1, mmpnn, n
 integer, intent(out) :: n1
 integer, intent(inout) :: ipivot(n)
-real, intent(inout) :: d(*)
-real, intent(in) :: eta
-real, intent(inout) :: qr(mmpnn,n)
-real, intent(in) :: tol
+real(nswc_sp), intent(inout) :: d(*)
+real(nswc_sp), intent(in) :: eta
+real(nswc_sp), intent(inout) :: qr(mmpnn,n)
+real(nswc_sp), intent(in) :: tol
 logical, intent(out) :: sing
 integer :: ik, j, jj, k, km1, l, lmm, mh, mp1, mpn1, ms, mv, np, &
    & ns, nsp1
-real :: c, dm, ds, rsj, tol2
-double precision :: sum
+real(nswc_sp) :: c, dm, ds, rsj, tol2
+real(nswc_dp) :: sum
 logical :: finis, fsum
 n1 = 0
 sing = .true.
@@ -63518,19 +63544,19 @@ implicit none
 integer, intent(in) :: m, m1, mm, mmpnn, n, n1
 integer, intent(out) :: numit
 integer, intent(in) :: ipivot(n)
-real, intent(in) :: a(mm,n), b(*)
-real, intent(in) :: d(*)
-real, intent(inout) :: f(*), g(*)
-real, intent(in) :: qr(mmpnn,n)
-real, intent(inout) :: res(*)
-real, intent(in) :: w(m)
-real, intent(inout) :: wres(*), x(*), y(*), y1(*), y2(*)
-real, intent(inout) :: digitx
-real, intent(in) :: eta
+real(nswc_sp), intent(in) :: a(mm,n), b(*)
+real(nswc_sp), intent(in) :: d(*)
+real(nswc_sp), intent(inout) :: f(*), g(*)
+real(nswc_sp), intent(in) :: qr(mmpnn,n)
+real(nswc_sp), intent(inout) :: res(*)
+real(nswc_sp), intent(in) :: w(m)
+real(nswc_sp), intent(inout) :: wres(*), x(*), y(*), y1(*), y2(*)
+real(nswc_sp), intent(inout) :: digitx
+real(nswc_sp), intent(in) :: eta
 logical, intent(inout) :: fail
 integer :: i, j, k, kz, l, mp1, mpn, n1p1, np, ns
-real :: c, dxnorm, eta2, rdr1, rdr2, rdx1, rdx2, rnr, rnx, xnorm
-double precision :: sum
+real(nswc_sp) :: c, dxnorm, eta2, rdr1, rdr2, rdx1, rdx2, rnr, rnx, xnorm
+real(nswc_dp) :: sum
 numit = 0
 kz = 0
 eta2 = eta*eta
@@ -63672,13 +63698,13 @@ end subroutine solve2
 pure subroutine solve3(f, m1, m, n1, qr, d, y, mmpnn)
 implicit none
 integer, intent(in) :: m, m1, mmpnn, n1
-real, intent(in) :: d(*)
-real, intent(inout) :: f(*)
-real, intent(in) :: qr(mmpnn,n1)
-real, intent(inout) :: y(*)
+real(nswc_sp), intent(in) :: d(*)
+real(nswc_sp), intent(inout) :: f(*)
+real(nswc_sp), intent(in) :: qr(mmpnn,n1)
+real(nswc_sp), intent(inout) :: y(*)
 integer :: j, l, lmm, mh, mpl, mpn1, mv, ns, nsm1
-real :: c
-double precision :: sum
+real(nswc_sp) :: c
+real(nswc_dp) :: sum
 ! Subroutine solve3 is called only by subroutine solve2.
 ! This subroutine calculates new values of f.
 mv = 1
@@ -63744,11 +63770,11 @@ pure subroutine covar(n, m1, n1, ipivot, c, d, z, nn)
 implicit none
 integer, intent(in) :: m1, n, n1, nn
 integer, intent(in) :: ipivot(n)
-real, intent(inout) :: c(nn,n)
-real, intent(in) :: d(*)
-real, intent(inout) :: z(*)
+real(nswc_sp), intent(inout) :: c(nn,n)
+real(nswc_sp), intent(in) :: d(*)
+real(nswc_sp), intent(inout) :: z(*)
 integer :: i, j, k, ka, l, n1p1
-double precision :: sum
+real(nswc_dp) :: sum
 ! Subroutine covar uses results from the orthogonal decomposition
 ! stored in c, d and ipivot to compute the unscaled covariance matrix
 ! of the least squares coefficients.
@@ -63824,13 +63850,13 @@ integer :: n
 integer, intent(in) :: itnlim
 integer, intent(inout) :: istop
 integer, intent(in) :: ia(*), ja(*)
-real, intent(in) :: a(*), damp
-real, intent(inout) :: u(m), x(n)
-real, intent(in) :: atol, btol, conlim
-real, intent(inout) :: acond, rnorm, xnorm, w(*)
+real(nswc_sp), intent(in) :: a(*), damp
+real(nswc_sp), intent(inout) :: u(m), x(n)
+real(nswc_sp), intent(in) :: atol, btol, conlim
+real(nswc_sp), intent(inout) :: acond, rnorm, xnorm, w(*)
 integer, intent(inout) :: itn
 integer :: npi, i, nconv, nstop
-real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
+real(nswc_sp) :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
    & ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
    & res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
    & t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm, z, zbar, &
@@ -64136,10 +64162,10 @@ end subroutine splsq
 pure subroutine normlz(n,x,beta)
 implicit none
 integer, intent(in) :: n
-real, intent(inout) :: x(n)
-real, intent(out) :: beta
-real, parameter :: zero = 0.0
-real, parameter :: one = 1.0
+real(nswc_sp), intent(inout) :: x(n)
+real(nswc_sp), intent(out) :: beta
+real(nswc_sp), parameter :: zero = 0.0
+real(nswc_sp), parameter :: one = 1.0
 !     normlz computes the Euclidean norm of x and returns the
 !     value in beta. If x is nonzero, then x is rescaled so
 !     THAT NORM(x) = 1.
@@ -64157,13 +64183,13 @@ integer :: n
 integer, intent(in) :: itnlim
 integer, intent(inout) :: istop
 integer, intent(in) :: ita(*), jta(*)
-real, intent(in) :: ta(*), damp
-real, intent(inout) :: u(m), x(n)
-real, intent(in) :: atol, btol, conlim
-real, intent(inout) :: acond, rnorm, xnorm, w(*)
+real(nswc_sp), intent(in) :: ta(*), damp
+real(nswc_sp), intent(inout) :: u(m), x(n)
+real(nswc_sp), intent(in) :: atol, btol, conlim
+real(nswc_sp), intent(inout) :: acond, rnorm, xnorm, w(*)
 integer, intent(inout) :: itn
 integer :: npi, i, nconv, nstop
-real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
+real(nswc_sp) :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
    & ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
    & res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
    & t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm, z, zbar, &
@@ -64475,13 +64501,13 @@ integer, intent(in) :: m
 integer :: n
 integer, intent(in) :: ka, ml, mu, itnlim
 integer, intent(inout) :: istop
-real, intent(in) :: a(ka,n), damp
-real, intent(inout) :: u(m), x(n)
-real, intent(in) :: atol, btol, conlim
-real, intent(inout) :: acond, rnorm, xnorm, w(*)
+real(nswc_sp), intent(in) :: a(ka,n), damp
+real(nswc_sp), intent(inout) :: u(m), x(n)
+real(nswc_sp), intent(in) :: atol, btol, conlim
+real(nswc_sp), intent(inout) :: acond, rnorm, xnorm, w(*)
 integer, intent(inout) :: itn
 integer :: npi, i, nconv, nstop
-real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
+real(nswc_sp) :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
    & ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
    & res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
    & t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm, z, zbar, &
@@ -64791,16 +64817,16 @@ end subroutine blsq
 subroutine fmin(f, a0, b0, x, w, aerr, rerr, error, ind)
 implicit none
 integer, intent(out) :: ind
-real :: f
-real, intent(in) :: a0, b0
-real, intent(inout) :: x, w
-real, intent(in) :: aerr, rerr
-real, intent(inout) :: error
+real(nswc_sp) :: f
+real(nswc_sp), intent(in) :: a0, b0
+real(nswc_sp), intent(inout) :: x, w
+real(nswc_sp), intent(in) :: aerr, rerr
+real(nswc_sp), intent(inout) :: error
 external f
-real :: eps, atol, ftol, rtol, tol, a, b, e, fu, fv, u, v, nswc_ai_r4
-real, parameter :: eps0 = 5.e-3
-real, parameter :: c1 = .3819660112501052
-real, parameter :: c2 = .6180339887498948
+real(nswc_sp) :: eps, atol, ftol, rtol, tol, a, b, e, fu, fv, u, v, nswc_ai_r4
+real(nswc_sp), parameter :: eps0 = 5.e-3
+real(nswc_sp), parameter :: c1 = .3819660112501052
+real(nswc_sp), parameter :: c2 = .6180339887498948
 !     ******************************************************************
 !     Golden section minimization of a function f(T)
 !     ******************************************************************
@@ -64942,12 +64968,12 @@ subroutine optf(fcn,n,rerr,iter,xpls,fpls,ierr,wrk)
 implicit none
 integer, intent(inout) :: ierr, iter
 integer :: n
-real, intent(inout) :: fpls
-real, intent(in) :: rerr
-real, intent(inout) :: xpls(n), wrk(n,*)
+real(nswc_sp), intent(inout) :: fpls
+real(nswc_sp), intent(in) :: rerr
+real(nswc_sp), intent(inout) :: xpls(n), wrk(n,*)
 external fcn
 integer :: i, itncnt, itnlim, mo
-real :: eps, fscale, gradtl, stepmx, steptl
+real(nswc_sp) :: eps, fscale, gradtl, stepmx, steptl
 !-----------------------------------------------------------------------
 !                 Interface to minimization package
 !-----------------------------------------------------------------------
@@ -65012,17 +65038,17 @@ integer, intent(in) :: itnlim
 integer, intent(inout) :: mo
 integer :: n
 integer, intent(in) :: nr
-real, intent(inout) :: a(nr,n), fpls, fscale, g(n), gpls(n)
-real, intent(in) :: gradtl
-real, intent(inout) :: p(n)
-real, intent(in) :: rerr
-real, intent(inout) :: stepmx
-real, intent(in) :: steptl
-real, intent(inout) :: typsiz(n), wrk0(n), wrk1(n), wrk2(n), x(n), &
+real(nswc_sp), intent(inout) :: a(nr,n), fpls, fscale, g(n), gpls(n)
+real(nswc_sp), intent(in) :: gradtl
+real(nswc_sp), intent(inout) :: p(n)
+real(nswc_sp), intent(in) :: rerr
+real(nswc_sp), intent(inout) :: stepmx
+real(nswc_sp), intent(in) :: steptl
+real(nswc_sp), intent(inout) :: typsiz(n), wrk0(n), wrk1(n), wrk2(n), x(n), &
    & xpls(n)
 external fcn
 integer :: i, iagflg, icscmx, iretcd, j, jp1, nm1, ns, sptr
-real :: cbrnf, f, fstack(30), rnf, sqrnf, stmx
+real(nswc_sp) :: cbrnf, f, fstack(30), rnf, sqrnf, stmx
 logical :: mxtake, noupdt
 !-----------------------------------------------------------------------
 !             Driver for non-linear optimization problem
@@ -65177,13 +65203,13 @@ pure subroutine opchk1(n,x,typsiz,fscale,gradtl,itnlim,rerr, &
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: itnlim, n
-real, intent(inout) :: fscale
-real, intent(in) :: gradtl, rerr
-real, intent(inout) :: stepmx
-real, intent(in) :: x(n)
-real, intent(inout) :: typsiz(n)
+real(nswc_sp), intent(inout) :: fscale
+real(nswc_sp), intent(in) :: gradtl, rerr
+real(nswc_sp), intent(inout) :: stepmx
+real(nswc_sp), intent(in) :: x(n)
+real(nswc_sp), intent(inout) :: typsiz(n)
 integer :: i
-real :: stpsiz
+real(nswc_sp) :: stpsiz
 !-----------------------------------------------------------------------
 !                  Check input for reasonableness
 !-----------------------------------------------------------------------
@@ -65251,15 +65277,15 @@ implicit none
 integer, intent(inout) :: icscmx
 integer, intent(out) :: ierr
 integer, intent(in) :: iretcd, itncnt, itnlim, n, ns
-real, intent(in) :: fpls
-real, intent(inout) :: fscale
-real, intent(in) :: gradtl, steptl
-real, intent(in) :: xpls(n), gpls(n), x(n), typsiz(n)
-real, intent(inout) :: fstack(ns)
+real(nswc_sp), intent(in) :: fpls
+real(nswc_sp), intent(inout) :: fscale
+real(nswc_sp), intent(in) :: gradtl, steptl
+real(nswc_sp), intent(in) :: xpls(n), gpls(n), x(n), typsiz(n)
+real(nswc_sp), intent(inout) :: fstack(ns)
 integer, intent(inout) :: sptr
 logical, intent(in) :: mxtake
 integer :: i, jerr
-real :: d, grd, relstp, rgx, rsx
+real(nswc_sp) :: d, grd, relstp, rgx, rsx
 !-----------------------------------------------------------------------
 !            Unconstrained minimization stopping criteria
 !-----------------------------------------------------------------------
@@ -65347,12 +65373,12 @@ end subroutine opstp
 subroutine fxdec(fcn, n, x, fx, r)
 implicit none
 integer :: n
-real, intent(inout) :: fx
-real, intent(in) :: r
-real, intent(inout) :: x(n)
+real(nswc_sp), intent(inout) :: fx
+real(nswc_sp), intent(in) :: r
+real(nswc_sp), intent(inout) :: x(n)
 external fcn
 integer :: i
-real :: fminus, fplus, h, xi, xminus, xplus
+real(nswc_sp) :: fminus, fplus, h, xi, xminus, xplus
 !-----------------------------------------------------------------------
 !     Fixed step coordinate descent procedure / one iteration
 !-----------------------------------------------------------------------
@@ -65380,10 +65406,10 @@ pure subroutine scalex(mo, x, typsiz, n, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: mo, n
-real, intent(in) :: x(n)
-real, intent(inout) :: typsiz(n)
+real(nswc_sp), intent(in) :: x(n)
+real(nswc_sp), intent(inout) :: typsiz(n)
 integer :: i
-real :: big, c, t, xmin
+real(nswc_sp) :: big, c, t, xmin
 !-----------------------------------------------------------------------
 !     Rescale the variables
 !-----------------------------------------------------------------------
@@ -65410,11 +65436,11 @@ end subroutine scalex
 pure subroutine lltslv(nr,n,a,x,b)
 implicit none
 integer, intent(in) :: n, nr
-real, intent(in) :: a(nr,n)
-real, intent(inout) :: x(n)
-real, intent(in) :: b(n)
+real(nswc_sp), intent(in) :: a(nr,n)
+real(nswc_sp), intent(inout) :: x(n)
+real(nswc_sp), intent(in) :: b(n)
 integer :: i, ii, im1, ip1, j
-real :: sum
+real(nswc_sp) :: sum
 !-----------------------------------------------------------------------
 !        Solution of AX = b where A has the form L(L-TRANSPOSE)
 !           but only the lower triangular part L is stored.
@@ -65459,14 +65485,14 @@ end subroutine lltslv
 subroutine fstofd(n, x, fcn, fx, g, typsiz, r)
 implicit none
 integer :: n
-real, intent(in) :: fx
-real, intent(inout) :: g(n)
-real, intent(in) :: r
-real :: typsiz(n)
-real, intent(inout) :: x(n)
+real(nswc_sp), intent(in) :: fx
+real(nswc_sp), intent(inout) :: g(n)
+real(nswc_sp), intent(in) :: r
+real(nswc_sp) :: typsiz(n)
+real(nswc_sp), intent(inout) :: x(n)
 external fcn
 integer :: j
-real :: fplus, stepsz, xtmpj
+real(nswc_sp) :: fplus, stepsz, xtmpj
 !-----------------------------------------------------------------------
 !     Find forward difference approximation g to the first derivative
 !     (gradient) of the function defined by FCN at the point x.
@@ -65494,13 +65520,13 @@ end subroutine fstofd
 subroutine fstocd(n, x, fcn, typsiz, r, g)
 implicit none
 integer :: n
-real, intent(in) :: r
-real, intent(inout) :: x(n)
-real, intent(in) :: typsiz(n)
-real, intent(inout) :: g(n)
+real(nswc_sp), intent(in) :: r
+real(nswc_sp), intent(inout) :: x(n)
+real(nswc_sp), intent(in) :: typsiz(n)
+real(nswc_sp), intent(inout) :: g(n)
 external fcn
 integer :: i
-real :: fminus, fplus, stepi, xtempi
+real(nswc_sp) :: fminus, fplus, stepi, xtempi
 !-----------------------------------------------------------------------
 !     Find central difference approximation g to the first derivative
 !     (gradient) of the function defined by FCN at the point x.
@@ -65533,16 +65559,16 @@ subroutine lnsrch(n,x,f,g,p,xpls,fpls,fcn,mxtake,iretcd, &
 implicit none
 integer, intent(out) :: iretcd
 integer :: n
-real, intent(in) :: f
-real :: fpls
-real, intent(in) :: stepmx, steptl
-real, intent(in) :: x(n), g(n)
-real, intent(inout) :: p(n), xpls(n)
-real, intent(in) :: typsiz(n)
+real(nswc_sp), intent(in) :: f
+real(nswc_sp) :: fpls
+real(nswc_sp), intent(in) :: stepmx, steptl
+real(nswc_sp), intent(in) :: x(n), g(n)
+real(nswc_sp), intent(inout) :: p(n), xpls(n)
+real(nswc_sp), intent(in) :: typsiz(n)
 logical, intent(out) :: mxtake
 external fcn
 integer :: i
-real :: a, b, disc, pfpls, plmbda, rln, rmnlmb, scl, sln, slp, t1, t2, t3, tlmbda, tmp, w, lambda
+real(nswc_sp) :: a, b, disc, pfpls, plmbda, rln, rmnlmb, scl, sln, slp, t1, t2, t3, tlmbda, tmp, w, lambda
 !-----------------------------------------------------------------------
 !             Find a next Newton iterate by line search
 !-----------------------------------------------------------------------
@@ -65643,13 +65669,13 @@ pure subroutine secfac(nr,n,x,g,a,xpls,gpls,itncnt,tol, &
    & noupdt,s,y,w)
 implicit none
 integer, intent(in) :: itncnt, n, nr
-real, intent(in) :: tol
-real, intent(in) :: x(n), xpls(n), g(n), gpls(n)
-real, intent(inout) :: a(nr,n)
-real, intent(inout) :: s(n), y(n), w(n)
+real(nswc_sp), intent(in) :: tol
+real(nswc_sp), intent(in) :: x(n), xpls(n), g(n), gpls(n)
+real(nswc_sp), intent(inout) :: a(nr,n)
+real(nswc_sp), intent(inout) :: s(n), y(n), w(n)
 logical, intent(inout) :: noupdt
 integer :: i, im1, j
-real :: alp, den1, den2, snorm2, sum, ynrm2
+real(nswc_sp) :: alp, den1, den2, snorm2, sum, ynrm2
 !-----------------------------------------------------------------------
 !           Update hessian by the BFGS factored method
 !-----------------------------------------------------------------------
@@ -65750,10 +65776,10 @@ end subroutine secfac
 pure subroutine qrupdt(nr,n,a,u,v)
 implicit none
 integer, intent(in) :: n, nr
-real, intent(inout) :: a(nr,n), u(n)
-real, intent(in) :: v(n)
+real(nswc_sp), intent(inout) :: a(nr,n), u(n)
+real(nswc_sp), intent(in) :: v(n)
 integer :: i, ii, j, k, km1
-real :: r
+real(nswc_sp) :: r
 !-----------------------------------------------------------------------
 !     Find an orthogonal matrix (Q*) and an upper triangular
 !          MATRIX (r*) SUCH THAT (Q*)(r*) = r + u(v+)
@@ -65796,11 +65822,11 @@ end subroutine qrupdt
 pure subroutine jrot(nr,n,h,i,a,b,r)
 implicit none
 integer, intent(in) :: i, n, nr
-real, intent(in) :: a, b
-real, intent(inout) :: r
-real, intent(inout) :: h(nr,n)
+real(nswc_sp), intent(in) :: a, b
+real(nswc_sp), intent(inout) :: r
+real(nswc_sp), intent(inout) :: h(nr,n)
 integer :: j
-real :: c, s, t, z
+real(nswc_sp) :: c, s, t, z
 !-----------------------------------------------------------------------
 !         Pre-multiplication of an upper Hessenberg matrix h
 !               by the Jacobian rotation j(i,i+1,a,b)
@@ -65853,12 +65879,12 @@ integer :: m, n
 integer, intent(out) :: info
 integer, intent(in) :: lwa
 integer, intent(inout) :: iwa(n)
-real, intent(in) :: epsfcn, tol
-real, intent(inout) :: x(n), fvec(m), wa(lwa)
+real(nswc_sp), intent(in) :: epsfcn, tol
+real(nswc_sp), intent(inout) :: x(n), fvec(m), wa(lwa)
 external fcn
 integer :: maxfev, mode, mp5n, nfev, nprint
-real :: ftol, gtol, xtol
-real, parameter :: factor = 1.0e2
+real(nswc_sp) :: ftol, gtol, xtol
+real(nswc_sp), parameter :: factor = 1.0e2
 !     **********
 !     SUBROUTINE lmdiff
 !     the purpose of lmdiff is to minimize the sum of the squares of
@@ -65963,17 +65989,17 @@ integer, intent(in) :: maxfev, mode, nprint
 integer, intent(out) :: info, nfev
 integer, intent(in) :: ldfjac
 integer, intent(inout) :: ipvt(n)
-real, intent(in) :: ftol, xtol, gtol, epsfcn, factor
-real, intent(inout) :: x(n), fvec(m), diag(n), fjac(ldfjac,n), &
+real(nswc_sp), intent(in) :: ftol, xtol, gtol, epsfcn, factor
+real(nswc_sp), intent(inout) :: x(n), fvec(m), diag(n), fjac(ldfjac,n), &
    & qtf(n), wa1(n), wa2(n), wa3(n), wa4(m)
 external fcn
 integer :: i, iflag, iter, j, l
-real :: actred, delta, dirder, eps, fnorm, fnorm1, gnorm, par, pnorm, prered, ratio, sum, temp, temp1, temp2, xnorm
-real, parameter :: p1 = 1.0e-1
-real, parameter :: p5 = 5.0e-1
-real, parameter :: p25 = 2.5e-1
-real, parameter :: p75 = 7.5e-1
-real, parameter :: p0001 = 1.0e-4
+real(nswc_sp) :: actred, delta, dirder, eps, fnorm, fnorm1, gnorm, par, pnorm, prered, ratio, sum, temp, temp1, temp2, xnorm
+real(nswc_sp), parameter :: p1 = 1.0e-1
+real(nswc_sp), parameter :: p5 = 5.0e-1
+real(nswc_sp), parameter :: p25 = 2.5e-1
+real(nswc_sp), parameter :: p75 = 7.5e-1
+real(nswc_sp), parameter :: p0001 = 1.0e-4
 !     **********
 !     SUBROUTINE lmdif
 !     the purpose of lmdif is to minimize the sum of the squares of
@@ -66302,14 +66328,14 @@ iflag = 0
 if (nprint > 0) call fcn(m,n,x,fvec,iflag)
 end subroutine lmdif
 
-pure real function enorm(n,x)
+pure real(nswc_sp) function enorm(n,x)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: x(n)
+real(nswc_sp), intent(in) :: x(n)
 integer :: i
-real :: agiant, floatn, s1, s2, s3, xabs, x1max, x3max
-real, parameter :: rdwarf = 3.834e-20
-real, parameter :: rgiant = 1.304e19
+real(nswc_sp) :: agiant, floatn, s1, s2, s3, xabs, x1max, x3max
+real(nswc_sp), parameter :: rdwarf = 3.834e-20
+real(nswc_sp), parameter :: rgiant = 1.304e19
 !     **********
 !     Function enorm
 !     given an n-vector x, this function calculates the
@@ -66391,11 +66417,11 @@ end function enorm
 pure subroutine dogleg(n,r,lr,diag,qtb,delta,x,wa1,wa2)
 implicit none
 integer, intent(in) :: n, lr
-real, intent(in) :: delta
-real, intent(in) :: r(lr), diag(n), qtb(n)
-real, intent(inout) :: x(n), wa1(n), wa2(n)
+real(nswc_sp), intent(in) :: delta
+real(nswc_sp), intent(in) :: r(lr), diag(n), qtb(n)
+real(nswc_sp), intent(inout) :: x(n), wa1(n), wa2(n)
 integer :: i, j, jj, jp1, k, l
-real :: alpha, bnorm, epsmch, gnorm, qnorm, sgnorm, sum, temp
+real(nswc_sp) :: alpha, bnorm, epsmch, gnorm, qnorm, sgnorm, sum, temp
 !     **********
 !     Subroutine dogleg
 !     given an M by n matrix A, an n by n nonsingular diagonal
@@ -66531,16 +66557,16 @@ integer :: n
 integer, intent(in) :: ldfjac
 integer :: iflag
 integer, intent(in) :: ml, mu
-real, intent(in) :: epsfcn
-real, intent(inout) :: x(n)
-real, intent(in) :: fvec(n)
-real, intent(inout) :: fjac(ldfjac,n)
-real :: wa1(n)
-real, intent(inout) :: wa2(n)
+real(nswc_sp), intent(in) :: epsfcn
+real(nswc_sp), intent(inout) :: x(n)
+real(nswc_sp), intent(in) :: fvec(n)
+real(nswc_sp), intent(inout) :: fjac(ldfjac,n)
+real(nswc_sp) :: wa1(n)
+real(nswc_sp), intent(inout) :: wa2(n)
 external fcn
 integer :: i, j, k, msum
-real :: eps, epsmch, h, temp
-real, parameter :: zero = 0.0e0
+real(nswc_sp) :: eps, epsmch, h, temp
+real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     SUBROUTINE fdjac1
 !     this subroutine computes a forward-difference approximation
@@ -66653,15 +66679,15 @@ implicit none
 integer :: m, n
 integer, intent(in) :: ldfjac
 integer :: iflag
-real, intent(in) :: epsfcn
-real, intent(inout) :: x(n)
-real, intent(in) :: fvec(m)
-real, intent(inout) :: fjac(ldfjac,n)
-real :: wa(m)
+real(nswc_sp), intent(in) :: epsfcn
+real(nswc_sp), intent(inout) :: x(n)
+real(nswc_sp), intent(in) :: fvec(m)
+real(nswc_sp), intent(inout) :: fjac(ldfjac,n)
+real(nswc_sp) :: wa(m)
 external fcn
 integer :: i, j
-real :: eps, epsmch, h, temp
-real, parameter :: zero = 0.0e0
+real(nswc_sp) :: eps, epsmch, h, temp
+real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     SUBROUTINE fdjac2
 !     this subroutine computes a forward-difference approximation
@@ -66737,16 +66763,16 @@ pure subroutine lmpar(n,r,ldr,ipvt,diag,qtb,delta,par,x,sdiag,wa1, &
 implicit none
 integer, intent(in) :: n, ldr
 integer, intent(in) :: ipvt(n)
-real, intent(in) :: delta
-real, intent(inout) :: par
-real, intent(inout) :: r(ldr,n)
-real, intent(in) :: diag(n), qtb(n)
-real, intent(inout) :: x(n), sdiag(n), wa1(n), wa2(n)
+real(nswc_sp), intent(in) :: delta
+real(nswc_sp), intent(inout) :: par
+real(nswc_sp), intent(inout) :: r(ldr,n)
+real(nswc_sp), intent(in) :: diag(n), qtb(n)
+real(nswc_sp), intent(inout) :: x(n), sdiag(n), wa1(n), wa2(n)
 integer :: i, iter, j, jm1, jp1, k, l, nsing
-real :: dxnorm, dwarf, fp, gnorm, parc, parl, paru, sum, temp
-real, parameter :: p1 = 1.0e-1
-real, parameter :: p001 = 1.0e-3
-real, parameter :: zero = 0.0e0
+real(nswc_sp) :: dxnorm, dwarf, fp, gnorm, parc, parl, paru, sum, temp
+real(nswc_sp), parameter :: p1 = 1.0e-1
+real(nswc_sp), parameter :: p001 = 1.0e-3
+real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     Subroutine lmpar
 !     given an M by n matrix A, an n by n nonsingular diagonal
@@ -66942,11 +66968,11 @@ end subroutine lmpar
 pure subroutine qform(m,n,q,ldq,wa)
 implicit none
 integer, intent(in) :: m, n, ldq
-real, intent(inout) :: q(ldq,m), wa(m)
+real(nswc_sp), intent(inout) :: q(ldq,m), wa(m)
 integer :: i, j, jm1, k, l, minmn, np1
-real :: sum, temp
-real, parameter :: one = 1.0e0
-real, parameter :: zero = 0.0e0
+real(nswc_sp) :: sum, temp
+real(nswc_sp), parameter :: one = 1.0e0
+real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     Subroutine qform
 !     this subroutine proceeds from the computed QR factorization of
@@ -67019,12 +67045,12 @@ implicit none
 integer, intent(in) :: m, n, lda, lipvt
 integer, intent(inout) :: ipvt(lipvt)
 logical, intent(in) :: pivot
-real, intent(inout) :: a(lda,n), rdiag(n), acnorm(n), wa(n)
+real(nswc_sp), intent(inout) :: a(lda,n), rdiag(n), acnorm(n), wa(n)
 integer :: i, j, jp1, k, kmax, minmn
-real :: ajnorm, epsmch, sum, temp
-real, parameter :: one = 1.0e0
-real, parameter :: p05 = 5.0e-2
-real, parameter :: zero = 0.0e0
+real(nswc_sp) :: ajnorm, epsmch, sum, temp
+real(nswc_sp), parameter :: one = 1.0e0
+real(nswc_sp), parameter :: p05 = 5.0e-2
+real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     Subroutine qrfac
 !     this subroutine uses Householder transformations with column
@@ -67148,14 +67174,14 @@ pure subroutine qrsolv(n,r,ldr,ipvt,diag,qtb,x,sdiag,wa)
 implicit none
 integer, intent(in) :: n, ldr
 integer, intent(in) :: ipvt(n)
-real, intent(inout) :: r(ldr,n)
-real, intent(in) :: diag(n), qtb(n)
-real, intent(inout) :: x(n), sdiag(n), wa(n)
+real(nswc_sp), intent(inout) :: r(ldr,n)
+real(nswc_sp), intent(in) :: diag(n), qtb(n)
+real(nswc_sp), intent(inout) :: x(n), sdiag(n), wa(n)
 integer :: i, j, jp1, k, kp1, l, nsing
-real :: cos, cotan, qtbpj, sin, sum, tan, temp
-real, parameter :: p5 = 5.0e-1
-real, parameter :: p25 = 2.5e-1
-real, parameter :: zero = 0.0e0
+real(nswc_sp) :: cos, cotan, qtbpj, sin, sum, tan, temp
+real(nswc_sp), parameter :: p5 = 5.0e-1
+real(nswc_sp), parameter :: p25 = 2.5e-1
+real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     Subroutine qrsolv
 !     given an M by n matrix A, an n by n diagonal matrix D,
@@ -67298,11 +67324,11 @@ end subroutine qrsolv
 pure subroutine r1mpyq(m,n,a,lda,v,w)
 implicit none
 integer, intent(in) :: m, n, lda
-real, intent(inout) :: a(lda,n)
-real, intent(in) :: v(n), w(n)
+real(nswc_sp), intent(inout) :: a(lda,n)
+real(nswc_sp), intent(in) :: v(n), w(n)
 integer :: i, j, nmj, nm1
-real :: cos, sin, temp
-real, parameter :: one = 1.0e0
+real(nswc_sp) :: cos, sin, temp
+real(nswc_sp), parameter :: one = 1.0e0
 !     **********
 !     Subroutine r1mpyq
 !     given an m by n matrix a, this subroutine computes a*Q where
@@ -67370,15 +67396,15 @@ pure subroutine r1updt(m,n,s,ls,u,v,w,sing)
 implicit none
 integer, intent(in) :: m, n, ls
 logical, intent(inout) :: sing
-real, intent(inout) :: s(ls)
-real, intent(in) :: u(m)
-real, intent(inout) :: v(n), w(m)
+real(nswc_sp), intent(inout) :: s(ls)
+real(nswc_sp), intent(in) :: u(m)
+real(nswc_sp), intent(inout) :: v(n), w(m)
 integer :: i, j, jj, l, nmj, nm1
-real :: cos, cotan, giant, sin, tan, tau, temp
-real, parameter :: one = 1.0e0
-real, parameter :: p5 = 5.0e-1
-real, parameter :: p25 = 2.5e-1
-real, parameter :: zero = 0.0e0
+real(nswc_sp) :: cos, cotan, giant, sin, tan, tau, temp
+real(nswc_sp), parameter :: one = 1.0e0
+real(nswc_sp), parameter :: p5 = 5.0e-1
+real(nswc_sp), parameter :: p25 = 2.5e-1
+real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     Subroutine r1updt
 !     given an m by n lower trapezoidal matrix s, an m-vector u,
@@ -67531,12 +67557,12 @@ integer, intent(inout) :: ibasis, ind, iter, iwk(*)
 integer, intent(in) :: ka
 integer :: m
 integer, intent(in) :: mxiter, n0, numge, numle
-real :: a(ka,n0), b0(m)
-real, intent(inout) :: bi(m,m)
-real :: c(n0)
-real, intent(inout) :: wk(*), x(*), z
+real(nswc_sp) :: a(ka,n0), b0(m)
+real(nswc_sp), intent(inout) :: bi(m,m)
+real(nswc_sp) :: c(n0)
+real(nswc_sp), intent(inout) :: wk(*), x(*), z
 integer :: ip
-real :: eps0, rerr, rerrmn, rerrmx
+real(nswc_sp) :: eps0, rerr, rerrmn, rerrmx
 !-----------------------------------------------------------------------
 !     Simplex procedure for solving linear programming problems
 !-----------------------------------------------------------------------
@@ -67572,18 +67598,19 @@ implicit none
 integer, intent(inout) :: ind
 integer, intent(out) :: iter
 integer, intent(in) :: ka, m, mxiter, n0, numge, numle
-real, intent(in) :: eps0
-real, intent(inout) :: rerr
-real, intent(in) :: rerrmn, rerrmx
-real, intent(out) :: z
-real, intent(in) :: a(ka,n0), b0(m), c(n0)
-real, intent(inout) :: bi(m,m), xb(m), y(m), r(*)
+real(nswc_sp), intent(in) :: eps0
+real(nswc_sp), intent(inout) :: rerr
+real(nswc_sp), intent(in) :: rerrmn, rerrmx
+real(nswc_sp), intent(out) :: z
+real(nswc_sp), intent(in) :: a(ka,n0), b0(m), c(n0)
+real(nswc_sp), intent(inout) :: bi(m,m), xb(m), y(m), r(*)
 integer, intent(inout) :: ibasis(m), basis(*)
 integer, intent(inout) :: index(m)
 integer :: i, ibeg, icount, iend, ierr, ii, il, imin, iout, ip, j, jcol, jj, jmin, jp, k, ki, kj, l, ll, lrow, m0, mcheck, ms, n, &
    & npos, nrow, ns, nstep, num, bflag, nswc_ai_i4
-real :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax, nswc_ai_r4
-double precision :: dsum, dsump, dsumn, dt
+real(nswc_sp) :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax, &
+   & nswc_ai_r4
+real(nswc_dp) :: dsum, dsump, dsumn, dt
 !----------------------
 !     NSTEP = 1   Eliminate the negative variables
 !     NSTEP = 2   Phase 1 of the simplex algorithm
@@ -68359,12 +68386,12 @@ integer :: ita(*)
 integer, intent(inout) :: iter, iwk(*)
 integer :: jta(*), m
 integer, intent(in) :: mxiter, n0, numge, numle
-real :: b0(m)
-real, intent(inout) :: bi(m,m)
-real :: c(n0), ta(*)
-real, intent(inout) :: wk(*), x(*), z
+real(nswc_sp) :: b0(m)
+real(nswc_sp), intent(inout) :: bi(m,m)
+real(nswc_sp) :: c(n0), ta(*)
+real(nswc_sp), intent(inout) :: wk(*), x(*), z
 integer :: ip
-real :: eps0, rerr, rerrmn, rerrmx
+real(nswc_sp) :: eps0, rerr, rerrmn, rerrmx
 !-----------------------------------------------------------------------
 !     Simplex procedure for solving linear programming problems
 !-----------------------------------------------------------------------
@@ -68401,19 +68428,20 @@ implicit none
 integer, intent(inout) :: ind
 integer, intent(out) :: iter
 integer, intent(in) :: m, mxiter, n0, numge, numle
-real, intent(in) :: eps0
-real, intent(inout) :: rerr
-real, intent(in) :: rerrmn, rerrmx
-real, intent(out) :: z
-real, intent(in) :: ta(*), b0(m), c(n0)
-real, intent(inout) :: bi(m,m), xb(m), y(m), r(*)
+real(nswc_sp), intent(in) :: eps0
+real(nswc_sp), intent(inout) :: rerr
+real(nswc_sp), intent(in) :: rerrmn, rerrmx
+real(nswc_sp), intent(out) :: z
+real(nswc_sp), intent(in) :: ta(*), b0(m), c(n0)
+real(nswc_sp), intent(inout) :: bi(m,m), xb(m), y(m), r(*)
 integer, intent(in) :: ita(*), jta(*)
 integer, intent(inout) :: ibasis(m), basis(*)
 integer, intent(inout) :: index(m)
 integer :: i, ibeg, icount, iend, ierr, ii, il, imin, iout, ip, j, jcol, jj, jmin, jp, k, ki, kj, l, ll, lmax, lmin, lrow, m0, &
    & mcheck, ms, n, npos, ns, nstep, num, bflag, nswc_ai_i4
-real :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax, nswc_ai_r4
-double precision :: dsum, dsump, dsumn, dt
+real(nswc_sp) :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax, &
+   & nswc_ai_r4
+real(nswc_dp) :: dsum, dsump, dsumn, dt
 !----------------------
 !     NSTEP = 1   Eliminate the negative variables
 !     NSTEP = 2   Phase 1 of the simplex algorithm
@@ -69211,12 +69239,12 @@ implicit none
 integer, intent(in) :: iend
 integer, intent(inout) :: ierr, index(*), jp
 integer, intent(in) :: ka, n
-real, intent(inout) :: a(*), temp(n)
+real(nswc_sp), intent(inout) :: a(*), temp(n)
 integer :: i, ibeg, ij, ik, il, j, jcol, jj, k, kcol, kcount, kj, &
    & kj0, kk, kl, km1, kp1, l, lj, lj0, lk, lmin, max, mcol, ncol, nk, &
    & nm1, nmj, nmk, nn
-real :: c, pmin, s, nswc_ai_r4
-double precision :: dsum
+real(nswc_sp) :: c, pmin, s, nswc_ai_r4
+real(nswc_dp) :: dsum
 !     ******************************************************************
 !     crout procedure for inverting matrices
 !     ******************************************************************
@@ -69708,9 +69736,9 @@ integer, intent(in) :: m, n, num
 integer, intent(inout) :: p(n), w(n)
 integer, intent(in) :: k(m)
 integer, intent(inout) :: xstar(n), bck, vstar, iwk(num)
-real, intent(inout) :: wk(n)
+real(nswc_sp), intent(inout) :: wk(n)
 integer :: i, isumw, j, jj, jn, jnn, l, lx, lxi, maxw, minw, mn, n5, np1, npl, bb, bl, x, xl, b, ubb, f, pbl, q, v, bs, ps, ws, xs
-real :: ap, aw
+real(nswc_sp) :: ap, aw
 ! Subroutine to solve A 0-1 multiple knapsack problem of n
 ! ITEMS (WITH  n .GE. 2) AND  m  KNAPSACKS (WITH  m .GE. 1 ,
 ! I.E. also suitable for A 0-1 single knapsack problem).
@@ -70269,7 +70297,7 @@ integer, intent(out) :: vs
 integer, intent(inout) :: ps(np1), ws(np1), xs(n)
 integer, intent(inout) :: d(n), min(n), pbar(n), wbar(n), zbar(n)
 integer :: ii, ii1, in, ip, j, j1, jj, kk, l, lim, lim1, ll, lold, mfirst, mink, ms, n1, nn, diff, pr, r, t, nswc_ai_i4
-real :: a, b, c
+real(nswc_sp) :: a, b, c
 ! Subroutine to solve the 0-1 single knapsack problem
 ! maximize    vs = ps(1)*xs(1) + ... + ps(ns)*xs(ns)
 ! subject to       ws(1)*xs(1) + ... + ws(ns)*xs(ns) .LE. qs
@@ -70475,13 +70503,13 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: mo
 integer, intent(out) :: num
-real, intent(in) :: aerr
-real, intent(inout) :: c, error
-real, intent(in) :: rerr, t
-real, intent(inout) :: y
+real(nswc_sp), intent(in) :: aerr
+real(nswc_sp), intent(inout) :: c, error
+real(nswc_sp), intent(in) :: rerr, t
+real(nswc_sp), intent(inout) :: y
 external fun
 integer :: ier, ierc, num1
-real :: a
+real(nswc_sp) :: a
 !-----------------------------------------------------------------------
 !             Computation of the inverse Laplace transform
 !              of a function which is not too oscillatory
@@ -70584,10 +70612,10 @@ end subroutine lainv
 subroutine abcon(fun, c, num, ierr)
 implicit none
 integer, intent(inout) :: ierr, num
-real, intent(inout) :: c
+real(nswc_sp), intent(inout) :: c
 external fun
 integer :: num1
-real :: eta, x0, xmin
+real(nswc_sp) :: eta, x0, xmin
 logical :: find
 !-----------------------------------------------------------------------
 !             Computation of the abscissa of convergence
@@ -70637,12 +70665,12 @@ subroutine srch(fun,cond,xl,eta,x,num,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(inout) :: num
-real, intent(in) :: eta
-real, intent(inout) :: x
-real, intent(in) :: xl
+real(nswc_sp), intent(in) :: eta
+real(nswc_sp), intent(inout) :: x
+real(nswc_sp), intent(in) :: xl
 external fun, cond
 integer :: i, ier, num1
-real :: dx, tol, x1, x2, xbar, xm
+real(nswc_sp) :: dx, tol, x1, x2, xbar, xm
 logical :: cnd
 !-----------------------------------------------------------------------
 !     srch computes an upper bound for the smallest number x such
@@ -70737,10 +70765,10 @@ end subroutine srch
 subroutine abcon1(fun, c, num, ierr)
 implicit none
 integer, intent(inout) :: ierr, num
-real, intent(inout) :: c
+real(nswc_sp), intent(inout) :: c
 external fun
 integer :: i, num1
-real :: dx, eta, tol, x1, x2, xbar, xm
+real(nswc_sp) :: dx, eta, tol, x1, x2, xbar, xm
 logical :: cmplex, iend, right
 !-----------------------------------------------------------------------
 !             Computation of the abscissa of convergence
@@ -70839,16 +70867,16 @@ end subroutine abcon1
 subroutine acond(fun, x, cond, num, ierr)
 implicit none
 integer, intent(inout) :: ierr, num
-real, intent(in) :: x
+real(nswc_sp), intent(in) :: x
 logical, intent(inout) :: cond
 external fun
 integer :: ier, ier1, ier2, iwk(100), n, num1, num2
-real :: a, c, error1, error2, wk(400), y, z1, z2
+real(nswc_sp) :: a, c, error1, error2, wk(400), y, z1, z2
 integer, parameter :: l = 100
 integer, parameter :: m = 400
-real, parameter :: aerr = 1.e-30
-real, parameter :: rerr = 1.e-4
-real, parameter :: tol = 1.e-4
+real(nswc_sp), parameter :: aerr = 1.e-30
+real(nswc_sp), parameter :: rerr = 1.e-4
+real(nswc_sp), parameter :: tol = 1.e-4
 !-----------------------------------------------------------------------
 !        This subroutine tests whether or not a given value of x
 !        lies to the right of the abscissa of convergence of the
@@ -70891,12 +70919,12 @@ end subroutine acond
 
 function acondf(x, y, c, fun)
 implicit none
-real, intent(in) :: c
-real :: x
-real, intent(in) :: y
+real(nswc_sp), intent(in) :: c
+real(nswc_sp) :: x
+real(nswc_sp), intent(in) :: y
 external fun
-real :: a, b, t
-real :: acondf
+real(nswc_sp) :: a, b, t
+real(nswc_sp) :: acondf
 !-----------------------------------------------------------------------
 !        acondf is the function integrated along the x-axis in
 !        acond. y is a dummy variable.
@@ -70908,11 +70936,11 @@ end function acondf
 
 function acondg(x, y, c, fun)
 implicit none
-real :: c, x
-real, intent(in) :: y
+real(nswc_sp) :: c, x
+real(nswc_sp), intent(in) :: y
 external fun
-real :: a, b, s, t, u, v
-real :: acondg
+real(nswc_sp) :: a, b, s, t, u, v
+real(nswc_sp) :: acondg
 !-----------------------------------------------------------------------
 !        acondg is the function integrated along the line x = c
 !        in acond. y is a dummy variable.
@@ -70927,17 +70955,17 @@ end function acondg
 subroutine xcond(fun, x, cond, num, ierr)
 implicit none
 integer, intent(inout) :: ierr, num
-real :: x
+real(nswc_sp) :: x
 logical, intent(out) :: cond
 external fun
 integer :: iwk(100), n
-real :: c, error, t, wk(400), y, y1, z
+real(nswc_sp) :: c, error, t, wk(400), y, y1, z
 integer, parameter :: l = 100
 integer, parameter :: m = 400
-real, parameter :: aerr = 1.e-30
-real, parameter :: rerr = 1.e-4
-real, parameter :: tol = 1.e-4
-real, parameter :: epsr = 1.e-2
+real(nswc_sp), parameter :: aerr = 1.e-30
+real(nswc_sp), parameter :: rerr = 1.e-4
+real(nswc_sp), parameter :: tol = 1.e-4
+real(nswc_sp), parameter :: epsr = 1.e-2
 !-----------------------------------------------------------------------
 !        This subroutine tests whether or not a given value of x
 !        lies to the right of all singularities of the complex
@@ -70983,11 +71011,11 @@ end subroutine xcond
 
 function xcondx(x,y,c,fun)
 implicit none
-real, intent(in) :: c
-real :: x, y
+real(nswc_sp), intent(in) :: c
+real(nswc_sp) :: x, y
 external fun
-real :: a, b, s, t, u, v
-real :: xcondx
+real(nswc_sp) :: a, b, s, t, u, v
+real(nswc_sp) :: xcondx
 !     Real part of the integrand in xcond
 call fun(x, y, a, b)
 call crec(x + c, y, s, t)
@@ -70998,11 +71026,11 @@ end function xcondx
 
 function xcondy(x,y,c,fun)
 implicit none
-real, intent(in) :: c
-real :: x, y
+real(nswc_sp), intent(in) :: c
+real(nswc_sp) :: x, y
 external fun
-real :: a, b, s, t, u, v
-real :: xcondy
+real(nswc_sp) :: a, b, s, t, u, v
+real(nswc_sp) :: xcondy
 !     Imaginary part of integrand in xcond
 call fun(x, y, a, b)
 call crec(x + c, y, s, t)
@@ -71015,14 +71043,14 @@ subroutine lainv1(fun,t,c,epsre,epsab,result,esterr,num, &
    & ier)
 implicit none
 external fun
-real, intent(in) :: c, epsab, epsre
-real, intent(out) :: esterr, result
-real, intent(in) :: t
+real(nswc_sp), intent(in) :: c, epsab, epsre
+real(nswc_sp), intent(out) :: esterr, result
+real(nswc_sp), intent(in) :: t
 integer, intent(out) :: ier
 integer, intent(out) :: num
-real :: a, aim, ak, are, arg, b, bb, e, eps, epsr1, f, fim, fre, &
+real(nswc_sp) :: a, aim, ak, are, arg, b, bb, e, eps, epsr1, f, fim, fre, &
    & pid16, r, s, si(32), tol
-complex :: rex(52), cres, res3la(3)
+complex(nswc_sp) :: rex(52), cres, res3la(3)
 integer :: i, k, kc, kk, ks, m, nex, nres
 integer, parameter :: max = 500
 ! ......................................................................
@@ -71188,16 +71216,16 @@ end subroutine lainv1
 
 pure subroutine cqext(n,epstab,result,abserr,res3la,nres)
 implicit none
-real, intent(out) :: abserr
-complex, intent(inout) :: epstab(52)
-complex, intent(out) :: result
-complex, intent(inout) :: res3la(3)
+real(nswc_sp), intent(out) :: abserr
+complex(nswc_sp), intent(inout) :: epstab(52)
+complex(nswc_sp), intent(out) :: result
+complex(nswc_sp), intent(inout) :: res3la(3)
 integer, intent(inout) :: n
 integer, intent(inout) :: nres
-real :: a1, a2, b1, b2, c1, c2, d1, d2, e1abs, epmach, epsinf, &
+real(nswc_sp) :: a1, a2, b1, b2, c1, c2, d1, d2, e1abs, epmach, epsinf, &
    & err1, err2, err3, error, oflow, res1, res2
-complex :: delta1, delta2, delta3, e0, e1, e2, e3, res, ss
-double precision :: r, s, u1, u2, u3, v1, v2, v3, ss1, ss2, w1, w2
+complex(nswc_sp) :: delta1, delta2, delta3, e0, e1, e2, e3, res, ss
+real(nswc_dp) :: r, s, u1, u2, u3, v1, v2, v3, ss1, ss2, w1, w2
 integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp, newelm, num
 ! 1.        cqext
 !           epsilon algorithm
@@ -71385,14 +71413,14 @@ integer, intent(in) :: inf
 integer, intent(out) :: last
 integer, intent(in) :: lenw, limit
 integer, intent(out) :: neval
-real, intent(out) :: abserr
-real, intent(in) :: bound
-real :: c
-real, intent(in) :: epsabs, epsrel
-real, intent(out) :: result
-real :: y
-real :: f
-real, intent(inout) :: work(lenw)
+real(nswc_sp), intent(out) :: abserr
+real(nswc_sp), intent(in) :: bound
+real(nswc_sp) :: c
+real(nswc_sp), intent(in) :: epsabs, epsrel
+real(nswc_sp), intent(out) :: result
+real(nswc_sp) :: y
+real(nswc_sp) :: f
+real(nswc_sp), intent(inout) :: work(lenw)
 integer, intent(inout) :: iwork(limit)
 external f, phi
 integer :: l1, l2, l3
@@ -71566,20 +71594,20 @@ integer, intent(inout) :: iord
 integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
-real, intent(out) :: abserr
-real, intent(inout) :: alist(limit), blist(limit)
-real, intent(in) :: bound
-real :: c
-real, intent(inout) :: elist(limit)
-real, intent(in) :: epsabs, epsrel
-real, intent(out) :: result
-real, intent(inout) :: rlist(limit)
-real :: y
-real :: f
+real(nswc_sp), intent(out) :: abserr
+real(nswc_sp), intent(inout) :: alist(limit), blist(limit)
+real(nswc_sp), intent(in) :: bound
+real(nswc_sp) :: c
+real(nswc_sp), intent(inout) :: elist(limit)
+real(nswc_sp), intent(in) :: epsabs, epsrel
+real(nswc_sp), intent(out) :: result
+real(nswc_sp), intent(inout) :: rlist(limit)
+real(nswc_sp) :: y
+real(nswc_sp) :: f
 external f, phi
 integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, &
    & ktmin, maxerr, nres, nrmax, numrl2
-real :: a1, a2, abseps, area, area1, area12, area2, b1, b2, boun, &
+real(nswc_sp) :: a1, a2, abseps, area, area1, area12, area2, b1, b2, boun, &
    & correc, defab1, defab2, defabs, dres, epmach, erlarg, erlast, &
    & errbnd, errmax, erro12, error1, error2, errsum, ertest, oflow, &
    & rerr, res3la(3), resabs, reseps, rlist2(52), small, t, uflow
@@ -71982,23 +72010,25 @@ subroutine qk15i1(f, phi, y, c, boun, inf, a, b, result, abserr, &
    & resabs, resasc, epmach, uflow)
 implicit none
 integer, intent(in) :: inf
-real, intent(in) :: a
-real, intent(inout) :: abserr
-real, intent(in) :: b, boun
-real :: c
-real, intent(in) :: epmach
-real, intent(inout) :: resabs, resasc, result
-real, intent(in) :: uflow
-real :: y
-real :: f
+real(nswc_sp), intent(in) :: a
+real(nswc_sp), intent(inout) :: abserr
+real(nswc_sp), intent(in) :: b, boun
+real(nswc_sp) :: c
+real(nswc_sp), intent(in) :: epmach
+real(nswc_sp), intent(inout) :: resabs, resasc, result
+real(nswc_sp), intent(in) :: uflow
+real(nswc_sp) :: y
+real(nswc_sp) :: f
 external f, phi
 integer :: j
-real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, fv1(7), fv2(7)
-real, parameter :: xgk(8) = [0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
+real(nswc_sp) :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, fv1(7), &
+   & fv2(7)
+real(nswc_sp), parameter :: xgk(8) = [0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
    & 0.7415311855993944e+00, 0.5860872354676911e+00, 0.4058451513773972e+00, 0.2077849550078985e+00, 0.0000000000000000e+00]
-real, parameter :: wgk(8) = [0.2293532201052922e-01, 0.6309209262997855e-01, 0.1047900103222502e+00, &
+real(nswc_sp), parameter :: wgk(8) = [0.2293532201052922e-01, 0.6309209262997855e-01, 0.1047900103222502e+00, &
    & 0.1406532597155259e+00, 0.1690047266392679e+00, 0.1903505780647854e+00, 0.2044329400752989e+00, 0.2094821410847278e+00]
-real, parameter :: wg(8) = [0.0000000000000000e+00, 0.1294849661688697e+00, 0.0000000000000000e+00, 0.2797053914892767e+00 &
+real(nswc_sp), parameter :: wg(8) = [0.0000000000000000e+00, 0.1294849661688697e+00, 0.0000000000000000e+00, &
+   & 0.2797053914892767e+00 &
    & , 0.0000000000000000e+00, 0.3818300505051189e+00, 0.0000000000000000e+00, 0.4179591836734694e+00]
 !-----------------------------------------------------------------------
 ! 1.        PURPOSE
@@ -72137,7 +72167,7 @@ subroutine fft(c,n,isn,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer :: isn, n
-real, intent(inout) :: c(*)
+real(nswc_sp), intent(inout) :: c(*)
 !-----------------------------------------------------------------------
 !     The complex array c of dimension n is interpreted by the code
 !     as a real array of dimension 2*n. if this association is not
@@ -72154,7 +72184,7 @@ subroutine fft1(a,b,n,isn,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer :: isn, n
-real, intent(inout) :: a(n), b(n)
+real(nswc_sp), intent(inout) :: a(n), b(n)
 !     ------------
 if (abs(isn) /= 1) go to 10
 call sfft(a,b,n,n,n,isn,ierr)
@@ -72166,7 +72196,7 @@ subroutine mfft(c,n,ndim,isn,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: isn, ndim
-real, intent(inout) :: c(*)
+real(nswc_sp), intent(inout) :: c(*)
 integer :: n(ndim)
 integer :: i, isign, nspan, ntot
 !-----------------------------------------------------------------------
@@ -72203,7 +72233,7 @@ implicit none
 integer, intent(inout) :: ierr
 integer :: isn
 integer, intent(in) :: ndim
-real, intent(inout) :: a(*), b(*)
+real(nswc_sp), intent(inout) :: a(*), b(*)
 integer :: n(ndim)
 integer :: i, nspan, ntot
 !     ------------
@@ -72231,10 +72261,10 @@ end subroutine mfft1
 subroutine sfft(a,b,ntot,n,nspan,isn,ierr)
 implicit none
 integer :: ierr, isn, n, nspan, ntot
-real :: a(*), b(*)
+real(nswc_sp) :: a(*), b(*)
 integer :: i, inc, j, jc, jf, jj, k, k1, k2, k3, k4, kk, ks, kspan, kspnn, kt, l, m, max, maxf, maxn, maxp, nfac(15), nn, np(209), &
    & nt, num, nswc_ai_i4
-real :: aa, aj, ajm, ajp, ak, akm, akp, at(23), bb, bj, bjm, bjp, &
+real(nswc_sp) :: aa, aj, ajm, ajp, ak, akm, akp, at(23), bb, bj, bjm, bjp, &
    & bk, bkm, bkp, bt(23), c1, c2, c3, c72, cd, ck(23), rad, radf, s1, &
    & s120, s2, s3, s72, sd, sk(23), u, v
 !  Multivariate complex Fourier transform, computed in place
@@ -72843,10 +72873,10 @@ end subroutine sfft
 subroutine cosqi(n,wsave)
 implicit none
 integer :: n
-real, intent(inout) :: wsave(*)
+real(nswc_sp), intent(inout) :: wsave(*)
 integer :: k
-real :: dt, fk
-real, parameter :: pih = 1.57079632679491
+real(nswc_sp) :: dt, fk
+real(nswc_sp), parameter :: pih = 1.57079632679491
 dt = pih/float(n)
 fk = 0.
 do k = 1,n
@@ -72892,10 +72922,10 @@ end subroutine cosqi
 subroutine cosqf(n,x,wsave)
 implicit none
 integer :: n
-real, intent(inout) :: wsave(*), x(*)
-real :: tsqx
+real(nswc_sp), intent(inout) :: wsave(*), x(*)
+real(nswc_sp) :: tsqx
 integer :: nswc_ai_i4
-real, parameter :: sqrt2 = 1.4142135623731
+real(nswc_sp), parameter :: sqrt2 = 1.4142135623731
 nswc_ai_i4 = n - 2
 if (nswc_ai_i4 < 0) go to 102
 if (nswc_ai_i4 == 0) go to 101
@@ -72910,10 +72940,10 @@ end subroutine cosqf
 subroutine cosqf1(n,x,w,xh)
 implicit none
 integer :: n
-real :: w(*)
-real, intent(inout) :: x(*), xh(*)
+real(nswc_sp) :: w(*)
+real(nswc_sp), intent(inout) :: x(*), xh(*)
 integer :: i, k, kc, modn, np2, ns2
-real :: xim1
+real(nswc_sp) :: xim1
 ns2 = (n + 1)/2
 np2 = n + 2
 do k = 2,ns2
@@ -72973,10 +73003,10 @@ end subroutine cosqf1
 subroutine cosqb(n,x,wsave)
 implicit none
 integer :: n
-real, intent(inout) :: wsave(*), x(*)
-real :: x1
+real(nswc_sp), intent(inout) :: wsave(*), x(*)
+real(nswc_sp) :: x1
 integer :: nswc_ai_i4
-real, parameter :: tsqrt2 = 2.82842712474619
+real(nswc_sp), parameter :: tsqrt2 = 2.82842712474619
 nswc_ai_i4 = n - 2
 if (nswc_ai_i4 < 0) go to 101
 if (nswc_ai_i4 == 0) go to 102
@@ -72993,10 +73023,10 @@ end subroutine cosqb
 subroutine cosqb1(n,x,w,xh)
 implicit none
 integer :: n
-real :: w(*)
-real, intent(inout) :: x(*), xh(*)
+real(nswc_sp) :: w(*)
+real(nswc_sp), intent(inout) :: x(*), xh(*)
 integer :: i, k, kc, modn, np2, ns2
-real :: xim1
+real(nswc_sp) :: xim1
 ns2 = (n + 1)/2
 np2 = n + 2
 do i = 3,n,2
@@ -73059,9 +73089,9 @@ end subroutine cosqb1
 subroutine sinqf(n,x,wsave)
 implicit none
 integer :: n
-real, intent(inout) :: wsave(*), x(*)
+real(nswc_sp), intent(inout) :: wsave(*), x(*)
 integer :: k, kc, ns2
-real :: xhold
+real(nswc_sp) :: xhold
 if (n == 1) return
 ns2 = n/2
 do k = 1,ns2
@@ -73112,9 +73142,9 @@ end subroutine sinqf
 subroutine sinqb(n,x,wsave)
 implicit none
 integer :: n
-real, intent(inout) :: wsave(*), x(*)
+real(nswc_sp), intent(inout) :: wsave(*), x(*)
 integer :: k, kc, ns2
-real :: xhold
+real(nswc_sp) :: xhold
 if (n > 1) go to 101
 x(1) = 4.*x(1)
 return
@@ -73149,7 +73179,7 @@ end subroutine sinqb
 subroutine rffti(n,wsave)
 implicit none
 integer :: n
-real, intent(inout) :: wsave(*)
+real(nswc_sp), intent(inout) :: wsave(*)
 if (n == 1) return
 call rffti1(n,wsave(n + 1),wsave(2*n + 1))
 end subroutine rffti
@@ -73157,10 +73187,10 @@ end subroutine rffti
 pure subroutine rffti1(n,wa,ifac)
 implicit none
 integer, intent(in) :: n
-real, intent(inout) :: wa(*), ifac(*)
+real(nswc_sp), intent(inout) :: wa(*), ifac(*)
 integer :: i, ib, ido, ii, ip, ipm, is, j, k1, l1, l2, ld, nf, &
    & nfm1, nl, nq, nr, ntry
-real :: arg, argh, argld, fi, tpi
+real(nswc_sp) :: arg, argh, argld, fi, tpi
 integer, parameter :: ntryh(4) = [4, 2, 3, 5]
 nl = n
 nf = 0
@@ -73257,7 +73287,7 @@ end subroutine rffti1
 subroutine rfftb(n,r,wsave)
 implicit none
 integer :: n
-real, intent(inout) :: r(*), wsave(*)
+real(nswc_sp), intent(inout) :: r(*), wsave(*)
 if (n == 1) return
 call rfftb1(n,r,wsave,wsave(n + 1),wsave(2*n + 1))
 end subroutine rfftb
@@ -73265,9 +73295,9 @@ end subroutine rfftb
 subroutine rfftb1(n,c,ch,wa,ifac)
 implicit none
 integer, intent(in) :: n
-real, intent(inout) :: c(*), ch(*)
-real :: wa(*)
-real, intent(in) :: ifac(*)
+real(nswc_sp), intent(inout) :: c(*), ch(*)
+real(nswc_sp) :: wa(*)
+real(nswc_sp), intent(in) :: ifac(*)
 integer :: i, idl1, ido, ip, iw, ix2, ix3, ix4, k1, l1, l2, na, nf
 nf = ifac(2)
 na = 0
@@ -73329,11 +73359,11 @@ end subroutine rfftb1
 subroutine radb2(ido,l1,cc,ch,wa1)
 implicit none
 integer, intent(in) :: ido, l1
-real :: cc(ido,2,l1)
-real, intent(inout) :: ch(ido,l1,*)
-real :: wa1(*)
+real(nswc_sp) :: cc(ido,2,l1)
+real(nswc_sp), intent(inout) :: ch(ido,l1,*)
+real(nswc_sp) :: wa1(*)
 integer :: i, ic, idp2, k, nswc_ai_i4
-real :: ti2, tr2
+real(nswc_sp) :: ti2, tr2
 do k = 1,l1
    ch(1,k,1) = cc(1,1,k) + cc(ido,2,k)
    ch(1,k,2) = cc(1,1,k) - cc(ido,2,k)
@@ -73378,13 +73408,13 @@ end subroutine radb2
 subroutine radb3(ido,l1,cc,ch,wa1,wa2)
 implicit none
 integer, intent(in) :: ido, l1
-real :: cc(ido,3,l1)
-real, intent(inout) :: ch(ido,l1,*)
-real :: wa1(*), wa2(*)
+real(nswc_sp) :: cc(ido,3,l1)
+real(nswc_sp), intent(inout) :: ch(ido,l1,*)
+real(nswc_sp) :: wa1(*), wa2(*)
 integer :: i, ic, idp2, k
-real :: ci2, ci3, cr2, cr3, di2, di3, dr2, dr3, ti2, tr2
-real, parameter :: taur = -.5
-real, parameter :: taui = .866025403784439
+real(nswc_sp) :: ci2, ci3, cr2, cr3, di2, di3, dr2, dr3, ti2, tr2
+real(nswc_sp), parameter :: taur = -.5
+real(nswc_sp), parameter :: taui = .866025403784439
 do k = 1,l1
    tr2 = cc(ido,2,k) + cc(ido,2,k)
    cr2 = cc(1,1,k) + taur*tr2
@@ -73444,12 +73474,12 @@ end subroutine radb3
 subroutine radb4(ido,l1,cc,ch,wa1,wa2,wa3)
 implicit none
 integer, intent(in) :: ido, l1
-real :: cc(ido,4,l1)
-real, intent(inout) :: ch(ido,l1,*)
-real :: wa1(*), wa2(*), wa3(*)
+real(nswc_sp) :: cc(ido,4,l1)
+real(nswc_sp), intent(inout) :: ch(ido,l1,*)
+real(nswc_sp) :: wa1(*), wa2(*), wa3(*)
 integer :: i, ic, idp2, k, nswc_ai_i4
-real :: ci2, ci3, ci4, cr2, cr3, cr4, ti1, ti2, ti3, ti4, tr1, tr2, tr3, tr4
-real, parameter :: sqrt2 = 1.414213562373095
+real(nswc_sp) :: ci2, ci3, ci4, cr2, cr3, cr4, ti1, ti2, ti3, ti4, tr1, tr2, tr3, tr4
+real(nswc_sp), parameter :: sqrt2 = 1.414213562373095
 do k = 1,l1
    tr1 = cc(1,1,k) - cc(ido,4,k)
    tr2 = cc(1,1,k) + cc(ido,4,k)
@@ -73538,15 +73568,16 @@ end subroutine radb4
 subroutine radb5(ido,l1,cc,ch,wa1,wa2,wa3,wa4)
 implicit none
 integer, intent(in) :: ido, l1
-real :: cc(ido,5,l1)
-real, intent(inout) :: ch(ido,l1,*)
-real :: wa1(*), wa2(*), wa3(*), wa4(*)
+real(nswc_sp) :: cc(ido,5,l1)
+real(nswc_sp), intent(inout) :: ch(ido,l1,*)
+real(nswc_sp) :: wa1(*), wa2(*), wa3(*), wa4(*)
 integer :: i, ic, idp2, k
-real :: ci2, ci3, ci4, ci5, cr2, cr3, cr4, cr5, di2, di3, di4, di5, dr2, dr3, dr4, dr5, ti2, ti3, ti4, ti5, tr2, tr3, tr4, tr5
-real, parameter :: tr11 = .309016994374947
-real, parameter :: ti11 = .951056516295154
-real, parameter :: tr12 = -.809016994374947
-real, parameter :: ti12 = .587785252292473
+real(nswc_sp) :: ci2, ci3, ci4, ci5, cr2, cr3, cr4, cr5, di2, di3, di4, di5, dr2, dr3, dr4, dr5, ti2, ti3, ti4, ti5, tr2, tr3, tr4 &
+   & , tr5
+real(nswc_sp), parameter :: tr11 = .309016994374947
+real(nswc_sp), parameter :: ti11 = .951056516295154
+real(nswc_sp), parameter :: tr12 = -.809016994374947
+real(nswc_sp), parameter :: ti12 = .587785252292473
 do k = 1,l1
    ti5 = cc(1,3,k) + cc(1,3,k)
    ti4 = cc(1,5,k) + cc(1,5,k)
@@ -73649,14 +73680,14 @@ end subroutine radb5
 subroutine radbg(ido,ip,l1,idl1,cc,c1,c2,ch,ch2,wa)
 implicit none
 integer, intent(in) :: idl1, ido, ip, l1
-real, intent(inout) :: c1(ido,l1,ip), c2(idl1,ip)
-real :: cc(ido,ip,l1)
-real, intent(inout) :: ch(ido,l1,ip), ch2(idl1,ip)
-real :: wa(*)
+real(nswc_sp), intent(inout) :: c1(ido,l1,ip), c2(idl1,ip)
+real(nswc_sp) :: cc(ido,ip,l1)
+real(nswc_sp), intent(inout) :: ch(ido,l1,ip), ch2(idl1,ip)
+real(nswc_sp) :: wa(*)
 integer :: i, ic, idij, idp2, ik, ipp2, ipph, is, j, j2, jc, k, l, &
    & lc, nbd
-real :: ai1, ai2, ar1, ar1h, ar2, ar2h, arg, dc2, dcp, ds2, dsp
-real, parameter :: tpi = 6.28318530717959
+real(nswc_sp) :: ai1, ai2, ar1, ar1h, ar2, ar2h, arg, dc2, dcp, ds2, dsp
+real(nswc_sp), parameter :: tpi = 6.28318530717959
 arg = tpi/float(ip)
 dcp = cos(arg)
 dsp = sin(arg)
@@ -73853,7 +73884,7 @@ end subroutine radbg
 subroutine rfftf(n,r,wsave)
 implicit none
 integer :: n
-real, intent(inout) :: r(*), wsave(*)
+real(nswc_sp), intent(inout) :: r(*), wsave(*)
 if (n == 1) return
 call rfftf1(n,r,wsave,wsave(n + 1),wsave(2*n + 1))
 end subroutine rfftf
@@ -73861,9 +73892,9 @@ end subroutine rfftf
 subroutine rfftf1(n,c,ch,wa,ifac)
 implicit none
 integer, intent(in) :: n
-real, intent(inout) :: c(*), ch(*)
-real :: wa(*)
-real, intent(in) :: ifac(*)
+real(nswc_sp), intent(inout) :: c(*), ch(*)
+real(nswc_sp) :: wa(*)
+real(nswc_sp), intent(in) :: ifac(*)
 integer :: i, idl1, ido, ip, iw, ix2, ix3, ix4, k1, kh, l1, l2, &
    & na, nf
 nf = ifac(2)
@@ -73926,11 +73957,11 @@ end subroutine rfftf1
 subroutine radf2(ido,l1,cc,ch,wa1)
 implicit none
 integer, intent(in) :: ido, l1
-real :: cc(ido,l1,*)
-real, intent(inout) :: ch(ido,2,l1)
-real :: wa1(*)
+real(nswc_sp) :: cc(ido,l1,*)
+real(nswc_sp), intent(inout) :: ch(ido,2,l1)
+real(nswc_sp) :: wa1(*)
 integer :: i, ic, idp2, k, nswc_ai_i4
-real :: ti2, tr2
+real(nswc_sp) :: ti2, tr2
 do k = 1,l1
    ch(1,1,k) = cc(1,k,1) + cc(1,k,2)
    ch(ido,2,k) = cc(1,k,1) - cc(1,k,2)
@@ -73975,13 +74006,13 @@ end subroutine radf2
 subroutine radf3(ido,l1,cc,ch,wa1,wa2)
 implicit none
 integer, intent(in) :: ido, l1
-real :: cc(ido,l1,*)
-real, intent(inout) :: ch(ido,3,l1)
-real :: wa1(*), wa2(*)
+real(nswc_sp) :: cc(ido,l1,*)
+real(nswc_sp), intent(inout) :: ch(ido,3,l1)
+real(nswc_sp) :: wa1(*), wa2(*)
 integer :: i, ic, idp2, k
-real :: ci2, cr2, di2, di3, dr2, dr3, ti2, ti3, tr2, tr3
-real, parameter :: taur = -.5
-real, parameter :: taui = .866025403784439
+real(nswc_sp) :: ci2, cr2, di2, di3, dr2, dr3, ti2, ti3, tr2, tr3
+real(nswc_sp), parameter :: taur = -.5
+real(nswc_sp), parameter :: taui = .866025403784439
 do k = 1,l1
    cr2 = cc(1,k,2) + cc(1,k,3)
    ch(1,1,k) = cc(1,k,1) + cr2
@@ -74039,12 +74070,12 @@ end subroutine radf3
 subroutine radf4(ido,l1,cc,ch,wa1,wa2,wa3)
 implicit none
 integer, intent(in) :: ido, l1
-real :: cc(ido,l1,*)
-real, intent(inout) :: ch(ido,4,l1)
-real :: wa1(*), wa2(*), wa3(*)
+real(nswc_sp) :: cc(ido,l1,*)
+real(nswc_sp), intent(inout) :: ch(ido,4,l1)
+real(nswc_sp) :: wa1(*), wa2(*), wa3(*)
 integer :: i, ic, idp2, k, nswc_ai_i4
-real :: ci2, ci3, ci4, cr2, cr3, cr4, ti1, ti2, ti3, ti4, tr1, tr2, tr3, tr4
-real, parameter :: hsqt2 = .7071067811865475
+real(nswc_sp) :: ci2, ci3, ci4, cr2, cr3, cr4, ti1, ti2, ti3, ti4, tr1, tr2, tr3, tr4
+real(nswc_sp), parameter :: hsqt2 = .7071067811865475
 do k = 1,l1
    tr1 = cc(1,k,2) + cc(1,k,4)
    tr2 = cc(1,k,1) + cc(1,k,3)
@@ -74129,15 +74160,16 @@ end subroutine radf4
 subroutine radf5(ido,l1,cc,ch,wa1,wa2,wa3,wa4)
 implicit none
 integer, intent(in) :: ido, l1
-real :: cc(ido,l1,*)
-real, intent(inout) :: ch(ido,5,l1)
-real :: wa1(*), wa2(*), wa3(*), wa4(*)
+real(nswc_sp) :: cc(ido,l1,*)
+real(nswc_sp), intent(inout) :: ch(ido,5,l1)
+real(nswc_sp) :: wa1(*), wa2(*), wa3(*), wa4(*)
 integer :: i, ic, idp2, k
-real :: ci2, ci3, ci4, ci5, cr2, cr3, cr4, cr5, di2, di3, di4, di5, dr2, dr3, dr4, dr5, ti2, ti3, ti4, ti5, tr2, tr3, tr4, tr5
-real, parameter :: tr11 = .309016994374947
-real, parameter :: ti11 = .951056516295154
-real, parameter :: tr12 = -.809016994374947
-real, parameter :: ti12 = .587785252292473
+real(nswc_sp) :: ci2, ci3, ci4, ci5, cr2, cr3, cr4, cr5, di2, di3, di4, di5, dr2, dr3, dr4, dr5, ti2, ti3, ti4, ti5, tr2, tr3, tr4 &
+   & , tr5
+real(nswc_sp), parameter :: tr11 = .309016994374947
+real(nswc_sp), parameter :: ti11 = .951056516295154
+real(nswc_sp), parameter :: tr12 = -.809016994374947
+real(nswc_sp), parameter :: ti12 = .587785252292473
 do k = 1,l1
    cr2 = cc(1,k,5) + cc(1,k,2)
    ci5 = cc(1,k,5) - cc(1,k,2)
@@ -74236,13 +74268,13 @@ end subroutine radf5
 subroutine radfg(ido,ip,l1,idl1,cc,c1,c2,ch,ch2,wa)
 implicit none
 integer, intent(in) :: idl1, ido, ip, l1
-real, intent(inout) :: c1(ido,l1,ip), c2(idl1,ip), cc(ido,ip,l1), &
+real(nswc_sp), intent(inout) :: c1(ido,l1,ip), c2(idl1,ip), cc(ido,ip,l1), &
    & ch(ido,l1,ip), ch2(idl1,ip)
-real :: wa(*)
+real(nswc_sp) :: wa(*)
 integer :: i, ic, idij, idp2, ik, ipp2, ipph, is, j, j2, jc, k, l, &
    & lc, nbd
-real :: ai1, ai2, ar1, ar1h, ar2, ar2h, arg, dc2, dcp, ds2, dsp
-real, parameter :: tpi = 6.28318530717959
+real(nswc_sp) :: ai1, ai2, ar1, ar1h, ar2, ar2h, arg, dc2, dcp, ds2, dsp
+real(nswc_sp), parameter :: tpi = 6.28318530717959
 arg = tpi/float(ip)
 dcp = cos(arg)
 dsp = sin(arg)
@@ -74407,11 +74439,11 @@ subroutine cheby(a, b, f, g, phi, eps, itno, mxiter, l, m, &
 implicit none
 integer, intent(inout) :: ierr, itno
 integer, intent(in) :: l, m, mxiter
-double precision, intent(in) :: a, b
-double precision :: f, g, phi
-double precision, intent(in) :: eps
-double precision, intent(inout) :: error
-double precision, intent(inout) :: p(*), q(*), w(*)
+real(nswc_dp), intent(in) :: a, b
+real(nswc_dp) :: f, g, phi
+real(nswc_dp), intent(in) :: eps
+real(nswc_dp), intent(inout) :: error
+real(nswc_dp), intent(inout) :: p(*), q(*), w(*)
 external f, g, phi
 integer :: i1, i2, i3, i4, i5, lp1, lpm, mp1, n, np1
 !     ******************************************************************
@@ -74446,23 +74478,23 @@ subroutine cheby1(a, b, f, g, phi, eps, itno, mxiter, l, m, &
 implicit none
 integer, intent(inout) :: ierr, itno
 integer, intent(in) :: l, lp1, lpm, m, mp1, mxiter, n, np1
-double precision, intent(in) :: a, b
-double precision :: f, g, phi
-double precision, intent(in) :: eps
-double precision, intent(out) :: error
-double precision, intent(inout) :: p(lp1), q(mp1), x(np1), &
+real(nswc_dp), intent(in) :: a, b
+real(nswc_dp) :: f, g, phi
+real(nswc_dp), intent(in) :: eps
+real(nswc_dp), intent(out) :: error
+real(nswc_dp), intent(inout) :: p(lp1), q(mp1), x(np1), &
    & xval(np1), c(np1,np1), d(np1), err(np1), h(np1)
 external f, g, phi
 integer :: i, ii, j, k, kount, lpi
-double precision :: b1, del, dn, dnp1, h1, olderr, sign, sum, templ, test, u, xi, xlb, xm1, y, y2, y3, z, zz, z1, z2, z3
-double precision, parameter :: pi = 3.14159265358979323846264338328d0
-double precision, parameter :: zero = 0.d0
-double precision, parameter :: half = .5d0
-double precision, parameter :: one = 1.d0
-double precision, parameter :: ten = 10.d0
-double precision, parameter :: eps0 = 1.d-2
-double precision, parameter :: tau = .015d0
-double precision, parameter :: c0 = .0625d0
+real(nswc_dp) :: b1, del, dn, dnp1, h1, olderr, sign, sum, templ, test, u, xi, xlb, xm1, y, y2, y3, z, zz, z1, z2, z3
+real(nswc_dp), parameter :: pi = 3.14159265358979323846264338328d0
+real(nswc_dp), parameter :: zero = 0.d0
+real(nswc_dp), parameter :: half = .5d0
+real(nswc_dp), parameter :: one = 1.d0
+real(nswc_dp), parameter :: ten = 10.d0
+real(nswc_dp), parameter :: eps0 = 1.d-2
+real(nswc_dp), parameter :: tau = .015d0
+real(nswc_dp), parameter :: c0 = .0625d0
 !     ------------------------------------------------------------------
 !     -------------------
 !     -------------------
@@ -74709,13 +74741,13 @@ pure subroutine cerr(t, ft, gt, phit, del, ierr, l, lp1, m, np1, d)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, lp1, m, np1
-double precision, intent(in) :: t, ft, gt, phit
-double precision, intent(inout) :: del
-double precision, intent(in) :: d(np1)
+real(nswc_dp), intent(in) :: t, ft, gt, phit
+real(nswc_dp), intent(inout) :: del
+real(nswc_dp), intent(in) :: d(np1)
 integer :: i, ii
-double precision :: p, q, r
-double precision, parameter :: zero = 0.d0
-double precision, parameter :: one = 1.d0
+real(nswc_dp) :: p, q, r
+real(nswc_dp), parameter :: zero = 0.d0
+real(nswc_dp), parameter :: one = 1.d0
 !     ------------------------------------------------------------------
 !     Compute the approximation error at point t
 !     ------------------------------------------------------------------
@@ -74754,10 +74786,10 @@ subroutine adapt(f, xlft, xrgt, epsln, npiece, errest, xknots, &
 implicit none
 integer :: ierr, kbreak, kdiff(kbreak), kmax, mo, ndeg, npiece, &
    & nsmth
-double precision :: xknots(*), coefs(kmax,*)
-double precision :: anorm, brakpt(kbreak), dx, epsln, errest, &
+real(nswc_dp) :: xknots(*), coefs(kmax,*)
+real(nswc_dp) :: anorm, brakpt(kbreak), dx, epsln, errest, &
    & vallft(kbreak), valrgt(kbreak), xlft, xrgt
-double precision :: f
+real(nswc_dp) :: f
 external f
 integer :: k, kdimen, ndimen
 !        ===============================================================
@@ -74810,8 +74842,8 @@ end subroutine adapt
 subroutine adapt1(f, xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
 integer :: ierr, kdimen, kmax, ndimen
-double precision :: xknots(kdimen), coefs(kmax,ndimen)
-double precision :: f
+real(nswc_dp) :: xknots(kdimen), coefs(kmax,ndimen)
+real(nswc_dp) :: f
 external f
 !     This algorithm computes a piecewise polynomial approximation
 !  of specified smoothness, accuracy and degree.  The input to the
@@ -74984,17 +75016,17 @@ end subroutine adapt1
 subroutine adset(xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
 integer :: ierr, kdimen, kmax, ndimen
-double precision :: xknots(kdimen), coefs(kmax,ndimen)
+real(nswc_dp) :: xknots(kdimen), coefs(kmax,ndimen)
 integer :: j, k, limsm
-double precision :: akmax, eps, km1, ratio
+real(nswc_dp) :: akmax, eps, km1, ratio
 !        ===============================================================
 ! **  This program checks the input data and initializes the computation
-double precision, parameter :: eps0 = 1.d-30
-double precision, parameter :: zero = 0.d0
-double precision, parameter :: one = 1.d0
-double precision, parameter :: two = 2.d0
-double precision, parameter :: three = 3.d0
-double precision, parameter :: c100 = 100.d0
+real(nswc_dp), parameter :: eps0 = 1.d-30
+real(nswc_dp), parameter :: zero = 0.d0
+real(nswc_dp), parameter :: one = 1.d0
+real(nswc_dp), parameter :: two = 2.d0
+real(nswc_dp), parameter :: three = 3.d0
+real(nswc_dp), parameter :: c100 = 100.d0
 integer, parameter :: kleft = 1
 integer, parameter :: kright = 2
 integer, parameter :: kboth = 3
@@ -75079,7 +75111,7 @@ end subroutine adset
 subroutine adtake(ierr)
 implicit none
 integer :: ierr
-double precision :: dx, ratio
+real(nswc_dp) :: dx, ratio
 !        ===============================================================
 ! **  This program takes an active interval off the top of the stack
 !     it also does most of the work of locating and handling
@@ -75132,10 +75164,10 @@ end subroutine adtake
 
 subroutine adcomp(f)
 implicit none
-double precision :: f
+real(nswc_dp) :: f
 external f
 integer :: j
-double precision :: absc(4), aj, dx, fdumb(9), r, wgts(4)
+real(nswc_dp) :: absc(4), aj, dx, fdumb(9), r, wgts(4)
 !        ===============================================================
 ! **  This program computes the piecewise polynomial approximation on
 !     the current interval. It also estimates the error
@@ -75210,21 +75242,21 @@ nswc_state_kontrl_errori = errint(f,polydd,nswc_state_kontrl_xleft(nswc_state_ko
 nswc_state_kontrl_errori = r*nswc_state_kontrl_errori
 end subroutine adcomp
 
-double precision function errint(f, fit, aaa, bbb, points, weight)
+real(nswc_dp) function errint(f, fit, aaa, bbb, points, weight)
 implicit none
-double precision :: aaa, bbb, fit, points(*), weight(*)
-double precision :: f
+real(nswc_dp) :: aaa, bbb, fit, points(*), weight(*)
+real(nswc_dp) :: f
 external f, fit
 integer :: j
-double precision :: abmid, ba, fdumb(9), p, pj, er, f1, f2
+real(nswc_dp) :: abmid, ba, fdumb(9), p, pj, er, f1, f2
 !        ===============================================================
 ! **  This function does a four point integration rule for the
 !     absolute value of the difference of two functions( f and fit )
 !                   abs( f(X) - fit(X) )**NORM
 !     the integration uses the points and weights given and scaled
 !     from (-1,1) to (aaa,bbb)
-double precision, parameter :: two = 2.0d0
-double precision, parameter :: three = 3.0d0
+real(nswc_dp), parameter :: two = 2.0d0
+real(nswc_dp), parameter :: three = 3.0d0
 !         Compute midpoint = abmid and half length = ba of interval
 abmid = (aaa + bbb)/two
 ba = (bbb - aaa)/two
@@ -75263,7 +75295,7 @@ implicit none
 integer :: ni, nl, nr
 integer :: idif, ipt, ipt2, j, k, nddx, nl1, nl2, nr1, nr2, nrl, &
    & nrlj, nrlj1
-double precision :: difff, diffx
+real(nswc_dp) :: difff, diffx
 !        ===============================================================
 ! **  This program computes the divided differences array as follows
 !         nl COALESCED POINTS ON left   - DERIV VALUES IN FLEFT
@@ -75367,9 +75399,9 @@ end do
 150 continue
 end subroutine newton
 
-double precision function polydd(x)
+real(nswc_dp) function polydd(x)
 implicit none
-double precision :: x
+real(nswc_dp) :: x
 integer :: j, k
 !        ===============================================================
 ! **  This function evaluates the current polynomial piece represented
@@ -75383,13 +75415,13 @@ end function polydd
 
 subroutine adchk
 implicit none
-double precision :: aknots, dtest, dx
+real(nswc_dp) :: aknots, dtest, dx
 integer :: nswc_ai_i4
 !        ===============================================================
 ! **  This program checks for discarding interval, applies various
 !     tests about discarding involving edist and charf.
-double precision, parameter :: three = 3.0d0
-double precision, parameter :: five = 5.0d0
+real(nswc_dp), parameter :: three = 3.0d0
+real(nswc_dp), parameter :: five = 5.0d0
 nswc_state_kontrl_discrd = .false.
 dx = nswc_state_kontrl_xright(nswc_state_kontrl_nstack) - nswc_state_kontrl_xleft(nswc_state_kontrl_nstack)
 if (dx > nswc_state_inputz_charf) return
@@ -75416,18 +75448,18 @@ end subroutine adchk
 subroutine adput(xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
 integer :: ierr, kdimen, kmax, ndimen
-double precision :: xknots(kdimen), coefs(kmax,ndimen)
+real(nswc_dp) :: xknots(kdimen), coefs(kmax,ndimen)
 integer :: k
-double precision :: dx, powers(20), p, ratio
+real(nswc_dp) :: dx, powers(20), p, ratio
 !        ===============================================================
 ! **  This program puts intervals on the stack or discards them.
 !     When an interval is discarded a new knot is found. Then this
 !     program updates the error estimate, the XKNOT array, transforms
 !     the polynomial to the power form and put the coefficients into
 !     the array coefs.  It also checks for passing break points
-double precision, parameter :: half = .5d0
-double precision, parameter :: one = 1.d0
-double precision, parameter :: three = 3.d0
+real(nswc_dp), parameter :: half = .5d0
+real(nswc_dp), parameter :: one = 1.d0
+real(nswc_dp), parameter :: three = 3.d0
 !            Check for discarding the interval
 if (nswc_state_kontrl_discrd) go to 30
 !         Subdivide interval and place on stack
@@ -75470,10 +75502,10 @@ end subroutine adput
 
 subroutine adtran(d, powers)
 implicit none
-double precision :: d(20,*), powers(*)
+real(nswc_dp) :: d(20,*), powers(*)
 integer :: i, ii, j, k, khi, koef, l, ltop, ni, ni1, nl, nr, nri, &
    & nri1, nrl, nrli, nrlk
-double precision :: shift, xl, xr, xtemp(20)
+real(nswc_dp) :: shift, xl, xr, xtemp(20)
 !        ===============================================================
 ! **  This program converts polynomial representation from divided
 !     difference to power form.  There are coalesced points on each
@@ -75570,15 +75602,15 @@ end subroutine adtran
 subroutine cpsc(f, z, n, ic, tol, r, rs, err)
 implicit none
 integer, intent(in) :: ic, n
-real, intent(inout) :: err(n), r
-real, intent(in) :: tol
-complex :: f
-complex, intent(inout) :: rs(n)
-complex :: z
+real(nswc_sp), intent(inout) :: err(n), r
+real(nswc_sp), intent(in) :: tol
+complex(nswc_sp) :: f
+complex(nswc_sp), intent(inout) :: rs(n)
+complex(nswc_sp) :: z
 integer :: i, ia, inr, iq, is, it, ix, j, jn, kl, km, kn, l, l1, l2, lf, ln, m, np, nr
-real :: ang, b, c(4), cm, cp, ct, cx, ep6, eps, eps0, fac, fact, &
+real(nswc_sp) :: ang, b, c(4), cm, cp, ct, cx, ep6, eps, eps0, fac, fact, &
    & fc(3), pi, r1, ra, re, sc(4), sf, sp, sr
-complex :: a(64), v, rt(51,3), fv(6), u, w, t, rv(3), rq, s, xk, co
+complex(nswc_sp) :: a(64), v, rt(51,3), fv(6), u, w, t, rv(3), rq, s, xk, co
 integer, parameter :: iw(7) = [1, 2, 4, 8, 16, 32, 64]
 integer, parameter :: ip(32) = [64, 32, 48, 16, 56, 24, 40, 8, 60, 28, 44, 12, 52, 20, 36, 4, 62, 30, 46, 14, 54, 22, &
    & 38, 6, 58, 26, 42, 10, 50, 18, 34, 2]
@@ -75781,9 +75813,9 @@ end do
 contains
    pure function mult(re, co) result(nswc_sf_result)
       implicit none
-      real, intent(in) :: re
-      complex, intent(in) :: co
-      complex :: nswc_sf_result
+      real(nswc_sp), intent(in) :: re
+      complex(nswc_sp), intent(in) :: co
+      complex(nswc_sp) :: nswc_sf_result
       nswc_sf_result = cmplx(re*real(co),re*aimag(co))
    end function mult
 end subroutine cpsc
@@ -75792,18 +75824,18 @@ subroutine dcpsc(fun, x, y, n, ic, tol, r, rs1, rs2, err)
 implicit none
 external fun
 integer, intent(in) :: ic, n
-double precision :: x, y
-double precision, intent(in) :: tol
-double precision, intent(inout) :: r, rs1(n), rs2(n), err(n)
+real(nswc_dp) :: x, y
+real(nswc_dp), intent(in) :: tol
+real(nswc_dp), intent(inout) :: r, rs1(n), rs2(n), err(n)
 integer :: i, ia, inr, iq, is, it, ix, j, jn, kl, km, kn, l, l1, &
    & l2, lf, ln, m, mm1, np, nr
-double precision :: ang, b, cm, cp, ct, cx, eps, eps0, ep6, fac, fact, pi, ra, r1, s, sf, sp, sr, t, u, v, w, c(4), fc(3), sc(4), &
+real(nswc_dp) :: ang, b, cm, cp, ct, cx, eps, eps0, ep6, fac, fact, pi, ra, r1, s, sf, sp, sr, t, u, v, w, c(4), fc(3), sc(4), &
    & a1(64), a2(64), fv1(6), fv2(6), rt1(51,3), rt2(51,3)
 integer, parameter :: iw(7) = [1, 2, 4, 8, 16, 32, 64]
 integer, parameter :: ip(32) = [64, 32, 48, 16, 56, 24, 40, 8, 60, 28, 44, 12, 52, 20, 36, 4, 62, 30, 46, 14, 54, 22, &
    & 38, 6, 58, 26, 42, 10, 50, 18, 34, 2]
-double precision, parameter :: rv1(3) = [-.4d0, .7d0, .02d0]
-double precision, parameter :: rv2(3) = [.3d0, .2d0, -.06d0]
+real(nswc_dp), parameter :: rv1(3) = [-.4d0, .7d0, .02d0]
+real(nswc_dp), parameter :: rv2(3) = [.3d0, .2d0, -.06d0]
 !  Evaluation of complex power series coefficients or derivatives.
 !  *** Input parameters ***
 !    fun subroutine which computes the complex function F for which
@@ -76040,12 +76072,12 @@ end subroutine dcpsc
 function trp(a,n,x,y)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: a
-real :: x(n), y(n)
+real(nswc_sp), intent(in) :: a
+real(nswc_sp) :: x(n), y(n)
 integer :: i, il, ir, nm1
-real :: r
-real :: trp
-real :: nswc_ai_r4
+real(nswc_sp) :: r
+real(nswc_sp) :: trp
+real(nswc_sp) :: nswc_ai_r4
 nm1 = n - 1
 if (a < x(2)) go to 50
 if (a >= x(nm1)) go to 40
@@ -76075,12 +76107,12 @@ subroutine ltrp(m,x,y,n,xi,yi,ni,t,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, ni
-real, intent(inout) :: t(m)
-real :: x(n), xi(ni), y(n)
-real, intent(inout) :: yi(ni)
+real(nswc_sp), intent(inout) :: t(m)
+real(nswc_sp) :: x(n), xi(ni), y(n)
+real(nswc_sp), intent(inout) :: yi(ni)
 integer :: i, ii, il, ilm1, ilold, ipm, ir, istep, j, jmax, k, l, &
    & mm1, num
-real :: dl, dr, xx, nswc_ai_r4
+real(nswc_sp) :: dl, dr, xx, nswc_ai_r4
 !     ******************************************************************
 !     Lagrange interpolation
 !     ******************************************************************
@@ -76227,10 +76259,10 @@ subroutine htrp(n,x,y,a,t,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
-real, intent(inout) :: a(n), t(n)
-real :: x(n), y(n)
+real(nswc_sp), intent(inout) :: a(n), t(n)
+real(nswc_sp) :: x(n), y(n)
 integer :: i, ibeg, iend, k
-real :: diff, f, r
+real(nswc_sp) :: diff, f, r
 !     ******************************************************************
 !     Hermite interpolation
 !     ******************************************************************
@@ -76277,12 +76309,12 @@ end subroutine htrp
 pure subroutine pcoeff(alpha,n,x,a,c,t)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: alpha
-real, intent(in) :: x(*), a(n)
-real, intent(inout) :: c(n)
-double precision, intent(inout) :: t(n)
+real(nswc_sp), intent(in) :: alpha
+real(nswc_sp), intent(in) :: x(*), a(n)
+real(nswc_sp), intent(inout) :: c(n)
+real(nswc_dp), intent(inout) :: t(n)
 integer :: i, j, k, nm1
-double precision :: xx, r
+real(nswc_dp) :: xx, r
 if (n > 1) go to 10
 c(1) = a(1)
 return
@@ -76307,12 +76339,12 @@ pure subroutine pfit(nd,np,x,y,a,rnorm,phi,phix,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: nd, np
-real, intent(inout) :: rnorm
-real, intent(in) :: x(np), y(np)
-real, intent(inout) :: a(*), phi(2,*), phix(4,np)
+real(nswc_sp), intent(inout) :: rnorm
+real(nswc_sp), intent(in) :: x(np), y(np)
+real(nswc_sp), intent(inout) :: a(*), phi(2,*), phix(4,np)
 integer :: k, la, lb, ls, m, mp1, nd1
-real :: alpha, c, temp, xmax, xmin, za, zb, lambda
-double precision :: dalpha, dsum
+real(nswc_sp) :: alpha, c, temp, xmax, xmin, za, zb, lambda
+real(nswc_dp) :: dalpha, dsum
 !     ******************************************************************
 !     Unweighted least squares polynomial fit
 !     ******************************************************************
@@ -76447,12 +76479,12 @@ pure subroutine wpfit(nd,np,x,y,w,a,rnorm,phi,phix,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: nd, np
-real, intent(inout) :: rnorm
-real, intent(in) :: x(np), y(np), w(np)
-real, intent(inout) :: a(*), phi(2,*), phix(4,np)
+real(nswc_sp), intent(inout) :: rnorm
+real(nswc_sp), intent(in) :: x(np), y(np), w(np)
+real(nswc_sp), intent(inout) :: a(*), phi(2,*), phix(4,np)
 integer :: k, la, lb, ls, m, mp1, nd1, nw
-real :: alpha, c, temp, xmax, xmin, za, zb, lambda, nswc_ai_r4
-double precision :: dalpha, dsum
+real(nswc_sp) :: alpha, c, temp, xmax, xmin, za, zb, lambda, nswc_ai_r4
+real(nswc_dp) :: dalpha, dsum
 !     ******************************************************************
 !     Weighted least squares polynomial fit
 !     ******************************************************************
@@ -76603,11 +76635,11 @@ implicit none
 integer, intent(in) :: ibeg, iend
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
-real, intent(in) :: alpha, beta
-real, intent(in) :: x(n), y(n)
-real, intent(inout) :: a(n), b(n), c(n)
+real(nswc_sp), intent(in) :: alpha, beta
+real(nswc_sp), intent(in) :: x(n), y(n)
+real(nswc_sp), intent(inout) :: a(n), b(n), c(n)
 integer :: i, j, m, nm1, nswc_ai_i4
-real :: del, h, r, t
+real(nswc_sp) :: del, h, r, t
 !-----------------------------------------------------------------------
 !                   Cubic spline interpolation
 !-----------------------------------------------------------------------
@@ -76710,11 +76742,11 @@ pure subroutine splift(x,y,yp,ypp,n,w,ierr,isx,a1,b1,an,bn)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: isx, n
-real, intent(in) :: a1, an, b1, bn
-real, intent(in) :: x(n), y(n)
-real, intent(inout) :: yp(n), ypp(n), w(n,3)
+real(nswc_sp), intent(in) :: a1, an, b1, bn
+real(nswc_sp), intent(in) :: x(n), y(n)
+real(nswc_sp), intent(inout) :: yp(n), ypp(n), w(n,3)
 integer :: i, j, nm1, nm2
-real :: dnew, dold, h
+real(nswc_sp) :: dnew, dold, h
 !     Written by Rondall E. Jones
 !        Sandia Laboratories
 !        albuquerque, new mexico  87115
@@ -76842,11 +76874,11 @@ pure subroutine spfit(x, y, wgt, m, break, l, z, a, b, c, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m
-real, intent(in) :: x(m), y(m), wgt(m)
-real, intent(inout) :: break(l)
-real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
+real(nswc_sp), intent(in) :: x(m), y(m), wgt(m)
+real(nswc_sp), intent(inout) :: break(l)
+real(nswc_sp), intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
 integer :: j, k, la, lm1, lq, lw, n
-real :: temp(20)
+real(nswc_sp) :: temp(20)
 !-----------------------------------------------------------------------
 !            Weighted least squares cubic spline fitting
 !-----------------------------------------------------------------------
@@ -76900,14 +76932,14 @@ subroutine cspfit(x, y, m, break, l, xcon, con, nder, nc, &
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, nc
-real, intent(in) :: x(m), y(m)
-real, intent(inout) :: break(l)
-real, intent(in) :: xcon(*), con(*)
-real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
+real(nswc_sp), intent(in) :: x(m), y(m)
+real(nswc_sp), intent(inout) :: break(l)
+real(nswc_sp), intent(in) :: xcon(*), con(*)
+real(nswc_sp), intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
 integer, intent(in) :: nder(*)
 integer, intent(inout) :: iwk(*)
 integer :: j, k, la, lm1, lw, n
-real :: r, temp(20)
+real(nswc_sp) :: r, temp(20)
 !-----------------------------------------------------------------------
 !                Least squares cubic spline fitting with
 !                  equality and inequality constraints
@@ -76971,10 +77003,10 @@ pure subroutine scomp(x,y,a,b,c,n,xi,yi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
-real, intent(inout) :: yi(ni)
+real(nswc_sp), intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
+real(nswc_sp), intent(inout) :: yi(ni)
 integer :: i, il, ir, k
-real :: dx, xx, nswc_ai_r4
+real(nswc_sp) :: dx, xx, nswc_ai_r4
 !     Abstract
 !         scomp evaluates a cubic spline at the abscissas in xi.
 !         It is assumed that the coefficients of the polynomials
@@ -77057,10 +77089,10 @@ pure subroutine scomp1(x,y,yp,n,xi,yi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), yp(n), xi(ni)
-real, intent(inout) :: yi(ni)
+real(nswc_sp), intent(in) :: x(n), y(n), yp(n), xi(ni)
+real(nswc_sp), intent(inout) :: yi(ni)
 integer :: i, il, ir, k, nm1
-real :: a, b, c, d, dx, h, xx, nswc_ai_r4
+real(nswc_sp) :: a, b, c, d, dx, h, xx, nswc_ai_r4
 !     Abstract
 !         scomp1 evaluates a cubic spline at the abscissas in xi.
 !         It is assumed that the first derivatives at the nodes
@@ -77145,10 +77177,10 @@ pure subroutine scomp2(x,y,ypp,n,xi,yi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
-real, intent(inout) :: yi(ni)
+real(nswc_sp), intent(in) :: x(n), y(n), ypp(n), xi(ni)
+real(nswc_sp), intent(inout) :: yi(ni)
 integer :: i, il, ir, k, nm1
-real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
+real(nswc_sp) :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
 !     Abstract
 !         scomp2 evaluates a cubic spline at the abscissas in xi.
 !         It is assumed that the second derivatives at the nodes
@@ -77236,10 +77268,10 @@ pure subroutine seval(x,y,a,b,c,n,xi,yi,ypi,yppi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
-real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
+real(nswc_sp), intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
+real(nswc_sp), intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 integer :: i, il, ir, k
-real :: bi, ci, dx, xx, nswc_ai_r4
+real(nswc_sp) :: bi, ci, dx, xx, nswc_ai_r4
 !     Abstract
 !         seval evaluates a cubic spline and its first and second
 !         derivatives at the abscissas in xi.  It is assumed that
@@ -77329,10 +77361,10 @@ pure subroutine seval1(x,y,yp,n,xi,yi,ypi,yppi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), yp(n), xi(ni)
-real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
+real(nswc_sp), intent(in) :: x(n), y(n), yp(n), xi(ni)
+real(nswc_sp), intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 integer :: i, il, ir, k, nm1
-real :: a, b, c, d, dx, h, xx, nswc_ai_r4
+real(nswc_sp) :: a, b, c, d, dx, h, xx, nswc_ai_r4
 !     Abstract
 !         seval1 evaluates a cubic spline and its first and second
 !         derivatives at the abscissas in xi.  It is assumed that
@@ -77423,10 +77455,10 @@ pure subroutine seval2(x,y,ypp,n,xi,yi,ypi,yppi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
-real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
-real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
+real(nswc_sp), intent(in) :: x(n), y(n), ypp(n), xi(ni)
+real(nswc_sp), intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 integer :: i, il, ir, k, nm1
-real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
+real(nswc_sp) :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
 !     Abstract
 !         seval2 evaluates a cubic spline and its first and second
 !         derivatives at the abscissas in xi.  It is assumed that
@@ -77515,13 +77547,13 @@ ir = min(i + 1,nm1)
 go to 10
 end subroutine seval2
 
-pure real function csint(x, y, a, b, c, n, alpha, beta)
+pure real(nswc_sp) function csint(x, y, a, b, c, n, alpha, beta)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: alpha, beta
-real, intent(in) :: x(n), y(n), a(n), b(n), c(n)
+real(nswc_sp), intent(in) :: alpha, beta
+real(nswc_sp), intent(in) :: x(n), y(n), a(n), b(n), c(n)
 integer :: i, k, kp1, l, lm1
-real :: a0, b0, d, d2, h, h2, r, s, sum
+real(nswc_sp) :: a0, b0, d, d2, h, h2, r, s, sum
 !-----------------------------------------------------------------------
 !                    Integrating a cubic spline
 !                         --------------
@@ -77594,13 +77626,13 @@ sum = y(k) + 0.5*a(k)*r + b(k)*(s + h*d)/3.0 &
 csint = (beta - alpha)*sum
 end function csint
 
-pure real function csint1(x, y, yp, n, a, b)
+pure real(nswc_sp) function csint1(x, y, yp, n, a, b)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: a, b
-real, intent(in) :: x(n), y(n), yp(n)
+real(nswc_sp), intent(in) :: a, b
+real(nswc_sp), intent(in) :: x(n), y(n), yp(n)
 integer :: i, ip1, k, kp1, l, lm1, lp1
-real :: a0, b0, bi, ci, d, d2, h, h2, r, s, sum
+real(nswc_sp) :: a0, b0, bi, ci, d, d2, h, h2, r, s, sum
 !-----------------------------------------------------------------------
 !                    Integrating a cubic spline
 !                         --------------
@@ -77685,13 +77717,13 @@ sum = y(k) + 0.5*yp(k)*r + bi*(s + h*d)/3.0 &
 csint1 = (b - a)*sum
 end function csint1
 
-pure real function csint2(x, y, ypp, n, a, b)
+pure real(nswc_sp) function csint2(x, y, ypp, n, a, b)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: a, b
-real, intent(in) :: x(n), y(n), ypp(n)
+real(nswc_sp), intent(in) :: a, b
+real(nswc_sp), intent(in) :: x(n), y(n), ypp(n)
 integer :: i, ip1, k, kp1, l, lm1, lp1
-real :: a0, b0, d, dma, dmb, dpa, dpb, h, r, s, sum
+real(nswc_sp) :: a0, b0, d, dma, dmb, dpa, dpb, h, r, s, sum
 !-----------------------------------------------------------------------
 !                    Integrating a cubic spline
 !                         --------------
@@ -77761,10 +77793,10 @@ pure subroutine pdspl(x, y, a, b, c, n, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
-real, intent(in) :: x(n), y(*)
-real, intent(inout) :: a(*), b(*), c(*), t(*)
+real(nswc_sp), intent(in) :: x(n), y(*)
+real(nswc_sp), intent(inout) :: a(*), b(*), c(*), t(*)
 integer :: i, j, nm1, nm2, nm3
-real :: alpha, del, del0, deli, delta, e, h, hi, r, s, si, w
+real(nswc_sp) :: alpha, del, del0, deli, delta, e, h, hi, r, s, si, w
 !-----------------------------------------------------------------------
 !                Periodic cubic spline interpolation
 !-----------------------------------------------------------------------
@@ -77865,12 +77897,12 @@ subroutine pdfit(x, y, m, break, l, z, a, b, c, wk, iwk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m
-real, intent(in) :: x(m), y(m)
-real, intent(inout) :: break(l)
-real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
+real(nswc_sp), intent(in) :: x(m), y(m)
+real(nswc_sp), intent(inout) :: break(l)
+real(nswc_sp), intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
 integer, intent(inout) :: iwk(*)
 integer :: j, k, la, lm1, lw, n
-real :: r, temp(20), con(3), xcon(3)
+real(nswc_sp) :: r, temp(20), con(3), xcon(3)
 integer, parameter :: nder(3) = [3, 7, 11]
 !-----------------------------------------------------------------------
 !            Least squares periodic cubic spline fitting
@@ -77945,10 +77977,10 @@ pure subroutine pscmp(x, y, a, b, c, n, xi, yi, m, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
-real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
-real, intent(inout) :: yi(m)
+real(nswc_sp), intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
+real(nswc_sp), intent(inout) :: yi(m)
 integer :: i, il, ir, j, k
-real :: dx, h, t, t0, x1, xold, xx, nswc_ai_r4
+real(nswc_sp) :: dx, h, t, t0, x1, xold, xx, nswc_ai_r4
 !-----------------------------------------------------------------------
 !              Evaluation of a periodic cubic spline
 !-----------------------------------------------------------------------
@@ -78018,10 +78050,10 @@ pure subroutine psevl(x, y, a, b, c, n, xi, yi, ypi, yppi, m, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
-real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
-real, intent(inout) :: yi(m), ypi(m), yppi(m)
+real(nswc_sp), intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
+real(nswc_sp), intent(inout) :: yi(m), ypi(m), yppi(m)
 integer :: i, il, ir, j, k
-real :: bi2, ci3, dx, h, t, t0, x1, xold, xx, nswc_ai_r4
+real(nswc_sp) :: bi2, ci3, dx, h, t, t0, x1, xold, xx, nswc_ai_r4
 !-----------------------------------------------------------------------
 !     Evaluation and differentiation of a periodic cubic spline
 !-----------------------------------------------------------------------
@@ -78098,8 +78130,8 @@ pure subroutine csloop(m, n, x, kx, t, dx, kdx, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kdx, kx, m, n
-real, intent(in) :: x(kx,n)
-real, intent(inout) :: t(m), dx(kdx,n), wk(*)
+real(nswc_sp), intent(in) :: x(kx,n)
+real(nswc_sp), intent(inout) :: t(m), dx(kdx,n), wk(*)
 integer :: ia, ib, ic, ie, mm1
 !-----------------------------------------------------------------------
 !               Closed curve cubic spline fitting
@@ -78131,10 +78163,10 @@ pure subroutine cslop1(m, n, x, kx, t, dx, kdx, a, b, c, e, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kdx, kx, m, n
-real, intent(in) :: x(kx,n)
-real, intent(inout) :: t(m), dx(kdx,n), a(*), b(m), c(*), e(*)
+real(nswc_sp), intent(in) :: x(kx,n)
+real(nswc_sp), intent(inout) :: t(m), dx(kdx,n), a(*), b(m), c(*), e(*)
 integer :: i, im1, j, l, mm1, mm2
-real :: alpha, del, del0, del1, deli, delm, eta, h, hm, p, r, si, &
+real(nswc_sp) :: alpha, del, del0, del1, deli, delm, eta, h, hm, p, r, si, &
    & sm, sum, tau
 !-----------------------------------------------------------------------
 !               Closed curve cubic spline fitting
@@ -78267,10 +78299,10 @@ end subroutine cslop1
 pure subroutine lopcmp(m, n, t, x, kx, dx, kdx, l, ti, z, kz)
 implicit none
 integer, intent(in) :: kdx, kx, kz, l, m, n
-real, intent(in) :: t(m), x(kx,n), dx(kdx,n), ti(l)
-real, intent(inout) :: z(kz, n)
+real(nswc_sp), intent(in) :: t(m), x(kx,n), dx(kdx,n), ti(l)
+real(nswc_sp), intent(inout) :: z(kz, n)
 integer :: i, il, ir, j, k
-real :: a, b, c, d, dt, h, t0, told, w, nswc_ai_r4
+real(nswc_sp) :: a, b, c, d, dt, h, t0, told, w, nswc_ai_r4
 !-----------------------------------------------------------------------
 !            Evaluation of a cubic spline closed curve
 !                     in n-dimensional space
@@ -78342,11 +78374,11 @@ end subroutine lopcmp
 pure subroutine lopdf(m, n, t, x, kx, dx, kdx, ti, z, dz, ddz)
 implicit none
 integer, intent(in) :: kdx, kx, m, n
-real, intent(in) :: ti
-real, intent(in) :: t(m), x(kx,n), dx(kdx,n)
-real, intent(inout) :: z(n), dz(n), ddz(n)
+real(nswc_sp), intent(in) :: ti
+real(nswc_sp), intent(in) :: t(m), x(kx,n), dx(kdx,n)
+real(nswc_sp), intent(inout) :: z(n), dz(n), ddz(n)
 integer :: i, il, ir, j
-real :: a, b, c, d, dt, h, t0, w, nswc_ai_r4
+real(nswc_sp) :: a, b, c, d, dt, h, t0, w, nswc_ai_r4
 !-----------------------------------------------------------------------
 !          Evaluation and differentiation of a cubic spline
 !                closed curve in n-dimensional space
@@ -78407,11 +78439,11 @@ pure subroutine curv1(n,x,y,slp1,slpn,islpsw,yp,temp, &
 implicit none
 integer, intent(in) :: n, islpsw
 integer, intent(out) :: ierr
-real, intent(in) :: x(n), y(n), slp1, slpn
-real, intent(inout) :: yp(n), temp(n)
-real, intent(in) :: sigma
+real(nswc_sp), intent(in) :: x(n), y(n), slp1, slpn
+real(nswc_sp), intent(inout) :: yp(n), temp(n)
+real(nswc_sp), intent(in) :: sigma
 integer :: i, ibak, nm1, np1
-real :: c1, c2, c3, delx1, delx2, delxn, delxnm, diag, diag1, &
+real(nswc_sp) :: c1, c2, c3, delx1, delx2, delxn, delxnm, diag, diag1, &
    & diag2, dx1, dx2, sdiag1, sdiag2, sigmap, slpp1, slppn
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -78531,11 +78563,11 @@ end subroutine curv1
 pure function curv2(t,n,x,y,yp,sigma)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: t, x(n), y(n), yp(n), sigma
+real(nswc_sp), intent(in) :: t, x(n), y(n), yp(n), sigma
 integer :: i, im1
-real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, &
+real(nswc_sp) :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, &
    & sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sum
-real :: curv2
+real(nswc_sp) :: curv2
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
 !                            department of computer sciences
@@ -78596,11 +78628,11 @@ end function curv2
 pure function curvd(t,n,x,y,yp,sigma)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: t, x(n), y(n), yp(n), sigma
+real(nswc_sp), intent(in) :: t, x(n), y(n), yp(n), sigma
 integer :: i, im1
-real :: coshm1, coshm2, del1, del2, dels, dummy, sigmap, sinhms, &
+real(nswc_sp) :: coshm1, coshm2, del1, del2, dels, dummy, sigmap, sinhms, &
    & sum
-real :: curvd
+real(nswc_sp) :: curvd
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
 !                            department of computer sciences
@@ -78654,12 +78686,12 @@ end function curvd
 pure function curvi(xl,xu,n,x,y,yp,sigma)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
+real(nswc_sp), intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
 integer :: i, il, ilm1, ilp1, iu, ium1
-real :: c1, c2, cl1, cl2, cmm1, cmm2, cs, cu1, cu2, del1, del2, &
+real(nswc_sp) :: c1, c2, cl1, cl2, cmm1, cmm2, cs, cu1, cu2, del1, del2, &
    & deli, dell1, dell2, dels, delu1, delu2, dummy, sigmap, ss, ssign, &
    & sum, t, t1, t2, xxl, xxu
-real :: curvi
+real(nswc_sp) :: curvi
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
 !                            department of computer sciences
@@ -78788,10 +78820,10 @@ go to 10
 contains
    pure function term(cmm1, cmm2, t) result(nswc_sf_result)
       implicit none
-      real, intent(in) :: cmm1
-      real, intent(in) :: cmm2
-      real, intent(in) :: t
-      real :: nswc_sf_result
+      real(nswc_sp), intent(in) :: cmm1
+      real(nswc_sp), intent(in) :: cmm2
+      real(nswc_sp), intent(in) :: t
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = (cmm1 - cmm2 - sigmap*t*ss)/(sigmap*   sigmap*sigmap*(ss + sigmap*dels))
    end function term
 end function curvi
@@ -78801,11 +78833,11 @@ pure subroutine kurv1(n,x,y,slp1,slpn,islpsw,xp,yp,temp,s, &
 implicit none
 integer, intent(in) :: n, islpsw
 integer, intent(out) :: ierr
-real, intent(in) :: x(n), y(n), slp1, slpn
-real, intent(inout) :: xp(n), yp(n), temp(n), s(n)
-real, intent(in) :: sigma
+real(nswc_sp), intent(in) :: x(n), y(n), slp1, slpn
+real(nswc_sp), intent(inout) :: xp(n), yp(n), temp(n), s(n)
+real(nswc_sp), intent(in) :: sigma
 integer :: i, ibak, im1, nm1, np1
-real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
+real(nswc_sp) :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
    & diag1, diag2, diagin, dx1, dx2, dy1, dy2, sdiag1, sdiag2, sigmap, &
    & slpp1x, slpp1y, slppnx, slppny, sx, sy
 !                      From the spline under tension package
@@ -78958,11 +78990,11 @@ end subroutine kurv1
 pure subroutine kurv2(t,xs,ys,n,x,y,xp,yp,s,sigma)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: t
-real, intent(inout) :: xs, ys
-real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
+real(nswc_sp), intent(in) :: t
+real(nswc_sp), intent(inout) :: xs, ys
+real(nswc_sp), intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 integer :: i, im1
-real :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
+real(nswc_sp) :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
    & dummy, sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sumx, sumy, &
    & tn
 !                      From the spline under tension package
@@ -79042,11 +79074,11 @@ pure subroutine kurvp1(n,x,y,xp,yp,temp,s,sigma,ierr)
 implicit none
 integer, intent(in) :: n
 integer, intent(out) :: ierr
-real, intent(in) :: x(n), y(n)
-real, intent(inout) :: xp(n), yp(n), temp(*), s(n)
-real, intent(in) :: sigma
+real(nswc_sp), intent(in) :: x(n), y(n)
+real(nswc_sp), intent(inout) :: xp(n), yp(n), temp(*), s(n)
+real(nswc_sp), intent(in) :: sigma
 integer :: i, ibak, im1, nm1, np1, npi, npibak
-real :: dels1, dels2, diag, diag1, diag2, diagin, dx1, dx2, dy1, &
+real(nswc_sp) :: dels1, dels2, diag, diag1, diag2, diagin, dx1, dx2, dy1, &
    & dy2, sdiag1, sdiag2, sigmap, xpn, ypn
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -79183,11 +79215,11 @@ end subroutine kurvp1
 pure subroutine kurvp2(t,xs,ys,n,x,y,xp,yp,s,sigma)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: t
-real, intent(inout) :: xs, ys
-real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
+real(nswc_sp), intent(in) :: t
+real(nswc_sp), intent(inout) :: xs, ys
+real(nswc_sp), intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 integer :: i, im1
-real :: c1, c2, ci, cim1, coshp1, coshp2, d, del1, del2, delp1, &
+real(nswc_sp) :: c1, c2, ci, cim1, coshp1, coshp2, d, del1, del2, delp1, &
    & delp2, dels, dummy, si, sigmap, sinhm1, sinhm2, sinhms, sinhp1, &
    & sinhp2, sumx, sumy, tn
 !                      From the spline under tension package
@@ -79275,12 +79307,12 @@ pure subroutine qurv1(n,x,y,z,slp1x,slp1y,slp1z,slpnx, &
 implicit none
 integer, intent(in) :: n, islpsw
 integer, intent(out) :: ierr
-real, intent(in) :: x(n), y(n), z(n), slp1x, slp1y, slp1z, slpnx, &
+real(nswc_sp), intent(in) :: x(n), y(n), z(n), slp1x, slp1y, slp1z, slpnx, &
    & slpny, slpnz
-real, intent(inout) :: xp(n), yp(n), zp(n), temp(n), s(n)
-real, intent(in) :: sigma
+real(nswc_sp), intent(inout) :: xp(n), yp(n), zp(n), temp(n), s(n)
+real(nswc_sp), intent(in) :: sigma
 integer :: i, ibak, im1, nm1, np1
-real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
+real(nswc_sp) :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
    & diag1, diag2, diagin, dx1, dx2, dy1, dy2, dz1, dz2, sdiag1, &
    & sdiag2, sigmap, slpp1x, slpp1y, slpp1z, slppnx, slppny, slppnz, t
 !                      From the spline under tension package
@@ -79456,12 +79488,12 @@ end subroutine qurv1
 pure subroutine qurv2(t,xs,ys,zs,n,x,y,z,xp,yp,zp,s,sigma)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: t
-real, intent(inout) :: xs, ys, zs
-real, intent(in) :: x(n), y(n), z(n), xp(n), yp(n), zp(n), s(n)
-real, intent(in) :: sigma
+real(nswc_sp), intent(in) :: t
+real(nswc_sp), intent(inout) :: xs, ys, zs
+real(nswc_sp), intent(in) :: x(n), y(n), z(n), xp(n), yp(n), zp(n), s(n)
+real(nswc_sp), intent(in) :: sigma
 integer :: i, im1
-real :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
+real(nswc_sp) :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
    & dummy, sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sumx, sumy, &
    & sumz, tn
 !                      From the spline under tension package
@@ -79543,9 +79575,9 @@ end subroutine qurv2
 pure elemental subroutine ceez(del1,del2,sigma,c1,c2,c3,n)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: del1, del2, sigma
-real, intent(inout) :: c1, c2, c3
-real :: coshm1, coshm2, del, delm, delp, denom, dummy, sinhmm, &
+real(nswc_sp), intent(in) :: del1, del2, sigma
+real(nswc_sp), intent(inout) :: c1, c2, c3
+real(nswc_sp) :: coshm1, coshm2, del, delm, delp, denom, dummy, sinhmm, &
    & sinhmp
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -79601,9 +79633,9 @@ end subroutine ceez
 
 pure elemental subroutine terms(diag,sdiag,sigma,del)
 implicit none
-real, intent(inout) :: diag, sdiag
-real, intent(in) :: sigma, del
-real :: coshm, denom, sigdel, sinhm
+real(nswc_sp), intent(inout) :: diag, sdiag
+real(nswc_sp), intent(in) :: sigma, del
+real(nswc_sp) :: coshm, denom, sigdel, sinhm
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
 !                            department of computer sciences
@@ -79640,9 +79672,9 @@ end subroutine terms
 pure integer function intrvl(x, t, m)
 implicit none
 integer, intent(in) :: m
-real, intent(in) :: x, t(m)
+real(nswc_sp), intent(in) :: x, t(m)
 integer :: i, il, ir
-real :: tm, nswc_ai_r4
+real(nswc_sp) :: tm, nswc_ai_r4
 !-----------------------------------------------------------------------
 !             Location of a value x in a sequence t
 !                       ----------------
@@ -79693,13 +79725,13 @@ end function intrvl
 pure subroutine bval(t, bcoef, n, k, x, jderiv, w, wk)
 implicit none
 integer, intent(in) :: jderiv, k, n
-real, intent(inout) :: w
-real, intent(in) :: x
-real, intent(in) :: t(*), bcoef(n)
-real, intent(inout) :: wk(k,3)
+real(nswc_sp), intent(inout) :: w
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), intent(in) :: t(*), bcoef(n)
+real(nswc_sp), intent(inout) :: wk(k,3)
 integer :: i, imk, ipj, j, jc, jcmax, jcmin, jdrvp1, jj, km1, kmj, &
    & l, nmi, npk
-real :: dl, dr, fkmj
+real(nswc_sp) :: dl, dr, fkmj
 !-----------------------------------------------------------------------
 !     bval calculates the value at x of the jderiv-TH derivative
 !     of a spline F from its B-representation.
@@ -79836,12 +79868,12 @@ end subroutine bval
 pure subroutine bvali(t, bcoeff, n, k, x, w, wk)
 implicit none
 integer, intent(in) :: k, n
-real, intent(out) :: w
-real, intent(in) :: x
-real, intent(in) :: t(*), bcoeff(n)
-real, intent(inout) :: wk(*)
+real(nswc_sp), intent(out) :: w
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), intent(in) :: t(*), bcoeff(n)
+real(nswc_sp), intent(inout) :: wk(*)
 integer :: i, ipk, kp1, np1, npk
-real :: sum, tlast, tnew, xval
+real(nswc_sp) :: sum, tlast, tnew, xval
 !-----------------------------------------------------------------------
 !           Integral of a piecewise polynomial from t(1) to x
 !                   using its B-spline representation
@@ -79874,13 +79906,13 @@ end subroutine bvali
 pure subroutine bvali0(t, tnew, bcoef, n, k, x, w, wk)
 implicit none
 integer, intent(in) :: k, n
-real, intent(in) :: tnew
-real, intent(out) :: w
-real, intent(in) :: x
-real, intent(in) :: t(*), bcoef(n)
-real, intent(inout) :: wk(k,3)
+real(nswc_sp), intent(in) :: tnew
+real(nswc_sp), intent(out) :: w
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), intent(in) :: t(*), bcoef(n)
+real(nswc_sp), intent(inout) :: wk(k,3)
 integer :: i, imk, ipj, j, jc, jcmin, jj, km1, kmj, l, m
-real :: dl, dr, tipj
+real(nswc_sp) :: dl, dr, tipj
 !-----------------------------------------------------------------------
 !     bvali0 calculates the value at x of an antiderivative
 !     OF A B-SPLINE F FOR t(1) .LE. x .LE. t(n + k - 1).
@@ -79960,10 +79992,10 @@ implicit none
 integer, intent(in) :: k
 integer, intent(out) :: l
 integer, intent(in) :: n
-real, intent(in) :: t(*), a(n)
-real, intent(inout) :: break(*), c(k,*), wk(k,*)
+real(nswc_sp), intent(in) :: t(*), a(n)
+real(nswc_sp), intent(inout) :: break(*), c(k,*), wk(k,*)
 integer :: i, il, ilj, ilkj, j, jj, jp1, km1, kmj, kp1, left
-real :: diff, r, s, term, x
+real(nswc_sp) :: diff, r, s, term, x
 !-----------------------------------------------------------------------
 !              Conversion from B-spline representation
 !              to piecewise polynomial representation
@@ -80045,10 +80077,10 @@ end subroutine bspp
 subroutine ppval(x, a, l, n, xi, yi, ni)
 implicit none
 integer, intent(in) :: l, n, ni
-real :: a(l,n), x(n), xi(ni)
-real, intent(inout) :: yi(ni)
+real(nswc_sp) :: a(l,n), x(n), xi(ni)
+real(nswc_sp), intent(inout) :: yi(ni)
 integer :: i, il, ir, j, k, lm1, lmj
-real :: dx, s, xx, nswc_ai_r4
+real(nswc_sp) :: dx, s, xx, nswc_ai_r4
 !-----------------------------------------------------------------------
 !         This routine evaluates a piecewise polynomial at the
 !         abscissas in xi. It is assumed that the coefficients
@@ -80127,11 +80159,11 @@ pure subroutine bspvb(t, k, jhigh, j, x, left, blist)
 implicit none
 integer, intent(inout) :: j
 integer, intent(in) :: jhigh, k, left
-real, intent(in) :: x
-real, intent(in) :: t(*)
-real, intent(inout) :: blist(k)
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), intent(in) :: t(*)
+real(nswc_sp), intent(inout) :: blist(k)
 integer :: i, imj, l
-real :: s, term, ti, timj
+real(nswc_sp) :: s, term, ti, timj
 !-----------------------------------------------------------------------
 !     bspvb calculates the value of all possibly nonzero B-splines
 !     at x of order max(jhigh,j + 1) where t(k) .LE. x .LT. t(N+1).
@@ -80179,12 +80211,12 @@ end subroutine bspvb
 pure subroutine bspvd(t, k, x, left, dbiatx, idim, nderiv, a)
 implicit none
 integer, intent(in) :: idim, k, left, nderiv
-real, intent(in) :: x
-real, intent(in) :: t(*)
-real, intent(inout) :: dbiatx(idim,nderiv), a(k,k)
+real(nswc_sp), intent(in) :: x
+real(nswc_sp), intent(in) :: t(*)
+real(nswc_sp), intent(inout) :: dbiatx(idim,nderiv), a(k,k)
 integer :: i, ideriv, il, j, jj, jlow, jp1mid, kp1, kp1mm, l, &
    & ldummy, m, mhigh
-real :: factor, fkp1mm, sum
+real(nswc_sp) :: factor, fkp1mm, sum
 !-----------------------------------------------------------------------
 ! Calculates value and deriv.S of all B-splines which do not vanish at x
 !******  i N P U t  ******
@@ -80301,12 +80333,12 @@ pure subroutine bstrp(tau, gtau, t, n, k, bcoef, q, iflag)
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: k, n
-real, intent(inout) :: bcoef(n)
-real, intent(in) :: gtau(n)
-real, intent(inout) :: q(*)
-real, intent(in) :: t(*), tau(n)
+real(nswc_sp), intent(inout) :: bcoef(n)
+real(nswc_sp), intent(in) :: gtau(n)
+real(nswc_sp), intent(inout) :: q(*)
+real(nswc_sp), intent(in) :: t(*), tau(n)
 integer :: i, ilp1mx, j, jj, km1, kpkm2, left, lenq, np1
-real :: taui
+real(nswc_sp) :: taui
 !-----------------------------------------------------------------------
 !   This routine produces the B-spline COEFF.S bcoef of the piecewise
 !   polynomial of order k with knots t(i) (i=1,...,n+k) which has the
@@ -80417,9 +80449,9 @@ pure subroutine banfac(w, nroww, nrow, nbandl, nbandu, iflag)
 implicit none
 integer, intent(out) :: iflag
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
-real, intent(inout) :: w(nroww,nrow)
+real(nswc_sp), intent(inout) :: w(nroww,nrow)
 integer :: i, ipk, j, jbeg, jend, jmax, k, kmax, mdj, middle, midmk, mj, nrowm1, nswc_ai_i4
-real :: factor, pivot
+real(nswc_sp) :: factor, pivot
 !  From  * a practical guide to splines *  by C. DE boor
 !  returns in  w  the LU-factorization (without pivoting) of the banded
 !  matrix  A  of order  nrow  with  (nbandl + 1 + nbandu) bands or diag-
@@ -80536,8 +80568,8 @@ end subroutine banfac
 pure subroutine banslv(w, nroww, nrow, nbandl, nbandu, b)
 implicit none
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
-real, intent(in) :: w(nroww,nrow)
-real, intent(inout) :: b(nrow)
+real(nswc_sp), intent(in) :: w(nroww,nrow)
+real(nswc_sp), intent(inout) :: b(nrow)
 integer :: i, imj, ipj, j, jmax, middle, mmj, mpj, nrowm1
 !  From  * a practical guide to splines *  by C. DE boor
 !  companion routine to  banfac . It returns the solution  X  of the
@@ -80597,11 +80629,11 @@ pure subroutine bslsq(tau, gtau, wgt, ntau, t, n, k, a, wk, q, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: k, n, ntau
-real, intent(in) :: tau(ntau), gtau(ntau), wgt(ntau)
-real, intent(in) :: t(*)
-real, intent(inout) :: a(n), wk(n), q(k,n)
+real(nswc_sp), intent(in) :: tau(ntau), gtau(ntau), wgt(ntau)
+real(nswc_sp), intent(in) :: t(*)
+real(nswc_sp), intent(inout) :: a(n), wk(n), q(k,n)
 integer :: i, j, jj, l, left, leftmk, mm
-real :: dw
+real(nswc_sp) :: dw
 !-----------------------------------------------------------------------
 !        bslsq produces the B-spline coefficients of a piecewise
 !              polynomial P(X) of order k which minimizes
@@ -80669,9 +80701,9 @@ pure subroutine bchfac(w, nb, n, diag, iflag)
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: n, nb
-real, intent(inout) :: w(nb,n), diag(n)
+real(nswc_sp), intent(inout) :: w(nb,n), diag(n)
 integer :: i, imax, ipj, j, jmax, k, kpi
-real :: ratio, t
+real(nswc_sp) :: ratio, t
 !-----------------------------------------------------------------------
 !  From  * a practical guide to splines *  by C. DE boor
 !  constructs Cholesky factorization
@@ -80769,8 +80801,8 @@ end subroutine bchfac
 pure subroutine bchslv(w, nb, n, b)
 implicit none
 integer, intent(in) :: n, nb
-real, intent(in) :: w(nb,n)
-real, intent(inout) :: b(n)
+real(nswc_sp), intent(in) :: w(nb,n)
+real(nswc_sp), intent(inout) :: b(n)
 integer :: j, jmax, jpk, k, nbm1
 !-----------------------------------------------------------------------
 !     bchslv solves the linear system C*X = b for X when w contains
@@ -80821,10 +80853,10 @@ subroutine bfit(bkpt, n, nord, xdata, ydata, ndata, &
 implicit none
 integer, intent(inout) :: mode
 integer, intent(in) :: n, nconst, ndata, nord
-real, intent(inout) :: rnorm
-real, intent(in) :: bkpt(*), xdata(ndata), ydata(ndata)
-real, intent(in) :: xconst(*), yconst(*)
-real, intent(inout) :: coeff(n), w(*)
+real(nswc_sp), intent(inout) :: rnorm
+real(nswc_sp), intent(in) :: bkpt(*), xdata(ndata), ydata(ndata)
+real(nswc_sp), intent(in) :: xconst(*), yconst(*)
+real(nswc_sp), intent(inout) :: coeff(n), w(*)
 integer, intent(in) :: nderiv(*)
 integer, intent(inout) :: iw(*)
 integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
@@ -81013,17 +81045,17 @@ implicit none
 integer, intent(in) :: mdg, mdw
 integer, intent(inout) :: mode
 integer, intent(in) :: nbkpt, nconst, ndata, nord
-real, intent(inout) :: rnorm
-real, intent(in) :: bkpt(nbkpt), xdata(ndata), ydata(ndata)
-real, intent(in) :: xconst(*), yconst(*)
-real, intent(inout) :: coeff(*)
-real, intent(inout) :: bf(nord,nord), g(mdg,*), w(mdw,*), work(*)
+real(nswc_sp), intent(inout) :: rnorm
+real(nswc_sp), intent(in) :: bkpt(nbkpt), xdata(ndata), ydata(ndata)
+real(nswc_sp), intent(in) :: xconst(*), yconst(*)
+real(nswc_sp), intent(inout) :: coeff(*)
+real(nswc_sp), intent(inout) :: bf(nord,nord), g(mdg,*), w(mdw,*), work(*)
 integer, intent(in) :: nderiv(*)
 integer, intent(inout) :: iwork(*)
 integer :: i, idata, ideriv, ierr, ileft, intrvl, intw1, ip, ip1, &
    & ir, irow, itype, iw1, iw2, j, l, lw, m, mt, n, nb, neqcon, nincon, &
    & nordm1, nordp1, np1
-real :: rnorme, xmax, xmin, xval, yval, prgopt(7)
+real(nswc_sp) :: rnorme, xmax, xmin, xval, yval, prgopt(7)
 logical :: band, new
 !---------------------
 go to 100
@@ -81276,9 +81308,9 @@ pure subroutine bndacc(g,mdg,nb,ip,ir,mt,jt)
 implicit none
 integer, intent(inout) :: ip, ir
 integer, intent(in) :: jt, mdg, mt, nb
-real, intent(inout) :: g(mdg,*)
+real(nswc_sp), intent(inout) :: g(mdg,*)
 integer :: i, ie, ig, ig1, ig2, j, jg, k, kh, l, lp1, mh, mu, nbp1
-real :: rho
+real(nswc_sp) :: rho
 !***Author  Lawson, C. L., (JPL)
 !           Hanson, R. J., (SNLA)
 !***purpose  solve the least squares problem AX = B for banded
@@ -81450,11 +81482,11 @@ subroutine bndsl(mode,g,mdg,nb,ip,ir,x,n,rnorm,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ip, ir, mdg, mode, n, nb
-real :: g(mdg,*)
-real, intent(out) :: rnorm
-real, intent(inout) :: x(n)
+real(nswc_sp) :: g(mdg,*)
+real(nswc_sp), intent(out) :: rnorm
+real(nswc_sp), intent(inout) :: x(n)
 integer :: i, i1, i2, ie, ii, irm1, ix, j, jg, l, np1
-real :: rsq, s
+real(nswc_sp) :: rsq, s
 !***Author  Lawson, C. L., (JPL)
 !           Hanson, R. J., (SNLA)
 !***purpose  solve the least squares problem AX = B for banded
@@ -81609,10 +81641,10 @@ pure subroutine spfit2(x, wx, mx, y, wy, my, z, kz, xbreak, nx, &
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kz, mx, my, num, nx, ny
-real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz, my)
-real, intent(in) :: xbreak(nx), ybreak(ny)
-real, intent(inout) :: f(*)
-real, intent(inout) :: s(*), t(*), wk(num)
+real(nswc_sp), intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz, my)
+real(nswc_sp), intent(in) :: xbreak(nx), ybreak(ny)
+real(nswc_sp), intent(inout) :: f(*)
+real(nswc_sp), intent(inout) :: s(*), t(*), wk(num)
 integer :: i, imax, j, l, ld, m, n, nu
 !-----------------------------------------------------------------------
 !            Weighted least squares bicubic spline fitting
@@ -81720,10 +81752,10 @@ end subroutine spfit2
 pure subroutine cspp(t, a, ka, m, n, z, kz, dz, kdz)
 implicit none
 integer, intent(in) :: ka, kdz, kz, m, n
-real, intent(in) :: t(*), a(ka,n)
-real, intent(inout) :: z(kz,*), dz(kdz,*)
+real(nswc_sp), intent(in) :: t(*), a(ka,n)
+real(nswc_sp), intent(inout) :: z(kz,*), dz(kdz,*)
 integer :: i, il, ilj, ilkj, j, jj, jp1, k, kmj, l, left, mp1, mu
-real :: del, diff, r, s, term, x, c(4), wk(4,5)
+real(nswc_sp) :: del, diff, r, s, term, x, c(4), wk(4,5)
 !-----------------------------------------------------------------------
 !            Computation of n cubic splines and their first
 !            derivatives at the knots t(4),...,t(m+1). The
@@ -81814,12 +81846,12 @@ pure subroutine csurf(ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
 implicit none
 integer, intent(in) :: ider, jder, kf, kf1, kf12, kf2, kz, m, mx, &
    & my, n
-real, intent(in) :: x(mx), y(my)
-real, intent(inout) :: z(kz,my)
-real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
+real(nswc_sp), intent(in) :: x(mx), y(my)
+real(nswc_sp), intent(inout) :: z(kz,my)
+real(nswc_sp), intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
    & f12(kf12,n)
 integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1, nswc_ai_i4
-real :: a, b, b1, b2, b3, bx, c, c1, c2, c3, cx, d, dfi, dfip1, ds, dt, dx, dy, fi, fip1, xx, yy, nswc_ai_r4
+real(nswc_sp) :: a, b, b1, b2, b3, bx, c, c1, c2, c3, cx, d, dfi, dfip1, ds, dt, dx, dy, fi, fip1, xx, yy, nswc_ai_r4
 !-----------------------------------------------------------------------
 !             Evaluation or differentiation of a bicubic
 !                        spline over a grid
@@ -81956,9 +81988,9 @@ end subroutine csurf
 pure subroutine csurf1(ider, jder, x, mx, y, my, z, kz, s, m, t, n, f)
 implicit none
 integer, intent(in) :: ider, jder, kz, m, mx, my, n
-real, intent(in) :: x(mx), y(my)
-real, intent(inout) :: z(kz,my)
-real, intent(in) :: s(m), t(n), f(m,n,4)
+real(nswc_sp), intent(in) :: x(mx), y(my)
+real(nswc_sp), intent(inout) :: z(kz,my)
+real(nswc_sp), intent(in) :: s(m), t(n), f(m,n,4)
 !-----------------------------------------------------------------------
 !             Evaluation or differentiation of a bicubic
 !                        spline over a grid
@@ -81972,12 +82004,12 @@ pure subroutine csrf(ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
 implicit none
 integer, intent(in) :: ider, jder, kf, kf1, kf12, kf2, kz, m, mx, &
    & my, n
-real, intent(in) :: x(mx), y(my)
-real, intent(inout) :: z(kz,my)
-real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
+real(nswc_sp), intent(in) :: x(mx), y(my)
+real(nswc_sp), intent(inout) :: z(kz,my)
+real(nswc_sp), intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
    & f12(kf12,n)
 integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1, nswc_ai_i4
-real :: a, a1, a2, a3, ax, c, c1, c2, c3, cx, d, dfi, dfip1, ds, dt, dx, dy, fi, fip1, xx, yy, nswc_ai_r4
+real(nswc_sp) :: a, a1, a2, a3, ax, c, c1, c2, c3, cx, d, dfi, dfip1, ds, dt, dx, dy, fi, fip1, xx, yy, nswc_ai_r4
 !-----------------------------------------------------------------------
 !             Evaluation or differentiation of a bicubic
 !                        spline over a grid
@@ -82110,9 +82142,9 @@ pure subroutine csrf2(ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
    & f, kf, ddf)
 implicit none
 integer, intent(in) :: ider, jder, kf, kz, m, mx, my, n
-real, intent(in) :: x(mx), y(my)
-real, intent(inout) :: z(kz,my)
-real, intent(in) :: s(m), t(n), f(kf,n), ddf(m,n,3)
+real(nswc_sp), intent(in) :: x(mx), y(my)
+real(nswc_sp), intent(inout) :: z(kz,my)
+real(nswc_sp), intent(in) :: s(m), t(n), f(kf,n), ddf(m,n,3)
 !-----------------------------------------------------------------------
 !             Evaluation or differentiation of a bicubic
 !                        spline over a grid
@@ -82125,12 +82157,12 @@ subroutine surf(m,n,x,y,z,iz,opt,zp,temp,sigma,ierr)
 implicit none
 integer, intent(in) :: m, n, iz
 integer, intent(out) :: ierr
-real, intent(in) :: x(m), y(n), z(iz,n), opt(*)
-real, intent(inout) :: zp(m,n,*), temp(*)
-real, intent(in) :: sigma
+real(nswc_sp), intent(in) :: x(m), y(n), z(iz,n), opt(*)
+real(nswc_sp), intent(inout) :: zp(m,n,*), temp(*)
+real(nswc_sp), intent(in) :: sigma
 integer :: i, ibak, ibakp1, im1, ip1, j, jbak, jbakp1, jm1, jp1, key, l, mm1, mp1, nm1, np1, npi, npibak, npm, npmpj, ind(8), &
    & loc(8), num(8), nswc_ai_i4
-real :: c1, c2, c3, del1, del2, deli, delx1, delx2, delxm, delxmm, &
+real(nswc_sp) :: c1, c2, c3, del1, del2, deli, delx1, delx2, delxm, delxmm, &
    & dely1, dely2, delyn, delynm, diag1, diag2, diagi, diagin, sdiag1, &
    & sdiag2, sigmax, sigmay, t, zxy1ns, zxymns
 !                      From the spline under tension package
@@ -82484,14 +82516,14 @@ end subroutine surf
 function surf2(xx,yy,m,n,x,y,z,iz,zp,sigma)
 implicit none
 integer, intent(in) :: m, n, iz
-real, intent(in) :: xx, yy, x(m), y(n)
-real :: z(iz,n), zp(m,n,*)
-real, intent(in) :: sigma
+real(nswc_sp), intent(in) :: xx, yy, x(m), y(n)
+real(nswc_sp) :: z(iz,n), zp(m,n,*)
+real(nswc_sp), intent(in) :: sigma
 integer :: i, im1, j, jm1
-real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, f1, &
+real(nswc_sp) :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, f1, &
    & f2, fp1, fp2, sigmap, sigmax, sigmay, sinhm1, sinhm2, sinhms, &
    & sinhp1, sinhp2, zi, zim1, zxxi, zxxim1
-real :: surf2
+real(nswc_sp) :: surf2
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
 !                            department of computer sciences
@@ -82588,22 +82620,22 @@ surf2 = hermnz(zim1,zi,zxxim1,zxxi,sigmax)
 contains
    pure function hermnz(f1, f2, fp1, fp2, sigmap) result(nswc_sf_result)
       implicit none
-      real, intent(in) :: f1
-      real, intent(in) :: f2
-      real, intent(in) :: fp1
-      real, intent(in) :: fp2
-      real, intent(in) :: sigmap
-      real :: nswc_sf_result
+      real(nswc_sp), intent(in) :: f1
+      real(nswc_sp), intent(in) :: f2
+      real(nswc_sp), intent(in) :: fp1
+      real(nswc_sp), intent(in) :: fp2
+      real(nswc_sp), intent(in) :: sigmap
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = (f2*del1 + f1*del2)/dels   + (fp2*(sinhm1*del2 - del1*(2.*(coshp1 + 1.)*   sinhp2 + sigmap*coshp1*del2)) &
    & + fp1*(sinhm2*del1 - del2*(2.*(coshp2 + 1.)*   sinhp1 + sigmap*coshp2*del1))   )/(sigmap*sigmap*dels*(sinhms + sigmap*dels))
    end function hermnz
    pure function hermz(f1, f2, fp1, fp2) result(nswc_sf_result)
       implicit none
-      real, intent(in) :: f1
-      real, intent(in) :: f2
-      real, intent(in) :: fp1
-      real, intent(in) :: fp2
-      real :: nswc_sf_result
+      real(nswc_sp), intent(in) :: f1
+      real(nswc_sp), intent(in) :: f2
+      real(nswc_sp), intent(in) :: fp1
+      real(nswc_sp), intent(in) :: fp2
+      real(nswc_sp) :: nswc_sf_result
       nswc_sf_result = (f2*del1 + f1*del2)/dels - del1*   del2*(fp2*(del1 + dels) +   fp1*(del2 + dels))/   (6.*dels)
    end function hermz
 end function surf2
@@ -82612,13 +82644,13 @@ pure subroutine nsurf2(dxmin,dxmax,md,dymin,dymax,nd,dz, &
    & idz,m,n,x,y,z,iz,zp,work,sigma)
 implicit none
 integer, intent(in) :: md, nd, idz, m, n, iz
-real, intent(in) :: dxmin, dxmax, dymin, dymax
-real, intent(inout) :: dz(idz,nd)
-real, intent(in) :: x(m), y(n), z(iz,n), zp(m,n,*)
-real, intent(inout) :: work(4,md)
-real, intent(in) :: sigma
+real(nswc_sp), intent(in) :: dxmin, dxmax, dymin, dymax
+real(nswc_sp), intent(inout) :: dz(idz,nd)
+real(nswc_sp), intent(in) :: x(m), y(n), z(iz,n), zp(m,n,*)
+real(nswc_sp), intent(inout) :: work(4,md)
+real(nswc_sp), intent(in) :: sigma
 integer :: i, ii, im1, j, jj, jm1, lasti, lastj
-real :: c1, c2, c3, c4, coshp1, coshp2, del1, del2, delp1, delp2, &
+real(nswc_sp) :: c1, c2, c3, c4, coshp1, coshp2, del1, del2, delp1, delp2, &
    & dels, deltdx, deltdy, dummy, sigmax, sigmay, sinhm1, sinhm2, &
    & sinhms, sinhp1, sinhp2, temp, xii, yjj, zi, zim1, zxxi, zxxim1
 !                      From the spline under tension package
@@ -82772,9 +82804,9 @@ pure subroutine bstrp2(x, y, z, kz, tx, nx, kx, ty, ny, ky, &
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: ka, kx, ky, kz, l, nx, ny
-real, intent(in) :: x(nx), y(ny), z(kz,ny)
-real, intent(in) :: tx(*), ty(*)
-real, intent(inout) :: a(ka,ny), wk(l)
+real(nswc_sp), intent(in) :: x(nx), y(ny), z(kz,ny)
+real(nswc_sp), intent(in) :: tx(*), ty(*)
+real(nswc_sp), intent(inout) :: a(ka,ny), wk(l)
 integer :: iw, m
 !-----------------------------------------------------------------------
 !         Piecewise polynomial interpolation in two variables
@@ -82811,8 +82843,8 @@ pure subroutine bstrp1(x, z, kz, m, n, t, k, a, ka, work, iflag)
 implicit none
 integer, intent(out) :: iflag
 integer, intent(in) :: k, ka, kz, m, n
-real, intent(in) :: x(m), z(kz,n), t(*)
-real, intent(inout) :: a(ka,m), work(*)
+real(nswc_sp), intent(in) :: x(m), z(kz,n), t(*)
+real(nswc_sp), intent(inout) :: a(ka,m), work(*)
 integer :: i, j, mp1
 !-------------------------------------------------------------------
 !     bstrp1 computes B-spline interpolation coefficients for
@@ -82845,9 +82877,9 @@ pure subroutine bslsq2(x, wx, mx, y, wy, my, z, kz, tx, nx, kx, &
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: ka, kx, ky, kz, l, mx, my, nx, ny
-real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz,my)
-real, intent(in) :: tx(*), ty(*)
-real, intent(inout) :: a(ka,ny), wk(l)
+real(nswc_sp), intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz,my)
+real(nswc_sp), intent(in) :: tx(*), ty(*)
+real(nswc_sp), intent(inout) :: a(ka,ny), wk(l)
 integer :: ierr, iq, iw, m
 !-----------------------------------------------------------------------
 !             Weighted least squares fitting of piecewise
@@ -82892,11 +82924,11 @@ pure subroutine bslsq1(tau, wgt, ntau, z, kz, m, t, n, k, &
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: k, ka, kz, m, n, ntau
-real, intent(in) :: tau(ntau), wgt(ntau), z(kz,m)
-real, intent(in) :: t(*)
-real, intent(inout) :: a(ka,n), wk(n), q(k,n)
+real(nswc_sp), intent(in) :: tau(ntau), wgt(ntau), z(kz,m)
+real(nswc_sp), intent(in) :: t(*)
+real(nswc_sp), intent(inout) :: a(ka,n), wk(n), q(k,n)
 integer :: i, j, jj, l, left, leftmk, mm
-real :: dw
+real(nswc_sp) :: dw
 !-----------------------------------------------------------------------
 !     bslsq1 produces the B-spline coefficients a(j,1),...,a(j,n)
 !     of the piecewise polynomial P(X) of order k with knots t(i)
@@ -82979,10 +83011,10 @@ end subroutine bslsq1
 pure subroutine bchsv1(w, nb, n, b, kb, m)
 implicit none
 integer, intent(in) :: kb, m, n, nb
-real, intent(in) :: w(nb,n)
-real, intent(inout) :: b(kb,n)
+real(nswc_sp), intent(in) :: w(nb,n)
+real(nswc_sp), intent(inout) :: b(kb,n)
 integer :: i, j, jmax, jpk, k, nbm1
-real :: t
+real(nswc_sp) :: t
 !-----------------------------------------------------------------------
 !     bchsv1 solves m linear systems C*X = b  (i = 1,...,m), where
 !                                       i   i
@@ -83050,10 +83082,10 @@ pure subroutine bval2(a, ka, tx, nx, kx, ty, ny, ky, x0, y0, &
    & idx, idy, f, wk)
 implicit none
 integer, intent(in) :: idx, idy, ka, kx, ky, nx, ny
-real, intent(out) :: f
-real, intent(in) :: x0, y0
-real, intent(in) :: a(ka,ny), tx(*), ty(*)
-real, intent(inout) :: wk(*)
+real(nswc_sp), intent(out) :: f
+real(nswc_sp), intent(in) :: x0, y0
+real(nswc_sp), intent(in) :: a(ka,ny), tx(*), ty(*)
+real(nswc_sp), intent(inout) :: wk(*)
 integer :: i, iw, j, l, m
 !-----------------------------------------------------------------------
 !                Evaluation and partial differentiation
@@ -83095,10 +83127,10 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: iadj(*), iend(n)
 integer, intent(out) :: ier
-real :: x(n), y(n)
+real(nswc_sp) :: x(n), y(n)
 integer :: nn, k, km1, nl, nr, ind, indx, n0, itemp, ierr, km1d2, &
    & kmi, i, kmin
-real :: xl, yl, xr, yr, dxr, dyr, xk, yk, dxk, dyk, cprod, sprod
+real(nswc_sp) :: xl, yl, xr, yr, dxr, dyr, xk, yk, dxk, dyk, cprod, sprod
 !***********************************************************
 !                                               Robert Renka
 !                                       Oak Ridge Natl. Lab.
@@ -83302,10 +83334,10 @@ implicit none
 integer, intent(in) :: kk
 integer, intent(inout) :: iadj(*), iend(kk)
 integer, intent(out) :: ier
-real :: x(kk), y(kk)
+real(nswc_sp) :: x(kk), y(kk)
 integer :: k, km1, i1, i2, i3, indkf, indkl, nabor1, io1, io2, &
    & in1, indk1, ind2f, ind21
-real :: xk, yk
+real(nswc_sp) :: xk, yk
 !***********************************************************
 !                                               Robert Renka
 !                                       Oak Ridge Natl. Lab.
@@ -83893,8 +83925,8 @@ end subroutine swapd
 pure logical function swptst(in1,in2,io1,io2,x,y)
 implicit none
 integer, intent(in) :: in1, in2, io1, io2
-real, intent(in) :: x(*), y(*)
-real :: dx11, dx12, dx22, dx21, dy11, dy12, dy22, dy21, sin1, &
+real(nswc_sp), intent(in) :: x(*), y(*)
+real(nswc_sp) :: dx11, dx12, dx22, dx21, dy11, dy12, dy22, dy21, sin1, &
    & sin2, cos1, cos2, sin12
 !***********************************************************
 !                                               Robert Renka
@@ -84006,9 +84038,9 @@ subroutine trfind(nst,px,py,x,y,iadj,iend, i1,i2,i3)
 implicit none
 integer, intent(in) :: nst, iadj(*), iend(*)
 integer, intent(inout) :: i1, i2, i3
-real, intent(in) :: px, py
-real :: x(*), y(*)
-real :: x0, x1, x2, y0, y1, y2, xp, yp
+real(nswc_sp), intent(in) :: px, py
+real(nswc_sp) :: x(*), y(*)
+real(nswc_sp) :: x0, x1, x2, y0, y1, y2, xp, yp
 integer :: n0, n1, n2, n3, n4, indx, ind, nf, nl, next
 !***********************************************************
 !                                               Robert Renka
@@ -84223,12 +84255,12 @@ i3 = 0
 contains
    pure function left(x1, y1, x2, y2, x0, y0) result(nswc_sf_result)
       implicit none
-      real, intent(in) :: x1
-      real, intent(in) :: y1
-      real, intent(in) :: x2
-      real, intent(in) :: y2
-      real, intent(in) :: x0
-      real, intent(in) :: y0
+      real(nswc_sp), intent(in) :: x1
+      real(nswc_sp), intent(in) :: y1
+      real(nswc_sp), intent(in) :: x2
+      real(nswc_sp), intent(in) :: y2
+      real(nswc_sp), intent(in) :: x0
+      real(nswc_sp), intent(in) :: y0
       logical :: nswc_sf_result
       nswc_sf_result = (x2 - x1)*(y0 - y1) >=   (x0 - x1)*(y2 - y1)
    end function left
@@ -84238,11 +84270,11 @@ pure subroutine gradg(n, x, y, z, iadj, iend, zxzy, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
-real, intent(in) :: x(n), y(n), z(n)
-real, intent(inout) :: zxzy(2,n)
+real(nswc_sp), intent(in) :: x(n), y(n), z(n)
+real(nswc_sp), intent(inout) :: zxzy(2,n)
 integer, intent(in) :: iadj(*), iend(n)
 integer :: j, miter
-real :: eps
+real(nswc_sp) :: eps
 !-----------------------------------------------------------------------
 !                      Derivative estimation
 !-----------------------------------------------------------------------
@@ -84265,10 +84297,10 @@ pure subroutine gradg1(n,x,y,z,iadj,iend,eps, nit, &
 implicit none
 integer, intent(in) :: n, iadj(*), iend(n)
 integer, intent(inout) :: nit, ier
-real, intent(in) :: x(n), y(n), z(n), eps
-real, intent(inout) :: zxzy(2,n)
+real(nswc_sp), intent(in) :: x(n), y(n), z(n), eps
+real(nswc_sp), intent(inout) :: zxzy(2,n)
 integer :: nn, maxit, iter, k, indf, indl, indx, nb
-real :: tol, dgmax, xk, yk, zk, zxk, zyk, a11, a12, a22, r1, r2, &
+real(nswc_sp) :: tol, dgmax, xk, yk, zk, zxk, zyk, a11, a12, a22, r1, r2, &
    & delx, dely, delxs, delys, dsq, dcub, t, dzx, dzy
 !***********************************************************
 !                                               Robert Renka
@@ -84441,8 +84473,8 @@ pure subroutine gradl(n, x, y, z, iadj, iend, zxzy, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
-real, intent(in) :: x(n), y(n), z(n)
-real, intent(inout) :: zxzy(2,n)
+real(nswc_sp), intent(in) :: x(n), y(n), z(n)
+real(nswc_sp), intent(inout) :: zxzy(2,n)
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(n)
 integer :: j
@@ -84467,15 +84499,15 @@ pure subroutine gradl1(n,k,x,y,z,iadj,iend, dx,dy,ier)
 implicit none
 integer, intent(in) :: n, k, iadj(*)
 integer, intent(inout) :: iend(n), ier
-real, intent(in) :: x(n), y(n), z(n)
-real, intent(inout) :: dx, dy
+real(nswc_sp), intent(in) :: x(n), y(n), z(n)
+real(nswc_sp), intent(inout) :: dx, dy
 integer :: nn, kk, lmin, lmax, lm1, lnp, npts(30), ierr, np, i, j, im1, jp1, ip1, l
-real :: sum, ds, r, rs, avsq, av, xk, yk, zk, a(6,6), c, s, dmin
+real(nswc_sp) :: sum, ds, r, rs, avsq, av, xk, yk, zk, a(6,6), c, s, dmin
 integer, parameter :: lmn = 10
 integer, parameter :: lmx = 30
-real, parameter :: rtol = 1.e-5
-real, parameter :: dtol = .01
-real, parameter :: sf = 1.
+real(nswc_sp), parameter :: rtol = 1.e-5
+real(nswc_sp), parameter :: dtol = .01
+real(nswc_sp), parameter :: sf = 1.
 !***********************************************************
 !                                               Robert Renka
 !                                       Oak Ridge Natl. Lab.
@@ -84720,10 +84752,10 @@ end subroutine gradl1
 
 pure subroutine setrm(xk,yk,zk,xi,yi,zi,s1,s2,r, row)
 implicit none
-real, intent(in) :: xk, yk, zk, xi, yi, zi, s1, s2, r
-real, intent(inout) :: row(6)
+real(nswc_sp), intent(in) :: xk, yk, zk, xi, yi, zi, s1, s2, r
+real(nswc_sp), intent(inout) :: row(6)
 integer :: i
-real :: dx, dy, dxsq, dysq, d, w, w1, w2
+real(nswc_sp) :: dx, dy, dxsq, dysq, d, w, w1, w2
 !***********************************************************
 !                                               Robert Renka
 !                                       Oak Ridge Natl. Lab.
@@ -84790,10 +84822,10 @@ integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(*)
 integer, intent(in) :: l
 integer, intent(inout) :: npts(l), ier
-real, intent(in) :: x(*), y(*)
-real, intent(inout) :: ds
+real(nswc_sp), intent(in) :: x(*), y(*)
+real(nswc_sp), intent(inout) :: ds
 integer :: lm1, n1, i, ni, np, indf, indl, indx, nb
-real :: x1, y1, dnp, dnb
+real(nswc_sp) :: x1, y1, dnp, dnb
 !***********************************************************
 !                                               Robert Renka
 !                                       Oak Ridge Natl. Lab.
@@ -84905,10 +84937,10 @@ subroutine sfval(n, x, y, z, m, xi, yi, zi, iadj, iend, &
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
-real :: x(n), y(n)
-real, intent(in) :: z(n), xi(m), yi(m)
-real, intent(inout) :: zi(m)
-real, intent(in) :: zxzy(2,n)
+real(nswc_sp) :: x(n), y(n)
+real(nswc_sp), intent(in) :: z(n), xi(m), yi(m)
+real(nswc_sp), intent(inout) :: zi(m)
+real(nswc_sp), intent(in) :: zxzy(2,n)
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(n)
 integer :: ist, j
@@ -84935,10 +84967,10 @@ subroutine sfval2(n, x, y, z, l, m, nrows, xi, yi, zi, &
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, n, nrows
-real :: x(n), y(n)
-real, intent(in) :: z(n), zxzy(2,n)
-real, intent(in) :: xi(l), yi(m)
-real, intent(inout) :: zi(nrows,m)
+real(nswc_sp) :: x(n), y(n)
+real(nswc_sp), intent(in) :: z(n), zxzy(2,n)
+real(nswc_sp), intent(in) :: xi(l), yi(m)
+real(nswc_sp), intent(inout) :: zi(nrows,m)
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(n)
 integer :: i, ist, j
@@ -84970,12 +85002,12 @@ integer, intent(in) :: n, iadj(*)
 integer, intent(inout) :: iend(n)
 integer, intent(in) :: iflag
 integer, intent(inout) :: ist, ier
-real, intent(in) :: px, py
-real :: x(n), y(n)
-real, intent(in) :: z(n), zxzy(2,n)
-real, intent(out) :: pz
+real(nswc_sp), intent(in) :: px, py
+real(nswc_sp) :: x(n), y(n)
+real(nswc_sp), intent(in) :: z(n), zxzy(2,n)
+real(nswc_sp), intent(out) :: pz
 integer :: nn, i1, i2, i3, ierr, n1, n2, indx
-real :: xp, yp, zx1, zy1, zx2, zy2, zx3, zy3, x1, y1, x2, y2, x3, &
+real(nswc_sp) :: xp, yp, zx1, zy1, zx2, zy2, zx3, zy3, x1, y1, x2, y2, x3, &
    & y3, z1, z2, z3, dum, dp, u, v, xq, yq, r1, r2, a1, a2, b1, b2, c1, &
    & c2, f1, f2
 !***********************************************************
@@ -85199,11 +85231,11 @@ pure elemental subroutine tval(x,y,x1,x2,x3,y1,y2,y3,z1,z2,z3,zx1, &
 implicit none
 integer, intent(in) :: iflag
 integer, intent(inout) :: ier
-real, intent(in) :: x, y, x1, x2, x3, y1, y2, y3, z1, z2, z3, zx1, &
+real(nswc_sp), intent(in) :: x, y, x1, x2, x3, y1, y2, y3, z1, z2, z3, zx1, &
    & zx2, zx3, zy1, zy2, zy3
-real, intent(inout) :: w, wx, wy
+real(nswc_sp), intent(inout) :: w, wx, wy
 integer :: i, ip1, ip2, ip3
-real :: u(3), v(3), sl(3), area, xp, yp, r(3), rx(3), ry(3), &
+real(nswc_sp) :: u(3), v(3), sl(3), area, xp, yp, r(3), rx(3), ry(3), &
    & phi(3), phix(3), phiy(3), rmin, c1, c2, ro(3), rox(3), roy(3), &
    & f(3), g(3), gx(3), gy(3), p(3), px(3), py(3), q(3), qx(3), qy(3), &
    & a(3), ax(3), ay(3), b(3), bx(3), by(3), c(3), cx(3), cy(3)
@@ -85444,11 +85476,11 @@ integer, intent(in) :: nfpts, dimen, fiwkln, fdwkln
 integer, intent(inout) :: error, ireqd, dreqd
 integer, intent(in) :: ncrows
 integer, intent(inout) :: fitiwk(fiwkln)
-real, intent(inout) :: fitdwk(fdwkln), fitcds(ncrows,dimen)
-real, intent(inout) :: fitvls(nfpts), resids(nfpts)
-real, intent(in) :: wts(nfpts)
+real(nswc_sp), intent(inout) :: fitdwk(fdwkln), fitcds(ncrows,dimen)
+real(nswc_sp), intent(inout) :: fitvls(nfpts), resids(nfpts)
+real(nswc_sp), intent(in) :: wts(nfpts)
 integer :: indstt, p, dimp1, newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, alfl
-real :: scale
+real(nswc_sp) :: scale
 !     ***************
 !     Purpose
 !     -------
@@ -85972,12 +86004,12 @@ integer, intent(in) :: psiwid, alfl
 integer, intent(inout) :: error
 integer :: dimp1
 integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
-real, intent(inout) :: psi(npts,psiwid), alpha(alfl), f(npts)
-real, intent(inout) :: coord(ncrows,dimen), maxabs(dimp1)
-real, intent(in) :: weight(npts)
-real, intent(inout) :: z(npts), sumsqs(npolys), c(npolys)
+real(nswc_sp), intent(inout) :: psi(npts,psiwid), alpha(alfl), f(npts)
+real(nswc_sp), intent(inout) :: coord(ncrows,dimen), maxabs(dimp1)
+real(nswc_sp), intent(in) :: weight(npts)
+real(nswc_sp), intent(inout) :: z(npts), sumsqs(npolys), c(npolys)
 integer :: k, p, sttdeg, onplys
-real :: runtot, rntot1
+real(nswc_sp) :: runtot, rntot1
 !     ***************
 !     Purpose
 !     -------
@@ -86041,15 +86073,15 @@ integer, intent(inout) :: sttdeg
 integer, intent(inout) :: degree, npolys
 integer, intent(in) :: npts, dimen, psiwid, alfl
 integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
-real, intent(inout) :: alpha(alfl)
-real, intent(in) :: coord(ncrows,dimen)
-real, intent(inout) :: psi(npts,psiwid)
-real, intent(inout) :: sumsqs(npolys), c(npolys)
-real, intent(in) :: f(npts), weight(npts)
-real, intent(inout) :: z(npts)
+real(nswc_sp), intent(inout) :: alpha(alfl)
+real(nswc_sp), intent(in) :: coord(ncrows,dimen)
+real(nswc_sp), intent(inout) :: psi(npts,psiwid)
+real(nswc_sp), intent(inout) :: sumsqs(npolys), c(npolys)
+real(nswc_sp), intent(in) :: f(npts), weight(npts)
+real(nswc_sp), intent(inout) :: z(npts)
 integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1, m, start, jindex, jpindx, q, j3, j1, j1mj2, j0mj1, j1m1, starta, onpp1, &
    & index1, index2
-real :: arc, runtot, rntot1, rntot2
+real(nswc_sp) :: arc, runtot, rntot1, rntot2
 !     ***************
 !     Purpose
 !     -------
@@ -86213,10 +86245,10 @@ end subroutine incdg
 pure subroutine scalpm(coord,npts,maxabs)
 implicit none
 integer, intent(in) :: npts
-real, intent(out) :: maxabs
-real, intent(in) :: coord(npts)
+real(nswc_sp), intent(out) :: maxabs
+real(nswc_sp), intent(in) :: coord(npts)
 integer :: p
-real :: a
+real(nswc_sp) :: a
 !     ***************
 !     Purpose
 !     -------
@@ -86244,8 +86276,8 @@ end subroutine scalpm
 pure subroutine scaldn(coord,npts,maxabs)
 implicit none
 integer, intent(in) :: npts
-real, intent(in) :: maxabs
-real, intent(inout) :: coord(npts)
+real(nswc_sp), intent(in) :: maxabs
+real(nswc_sp), intent(inout) :: coord(npts)
 integer :: p
 !     ***************
 !     Purpose
@@ -86273,9 +86305,9 @@ integer, intent(in) :: nepts, dimen
 integer, intent(inout) :: error
 integer, intent(in) :: evldeg
 integer, intent(in) :: fitiwk(fiwkln)
-real, intent(inout) :: fitdwk(fdwkln)
-real, intent(in) :: evlcds(nerows,dimen)
-real, intent(inout) :: evlvls(nepts), temp(dimen)
+real(nswc_sp), intent(inout) :: fitdwk(fdwkln)
+real(nswc_sp), intent(in) :: evlcds(nerows,dimen)
+real(nswc_sp), intent(inout) :: evlvls(nepts), temp(dimen)
 integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt, nswc_ai_i4
 !     ***************
 !     Purpose
@@ -86406,14 +86438,14 @@ implicit none
 integer, intent(in) :: ncrows
 integer, intent(in) :: dimen, nepts, npolys, alfl, dimp1
 integer, intent(in) :: indexs(4,npolys)
-real, intent(in) :: alpha(alfl), coord(ncrows,dimen)
-real, intent(inout) :: psi(npolys)
-real, intent(in) :: c(npolys)
-real, intent(inout) :: f(nepts)
-real, intent(in) :: maxabs(dimp1)
-real, intent(inout) :: x(dimen)
+real(nswc_sp), intent(in) :: alpha(alfl), coord(ncrows,dimen)
+real(nswc_sp), intent(inout) :: psi(npolys)
+real(nswc_sp), intent(in) :: c(npolys)
+real(nswc_sp), intent(inout) :: f(nepts)
+real(nswc_sp), intent(in) :: maxabs(dimp1)
+real(nswc_sp), intent(inout) :: x(dimen)
 integer :: jm1, jprime, m, p, k, i, j, index
-real :: runtot, rntot1
+real(nswc_sp) :: runtot, rntot1
 !     ***************
 !     Purpose
 !     -------
@@ -86484,12 +86516,12 @@ integer, intent(in) :: nfpts, dimen, fiwkln, fdwkln
 integer, intent(inout) :: error, ireqd, dreqd
 integer, intent(in) :: ncrows
 integer, intent(inout) :: fitiwk(fiwkln)
-double precision, intent(inout) :: fitdwk(fdwkln), &
+real(nswc_dp), intent(inout) :: fitdwk(fdwkln), &
    & fitcds(ncrows,dimen)
-double precision, intent(inout) :: fitvls(nfpts), resids(nfpts)
-double precision, intent(in) :: wts(nfpts)
+real(nswc_dp), intent(inout) :: fitvls(nfpts), resids(nfpts)
+real(nswc_dp), intent(in) :: wts(nfpts)
 integer :: indstt, p, dimp1, newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, alfl
-double precision :: scale
+real(nswc_dp) :: scale
 !     ***************
 !     Purpose
 !     -------
@@ -86638,15 +86670,15 @@ integer, intent(in) :: psiwid, alfl
 integer, intent(inout) :: error
 integer :: dimp1
 integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
-double precision, intent(inout) :: psi(npts,psiwid), alpha(alfl), &
+real(nswc_dp), intent(inout) :: psi(npts,psiwid), alpha(alfl), &
    & f(npts)
-double precision, intent(inout) :: coord(ncrows,dimen), &
+real(nswc_dp), intent(inout) :: coord(ncrows,dimen), &
    & maxabs(dimp1)
-double precision, intent(in) :: weight(npts)
-double precision, intent(inout) :: z(npts), sumsqs(npolys), &
+real(nswc_dp), intent(in) :: weight(npts)
+real(nswc_dp), intent(inout) :: z(npts), sumsqs(npolys), &
    & c(npolys)
 integer :: k, p, sttdeg, onplys
-double precision :: runtot, rntot1
+real(nswc_dp) :: runtot, rntot1
 !     ***************
 !     Purpose
 !     -------
@@ -86710,15 +86742,15 @@ integer, intent(inout) :: sttdeg
 integer, intent(inout) :: degree, npolys
 integer, intent(in) :: npts, dimen, psiwid, alfl
 integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
-double precision, intent(inout) :: alpha(alfl)
-double precision, intent(in) :: coord(ncrows,dimen)
-double precision, intent(inout) :: psi(npts,psiwid)
-double precision, intent(inout) :: sumsqs(npolys), c(npolys)
-double precision, intent(in) :: f(npts), weight(npts)
-double precision, intent(inout) :: z(npts)
+real(nswc_dp), intent(inout) :: alpha(alfl)
+real(nswc_dp), intent(in) :: coord(ncrows,dimen)
+real(nswc_dp), intent(inout) :: psi(npts,psiwid)
+real(nswc_dp), intent(inout) :: sumsqs(npolys), c(npolys)
+real(nswc_dp), intent(in) :: f(npts), weight(npts)
+real(nswc_dp), intent(inout) :: z(npts)
 integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1, m, start, jindex, jpindx, q, j3, j1, j1mj2, j0mj1, j1m1, starta, onpp1, &
    & index1, index2
-double precision :: arc, runtot, rntot1, rntot2
+real(nswc_dp) :: arc, runtot, rntot1, rntot2
 !     ***************
 !     Purpose
 !     -------
@@ -86882,10 +86914,10 @@ end subroutine dincdg
 pure subroutine dscalp(coord,npts,maxabs)
 implicit none
 integer, intent(in) :: npts
-double precision, intent(out) :: maxabs
-double precision, intent(in) :: coord(npts)
+real(nswc_dp), intent(out) :: maxabs
+real(nswc_dp), intent(in) :: coord(npts)
 integer :: p
-double precision :: a
+real(nswc_dp) :: a
 !     ***************
 !     Purpose
 !     -------
@@ -86913,8 +86945,8 @@ end subroutine dscalp
 pure subroutine dscald(coord,npts,maxabs)
 implicit none
 integer, intent(in) :: npts
-double precision, intent(in) :: maxabs
-double precision, intent(inout) :: coord(npts)
+real(nswc_dp), intent(in) :: maxabs
+real(nswc_dp), intent(inout) :: coord(npts)
 integer :: p
 !     ***************
 !     Purpose
@@ -86942,9 +86974,9 @@ integer, intent(in) :: nepts, dimen
 integer, intent(inout) :: error
 integer, intent(in) :: evldeg
 integer, intent(in) :: fitiwk(fiwkln)
-double precision, intent(inout) :: fitdwk(fdwkln)
-double precision, intent(in) :: evlcds(nerows,dimen)
-double precision, intent(inout) :: evlvls(nepts), temp(dimen)
+real(nswc_dp), intent(inout) :: fitdwk(fdwkln)
+real(nswc_dp), intent(in) :: evlcds(nerows,dimen)
+real(nswc_dp), intent(inout) :: evlvls(nepts), temp(dimen)
 integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt, nswc_ai_i4
 !     ***************
 !     Purpose
@@ -87076,14 +87108,14 @@ implicit none
 integer, intent(in) :: ncrows
 integer, intent(in) :: dimen, nepts, npolys, alfl, dimp1
 integer, intent(in) :: indexs(4,npolys)
-double precision, intent(in) :: alpha(alfl), coord(ncrows,dimen)
-double precision, intent(inout) :: psi(npolys)
-double precision, intent(in) :: c(npolys)
-double precision, intent(inout) :: f(nepts)
-double precision, intent(in) :: maxabs(dimp1)
-double precision, intent(inout) :: x(dimen)
+real(nswc_dp), intent(in) :: alpha(alfl), coord(ncrows,dimen)
+real(nswc_dp), intent(inout) :: psi(npolys)
+real(nswc_dp), intent(in) :: c(npolys)
+real(nswc_dp), intent(inout) :: f(nepts)
+real(nswc_dp), intent(in) :: maxabs(dimp1)
+real(nswc_dp), intent(inout) :: x(dimen)
 integer :: jm1, jprime, m, p, k, i, j, index
-double precision :: runtot, rntot1
+real(nswc_dp) :: runtot, rntot1
 !     ***************
 !     Purpose
 !     -------
@@ -87144,16 +87176,16 @@ do p = 1,nepts
 end do
 end subroutine dmevl1
 
-real function qsuba(f, a, b, epsil, mcount, relerr, ind)
+real(nswc_sp) function qsuba(f, a, b, epsil, mcount, relerr, ind)
 implicit none
 integer, intent(inout) :: ind
 integer, intent(in) :: mcount
-real, intent(in) :: a, b, epsil
-real, intent(inout) :: relerr
-real :: f
+real(nswc_sp), intent(in) :: a, b, epsil
+real(nswc_sp), intent(inout) :: relerr
+real(nswc_sp) :: f
 external f
 integer :: icheck, is, k, nf, npts
-real :: eps, err, result(8), stack(100), sub1, sub2, sub3, sum, &
+real(nswc_sp) :: eps, err, result(8), stack(100), sub1, sub2, sub3, sum, &
    & tol, x
 integer, parameter :: ismax = 100
 !-----------------------------------------------------------------------
@@ -87266,13 +87298,13 @@ subroutine quad(a, b, result, k, epsil, npts, icheck, f)
 implicit none
 integer, intent(out) :: icheck
 integer, intent(inout) :: k, npts
-real, intent(in) :: a, b, epsil
-real, intent(inout) :: result(*)
-real :: f
+real(nswc_sp), intent(in) :: a, b, epsil
+real(nswc_sp), intent(inout) :: result(*)
+real(nswc_sp) :: f
 external f
 integer :: i, inew, iold, j
-real :: acum, diff, funct(127), fzero, sum, x
-real, parameter :: p(381) = [0.77459666924148337704e00, 0.55555555555555555556e00, 0.88888888888888888889e00, &
+real(nswc_sp) :: acum, diff, funct(127), fzero, sum, x
+real(nswc_sp), parameter :: p(381) = [0.77459666924148337704e00, 0.55555555555555555556e00, 0.88888888888888888889e00, &
    & 0.26848808986833344073e00, 0.96049126870802028342e00, 0.10465622602646726519e00, 0.43424374934680255800e00, &
    & 0.40139741477596222291e00, 0.45091653865847414235e00, 0.13441525524378422036e00, 0.51603282997079739697e-01, &
    & 0.20062852937698902103e00, 0.99383196321275502221e00, 0.17001719629940260339e-01, 0.88845923287225699889e00, &
@@ -87456,15 +87488,15 @@ end subroutine quad
 subroutine qags(f, a, b, epsabs, epsrel, result, abserr, &
    & neval, ier, limit, lenw, last, iwork, work)
 implicit none
-real :: f
+real(nswc_sp) :: f
 integer, intent(out) :: ier, last
 integer, intent(in) :: lenw, limit
 integer, intent(out) :: neval
-real, intent(in) :: a
-real, intent(out) :: abserr
-real, intent(in) :: b, epsabs, epsrel
-real, intent(out) :: result
-real, intent(inout) :: work(lenw)
+real(nswc_sp), intent(in) :: a
+real(nswc_sp), intent(out) :: abserr
+real(nswc_sp), intent(in) :: b, epsabs, epsrel
+real(nswc_sp), intent(out) :: result
+real(nswc_sp), intent(inout) :: work(lenw)
 integer, intent(inout) :: iwork(limit)
 external f
 integer :: l1, l2, l3
@@ -87730,23 +87762,24 @@ implicit none
 !              - f (user-provided function)
 !              - spmpar
 !-----------------------------------------------------------------------
-real, intent(in) :: a
-real, intent(out) :: abserr
-real, intent(inout) :: alist
-real, intent(in) :: b
-real, intent(inout) :: blist
-real, intent(inout) :: elist
-real, intent(in) :: epsabs, epsrel
-real :: f
-real, intent(out) :: result
-real, intent(inout) :: rlist
+real(nswc_sp), intent(in) :: a
+real(nswc_sp), intent(out) :: abserr
+real(nswc_sp), intent(inout) :: alist
+real(nswc_sp), intent(in) :: b
+real(nswc_sp), intent(inout) :: blist
+real(nswc_sp), intent(inout) :: elist
+real(nswc_sp), intent(in) :: epsabs, epsrel
+real(nswc_sp) :: f
+real(nswc_sp), intent(out) :: result
+real(nswc_sp), intent(inout) :: rlist
 integer, intent(out) :: ier
 integer, intent(inout) :: iord
 integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
-real :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, errbnd, &
+real(nswc_sp) :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, &
+   & errbnd, &
    & errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, uflow
 integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2
 logical :: extrap, noext
@@ -88009,22 +88042,23 @@ subroutine qk21f(f, a, b, result, abserr, resabs, resasc, &
    & epmach, uflow, isig)
 implicit none
 integer, intent(out) :: isig
-real, intent(in) :: a
-real, intent(inout) :: abserr
-real, intent(in) :: b, epmach
-real, intent(inout) :: resabs, resasc, result
-real, intent(in) :: uflow
-real :: f
+real(nswc_sp), intent(in) :: a
+real(nswc_sp), intent(inout) :: abserr
+real(nswc_sp), intent(in) :: b, epmach
+real(nswc_sp), intent(inout) :: resabs, resasc, result
+real(nswc_sp), intent(in) :: uflow
+real(nswc_sp) :: f
 external f
 integer :: j, jtw, jtwm1
-real :: absc, centr, dhlgth, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tol, fv1(10), fv2(10)
-real, parameter :: xgk(11) = [0.9956571630258081e+00, 0.9739065285171717e+00, 0.9301574913557082e+00, &
+real(nswc_sp) :: absc, centr, dhlgth, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tol, fv1(10), fv2(10)
+real(nswc_sp), parameter :: xgk(11) = [0.9956571630258081e+00, 0.9739065285171717e+00, 0.9301574913557082e+00, &
    & 0.8650633666889845e+00, 0.7808177265864169e+00, 0.6794095682990244e+00, 0.5627571346686047e+00, 0.4333953941292472e+00, &
    & 0.2943928627014602e+00, 0.1488743389816312e+00, 0.0000000000000000e+00]
-real, parameter :: wgk(11) = [0.1169463886737187e-01, 0.3255816230796473e-01, 0.5475589657435200e-01, &
+real(nswc_sp), parameter :: wgk(11) = [0.1169463886737187e-01, 0.3255816230796473e-01, 0.5475589657435200e-01, &
    & 0.7503967481091995e-01, 0.9312545458369761e-01, 0.1093871588022976e+00, 0.1234919762620659e+00, 0.1347092173114733e+00, &
    & 0.1427759385770601e+00, 0.1477391049013385e+00, 0.1494455540029169e+00]
-real, parameter :: wg(5) = [0.6667134430868814e-01, 0.1494513491505806e+00, 0.2190863625159820e+00, 0.2692667193099964e+00 &
+real(nswc_sp), parameter :: wg(5) = [0.6667134430868814e-01, 0.1494513491505806e+00, 0.2190863625159820e+00, &
+   & 0.2692667193099964e+00 &
    & , 0.2955242247147529e+00]
 !-----------------------------------------------------------------------
 ! 1.        PURPOSE
@@ -88150,11 +88184,11 @@ integer, intent(in) :: inf
 integer, intent(out) :: last
 integer, intent(in) :: lenw, limit
 integer, intent(out) :: neval
-real, intent(out) :: abserr
-real, intent(in) :: bound, epsabs, epsrel
-real, intent(out) :: result
-real :: f
-real, intent(inout) :: work(lenw)
+real(nswc_sp), intent(out) :: abserr
+real(nswc_sp), intent(in) :: bound, epsabs, epsrel
+real(nswc_sp), intent(out) :: result
+real(nswc_sp) :: f
+real(nswc_sp), intent(inout) :: work(lenw)
 integer, intent(inout) :: iwork(limit)
 external f
 integer :: l1, l2, l3
@@ -88436,15 +88470,15 @@ implicit none
 !              - f (user-provided function)
 !              - spmpar
 !-----------------------------------------------------------------------
-real, intent(out) :: abserr
-real, intent(inout) :: alist
-real, intent(inout) :: blist
-real, intent(in) :: bound
-real, intent(inout) :: elist
-real, intent(in) :: epsabs, epsrel
-real :: f
-real, intent(out) :: result
-real, intent(inout) :: rlist
+real(nswc_sp), intent(out) :: abserr
+real(nswc_sp), intent(inout) :: alist
+real(nswc_sp), intent(inout) :: blist
+real(nswc_sp), intent(in) :: bound
+real(nswc_sp), intent(inout) :: elist
+real(nswc_sp), intent(in) :: epsabs, epsrel
+real(nswc_sp) :: f
+real(nswc_sp), intent(out) :: result
+real(nswc_sp), intent(inout) :: rlist
 integer, intent(out) :: ier
 integer, intent(in) :: inf
 integer, intent(inout) :: iord
@@ -88452,7 +88486,8 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
-real :: abseps, area, area1, area12, area2, a1, a2, boun, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, &
+real(nswc_sp) :: abseps, area, area1, area12, area2, a1, a2, boun, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, &
+   & erlast, &
    & errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, uflow
 integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2
 logical :: extrap, noext
@@ -88717,20 +88752,22 @@ subroutine qk15i(f, boun, inf, a, b, result, abserr, resabs, &
    & resasc, epmach, uflow)
 implicit none
 integer, intent(in) :: inf
-real, intent(in) :: a
-real, intent(inout) :: abserr
-real, intent(in) :: b, boun, epmach
-real, intent(inout) :: resabs, resasc, result
-real, intent(in) :: uflow
-real :: f
+real(nswc_sp), intent(in) :: a
+real(nswc_sp), intent(inout) :: abserr
+real(nswc_sp), intent(in) :: b, boun, epmach
+real(nswc_sp), intent(inout) :: resabs, resasc, result
+real(nswc_sp), intent(in) :: uflow
+real(nswc_sp) :: f
 external f
 integer :: j
-real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, fv1(7), fv2(7)
-real, parameter :: xgk(8) = [0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
+real(nswc_sp) :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, fv1(7), &
+   & fv2(7)
+real(nswc_sp), parameter :: xgk(8) = [0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
    & 0.7415311855993944e+00, 0.5860872354676911e+00, 0.4058451513773972e+00, 0.2077849550078985e+00, 0.0000000000000000e+00]
-real, parameter :: wgk(8) = [0.2293532201052922e-01, 0.6309209262997855e-01, 0.1047900103222502e+00, &
+real(nswc_sp), parameter :: wgk(8) = [0.2293532201052922e-01, 0.6309209262997855e-01, 0.1047900103222502e+00, &
    & 0.1406532597155259e+00, 0.1690047266392679e+00, 0.1903505780647854e+00, 0.2044329400752989e+00, 0.2094821410847278e+00]
-real, parameter :: wg(8) = [0.0000000000000000e+00, 0.1294849661688697e+00, 0.0000000000000000e+00, 0.2797053914892767e+00 &
+real(nswc_sp), parameter :: wg(8) = [0.0000000000000000e+00, 0.1294849661688697e+00, 0.0000000000000000e+00, &
+   & 0.2797053914892767e+00 &
    & , 0.0000000000000000e+00, 0.3818300505051189e+00, 0.0000000000000000e+00, 0.4179591836734694e+00]
 !-----------------------------------------------------------------------
 ! 1.        PURPOSE
@@ -88903,12 +88940,12 @@ implicit none
 !                       maxerr = iord(nrmax)
 ! 4.        NO SUBROUTINES OR FUNCTIONS NEEDED
 !     ..................................................................
-real :: elist
-real, intent(inout) :: ermax
+real(nswc_sp) :: elist
+real(nswc_sp), intent(inout) :: ermax
 integer, intent(inout) :: iord
 integer, intent(in) :: last, limit
 integer, intent(inout) :: maxerr, nrmax
-real :: errmax, errmin
+real(nswc_sp) :: errmax, errmin
 integer :: i, ibeg, ido, isucc, j, jbnd, jupbn, k
 dimension elist(last),iord(last)
 !           Check whether the list contains more than
@@ -88976,12 +89013,12 @@ pure subroutine qelg(n, epstab, result, abserr, res3la, nres, &
    & epmach, oflow)
 implicit none
 integer, intent(inout) :: n, nres
-real, intent(out) :: abserr
-real, intent(in) :: epmach, oflow
-real, intent(out) :: result
-real, intent(inout) :: epstab(52), res3la(3)
+real(nswc_sp), intent(out) :: abserr
+real(nswc_sp), intent(in) :: epmach, oflow
+real(nswc_sp), intent(out) :: result
+real(nswc_sp), intent(inout) :: epstab(52), res3la(3)
 integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp, newelm, num
-real :: delta1, delta2, delta3, e0, e1, e1abs, e2, e3, epsinf, &
+real(nswc_sp) :: delta1, delta2, delta3, e0, e1, e1abs, e2, e3, epsinf, &
    & err1, err2, err3, error, res, ss, tol1, tol2, tol3
 !-----------------------------------------------------------------------
 ! 1.        PURPOSE
@@ -89250,13 +89287,13 @@ implicit none
 !                     contain the error estimates.
 !                    work(limit*4+1), ... is the area reserved to store
 !                     functional values.
-real :: a
-real, intent(out) :: abserr
-real :: b
-real, intent(in) :: epsabs, epsrel
-real :: f
-real, intent(out) :: result
-real, intent(inout) :: work
+real(nswc_sp) :: a
+real(nswc_sp), intent(out) :: abserr
+real(nswc_sp) :: b
+real(nswc_sp), intent(in) :: epsabs, epsrel
+real(nswc_sp) :: f
+real(nswc_sp), intent(out) :: result
+real(nswc_sp), intent(inout) :: work
 integer, intent(out) :: ier
 integer, intent(inout) :: iwork
 integer, intent(out) :: last
@@ -89399,24 +89436,25 @@ implicit none
 !                     saved in the corresponding column
 !                     of valp,valn
 !***routines called  f,spmpar,qelg,qxlqm,qpsrt,qxrrd,qxcpy
-real :: a
-real, intent(out) :: abserr
-real, intent(inout) :: alist
-real :: b
-real, intent(inout) :: blist
-real, intent(inout) :: elist
-real, intent(in) :: epsabs, epsrel
-real :: f
-real, intent(out) :: result
-real, intent(inout) :: rlist
-real, intent(inout) :: valp, valn
+real(nswc_sp) :: a
+real(nswc_sp), intent(out) :: abserr
+real(nswc_sp), intent(inout) :: alist
+real(nswc_sp) :: b
+real(nswc_sp), intent(inout) :: blist
+real(nswc_sp), intent(inout) :: elist
+real(nswc_sp), intent(in) :: epsabs, epsrel
+real(nswc_sp) :: f
+real(nswc_sp), intent(out) :: result
+real(nswc_sp), intent(inout) :: rlist
+real(nswc_sp), intent(inout) :: valp, valn
 integer, intent(out) :: ier
 integer, intent(inout) :: iord
 integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(inout) :: lp(limit), ln(limit)
 external f
-real :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, errbnd, &
+real(nswc_sp) :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, &
+   & errbnd, &
    & errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, uflow, vp1(21), &
    & vp2(21), vn1(21), vn2(21)
 integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2, lp1, lp2, ln1, ln2
@@ -89654,8 +89692,8 @@ end subroutine qxgse
 pure subroutine qxcpy(a, b, l)
 implicit none
 integer, intent(in) :: l
-real, intent(inout) :: a(l)
-real, intent(in) :: b(l)
+real(nswc_sp), intent(inout) :: a(l)
+real(nswc_sp), intent(in) :: b(l)
 integer :: i
 !  TO COPY THE REAL VECTOR b OF LENGTH l   i N T O
 !          the real vector a of length l
@@ -89727,15 +89765,15 @@ implicit none
 !              ls       NUMBER OF ELEMENTS IN
 !                       vr,vs respectively
 !***routines called  qxrul
-real :: f
-real, intent(in) :: a, b
-real, intent(inout) :: result, abserr, resabs, resasc
-real, intent(in) :: epmach, oflow, uflow
-real, intent(inout) :: vr(21), vs(21)
+real(nswc_sp) :: f
+real(nswc_sp), intent(in) :: a, b
+real(nswc_sp), intent(inout) :: result, abserr, resabs, resasc
+real(nswc_sp), intent(in) :: epmach, oflow, uflow
+real(nswc_sp), intent(inout) :: vr(21), vs(21)
 integer, intent(in) :: key
 integer, intent(inout) :: lr, ls
 external f
-real :: t, resg, resk, errold
+real(nswc_sp) :: t, resg, resk, errold
 integer :: k, k0, k1, k2, key1
 key1 = max(key ,  0)
 key1 = min(key1,  4)
@@ -89761,19 +89799,19 @@ end subroutine qxlqm
 
 subroutine qxrul(f,xl,xu,y,ya,ym,ke,k1,fv1,fv2,l1,l2)
 implicit none
-real :: f
-real, intent(in) :: xl, xu
-real, intent(out) :: y
-real, intent(inout) :: ya, ym
-real, intent(inout) :: fv1(21), fv2(21)
+real(nswc_sp) :: f
+real(nswc_sp), intent(in) :: xl, xu
+real(nswc_sp), intent(out) :: y
+real(nswc_sp), intent(inout) :: ya, ym
+real(nswc_sp), intent(inout) :: fv1(21), fv2(21)
 integer, intent(in) :: ke, k1
 integer, intent(inout) :: l1, l2
 external f
 integer :: i, is, k, ks, j
-real :: ldl, y2, xx(41), aa, bb, c
+real(nswc_sp) :: ldl, y2, xx(41), aa, bb, c
 integer, parameter :: istart(4) = [0, 7, 17, 31]
 integer, parameter :: len(4) = [7, 10, 14, 21]
-real, parameter :: ww(52) = [1.303262173284849021810473057638590518409112513421e-1, &
+real(nswc_sp), parameter :: ww(52) = [1.303262173284849021810473057638590518409112513421e-1, &
    & 2.390632866847646220320329836544615917290026806242e-1, 2.630626354774670227333506083741355715758124943143e-1, &
    & 2.186819313830574175167853094864355208948886875898e-1, 2.757897646642836865859601197607471574336674206700e-2, &
    & 1.055750100538458443365034879086669791305550493830e-1, 1.571194260595182254168429283636656908546309467968e-2, &
@@ -89942,13 +89980,13 @@ implicit none
 !              lr     - INTEGER
 !              ls       NUMBER OF ELEMENTES IN r,s RESPECTIVELY
 !***routines called  f
-real :: f
-real, intent(inout) :: r(21), s(21)
-real :: z(21)
-real, intent(in) :: xu, xl
+real(nswc_sp) :: f
+real(nswc_sp), intent(inout) :: r(21), s(21)
+real(nswc_sp) :: z(21)
+real(nswc_sp), intent(in) :: xu, xl
 integer, intent(inout) :: lr, ls
 integer, intent(in) :: lz
-real :: dlen, centr
+real(nswc_sp) :: dlen, centr
 dlen = (xu - xl)*0.5
 centr = xl + dlen
 r(1) = z(3)
@@ -90005,12 +90043,12 @@ subroutine dqags(f, a, b, epsabs, epsrel, result, abserr, &
    & neval, ier, limit, lenw, last, iwork, work)
 implicit none
 integer, intent(out) :: last
-double precision, intent(in) :: a
-double precision, intent(out) :: abserr
-double precision, intent(in) :: b, epsabs, epsrel
-double precision :: f
-double precision, intent(out) :: result
-double precision, intent(inout) :: work
+real(nswc_dp), intent(in) :: a
+real(nswc_dp), intent(out) :: abserr
+real(nswc_dp), intent(in) :: b, epsabs, epsrel
+real(nswc_dp) :: f
+real(nswc_dp), intent(out) :: result
+real(nswc_dp), intent(inout) :: work
 integer, intent(out) :: ier
 integer, intent(inout) :: iwork
 integer, intent(in) :: lenw, limit
@@ -90280,23 +90318,23 @@ implicit none
 !              - f (user-provided function)
 !              - dpmpar
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a
-double precision, intent(out) :: abserr
-double precision, intent(inout) :: alist
-double precision, intent(in) :: b
-double precision, intent(inout) :: blist
-double precision, intent(inout) :: elist
-double precision, intent(in) :: epsabs, epsrel
-double precision :: f
-double precision, intent(out) :: result
-double precision, intent(inout) :: rlist
+real(nswc_dp), intent(in) :: a
+real(nswc_dp), intent(out) :: abserr
+real(nswc_dp), intent(inout) :: alist
+real(nswc_dp), intent(in) :: b
+real(nswc_dp), intent(inout) :: blist
+real(nswc_dp), intent(inout) :: elist
+real(nswc_dp), intent(in) :: epsabs, epsrel
+real(nswc_dp) :: f
+real(nswc_dp), intent(out) :: result
+real(nswc_dp), intent(inout) :: rlist
 integer, intent(out) :: ier
 integer, intent(inout) :: iord
 integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
-double precision :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, &
+real(nswc_dp) :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, &
    & erlast, errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, &
    & uflow
 integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2
@@ -90602,30 +90640,30 @@ implicit none
 ! 3.        SUBROUTINES OR FUNCTIONS NEEDED
 !                 - f (user-provided function)
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a
-double precision, intent(inout) :: abserr
-double precision, intent(in) :: b
-double precision, intent(in) :: epmach
-double precision :: f
-double precision, intent(inout) :: resabs
-double precision, intent(inout) :: result
-double precision, intent(in) :: uflow
-double precision, intent(inout) :: resasc
+real(nswc_dp), intent(in) :: a
+real(nswc_dp), intent(inout) :: abserr
+real(nswc_dp), intent(in) :: b
+real(nswc_dp), intent(in) :: epmach
+real(nswc_dp) :: f
+real(nswc_dp), intent(inout) :: resabs
+real(nswc_dp), intent(inout) :: result
+real(nswc_dp), intent(in) :: uflow
+real(nswc_dp), intent(inout) :: resasc
 integer, intent(out) :: isig
 external f
-double precision :: absc, centr, dhlgth, fc, fsum, fval1, fval2, fv1(10), fv2(10), hlgth, resg, resk, reskh, tol
+real(nswc_dp) :: absc, centr, dhlgth, fc, fsum, fval1, fval2, fv1(10), fv2(10), hlgth, resg, resk, reskh, tol
 integer :: j, jtw, jtwm1
-double precision, parameter :: xgk(11) = [0.995657163025808080735527280689d+00, &
+real(nswc_dp), parameter :: xgk(11) = [0.995657163025808080735527280689d+00, &
    & 0.973906528517171720077964012084d+00, 0.930157491355708226001207180060d+00, 0.865063366688984510732096688423d+00, &
    & 0.780817726586416897063717578345d+00, 0.679409568299024406234327365115d+00, 0.562757134668604683339000099273d+00, &
    & 0.433395394129247190799265943166d+00, 0.294392862701460198131126603104d+00, 0.148874338981631210884826001130d+00, &
    & 0.000000000000000000000000000000d+00]
-double precision, parameter :: wgk(11) = [0.116946388673718742780643960622d-01, &
+real(nswc_dp), parameter :: wgk(11) = [0.116946388673718742780643960622d-01, &
    & 0.325581623079647274788189724594d-01, 0.547558965743519960313813002446d-01, 0.750396748109199527670431409162d-01, &
    & 0.931254545836976055350654650834d-01, 0.109387158802297641899210590326d+00, 0.123491976262065851077958109831d+00, &
    & 0.134709217311473325928054001772d+00, 0.142775938577060080797094273139d+00, 0.147739104901338491374841515972d+00, &
    & 0.149445554002916905664936468390d+00]
-double precision, parameter :: wg(5) = [0.666713443086881375935688098933d-01, &
+real(nswc_dp), parameter :: wg(5) = [0.666713443086881375935688098933d-01, &
    & 0.149451349150580593145776339658d+00, 0.219086362515982043995534934228d+00, 0.269266719309996355091226921569d+00, &
    & 0.295524224714752870173892994651d+00]
 !           The abscissae and weights are given for the interval (-1,1).
@@ -90707,11 +90745,11 @@ subroutine dqagi(f, bound, inf, epsabs, epsrel, result, abserr, &
 implicit none
 integer, intent(in) :: inf
 integer, intent(out) :: last
-double precision, intent(out) :: abserr
-double precision, intent(in) :: bound, epsabs, epsrel
-double precision :: f
-double precision, intent(out) :: result
-double precision, intent(inout) :: work
+real(nswc_dp), intent(out) :: abserr
+real(nswc_dp), intent(in) :: bound, epsabs, epsrel
+real(nswc_dp) :: f
+real(nswc_dp), intent(out) :: result
+real(nswc_dp), intent(inout) :: work
 integer, intent(out) :: ier
 integer, intent(inout) :: iwork
 integer, intent(in) :: lenw, limit
@@ -90997,15 +91035,15 @@ implicit none
 !              - f (user-provided function)
 !              - dpmpar
 !-----------------------------------------------------------------------
-double precision, intent(out) :: abserr
-double precision, intent(inout) :: alist
-double precision, intent(inout) :: blist
-double precision, intent(in) :: bound
-double precision, intent(inout) :: elist
-double precision, intent(in) :: epsabs, epsrel
-double precision :: f
-double precision, intent(out) :: result
-double precision, intent(inout) :: rlist
+real(nswc_dp), intent(out) :: abserr
+real(nswc_dp), intent(inout) :: alist
+real(nswc_dp), intent(inout) :: blist
+real(nswc_dp), intent(in) :: bound
+real(nswc_dp), intent(inout) :: elist
+real(nswc_dp), intent(in) :: epsabs, epsrel
+real(nswc_dp) :: f
+real(nswc_dp), intent(out) :: result
+real(nswc_dp), intent(inout) :: rlist
 integer, intent(out) :: ier
 integer, intent(in) :: inf
 integer, intent(inout) :: iord
@@ -91013,7 +91051,7 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
-double precision :: abseps, area, area1, area12, area2, a1, a2, boun, b1, b2, correc, defabs, defab1, defab2, dres, epmach, &
+real(nswc_dp) :: abseps, area, area1, area12, area2, a1, a2, boun, b1, b2, correc, defabs, defab1, defab2, dres, epmach, &
    & erlarg, erlast, errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), &
    & small, t, uflow
 integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2
@@ -91279,27 +91317,27 @@ subroutine dqk15i(f, boun, inf, a, b, result, abserr, resabs, &
    & resasc, epmach, uflow)
 implicit none
 integer, intent(in) :: inf
-double precision, intent(in) :: a
-double precision, intent(inout) :: abserr
-double precision, intent(in) :: b, boun
-double precision, intent(in) :: epmach
-double precision :: f
-double precision, intent(inout) :: resabs, resasc
-double precision, intent(inout) :: result
-double precision, intent(in) :: uflow
+real(nswc_dp), intent(in) :: a
+real(nswc_dp), intent(inout) :: abserr
+real(nswc_dp), intent(in) :: b, boun
+real(nswc_dp), intent(in) :: epmach
+real(nswc_dp) :: f
+real(nswc_dp), intent(inout) :: resabs, resasc
+real(nswc_dp), intent(inout) :: result
+real(nswc_dp), intent(in) :: uflow
 external f
 integer :: j
-double precision :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, &
+real(nswc_dp) :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, &
    & fv1(7), fv2(7)
-double precision, parameter :: xgk(8) = [0.991455371120812639206854697526d+00, &
+real(nswc_dp), parameter :: xgk(8) = [0.991455371120812639206854697526d+00, &
    & 0.949107912342758524526189684048d+00, 0.864864423359769072789712788641d+00, 0.741531185599394439863864773281d+00, &
    & 0.586087235467691130294144838259d+00, 0.405845151377397166906606412077d+00, 0.207784955007898467600689403773d+00, &
    & 0.000000000000000000000000000000d+00]
-double precision, parameter :: wgk(8) = [0.229353220105292249637320080590d-01, &
+real(nswc_dp), parameter :: wgk(8) = [0.229353220105292249637320080590d-01, &
    & 0.630920926299785532907006631892d-01, 0.104790010322250183839876322542d+00, 0.140653259715525918745189590510d+00, &
    & 0.169004726639267902826583426599d+00, 0.190350578064785409913256402421d+00, 0.204432940075298892414161999235d+00, &
    & 0.209482141084727828012999174892d+00]
-double precision, parameter :: wg(8) = [0.0d+00, 0.129484966168869693270611432679d+00, 0.0d+00, &
+real(nswc_dp), parameter :: wg(8) = [0.0d+00, 0.129484966168869693270611432679d+00, 0.0d+00, &
    & 0.279705391489276667901467771424d+00, 0.0d+00, 0.381830050505118944950369775489d+00, 0.0d+00, &
    & 0.417959183673469387755102040816d+00]
 !-----------------------------------------------------------------------
@@ -91473,12 +91511,12 @@ implicit none
 !                       maxerr = iord(nrmax)
 ! 4.        NO SUBROUTINES OR FUNCTIONS NEEDED
 !     ..................................................................
-double precision :: elist
-double precision, intent(inout) :: ermax
+real(nswc_dp) :: elist
+real(nswc_dp), intent(inout) :: ermax
 integer, intent(inout) :: iord
 integer, intent(in) :: last, limit
 integer, intent(inout) :: maxerr, nrmax
-double precision :: errmax, errmin
+real(nswc_dp) :: errmax, errmin
 integer :: i, ibeg, ido, isucc, j, jbnd, jupbn, k
 dimension elist(last),iord(last)
 !           Check whether the list contains more than
@@ -91582,15 +91620,15 @@ implicit none
 !                       the largest positive magnitude.
 ! 3.        NO SUBROUTINES OR FUNCTIONS USED
 !-----------------------------------------------------------------------
-double precision, intent(out) :: abserr
-double precision, intent(in) :: epmach
-double precision, intent(inout) :: epstab(52)
-double precision, intent(in) :: oflow
-double precision, intent(out) :: result
-double precision, intent(inout) :: res3la(3)
+real(nswc_dp), intent(out) :: abserr
+real(nswc_dp), intent(in) :: epmach
+real(nswc_dp), intent(inout) :: epstab(52)
+real(nswc_dp), intent(in) :: oflow
+real(nswc_dp), intent(out) :: result
+real(nswc_dp), intent(inout) :: res3la(3)
 integer, intent(inout) :: n
 integer, intent(inout) :: nres
-double precision :: delta1, delta2, delta3, epsinf, error, err1, err2, err3, e0, e1, e1abs, e2, e3, res, ss, tol1, tol2, tol3
+real(nswc_dp) :: delta1, delta2, delta3, epsinf, error, err1, err2, err3, e0, e1, e1abs, e2, e3, res, ss, tol1, tol2, tol3
 integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp, newelm, num
 !---------------------
 !           List of major variables
@@ -91822,13 +91860,13 @@ implicit none
 !                     contain the error estimates.
 !                    work(limit*4+1), ... is the area reserved to store
 !                     functional values.
-double precision :: a
-double precision, intent(out) :: abserr
-double precision :: b
-double precision, intent(in) :: epsabs, epsrel
-double precision :: f
-double precision, intent(out) :: result
-double precision, intent(inout) :: work
+real(nswc_dp) :: a
+real(nswc_dp), intent(out) :: abserr
+real(nswc_dp) :: b
+real(nswc_dp), intent(in) :: epsabs, epsrel
+real(nswc_dp) :: f
+real(nswc_dp), intent(out) :: result
+real(nswc_dp), intent(inout) :: work
 integer, intent(out) :: ier
 integer, intent(inout) :: iwork
 integer, intent(out) :: last
@@ -91971,24 +92009,24 @@ implicit none
 !                     saved in the corresponding column
 !                     of valp,valn
 !***routines called  f,dpmpar,dqelg,dqxlqm,dqpsrt,dqxrrd,dqxcpy
-double precision :: a
-double precision, intent(out) :: abserr
-double precision, intent(inout) :: alist
-double precision :: b
-double precision, intent(inout) :: blist
-double precision, intent(inout) :: elist
-double precision, intent(in) :: epsabs, epsrel
-double precision :: f
-double precision, intent(out) :: result
-double precision, intent(inout) :: rlist
-double precision, intent(inout) :: valp, valn
+real(nswc_dp) :: a
+real(nswc_dp), intent(out) :: abserr
+real(nswc_dp), intent(inout) :: alist
+real(nswc_dp) :: b
+real(nswc_dp), intent(inout) :: blist
+real(nswc_dp), intent(inout) :: elist
+real(nswc_dp), intent(in) :: epsabs, epsrel
+real(nswc_dp) :: f
+real(nswc_dp), intent(out) :: result
+real(nswc_dp), intent(inout) :: rlist
+real(nswc_dp), intent(inout) :: valp, valn
 integer, intent(out) :: ier
 integer, intent(inout) :: iord
 integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(inout) :: lp(limit), ln(limit)
 external f
-double precision :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, &
+real(nswc_dp) :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, &
    & erlast, errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, &
    & uflow, vp1(21), vp2(21), vn1(21), vn2(21)
 integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2, lp1, lp2, ln1, ln2
@@ -92226,8 +92264,8 @@ end subroutine dqxgse
 pure subroutine dqxcpy(a, b, l)
 implicit none
 integer, intent(in) :: l
-double precision, intent(inout) :: a(l)
-double precision, intent(in) :: b(l)
+real(nswc_dp), intent(inout) :: a(l)
+real(nswc_dp), intent(in) :: b(l)
 integer :: i
 !  TO COPY THE DOUBLE PRECISION VECTOR b OF LENGTH l   i N T O
 !          the double precision vector a of length l
@@ -92299,15 +92337,15 @@ implicit none
 !              ls       NUMBER OF ELEMENTS IN
 !                       vr,vs respectively
 !***routines called  dqxrul
-double precision :: f
-double precision, intent(in) :: a, b
-double precision, intent(inout) :: result, abserr, resabs, resasc
-double precision, intent(in) :: epmach, oflow, uflow
-double precision, intent(inout) :: vr(21), vs(21)
+real(nswc_dp) :: f
+real(nswc_dp), intent(in) :: a, b
+real(nswc_dp), intent(inout) :: result, abserr, resabs, resasc
+real(nswc_dp), intent(in) :: epmach, oflow, uflow
+real(nswc_dp), intent(inout) :: vr(21), vs(21)
 integer, intent(in) :: key
 integer, intent(inout) :: lr, ls
 external f
-double precision :: t, resg, resk, errold
+real(nswc_dp) :: t, resg, resk, errold
 integer :: k, k0, k1, k2, key1
 key1 = max(key ,  0)
 key1 = min(key1,  4)
@@ -92333,19 +92371,19 @@ end subroutine dqxlqm
 
 subroutine dqxrul(f,xl,xu,y,ya,ym,ke,k1,fv1,fv2,l1,l2)
 implicit none
-double precision :: f
-double precision, intent(in) :: xl, xu
-double precision, intent(out) :: y
-double precision, intent(inout) :: ya, ym
-double precision, intent(inout) :: fv1(21), fv2(21)
+real(nswc_dp) :: f
+real(nswc_dp), intent(in) :: xl, xu
+real(nswc_dp), intent(out) :: y
+real(nswc_dp), intent(inout) :: ya, ym
+real(nswc_dp), intent(inout) :: fv1(21), fv2(21)
 integer, intent(in) :: ke, k1
 integer, intent(inout) :: l1, l2
 external f
 integer :: i, is, k, ks, j
-double precision :: ldl, y2, xx(41), aa, bb, c
+real(nswc_dp) :: ldl, y2, xx(41), aa, bb, c
 integer, parameter :: istart(4) = [0, 7, 17, 31]
 integer, parameter :: len(4) = [7, 10, 14, 21]
-double precision, parameter :: ww(52) = [1.303262173284849021810473057638590518409112513421d-1, &
+real(nswc_dp), parameter :: ww(52) = [1.303262173284849021810473057638590518409112513421d-1, &
    & 2.390632866847646220320329836544615917290026806242d-1, 2.630626354774670227333506083741355715758124943143d-1, &
    & 2.186819313830574175167853094864355208948886875898d-1, 2.757897646642836865859601197607471574336674206700d-2, &
    & 1.055750100538458443365034879086669791305550493830d-1, 1.571194260595182254168429283636656908546309467968d-2, &
@@ -92514,13 +92552,13 @@ implicit none
 !              lr     - INTEGER
 !              ls       NUMBER OF ELEMENTES IN r,s RESPECTIVELY
 !***routines called  f
-double precision :: f
-double precision, intent(inout) :: r(21), s(21)
-double precision :: z(21)
-double precision, intent(in) :: xu, xl
+real(nswc_dp) :: f
+real(nswc_dp), intent(inout) :: r(21), s(21)
+real(nswc_dp) :: z(21)
+real(nswc_dp), intent(in) :: xu, xl
 integer, intent(inout) :: lr, ls
 integer, intent(in) :: lz
-double precision :: dlen, centr
+real(nswc_dp) :: dlen, centr
 dlen = (xu - xl)*0.5d0
 centr = xl + dlen
 r(1) = z(3)
@@ -92576,12 +92614,12 @@ end subroutine dqxrrd
 subroutine cubtri(f, t, eps, mcalls, ans, err, ncalls, w, nw, &
    & idata, rdata, ier)
 implicit none
-real :: f
+real(nswc_sp) :: f
 external f
 integer :: idata(*), ier, mcalls, ncalls, nw
-real :: ans, eps, err, rdata(*), t(2,*), w(6,nw)
+real(nswc_sp) :: ans, eps, err, rdata(*), t(2,*), w(6,nw)
 integer :: i, j, jkp, k, l, maxc, maxk, mw
-real :: alfa, anskp, area, errmax, h, q1, q2, r1, r2, vec(2,3), x(2)
+real(nswc_sp) :: alfa, anskp, area, errmax, h, q1, q2, r1, r2, vec(2,3), x(2)
 !       Adaptive cubature over a triangle
 !       parameters
 !          f     - User supplied external function of the form
@@ -92643,12 +92681,12 @@ real :: alfa, anskp, area, errmax, h, q1, q2, r1, r2, vec(2,3), x(2)
 !       statement number 90.
 !       Actual dimension of w is (6,nw/6)
 integer, parameter :: nfe = 19
-real, parameter :: s(4) = [1e0, 1e0, 1e0, -1e0]
-real, parameter :: d(2,4) = reshape([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0], [2, 4])
-real, parameter :: zero = 0.e0
-real, parameter :: one = 1.e0
-double precision, parameter :: dzero = 0.d0
-real, parameter :: point5 = .5e0
+real(nswc_sp), parameter :: s(4) = [1e0, 1e0, 1e0, -1e0]
+real(nswc_sp), parameter :: d(2,4) = reshape([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0], [2, 4])
+real(nswc_sp), parameter :: zero = 0.e0
+real(nswc_sp), parameter :: one = 1.e0
+real(nswc_dp), parameter :: dzero = 0.d0
+real(nswc_sp), parameter :: point5 = .5e0
 !       This common is required to preserve tans and terr between calls
 !       and to save variables in function rnderr
 !       nfe is the number of function evaluations per call to cubrul.
@@ -92758,8 +92796,8 @@ end subroutine cubtri
 
 function rnderr(x, a, y, b)
 implicit none
-real :: a, b, x, y
-real :: rnderr
+real(nswc_sp) :: a, b, x, y
+real(nswc_sp) :: rnderr
 !       This function computes the rounding error committed when the
 !       sum x+a is formed.  In the calling program, y must be the same
 !       as x and b must be the same as A.  they are declared as
@@ -92774,17 +92812,17 @@ end function rnderr
 
 subroutine cubrul(f, vec, p, idata, rdata)
 implicit none
-real :: f
-real, intent(inout) :: p(*)
-real :: rdata(*)
-real, intent(in) :: vec(2,*)
+real(nswc_sp) :: f
+real(nswc_sp), intent(inout) :: p(*)
+real(nswc_sp) :: rdata(*)
+real(nswc_sp), intent(in) :: vec(2,*)
 integer :: idata(*)
 external f
 integer :: i, j, k
-real :: x, y, area, origin(2), tvec(2,3)
-double precision :: a1, a2, s, sn
+real(nswc_sp) :: x, y, area, origin(2), tvec(2,3)
+real(nswc_dp) :: a1, a2, s, sn
 integer, parameter :: nquad = 6
-real, parameter :: w(5,6) = reshape([.3333333333333333333333333e0, .3333333333333333333333333e0, &
+real(nswc_sp), parameter :: w(5,6) = reshape([.3333333333333333333333333e0, .3333333333333333333333333e0, &
    & .3333333333333333333333333e0, .225e0, .3786109120031468330830822e-1, .7974269853530873223980253e0, &
    & .1012865073234563388009874e0, .1012865073234563388009874e0, .3778175416344814577870518e0, .1128612762395489164329420e0, &
    & .5971587178976982045911758e-1, .4701420641051150897704412e0, .4701420641051150897704412e0, .3971824583655185422129482e0, &
@@ -92792,11 +92830,11 @@ real, parameter :: w(5,6) = reshape([.3333333333333333333333333e0, .333333333333
    & .3488144389708976891842461e0, .9410382782311208665596304e0, .2948086088443956672018481e-1, .2948086088443956672018481e-1, &
    & 0.e0, .4033280212549620569433320e-1, .7384168123405100656112906e0, .2321023267750503676685246e0, &
    & .2948086088443956672018481e-1, 0.e0, .2250583347313904927138324e0], [5, 6])
-double precision, parameter :: dzero = 0.d0
-double precision, parameter :: done = 1.d0
-double precision, parameter :: dthree = 3.d0
-double precision, parameter :: dsix = 6.d0
-real, parameter :: point5 = .5e0
+real(nswc_dp), parameter :: dzero = 0.d0
+real(nswc_dp), parameter :: done = 1.d0
+real(nswc_dp), parameter :: dthree = 3.d0
+real(nswc_dp), parameter :: dsix = 6.d0
+real(nswc_sp), parameter :: point5 = .5e0
 !       BASIC cubature rule pair over a triangle
 !       parameters
 !         f  - External function - See comments to cubtri
@@ -92895,12 +92933,12 @@ subroutine ieslv(kernel,rhfcn,a,b,ep,iflag,t,x,nt,nupper, &
    & mupper,nf,mf,norm,w,ier)
 implicit none
 integer :: ier, iflag, mf, mupper, nf, nt, nupper
-real :: a, b, ep, t(*), w(*), x(*)
-real :: rhfcn
-real :: kernel, norm
+real(nswc_sp) :: a, b, ep, t(*), w(*), x(*)
+real(nswc_sp) :: rhfcn
+real(nswc_sp) :: kernel, norm
 external kernel, rhfcn
 integer :: i1, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i2, i20, i21, i3, i4, i5, i6, i7, i8, i9, m, n, nhalf, nsq, nup
-real :: cutoff, rootrt, unitrd
+real(nswc_sp) :: cutoff, rootrt, unitrd
 !   The integral equation being solved is
 !                     b
 !          x(S) -  INT  kernel(S,t)*x(t)*DT = rhfcn(S)
@@ -93054,19 +93092,19 @@ subroutine iegs(kernel,rhfcn,a,b,ep,iflag,x,t,nt,nup,mup,ier, &
    & imknn)
 implicit none
 integer :: ier, iflag, mup, nhalf, nt, nup
-real :: a, aside(nup,*), aside3(nup,nup), b, cutoff, deln(nup), &
+real(nswc_sp) :: a, aside(nup,*), aside3(nup,nup), b, cutoff, deln(nup), &
    & ep, oldx(mup), r(mup), rh(nup), rhs(mup), rootrt, save(mup), &
    & save2(mup), t(*), tm(mup), tn(nup), unitrd, wm(mup), wn(nup), &
    & x(*), xm(mup), xmz(mup), xn(nup)
-real :: rhfcn
-real :: kernel, lufact(nup,nup), kmm(nup,nup), kmn(nup,nhalf), &
+real(nswc_sp) :: rhfcn
+real(nswc_sp) :: kernel, lufact(nup,nup), kmm(nup,nup), kmn(nup,nhalf), &
    & knm(nhalf,nup), imknn(nup,nup)
 external kernel, rhfcn
 integer :: i, ind, j, loop, m, mnew, n
-real :: aside2(5), averr, cond, denr1, denr2, eps, error, esterr, &
+real(nswc_sp) :: aside2(5), averr, cond, denr1, denr2, eps, error, esterr, &
    & pastc, pastre, r1rat, rate, relerr, relmin, rt, temp, temp2, test, &
    & xnorm
-real :: numr1, numr2
+real(nswc_sp) :: numr1, numr2
 integer :: flag, oldm
 !   This routine controls the solution of the integral equation.
 !   Initialization
@@ -93345,13 +93383,13 @@ subroutine nsterp(tm,wm,xm,m,tn,wn,xn,n,kernel,rhfcn,rhs,kmn, &
    & nhalf,nup)
 implicit none
 integer, intent(in) :: m, n, nhalf, nup
-real, intent(inout) :: rhs(m)
-real :: tm(m), tn(n), wm(m), wn(n)
-real, intent(inout) :: xm(m)
-real :: xn(n)
-real :: rhfcn
-real :: kernel
-real, intent(inout) :: kmn(nup,nhalf)
+real(nswc_sp), intent(inout) :: rhs(m)
+real(nswc_sp) :: tm(m), tn(n), wm(m), wn(n)
+real(nswc_sp), intent(inout) :: xm(m)
+real(nswc_sp) :: xn(n)
+real(nswc_sp) :: rhfcn
+real(nswc_sp) :: kernel
+real(nswc_sp), intent(inout) :: kmn(nup,nhalf)
 external kernel, rhfcn
 integer :: i, j
 !   Use the values of xn(i), i=1,...,n, to calculate the Nystrom
@@ -93389,9 +93427,9 @@ end subroutine nsterp
 pure elemental function rmin(n,m,cond,unitrd,averr)
 implicit none
 integer, intent(in) :: m, n
-real, intent(in) :: averr, cond, unitrd
-real :: float1, float2
-real :: rmin
+real(nswc_sp), intent(in) :: averr, cond, unitrd
+real(nswc_sp) :: float1, float2
+real(nswc_sp) :: rmin
 !   For a linear system   (I-KMM)*XM=RHFCN   of order m, this is the
 !   value of RELMIN used in iegs. The variable unitrd is defined in
 !   IEGAUS, and the variables cond and averr are defined in iegs
@@ -93404,10 +93442,10 @@ rmin = max((float1**1.5)*cond*unitrd, &
    & (float2**1.5)*averr)
 end function rmin
 
-real function rnrm(x,y,n,iflag)
+real(nswc_sp) function rnrm(x,y,n,iflag)
 implicit none
 integer, intent(in) :: iflag, n
-real :: x(n), y(n)
+real(nswc_sp) :: x(n), y(n)
 integer :: i
 !   iflag=0    Calculate the maximum norm of x.
 !   iflag=1    Calculate the maximum norm of x-y.
@@ -93427,12 +93465,12 @@ end function rnrm
 
 function conew(cond,elinsy,relrsd,averr,pastc,pastre)
 implicit none
-real, intent(out) :: averr
-real, intent(in) :: cond, elinsy
-real, intent(inout) :: pastc, pastre
-real, intent(in) :: relrsd
-real :: c
-real :: conew
+real(nswc_sp), intent(out) :: averr
+real(nswc_sp), intent(in) :: cond, elinsy
+real(nswc_sp), intent(inout) :: pastc, pastre
+real(nswc_sp), intent(in) :: relrsd
+real(nswc_sp) :: c
+real(nswc_sp) :: conew
 !   This is used in updating the value of the condition number
 !   IN iegs.
 averr = sqrt(elinsy*pastre)
@@ -93448,11 +93486,11 @@ end function conew
 pure subroutine wandt(wv,tv,n,a,b)
 implicit none
 integer, intent(in) :: n
-real, intent(in) :: a, b
-real, intent(inout) :: tv(n), wv(n)
+real(nswc_sp), intent(in) :: a, b
+real(nswc_sp), intent(inout) :: tv(n), wv(n)
 integer :: i, i1, i2, k, l, loop, m, mt, npi, nplace
-real :: al, bl, fl, floop, h, r, s, scale
-real, parameter :: t(255) = [.577350269189626e0, .861136311594053e0, .339981043584856e0, .960289856497536e0, &
+real(nswc_sp) :: al, bl, fl, floop, h, r, s, scale
+real(nswc_sp), parameter :: t(255) = [.577350269189626e0, .861136311594053e0, .339981043584856e0, .960289856497536e0, &
    & .796666477413627e0, .525532409916329e0, .183434642495650e0, .989400934991650e0, .944575023073233e0, .865631202387832e0, &
    & .755404408355003e0, .617876244402644e0, .458016777657227e0, .281603550779259e0, .950125098376374e-1, .997263861849482e0, &
    & .985611511545268e0, .964762255587506e0, .934906075937740e0, .896321155766052e0, .849367613732570e0, .794483795967942e0, &
@@ -93495,7 +93533,7 @@ real, parameter :: t(255) = [.577350269189626e0, .861136311594053e0, .3399810435
    & .200717593323127e0, .188704193421389e0, .176662486044902e0, .164594277567554e0, .152501378338656e0, .140385602411376e0, &
    & .128248767270607e0, .116092693560333e0, .103919204810509e0, .917301271635196e-1, .795272891002330e-1, .673125211657164e-1, &
    & .550876556946340e-1, .428545265363791e-1, .306149687799790e-1, .183708184788137e-1, .612391237518953e-2]
-real, parameter :: w(255) = [1.0e0, .347854845137454e0, .652145154862546e0, .101228536290376e0, .222381034453374e0, &
+real(nswc_sp), parameter :: w(255) = [1.0e0, .347854845137454e0, .652145154862546e0, .101228536290376e0, .222381034453374e0, &
    & .313706645877887e0, .362683783378362e0, .271524594117541e-1, .622535239386479e-1, .951585116824928e-1, .124628971255534e0, &
    & .149595988816577e0, .169156519395003e0, .182603415044924e0, .189450610455068e0, .701861000947010e-2, .162743947309057e-1, &
    & .253920653092621e-1, .342738629130214e-1, .428358980222267e-1, .509980592623762e-1, .586840934785355e-1, .658222227763618e-1, &
@@ -93574,16 +93612,16 @@ subroutine leave(ierset,nf,mf,xv,tv,wv,error,kernel,rhfcn,ep, &
    & rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 implicit none
 integer :: ier, ierset, iflag, mf, nf, nhalf, nt, nup
-real :: deln(nf), elinsy, ep, eps, error, r(mf), rh(nf), rhs(mf), &
+real(nswc_sp) :: deln(nf), elinsy, ep, eps, error, r(mf), rh(nf), rhs(mf), &
    & t(*), tm(mf), tn(nf), tv(mf), wm(mf), wn(nf), wv(mf), x(*), &
    & xm(mf), xmz(mf), xnorm, xv(mf)
-real :: rhfcn
-real :: kernel, kmm(nup,nup), kmn(nup,nhalf), knm(nhalf,nup), &
+real(nswc_sp) :: rhfcn
+real(nswc_sp) :: kernel, kmm(nup,nup), kmn(nup,nhalf), knm(nhalf,nup), &
    & imknn(nup,nup), lufact(nup,nup)
 external kernel, rhfcn
 integer :: i, itloop, j
-real :: derror, savep, sum, temp
-real :: numr1
+real(nswc_sp) :: derror, savep, sum, temp
+real(nswc_sp) :: numr1
 !   This routine sets all necessary parameters for leaving IEGAUS.
 !   If nt .GT. 0, it also performs the necessary Nystrom
 !   interpolation at the nodes given in T.
@@ -93677,19 +93715,19 @@ integer, intent(in) :: iflg, m
 integer :: n
 integer, intent(in) :: nhalf
 integer :: nup
-real, intent(inout) :: deln(n), r(m), rh(n)
-real :: rhfcn, rhs(m), tm(m), tn(n), wm(m), wn(n)
-real, intent(inout) :: xm(m)
-real :: xmz(m)
-real :: kernel
-real, intent(inout) :: kmm(nup,nup)
-real :: kmn(nup,nhalf)
-real, intent(inout) :: knm(nhalf,nup)
-real :: imknn(nup,nup)
-real, intent(inout) :: lufact(nup,nup)
+real(nswc_sp), intent(inout) :: deln(n), r(m), rh(n)
+real(nswc_sp) :: rhfcn, rhs(m), tm(m), tn(n), wm(m), wn(n)
+real(nswc_sp), intent(inout) :: xm(m)
+real(nswc_sp) :: xmz(m)
+real(nswc_sp) :: kernel
+real(nswc_sp), intent(inout) :: kmm(nup,nup)
+real(nswc_sp) :: kmn(nup,nhalf)
+real(nswc_sp), intent(inout) :: knm(nhalf,nup)
+real(nswc_sp) :: imknn(nup,nup)
+real(nswc_sp), intent(inout) :: lufact(nup,nup)
 external kernel, rhfcn
 integer :: i, ind, j
-real :: sum
+real(nswc_sp) :: sum
 !   This routine calculates one iterate xm given the initial guess
 !   xmz. The routine is divided according to whether or not
 !   m .GT. NUPPER.
@@ -93779,11 +93817,11 @@ end subroutine itert
 subroutine lnsys(a,d,m,n,b,x,option,ierr)
 implicit none
 integer :: ierr, m, n
-real :: a(m,n), d(m,n), b(n), x(n)
+real(nswc_sp) :: a(m,n), d(m,n), b(n), x(n)
 integer :: option
 integer :: i, ip1, iswit, j, k, kp1, l, nm1, nmi
-real :: c, sum, t
-real :: normx, norme, normb, normr, r(128), scale(128)
+real(nswc_sp) :: c, sum, t
+real(nswc_sp) :: normx, norme, normb, normr, r(128), scale(128)
 !   Solve AX = b where A is a matrix of order n. m is the number of
 !   rows in the dimension statement for A in the calling program.
 !   option=1   Compute an LU decomposition of A and store it in d.
@@ -93941,9 +93979,9 @@ subroutine ode(f,neqn,y,t,tout,relerr,abserr,iflag,work,iwork)
 implicit none
 integer, intent(inout) :: iflag, iwork(5)
 integer, intent(in) :: neqn
-real, intent(inout) :: abserr, relerr, t
-real, intent(in) :: tout
-real, intent(inout) :: work(*), y(neqn)
+real(nswc_sp), intent(inout) :: abserr, relerr, t
+real(nswc_sp), intent(in) :: tout
+real(nswc_sp), intent(inout) :: work(*), y(neqn)
 external f
 integer :: ip, iphi, iwt, iyp, iypout, iyy
 logical :: start, phase1, nornd
@@ -94107,16 +94145,16 @@ implicit none
 integer, intent(inout) :: iflag, isnold, k, kold
 integer, intent(in) :: neqn
 integer, intent(inout) :: ns
-real, intent(inout) :: abserr, alpha(12), beta(12), delsgn, g(13), &
+real(nswc_sp), intent(inout) :: abserr, alpha(12), beta(12), delsgn, g(13), &
    & h, hold, p(neqn), phi(neqn,16), psi(12), relerr, sig(13), t, told
-real, intent(in) :: tout
-real, intent(inout) :: v(12), w(12), wt(neqn), x, y(neqn)
-real :: yp(neqn)
-real, intent(inout) :: ypout(neqn), yy(neqn)
+real(nswc_sp), intent(in) :: tout
+real(nswc_sp), intent(inout) :: v(12), w(12), wt(neqn), x, y(neqn)
+real(nswc_sp) :: yp(neqn)
+real(nswc_sp), intent(inout) :: ypout(neqn), yy(neqn)
 logical, intent(inout) :: start, phase1, nornd
 external f
 integer :: isn, kle4, l, nostep
-real :: absdel, abseps, del, eps, fouru, releps, tend, u
+real(nswc_sp) :: absdel, abseps, del, eps, fouru, releps, tend, u
 logical :: stiff, crash
 integer, parameter :: maxnum = 500
 !   ODE  merely allocates storage for  de1 to relieve the user of the
@@ -94248,20 +94286,21 @@ implicit none
 integer, intent(inout) :: k, kold
 integer, intent(in) :: neqn
 integer, intent(inout) :: ns
-real, intent(inout) :: alpha(12), beta(12), eps, g(13), h, hold, &
+real(nswc_sp), intent(inout) :: alpha(12), beta(12), eps, g(13), h, hold, &
    & p(neqn), phi(neqn,16), psi(12), sig(13), v(12), w(12)
-real :: wt(neqn)
-real, intent(inout) :: x, y(neqn)
-real :: yp(neqn)
+real(nswc_sp) :: wt(neqn)
+real(nswc_sp), intent(inout) :: x, y(neqn)
+real(nswc_sp) :: yp(neqn)
 logical, intent(inout) :: start
 logical, intent(out) :: crash
 logical, intent(inout) :: phase1, nornd
 external f
 integer :: i, ifail, im1, ip1, iq, j, km1, km2, knew, kp1, kp2, l, limit1, limit2, nsm2, nsp1, nsp2, nswc_ai_i4
-real :: absh, erk, erkm1, erkm2, erkp1, err, fouru, hnew, p5eps, r, reali, realns, rho, round, sum, tau, temp1, temp2, temp3, &
+real(nswc_sp) :: absh, erk, erkm1, erkm2, erkp1, err, fouru, hnew, p5eps, r, reali, realns, rho, round, sum, tau, temp1, temp2, &
+   & temp3, &
    & temp4, temp5, temp6, twou, u, xold
-real, parameter :: two(13) = [2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0, 1024.0, 2048.0, 4096.0, 8192.0]
-real, parameter :: gstr(13) = [0.500, 0.0833, 0.0417, 0.0264, 0.0188, 0.0143, 0.0114, 0.00936, 0.00789, 0.00679, 0.00592, &
+real(nswc_sp), parameter :: two(13) = [2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0, 1024.0, 2048.0, 4096.0, 8192.0]
+real(nswc_sp), parameter :: gstr(13) = [0.500, 0.0833, 0.0417, 0.0264, 0.0188, 0.0143, 0.0114, 0.00936, 0.00789, 0.00679, 0.00592, &
    & 0.00524, 0.00468]
 !   Written by L. F. Shampine and M. K. Gordon
 !   abstract
@@ -94688,12 +94727,12 @@ end subroutine step1
 subroutine intrp(x,y,xout,yout,ypout,neqn,kold,phi,psi)
 implicit none
 integer, intent(in) :: kold, neqn
-real :: phi(neqn,16), psi(12)
-real, intent(in) :: x, xout
-real :: y(neqn)
-real, intent(inout) :: yout(neqn), ypout(neqn)
+real(nswc_sp) :: phi(neqn,16), psi(12)
+real(nswc_sp), intent(in) :: x, xout
+real(nswc_sp) :: y(neqn)
+real(nswc_sp), intent(inout) :: yout(neqn), ypout(neqn)
 integer :: i, j, jm1, ki, kip1, l, limit1
-real :: eta, g(13), gamma, hi, psijm1, rho(13), temp1, temp2, &
+real(nswc_sp) :: eta, g(13), gamma, hi, psijm1, rho(13), temp1, temp2, &
    & temp3, term, w(13)
 !   Written by L. F. Shampine and M. K. Gordon
 !   abstract
@@ -94765,10 +94804,10 @@ subroutine brkf45(fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag, &
 implicit none
 integer, intent(inout) :: iflag, iwork(5)
 integer, intent(in) :: neqn
-real, intent(in) :: abserr
-real, intent(inout) :: relerr, t
-real, intent(in) :: tend, tout
-real, intent(inout) :: work(*), y(neqn), yp(neqn)
+real(nswc_sp), intent(in) :: abserr
+real(nswc_sp), intent(inout) :: relerr, t
+real(nswc_sp), intent(in) :: tend, tout
+real(nswc_sp), intent(inout) :: work(*), y(neqn), yp(neqn)
 external fcn
 integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
    & kwp, kx, ky1, ky2
@@ -95024,84 +95063,85 @@ implicit none
 integer, intent(inout) :: iflag, jflag, kflag
 integer, intent(in) :: neqn
 integer, intent(inout) :: nfe
-real, intent(in) :: abserr
-real :: f1(neqn)
-real, intent(inout) :: f2(neqn), f3(neqn)
-real :: f4(neqn), f7(neqn)
-real, intent(inout) :: h, hint, relerr, savae, savre, t
-real, intent(in) :: tend
-real, intent(inout) :: told
-real, intent(in) :: tout
-real, intent(inout) :: w(neqn), wp(neqn), x, y(neqn), y1(neqn), &
+real(nswc_sp), intent(in) :: abserr
+real(nswc_sp) :: f1(neqn)
+real(nswc_sp), intent(inout) :: f2(neqn), f3(neqn)
+real(nswc_sp) :: f4(neqn), f7(neqn)
+real(nswc_sp), intent(inout) :: h, hint, relerr, savae, savre, t
+real(nswc_sp), intent(in) :: tend
+real(nswc_sp), intent(inout) :: told
+real(nswc_sp), intent(in) :: tout
+real(nswc_sp), intent(inout) :: w(neqn), wp(neqn), x, y(neqn), y1(neqn), &
    & y2(neqn), yp(neqn)
 logical, intent(inout) :: endpnt
 logical, intent(inout) :: blkout
 external fcn
 integer :: k, mflag, n
-real :: a, ae, dt, dtsign, ee, eeoet, errtol, esttol, ez, hmin, hstop, rer, s, scale, sf, swap, tol, toler, toln, u, u26, ypk
+real(nswc_sp) :: a, ae, dt, dtsign, ee, eeoet, errtol, esttol, ez, hmin, hstop, rer, s, scale, sf, swap, tol, toler, toln, u, u26, &
+   & ypk
 logical :: hfaild, interp
-real, parameter :: c2 = .250000000000000e+00
-real, parameter :: c3 = .375000000000000e+00
-real, parameter :: c4 = .923076923076923e+00
-real, parameter :: c6 = .500000000000000e+00
-real, parameter :: c8 = .150000000000000e+01
-real, parameter :: c9 = .200000000000000e+01
-real, parameter :: a21 = .250000000000000e+00
-real, parameter :: a31 = .937500000000000e-01
-real, parameter :: a32 = .281250000000000e+00
-real, parameter :: a41 = .879380974055530e+00
-real, parameter :: a42 = -.327719617660446e+01
-real, parameter :: a43 = .332089212562585e+01
-real, parameter :: a51 = .203240740740741e+01
-real, parameter :: a52 = -.800000000000000e+01
-real, parameter :: a53 = .717348927875244e+01
-real, parameter :: a54 = -.205896686159844e+00
-real, parameter :: a61 = -.296296296296296e+00
-real, parameter :: a62 = .200000000000000e+01
-real, parameter :: a63 = -.138167641325536e+01
-real, parameter :: a64 = .452972709551657e+00
-real, parameter :: a65 = -.275000000000000e+00
-real, parameter :: b1b = .118518518518519e+00
-real, parameter :: b3b = .518986354775828e+00
-real, parameter :: b4b = .506131490342017e+00
-real, parameter :: b5b = -.180000000000000e+00
-real, parameter :: b6b = .363636363636364e-01
-real, parameter :: erc11 = .277777777777778e-02
-real, parameter :: erc13 = -.299415204678363e-01
-real, parameter :: erc14 = -.291998936735779e-01
-real, parameter :: erc15 = .200000000000000e-01
-real, parameter :: b1 = .143672839506173e+00
-real, parameter :: b3 = .210187767614668e+00
-real, parameter :: b4 = .603140025990903e+00
-real, parameter :: b5 = .200000000000000e-01
-real, parameter :: b6 = .400000000000000e+00
-real, parameter :: b7 = -.266666666666667e+00
-real, parameter :: b8 = .736460905349794e+00
-real, parameter :: b9 = .153205128205128e+00
-real, parameter :: a81 = -.785774430040232e+00
-real, parameter :: a82 = .269557443004023e+01
-real, parameter :: a83 = -.387868820553843e+00
-real, parameter :: a84 = -.323463729234086e+01
-real, parameter :: a85 = .141740175234689e+01
-real, parameter :: a86 = -.739340252773601e+00
-real, parameter :: a87 = .253464461332141e+01
-real, parameter :: a91 = .277678804896947e+01
-real, parameter :: a92 = -.461924686192469e+01
-real, parameter :: a93 = -.540556629238679e+01
-real, parameter :: a94 = .195138152603181e+02
-real, parameter :: a95 = -.627825575453278e+01
-real, parameter :: a96 = .753363921389629e+01
-real, parameter :: a97 = -.139246861924514e+02
-real, parameter :: a98 = .240351257812904e+01
-real, parameter :: erc21 = .224905375494686e-01
-real, parameter :: erc23 = -.186601479161668e+00
-real, parameter :: erc24 = .224620349650851e+00
-real, parameter :: erc25 = -.384622777202128e-01
-real, parameter :: erc26 = .180000000000000e+00
-real, parameter :: erc27 = -.233333333333333e+00
-real, parameter :: erc28 = .362862030148937e-01
-real, parameter :: erc29 = -.500000000000000e-02
-real, parameter :: remin = 1.e-12
+real(nswc_sp), parameter :: c2 = .250000000000000e+00
+real(nswc_sp), parameter :: c3 = .375000000000000e+00
+real(nswc_sp), parameter :: c4 = .923076923076923e+00
+real(nswc_sp), parameter :: c6 = .500000000000000e+00
+real(nswc_sp), parameter :: c8 = .150000000000000e+01
+real(nswc_sp), parameter :: c9 = .200000000000000e+01
+real(nswc_sp), parameter :: a21 = .250000000000000e+00
+real(nswc_sp), parameter :: a31 = .937500000000000e-01
+real(nswc_sp), parameter :: a32 = .281250000000000e+00
+real(nswc_sp), parameter :: a41 = .879380974055530e+00
+real(nswc_sp), parameter :: a42 = -.327719617660446e+01
+real(nswc_sp), parameter :: a43 = .332089212562585e+01
+real(nswc_sp), parameter :: a51 = .203240740740741e+01
+real(nswc_sp), parameter :: a52 = -.800000000000000e+01
+real(nswc_sp), parameter :: a53 = .717348927875244e+01
+real(nswc_sp), parameter :: a54 = -.205896686159844e+00
+real(nswc_sp), parameter :: a61 = -.296296296296296e+00
+real(nswc_sp), parameter :: a62 = .200000000000000e+01
+real(nswc_sp), parameter :: a63 = -.138167641325536e+01
+real(nswc_sp), parameter :: a64 = .452972709551657e+00
+real(nswc_sp), parameter :: a65 = -.275000000000000e+00
+real(nswc_sp), parameter :: b1b = .118518518518519e+00
+real(nswc_sp), parameter :: b3b = .518986354775828e+00
+real(nswc_sp), parameter :: b4b = .506131490342017e+00
+real(nswc_sp), parameter :: b5b = -.180000000000000e+00
+real(nswc_sp), parameter :: b6b = .363636363636364e-01
+real(nswc_sp), parameter :: erc11 = .277777777777778e-02
+real(nswc_sp), parameter :: erc13 = -.299415204678363e-01
+real(nswc_sp), parameter :: erc14 = -.291998936735779e-01
+real(nswc_sp), parameter :: erc15 = .200000000000000e-01
+real(nswc_sp), parameter :: b1 = .143672839506173e+00
+real(nswc_sp), parameter :: b3 = .210187767614668e+00
+real(nswc_sp), parameter :: b4 = .603140025990903e+00
+real(nswc_sp), parameter :: b5 = .200000000000000e-01
+real(nswc_sp), parameter :: b6 = .400000000000000e+00
+real(nswc_sp), parameter :: b7 = -.266666666666667e+00
+real(nswc_sp), parameter :: b8 = .736460905349794e+00
+real(nswc_sp), parameter :: b9 = .153205128205128e+00
+real(nswc_sp), parameter :: a81 = -.785774430040232e+00
+real(nswc_sp), parameter :: a82 = .269557443004023e+01
+real(nswc_sp), parameter :: a83 = -.387868820553843e+00
+real(nswc_sp), parameter :: a84 = -.323463729234086e+01
+real(nswc_sp), parameter :: a85 = .141740175234689e+01
+real(nswc_sp), parameter :: a86 = -.739340252773601e+00
+real(nswc_sp), parameter :: a87 = .253464461332141e+01
+real(nswc_sp), parameter :: a91 = .277678804896947e+01
+real(nswc_sp), parameter :: a92 = -.461924686192469e+01
+real(nswc_sp), parameter :: a93 = -.540556629238679e+01
+real(nswc_sp), parameter :: a94 = .195138152603181e+02
+real(nswc_sp), parameter :: a95 = -.627825575453278e+01
+real(nswc_sp), parameter :: a96 = .753363921389629e+01
+real(nswc_sp), parameter :: a97 = -.139246861924514e+02
+real(nswc_sp), parameter :: a98 = .240351257812904e+01
+real(nswc_sp), parameter :: erc21 = .224905375494686e-01
+real(nswc_sp), parameter :: erc23 = -.186601479161668e+00
+real(nswc_sp), parameter :: erc24 = .224620349650851e+00
+real(nswc_sp), parameter :: erc25 = -.384622777202128e-01
+real(nswc_sp), parameter :: erc26 = .180000000000000e+00
+real(nswc_sp), parameter :: erc27 = -.233333333333333e+00
+real(nswc_sp), parameter :: erc28 = .362862030148937e-01
+real(nswc_sp), parameter :: erc29 = -.500000000000000e-02
+real(nswc_sp), parameter :: remin = 1.e-12
 integer, parameter :: maxnfe = 18000
 !     Two step block Runge-Kutta Fehlberg method.
 !     A standard 5(4) formula is used at the first point in the block
@@ -95530,14 +95570,14 @@ end subroutine rkfc
 subroutine extra(neqn,yinc2,f2,t,h,yinc1,y,f1,f,tex,yex,ypex)
 implicit none
 integer, intent(in) :: neqn
-real :: f(neqn), f1(neqn), f2(neqn)
-real, intent(in) :: h, t, tex
-real :: y(neqn)
-real, intent(inout) :: yex(neqn)
-real :: yinc1(neqn), yinc2(neqn)
-real, intent(inout) :: ypex(neqn)
+real(nswc_sp) :: f(neqn), f1(neqn), f2(neqn)
+real(nswc_sp), intent(in) :: h, t, tex
+real(nswc_sp) :: y(neqn)
+real(nswc_sp), intent(inout) :: yex(neqn)
+real(nswc_sp) :: yinc1(neqn), yinc2(neqn)
+real(nswc_sp), intent(inout) :: ypex(neqn)
 integer :: n
-real :: a1, a2, a3, a4, hf, hf1, hf2, sig
+real(nswc_sp) :: a1, a2, a3, a4, hf, hf1, hf2, sig
 !     This version of extra is the third of the three changes
 !     needed to make the interpolant derivative more stable.
 !     t is the independent variable.
@@ -95717,11 +95757,11 @@ implicit none
 !    should not be altered.
 integer, intent(in) :: neqn
 integer, intent(inout) :: iflag, iwork(5)
-real, intent(inout) :: y(neqn), t
-real, intent(in) :: tout
-real, intent(inout) :: relerr
-real, intent(in) :: abserr
-real, intent(inout) :: work(*)
+real(nswc_sp), intent(inout) :: y(neqn), t
+real(nswc_sp), intent(in) :: tout
+real(nswc_sp), intent(inout) :: relerr
+real(nswc_sp), intent(in) :: abserr
+real(nswc_sp), intent(inout) :: work(*)
 external f
 integer :: k1, k2, k3, k4, k5, k6, k1m
 !     Compute indices for the splitting of the work array
@@ -95756,20 +95796,20 @@ implicit none
 !         nfe- counter on the number of derivative function evaluations
 integer, intent(in) :: neqn
 integer, intent(inout) :: iflag, nfe, kop, init, jflag, kflag
-real, intent(inout) :: y(neqn), t
-real, intent(in) :: tout
-real, intent(inout) :: relerr
-real, intent(in) :: abserr
-real, intent(inout) :: h
-real :: yp(neqn)
-real, intent(inout) :: f1(neqn)
-real :: f2(neqn), f3(neqn), f4(neqn)
-real, intent(inout) :: f5(neqn), savre, savae
+real(nswc_sp), intent(inout) :: y(neqn), t
+real(nswc_sp), intent(in) :: tout
+real(nswc_sp), intent(inout) :: relerr
+real(nswc_sp), intent(in) :: abserr
+real(nswc_sp), intent(inout) :: h
+real(nswc_sp) :: yp(neqn)
+real(nswc_sp), intent(inout) :: f1(neqn)
+real(nswc_sp) :: f2(neqn), f3(neqn), f4(neqn)
+real(nswc_sp), intent(inout) :: f5(neqn), savre, savae
 external f
 logical :: hfaild, output
-real :: a, ae, dt, ee, eeoet, esttol, et, hmin, rer, s, scale, tol, toln, u26, eps, ypk
+real(nswc_sp) :: a, ae, dt, ee, eeoet, esttol, et, hmin, rer, s, scale, tol, toln, u26, eps, ypk
 integer :: k, mflag
-real, parameter :: remin = 1.e-12
+real(nswc_sp), parameter :: remin = 1.e-12
 integer, parameter :: maxnfe = 3000
 !     remin is the minimum acceptable value of relerr.  Attempts
 !     to obtain higher accuracy with this subroutine are usually
@@ -96013,14 +96053,14 @@ implicit none
 !    roundoff in t so that the various independent arguments can be
 !    distinguished.
 integer, intent(in) :: neqn
-real, intent(in) :: y(neqn)
-real :: t, h
-real, intent(in) :: yp(neqn)
-real, intent(inout) :: f1(neqn)
-real :: f2(neqn), f3(neqn), f4(neqn)
-real, intent(inout) :: f5(neqn), s(neqn)
+real(nswc_sp), intent(in) :: y(neqn)
+real(nswc_sp) :: t, h
+real(nswc_sp), intent(in) :: yp(neqn)
+real(nswc_sp), intent(inout) :: f1(neqn)
+real(nswc_sp) :: f2(neqn), f3(neqn), f4(neqn)
+real(nswc_sp), intent(inout) :: f5(neqn), s(neqn)
 external f
-real :: ch
+real(nswc_sp) :: ch
 integer :: k
 ch = h/4.0
 do k = 1,neqn
@@ -96063,12 +96103,12 @@ subroutine gerk(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
 implicit none
 integer, intent(inout) :: iflag, iwork(5)
 integer, intent(in) :: neqn
-real, intent(in) :: abserr
-real, intent(inout) :: gerror(neqn)
-real, intent(in) :: relerr
-real, intent(inout) :: t
-real, intent(in) :: tout
-real, intent(inout) :: work(*), y(neqn)
+real(nswc_sp), intent(in) :: abserr
+real(nswc_sp), intent(inout) :: gerror(neqn)
+real(nswc_sp), intent(in) :: relerr
+real(nswc_sp), intent(inout) :: t
+real(nswc_sp), intent(in) :: tout
+real(nswc_sp), intent(inout) :: work(*), y(neqn)
 external f
 integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !     Fehlberg fourth(fifth) order Runge-Kutta method with
@@ -96252,18 +96292,18 @@ implicit none
 integer, intent(inout) :: iflag, init, jflag, kflag, kop
 integer, intent(in) :: neqn
 integer, intent(inout) :: nfe
-real, intent(in) :: abserr
-real, intent(inout) :: f1(neqn)
-real :: f2(neqn), f3(neqn), f4(neqn)
-real, intent(inout) :: f5(neqn), gerror(neqn), h
-real, intent(in) :: relerr
-real, intent(inout) :: savae, savre, t
-real, intent(in) :: tout
-real, intent(inout) :: y(neqn), yg(neqn), ygp(neqn)
-real :: yp(neqn)
+real(nswc_sp), intent(in) :: abserr
+real(nswc_sp), intent(inout) :: f1(neqn)
+real(nswc_sp) :: f2(neqn), f3(neqn), f4(neqn)
+real(nswc_sp), intent(inout) :: f5(neqn), gerror(neqn), h
+real(nswc_sp), intent(in) :: relerr
+real(nswc_sp), intent(inout) :: savae, savre, t
+real(nswc_sp), intent(in) :: tout
+real(nswc_sp), intent(inout) :: y(neqn), yg(neqn), ygp(neqn)
+real(nswc_sp) :: yp(neqn)
 external f
 integer :: k, maxnfe, mflag
-real :: a, ae, dt, ee, eeoet, esttol, et, hh, hmin, remin, rer, s, &
+real(nswc_sp) :: a, ae, dt, ee, eeoet, esttol, et, hh, hmin, remin, rer, s, &
    & scale, tol, toln, ts, u, u26, ypk
 logical :: hfaild, output
 !     Fehlberg fourth(fifth) order Runge-Kutta method with
@@ -96540,16 +96580,16 @@ subroutine sfode(f,neq,y,t,tout,info,rerr,aerr,idid, &
 implicit none
 integer, intent(inout) :: idid
 integer :: liw, lrw, neq
-real, intent(inout) :: aerr, rerr, t
-real :: tout
+real(nswc_sp), intent(inout) :: aerr, rerr, t
+real(nswc_sp) :: tout
 external f
-real, intent(inout) :: y(neq)
-real, intent(inout) :: rwork(lrw)
-real :: rpar(*)
+real(nswc_sp), intent(inout) :: y(neq)
+real(nswc_sp), intent(inout) :: rwork(lrw)
+real(nswc_sp) :: rpar(*)
 integer, intent(inout) :: info(*)
 integer, intent(inout) :: iwork(liw)
 integer :: ipar(*)
-real :: rtol(1), atol(1)
+real(nswc_sp) :: rtol(1), atol(1)
 integer :: info1(15)
 !     --------------
 !     --------------
@@ -96573,11 +96613,11 @@ subroutine sfode1(f,neq,y,t,tout,info,rtol,atol,idid, &
 implicit none
 integer, intent(inout) :: idid
 integer :: liw, lrw, neq
-real, intent(inout) :: t
-real :: tout
+real(nswc_sp), intent(inout) :: t
+real(nswc_sp) :: tout
 external f
-real, intent(inout) :: y(neq), rtol(neq), atol(neq), rwork(lrw)
-real :: rpar(*)
+real(nswc_sp), intent(inout) :: y(neq), rtol(neq), atol(neq), rwork(lrw)
+real(nswc_sp) :: rpar(*)
 integer, intent(inout) :: info(*)
 integer, intent(inout) :: iwork(liw)
 integer :: ipar(*)
@@ -96599,9 +96639,9 @@ subroutine zzzjac(t,y,pd,n,rpar,ipar)
 implicit none
 integer :: ipar(*)
 integer, intent(in) :: n
-real :: pd(n,*), rpar(*)
-real, intent(out) :: t
-real :: y(n)
+real(nswc_sp) :: pd(n,*), rpar(*)
+real(nswc_sp), intent(out) :: t
+real(nswc_sp) :: y(n)
 !     -------------
 !     Dummy Jacobian subroutine
 !     -------------
@@ -96613,7 +96653,7 @@ subroutine stfode(f,neq,y,t,tout,info,rtol,atol,idid, &
    & rwork,lrw,iwork,liw,rpar,ipar,jac)
 implicit none
 integer :: idid, info(*), ipar(*), iwork, liw, lrw, neq
-real :: atol(*), rpar(*), rtol(*), rwork(lrw), t, tout, y(neq)
+real(nswc_sp) :: atol(*), rpar(*), rtol(*), rwork(lrw), t, tout, y(neq)
 external f, jac
 integer :: icomi, icomr, idelsn, iinout, ilrw, itstar, iypout, ml, &
    & mu
@@ -97248,7 +97288,7 @@ implicit none
 ! block debdf1, which is used internally in the sfode package.
 !-----------------------------------------------------------------------
 integer :: isav(*)
-real :: rsav(*)
+real(nswc_sp) :: rsav(*)
 integer :: i
 integer, parameter :: lenrls = 218
 integer, parameter :: lenils = 33
@@ -97313,7 +97353,7 @@ implicit none
 ! isav = Integer array of length 33 or more.
 !-----------------------------------------------------------------------
 integer :: isav(*)
-real :: rsav(*)
+real(nswc_sp) :: rsav(*)
 integer :: i
 integer, parameter :: lenrls = 218
 integer, parameter :: lenils = 33
@@ -97374,13 +97414,13 @@ subroutine lsod1(f,neq,t,y,tout,rtol,atol,idid,ypout, &
    & tstop,tolfac,delsgn,rpar,ipar)
 implicit none
 integer :: idid, ipar(*), iwm(*), neq
-real :: acor(neq), atol(*), delsgn, ewt(neq), rpar(*), rtol(*), &
+real(nswc_sp) :: acor(neq), atol(*), delsgn, ewt(neq), rpar(*), rtol(*), &
    & savf(neq), t, tolfac, tout, tstop, wm(*), y(neq), yh(neq,*), &
    & yh1(*), ypout(neq)
 logical :: intout
 external f, jac
 integer :: intflg, k, l, ltol, max
-real :: absdel, big, del, dt, ha, tol
+real(nswc_sp) :: absdel, big, del, dt, ha, tol
 !   stfode  merely allocates storage for lsod1 to relieve the user of
 !   the inconvenience of a long call list.  Consequently lsod1 is used
 !   as described in the comments for  stfode.
@@ -97619,19 +97659,19 @@ subroutine hstart(f,neq,a,b,y,yprime,etol,morder,small,big, &
 implicit none
 integer :: ipar(*)
 integer, intent(in) :: morder, neq
-real :: a
-real, intent(in) :: b, big
-real :: etol(neq)
-real, intent(inout) :: h, pv(neq)
-real :: rpar(*), sf(neq)
-real, intent(in) :: small
-real, intent(inout) :: spy(neq)
-real :: y(neq)
-real, intent(inout) :: yp(neq)
-real :: yprime(neq)
+real(nswc_sp) :: a
+real(nswc_sp), intent(in) :: b, big
+real(nswc_sp) :: etol(neq)
+real(nswc_sp), intent(inout) :: h, pv(neq)
+real(nswc_sp) :: rpar(*), sf(neq)
+real(nswc_sp), intent(in) :: small
+real(nswc_sp), intent(inout) :: spy(neq)
+real(nswc_sp) :: y(neq)
+real(nswc_sp), intent(inout) :: yp(neq)
+real(nswc_sp) :: yprime(neq)
 external f
 integer :: j, k, lk
-real :: absdx, da, delf, dely, dfdub, dfdxb, dx, dy, fbnd, relper, &
+real(nswc_sp) :: absdx, da, delf, dely, dfdub, dfdxb, dx, dy, fbnd, relper, &
    & srydpb, tolexp, tolmin, tolp, tolsum, ydpb
 !   hstart computes a starting step size to be used in solving initial
 !   value problems in ordinary differential equations.
@@ -97902,9 +97942,9 @@ implicit none
 ! iflag is returned negative if either k or t is out of bounds.
 !-----------------------------------------------------------------------
 integer :: k, nyh, iflag
-real :: t, yh(nyh,*), dky(*)
+real(nswc_sp) :: t, yh(nyh,*), dky(*)
 integer :: i, ic, j, jb, jb2, jj, jj1, jp1
-real :: c, r, s, tp
+real(nswc_sp) :: c, r, s, tp
 iflag = 0
 if (k < 0 .or. k > nswc_state_debdf1_nq) go to 80
 tp = nswc_state_debdf1_tn - nswc_state_debdf1_hu*(1.0e0 + 100.0e0*nswc_state_debdf1_u)
@@ -97952,13 +97992,13 @@ subroutine stod(neq, y, yh, nyh, yh1, ewt, savf, acor, &
    & wm, iwm, f, jac, rpar, ipar)
 implicit none
 integer :: ipar(*)
-real :: rpar(*)
+real(nswc_sp) :: rpar(*)
 external f, jac
 integer :: neq, nyh, iwm(*)
-real :: y(*), yh(nyh,*), yh1(*), ewt(*), savf(*), acor(*), wm(*)
+real(nswc_sp) :: y(*), yh(nyh,*), yh1(*), ewt(*), savf(*), acor(*), wm(*)
 integer :: ipnyh
 integer :: i, i1, iredo, iret, j, jb, m, ncf, newq
-real :: dcon, ddn, del, delp, dsm, dup, exdn, exsm, exup, r, rh, rhdn, rhsm, rhup, told
+real(nswc_sp) :: dcon, ddn, del, delp, dsm, dup, exdn, exsm, exup, r, rh, rhdn, rhsm, rhup, told
 !-----------------------------------------------------------------------
 ! stod  performs one step of the integration of an initial value
 ! problem for a system of ordinary differential equations.
@@ -98425,9 +98465,9 @@ pure subroutine cfod(meth, elco, tesco)
 implicit none
 !   cfod defines coefficients needed in the integrator package sfode
 integer, intent(in) :: meth
-real, intent(inout) :: elco(13, *), tesco(3, *)
+real(nswc_sp), intent(inout) :: elco(13, *), tesco(3, *)
 integer :: i, ib, nq, nqm1, nqp1
-real :: agamq, fnq, fnqm1, pc(12), pint, ragq, rqfac, rq1fac, &
+real(nswc_sp) :: agamq, fnq, fnqm1, pc(12), pint, ragq, rqfac, rq1fac, &
    & tsign, xpin
 !-----------------------------------------------------------------------
 ! cfod  is called by the integrator routine to set coefficients
@@ -98541,12 +98581,12 @@ subroutine pjac(neq, y, yh, nyh, ewt, ftem, savf, wm, iwm, &
    & f, jac, rpar, ipar)
 implicit none
 integer :: ipar(*)
-real :: rpar(*)
+real(nswc_sp) :: rpar(*)
 integer :: neq, nyh, iwm(*)
 external f, jac
-real :: y(*), yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*)
+real(nswc_sp) :: y(*), yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*)
 integer :: i, i1, i2, ii, j, j1, jj, lenp, mba, mband, meb1, meband, ml, ml3, mu
-real :: con, di, fac, hl0, r, r0, srur, yi, yj, yjj
+real(nswc_sp) :: con, di, fac, hl0, r, r0, srur, yi, yj, yjj
 !   pjac sets up the iteration matrix (involving the Jacobian) for the
 !   integration package sfode.
 !***Routines called  vnwrms,sgefa,sgbfa
@@ -98720,9 +98760,9 @@ implicit none
 !   integrator package sfode.
 !***Routines called  sgesl,sgbsl
 integer :: iwm(*)
-real :: wm(*), x(*), tem(*)
+real(nswc_sp) :: wm(*), x(*), tem(*)
 integer :: i, meband, ml, mu
-real :: di, hl0, phl0, r
+real(nswc_sp) :: di, hl0, phl0, r
 !-----------------------------------------------------------------------
 ! This routine manages the solution of the linear system arising from
 ! a chord iteration.  It is called by stod  if miter .NE. 0.
@@ -98790,8 +98830,8 @@ implicit none
 integer, intent(in) :: lda, n, ml, mu
 integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
-real, intent(inout) :: abd(lda,*)
-real :: t
+real(nswc_sp), intent(inout) :: abd(lda,*)
+real(nswc_sp) :: t
 integer :: i, i0, j, ju, jz, j0, j1, k, kp1, l, lm, m, mm, nm1
 !     sgbfa factors a real band matrix BY elimination.
 !     sgbfa is usually called by SGBCO, but it can be called
@@ -98926,9 +98966,9 @@ end subroutine sgbfa
 pure subroutine sgbsl(abd,lda,n,ml,mu,ipvt,b,job)
 implicit none
 integer, intent(in) :: lda, n, ml, mu, ipvt(*), job
-real, intent(in) :: abd(lda,*)
-real, intent(inout) :: b(*)
-real :: t
+real(nswc_sp), intent(in) :: abd(lda,*)
+real(nswc_sp), intent(inout) :: b(*)
+real(nswc_sp) :: t
 integer :: k, kb, l, la, lb, lm, m, nm1
 !     sgbsl solves the real band system
 !     A * X = b  OR  TRANS(A) * X = b
@@ -99033,9 +99073,9 @@ end subroutine sgbsl
 function vnorm(v,ncomp)
 implicit none
 integer, intent(in) :: ncomp
-real :: v(ncomp)
+real(nswc_sp) :: v(ncomp)
 integer :: k
-real :: vnorm
+real(nswc_sp) :: vnorm
 !     Compute the maximum norm of the vector v(*) of length ncomp and
 !     RETURN THE RESULT AS vnorm
 vnorm = 0.
@@ -99044,7 +99084,7 @@ do k = 1,ncomp
 end do
 end function vnorm
 
-real function vnwrms(n, v, w)
+real(nswc_sp) function vnwrms(n, v, w)
 implicit none
 !-----------------------------------------------------------------------
 ! This function routine computes the weighted root-mean-square norm
@@ -99053,9 +99093,9 @@ implicit none
 !   vnwrms = sqrt( (1/n) * sum( v(i)/w(i) )**2 )
 !-----------------------------------------------------------------------
 integer, intent(in) :: n
-real :: v(n), w(n)
+real(nswc_sp) :: v(n), w(n)
 integer :: i
-real :: sum
+real(nswc_sp) :: sum
 sum = 0.0e0
 do i = 1,n
    sum = sum + (v(i)/w(i))**2
@@ -99067,12 +99107,12 @@ end function vnwrms
 subroutine rk(n,t,h,a,f)
 implicit none
 integer, intent(in) :: n
-real, intent(inout) :: a(*)
-real, intent(in) :: h
-real, intent(inout) :: t
+real(nswc_sp), intent(inout) :: a(*)
+real(nswc_sp), intent(in) :: h
+real(nswc_sp), intent(inout) :: t
 external f
 integer :: k, m, m1, mk, nk, np1
-real :: ha, ta
+real(nswc_sp) :: ha, ta
 !     ******************************************************************
 !     Fourth order Runge-Kutta procedure for solving DY=F(t,Y)
 !     ******************************************************************
@@ -99123,15 +99163,15 @@ end subroutine rk
 subroutine rk8(n,t,h,y,dy,w,f)
 implicit none
 integer, intent(in) :: n
-real :: h
-real, intent(inout) :: t
-real, intent(inout) :: y(n), dy(n), w(*)
+real(nswc_sp) :: h
+real(nswc_sp), intent(inout) :: t
+real(nswc_sp), intent(inout) :: y(n), dy(n), w(*)
 external f
 integer :: i, j, k, l, m, m1
-real :: ha, sum, b(8,7)
-real, parameter :: a(7) = [.3333333333333333, .5, .6666666666666666, .1666666666666666, 1., .8333333333333333, 1.]
-real, parameter :: c(7) = [12., 8., 54., 4320., 20., 288., 820.]
-real, parameter :: d(9) = [41., 0., 27., 272., 27., 216., 0., 216., 41.]
+real(nswc_sp) :: ha, sum, b(8,7)
+real(nswc_sp), parameter :: a(7) = [.3333333333333333, .5, .6666666666666666, .1666666666666666, 1., .8333333333333333, 1.]
+real(nswc_sp), parameter :: c(7) = [12., 8., 54., 4320., 20., 288., 820.]
+real(nswc_sp), parameter :: d(9) = [41., 0., 27., 272., 27., 216., 0., 216., 41.]
 !     ******************************************************************
 !     Eighth order Runge-Kutta procedure for solving dy=F(t,y)
 !     ******************************************************************
@@ -99200,15 +99240,15 @@ integer, intent(inout) :: ierr
 integer :: iord, ku, mp1
 integer, intent(in) :: np1
 integer, intent(inout) :: nw
-real :: a, b, c, d
-real :: g
-real :: bval
-real, intent(inout) :: u(ku,np1), w(nw)
+real(nswc_sp) :: a, b, c, d
+real(nswc_sp) :: g
+real(nswc_sp) :: bval
+real(nswc_sp), intent(inout) :: u(ku,np1), w(nw)
 integer, intent(in) :: edge(4)
 external cofx, cofy
 integer :: i, ia, ib, ic, id, ij, imax, imin, indx, indy, iw, j, &
    & jcol, jmax, jmin, l, m, mn, n
-real :: alpha, beta, del, gam, hx, hy, p, xi, xmin, yj, ymin, dum(1)
+real(nswc_sp) :: alpha, beta, del, gam, hx, hy, p, xi, xmin, yj, ymin, dum(1)
 ! ----------------------------------------------------------------------
 !     Solution of separable elliptic partial differential equations
 !                     on rectangular domains
@@ -99430,12 +99470,12 @@ implicit none
 integer :: idmn
 integer, intent(inout) :: ierror
 integer :: intl, iorder, m, mbdcnd, mn, n, nbdcnd
-real :: a, alpha, b, beta, c, d, gama
-real, intent(inout) :: pertrb
-real :: xnu
-real, intent(inout) :: grhs(mn,*), usol(idmn,*)
-real :: bda(*), bdb(*), bdc(*), bdd(*)
-real, intent(inout) :: w(*)
+real(nswc_sp) :: a, alpha, b, beta, c, d, gama
+real(nswc_sp), intent(inout) :: pertrb
+real(nswc_sp) :: xnu
+real(nswc_sp), intent(inout) :: grhs(mn,*), usol(idmn,*)
+real(nswc_sp) :: bda(*), bdb(*), bdc(*), bdd(*)
+real(nswc_sp), intent(inout) :: w(*)
 external cofx, cofy
 integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
    & k, l, length, linput, ll, logb2n, loutpt
@@ -99857,13 +99897,13 @@ subroutine sepel1(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
    & idmn,w,pertrb,ierror)
 implicit none
 integer :: idmn, ierror, intl, iorder, m, mbdcnd, mn, n, nbdcnd
-real :: a, alpha, am(*), an(*), b, bda(*), bdb(*), bdc(*), bdd(*), &
+real(nswc_sp) :: a, alpha, am(*), an(*), b, bda(*), bdb(*), bdc(*), bdd(*), &
    & beta, bm(*), bn(*), c, cm(*), cn(*), d, dm(*), dn(*), gama, &
    & grhs(mn,*), pertrb, um(*), un(*), usol(idmn,*), w(*), xnu, zm(*), &
    & zn(*)
 external cofx, cofy
 integer :: i, i1, iord, j, mp, np
-real :: ai, ax1, axi, bi, bxi, ci, cxi, cxm, dj, dy1, dyj, ej, &
+real(nswc_sp) :: ai, ax1, axi, bi, bxi, ci, cxi, cxm, dj, dy1, dyj, ej, &
    & eyj, fj, fyj, fyn, prtrb, xi, yj
 logical :: singlr
 !     sepel1 sets up vectors and arrays for input to blktri
@@ -100130,9 +100170,9 @@ external cofx, cofy
 integer, intent(in) :: idmn
 integer, intent(out) :: ierror
 integer, intent(in) :: intl, iorder, m, mbdcnd, mn, n, nbdcnd
-real, intent(in) :: a, b, c, d
+real(nswc_sp), intent(in) :: a, b, c, d
 integer :: i, j
-real :: ai, bi, ci, dj, dlx, dly, ej, fj, xi, yj
+real(nswc_sp) :: ai, bi, ci, dj, dlx, dly, ej, fj, xi, yj
 !     This program checks the input parameters for errors
 !     check definition of solution region
 ierror = 1
@@ -100182,10 +100222,10 @@ subroutine chksng(mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy, &
 implicit none
 external cofx, cofy
 integer :: mbdcnd, nbdcnd
-real :: alpha, beta, gama, xnu
+real(nswc_sp) :: alpha, beta, gama, xnu
 logical :: singlr
 integer :: i, j
-real :: ai, bi, ci, dj, ej, fj, xi, yj
+real(nswc_sp) :: ai, bi, ci, dj, ej, fj, xi, yj
 !     THIS SUBROUTINE CHECKS IF THE PDE   sepell
 !     must solve is a singular operator
 singlr = .false.
@@ -100218,9 +100258,9 @@ end subroutine chksng
 subroutine orthg(usol,idmn,zn,zm,pertrb)
 implicit none
 integer :: idmn
-real :: pertrb, usol(idmn,*), zm(*), zn(*)
+real(nswc_sp) :: pertrb, usol(idmn,*), zm(*), zn(*)
 integer :: i, ifnl, ii, istr, j, jfnl, jj, jstr
-real :: ete, ute
+real(nswc_sp) :: ete, ute
 !     This subroutine orthogonalizes the array usol with respect to
 !     the constant array in a weighted least squares norm
 istr = nswc_state_splp_is
@@ -100251,9 +100291,9 @@ end subroutine orthg
 subroutine minsol(usol,idmn,zn,zm,pertb)
 implicit none
 integer :: idmn
-real :: pertb, usol(idmn,*), zm(*), zn(*)
+real(nswc_sp) :: pertb, usol(idmn,*), zm(*), zn(*)
 integer :: i, ifnl, ii, istr, j, jfnl, jj, jstr
-real :: ete, pertrb, ute
+real(nswc_sp) :: ete, pertrb, ute
 !     This subroutine orthogonalizes the array usol with respect to
 !     the constant array in a weighted least squares norm
 !     Entry at minsol occurrs when the final solution is
@@ -100287,10 +100327,10 @@ end subroutine minsol
 subroutine trisp(n,a,b,c,d,u,z)
 implicit none
 integer, intent(in) :: n
-real :: a(n), b(n), c(n)
-real, intent(inout) :: d(n), u(n), z(n)
+real(nswc_sp) :: a(n), b(n), c(n)
+real(nswc_sp), intent(inout) :: d(n), u(n), z(n)
 integer :: j, k, nm1, nm2
-real :: an, bn, den, v
+real(nswc_sp) :: an, bn, den, v
 !     This subroutine solves for a non-zero eigenvector corresponding
 !     to the zero eigenvalue of the transpose of the rank
 !     deficient one matrix with subdiagonal A, diagonal b, and
@@ -100327,9 +100367,9 @@ subroutine defer(cofx,cofy,usol,idmn,grhs,mn)
 implicit none
 external cofx, cofy
 integer :: idmn, mn
-real :: grhs(mn,*), usol(idmn,*)
+real(nswc_sp) :: grhs(mn,*), usol(idmn,*)
 integer :: i, j
-real :: ai, bi, ci, dj, ej, fj, tx, ty, uxxx, uxxxx, uyyy, uyyyy, &
+real(nswc_sp) :: ai, bi, ci, dj, ej, fj, tx, ty, uxxx, uxxxx, uyyy, uyyyy, &
    & xi, yj
 !     This subroutine first approximates the truncation error given
 !     BY  TRUN1(X,Y)=dlx**2*tx+dly**2*ty WHERE
@@ -100376,7 +100416,7 @@ end subroutine defer
 subroutine dxfn(u,idmn,i,j,uxxx,uxxxx)
 implicit none
 integer :: i, idmn, j
-real :: u(idmn,*), uxxx, uxxxx
+real(nswc_sp) :: u(idmn,*), uxxx, uxxxx
 !     This program computes second order finite difference
 !     approximations to the third and fourth X
 !     partial derivatives of u at the (i,j) mesh point
@@ -100430,7 +100470,7 @@ end subroutine dxfn
 subroutine dyfn(u,idmn,i,j,uyyy,uyyyy)
 implicit none
 integer :: i, idmn, j
-real :: u(idmn,*), uyyy, uyyyy
+real(nswc_sp) :: u(idmn,*), uyyy, uyyyy
 !     This program computes second order finite difference
 !     approximations to the third and fourth Y
 !     partial derivatives of u at the (i,j) mesh point
@@ -100486,7 +100526,7 @@ subroutine blktri(iflg,np,n,an,bn,cn,mp,m,am,bm,cm,idimy,y, &
    & ierror,w)
 implicit none
 integer :: idimy, ierror, iflg, m, mp, n, np
-real :: am(*), an(*), bm(*), bn(*), cm(*), cn(*), w(*), y(idimy,*)
+real(nswc_sp) :: am(*), an(*), bm(*), bn(*), cm(*), cn(*), w(*), y(idimy,*)
 integer :: iw1, iw2, iw3, iwah, iwbh, iwd, iwu, iww, nh, nl
 !***********************************************************************
 !          Version  2  October 1976  including errata  October 1976
@@ -100651,12 +100691,12 @@ subroutine blktr1(n,an,bn,cn,m,am,bm,cm,idimy,y,b,w1,w2,w3,wd, &
 implicit none
 external cprdct, prdct
 integer :: idimy, m, n
-real :: am(*), an(*), b(*), bm(*), bn(*), cm(*), cn(*), w1(*), &
+real(nswc_sp) :: am(*), an(*), b(*), bm(*), bn(*), cm(*), cn(*), w1(*), &
    & w2(*), w3(*), wd(*), wu(*), ww(*), y(idimy,*)
 integer :: i, i1, i2, i3, i4, idxa, idxc, if, ifd, im1, im2, im3, &
    & imi1, imi2, ip, ip1, ip2, ip3, ipi1, ipi2, ipi3, ir, irm1, iz, &
    & izr, j, kdo, l, ll, na, nc, nm1, nm2, nm3, np, np1, np2, np3, nz
-real :: dum
+real(nswc_sp) :: dum
 ! blktr1 solves the linear system
 ! b  contains the roots of all the b polynomials
 ! w1,W2,W3,WD,WW,WU  are all working arrays
@@ -100973,14 +101013,14 @@ end subroutine indxb
 subroutine prod0(nd,bd,nm1,bm1,nm2,bm2,na,aa,x,y,m,a,b,c,d,w,u)
 implicit none
 integer, intent(in) :: m, na, nd, nm1, nm2
-real :: a(*), aa(*), b(*), bd(*), bm1(*), bm2(*), c(*)
-real, intent(inout) :: d(*)
-real :: u(*)
-real, intent(inout) :: w(*)
-real :: x(*)
-real, intent(inout) :: y(*)
+real(nswc_sp) :: a(*), aa(*), b(*), bd(*), bm1(*), bm2(*), c(*)
+real(nswc_sp), intent(inout) :: d(*)
+real(nswc_sp) :: u(*)
+real(nswc_sp), intent(inout) :: w(*)
+real(nswc_sp) :: x(*)
+real(nswc_sp), intent(inout) :: y(*)
 integer :: ia, ibr, id, j, k, m1, m2, mm
-real :: den, rt
+real(nswc_sp) :: den, rt
 ! prod0 applies a sequence of matrix operations to the vector x and
 ! stores the result in y.
 ! bd,bm1,bm2 arrays containing roots of certian b polynomials.
@@ -101074,12 +101114,12 @@ end subroutine prod0
 subroutine prodp(nd,bd,nm1,bm1,nm2,bm2,na,aa,x,y,m,a,b,c,d,u,w)
 implicit none
 integer, intent(in) :: m, na, nd, nm1, nm2
-real :: a(*), aa(*), b(*), bd(*), bm1(*), bm2(*), c(*)
-real, intent(inout) :: d(*), u(*), w(*)
-real :: x(*)
-real, intent(inout) :: y(*)
+real(nswc_sp) :: a(*), aa(*), b(*), bd(*), bm1(*), bm2(*), c(*)
+real(nswc_sp), intent(inout) :: d(*), u(*), w(*)
+real(nswc_sp) :: x(*)
+real(nswc_sp), intent(inout) :: y(*)
 integer :: ia, ibr, id, j, k, m1, m2, mm, mm2
-real :: am, bh, den, rt, v, ym
+real(nswc_sp) :: am, bh, den, rt, v, ym
 ! prodp applies a sequence of matrix operations to the vector x and
 ! STORES THE RESULT IN y.   (PERIODIC BOUNDARY CONDITIONS)
 ! bd,bm1,bm2 arrays containing roots of certian b polynomials.
@@ -101192,13 +101232,13 @@ end subroutine prodp
 subroutine cprod0(nd,bd,nm1,bm1,nm2,bm2,na,aa,x,yy,m,a,b,c,d,w,y)
 implicit none
 integer, intent(in) :: m, na, nd, nm1, nm2
-real :: a(*), aa(*), b(*), bm1(*), bm2(*), c(*), x(*)
-real, intent(inout) :: yy(*)
-complex, intent(inout) :: y(*), d(*), w(*)
-complex :: bd(*)
+real(nswc_sp) :: a(*), aa(*), b(*), bm1(*), bm2(*), c(*), x(*)
+real(nswc_sp), intent(inout) :: yy(*)
+complex(nswc_sp), intent(inout) :: y(*), d(*), w(*)
+complex(nswc_sp) :: bd(*)
 integer :: ia, id, iflg, j, k, m1, m2, mm
-real :: rt
-complex :: crt, den, y1, y2
+real(nswc_sp) :: rt
+complex(nswc_sp) :: crt, den, y1, y2
 ! cprod0 applies a sequence of matrix operations to the vector x and
 ! STORES THE RESULT IN yy.   (COMPLEX CASE)
 ! aa         ARRAY CONTAINING SCALAR MULTIPLIERS OF THE VECTOR x.
@@ -101293,13 +101333,13 @@ end subroutine cprod0
 subroutine cprodp(nd,bd,nm1,bm1,nm2,bm2,na,aa,x,yy,m,a,b,c,d,u,y)
 implicit none
 integer, intent(in) :: m, na, nd, nm1, nm2
-real :: a(*), aa(*), b(*), bm1(*), bm2(*), c(*), x(*)
-real, intent(inout) :: yy(*)
-complex, intent(inout) :: y(*), d(*), u(*)
-complex :: bd(*)
+real(nswc_sp) :: a(*), aa(*), b(*), bm1(*), bm2(*), c(*), x(*)
+real(nswc_sp), intent(inout) :: yy(*)
+complex(nswc_sp), intent(inout) :: y(*), d(*), u(*)
+complex(nswc_sp) :: bd(*)
 integer :: ia, id, iflg, j, k, m1, m2, mm, mm2
-real :: rt
-complex :: v, den, bh, ym, am, y1, y2, yh, crt
+real(nswc_sp) :: rt
+complex(nswc_sp) :: v, den, bh, ym, am, y1, y2, yh, crt
 ! prodp applies a sequence of matrix operations to the vector x and
 ! stores the result in yy.  (Periodic boundary conditions and
 ! complex case)
@@ -101416,12 +101456,12 @@ end subroutine cprodp
 subroutine compb(n,ierror,an,bn,cn,b,ah,bh)
 implicit none
 integer :: ierror, n
-real :: ah(*), an(*), b(*), bh(*), bn(*), cn(*)
+real(nswc_sp) :: ah(*), an(*), b(*), bh(*), bn(*), cn(*)
 integer :: i, i2, i4, ib, if, ifd, ipl, ir, j, j1, j2, jf, js, &
    & kdo, l, l1, l2, lh, ls, n2m2, nb, nmp
-real :: arg, bnorm, d1, d2, d3
-complex, allocatable :: root_complex(:)
-real, allocatable :: root_real(:)
+real(nswc_sp) :: arg, bnorm, d1, d2, d3
+complex(nswc_sp), allocatable :: root_complex(:)
+real(nswc_sp), allocatable :: root_real(:)
 !     compb computes the roots of the b polynomials using tqlrt0,
 !     which is a modification of the EISPACK subroutine tqlrat.
 !     Ierror is set to 4 if either tqlrt0 fails or A(j+1)*C(j) is
@@ -101522,11 +101562,11 @@ end subroutine compb
 subroutine tqlrt0(n,d,e2,ierr)
 implicit none
 integer :: n, ierr
-real :: d(n), e2(n)
+real(nswc_sp) :: d(n), e2(n)
 integer :: nhalf, ntop
-real :: dhold
+real(nswc_sp) :: dhold
 integer :: i, j, l, m, ii, l1, mml
-real :: b, c, f, g, h, p, r, s
+real(nswc_sp) :: b, c, f, g, h, p, r, s
 !     This subroutine is a modification of the EISPACK subroutine
 !     tqlrat. The subroutine finds the eigenvalues of a symmetric
 !     tridiagonal matrix BY the rational QL method.
@@ -101638,13 +101678,13 @@ end subroutine tqlrt0
 subroutine ppadd(n,ierror,a,c,cbp,bp,bh)
 implicit none
 integer :: ierror, n
-real :: a(*), bh(*), bp(*), c(*)
-complex :: cbp(*)
+real(nswc_sp) :: a(*), bh(*), bp(*), c(*)
+complex(nswc_sp) :: cbp(*)
 integer :: i2, i3, icv, if, ig, is, it, iz, izm, izm2, j, modiz, &
    & nhalf, nt
-real :: db, psg, scnv, sgn, xl, xm, xr
-complex :: cf, cx, fsg, hsg, dd, f, fp, fpp, cdis, r1, r2, r3
-real :: nswc_ai_r4
+real(nswc_sp) :: db, psg, scnv, sgn, xl, xm, xr
+complex(nswc_sp) :: cf, cx, fsg, hsg, dd, f, fp, fpp, cdis, r1, r2, r3
+real(nswc_sp) :: nswc_ai_r4
 !     ppadd computes the eigenvalues of the periodic tridiagonal matrix
 !     with coefficients an,BN,CN
 ! n   IS THE ORDER OF THE bh AND bp POLYNOMIALS.
@@ -101807,11 +101847,11 @@ end subroutine ppadd
 function psgf(x,iz,c,a,bh)
 implicit none
 integer, intent(in) :: iz
-real :: a(*), bh(*), c(*)
-real, intent(in) :: x
+real(nswc_sp) :: a(*), bh(*), c(*)
+real(nswc_sp), intent(in) :: x
 integer :: j
-real :: dd, fsg, hsg
-real :: psgf
+real(nswc_sp) :: dd, fsg, hsg
+real(nswc_sp) :: psgf
 fsg = 1.
 hsg = 1.
 do j = 1,iz
@@ -101829,11 +101869,11 @@ end function psgf
 function bsrh(xll,xrr,iz,c,a,bh,f,sgn)
 implicit none
 integer :: iz
-real :: a(*), bh(*), c(*), sgn, xll, xrr
-real :: f
-real :: dx, x, xl, xr
-real :: bsrh
-real :: nswc_ai_r4
+real(nswc_sp) :: a(*), bh(*), c(*), sgn, xll, xrr
+real(nswc_sp) :: f
+real(nswc_sp) :: dx, x, xl, xr
+real(nswc_sp) :: bsrh
+real(nswc_sp) :: nswc_ai_r4
 xl = xll
 xr = xrr
 dx = .5*abs(xr - xl)
@@ -101854,11 +101894,11 @@ end function bsrh
 function ppsgf(x,iz,c,a,bh)
 implicit none
 integer, intent(in) :: iz
-real :: a(*), bh(*), c(*)
-real, intent(in) :: x
+real(nswc_sp) :: a(*), bh(*), c(*)
+real(nswc_sp), intent(in) :: x
 integer :: j
-real :: sum
-real :: ppsgf
+real(nswc_sp) :: sum
+real(nswc_sp) :: ppsgf
 sum = 0.
 do j = 1,iz
    sum = sum - 1./(x - bh(j))**2
@@ -101869,11 +101909,11 @@ end function ppsgf
 function ppspf(x,iz,c,a,bh)
 implicit none
 integer, intent(in) :: iz
-real :: a(*), bh(*), c(*)
-real, intent(in) :: x
+real(nswc_sp) :: a(*), bh(*), c(*)
+real(nswc_sp), intent(in) :: x
 integer :: j
-real :: sum
-real :: ppspf
+real(nswc_sp) :: sum
+real(nswc_sp) :: ppspf
 sum = 0.
 do j = 1,iz
    sum = sum + 1./(x - bh(j))
@@ -101888,12 +101928,12 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 integer, intent(inout) :: l(n)
 integer :: i, k, leftlo, fhi, xalo, xhi
-double precision :: c, m, t
+real(nswc_dp) :: c, m, t
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
 integer, parameter :: p = 2147483647
-double precision, parameter :: s = .4656612877413d-09
+real(nswc_dp), parameter :: s = .4656612877413d-09
 !-----------------------------------------------------------------------
 !               Uniform random selection of values from
 !                       a finite set of integers
@@ -101972,14 +102012,14 @@ pure subroutine urng(ix, x, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-real, intent(inout) :: x(n)
+real(nswc_sp), intent(inout) :: x(n)
 integer :: k, l, leftlo, fhi, xalo, xhi
-real :: t
+real(nswc_sp) :: t
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
 integer, parameter :: p = 2147483647
-real, parameter :: s = .465661e-09
+real(nswc_sp), parameter :: s = .465661e-09
 !-----------------------------------------------------------------------
 !         Uniform random number generator using the recursion
 !                       ix = ix*a MOD p
@@ -102034,14 +102074,14 @@ pure subroutine durng(ix, x, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-double precision, intent(inout) :: x(n)
+real(nswc_dp), intent(inout) :: x(n)
 integer :: k, l, leftlo, fhi, xalo, xhi
-double precision :: t
+real(nswc_dp) :: t
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
 integer, parameter :: p = 2147483647
-double precision, parameter :: s = .465661d-09
+real(nswc_dp), parameter :: s = .465661d-09
 !-----------------------------------------------------------------------
 !         Uniform random number generator using the recursion
 !                       ix = ix*a MOD p
@@ -102094,9 +102134,9 @@ end subroutine durng
 pure elemental subroutine urng0(ix, u, v)
 implicit none
 integer, intent(inout) :: ix
-real, intent(inout) :: u, v
+real(nswc_sp), intent(inout) :: u, v
 integer :: k, leftlo, fhi, xalo, xhi
-real :: t
+real(nswc_sp) :: t
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
@@ -102148,9 +102188,9 @@ end subroutine urng0
 pure elemental subroutine durng0(ix, u, v)
 implicit none
 integer, intent(inout) :: ix
-double precision, intent(inout) :: u, v
+real(nswc_dp), intent(inout) :: u, v
 integer :: k, leftlo, fhi, xalo, xhi
-double precision :: t
+real(nswc_dp) :: t
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
@@ -102202,9 +102242,9 @@ end subroutine durng0
 pure elemental subroutine urng1(ix, u, v, d)
 implicit none
 integer, intent(inout) :: ix
-real, intent(inout) :: d, u, v
+real(nswc_sp), intent(inout) :: d, u, v
 integer :: j, k, leftlo, fhi, xalo, xhi
-real :: t
+real(nswc_sp) :: t
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
@@ -102260,9 +102300,9 @@ end subroutine urng1
 pure elemental subroutine durng1(ix, u, v, d)
 implicit none
 integer, intent(inout) :: ix
-double precision, intent(inout) :: u, v, d
+real(nswc_dp), intent(inout) :: u, v, d
 integer :: j, k, leftlo, fhi, xalo, xhi
-double precision :: t
+real(nswc_dp) :: t
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
@@ -102319,14 +102359,14 @@ pure subroutine urng2(ix, x, y, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-real, intent(inout) :: x(n), y(n)
+real(nswc_sp), intent(inout) :: x(n), y(n)
 integer :: k, l, leftlo, fhi, xalo, xhi
-real :: t
+real(nswc_sp) :: t
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
 integer, parameter :: p = 2147483647
-real, parameter :: s = .465661e-09
+real(nswc_sp), parameter :: s = .465661e-09
 !-----------------------------------------------------------------------
 !         Generation of uniform random points (x(I),y(I))
 !                     FOR I = 1,...,n WHERE
@@ -102379,14 +102419,14 @@ pure subroutine durng2(ix, x, y, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-double precision, intent(inout) :: x(n), y(n)
+real(nswc_dp), intent(inout) :: x(n), y(n)
 integer :: k, l, leftlo, fhi, xalo, xhi
-double precision :: t
+real(nswc_dp) :: t
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
 integer, parameter :: p = 2147483647
-double precision, parameter :: s = .465661d-09
+real(nswc_dp), parameter :: s = .465661d-09
 !-----------------------------------------------------------------------
 !         Generation of uniform random points (x(I),y(I))
 !                     FOR I = 1,...,n WHERE
@@ -102439,7 +102479,7 @@ pure subroutine rcir(n, ix, x, y, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-real, intent(inout) :: x(n), y(n)
+real(nswc_sp), intent(inout) :: x(n), y(n)
 !-----------------------------------------------------------------------
 !          Generation of n uniform random points (x(I),y(I))
 !              in the unit circle centered at the origin
@@ -102452,15 +102492,15 @@ pure subroutine rcir1(n, ix, x, kx, y, ky, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, ky, n
-real, intent(inout) :: x(*), y(*)
+real(nswc_sp), intent(inout) :: x(*), y(*)
 integer :: i, i1, i2, j, k, leftlo, fhi, xalo, xhi
-real :: r, u, v
+real(nswc_sp) :: r, u, v
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
 integer, parameter :: p = 2147483647
 integer, parameter :: p0 = 1073741823
-real, parameter :: s = .931322e-09
+real(nswc_sp), parameter :: s = .931322e-09
 !-----------------------------------------------------------------------
 !      Generation of n uniform random points in the unit circle
 !      centered at the origin. The abscissa and ordinate of the
@@ -102525,7 +102565,7 @@ pure subroutine drcir(n, ix, x, y, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-double precision, intent(inout) :: x(n), y(n)
+real(nswc_dp), intent(inout) :: x(n), y(n)
 !-----------------------------------------------------------------------
 !          Generation of n uniform random points (x(I),y(I))
 !              in the unit circle centered at the origin
@@ -102538,15 +102578,15 @@ pure subroutine drcir1(n, ix, x, kx, y, ky, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, ky, n
-double precision, intent(inout) :: x(*), y(*)
+real(nswc_dp), intent(inout) :: x(*), y(*)
 integer :: i, i1, i2, j, k, leftlo, fhi, xalo, xhi
-double precision :: r, u, v
+real(nswc_dp) :: r, u, v
 integer, parameter :: a = 16807
 integer, parameter :: b15 = 32768
 integer, parameter :: b16 = 65536
 integer, parameter :: p = 2147483647
 integer, parameter :: p0 = 1073741823
-double precision, parameter :: s = .931322d-09
+real(nswc_dp), parameter :: s = .931322d-09
 !-----------------------------------------------------------------------
 !      Generation of n uniform random points in the unit circle
 !      centered at the origin. The abscissa and ordinate of the
@@ -102611,9 +102651,9 @@ pure subroutine rnor(ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-real, intent(inout) :: a(n)
+real(nswc_sp), intent(inout) :: a(n)
 integer :: i, m
-real :: r, s, u, v, t(2)
+real(nswc_sp) :: r, s, u, v, t(2)
 integer, parameter :: max = 2147483647
 !-----------------------------------------------------------------------
 !                 Normal random number generator
@@ -102653,9 +102693,9 @@ pure subroutine drnor(ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-double precision, intent(inout) :: a(n)
+real(nswc_dp), intent(inout) :: a(n)
 integer :: i, m
-double precision :: r, s, u, v, t(2)
+real(nswc_dp) :: r, s, u, v, t(2)
 integer, parameter :: max = 2147483647
 !-----------------------------------------------------------------------
 !                 Normal random number generator
@@ -102695,10 +102735,10 @@ pure subroutine nrng(ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-real, intent(inout) :: a(n)
+real(nswc_sp), intent(inout) :: a(n)
 integer :: i, m
-real :: phi, r, temp(1)
-real, parameter :: pi2 = 6.2831853071796
+real(nswc_sp) :: phi, r, temp(1)
+real(nswc_sp), parameter :: pi2 = 6.2831853071796
 !-----------------------------------------------------------------------
 !                 Gaussian random number generator
 !-----------------------------------------------------------------------
@@ -102723,10 +102763,10 @@ pure subroutine dnrng(ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-double precision, intent(inout) :: a(n)
+real(nswc_dp), intent(inout) :: a(n)
 integer :: i, m
-double precision :: phi, r, temp(1)
-double precision, parameter :: pi2 = 6.28318530717958647692528676656d0
+real(nswc_dp) :: phi, r, temp(1)
+real(nswc_dp), parameter :: pi2 = 6.28318530717958647692528676656d0
 !-----------------------------------------------------------------------
 !                 Gaussian random number generator
 !-----------------------------------------------------------------------
@@ -102751,11 +102791,11 @@ pure subroutine nrvg(mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
-real, intent(inout) :: a(*)
-real, intent(in) :: fmu(m)
-real, intent(inout) :: x(kx,n)
+real(nswc_sp), intent(inout) :: a(*)
+real(nswc_sp), intent(in) :: fmu(m)
+real(nswc_sp), intent(inout) :: x(kx,n)
 integer :: i, ii, j, k, l, l0, ldim
-real :: sum
+real(nswc_sp) :: sum
 integer, parameter :: max = 2147483647
 !-----------------------------------------------------------------------
 !           Generation of n random normal vectors of length m
@@ -102861,9 +102901,9 @@ pure subroutine nrvg1(mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
-real, intent(inout) :: a(m)
-real, intent(in) :: fmu(m)
-real, intent(inout) :: x(kx,n)
+real(nswc_sp), intent(inout) :: a(m)
+real(nswc_sp), intent(in) :: fmu(m)
+real(nswc_sp), intent(inout) :: x(kx,n)
 integer :: i, j
 integer, parameter :: max = 2147483647
 !-----------------------------------------------------------------------
@@ -102948,11 +102988,11 @@ pure subroutine dnrvg(mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
-double precision, intent(inout) :: a(*)
-double precision, intent(in) :: fmu(m)
-double precision, intent(inout) :: x(kx,n)
+real(nswc_dp), intent(inout) :: a(*)
+real(nswc_dp), intent(in) :: fmu(m)
+real(nswc_dp), intent(inout) :: x(kx,n)
 integer :: i, ii, j, k, l, l0, ldim
-double precision :: sum
+real(nswc_dp) :: sum
 integer, parameter :: max = 2147483647
 !-----------------------------------------------------------------------
 !           Generation of n random normal vectors of length m
@@ -103058,9 +103098,9 @@ pure subroutine dnrvg1(mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
-double precision, intent(inout) :: a(m)
-double precision, intent(in) :: fmu(m)
-double precision, intent(inout) :: x(kx,n)
+real(nswc_dp), intent(inout) :: a(m)
+real(nswc_dp), intent(in) :: fmu(m)
+real(nswc_dp), intent(inout) :: x(kx,n)
 integer :: i, j
 integer, parameter :: max = 2147483647
 !-----------------------------------------------------------------------
@@ -103145,8 +103185,8 @@ pure subroutine ranexp(n,a,iseed,x,ierror)
 implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
-real, intent(in) :: a
-real, intent(inout) :: x(n)
+real(nswc_sp), intent(in) :: a
+real(nswc_sp), intent(inout) :: x(n)
 integer :: i
 !              ***Subroutine purpose and description***
 !           ranexp generates n exponential random variates from an
@@ -103206,8 +103246,8 @@ pure subroutine drnexp(n,a,iseed,x,ierror)
 implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
-double precision, intent(in) :: a
-double precision, intent(inout) :: x(n)
+real(nswc_dp), intent(in) :: a
+real(nswc_dp), intent(inout) :: x(n)
 integer :: i
 !              ***Subroutine purpose and description***
 !           drnexp generates n exponential random variates from an
@@ -103267,10 +103307,10 @@ pure subroutine rgam(ix, a, n, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-real, intent(in) :: a
-real, intent(inout) :: x(n)
+real(nswc_sp), intent(in) :: a
+real(nswc_sp), intent(inout) :: x(n)
 integer :: i, ind
-real :: u, v, w
+real(nswc_sp) :: u, v, w
 integer, parameter :: max = 2147483647
 !-----------------------------------------------------------------------
 !               Computation of n variates x(1),...,x(n)
@@ -103316,10 +103356,10 @@ pure subroutine drgam(ix, a, n, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-double precision, intent(in) :: a
-double precision, intent(inout) :: x(n)
+real(nswc_dp), intent(in) :: a
+real(nswc_dp), intent(inout) :: x(n)
 integer :: i, ind
-double precision :: u, v, w
+real(nswc_dp) :: u, v, w
 integer, parameter :: max = 2147483647
 !-----------------------------------------------------------------------
 !             Computation of n double precision variates
@@ -103365,10 +103405,10 @@ pure subroutine rbeta(n, a, b, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-real, intent(in) :: a, b
-real, intent(inout) :: x(n)
+real(nswc_sp), intent(in) :: a, b
+real(nswc_sp), intent(inout) :: x(n)
 integer :: i, ind
-real :: u, v, x1, x2
+real(nswc_sp) :: u, v, x1, x2
 integer, parameter :: max = 2147483647
 !-----------------------------------------------------------------------
 !                Generation of beta random variates
@@ -103436,10 +103476,10 @@ pure subroutine drbeta(n, a, b, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-double precision, intent(in) :: a, b
-double precision, intent(inout) :: x(n)
+real(nswc_dp), intent(in) :: a, b
+real(nswc_dp), intent(inout) :: x(n)
 integer :: i, ind
-double precision :: u, v, x1, x2
+real(nswc_dp) :: u, v, x1, x2
 integer, parameter :: max = 2147483647
 !-----------------------------------------------------------------------
 !                         Double precision
@@ -103508,10 +103548,10 @@ pure subroutine fran(n, a, b, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-real, intent(in) :: a, b
-real, intent(inout) :: x(n)
+real(nswc_sp), intent(in) :: a, b
+real(nswc_sp), intent(inout) :: x(n)
 integer :: i, ind
-real :: ahalf, bhalf, big, bound, c, t, u, v, x1, x2, xmax
+real(nswc_sp) :: ahalf, bhalf, big, bound, c, t, u, v, x1, x2, xmax
 integer, parameter :: max = 2147483647
 !-----------------------------------------------------------------------
 !          Generation of variates from the F-distribution
@@ -103590,10 +103630,10 @@ pure subroutine dfran(n, a, b, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-double precision, intent(in) :: a, b
-double precision, intent(inout) :: x(n)
+real(nswc_dp), intent(in) :: a, b
+real(nswc_dp), intent(inout) :: x(n)
 integer :: i, ind
-double precision :: ahalf, bhalf, big, bound, c, t, u, v, xmax, &
+real(nswc_dp) :: ahalf, bhalf, big, bound, c, t, u, v, xmax, &
    & x1, x2
 integer, parameter :: max = 2147483647
 !-----------------------------------------------------------------------
@@ -103674,10 +103714,10 @@ pure subroutine tran(n, a, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-real, intent(in) :: a
-real, intent(inout) :: x(n)
+real(nswc_sp), intent(in) :: a
+real(nswc_sp), intent(inout) :: x(n)
 integer :: i, ind
-real :: ahalf, d, s, u, v, w, z
+real(nswc_sp) :: ahalf, d, s, u, v, w, z
 integer, parameter :: max = 2147483647
 !-----------------------------------------------------------------------
 !          Generation of variates from the T-distribution
@@ -103742,10 +103782,10 @@ pure subroutine dtran(n, a, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-double precision, intent(in) :: a
-double precision, intent(inout) :: x(n)
+real(nswc_dp), intent(in) :: a
+real(nswc_dp), intent(inout) :: x(n)
 integer :: i, ind
-double precision :: ahalf, d, s, u, v, w, z
+real(nswc_dp) :: ahalf, d, s, u, v, w, z
 integer, parameter :: max = 2147483647
 !-----------------------------------------------------------------------
 !                  Double precision generation of
@@ -103811,10 +103851,10 @@ pure subroutine rmk1(n, fmu, sig, alpha, iseed, x, ierror)
 implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
-real, intent(in) :: alpha, fmu, sig
-real, intent(inout) :: x(n)
+real(nswc_sp), intent(in) :: alpha, fmu, sig
+real(nswc_sp), intent(inout) :: x(n)
 integer :: i
-real :: c, sigi, t
+real(nswc_sp) :: c, sigi, t
 !              ***Subroutine purpose and description***
 !           rmk1 generates an autocorrelated sequence x of
 !           length n where x is a first-order markov process
@@ -103900,10 +103940,10 @@ pure subroutine drmk1(n, fmu, sig, alpha, iseed, x, ierror)
 implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
-double precision, intent(in) :: fmu, sig, alpha
-double precision, intent(inout) :: x(n)
+real(nswc_dp), intent(in) :: fmu, sig, alpha
+real(nswc_dp), intent(inout) :: x(n)
 integer :: i
-double precision :: c, sigi, t
+real(nswc_dp) :: c, sigi, t
 !              ***Subroutine purpose and description***
 !           drmk1 generates an autocorrelated sequence x of
 !           length n where x is a first-order markov process

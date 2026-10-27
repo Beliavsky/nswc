@@ -132,8 +132,8 @@ print *, 'a' ! a stays in this comment
 end subroutine f
 '''
         result = module_source(source, {}, {})
-        self.assertIn('real function cb(a)', result)
-        self.assertIn('real,intent(in)::a', result)
+        self.assertIn('real(nswc_sp) function cb(a)', result)
+        self.assertIn('real(nswc_sp),intent(in)::a', result)
         self.assertIn('x=cb(nswc_state_shared_a)', result)
         self.assertIn("'a' ! a stays in this comment", result)
         self.assertIn('10 format(2a)', result)

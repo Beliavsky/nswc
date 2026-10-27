@@ -62,7 +62,7 @@ def migrate(before, after, transformer=transform):
     if old != (ROOT/'nswc.f90').read_text():
         raise ValueError('Old pipeline does not reproduce maintained free form')
     state = {}
-    module_state(module_source(new, modern_state=False), state)
+    module_state(module_source(new, modern_state=False, named_kinds=False), state)
     if state != storage['module_state']:
         raise ValueError('Control-flow cleanup changed private state bindings')
     return {'data-constants.json': data_new, 'procedure-purity.json': pure_new,

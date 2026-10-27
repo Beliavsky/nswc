@@ -35,9 +35,9 @@ end subroutine data
         result = module_source(source, {'CALLER': ['LEAF'], 'CALLBACK': ['LEAF']})
         self.assertIn('module nswc_mod\nimplicit none\nprivate\n', result)
         self.assertIn('public :: caller\n', result)
-        self.assertIn('real :: x, keep\nexternal user_callback\n', result)
-        self.assertIn('real :: leaf, x\nexternal leaf\n', result)
-        self.assertIn('real :: leaf(2)\n', result)
+        self.assertIn('real(nswc_sp) :: x, keep\nexternal user_callback\n', result)
+        self.assertIn('real(nswc_sp) :: leaf, x\nexternal leaf\n', result)
+        self.assertIn('real(nswc_sp) :: leaf(2)\n', result)
         self.assertIn('x = leaf(x)\n', result)
 
     def test_local_library_interface_removed(self):
@@ -60,12 +60,12 @@ end function caller
 '''
         result = module_source(source, {'CALLER': ['LEAF']})
         self.assertNotIn('interface', result)
-        self.assertEqual(result.count('pure real function leaf'), 1)
+        self.assertEqual(result.count('pure real(nswc_sp) function leaf'), 1)
 
     def test_called_dummy_subroutine_gets_external_declaration(self):
         source = 'subroutine s(f,x)\nimplicit none\nreal :: x\ncall f(x)\nend subroutine s\n'
         result = module_source(source, {})
-        self.assertIn('implicit none\nexternal f\nreal :: x\n', result)
+        self.assertIn('implicit none\nexternal f\nreal(nswc_sp) :: x\n', result)
         duplicated = source.replace('real :: x\n', 'real :: x\nimplicit none\n')
         self.assertEqual(module_source(duplicated, {}).count('external f\n'), 1)
 
@@ -82,7 +82,7 @@ y = gamma(x)
 end subroutine s
 '''
         result = module_source(source, {'S': ['GAMMA']}, {'S': ['gamma']})
-        self.assertIn('intrinsic :: gamma\nreal :: x,y,gamma\n', result)
+        self.assertIn('intrinsic :: gamma\nreal(nswc_sp) :: x,y,gamma\n', result)
 
     def test_specific_gamma_intrinsic_uses_portable_generic(self):
         source = '''double precision function dgamma(x)
@@ -100,7 +100,7 @@ end subroutine s
 '''
         result = module_source(source, {'S': ['DGAMMA']}, {'S': ['dgamma']})
         self.assertIn('intrinsic :: gamma\n', result)
-        self.assertIn('double precision :: x, y\n', result)
+        self.assertIn('real(nswc_dp) :: x, y\n', result)
         self.assertIn('y = gamma(x) ! dgamma(x)\n', result)
         self.assertIn("print *, 'dgamma(x)'", result)
         self.assertIn("print *, '!', gamma(x) ! dgamma(x)", result)
