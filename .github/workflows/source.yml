@@ -42,4 +42,5 @@ jobs:
       - run: python tools/validate_sources.py
       - run: python tools/validate_interfaces.py
       - run: python tools/validate_module_pi.py
+      - run: python tools/validate_module_simple_constants.py
       - run: python tools/validate_module.py

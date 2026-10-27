@@ -1,0 +1,643 @@
+{
+  "input_sha256": "924beeaf5d80c7b7aea817bb5c5e8f584b6e2bb2aadc3ff184358761026fda6d",
+  "output_sha256": "fa91459175e2eddab1185d801cb3339fde4fbc3176a8b0a787024225cae88bcb",
+  "selected": [
+    {
+      "procedure": "HBRD",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "HBRD",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "HYBRD",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "HYBRD",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "SROTMG",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "SROTMG",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "SROTMG",
+      "name": "two",
+      "constant": "nswc_two_sp",
+      "type": "real(nswc_sp)",
+      "literal": "2.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "SROTM",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "SROTM",
+      "name": "two",
+      "constant": "nswc_two_sp",
+      "type": "real(nswc_sp)",
+      "literal": "2.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "DROTMG",
+      "name": "zero",
+      "constant": "nswc_zero_dp",
+      "type": "real(nswc_dp)",
+      "literal": "0.d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "DROTMG",
+      "name": "one",
+      "constant": "nswc_one_dp",
+      "type": "real(nswc_dp)",
+      "literal": "1.d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "DROTMG",
+      "name": "two",
+      "constant": "nswc_two_dp",
+      "type": "real(nswc_dp)",
+      "literal": "2.d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "DROTM",
+      "name": "zero",
+      "constant": "nswc_zero_dp",
+      "type": "real(nswc_dp)",
+      "literal": "0.d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "DROTM",
+      "name": "two",
+      "constant": "nswc_two_dp",
+      "type": "real(nswc_dp)",
+      "literal": "2.d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "SNRM2",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "SNRM2",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "DNRM2",
+      "name": "zero",
+      "constant": "nswc_zero_dp",
+      "type": "real(nswc_dp)",
+      "literal": "0.0d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "DNRM2",
+      "name": "one",
+      "constant": "nswc_one_dp",
+      "type": "real(nswc_dp)",
+      "literal": "1.0d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "SCNRM2",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "SCNRM2",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "CYCHG",
+      "name": "zero",
+      "constant": "nswc_zero_csp",
+      "type": "complex(nswc_sp)",
+      "literal": "(0.0,0.0)",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "CYCHG",
+      "name": "one",
+      "constant": "nswc_one_csp",
+      "type": "complex(nswc_sp)",
+      "literal": "(1.0,0.0)",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "ARCEDC",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "CDET",
+      "name": "zero",
+      "constant": "nswc_zero_csp",
+      "type": "complex(nswc_sp)",
+      "literal": "(0.0,0.0)",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "LE",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "DPLE",
+      "name": "zero",
+      "constant": "nswc_zero_dp",
+      "type": "real(nswc_dp)",
+      "literal": "0.d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "CLE",
+      "name": "zero",
+      "constant": "nswc_zero_csp",
+      "type": "complex(nswc_sp)",
+      "literal": "(0.0,0.0)",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "CVCS",
+      "name": "zero",
+      "constant": "nswc_zero_csp",
+      "type": "complex(nswc_sp)",
+      "literal": "(0.0,0.0)",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "CSCOPY",
+      "name": "zero",
+      "constant": "nswc_zero_csp",
+      "type": "complex(nswc_sp)",
+      "literal": "(0.0,0.0)",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "CNSPIV",
+      "name": "one",
+      "constant": "nswc_one_csp",
+      "type": "complex(nswc_sp)",
+      "literal": "(1.0,0.0)",
+      "origin": "variable"
+    },
+    {
+      "procedure": "CNSPIV",
+      "name": "zero",
+      "constant": "nswc_zero_csp",
+      "type": "complex(nswc_sp)",
+      "literal": "(0.0,0.0)",
+      "origin": "variable"
+    },
+    {
+      "procedure": "CSPLU",
+      "name": "zero",
+      "constant": "nswc_zero_csp",
+      "type": "complex(nswc_sp)",
+      "literal": "(0.0, 0.0)",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "ORIMP",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "ORIMP",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "LSEI",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "LSEI",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "LSI",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "LSI",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "LPDP",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "LPDP",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "WNLSM",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "WNLSM",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "WNLSM",
+      "name": "two",
+      "constant": "nswc_two_sp",
+      "type": "real(nswc_sp)",
+      "literal": "2.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "WNLIT",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "WNLIT",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "SPLSQ",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.0",
+      "origin": "variable"
+    },
+    {
+      "procedure": "SPLSQ",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0",
+      "origin": "variable"
+    },
+    {
+      "procedure": "NORMLZ",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "NORMLZ",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "STLSQ",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.0",
+      "origin": "variable"
+    },
+    {
+      "procedure": "STLSQ",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0",
+      "origin": "variable"
+    },
+    {
+      "procedure": "BLSQ",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.0",
+      "origin": "variable"
+    },
+    {
+      "procedure": "BLSQ",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0",
+      "origin": "variable"
+    },
+    {
+      "procedure": "FDJAC1",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "FDJAC2",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "LMPAR",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "QFORM",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "QFORM",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "QRFAC",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "QRFAC",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "QRSOLV",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "R1MPYQ",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "R1UPDT",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "R1UPDT",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.0e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "CHEBY1",
+      "name": "zero",
+      "constant": "nswc_zero_dp",
+      "type": "real(nswc_dp)",
+      "literal": "0.d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "CHEBY1",
+      "name": "one",
+      "constant": "nswc_one_dp",
+      "type": "real(nswc_dp)",
+      "literal": "1.d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "CERR",
+      "name": "zero",
+      "constant": "nswc_zero_dp",
+      "type": "real(nswc_dp)",
+      "literal": "0.d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "CERR",
+      "name": "one",
+      "constant": "nswc_one_dp",
+      "type": "real(nswc_dp)",
+      "literal": "1.d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "ADSET",
+      "name": "zero",
+      "constant": "nswc_zero_dp",
+      "type": "real(nswc_dp)",
+      "literal": "0.d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "ADSET",
+      "name": "one",
+      "constant": "nswc_one_dp",
+      "type": "real(nswc_dp)",
+      "literal": "1.d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "ADSET",
+      "name": "two",
+      "constant": "nswc_two_dp",
+      "type": "real(nswc_dp)",
+      "literal": "2.d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "ERRINT",
+      "name": "two",
+      "constant": "nswc_two_dp",
+      "type": "real(nswc_dp)",
+      "literal": "2.0d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "ADPUT",
+      "name": "one",
+      "constant": "nswc_one_dp",
+      "type": "real(nswc_dp)",
+      "literal": "1.d0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "CUBTRI",
+      "name": "zero",
+      "constant": "nswc_zero_sp",
+      "type": "real(nswc_sp)",
+      "literal": "0.e0",
+      "origin": "parameter"
+    },
+    {
+      "procedure": "CUBTRI",
+      "name": "one",
+      "constant": "nswc_one_sp",
+      "type": "real(nswc_sp)",
+      "literal": "1.e0",
+      "origin": "parameter"
+    }
+  ],
+  "skipped": [
+    {
+      "procedure": "RADIX",
+      "name": "one",
+      "reason": "machine probe, nested scope or explicit storage association"
+    },
+    {
+      "procedure": "MACH1",
+      "name": "one",
+      "reason": "machine probe, nested scope or explicit storage association"
+    },
+    {
+      "procedure": "MACH1",
+      "name": "zero",
+      "reason": "machine probe, nested scope or explicit storage association"
+    },
+    {
+      "procedure": "MACH2",
+      "name": "one",
+      "reason": "machine probe, nested scope or explicit storage association"
+    },
+    {
+      "procedure": "MACH2",
+      "name": "zero",
+      "reason": "machine probe, nested scope or explicit storage association"
+    },
+    {
+      "procedure": "SPMPAR",
+      "name": "one",
+      "reason": "machine probe, nested scope or explicit storage association"
+    },
+    {
+      "procedure": "DPMPAR",
+      "name": "one",
+      "reason": "machine probe, nested scope or explicit storage association"
+    }
+  ]
+}

@@ -104,7 +104,8 @@ The final `tools/module_kinds.py` pass adds named kinds after the storage pass;
 callback interface bodies receive IMPORT statements where needed. Intermediate
 generation used by historical storage/declaration checks can disable this pass
 with `named_kinds=False`.
-Machine constants are unchanged.
+Machine constants are unchanged. A final pass shares eligible scalar zero,
+one, and two constants as described below.
 
 Dummy callback interfaces retain the historical contracts in the implementation.
 The compiler checks ordinary module calls; it cannot fully check a callback whose
@@ -165,3 +166,43 @@ Add `--ifx PATH_TO_IFX` and optionally `--intel-env PATH_TO_ENVIRONMENT_BATCH`
 to repeat the constant-value checks with Intel Fortran. The ordinary module
 validation suite checks external and module numerical results with both
 compilers when Intel is supplied.
+
+## Shared zero, one, and two
+
+The module defines private real and complex parameters for zero, one, and two
+in each named kind. Examples are `nswc_zero_sp`, `nswc_one_dp`, and
+`nswc_one_csp` (single-precision complex). Ordinary numeric literals stay as
+written; the external and fixed-form implementations retain local definitions.
+
+`tools/module_simple_constants.py` consolidates 67 local parameters and eight
+variables initialized once to a literal constant. The variables are in `cnspiv`,
+`splsq`, `stlsq`, and `blsq`. A variable qualifies only when its initialization
+is in the initial straight-line executable prefix, precedes every reference,
+and is its only assignment. Storage association, nested scopes, attributed
+declarations, and possible modification through an unknown procedure prevent
+conversion. Intrinsic calls are accepted only for a small list of read-only
+intrinsics whose names are not shadowed by local declarations or module routines.
+
+Machine-arithmetic probes, including `radix`, `mach1`, `mach2`, `spmpar`, and
+`dpmpar`, retain their variables to preserve their rounding experiments. The
+array named `two` in `step1` is unrelated to the scalar constant and stays local.
+
+`tools/module-simple-constants.json` records selected declarations, original
+types and literal values, and exclusion reasons. The validator reproduces the
+review and generated module, checks idempotence, and compares constant bit
+patterns. Parameter-only consolidation must also preserve GNU assembly with
+source locations aligned. An optimized comparison checks all 69 affected
+procedures and their transitive library dependencies; GNU `-O2` assembly is
+unchanged for all 75 replacements. The module validator checks compiler symbol inventories after restoring
+only the reviewed local names, verifies signatures and intrinsic bindings, and
+runs the external/module numerical comparisons.
+
+```sh
+python tools/validate_module_simple_constants.py
+python tools/validate_module.py
+```
+
+Both validators accept `--ifx PATH_TO_IFX` and, on Windows,
+`--intel-env PATH_TO_ENVIRONMENT_BATCH` for Intel checks.
+After reviewing intentional source changes, refresh the selection report with
+`python tools/module_simple_constants.py --review`, then regenerate the module.

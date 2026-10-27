@@ -20,6 +20,7 @@ from remove_final_returns import transform_free as remove_final_returns
 from storage_modernization import module_state
 from module_kinds import transform as named_module_kinds
 from module_pi_constants import transform as shared_module_pi
+from module_simple_constants import transform as shared_simple_constants
 from declaration_sections import remove_empty_free_markers
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -68,7 +69,7 @@ def public_declarations(names, root=ROOT, width=100):
     return ''.join(output)
 
 
-def module_source(text, calls=None, intrinsics=None, coalesce=True, modern_state=True, named_kinds=True, pi_constants=True, documentation=True):
+def module_source(text, calls=None, intrinsics=None, coalesce=True, modern_state=True, named_kinds=True, pi_constants=True, documentation=True, simple_constants=True):
     from ford_documentation import strip, transform as ford_comments
     text = strip(text)
     if calls is None:
@@ -190,6 +191,8 @@ def module_source(text, calls=None, intrinsics=None, coalesce=True, modern_state
         return generated
     generated = named_module_kinds(generated)
     generated = shared_module_pi(generated) if pi_constants else generated
+    generated = remove_empty_free_markers(generated)
+    generated = shared_simple_constants(generated) if simple_constants else generated
     generated = remove_empty_free_markers(generated)
     return ford_comments(generated) if documentation else generated
 

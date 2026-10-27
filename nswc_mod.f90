@@ -15,6 +15,18 @@ module nswc_mod
 implicit none
 private
 integer, parameter :: nswc_sp = kind(0.0), nswc_dp = kind(0.0d0)
+real(nswc_sp), parameter :: nswc_zero_sp = 0.0_nswc_sp
+real(nswc_sp), parameter :: nswc_one_sp = 1.0_nswc_sp
+real(nswc_sp), parameter :: nswc_two_sp = 2.0_nswc_sp
+real(nswc_dp), parameter :: nswc_zero_dp = 0.0_nswc_dp
+real(nswc_dp), parameter :: nswc_one_dp = 1.0_nswc_dp
+real(nswc_dp), parameter :: nswc_two_dp = 2.0_nswc_dp
+complex(nswc_sp), parameter :: nswc_zero_csp = (0.0_nswc_sp, 0.0_nswc_sp)
+complex(nswc_sp), parameter :: nswc_one_csp = (1.0_nswc_sp, 0.0_nswc_sp)
+complex(nswc_sp), parameter :: nswc_two_csp = (2.0_nswc_sp, 0.0_nswc_sp)
+complex(nswc_dp), parameter :: nswc_zero_cdp = (0.0_nswc_dp, 0.0_nswc_dp)
+complex(nswc_dp), parameter :: nswc_one_cdp = (1.0_nswc_dp, 0.0_nswc_dp)
+complex(nswc_dp), parameter :: nswc_two_cdp = (2.0_nswc_dp, 0.0_nswc_dp)
 real(nswc_sp), parameter :: nswc_pi_sp = 3.1415926535897932384626433832795028841971693993751_nswc_sp
 real(nswc_sp), parameter :: nswc_half_pi_sp = 1.5707963267948966192313216916397514420985846996876_nswc_sp
 real(nswc_sp), parameter :: nswc_quarter_pi_sp = 0.78539816339744830961566084581987572104929234984378_nswc_sp
@@ -30408,8 +30420,6 @@ external fcn
 integer :: index, j, lr, maxfev, ml, mode, mu, nfev, nprint
 real(nswc_sp) :: xtol
 real(nswc_sp), parameter :: factor = 1.0e2
-real(nswc_sp), parameter :: one = 1.0e0
-real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     SUBROUTINE hbrd
 !       the purpose of hbrd is to find a zero of a system of
@@ -30478,7 +30488,7 @@ real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 info = 0
 !     Check the input parameters for errors.
-if (n <= 0 .or. epsfcn < zero .or. tol < zero .or. &
+if (n <= 0 .or. epsfcn < nswc_zero_sp .or. tol < nswc_zero_sp .or. &
    & lwa < (n*(3*n + 13))/2) go to 20
 !     CALL hybrd.
 maxfev = 200*(n + 1)
@@ -30487,7 +30497,7 @@ ml = n - 1
 mu = n - 1
 mode = 2
 do j = 1, n
-   wa(j) = one
+   wa(j) = nswc_one_sp
 end do
 nprint = 0
 lr = (n*(n + 1))/2
@@ -30644,12 +30654,10 @@ external fcn
 integer :: i, iflag, iter, j, jm1, l, msum, ncfail, ncsuc, nslow1, nslow2, iwa(1)
 logical :: jeval, sing
 real(nswc_sp) :: actred, delta, epsmch, fnorm, fnorm1, pnorm, prered, ratio, sum, temp, xnorm
-real(nswc_sp), parameter :: one = 1.0e0
 real(nswc_sp), parameter :: p1 = 1.0e-1
 real(nswc_sp), parameter :: p5 = 5.0e-1
 real(nswc_sp), parameter :: p001 = 1.0e-3
 real(nswc_sp), parameter :: p0001 = 1.0e-4
-real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     SUBROUTINE hybrd
 !     the purpose of hybrd is to find a zero of a system of
@@ -30772,12 +30780,12 @@ info = 0
 iflag = 0
 nfev = 0
 !     Check the input parameters for errors.
-if (n <= 0 .or. xtol < zero .or. maxfev <= 0 &
-   & .or. ml < 0 .or. mu < 0 .or. factor <= zero &
+if (n <= 0 .or. xtol < nswc_zero_sp .or. maxfev <= 0 &
+   & .or. ml < 0 .or. mu < 0 .or. factor <= nswc_zero_sp &
    & .or. ldfjac < n .or. lr < (n*(n + 1))/2) go to 300
 if (mode /= 2) go to 20
 do j = 1, n
-   if (diag(j) <= zero) go to 300
+   if (diag(j) <= nswc_zero_sp) go to 300
 end do
 20 continue
 !     Evaluate the function at the starting point
@@ -30813,7 +30821,7 @@ if (iter /= 1) go to 70
 if (mode == 2) go to 50
 do j = 1, n
    diag(j) = wa2(j)
-   if (wa2(j) == zero) diag(j) = one
+   if (wa2(j) == nswc_zero_sp) diag(j) = nswc_one_sp
 end do
 50 continue
 !        On the first iteration, calculate the norm of the scaled x
@@ -30823,15 +30831,15 @@ do j = 1, n
 end do
 xnorm = enorm(n,wa3)
 delta = factor*xnorm
-if (delta == zero) delta = factor
+if (delta == nswc_zero_sp) delta = factor
 70 continue
 !        Form (Q transpose)*fvec and store in QTF.
 do i = 1, n
    qtf(i) = fvec(i)
 end do
 do j = 1, n
-   if (fjac(j,j) == zero) go to 110
-   sum = zero
+   if (fjac(j,j) == nswc_zero_sp) go to 110
+   sum = nswc_zero_sp
    do i = j, n
       sum = sum + fjac(i,j)*qtf(i)
    end do
@@ -30853,7 +30861,7 @@ do j = 1, n
    end do
 140 continue
    r(l) = wa1(j)
-   if (wa1(j) == zero) sing = .true.
+   if (wa1(j) == nswc_zero_sp) sing = .true.
 end do
 !        Accumulate the orthogonal factor in fjac.
 call qform(n,n,fjac,ldfjac,wa1)
@@ -30889,12 +30897,12 @@ nfev = nfev + 1
 if (iflag < 0) go to 300
 fnorm1 = enorm(n,wa4)
 !           Compute the scaled actual reduction.
-actred = -one
-if (fnorm1 < fnorm) actred = one - (fnorm1/fnorm)**2
+actred = -nswc_one_sp
+if (fnorm1 < fnorm) actred = nswc_one_sp - (fnorm1/fnorm)**2
 !           Compute the scaled predicted reduction.
 l = 1
 do i = 1, n
-   sum = zero
+   sum = nswc_zero_sp
    do j = i, n
       sum = sum + r(l)*wa1(j)
       l = l + 1
@@ -30902,12 +30910,12 @@ do i = 1, n
    wa3(i) = qtf(i) + sum
 end do
 temp = enorm(n,wa3)
-prered = zero
-if (temp < fnorm) prered = one - (temp/fnorm)**2
+prered = nswc_zero_sp
+if (temp < fnorm) prered = nswc_one_sp - (temp/fnorm)**2
 !           Compute the ratio of the actual to the predicted
 !           reduction.
-ratio = zero
-if (prered > zero) ratio = actred/prered
+ratio = nswc_zero_sp
+if (prered > nswc_zero_sp) ratio = actred/prered
 !           Update the step bound.
 if (ratio >= p1) go to 230
 ncsuc = 0
@@ -30919,7 +30927,7 @@ ncfail = 0
 ncsuc = ncsuc + 1
 if (ratio >= p5 .or. ncsuc > 1) &
    & delta = max(delta,pnorm/p5)
-if (abs(ratio - one) <= p1) delta = pnorm/p5
+if (abs(ratio - nswc_one_sp) <= p1) delta = pnorm/p5
 240 continue
 !           Test for successful iteration.
 if (ratio < p0001) go to 260
@@ -30939,7 +30947,7 @@ if (actred >= p001) nslow1 = 0
 if (jeval) nslow2 = nslow2 + 1
 if (actred >= p1) nslow2 = 0
 !           Test for convergence.
-if (delta <= xtol*xnorm .or. fnorm == zero) info = 1
+if (delta <= xtol*xnorm .or. fnorm == nswc_zero_sp) info = 1
 if (info /= 0) go to 300
 !           Tests for termination and stringent tolerances.
 if (nfev >= maxfev) info = 2
@@ -30953,7 +30961,7 @@ if (ncfail == 2) go to 290
 !           Calculate the rank one modification to the Jacobian
 !           and update QTF if necessary.
 do j = 1, n
-   sum = zero
+   sum = nswc_zero_sp
    do i = 1, n
       sum = sum + fjac(i,j)*wa4(i)
    end do
@@ -34487,9 +34495,6 @@ real(nswc_sp), intent(inout) :: sd1, sd2, sparam(5), sx1
 real(nswc_sp), intent(in) :: sy1
 !     beginning of local variable declarations
 real(nswc_sp) :: sflag, sh11, sh12, sh21, sh22, sp1, sp2, sq1, sq2, stemp, su, nswc_ai_r4
-real(nswc_sp), parameter :: zero = 0.e0
-real(nswc_sp), parameter :: one = 1.e0
-real(nswc_sp), parameter :: two = 2.e0
 real(nswc_sp), parameter :: gam = 4096.e0
 real(nswc_sp), parameter :: gamsq = 1.67772e7
 real(nswc_sp), parameter :: rgamsq = 5.96046e-8
@@ -34508,10 +34513,10 @@ real(nswc_sp), parameter :: rgamsq = 5.96046e-8
 !     The values of gamsq and rgamsq set in the data statement may be
 !     inexact.  This is OK as they are only used for testing the size
 !     of sd1 and sd2.  All actual scaling of data is done using gam.
-if (sd1 < zero) go to 60
+if (sd1 < nswc_zero_sp) go to 60
 sp2 = sd2*sy1
-if (sp2 /= zero) go to 20
-sflag = -two
+if (sp2 /= nswc_zero_sp) go to 20
+sflag = -nswc_two_sp
 go to 260
 !     Regular-case..
 20 sp1 = sd1*sx1
@@ -34520,24 +34525,24 @@ sq2 = sp2*sy1
 if (abs(sq1) <= abs(sq2)) go to 40
 sh21 = -sy1/sx1
 sh12 = sp2/sp1
-su = one - sh12*sh21
-if (su <= zero) go to 60
-sflag = zero
-sh11 = one
-sh22 = one
+su = nswc_one_sp - sh12*sh21
+if (su <= nswc_zero_sp) go to 60
+sflag = nswc_zero_sp
+sh11 = nswc_one_sp
+sh22 = nswc_one_sp
 sd1 = sd1/su
 sd2 = sd2/su
 sx1 = sx1*su
 !         Go scale-check..
 go to 100
 40 continue
-if (sd2 < zero) go to 60
-sflag = one
+if (sd2 < nswc_zero_sp) go to 60
+sflag = nswc_one_sp
 sh11 = sp1/sp2
-sh21 = -one
-sh12 = one
+sh21 = -nswc_one_sp
+sh12 = nswc_one_sp
 sh22 = sx1/sy1
-su = one + sh11*sh22
+su = nswc_one_sp + sh11*sh22
 stemp = sd2/su
 sd2 = sd1/su
 sd1 = stemp
@@ -34546,21 +34551,21 @@ sx1 = sy1*su
 go to 100
 !     Procedure..zero-H-D-and-sx1..
 60 continue
-sflag = -one
-sh11 = zero
-sh12 = zero
-sh21 = zero
-sh22 = zero
-sd1 = zero
-sd2 = zero
-sx1 = zero
+sflag = -nswc_one_sp
+sh11 = nswc_zero_sp
+sh12 = nswc_zero_sp
+sh21 = nswc_zero_sp
+sh22 = nswc_zero_sp
+sd1 = nswc_zero_sp
+sd2 = nswc_zero_sp
+sx1 = nswc_zero_sp
 go to 250
 !     Procedure..scale-check
 100 continue
 110 continue
 if (sd1 > rgamsq) go to 130
-if (sd1 == zero) go to 160
-sflag = -one
+if (sd1 == nswc_zero_sp) go to 160
+sflag = -nswc_one_sp
 sd1 = sd1*(gam*gam)
 sx1 = sx1/gam
 sh11 = sh11/gam
@@ -34569,7 +34574,7 @@ go to 110
 130 continue
 140 continue
 if (sd1 < gamsq) go to 160
-sflag = -one
+sflag = -nswc_one_sp
 sd1 = sd1/(gam*gam)
 sx1 = sx1*gam
 sh11 = sh11*gam
@@ -34578,8 +34583,8 @@ go to 140
 160 continue
 170 continue
 if (abs(sd2) > rgamsq) go to 190
-if (sd2 == zero) go to 220
-sflag = -one
+if (sd2 == nswc_zero_sp) go to 220
+sflag = -nswc_one_sp
 sd2 = sd2*(gam*gam)
 sh21 = sh21/gam
 sh22 = sh22/gam
@@ -34587,7 +34592,7 @@ go to 170
 190 continue
 200 continue
 if (abs(sd2) < gamsq) go to 220
-sflag = -one
+sflag = -nswc_one_sp
 sd2 = sd2/(gam*gam)
 sh21 = sh21*gam
 sh22 = sh22*gam
@@ -34643,8 +34648,6 @@ real(nswc_sp), intent(inout) :: sx(*), sy(*)
 !     beginning of local variable declarations
 integer :: i, kx, ky, nsteps
 real(nswc_sp) :: sflag, sh11, sh12, sh21, sh22, w, z, nswc_ai_r4
-real(nswc_sp), parameter :: zero = 0.e0
-real(nswc_sp), parameter :: two = 2.e0
 !     Apply the modified Givens transformation, H, to the 2 by n matrix
 !     (sx**T), where **T indicates transpose. The elements of sx are in
 !     (sy**T)
@@ -34656,7 +34659,7 @@ real(nswc_sp), parameter :: two = 2.e0
 !     h=(          )    (          )    (          )    (          )
 !       (sh21  sh22),   (sh21  1.E0),   (-1.E0 sh22),   (0.E0  1.E0).
 sflag = sparam(1)
-if (n <= 0 .or.(sflag + two == zero)) go to 140
+if (n <= 0 .or.(sflag + nswc_two_sp == nswc_zero_sp)) go to 140
 if (.not.(incx == incy.and. incx > 0)) go to 70
 nsteps = n*incx
 nswc_ai_r4 = sflag
@@ -34794,16 +34797,13 @@ real(nswc_dp), intent(inout) :: dd1
 real(nswc_dp), intent(inout) :: dx1
 !     beginning of local variable declarations
 real(nswc_dp) :: dh11, dh21, dp2, dq2, du, dflag, dh12, dh22, dp1, dq1, dtemp, nswc_ai_r8
-real(nswc_dp), parameter :: zero = 0.d0
-real(nswc_dp), parameter :: one = 1.d0
-real(nswc_dp), parameter :: two = 2.d0
 real(nswc_dp), parameter :: gam = 4096.d0
 real(nswc_dp), parameter :: gamsq = 16777216.d0
 real(nswc_dp), parameter :: rgamsq = 5.9604645d-8
-if (dd1 < zero) go to 60
+if (dd1 < nswc_zero_dp) go to 60
 dp2 = dd2*dy1
-if (dp2 /= zero) go to 20
-dflag = -two
+if (dp2 /= nswc_zero_dp) go to 20
+dflag = -nswc_two_dp
 go to 260
 !     Regular-case..
 20 dp1 = dd1*dx1
@@ -34812,24 +34812,24 @@ dq2 = dp2*dy1
 if (abs(dq1) <= abs(dq2)) go to 40
 dh21 = -dy1/dx1
 dh12 = dp2/dp1
-du = one - dh12*dh21
-if (du <= zero) go to 60
-dflag = zero
-dh11 = one
-dh22 = one
+du = nswc_one_dp - dh12*dh21
+if (du <= nswc_zero_dp) go to 60
+dflag = nswc_zero_dp
+dh11 = nswc_one_dp
+dh22 = nswc_one_dp
 dd1 = dd1/du
 dd2 = dd2/du
 dx1 = dx1*du
 !         Go scale-check..
 go to 100
 40 continue
-if (dd2 < zero) go to 60
-dflag = one
+if (dd2 < nswc_zero_dp) go to 60
+dflag = nswc_one_dp
 dh11 = dp1/dp2
-dh21 = -one
-dh12 = one
+dh21 = -nswc_one_dp
+dh12 = nswc_one_dp
 dh22 = dx1/dy1
-du = one + dh11*dh22
+du = nswc_one_dp + dh11*dh22
 dtemp = dd2/du
 dd2 = dd1/du
 dd1 = dtemp
@@ -34838,21 +34838,21 @@ dx1 = dy1*du
 go to 100
 !     Procedure..zero-H-D-and-dx1..
 60 continue
-dflag = -one
-dh11 = zero
-dh12 = zero
-dh21 = zero
-dh22 = zero
-dd1 = zero
-dd2 = zero
-dx1 = zero
+dflag = -nswc_one_dp
+dh11 = nswc_zero_dp
+dh12 = nswc_zero_dp
+dh21 = nswc_zero_dp
+dh22 = nswc_zero_dp
+dd1 = nswc_zero_dp
+dd2 = nswc_zero_dp
+dx1 = nswc_zero_dp
 go to 250
 !     Procedure..scale-check
 100 continue
 110 continue
 if (dd1 > rgamsq) go to 130
-if (dd1 == zero) go to 160
-dflag = -one
+if (dd1 == nswc_zero_dp) go to 160
+dflag = -nswc_one_dp
 dd1 = dd1*(gam*gam)
 dx1 = dx1/gam
 dh11 = dh11/gam
@@ -34861,7 +34861,7 @@ go to 110
 130 continue
 140 continue
 if (dd1 < gamsq) go to 160
-dflag = -one
+dflag = -nswc_one_dp
 dd1 = dd1/(gam*gam)
 dx1 = dx1*gam
 dh11 = dh11*gam
@@ -34870,8 +34870,8 @@ go to 140
 160 continue
 170 continue
 if (abs(dd2) > rgamsq) go to 190
-if (dd2 == zero) go to 220
-dflag = -one
+if (dd2 == nswc_zero_dp) go to 220
+dflag = -nswc_one_dp
 dd2 = dd2*(gam*gam)
 dh21 = dh21/gam
 dh22 = dh22/gam
@@ -34879,7 +34879,7 @@ go to 170
 190 continue
 200 continue
 if (abs(dd2) < gamsq) go to 220
-dflag = -one
+dflag = -nswc_one_dp
 dd2 = dd2/(gam*gam)
 dh21 = dh21*gam
 dh22 = dh22*gam
@@ -34936,8 +34936,6 @@ real(nswc_dp), intent(inout) :: dy(*)
 !     beginning of local variable declarations
 integer :: i, kx, ky, nsteps
 real(nswc_dp) :: dflag, dh12, dh22, z, dh11, dh21, w, nswc_ai_r8
-real(nswc_dp), parameter :: zero = 0.d0
-real(nswc_dp), parameter :: two = 2.d0
 !     Apply the modified Givens transformation, H, to the 2 by n matrix
 !     (dx**T), where **T indicates transpose. The elements of dx are in
 !     (dy**T)
@@ -34949,7 +34947,7 @@ real(nswc_dp), parameter :: two = 2.d0
 !     h=(          )    (          )    (          )    (          )
 !       (dh21  dh22),   (dh21  1.D0),   (-1.D0 dh22),   (0.D0  1.D0).
 dflag = dparam(1)
-if (n <= 0 .or.(dflag + two == zero)) go to 140
+if (n <= 0 .or.(dflag + nswc_two_dp == nswc_zero_dp)) go to 140
 if (.not.(incx == incy.and. incx > 0)) go to 70
 nsteps = n*incx
 nswc_ai_r8 = dflag
@@ -35778,8 +35776,6 @@ real(nswc_sp), intent(in) :: sx(*)
 !     beginning of local variable declarations
 integer :: i, j, nn, next
 real(nswc_sp) :: hitest, sum, xmax
-real(nswc_sp), parameter :: zero = 0.0e0
-real(nswc_sp), parameter :: one = 1.0e0
 real(nswc_sp), parameter :: cutlo = 4.441e-16
 real(nswc_sp), parameter :: cuthi = 1.304e19
 !     Euclidean norm of the n-vector stored in sx() with storage
@@ -35815,10 +35811,10 @@ real(nswc_sp), parameter :: cuthi = 1.304e19
 !     DATA cutlo, cuthi / 8.232D-11,  1.304D19 /
 !     DATA cutlo, cuthi / 4.441E-16,  1.304E19 /
 if (n > 0) go to 10
-snrm2 = zero
+snrm2 = nswc_zero_sp
 go to 300
 10 next = 30
-sum = zero
+sum = nswc_zero_sp
 nn = n * incx
 !                                                 Begin main loop
 i = 1
@@ -35834,9 +35830,9 @@ case (110)
 end select
 30 if (abs(sx(i)) > cutlo) go to 85
 next = 50
-xmax = zero
+xmax = nswc_zero_sp
 !                        Phase 1.  Sum is zero
-50 if (sx(i) == zero) go to 200
+50 if (sx(i) == nswc_zero_sp) go to 200
 if (abs(sx(i)) > cutlo) go to 85
 !                                Prepare for phase 2.
 next = 70
@@ -35853,7 +35849,7 @@ go to 115
 !                     Common code for phases 2 and 4.
 !                     In phase 4 sum is large.  Scale to avoid overflow.
 110 if (abs(sx(i)) <= xmax) go to 115
-sum = one + sum * (xmax / sx(i))**2
+sum = nswc_one_sp + sum * (xmax / sx(i))**2
 xmax = abs(sx(i))
 go to 200
 115 sum = sum + (sx(i)/xmax)**2
@@ -35929,8 +35925,6 @@ real(nswc_dp), intent(in) :: dx(*)
 !     beginning of local variable declarations
 integer :: i, j, nn, next
 real(nswc_dp) :: hitest, sum, xmax
-real(nswc_dp), parameter :: zero = 0.0d0
-real(nswc_dp), parameter :: one = 1.0d0
 real(nswc_dp), parameter :: cutlo = 8.232d-11
 real(nswc_dp), parameter :: cuthi = 1.304d19
 !     Euclidean norm of the n-vector stored in dx() with storage
@@ -35966,10 +35960,10 @@ real(nswc_dp), parameter :: cuthi = 1.304d19
 !     DATA cutlo, cuthi / 8.232D-11,  1.304D19 /
 !     DATA cutlo, cuthi / 4.441E-16,  1.304E19 /
 if (n > 0) go to 10
-dnrm2 = zero
+dnrm2 = nswc_zero_dp
 go to 300
 10 next = 30
-sum = zero
+sum = nswc_zero_dp
 nn = n * incx
 !                                                 Begin main loop
 i = 1
@@ -35985,9 +35979,9 @@ case (110)
 end select
 30 if (abs(dx(i)) > cutlo) go to 85
 next = 50
-xmax = zero
+xmax = nswc_zero_dp
 !                        Phase 1.  Sum is zero
-50 if (dx(i) == zero) go to 200
+50 if (dx(i) == nswc_zero_dp) go to 200
 if (abs(dx(i)) > cutlo) go to 85
 !                                Prepare for phase 2.
 next = 70
@@ -36004,7 +35998,7 @@ go to 115
 !                     Common code for phases 2 and 4.
 !                     In phase 4 sum is large.  Scale to avoid overflow.
 110 if (abs(dx(i)) <= xmax) go to 115
-sum = one + sum * (xmax / dx(i))**2
+sum = nswc_one_dp + sum * (xmax / dx(i))**2
 xmax = abs(dx(i))
 go to 200
 115 sum = sum + (dx(i)/xmax)**2
@@ -36081,8 +36075,6 @@ complex(nswc_sp), intent(in) :: cx(*)
 integer :: i, nn, next
 logical :: imag, scale
 real(nswc_sp) :: hitest, sum, xmax, absx
-real(nswc_sp), parameter :: zero = 0.0e0
-real(nswc_sp), parameter :: one = 1.0e0
 real(nswc_sp), parameter :: cutlo = 4.441e-16
 real(nswc_sp), parameter :: cuthi = 1.304e19
 !     Unitary norm of the complex n-vector stored in cx() with storage
@@ -36118,10 +36110,10 @@ real(nswc_sp), parameter :: cuthi = 1.304e19
 !     DATA cutlo, cuthi / 8.232D-11,  1.304D19 /
 !     DATA cutlo, cuthi / 4.441E-16,  1.304E19 /
 if (n > 0) go to 10
-scnrm2 = zero
+scnrm2 = nswc_zero_sp
 go to 300
 10 next = 30
-sum = zero
+sum = nswc_zero_sp
 nn = n * incx
 !                                                 Begin main loop
 do i = 1,nn,incx
@@ -36143,7 +36135,7 @@ do i = 1,nn,incx
    next = 50
    scale = .false.
 !                        Phase 1.  Sum is zero
-50 if (absx == zero) go to 200
+50 if (absx == nswc_zero_sp) go to 200
    if (absx > cutlo) go to 85
 !                                Prepare for phase 2.
    next = 70
@@ -36160,7 +36152,7 @@ do i = 1,nn,incx
 !                     Common code for phases 2 and 4.
 !                     In phase 4 sum is large.  Scale to avoid overflow.
 110 if (absx <= xmax) go to 115
-   sum = one + sum * (xmax / absx)**2
+   sum = nswc_one_sp + sum * (xmax / absx)**2
    xmax = absx
    go to 200
 115 sum = sum + (absx/xmax)**2
@@ -37972,11 +37964,8 @@ implicit none
 complex(nswc_sp), intent(in) :: x(*)
 complex(nswc_sp), intent(inout) :: y(*)
 complex(nswc_sp), intent(in) :: yold
-!     beginning of local variable declarations
-complex(nswc_sp), parameter :: zero = (0.0,0.0)
-complex(nswc_sp), parameter :: one = (1.0,0.0)
-y(1) = zero
-if (yold == zero) y(1) = one
+y(1) = nswc_zero_csp
+if (yold == nswc_zero_csp) y(1) = nswc_one_csp
 end subroutine cychg
 
 pure subroutine svprd(a,n,x,y)
@@ -41143,7 +41132,6 @@ integer, intent(inout) :: pivot(*)
 integer :: index1, index2, index3, indpiv, isum1, isum2, k, &
    & nclblk, nclpiv, novrlp, nrwbk2, nrwblk, nrwpiv
 real(nswc_sp) :: pivmax
-real(nswc_sp), parameter :: zero = 0.0
 !***************************************************************
 !  A R C E D C supervises the modified alternate row and column
 !  decomposition with partial pivoting of the almost block
@@ -41267,7 +41255,7 @@ return
 !       C               CURRENT BLOCK AND THE NEXT BLOCK.
 !       C
 !       cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-pivmax = zero
+pivmax = nswc_zero_sp
 iflag = 0
 index1 = 1
 indpiv = 1
@@ -48509,7 +48497,6 @@ complex(nswc_sp), intent(in) :: x
 integer :: i, j, k, kp1, l, nm1
 complex(nswc_sp) :: pivot, t
 real(nswc_sp) :: s, c
-complex(nswc_sp), parameter :: zero = (0.0,0.0)
 !     -------------------
 !     Evaluation of the determinant of a-xi where A is an NXN matrix,
 !     x is a scalar, and i is the NXN identity matrix.
@@ -48521,7 +48508,7 @@ if (n >= 2) go to 10
 cdet = a(1,1) - x
 return
 !              Replace A with a-xi
-10 if (x == zero) go to 20
+10 if (x == nswc_zero_csp) go to 20
 do k = 1,n
    a(k,k) = a(k,k) - x
 end do
@@ -48543,7 +48530,7 @@ do k = 1,nm1
    pivot = a(l,k)
 !         Update the calculation of cdet
    cdet = cdet*pivot
-   if (cdet == zero) return
+   if (cdet == nswc_zero_csp) return
    if (k == l) go to 50
    cdet = -cdet
 !          Interchanging rows k and l
@@ -52059,7 +52046,6 @@ external rowk
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
 real(nswc_sp) :: bk, c1, cj, ck, dkj
-real(nswc_sp), parameter :: zero = 0.0
 !     ******************************************************************
 !     Solution of linear equations with reduced storage
 !     ******************************************************************
@@ -52073,7 +52059,7 @@ iflag = -1
 call rowk(n,1,c)
 bk = b(1)
 if (n > 1) go to 10
-if (c(1) == zero) go to 200
+if (c(1) == nswc_zero_sp) go to 200
 c(1) = bk/c(1)
 return
 !     Find the pivot for column 1
@@ -52085,7 +52071,7 @@ ip(1) = m
 c1 = c(m)
 c(m) = c(1)
 c(1) = c1
-if (c(1) == zero) go to 200
+if (c(1) == nswc_zero_sp) go to 200
 !     Find the first elementary matrix and store it in d
 do i = 2,n
    d(i - 1) = -c(i)/c(1)
@@ -52128,7 +52114,7 @@ do k = 2,n
 !       k=n CASE
    m = k
    if (k < n) go to 70
-   if (c(k) == zero) go to 200
+   if (c(k) == nswc_zero_sp) go to 200
    d(last) = bk/c(k)
    go to 90
 !     Find the pivot
@@ -52139,7 +52125,7 @@ do k = 2,n
    ck = c(m)
    c(m) = c(k)
    c(k) = ck
-   if (c(k) == zero) go to 200
+   if (c(k) == nswc_zero_sp) go to 200
 !     Find the k-TH elementary matrix
    ik = last
    do i = kp1,n
@@ -52214,7 +52200,6 @@ external rowk
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
 real(nswc_dp) :: bk, cj, ck, c1, dkj
-real(nswc_dp), parameter :: zero = 0.d0
 !     ******************************************************************
 !     Solution of linear equations with reduced storage
 !     ******************************************************************
@@ -52228,7 +52213,7 @@ iflag = -1
 call rowk(n,1,c)
 bk = b(1)
 if (n > 1) go to 10
-if (c(1) == zero) go to 200
+if (c(1) == nswc_zero_dp) go to 200
 c(1) = bk/c(1)
 return
 !     Find the pivot for column 1
@@ -52240,7 +52225,7 @@ ip(1) = m
 c1 = c(m)
 c(m) = c(1)
 c(1) = c1
-if (c(1) == zero) go to 200
+if (c(1) == nswc_zero_dp) go to 200
 !     Find the first elementary matrix and store it in d
 do i = 2,n
    d(i - 1) = -c(i)/c(1)
@@ -52283,7 +52268,7 @@ do k = 2,n
 !       k=n CASE
    m = k
    if (k < n) go to 70
-   if (c(k) == zero) go to 200
+   if (c(k) == nswc_zero_dp) go to 200
    d(last) = bk/c(k)
    go to 90
 !     Find the pivot
@@ -52294,7 +52279,7 @@ do k = 2,n
    ck = c(m)
    c(m) = c(k)
    c(k) = ck
-   if (c(k) == zero) go to 200
+   if (c(k) == nswc_zero_dp) go to 200
 !     Find the k-TH elementary matrix
    ik = last
    do i = kp1,n
@@ -52370,7 +52355,6 @@ integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
 real(nswc_sp) :: s, si
 complex(nswc_sp) :: bk, cj, ck, c1, dkj
-complex(nswc_sp), parameter :: zero = (0.0,0.0)
 !     ******************************************************************
 !     Solution of complex linear equations with reduced storage
 !     ******************************************************************
@@ -52384,7 +52368,7 @@ iflag = -1
 call rowk(n,1,c)
 bk = b(1)
 if (n > 1) go to 10
-if (c(1) == zero) go to 200
+if (c(1) == nswc_zero_csp) go to 200
 c(1) = bk/c(1)
 return
 !     Find the pivot for column 1
@@ -52401,7 +52385,7 @@ ip(1) = m
 c1 = c(m)
 c(m) = c(1)
 c(1) = c1
-if (c(1) == zero) go to 200
+if (c(1) == nswc_zero_csp) go to 200
 !     Find the first elementary matrix and store it in d
 do i = 2,n
    d(i - 1) = -c(i)/c(1)
@@ -52444,7 +52428,7 @@ do k = 2,n
 !       k=n CASE
    m = k
    if (k < n) go to 70
-   if (c(k) == zero) go to 200
+   if (c(k) == nswc_zero_csp) go to 200
    d(last) = bk/c(k)
    go to 90
 !     Find the pivot
@@ -52460,7 +52444,7 @@ do k = 2,n
    ck = c(m)
    c(m) = c(k)
    c(k) = ck
-   if (c(k) == zero) go to 200
+   if (c(k) == nswc_zero_csp) go to 200
 !     Find the k-TH elementary matrix
    ik = last
    do i = kp1,n
@@ -58315,13 +58299,12 @@ complex(nswc_sp), intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
 !     beginning of local variable declarations
 integer :: i, ip, j
-complex(nswc_sp), parameter :: zero = (0.0,0.0)
 !                 Store the i-TH row
 ip = 1
 do i = 1,m
    ib(i) = ip
    do j = 1,n
-      if (a(i,j) == zero) go to 10
+      if (a(i,j) == nswc_zero_csp) go to 10
       if (ip > num) go to 20
       b(ip) = a(i,j)
       jb(ip) = j
@@ -58770,7 +58753,6 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 !     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
-complex(nswc_sp), parameter :: zero = (0.0,0.0)
 !-----------------------------------------------------------------------
 !                 Copying a sparse complex matrix
 !-----------------------------------------------------------------------
@@ -58781,7 +58763,7 @@ do i = 1,m
    iend = ia(i + 1) - 1
    if (ibeg > iend) go to 20
    do ip = ibeg,iend
-      if (a(ip) == zero) go to 10
+      if (a(ip) == nswc_zero_csp) go to 10
       b(l) = a(ip)
       jb(l) = ja(ip)
       l = l + 1
@@ -63820,6 +63802,7 @@ subroutine cnspiv(n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
 !!   ia(n+1) is set so that ia(n+1) - ia(1) = The number of nonzeros in
 !!   A.  iu, ju, and u are used in a similar way to store the strict upper
 !!   triangle of u, except that ju actually contains c(j) instead of j
+!!   Initialize work storage and pointers to ju
 !! ```
 !! <!-- nswc-ford:end -->
 implicit none
@@ -63835,7 +63818,7 @@ integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
 !     beginning of local variable declarations
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk, nswc_ai_i4
-complex(nswc_sp) :: dk, lki, one, yk, zero
+complex(nswc_sp) :: dk, lki, yk
 real(nswc_sp) :: xpv, xpvmax
 !  cnspiv uses sparse Gaussian elimination with
 !  column interchanges to solve the linear system A x = b.  the
@@ -63875,11 +63858,9 @@ real(nswc_sp) :: xpv, xpvmax
 !  ia(n+1) is set so that ia(n+1) - ia(1) = The number of nonzeros in
 !  A.  iu, ju, and u are used in a similar way to store the strict upper
 !  triangle of u, except that ju actually contains c(j) instead of j
-one = (1.0,0.0)
-zero = (0.0,0.0)
 !  Initialize work storage and pointers to ju
 do j = 1,n
-   x(j) = zero
+   x(j) = nswc_zero_csp
 end do
 iu(1) = 1
 juptr = 0
@@ -63922,7 +63903,7 @@ do k = 1,n
 !  vi LT vk -- process the L(k,i) element and merge the
 !  adjacency of vi with the ordered adjacency of vk
    lki = - x(vi)
-   x(vi) = zero
+   x(vi) = nswc_zero_csp
 !  Adjust right hand side to reflect elimination
    yk = yk + lki * y(vi)
    ppk = vi
@@ -63934,7 +63915,7 @@ do k = 1,n
       vj = ic(juj)
 !  If vj is already in the adjacency of vk,
 !  skip the insertion
-      if (x(vj) /= zero) go to 90
+      if (x(vj) /= nswc_zero_csp) go to 90
 !  Insert vj in adjacency list of vk.
 !  Reset ppk to vi if we have passed the correct
 !  insertion spot.  (This happens when the adjacency of
@@ -63987,7 +63968,7 @@ do k = 1,n
    go to 150
 140 vi = p(vi)
 !  Compute D(k) = 1/L(k,k) and perform interchange.
-150 dk = one / x(maxc)
+150 dk = nswc_one_csp / x(maxc)
    x(maxc) = x(k)
    i = c(k)
    c(k) = c(maxc)
@@ -63995,7 +63976,7 @@ do k = 1,n
    ck = c(k)
    ic(ck) = k
    ic(i) = maxc
-   x(k) = zero
+   x(k) = nswc_zero_csp
 !  Update right hand side.
    y(k) = yk * dk
 !  Compute value for iu(k+1) and check for storage overflow
@@ -64009,7 +63990,7 @@ do k = 1,n
 160 juptr = juptr + 1
    ju(juptr) = c(j)
    u(juptr) = x(j) * dk
-   x(j) = zero
+   x(j) = nswc_zero_csp
    j = p(j)
    if (j <= n) go to 160
 170 continue
@@ -64491,7 +64472,6 @@ integer, intent(inout) :: p(*)
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm, nswc_ai_i4
 complex(nswc_sp) :: const
 real(nswc_sp) :: wi, wmax
-complex(nswc_sp), parameter :: zero = (0.0, 0.0)
 !-----------------------------------------------------------------------
 !     csplu employs Gaussian elimination with column interchanges
 !     to perform the LU decomposition of a complex sparse matrix.
@@ -64535,7 +64515,7 @@ complex(nswc_sp), parameter :: zero = (0.0, 0.0)
 jptr = 0
 it(1) = 1
 do j = 1,n
-   w(j) = zero
+   w(j) = nswc_zero_csp
 end do
 !     Perform the LU factorization of the r(k)-TH row of A
 do k = 1,n
@@ -64564,14 +64544,14 @@ do k = 1,n
    i = n + 1
 30 i = p(i)
    if (i >= k) go to 50
-   if (w(i) == zero) go to 30
+   if (w(i) == nswc_zero_csp) go to 30
 !     L(k,i) is nonzero. Therefore store it in L.
    jptr = jptr + 1
    if (jptr > max) go to 230
    const = w(i)
    t(jptr) = const
    jt(jptr) = c(i)
-   w(i) = zero
+   w(i) = nswc_zero_csp
 !     Perform elimination using the i-TH row of U
    jmin = iu(i)
    jmax = it(i + 1) - 1
@@ -64580,7 +64560,7 @@ do k = 1,n
    do jj = jmin,jmax
       lj = jt(jj)
       j = ic(lj)
-      if (w(j) /= zero) go to 43
+      if (w(j) /= nswc_zero_csp) go to 43
       nswc_ai_i4 = j - pm
       if (nswc_ai_i4 < 0) go to 40
       if (nswc_ai_i4 == 0) go to 43
@@ -64622,7 +64602,7 @@ do k = 1,n
    go to 80
 70 i = p(i)
 80 w(maxi) = w(k)
-   w(k) = zero
+   w(k) = nswc_zero_csp
    lk = c(k)
    ll = c(maxi)
    c(k) = ll
@@ -64632,12 +64612,12 @@ do k = 1,n
 !     The remaining elements of p form the k-TH row of U
    iu(k) = jptr + 1
 90 if (i > n) go to 100
-   if (w(i) == zero) go to 91
+   if (w(i) == nswc_zero_csp) go to 91
    jptr = jptr + 1
    if (jptr > max) go to 230
    t(jptr) = w(i)/d(k)
    jt(jptr) = c(i)
-   w(i) = zero
+   w(i) = nswc_zero_csp
 91 i = p(i)
    go to 90
 !     Prepare for the next row
@@ -73772,8 +73752,6 @@ dimension ip(n)
 integer :: i, j, k, np1
 real(nswc_sp) :: eps, eps2, rat, ratio, rnrm2, xnrm2
 real(nswc_dp) :: dsum
-real(nswc_sp), parameter :: zero = 0.0
-real(nswc_sp), parameter :: one = 1.0
 real(nswc_sp), parameter :: four = 4.0
 real(nswc_sp), parameter :: fourth = 0.25
 ! ----------------------------------------------------------------------
@@ -73828,12 +73806,12 @@ eps = spmpar(1)
 exit = .true.
 np1 = n + 1
 eps2 = eps*eps
-xnrm2 = zero
+xnrm2 = nswc_zero_sp
 do i = 1,n
    xnrm2 = xnrm2 + x(i)*x(i)
 end do
-if (xnrm2 == zero) return
-ratio = one
+if (xnrm2 == nswc_zero_sp) return
+ratio = nswc_one_sp
 !                                       Find the residual vector.
 20 do k = 1,m
    dsum = b(k)
@@ -73844,7 +73822,7 @@ ratio = one
 end do
 !                                       Find the correction vector.
 call orsol(m, n, qr, ms, s, ip, r)
-rnrm2 = zero
+rnrm2 = nswc_zero_sp
 do k = 1,n
    rnrm2 = rnrm2 + r(k)*r(k)
 end do
@@ -73853,7 +73831,7 @@ if (rnrm2 <= eps2*xnrm2) return
 do k = 1,n
    x(k) = x(k) + r(k)
 end do
-xnrm2 = zero
+xnrm2 = nswc_zero_sp
 do k = 1,n
    xnrm2 = xnrm2 + x(k)*x(k)
 end do
@@ -73861,7 +73839,7 @@ if (m == n) go to 50
 do k = np1,m
    x(k) = r(k)
 end do
-50 if (xnrm2 == zero) return
+50 if (xnrm2 == nswc_zero_sp) return
 rat = ratio
 ratio = rnrm2/xnrm2
 if (ratio <= fourth*rat) go to 20
@@ -78166,8 +78144,6 @@ integer :: i, ii, imax, j, jj, jp1, k, key, kk, kranke, l, last, &
    & np1, ntimes
 real(nswc_sp) :: enorm, fnorm, gam, rb, rn, rnmax, size, sn, snmax, srelpr, t, tau, uj, up, vj, xnorm, xnrme
 logical :: cov
-real(nswc_sp), parameter :: zero = 0.e0
-real(nswc_sp), parameter :: one = 1.e0
 real(nswc_sp), parameter :: half = 0.5e0
 !     dimension w(mdw,n+1),prgopt(*),x(n),
 !     ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
@@ -78440,21 +78416,21 @@ mode = 4
 return
 100 l = kranke
 !     Compute norm of equality constraint matrix and RT side.
-enorm = zero
+enorm = nswc_zero_sp
 do j = 1,n
    enorm = max(enorm,sasum(me,w(1,j),1))
 end do
 fnorm = sasum(me,w(1,np1),1)
 if (.not.(l > 0)) go to 200
-snmax = zero
-rnmax = zero
+snmax = nswc_zero_sp
+rnmax = nswc_zero_sp
 do i = 1,l
 !     Compute maximum ratio of vector lengths. Partition
 !     is at col. i.
    do k = i,me
       sn = sdot(n - i + 1,w(k,i),mdw,w(k,i),mdw)
       rn = sdot(i - 1,w(k,1),mdw,w(k,1),mdw)
-      if (.not.(rn == zero .and. sn > snmax)) go to 120
+      if (.not.(rn == nswc_zero_sp .and. sn > snmax)) go to 120
       snmax = sn
       imax = k
       go to 150
@@ -78495,14 +78471,14 @@ do i = 1,kranke
 end do
 !     Compute residuals for reduced problem.
 240 mep1 = me + 1
-rnorml = zero
+rnorml = nswc_zero_sp
 if (.not.(me < m)) go to 270
 do i = mep1,m
    w(i,np1) = w(i,np1) - sdot(kranke,w(i,1),mdw,x,1)
    sn = sdot(kranke,w(i,1),mdw,w(i,1),mdw)
    rn = sdot(n - kranke,w(i,kranke + 1),mdw,w(i,kranke + 1),mdw)
    if (.not.(rn <= tau**2*sn .and. kranke < n)) go to 260
-   w(i,kranke + 1) = zero
+   w(i,kranke + 1) = nswc_zero_sp
    call scopy(n - kranke, w(i,kranke + 1), 0, w(i,kranke + 1), mdw)
 260 continue
 end do
@@ -78550,7 +78526,7 @@ do jj = 1,kranke
    j = kranke + 1 - jj
    if (.not.(j < n)) go to 400
    rb = ws(j)*w(j,j)
-   if (rb /= zero) rb = one/rb
+   if (rb /= nswc_zero_sp) rb = nswc_one_sp/rb
    jp1 = j + 1
    do i = jp1,n
       w(i,j) = sdot(n - j,w(i,jp1),mdw,w(j,jp1),mdw)*rb
@@ -78596,7 +78572,7 @@ return
 tau = sqrt(srelpr)
 !     The nominal column scaling used in the code is
 !     the identity scaling.
-ws(n1) = one
+ws(n1) = nswc_one_sp
 call scopy(n, ws(n1), 0, ws(n1), 1)
 !     No covariance matrix is nominally computed.
 cov = .false.
@@ -78616,11 +78592,11 @@ if (.not.(ntimes > nopt)) go to 500
 mode = 4
 return
 500 key = prgopt(last + 1)
-if (key == 1) cov = prgopt(last + 2) /= zero
-if (.not.(key == 2 .and. prgopt(last + 2) /= zero)) go to 520
+if (key == 1) cov = prgopt(last + 2) /= nswc_zero_sp
+if (.not.(key == 2 .and. prgopt(last + 2) /= nswc_zero_sp)) go to 520
 do j = 1,n
    t = snrm2(m,w(1,j),1)
-   if (t /= zero) t = one/t
+   if (t /= nswc_zero_sp) t = nswc_one_sp/t
    l = n1 + j
    ws(l - 1) = t
 end do
@@ -78707,8 +78683,6 @@ integer :: i, ii, il, im1, ip1, j, k, key, key8, key9, krank, &
    & next, np1
 real(nswc_sp) :: anorm, blowup, eps, fac, gam, rb, srelpr, tau, tol, xnorm, rnrm(1), opt(7)
 logical :: cov
-real(nswc_sp), parameter :: zero = 0.e0
-real(nswc_sp), parameter :: one = 1.e0
 real(nswc_sp), parameter :: half = 0.5e0
 !     This is a companion subprogram to lsei( ).
 !     The documentation for lsei( ) has more complete
@@ -78752,7 +78726,7 @@ real(nswc_sp), parameter :: half = 0.5e0
 !                   precision.
 srelpr = spmpar(1)
 mode = 0
-rnorm = zero
+rnorm = nswc_zero_sp
 m = ma + mg
 np1 = n + 1
 krank = 0
@@ -78760,14 +78734,14 @@ if (n <= 0 .or. m <= 0) go to 70
 !     Process-option-vector
 go to 500
 !     Compute matrix NORM of least squares equas.
-40 anorm = zero
+40 anorm = nswc_zero_sp
 do j = 1,n
    anorm = max(anorm,sasum(ma,w(1,j),1))
 end do
 !     Set TOL for hfti( ) rank test.
 tau = tol*anorm
 !     Compute Householder orthogonal decomp of matrix.
-if (n > 0) ws(1) = zero
+if (n > 0) ws(1) = nswc_zero_sp
 call scopy(n, ws, 0, ws, 1)
 call scopy(ma, w(1,np1), 1, ws, 1)
 k = max(m,n)
@@ -78777,7 +78751,7 @@ n2 = n1 + n
 call hfti(w, mdw, ma, n, ws, 1, 1, tau, krank, rnrm, ws(n2), &
    & ws(n1), ip)
 rnorm = rnrm(1)
-fac = one
+fac = nswc_one_sp
 gam = ma - krank
 if (krank < ma) fac = rnorm**2/gam
 go to 80
@@ -78858,7 +78832,7 @@ krp1 = krank + 1
 call scopy(krank, w, mdw + 1, ws(n2), 1)
 !     Reciprocate diag. Terms.
 do j = 1,krank
-   w(j,j) = one/w(j,j)
+   w(j,j) = nswc_one_sp/w(j,j)
 end do
 if (.not.(krank > 1)) go to 310
 !     Invert the upper triangular QR factor on itself.
@@ -78881,7 +78855,7 @@ do j = 1,krank
    call scopy(j, w(1,j), 1, w(j,1), mdw)
 end do
 do i = krp1,n
-   w(i,1) = zero
+   w(i,1) = nswc_zero_sp
    call scopy(i, w(i,1), 0, w(i,1), mdw)
 end do
 !     Apply right side transformations to lower TRI.
@@ -78890,11 +78864,11 @@ do i = 1,krank
    l = n1 + i
    k = n2 + i
    rb = ws(l - 1)*ws(k - 1)
-   if (.not.(rb < zero)) go to 420
+   if (.not.(rb < nswc_zero_sp)) go to 420
 !     If rb.GE.zero, transformation can be regarded as zero.
-   rb = one/rb
+   rb = nswc_one_sp/rb
 !     Store unscaled rank-one Householder update in work array.
-   ws(n3) = zero
+   ws(n3) = nswc_zero_sp
    call scopy(n, ws(n3), 0, ws(n3), 1)
    l = n1 + i
    k = n3 + i
@@ -78961,7 +78935,7 @@ key8 = 0
 key9 = 0
 510 if (.not.(link > 1)) go to 540
 key = prgopt(last + 1)
-if (key == 1) cov = prgopt(last + 2) /= zero
+if (key == 1) cov = prgopt(last + 2) /= nswc_zero_sp
 if (key == 5) tol = max(srelpr,prgopt(last + 2))
 if (key /= 8) go to 520
 key8 = 1
@@ -79039,8 +79013,6 @@ real(nswc_sp), intent(inout) :: wnorm, ws(*), x(*)
 !     beginning of local variable declarations
 integer :: i, iw, ix, j, l, modew, n, np1
 real(nswc_sp) :: rnorm, sc, ynorm
-real(nswc_sp), parameter :: zero = 0.e0
-real(nswc_sp), parameter :: one = 1.e0
 real(nswc_sp), parameter :: fac = 0.1e0
 !     dimension a(mda,n+1),prgopt(*),x(n),ws((m+2)*(n+7)),is(m+n+1),
 !     where n=n1+n2.  This is a slight overestimate for ws(*).
@@ -79072,29 +79044,29 @@ n = n1 + n2
 mode = 1
 if (.not.(m <= 0)) go to 20
 if (.not.(n > 0)) go to 10
-x(1) = zero
+x(1) = nswc_zero_sp
 call scopy(n, x, 0, x, 1)
-10 wnorm = zero
+10 wnorm = nswc_zero_sp
 return
 20 np1 = n + 1
 !     Scale nonzero rows of inequality matrix to have length one.
 do i = 1,m
    sc = snrm2(n,a(i,1),mda)
-   if (sc == zero) go to 40
-   sc = one/sc
+   if (sc == nswc_zero_sp) go to 40
+   sc = nswc_one_sp/sc
    call sscal(np1, sc, a(i,1), mda)
 40 continue
 end do
 !     Scale RT.-Side vector to have length one (or zero).
 ynorm = snrm2(m,a(1,np1),1)
-if (ynorm == zero) go to 50
-sc = one/ynorm
+if (ynorm == nswc_zero_sp) go to 50
+sc = nswc_one_sp/ynorm
 call sscal(m, sc, a(1,np1), 1)
 !     Scale cols of matrix H.
 50 j = n1 + 1
 60 if (j > n) go to 70
 sc = snrm2(m,a(1,j),1)
-if (sc /= zero) sc = one/sc
+if (sc /= nswc_zero_sp) sc = nswc_one_sp/sc
 call sscal(m, sc, a(1,j), 1)
 x(j) = sc
 j = j + 1
@@ -79113,10 +79085,10 @@ do i = 1,m
    ws(iw + 1) = a(i,np1)
    iw = iw + 1
 end do
-ws(iw + 1) = zero
+ws(iw + 1) = nswc_zero_sp
 call scopy(n, ws(iw + 1), 0, ws(iw + 1), 1)
 iw = iw + n
-ws(iw + 1) = one
+ws(iw + 1) = nswc_one_sp
 iw = iw + 1
 !     SOLVE EU=F SUBJECT TO (TRANSPOSE OF H)U=0, U.GE.0.  THE
 !     MATRIX E = TRANSPOSE OF (G Y), AND THE (n+1)-VECTOR
@@ -79126,9 +79098,9 @@ iw = iw + m
 call wnnls(ws, np1, n2, np1 - n2, m, 0, prgopt, ws(ix), rnorm, &
    & modew, is, ws(iw + 1))
 !     Compute the components of the soln denoted above by W.
-sc = one - sdot(m,a(1,np1),1,ws(ix),1)
-if (.not.(one + fac*abs(sc) /= one .and. rnorm > zero)) go to 110
-sc = one/sc
+sc = nswc_one_sp - sdot(m,a(1,np1),1,ws(ix),1)
+if (.not.(nswc_one_sp + fac*abs(sc) /= nswc_one_sp .and. rnorm > nswc_zero_sp)) go to 110
+sc = nswc_one_sp/sc
 do j = 1,n1
    x(j) = sc*sdot(m,a(1,j),1,ws(ix),1)
 end do
@@ -79148,10 +79120,10 @@ do i = 1,m
    ws(iw + 1) = a(i,np1)
    iw = iw + 1
 end do
-ws(iw + 1) = zero
+ws(iw + 1) = nswc_zero_sp
 call scopy(n2, ws(iw + 1), 0, ws(iw + 1), 1)
 iw = iw + n2
-ws(iw + 1) = one
+ws(iw + 1) = nswc_one_sp
 iw = iw + 1
 ix = iw + 1
 iw = iw + m
@@ -79161,9 +79133,9 @@ iw = iw + m
 call wnnls(ws, n2 + 1, 0, n2 + 1, m, 0, prgopt, ws(ix), rnorm, modew, &
    & is, ws(iw + 1))
 !     Compute the components of the soln denoted above by Z.
-sc = one - sdot(m,a(1,np1),1,ws(ix),1)
-if (.not.(one + fac*abs(sc) /= one .and. rnorm > zero)) go to 160
-sc = one/sc
+sc = nswc_one_sp - sdot(m,a(1,np1),1,ws(ix),1)
+if (.not.(nswc_one_sp + fac*abs(sc) /= nswc_one_sp .and. rnorm > nswc_zero_sp)) go to 160
+sc = nswc_one_sp/sc
 do j = 1,n2
    l = n1 + j
    x(l) = sc*sdot(m,a(1,l),1,ws(ix),1)*x(l)
@@ -79637,9 +79609,6 @@ integer :: i, igo897, igo938, igo958, imax, isol, itemp, iter, itmax, iwmax, j, 
    & link, lp1, m, me, mep1, next, niv, niv1, nlink, nm1, nopt, np1, nsoln, nsp1, ntimes, idope(8)
 real(nswc_sp) :: alamda, alpha, alsq, amax, blowup, bnorm, eanorm, fac, sm, srelpr, t, tau, wmax, z2, zz, dope(4), sparam(5)
 logical :: hitcon, feasbl, done, pos
-real(nswc_sp), parameter :: zero = 0.e0
-real(nswc_sp), parameter :: one = 1.e0
-real(nswc_sp), parameter :: two = 2.e0
 !     This is a companion subprogram to wnnls( ).
 !     The documentation for wnnls( ) has more complete
 !     usage instructions.
@@ -79709,7 +79678,7 @@ tau = sqrt(srelpr)
 blowup = tau
 !     The nominal column scaling used in the code is
 !     the identity scaling.
-d(1) = one
+d(1) = nswc_one_sp
 call scopy(n, d, 0, d, 1)
 !     Define bound for number of options to change.
 nopt = 1000
@@ -79727,10 +79696,10 @@ if (.not.(ntimes > nopt)) go to 120
 mode = 2
 return
 120 key = prgopt(last + 1)
-if (.not.(key == 6 .and. prgopt(last + 2) /= zero)) go to 140
+if (.not.(key == 6 .and. prgopt(last + 2) /= nswc_zero_sp)) go to 140
 do j = 1,n
    t = snrm2(m,w(1,j),1)
-   if (t /= zero) t = one/t
+   if (t /= nswc_zero_sp) t = nswc_one_sp/t
    d(j) = t
 end do
 140 if (key == 7) call scopy(n, prgopt(last + 2), 1, d, 1)
@@ -79782,14 +79751,14 @@ do i = 1,m
    t = alsq
    itemp = 0
    go to 250
-240 t = one
+240 t = nswc_one_sp
    itemp = 1
 250 scale(i) = t
    itype(i) = itemp
 end do
 !     Set the soln vector x(*) to zero and the col interchange
 !     matrix to the identity.
-x(1) = zero
+x(1) = nswc_zero_sp
 call scopy(n, x, 0, x, 1)
 do i = 1,n
    ipivot(i) = i
@@ -79800,7 +79769,7 @@ go to 10
 !     set first l comps. Of dual vector to zero because
 !     these correspond to the unconstrained variables.
 if (.not.(l > 0)) go to 290
-wd(1) = zero
+wd(1) = nswc_zero_sp
 call scopy(l, wd, 0, wd, 1)
 !     The arrays idope(*) and dope(*) are used to pass
 !     information to wnlit().  This was done to avoid
@@ -79844,12 +79813,12 @@ done = .true.
 !     Check to see if any constraints have become active.
 !     If so, calculate an interpolation factor so that all
 !     active constraints are removed from the basis.
-320 alpha = two
+320 alpha = nswc_two_sp
 hitcon = .false.
 if (.not.(l < nsoln)) go to 360
 do j = lp1,nsoln
    zz = z(j)
-   if (.not.(zz <= zero)) go to 350
+   if (.not.(zz <= nswc_zero_sp)) go to 350
    t = x(j)/(x(j) - zz)
    if (.not.(t < alpha)) go to 330
    alpha = t
@@ -79888,7 +79857,7 @@ end do
 440 ipivot(n) = itemp
 !     Similarly repermute x(*) vector.
 call scopy(n - jcon, x(jcon + 1), 1, x(jcon), 1)
-x(n) = zero
+x(n) = nswc_zero_sp
 nsp1 = nsoln
 nsoln = nsoln - 1
 niv1 = niv
@@ -79930,7 +79899,7 @@ call sswap(1, scale(i), 1, scale(i + 1), 1)
 itemp = itype(i + 1)
 itype(i + 1) = itype(i)
 itype(i) = itemp
-w(i + 1,j) = zero
+w(i + 1,j) = nswc_zero_sp
 540 continue
 550 continue
 560 i = i + 1
@@ -79942,22 +79911,22 @@ go to 450
 !     positive will be set to zero and removed from the soln set.
 570 if (.not.(lp1 <= nsoln)) go to 590
 do jcon = lp1,nsoln
-   if (x(jcon) <= zero) go to 600
+   if (x(jcon) <= nswc_zero_sp) go to 600
 end do
 590 feasbl = .true.
 600 continue
 go to 400
 620 continue
 !     To zero-IP1-to-i-in-col-J
-if (.not.(w(i + 1,j) /= zero)) go to 630
+if (.not.(w(i + 1,j) /= nswc_zero_sp)) go to 630
 call srotmg(scale(i), scale(i + 1), w(i,j), w(i + 1,j), sparam)
-w(i + 1,j) = zero
+w(i + 1,j) = nswc_zero_sp
 call srotm(np1 - j, w(i,j + 1), mdw, w(i + 1,j + 1), mdw, sparam)
 630 go to 1290
 !     To perform-multiplier-test-and-drop-A-constraint
 640 call scopy(nsoln, z, 1, x, 1)
 if (.not.(nsoln < n)) go to 650
-x(nsp1) = zero
+x(nsp1) = nswc_zero_sp
 call scopy(n - nsoln, x(nsp1), 0, x(nsp1), 1)
 650 i = niv1
 660 if (.not.(i <= me)) go to 690
@@ -79977,7 +79946,7 @@ me = me - 1
 !     Form inner product vector wd(*) of dual coeffs.
 690 if (.not.(nsp1 <= n)) go to 730
 do j = nsp1,n
-   sm = zero
+   sm = nswc_zero_sp
    if (.not.(nsoln < m)) go to 710
    do i = nsp1,m
       sm = sm + scale(i)*w(i,j)*w(i,np1)
@@ -79989,7 +79958,7 @@ end do
 !     Find J such that wd(J)=WMAX is maximum.  This determines
 !     that the incoming col J will reduce the residual vector
 !     and be positive.
-750 wmax = zero
+750 wmax = nswc_zero_sp
 iwmax = nsp1
 if (.not.(nsp1 <= n)) go to 780
 do j = nsp1,n
@@ -79998,11 +79967,11 @@ do j = nsp1,n
    iwmax = j
 760 continue
 end do
-780 if (.not.(wmax <= zero)) go to 790
+780 if (.not.(wmax <= nswc_zero_sp)) go to 790
 done = .true.
 go to 960
 !     Set dual COEFF to zero for incoming col.
-790 wd(iwmax) = zero
+790 wd(iwmax) = nswc_zero_sp
 !     WMAX .GT. zero, so okay to move col IWMAX to soln set.
 !     Perform transformation to retriangularize, and test
 !     for near linear dependence.
@@ -80016,7 +79985,7 @@ niv1 = niv + 1
 if (.not.(nsoln /= iwmax)) go to 800
 call sswap(m, w(1,nsoln), 1, w(1,iwmax), 1)
 wd(iwmax) = wd(nsoln)
-wd(nsoln) = zero
+wd(nsoln) = nswc_zero_sp
 itemp = ipivot(nsoln)
 ipivot(nsoln) = ipivot(iwmax)
 ipivot(iwmax) = itemp
@@ -80041,9 +80010,9 @@ amax = t
 830 jp = jp - 1
 go to 820
 840 jp = imax
-850 if (.not.(w(j,nsoln) /= zero)) go to 860
+850 if (.not.(w(j,nsoln) /= nswc_zero_sp)) go to 860
 call srotmg(scale(jp), scale(j), w(jp,nsoln), w(j,nsoln), sparam)
-w(j,nsoln) = zero
+w(j,nsoln) = nswc_zero_sp
 call srotm(np1 - nsoln, w(jp,nsp1), mdw, w(j,nsp1), mdw, sparam)
 860 j = jm1
 go to 810
@@ -80051,13 +80020,13 @@ go to 810
 !     Test if this is nonpositive or too large.
 !     If this was true or if the pivot term was zero reject
 !     the col as dependent.
-870 if (.not.(w(niv,nsoln) /= zero)) go to 890
+870 if (.not.(w(niv,nsoln) /= nswc_zero_sp)) go to 890
 isol = niv
 igo897 = 880
 go to 980
 !     Test-proposed-new-component
 880 go to 940
-890 if (.not.(niv <= me .and. w(mep1,nsoln) /= zero)) go to 920
+890 if (.not.(niv <= me .and. w(mep1,nsoln) /= nswc_zero_sp)) go to 920
 !     Try to add row MEP1 as an additional equality constraint.
 !     Check size of proposed new soln component.
 !     Reject it if it is too large.
@@ -80089,7 +80058,7 @@ niv = niv - 1
 !     To test-proposed-new-component
 z2 = w(isol,np1)/w(isol,nsoln)
 z(nsoln) = z2
-pos = z2 > zero
+pos = z2 > nswc_zero_sp
 if (.not.(z2*eanorm >= bnorm .and. pos)) go to 990
 pos = .not.(blowup*z2*eanorm >= bnorm)
 990 go to 1280
@@ -80107,7 +80076,7 @@ do i = 1,krank
 end do
 !     Fill in trailing zeroes for constrained variables not in soln.
 1030 if (.not.(nsoln < n)) go to 1040
-x(nsp1) = zero
+x(nsp1) = nswc_zero_sp
 call scopy(n - nsoln, x(nsp1), 0, x(nsp1), 1)
 !     Repermute soln vector to natural order.
 1040 do i = 1,n
@@ -80148,7 +80117,7 @@ do jj = isol,nsoln
    go to 1150
 1140 i = j
 1150 if (.not.(j > krank .and. j <= l)) go to 1160
-   z(j) = zero
+   z(j) = nswc_zero_sp
    go to 1170
 1160 z(j) = temp(i)/w(i,j)
    call saxpy(i - 1, -z(j), w(1,j), 1, temp, 1)
@@ -80213,8 +80182,6 @@ integer :: i, i1, ic, igo990, igo993, igo996, ip1, ir, irp1, &
 real(nswc_sp) :: alsq, eanorm, fac, factor, hbar, rn, sn, t, tau, sparam(5)
 logical :: indep, recalc
 real(nswc_sp), parameter :: tenm3 = 1.e-3
-real(nswc_sp), parameter :: zero = 0.e0
-real(nswc_sp), parameter :: one = 1.e0
 !     This is a companion subprogram to wnnls( ).
 !     The documentation for wnnls( ) has more complete
 !     usage instructions.
@@ -80238,7 +80205,7 @@ tau = dope(4)
 np1 = n + 1
 lb = min(m - 1,l)
 recalc = .true.
-rnorm = zero
+rnorm = nswc_zero_sp
 krank = 0
 !     We set factor=1.E0 so that the heavy weight ALAMDA will be
 !     included in the test for col independence.
@@ -80280,9 +80247,9 @@ do jj = ip1,m
    j = jm1
    jm1 = j - 1
    jp = jm1
-80 if (.not.(w(j,i) /= zero)) go to 90
+80 if (.not.(w(j,i) /= nswc_zero_sp)) go to 90
    call srotmg(scale(jp), scale(j), w(jp,i), w(j,i), sparam)
-   w(j,i) = zero
+   w(j,i) = nswc_zero_sp
    call srotm(np1 - i, w(jp,ip1), mdw, w(j,ip1), mdw, sparam)
 90 j = jm1
 end do
@@ -80312,7 +80279,7 @@ krp1 = krank + 1
 if (.not.(krank < me)) go to 290
 factor = alsq
 do i = krp1,me
-   if (l > 0) w(i,1) = zero
+   if (l > 0) w(i,1) = nswc_zero_sp
    call scopy(l, w(i,1), 0, w(i,1), mdw)
 end do
 !     Determine the rank of the remaining equality constraint
@@ -80339,9 +80306,9 @@ go to 560
 200 j = me
 210 if (.not.(j > ir)) go to 230
 jm1 = j - 1
-if (.not.(w(j,i) /= zero)) go to 220
+if (.not.(w(j,i) /= nswc_zero_sp)) go to 220
 call srotmg(scale(jm1), scale(j), w(jm1,i), w(j,i), sparam)
-w(j,i) = zero
+w(j,i) = nswc_zero_sp
 call srotm(np1 - i, w(jm1,ip1), mdw, w(j,ip1), mdw, sparam)
 220 j = jm1
 go to 210
@@ -80355,11 +80322,11 @@ go to 520
 245 continue
 jj = ir
 250 if (.not.(ir <= me)) go to 260
-w(ir,1) = zero
+w(ir,1) = nswc_zero_sp
 call scopy(n, w(ir,1), 0, w(ir,1), mdw)
 rnorm = rnorm + (scale(ir)*w(ir,np1)/alsq)*w(ir,np1)
-w(ir,np1) = zero
-scale(ir) = one
+w(ir,np1) = nswc_zero_sp
+scale(ir) = nswc_one_sp
 !     Reclassify the zeroed row as a least squares equation.
 itype(ir) = 1
 ir = ir + 1
@@ -80404,9 +80371,9 @@ if (.not.(irp1 <= m)) go to 355
 j = m
 do jj = irp1,m
    jm1 = j - 1
-   if (.not.(w(j,i) /= zero)) go to 340
+   if (.not.(w(j,i) /= nswc_zero_sp)) go to 340
    call srotmg(scale(jm1), scale(j), w(jm1,i), w(j,i), sparam)
-   w(j,i) = zero
+   w(j,i) = nswc_zero_sp
    call srotm(np1 - i, w(jm1,ip1), mdw, w(j,ip1), mdw, sparam)
 340 j = jm1
 end do
@@ -80418,7 +80385,7 @@ indep = t > tau**2*eanorm**2
 if (.not.indep) go to 380
 !     Col test passed. Now must pass row norm test to be classified
 !     as independent.
-rn = zero
+rn = nswc_zero_sp
 do i1 = ir,m
    do j1 = ip1,n
       rn = amax1(rn,scale(i1)*w(i1,j1)**2)
@@ -80484,7 +80451,7 @@ recalc = hbar + tenm3*h(max) == hbar
 !     If required, recalculate col SS, using rows ir through mend.
 480 if (.not.(recalc)) go to 510
 do j = i,lend
-   h(j) = zero
+   h(j) = nswc_zero_sp
    do k = ir,mend
       h(j) = h(j) + scale(k)*w(k,j)**2
    end do
@@ -80510,8 +80477,8 @@ hbar = h(max)
 !     and compute  sn = Inverse weighted length of A1
 !                  rn = Inverse weighted length of A2
 !     CALL THE COL INDEPENDENT WHEN rn .GT. tau*sn
-sn = zero
-rn = zero
+sn = nswc_zero_sp
+rn = nswc_zero_sp
 do j = 1,mend
    t = scale(j)
    if (j <= me) t = t/factor
@@ -81958,11 +81925,9 @@ real(nswc_sp), intent(inout) :: acond, rnorm, xnorm, w(*)
 integer, intent(inout) :: itn
 !     beginning of local variable declarations
 integer :: npi, i, nconv, nstop
-real(nswc_sp) :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
-   & ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
-   & res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
-   & t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm, z, zbar, &
-   & zero
+real(nswc_sp) :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, ctol, dampsq, ddnorm, delta, gamma, gambar, phi, phibar, &
+   & psi, res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm &
+   & , z, zbar
 !     ------------------------------------------------------------------
 !     splsq finds a solution x to the following problems ...
 !     1. UNSYMMETRIC EQUATIONS --    SOLVE  a*x = B
@@ -82121,27 +82086,25 @@ real(nswc_sp) :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
 !     ------------------------------------------------------------------
 !     Local variables
 !     initialize.
-zero = 0.0
-one = 1.0
-ctol = zero
-if (conlim > zero) ctol = one/conlim
+ctol = nswc_zero_sp
+if (conlim > nswc_zero_sp) ctol = nswc_one_sp/conlim
 dampsq = damp**2
-anorm = zero
-acond = zero
-bbnorm = zero
-ddnorm = zero
-res2 = zero
-xnorm = zero
-xxnorm = zero
-cs2 = -one
-sn2 = zero
-z = zero
+anorm = nswc_zero_sp
+acond = nswc_zero_sp
+bbnorm = nswc_zero_sp
+ddnorm = nswc_zero_sp
+res2 = nswc_zero_sp
+xnorm = nswc_zero_sp
+xxnorm = nswc_zero_sp
+cs2 = -nswc_one_sp
+sn2 = nswc_zero_sp
+z = nswc_zero_sp
 itn = 0
 istop = 0
 nstop = 0
 do i = 1, n
-   w(i) = zero
-   x(i) = zero
+   w(i) = nswc_zero_sp
+   x(i) = nswc_zero_sp
 end do
 !     Set up the first vectors for the bidiagonalization.
 !     These satisfy   beta*u = B,   alfa*w = a(transpose)*u.
@@ -82154,7 +82117,7 @@ phibar = beta
 bnorm = beta
 rnorm = beta
 arnorm = alfa*beta
-if (arnorm <= zero) go to 800
+if (arnorm <= nswc_zero_sp) go to 800
 !     ------------------------------------------------------------------
 !     Main iteration loop.
 !     ------------------------------------------------------------------
@@ -82191,7 +82154,7 @@ tau = sn*phi
 !     Update x and w(n+1),...,w(2*n)
 t1 = phi/rho
 t2 = -theta/rho
-t3 = one/rho
+t3 = nswc_one_sp/rho
 do i = 1, n
    npi = n + i
    t = w(npi)
@@ -82226,21 +82189,21 @@ arnorm = alfa*abs(tau)
 !     some of which will be small near a solution.
 test1 = rnorm/bnorm
 test2 = arnorm/(anorm*rnorm)
-test3 = one/acond
-t1 = test1/(one + anorm*xnorm/bnorm)
+test3 = nswc_one_sp/acond
+t1 = test1/(nswc_one_sp + anorm*xnorm/bnorm)
 rtol = btol + atol*anorm*xnorm/bnorm
 !     The following tests guard against extremely small values of
 !     atol, btol, or CTOL.  (The user may have set any or all of
 !     the parameters atol, btol, conlim to zero.)
 !     the effect is equivalent to the normal tests using
 !     atol = relpr,  btol = relpr,  conlim = 1/relpr.
-t3 = one + test3
-t2 = one + test2
-t1 = one + t1
+t3 = nswc_one_sp + test3
+t2 = nswc_one_sp + test2
+t1 = nswc_one_sp + t1
 if (itn >= itnlim) istop = 7
-if (t3 <= one) istop = 6
-if (t2 <= one) istop = 5
-if (t1 <= one) istop = 4
+if (t3 <= nswc_one_sp) istop = 6
+if (t2 <= nswc_one_sp) istop = 5
+if (t1 <= nswc_one_sp) istop = 4
 !     Allow for tolerances set by the user.
 if (test3 <= ctol) istop = 3
 if (test2 <= atol) istop = 2
@@ -82282,16 +82245,13 @@ implicit none
 integer, intent(in) :: n
 real(nswc_sp), intent(inout) :: x(n)
 real(nswc_sp), intent(out) :: beta
-!     beginning of local variable declarations
-real(nswc_sp), parameter :: zero = 0.0
-real(nswc_sp), parameter :: one = 1.0
 !     normlz computes the Euclidean norm of x and returns the
 !     value in beta. If x is nonzero, then x is rescaled so
 !     THAT NORM(x) = 1.
 !     Functions and subroutines
 !     BLAS       snrm2,sscal
 beta = snrm2(n,x,1)
-if (beta > zero) call sscal(n,(one/beta),x,1)
+if (beta > nswc_zero_sp) call sscal(n,(nswc_one_sp/beta),x,1)
 end subroutine normlz
 
 subroutine stlsq(m,n,ta,ita,jta,damp,u,x,atol,btol,conlim, &
@@ -82479,11 +82439,9 @@ real(nswc_sp), intent(inout) :: acond, rnorm, xnorm, w(*)
 integer, intent(inout) :: itn
 !     beginning of local variable declarations
 integer :: npi, i, nconv, nstop
-real(nswc_sp) :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
-   & ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
-   & res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
-   & t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm, z, zbar, &
-   & zero
+real(nswc_sp) :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, ctol, dampsq, ddnorm, delta, gamma, gambar, phi, phibar, &
+   & psi, res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm &
+   & , z, zbar
 !     ------------------------------------------------------------------
 !     stlsq finds a solution x to the following problems ...
 !     1. UNSYMMETRIC EQUATIONS --    SOLVE  A*x = B
@@ -82644,27 +82602,25 @@ real(nswc_sp) :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
 !     ------------------------------------------------------------------
 !     Local variables
 !     initialize.
-zero = 0.0
-one = 1.0
-ctol = zero
-if (conlim > zero) ctol = one/conlim
+ctol = nswc_zero_sp
+if (conlim > nswc_zero_sp) ctol = nswc_one_sp/conlim
 dampsq = damp**2
-anorm = zero
-acond = zero
-bbnorm = zero
-ddnorm = zero
-res2 = zero
-xnorm = zero
-xxnorm = zero
-cs2 = -one
-sn2 = zero
-z = zero
+anorm = nswc_zero_sp
+acond = nswc_zero_sp
+bbnorm = nswc_zero_sp
+ddnorm = nswc_zero_sp
+res2 = nswc_zero_sp
+xnorm = nswc_zero_sp
+xxnorm = nswc_zero_sp
+cs2 = -nswc_one_sp
+sn2 = nswc_zero_sp
+z = nswc_zero_sp
 itn = 0
 istop = 0
 nstop = 0
 do i = 1, n
-   w(i) = zero
-   x(i) = zero
+   w(i) = nswc_zero_sp
+   x(i) = nswc_zero_sp
 end do
 !     Set up the first vectors for the bidiagonalization.
 !     These satisfy   beta*u = B,   alfa*w = A(transpose)*u.
@@ -82677,7 +82633,7 @@ phibar = beta
 bnorm = beta
 rnorm = beta
 arnorm = alfa*beta
-if (arnorm <= zero) go to 800
+if (arnorm <= nswc_zero_sp) go to 800
 !     ------------------------------------------------------------------
 !     Main iteration loop.
 !     ------------------------------------------------------------------
@@ -82714,7 +82670,7 @@ tau = sn*phi
 !     Update x and w(n+1),...,w(2*n)
 t1 = phi/rho
 t2 = -theta/rho
-t3 = one/rho
+t3 = nswc_one_sp/rho
 do i = 1, n
    npi = n + i
    t = w(npi)
@@ -82749,21 +82705,21 @@ arnorm = alfa*abs(tau)
 !     some of which will be small near a solution.
 test1 = rnorm/bnorm
 test2 = arnorm/(anorm*rnorm)
-test3 = one/acond
-t1 = test1/(one + anorm*xnorm/bnorm)
+test3 = nswc_one_sp/acond
+t1 = test1/(nswc_one_sp + anorm*xnorm/bnorm)
 rtol = btol + atol*anorm*xnorm/bnorm
 !     The following tests guard against extremely small values of
 !     atol, btol, or CTOL.  (The user may have set any or all of
 !     the parameters atol, btol, conlim to zero.)
 !     the effect is equivalent to the normal tests using
 !     atol = relpr,  btol = relpr,  conlim = 1/relpr.
-t3 = one + test3
-t2 = one + test2
-t1 = one + t1
+t3 = nswc_one_sp + test3
+t2 = nswc_one_sp + test2
+t1 = nswc_one_sp + t1
 if (itn >= itnlim) istop = 7
-if (t3 <= one) istop = 6
-if (t2 <= one) istop = 5
-if (t1 <= one) istop = 4
+if (t3 <= nswc_one_sp) istop = 6
+if (t2 <= nswc_one_sp) istop = 5
+if (t1 <= nswc_one_sp) istop = 4
 !     Allow for tolerances set by the user.
 if (test3 <= ctol) istop = 3
 if (test2 <= atol) istop = 2
@@ -82970,11 +82926,9 @@ real(nswc_sp), intent(inout) :: acond, rnorm, xnorm, w(*)
 integer, intent(inout) :: itn
 !     beginning of local variable declarations
 integer :: npi, i, nconv, nstop
-real(nswc_sp) :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
-   & ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
-   & res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
-   & t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm, z, zbar, &
-   & zero
+real(nswc_sp) :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, ctol, dampsq, ddnorm, delta, gamma, gambar, phi, phibar, &
+   & psi, res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm &
+   & , z, zbar
 !     ------------------------------------------------------------------
 !     blsq finds a solution x to the following problems ...
 !     1. UNSYMMETRIC EQUATIONS --    SOLVE  a*x = B
@@ -83137,27 +83091,25 @@ real(nswc_sp) :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
 !     ------------------------------------------------------------------
 !     Local variables
 !     initialize.
-zero = 0.0
-one = 1.0
-ctol = zero
-if (conlim > zero) ctol = one/conlim
+ctol = nswc_zero_sp
+if (conlim > nswc_zero_sp) ctol = nswc_one_sp/conlim
 dampsq = damp**2
-anorm = zero
-acond = zero
-bbnorm = zero
-ddnorm = zero
-res2 = zero
-xnorm = zero
-xxnorm = zero
-cs2 = -one
-sn2 = zero
-z = zero
+anorm = nswc_zero_sp
+acond = nswc_zero_sp
+bbnorm = nswc_zero_sp
+ddnorm = nswc_zero_sp
+res2 = nswc_zero_sp
+xnorm = nswc_zero_sp
+xxnorm = nswc_zero_sp
+cs2 = -nswc_one_sp
+sn2 = nswc_zero_sp
+z = nswc_zero_sp
 itn = 0
 istop = 0
 nstop = 0
 do i = 1, n
-   w(i) = zero
-   x(i) = zero
+   w(i) = nswc_zero_sp
+   x(i) = nswc_zero_sp
 end do
 !     Set up the first vectors for the bidiagonalization.
 !     These satisfy   beta*u = B,   alfa*w = a(transpose)*u.
@@ -83170,7 +83122,7 @@ phibar = beta
 bnorm = beta
 rnorm = beta
 arnorm = alfa*beta
-if (arnorm <= zero) go to 800
+if (arnorm <= nswc_zero_sp) go to 800
 !     ------------------------------------------------------------------
 !     Main iteration loop.
 !     ------------------------------------------------------------------
@@ -83207,7 +83159,7 @@ tau = sn*phi
 !     Update x and w(n+1),...,w(2*n)
 t1 = phi/rho
 t2 = -theta/rho
-t3 = one/rho
+t3 = nswc_one_sp/rho
 do i = 1, n
    npi = n + i
    t = w(npi)
@@ -83242,21 +83194,21 @@ arnorm = alfa*abs(tau)
 !     some of which will be small near a solution.
 test1 = rnorm/bnorm
 test2 = arnorm/(anorm*rnorm)
-test3 = one/acond
-t1 = test1/(one + anorm*xnorm/bnorm)
+test3 = nswc_one_sp/acond
+t1 = test1/(nswc_one_sp + anorm*xnorm/bnorm)
 rtol = btol + atol*anorm*xnorm/bnorm
 !     The following tests guard against extremely small values of
 !     atol, btol, or CTOL.  (The user may have set any or all of
 !     the parameters atol, btol, conlim to zero.)
 !     the effect is equivalent to the normal tests using
 !     atol = relpr,  btol = relpr,  conlim = 1/relpr.
-t3 = one + test3
-t2 = one + test2
-t1 = one + t1
+t3 = nswc_one_sp + test3
+t2 = nswc_one_sp + test2
+t1 = nswc_one_sp + t1
 if (itn >= itnlim) istop = 7
-if (t3 <= one) istop = 6
-if (t2 <= one) istop = 5
-if (t1 <= one) istop = 4
+if (t3 <= nswc_one_sp) istop = 6
+if (t2 <= nswc_one_sp) istop = 5
+if (t1 <= nswc_one_sp) istop = 4
 !     Allow for tolerances set by the user.
 if (test3 <= ctol) istop = 3
 if (test2 <= atol) istop = 2
@@ -85826,7 +85778,6 @@ external fcn
 !     beginning of local variable declarations
 integer :: i, j, k, msum
 real(nswc_sp) :: eps, epsmch, h, temp
-real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     SUBROUTINE fdjac1
 !     this subroutine computes a forward-difference approximation
@@ -85898,7 +85849,7 @@ if (msum < n) go to 40
 do j = 1, n
    temp = x(j)
    h = eps*abs(temp)
-   if (h == zero) h = eps
+   if (h == nswc_zero_sp) h = eps
    x(j) = temp + h
    call fcn(n,x,wa1,iflag)
    if (iflag < 0) exit
@@ -85914,7 +85865,7 @@ do k = 1, msum
    do j = k, n, msum
       wa2(j) = x(j)
       h = eps*abs(wa2(j))
-      if (h == zero) h = eps
+      if (h == nswc_zero_sp) h = eps
       x(j) = wa2(j) + h
    end do
    call fcn(n,x,wa1,iflag)
@@ -85922,9 +85873,9 @@ do k = 1, msum
    do j = k, n, msum
       x(j) = wa2(j)
       h = eps*abs(wa2(j))
-      if (h == zero) h = eps
+      if (h == nswc_zero_sp) h = eps
       do i = 1, n
-         fjac(i,j) = zero
+         fjac(i,j) = nswc_zero_sp
          if (i >= j - mu .and. i <= j + ml) &
             & fjac(i,j) = (wa1(i) - fvec(i))/h
       end do
@@ -86011,7 +85962,6 @@ external fcn
 !     beginning of local variable declarations
 integer :: i, j
 real(nswc_sp) :: eps, epsmch, h, temp
-real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     SUBROUTINE fdjac2
 !     this subroutine computes a forward-difference approximation
@@ -86070,7 +86020,7 @@ eps = sqrt(max(epsfcn,epsmch))
 do j = 1, n
    temp = x(j)
    h = eps*abs(temp)
-   if (h == zero) h = eps
+   if (h == nswc_zero_sp) h = eps
    x(j) = temp + h
    call fcn(m,n,x,wa,iflag)
    if (iflag < 0) exit
@@ -86172,7 +86122,6 @@ integer :: i, iter, j, jm1, jp1, k, l, nsing
 real(nswc_sp) :: dxnorm, dwarf, fp, gnorm, parc, parl, paru, sum, temp
 real(nswc_sp), parameter :: p1 = 1.0e-1
 real(nswc_sp), parameter :: p001 = 1.0e-3
-real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     Subroutine lmpar
 !     given an M by n matrix A, an n by n nonsingular diagonal
@@ -86244,8 +86193,8 @@ dwarf = spmpar(2)
 nsing = n
 do j = 1, n
    wa1(j) = qtb(j)
-   if (r(j,j) == zero .and. nsing == n) nsing = j - 1
-   if (nsing < n) wa1(j) = zero
+   if (r(j,j) == nswc_zero_sp .and. nsing == n) nsing = j - 1
+   if (nsing < n) wa1(j) = nswc_zero_sp
 end do
 if (nsing < 1) go to 50
 do k = 1, nsing
@@ -86277,14 +86226,14 @@ if (fp <= p1*delta) go to 220
 !     If the Jacobian is not rank deficient, the Newton
 !     step provides a lower bound, parl, for the zero of
 !     the function. Otherwise set this bound to zero.
-parl = zero
+parl = nswc_zero_sp
 if (nsing < n) go to 120
 do j = 1, n
    l = ipvt(j)
    wa1(j) = diag(l)*(wa2(l)/dxnorm)
 end do
 do j = 1, n
-   sum = zero
+   sum = nswc_zero_sp
    jm1 = j - 1
    if (jm1 < 1) go to 100
    do i = 1, jm1
@@ -86298,7 +86247,7 @@ parl = ((fp/delta)/temp)/temp
 120 continue
 !     Calculate an upper bound, paru, for the zero of the function.
 do j = 1, n
-   sum = zero
+   sum = nswc_zero_sp
    do i = 1, j
       sum = sum + r(i,j)*qtb(i)
    end do
@@ -86307,17 +86256,17 @@ do j = 1, n
 end do
 gnorm = enorm(n,wa1)
 paru = gnorm/delta
-if (paru == zero) paru = dwarf/min(delta,p1)
+if (paru == nswc_zero_sp) paru = dwarf/min(delta,p1)
 !     If the input par lies outside of the interval (parl,paru),
 !     set par to the closer endpoint.
 par = max(par,parl)
 par = min(par,paru)
-if (par == zero) par = gnorm/dxnorm
+if (par == nswc_zero_sp) par = gnorm/dxnorm
 !     Beginning of an iteration.
 150 continue
 iter = iter + 1
 !        Evaluate the function at the current value of par.
-if (par == zero) par = max(dwarf,p001*paru)
+if (par == nswc_zero_sp) par = max(dwarf,p001*paru)
 temp = sqrt(par)
 do j = 1, n
    wa1(j) = temp*diag(j)
@@ -86333,8 +86282,8 @@ fp = dxnorm - delta
 !        of par. Also test for the exceptional cases where parl
 !        is zero or the number of iterations has reached 10.
 if (abs(fp) <= p1*delta &
-   & .or. parl == zero .and. fp <= temp &
-   & .and. temp < zero .or. iter == 10) go to 220
+   & .or. parl == nswc_zero_sp .and. fp <= temp &
+   & .and. temp < nswc_zero_sp .or. iter == 10) go to 220
 !        Compute the Newton correction.
 do j = 1, n
    l = ipvt(j)
@@ -86353,15 +86302,15 @@ end do
 temp = enorm(n,wa1)
 parc = ((fp/delta)/temp)/temp
 !        Depending on the sign of the function, update parl or paru.
-if (fp > zero) parl = max(parl,par)
-if (fp < zero) paru = min(paru,par)
+if (fp > nswc_zero_sp) parl = max(parl,par)
+if (fp < nswc_zero_sp) paru = min(paru,par)
 !        Compute an improved estimate for par.
 par = max(parl,par + parc)
 !        END OF AN ITERATION.
 go to 150
 220 continue
 !     Termination.
-if (iter == 0) par = zero
+if (iter == 0) par = nswc_zero_sp
 !     Last card of subroutine lmpar.
 end subroutine lmpar
 
@@ -86406,8 +86355,6 @@ real(nswc_sp), intent(inout) :: q(ldq,m), wa(m)
 !     beginning of local variable declarations
 integer :: i, j, jm1, k, l, minmn, np1
 real(nswc_sp) :: sum, temp
-real(nswc_sp), parameter :: one = 1.0e0
-real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     Subroutine qform
 !     this subroutine proceeds from the computed QR factorization of
@@ -86437,7 +86384,7 @@ if (minmn < 2) go to 30
 do j = 2, minmn
    jm1 = j - 1
    do i = 1, jm1
-      q(i,j) = zero
+      q(i,j) = nswc_zero_sp
    end do
 end do
 30 continue
@@ -86446,9 +86393,9 @@ np1 = n + 1
 if (m < np1) go to 60
 do j = np1, m
    do i = 1, m
-      q(i,j) = zero
+      q(i,j) = nswc_zero_sp
    end do
-   q(j,j) = one
+   q(j,j) = nswc_one_sp
 end do
 60 continue
 !     Accumulate q from its factored form.
@@ -86456,12 +86403,12 @@ do l = 1, minmn
    k = minmn - l + 1
    do i = k, m
       wa(i) = q(i,k)
-      q(i,k) = zero
+      q(i,k) = nswc_zero_sp
    end do
-   q(k,k) = one
-   if (wa(k) == zero) go to 110
+   q(k,k) = nswc_one_sp
+   if (wa(k) == nswc_zero_sp) go to 110
    do j = k, m
-      sum = zero
+      sum = nswc_zero_sp
       do i = k, m
          sum = sum + q(i,j)*wa(i)
       end do
@@ -86548,9 +86495,7 @@ real(nswc_sp), intent(inout) :: a(lda,n), rdiag(n), acnorm(n), wa(n)
 !     beginning of local variable declarations
 integer :: i, j, jp1, k, kmax, minmn
 real(nswc_sp) :: ajnorm, epsmch, sum, temp
-real(nswc_sp), parameter :: one = 1.0e0
 real(nswc_sp), parameter :: p05 = 5.0e-2
-real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     Subroutine qrfac
 !     this subroutine uses Householder transformations with column
@@ -86637,18 +86582,18 @@ do j = 1, minmn
 !        Compute the Householder transformation to reduce the
 !        j-TH column of A to a multiple of the j-TH unit vector.
    ajnorm = enorm(m - j + 1,a(j,j))
-   if (ajnorm == zero) go to 100
-   if (a(j,j) < zero) ajnorm = -ajnorm
+   if (ajnorm == nswc_zero_sp) go to 100
+   if (a(j,j) < nswc_zero_sp) ajnorm = -ajnorm
    do i = j, m
       a(i,j) = a(i,j)/ajnorm
    end do
-   a(j,j) = a(j,j) + one
+   a(j,j) = a(j,j) + nswc_one_sp
 !        Apply the transformation to the remaining columns
 !        and update the norms.
    jp1 = j + 1
    if (n < jp1) go to 100
    do k = jp1, n
-      sum = zero
+      sum = nswc_zero_sp
       do i = j, m
          sum = sum + a(i,j)*a(i,k)
       end do
@@ -86656,9 +86601,9 @@ do j = 1, minmn
       do i = j, m
          a(i,k) = a(i,k) - temp*a(i,j)
       end do
-      if (.not.pivot .or. rdiag(k) == zero) go to 80
+      if (.not.pivot .or. rdiag(k) == nswc_zero_sp) go to 80
       temp = a(j,k)/rdiag(k)
-      rdiag(k) = rdiag(k)*sqrt(max(zero,one - temp**2))
+      rdiag(k) = rdiag(k)*sqrt(max(nswc_zero_sp,nswc_one_sp - temp**2))
       if (p05*(rdiag(k)/wa(k))**2 > epsmch) go to 80
       rdiag(k) = enorm(m - j,a(jp1,k))
       wa(k) = rdiag(k)
@@ -86746,7 +86691,6 @@ integer :: i, j, jp1, k, kp1, l, nsing
 real(nswc_sp) :: cos, cotan, qtbpj, sin, sum, tan, temp
 real(nswc_sp), parameter :: p5 = 5.0e-1
 real(nswc_sp), parameter :: p25 = 2.5e-1
-real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     Subroutine qrsolv
 !     given an M by n matrix A, an n by n diagonal matrix D,
@@ -86813,19 +86757,19 @@ do j = 1, n
 !        Prepare the row of D to be eliminated, locating the
 !        diagonal element using P from the QR factorization.
    l = ipvt(j)
-   if (diag(l) == zero) go to 90
+   if (diag(l) == nswc_zero_sp) go to 90
    do k = j, n
-      sdiag(k) = zero
+      sdiag(k) = nswc_zero_sp
    end do
    sdiag(j) = diag(l)
 !        The transformations to eliminate the row of D
 !        modify only a single element of (Q transpose)*B
 !        beyond the first n, which is initially zero.
-   qtbpj = zero
+   qtbpj = nswc_zero_sp
    do k = j, n
 !           Determine a Givens rotation which eliminates the
 !           appropriate element in the current row of D.
-      if (sdiag(k) == zero) go to 70
+      if (sdiag(k) == nswc_zero_sp) go to 70
       if (abs(r(k,k)) >= abs(sdiag(k))) go to 40
       cotan = r(k,k)/sdiag(k)
       sin = p5/sqrt(p25 + p25*cotan**2)
@@ -86862,13 +86806,13 @@ end do
 !     singular, then obtain a least squares solution.
 nsing = n
 do j = 1, n
-   if (sdiag(j) == zero .and. nsing == n) nsing = j - 1
-   if (nsing < n) wa(j) = zero
+   if (sdiag(j) == nswc_zero_sp .and. nsing == n) nsing = j - 1
+   if (nsing < n) wa(j) = nswc_zero_sp
 end do
 if (nsing < 1) go to 150
 do k = 1, nsing
    j = nsing - k + 1
-   sum = zero
+   sum = nswc_zero_sp
    jp1 = j + 1
    if (nsing < jp1) go to 130
    do i = jp1, nsing
@@ -86937,7 +86881,6 @@ real(nswc_sp), intent(in) :: v(n), w(n)
 !     beginning of local variable declarations
 integer :: i, j, nmj, nm1
 real(nswc_sp) :: cos, sin, temp
-real(nswc_sp), parameter :: one = 1.0e0
 !     **********
 !     Subroutine r1mpyq
 !     given an m by n matrix a, this subroutine computes a*Q where
@@ -86975,10 +86918,10 @@ nm1 = n - 1
 if (nm1 < 1) go to 50
 do nmj = 1, nm1
    j = n - nmj
-   if (abs(v(j)) > one) cos = one/v(j)
-   if (abs(v(j)) > one) sin = sqrt(one - cos**2)
-   if (abs(v(j)) <= one) sin = v(j)
-   if (abs(v(j)) <= one) cos = sqrt(one - sin**2)
+   if (abs(v(j)) > nswc_one_sp) cos = nswc_one_sp/v(j)
+   if (abs(v(j)) > nswc_one_sp) sin = sqrt(nswc_one_sp - cos**2)
+   if (abs(v(j)) <= nswc_one_sp) sin = v(j)
+   if (abs(v(j)) <= nswc_one_sp) cos = sqrt(nswc_one_sp - sin**2)
    do i = 1, m
       temp = cos*a(i,j) - sin*a(i,n)
       a(i,n) = sin*a(i,j) + cos*a(i,n)
@@ -86987,10 +86930,10 @@ do nmj = 1, nm1
 end do
 !     Apply the second set of Givens rotations to A.
 do j = 1, nm1
-   if (abs(w(j)) > one) cos = one/w(j)
-   if (abs(w(j)) > one) sin = sqrt(one - cos**2)
-   if (abs(w(j)) <= one) sin = w(j)
-   if (abs(w(j)) <= one) cos = sqrt(one - sin**2)
+   if (abs(w(j)) > nswc_one_sp) cos = nswc_one_sp/w(j)
+   if (abs(w(j)) > nswc_one_sp) sin = sqrt(nswc_one_sp - cos**2)
+   if (abs(w(j)) <= nswc_one_sp) sin = w(j)
+   if (abs(w(j)) <= nswc_one_sp) cos = sqrt(nswc_one_sp - sin**2)
    do i = 1, m
       temp = cos*a(i,j) + sin*a(i,n)
       a(i,n) = -sin*a(i,j) + cos*a(i,n)
@@ -87067,10 +87010,8 @@ real(nswc_sp), intent(inout) :: v(n), w(m)
 !     beginning of local variable declarations
 integer :: i, j, jj, l, nmj, nm1
 real(nswc_sp) :: cos, cotan, giant, sin, tan, tau, temp
-real(nswc_sp), parameter :: one = 1.0e0
 real(nswc_sp), parameter :: p5 = 5.0e-1
 real(nswc_sp), parameter :: p25 = 2.5e-1
-real(nswc_sp), parameter :: zero = 0.0e0
 !     **********
 !     Subroutine r1updt
 !     given an m by n lower trapezoidal matrix s, an m-vector u,
@@ -87133,16 +87074,16 @@ if (nm1 < 1) go to 70
 do nmj = 1, nm1
    j = n - nmj
    jj = jj - (m - j + 1)
-   w(j) = zero
-   if (v(j) == zero) go to 50
+   w(j) = nswc_zero_sp
+   if (v(j) == nswc_zero_sp) go to 50
 !        Determine a Givens rotation which eliminates the
 !        j-TH element of v.
    if (abs(v(n)) >= abs(v(j))) go to 20
    cotan = v(n)/v(j)
    sin = p5/sqrt(p25 + p25*cotan**2)
    cos = sin*cotan
-   tau = one
-   if (abs(cos)*giant > one) tau = one/cos
+   tau = nswc_one_sp
+   if (abs(cos)*giant > nswc_one_sp) tau = nswc_one_sp/cos
    go to 30
 20 continue
    tan = v(j)/v(n)
@@ -87173,15 +87114,15 @@ end do
 sing = .false.
 if (nm1 < 1) go to 140
 do j = 1, nm1
-   if (w(j) == zero) go to 120
+   if (w(j) == nswc_zero_sp) go to 120
 !        Determine a Givens rotation which eliminates the
 !        j-TH element of the spike.
    if (abs(s(jj)) >= abs(w(j))) go to 90
    cotan = s(jj)/w(j)
    sin = p5/sqrt(p25 + p25*cotan**2)
    cos = sin*cotan
-   tau = one
-   if (abs(cos)*giant > one) tau = one/cos
+   tau = nswc_one_sp
+   if (abs(cos)*giant > nswc_one_sp) tau = nswc_one_sp/cos
    go to 100
 90 continue
    tan = w(j)/s(jj)
@@ -87202,7 +87143,7 @@ do j = 1, nm1
    w(j) = tau
 120 continue
 !        Test for zero diagonal elements in the output s.
-   if (s(jj) == zero) sing = .true.
+   if (s(jj) == nswc_zero_sp) sing = .true.
    jj = jj + (m - j + 1)
 end do
 140 continue
@@ -87212,7 +87153,7 @@ do i = n, m
    s(l) = w(i)
    l = l + 1
 end do
-if (s(jj) == zero) sing = .true.
+if (s(jj) == nswc_zero_sp) sing = .true.
 !     Last card of subroutine r1updt.
 end subroutine r1updt
 
@@ -96100,9 +96041,7 @@ external f, g, phi
 !     beginning of local variable declarations
 integer :: i, ii, j, k, kount, lpi
 real(nswc_dp) :: b1, del, dn, dnp1, h1, olderr, sign, sum, templ, test, u, xi, xlb, xm1, y, y2, y3, z, zz, z1, z2, z3
-real(nswc_dp), parameter :: zero = 0.d0
 real(nswc_dp), parameter :: half = .5d0
-real(nswc_dp), parameter :: one = 1.d0
 real(nswc_dp), parameter :: ten = 10.d0
 real(nswc_dp), parameter :: eps0 = 1.d-2
 real(nswc_dp), parameter :: tau = .015d0
@@ -96110,20 +96049,20 @@ real(nswc_dp), parameter :: c0 = .0625d0
 !     ------------------------------------------------------------------
 !     -------------------
 !     -------------------
-error = zero
-if (eps <= zero .or. eps >= eps0) go to 200
+error = nswc_zero_dp
+if (eps <= nswc_zero_dp .or. eps >= eps0) go to 200
 ierr = 0
 itno = 1
-xlb = zero
+xlb = nswc_zero_dp
 dn = n
 dnp1 = np1
 do i = 1,lp1
-   p(i) = zero
+   p(i) = nswc_zero_dp
 end do
 do i = 1,mp1
-   q(i) = zero
+   q(i) = nswc_zero_dp
 end do
-q(1) = one
+q(1) = nswc_one_dp
 !     Compute initial approximations of the critical points
 x(1) = a
 x(np1) = b
@@ -96145,10 +96084,10 @@ end do
 kount = 1
 !     Set up the linear equations
 40 k = l + 2
-sign = one
+sign = nswc_one_dp
 do i = 1,np1
    sign = -sign
-   c(i,1) = one
+   c(i,1) = nswc_one_dp
    if (l <= 0) go to 42
    do j = 2,lp1
       c(i,j) = c(i,j - 1)*xval(i)
@@ -96186,10 +96125,10 @@ end do
 end do
 !     Search for new critical points
 olderr = error
-error = zero
-z1 = zero
-u = one
-if (xlb < zero) u = -u
+error = nswc_zero_dp
+z1 = nswc_zero_dp
+u = nswc_one_dp
+if (xlb < nswc_zero_dp) u = -u
 if (n > 1) go to 70
 h(1) = tau*(x(2) - x(1))
 h(2) = -h(1)
@@ -96235,7 +96174,7 @@ do i = 1,np1
    z3 = z
    go to 80
 83 y = (z - z3) + (z2 - z3)
-   if (y /= zero) go to 84
+   if (y /= nswc_zero_dp) go to 84
    y = y3
    go to 90
 84 y = half*(y2 + y3) + h1*(z2 - z3)/y
@@ -96250,17 +96189,17 @@ do i = 1,np1
    error = max(error, z)
    if (z >= ten) go to 240
    y = abs(xlb)
-   zz = one
-   if (y /= zero) zz = abs(z - y)/y
+   zz = nswc_one_dp
+   if (y /= nswc_zero_dp) zz = abs(z - y)/y
    if (z1 < zz) z1 = zz
 end do
 !     Search for an extra extremal point between the endpoints
 !     of the interval and the critical points
 if (x(1) <= a) go to 110
 h1 = c0*(x(1) - a)
-u = one
-if (xlb >= zero) u = -u
-z3 = zero
+u = nswc_one_dp
+if (xlb >= nswc_zero_dp) u = -u
+z3 = nswc_zero_dp
 y = a
 do i = 1,16
    call cerr(y, f(y), g(y), phi(y), del, ierr, l, lp1, m, np1, d)
@@ -96285,9 +96224,9 @@ err(1) = u*z3
 go to 113
 110 if (x(np1) >= b) go to 120
 h1 = c0*(b - x(np1))
-u = one
-if (err(np1) >= zero) u = -u
-z3 = zero
+u = nswc_one_dp
+if (err(np1) >= nswc_zero_dp) u = -u
+z3 = nswc_zero_dp
 y = b
 do i = 1,16
    call cerr(y, f(y), g(y), phi(y), del, ierr, l, lp1, m, np1, d)
@@ -96308,15 +96247,15 @@ end do
 x(np1) = z2
 err(np1) = u*z3
 113 xlb = -xlb
-zz = one
-if (z /= zero) zz = abs(z3 - z)/z
+zz = nswc_one_dp
+if (z /= nswc_zero_dp) zz = abs(z3 - z)/z
 if (z1 < zz) z1 = zz
 !     Check for convergence
 120 if (z1 <= eps) return
 !     Set up for the next iteration
 if (itno >= mxiter) go to 210
-sum = zero
-sign = one
+sum = nswc_zero_dp
+sign = nswc_one_dp
 do i = 1,np1
    sum = sum + sign*err(i)
    sign = -sign
@@ -96371,8 +96310,6 @@ real(nswc_dp), intent(in) :: d(np1)
 !     beginning of local variable declarations
 integer :: i, ii
 real(nswc_dp) :: p, q, r
-real(nswc_dp), parameter :: zero = 0.d0
-real(nswc_dp), parameter :: one = 1.d0
 !     ------------------------------------------------------------------
 !     Compute the approximation error at point t
 !     ------------------------------------------------------------------
@@ -96383,15 +96320,15 @@ do i = 1,l
    ii = lp1 - i
    p = p*phit + d(ii)
 end do
-20 q = zero
+20 q = nswc_zero_dp
 if (m <= 0) go to 22
 do i = 1,m
    ii = np1 - i
    q = (q + d(ii))*phit
 end do
-22 q = q + one
-if (q == zero) go to 110
-if (gt == zero) go to 100
+22 q = q + nswc_one_dp
+if (q == nswc_zero_dp) go to 110
+if (gt == nswc_zero_dp) go to 100
 r = p/q
 del = (r - ft)/gt
 return
@@ -96863,9 +96800,6 @@ real(nswc_dp) :: akmax, eps, km1, ratio
 !        ===============================================================
 ! **  This program checks the input data and initializes the computation
 real(nswc_dp), parameter :: eps0 = 1.d-30
-real(nswc_dp), parameter :: zero = 0.d0
-real(nswc_dp), parameter :: one = 1.d0
-real(nswc_dp), parameter :: two = 2.d0
 real(nswc_dp), parameter :: three = 3.d0
 real(nswc_dp), parameter :: c100 = 100.d0
 integer, parameter :: kleft = 1
@@ -96886,14 +96820,15 @@ nswc_state_kontrl_maxpar = min(20,nswc_state_inputz_npardm)
 nswc_state_kontrl_maxaux = 20
 ! -------- Check input data --------------------------------------------
 ierr = 0
-if (nswc_state_inputz_a >= nswc_state_inputz_b .or. nswc_state_inputz_accur <= zero) go to 200
+if (nswc_state_inputz_a >= nswc_state_inputz_b .or. nswc_state_inputz_accur <= nswc_zero_dp) go to 200
 if (nswc_state_inputz_degree >= nswc_state_kontrl_maxpar .or. 2*nswc_state_inputz_smooth >= nswc_state_inputz_degree) go to 200
 akmax = kmax
 ratio = (nswc_state_inputz_b - nswc_state_inputz_a)/(abs(nswc_state_inputz_a) + abs(nswc_state_inputz_b))
-if (ratio <= two*nswc_state_kontrl_buffer*akmax) go to 210
+if (ratio <= nswc_two_dp*nswc_state_kontrl_buffer*akmax) go to 210
 if (nswc_state_inputz_charf < (nswc_state_inputz_b - nswc_state_inputz_a)/akmax) go to 220
-if (nswc_state_inputz_norm >= zero .and. (nswc_state_inputz_norm - one)*(nswc_state_inputz_norm - two)*(nswc_state_inputz_norm - &
-   & three) /= zero)   go to 200
+if (nswc_state_inputz_norm >= nswc_zero_dp .and. (nswc_state_inputz_norm - nswc_one_dp)*(nswc_state_inputz_norm - nswc_two_dp)*( &
+   & nswc_state_inputz_norm - &
+   & three) /= nswc_zero_dp)   go to 200
 if (nswc_state_inputz_edist*(nswc_state_inputz_edist - 1)*(nswc_state_inputz_edist - 2) /= 0) go to 200
 if (nswc_state_inputz_nbreak < 0 .or. nswc_state_inputz_nbreak > nswc_state_kontrl_maxaux) go to 200
 if (nswc_state_inputz_nbreak == 0) go to 150
@@ -96915,7 +96850,7 @@ end do
 nswc_state_kontrl_xleft(1) = nswc_state_inputz_a
 nswc_state_kontrl_xright(1) = nswc_state_inputz_b
 !             Termination and error values
-nswc_state_resulz_error = zero
+nswc_state_resulz_error = nswc_zero_dp
 nswc_state_kontrl_dsctol = nswc_state_inputz_accur**abs(nswc_state_inputz_norm)
 if (nswc_state_inputz_edist == 0) nswc_state_kontrl_dsctol = nswc_state_kontrl_dsctol/(nswc_state_inputz_b - nswc_state_inputz_a)
 if (nswc_state_inputz_norm == three) nswc_state_kontrl_dsctol = nswc_state_inputz_accur
@@ -96926,8 +96861,8 @@ nswc_state_kontrl_interp = nswc_state_inputz_degree + 2 - 2*nswc_state_inputz_sm
 xknots(1) = nswc_state_inputz_a
 nswc_state_kontrl_npar = nswc_state_inputz_degree + 1
 !             Compute array of NPAR factorials
-nswc_state_kontrl_factor(1) = one
-nswc_state_kontrl_factor(2) = one
+nswc_state_kontrl_factor(1) = nswc_one_dp
+nswc_state_kontrl_factor(2) = nswc_one_dp
 do k = 3,nswc_state_kontrl_npar
    km1 = k - 1
    nswc_state_kontrl_factor(k) = km1*nswc_state_kontrl_factor(k - 1)
@@ -97154,11 +97089,10 @@ real(nswc_dp) :: abmid, ba, fdumb(9), p, pj, er, f1, f2
 !                   abs( f(X) - fit(X) )**NORM
 !     the integration uses the points and weights given and scaled
 !     from (-1,1) to (aaa,bbb)
-real(nswc_dp), parameter :: two = 2.0d0
 real(nswc_dp), parameter :: three = 3.0d0
 !         Compute midpoint = abmid and half length = ba of interval
-abmid = (aaa + bbb)/two
-ba = (bbb - aaa)/two
+abmid = (aaa + bbb)/nswc_two_dp
+ba = (bbb - aaa)/nswc_two_dp
 pj = abmid + ba*points(1)
 !         Test for Tchebycheff (minimax) norm which uses special code
 if (nswc_state_inputz_norm == three) go to 20
@@ -97439,7 +97373,6 @@ real(nswc_dp) :: dx, powers(20), p, ratio
 !     the polynomial to the power form and put the coefficients into
 !     the array coefs.  It also checks for passing break points
 real(nswc_dp), parameter :: half = .5d0
-real(nswc_dp), parameter :: one = 1.d0
 real(nswc_dp), parameter :: three = 3.d0
 !            Check for discarding the interval
 if (nswc_state_kontrl_discrd) go to 30
@@ -97464,7 +97397,8 @@ return
 !            Discard interval, update global error, xknots and COEFS
 30 p = abs(nswc_state_inputz_norm)
 if (nswc_state_inputz_norm == three) nswc_state_resulz_error = max(nswc_state_resulz_error,nswc_state_kontrl_errori)
-if (nswc_state_inputz_norm /= three) nswc_state_resulz_error = (nswc_state_resulz_error**p + nswc_state_kontrl_errori)**(one/p)
+if (nswc_state_inputz_norm /= three) nswc_state_resulz_error = (nswc_state_resulz_error**p + nswc_state_kontrl_errori)**( &
+   & nswc_one_dp/p)
 !              Check for passing break points
 if (nswc_state_kontrl_break == nswc_state_kontrl_left .or. nswc_state_kontrl_break == nswc_state_kontrl_both) &
    & nswc_state_kontrl_ibreak = nswc_state_kontrl_ibreak + 1
@@ -122317,8 +122251,6 @@ real(nswc_sp) :: alfa, anskp, area, errmax, h, q1, q2, r1, r2, vec(2,3), x(2)
 integer, parameter :: nfe = 19
 real(nswc_sp), parameter :: s(4) = [1e0, 1e0, 1e0, -1e0]
 real(nswc_sp), parameter :: d(2,4) = reshape([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0], [2, 4])
-real(nswc_sp), parameter :: zero = 0.e0
-real(nswc_sp), parameter :: one = 1.e0
 real(nswc_dp), parameter :: dzero = 0.d0
 real(nswc_sp), parameter :: point5 = .5e0
 !       This common is required to preserve tans and terr between calls
@@ -122343,15 +122275,15 @@ if (ncalls > 0) go to 30
 !       Test for trivial cases
 nswc_state_cubsta_tans = dzero
 nswc_state_cubsta_terr = dzero
-if (area == zero) go to 90
+if (area == nswc_zero_sp) go to 90
 if (mcalls < nfe) go to 100
 if (nw < 6) go to 110
 !       Initialize data list
 k = 1
 mw = 1
-w(1,1) = zero
-w(2,1) = zero
-w(3,1) = one
+w(1,1) = nswc_zero_sp
+w(2,1) = nswc_zero_sp
+w(3,1) = nswc_one_sp
 call cubrul(f, vec, w(1,1), idata, rdata)
 nswc_state_cubsta_tans = w(5,1)
 nswc_state_cubsta_terr = w(6,1)
@@ -122359,10 +122291,10 @@ ncalls = nfe
 !       Test termination criteria
 30 ans = nswc_state_cubsta_tans
 err = nswc_state_cubsta_terr
-if (err < max(one,abs(ans))*eps) go to 90
+if (err < max(nswc_one_sp,abs(ans))*eps) go to 90
 if (k == maxk) go to 120
 !       Find triangle with largest error
-errmax = zero
+errmax = nswc_zero_sp
 do i = 1,mw
    if (w(6,i) <= errmax) go to 40
    errmax = w(6,i)
@@ -122374,16 +122306,16 @@ do i = 1,2
    x(i) = w(i,j)
 end do
 h = w(3,j)*point5
-if (rnderr(x(1),h,x(1),h) /= zero) go to 130
-if (rnderr(x(2),h,x(2),h) /= zero) go to 130
+if (rnderr(x(1),h,x(1),h) /= nswc_zero_sp) go to 130
+if (rnderr(x(2),h,x(2),h) /= nswc_zero_sp) go to 130
 anskp = sngl(nswc_state_cubsta_tans)
 nswc_state_cubsta_tans = nswc_state_cubsta_tans - dble(w(5,j))
 nswc_state_cubsta_terr = nswc_state_cubsta_terr - dble(w(6,j))
 r1 = w(4,j)
 r2 = w(5,j)
 jkp = j
-q1 = zero
-q2 = zero
+q1 = nswc_zero_sp
+q2 = nswc_zero_sp
 do i = 1,4
    do l = 1,2
       w(l,j) = x(l) + h*d(l,i)
@@ -122395,7 +122327,7 @@ do i = 1,4
    j = mw + i
 end do
 alfa = 1e15
-if (q2 /= r2) alfa = abs((q1 - r1)/(q2 - r2) - one)
+if (q2 /= r2) alfa = abs((q1 - r1)/(q2 - r2) - nswc_one_sp)
 j = jkp
 do i = 1,4
    w(6,j) = w(6,j)/alfa

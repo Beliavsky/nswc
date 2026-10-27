@@ -76,9 +76,10 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--ifx');p.add_argument('--intel-env',type=Path)
     args=p.parse_args()
     from generate_module import module_source
-    before=module_source((ROOT/'nswc.f90').read_text(),pi_constants=False)
+    source=(ROOT/'nswc.f90').read_text()
+    before=module_source(source,pi_constants=False,simple_constants=False)
     report={};aligned=[];after=transform(before,report,aligned)
-    if report!=json.loads(MANIFEST.read_text()) or after!=(ROOT/'nswc_mod.f90').read_text():
+    if report!=json.loads(MANIFEST.read_text()) or after!=module_source(source,simple_constants=False):
         raise ValueError('Shared pi generation or review does not reproduce')
     if transform(after)!=after: raise ValueError('Pi cleanup is not idempotent')
     verify_values(report)

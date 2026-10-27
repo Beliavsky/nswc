@@ -78,6 +78,8 @@ provides readable fixed form; `nswc_orig.f` preserves the supplied source.
 The module expresses its real and complex declarations with private named kinds;
 the external version retains `real` and `double precision`. Their actual types
 and precision choices remain the same. See the [module guide](docs/module.md).
+The module also shares private pi and scalar zero/one/two constants where their
+values and uses permit consolidation; machine-arithmetic probes stay unchanged.
 Correctness fixes apply to all three maintained versions. Only `nswc_orig.f`
 is preserved unchanged as the archive.
 Choose one implementation for each executable.
