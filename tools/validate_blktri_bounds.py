@@ -13,6 +13,7 @@ from free_source_fixes import correct_empty_factor_index
 from generate_interfaces import compiler_environment
 from validate_module import standalone_caller, state_test_module
 from validate_storage import run
+from validate_interfaces import restrict_public
 from blktri_empty_factors import transform_fixed as correct_fixed
 from explicit_typing import units
 
@@ -32,8 +33,7 @@ def solver_sources(external, module):
         selected.update(refs)
     module_blocks = procedure_blocks(module)
     prefix = module[:module.index(next(iter(module_blocks.values())))]
-    prefix = ''.join(line for line in prefix.splitlines(True)
-                     if not (m := re.match(r'^public :: (\w+)\s*$', line, re.I)) or m[1].upper() in selected)
+    prefix = restrict_public(prefix, selected)
     return (''.join(body for name, body in blocks.items() if name in selected),
             state_test_module(prefix + ''.join(body for name, body in module_blocks.items() if name in selected)
                               + 'end module nswc_mod\n'))

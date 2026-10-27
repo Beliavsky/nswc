@@ -1,3 +1,154 @@
+pure elemental double precision function dgam1(x)
+implicit none
+!-----------------------------------------------------------------------
+!     Evaluation of 1/gamma(1 + x) - 1  For -0.5 .LE. x .LE. 1.5
+!-----------------------------------------------------------------------
+!     The following are the first 49 coefficients of the Maclaurin
+!     expansion for 1/gamma(1 + x) - 1. The coefficients are
+!     correct to 40 digits. The coefficients were obtained by
+!     Alfred H. Morris Jr. (Naval Surface Warfare Center) and are
+!     given here for reference. Only the first 14 coefficients are
+!     used in this code.
+!                           -----------
+!     data a(1)  / .5772156649015328606065120900824024310422d+00/,
+!    *     A(2)  /-.6558780715202538810770195151453904812798d+00/,
+!    *     A(3)  /-.4200263503409523552900393487542981871139d-01/,
+!    *     A(4)  / .1665386113822914895017007951021052357178d+00/,
+!    *     A(5)  /-.4219773455554433674820830128918739130165d-01/,
+!    *     A(6)  /-.9621971527876973562114921672348198975363d-02/,
+!    *     A(7)  / .7218943246663099542395010340446572709905d-02/,
+!    *     A(8)  /-.1165167591859065112113971084018388666809d-02/,
+!    *     A(9)  /-.2152416741149509728157299630536478064782d-03/,
+!    *     A(10) / .1280502823881161861531986263281643233949d-03/
+!     data a(11) /-.2013485478078823865568939142102181838229d-04/,
+!    *     A(12) /-.1250493482142670657345359473833092242323d-05/,
+!    *     A(13) / .1133027231981695882374129620330744943324d-05/,
+!    *     A(14) /-.2056338416977607103450154130020572836513d-06/,
+!    *     A(15) / .6116095104481415817862498682855342867276d-08/,
+!    *     A(16) / .5002007644469222930055665048059991303045d-08/,
+!    *     A(17) /-.1181274570487020144588126565436505577739d-08/,
+!    *     A(18) / .1043426711691100510491540332312250191401d-09/,
+!    *     A(19) / .7782263439905071254049937311360777226068d-11/,
+!    *     A(20) /-.3696805618642205708187815878085766236571d-11/
+!     data a(21) / .5100370287454475979015481322863231802727d-12/,
+!    *     A(22) /-.2058326053566506783222429544855237419746d-13/,
+!    *     A(23) /-.5348122539423017982370017318727939948990d-14/,
+!    *     A(24) / .1226778628238260790158893846622422428165d-14/,
+!    *     A(25) /-.1181259301697458769513764586842297831212d-15/,
+!    *     A(26) / .1186692254751600332579777242928674071088d-17/,
+!    *     A(27) / .1412380655318031781555803947566709037086d-17/,
+!    *     A(28) /-.2298745684435370206592478580633699260285d-18/,
+!    *     A(29) / .1714406321927337433383963370267257066813d-19/,
+!    *     A(30) / .1337351730493693114864781395122268022875d-21/
+!     data a(31) /-.2054233551766672789325025351355733796682d-21/,
+!    *     A(32) / .2736030048607999844831509904330982014865d-22/,
+!    *     A(33) /-.1732356445910516639057428451564779799070d-23/,
+!    *     A(34) /-.2360619024499287287343450735427531007926d-25/,
+!    *     A(35) / .1864982941717294430718413161878666898946d-25/,
+!    *     A(36) /-.2218095624207197204399716913626860379732d-26/,
+!    *     A(37) / .1297781974947993668824414486330594165619d-27/,
+!    *     A(38) / .1180697474966528406222745415509971518560d-29/,
+!    *     A(39) /-.1124584349277088090293654674261439512119d-29/,
+!    *     A(40) / .1277085175140866203990206677751124647749d-30/
+!     data a(41) /-.7391451169615140823461289330108552823711d-32/,
+!    *     A(42) / .1134750257554215760954165259469306393009d-34/,
+!    *     A(43) / .4639134641058722029944804907952228463058d-34/,
+!    *     A(44) /-.5347336818439198875077418196709893320905d-35/,
+!    *     A(45) / .3207995923613352622861237279082794391090d-36/,
+!    *     A(46) /-.4445829736550756882101590352124643637401d-38/,
+!    *     A(47) /-.1311174518881988712901058494389922190237d-38/,
+!    *     A(48) / .1647033352543813886818259327906394145400d-39/,
+!    *     A(49) /-.1056233178503581218600561071538285049997d-40/
+!                           -----------
+!     c = A(1) - 1 Is also frequently needed. c has the value ...
+!     data c /-.4227843350984671393934879099175975689578d+00/
+!-----------------------------------------------------------------------
+double precision, intent(in) :: x
+!     beginning of local variable declarations
+double precision :: d, t, w, z, nswc_ai_r8
+double precision, parameter :: a0 = .611609510448141581788d-08
+double precision, parameter :: a1 = .624730830116465516210d-08
+double precision, parameter :: b1 = .203610414066806987300d+00
+double precision, parameter :: b2 = .266205348428949217746d-01
+double precision, parameter :: b3 = .493944979382446875238d-03
+double precision, parameter :: b4 = -.851419432440314906588d-05
+double precision, parameter :: b5 = -.643045481779353022248d-05
+double precision, parameter :: b6 = .992641840672773722196d-06
+double precision, parameter :: b7 = -.607761895722825260739d-07
+double precision, parameter :: b8 = .195755836614639731882d-09
+double precision, parameter :: p0 = .6116095104481415817861d-08
+double precision, parameter :: p1 = .6871674113067198736152d-08
+double precision, parameter :: p2 = .6820161668496170657918d-09
+double precision, parameter :: p3 = .4686843322948848031080d-10
+double precision, parameter :: p4 = .1572833027710446286995d-11
+double precision, parameter :: p5 = -.1249441572276366213222d-12
+double precision, parameter :: p6 = .4343529937408594255178d-14
+double precision, parameter :: q1 = .3056961078365221025009d+00
+double precision, parameter :: q2 = .5464213086042296536016d-01
+double precision, parameter :: q3 = .4956830093825887312020d-02
+double precision, parameter :: q4 = .2692369466186361192876d-03
+double precision, parameter :: c = -.422784335098467139393487909917598d+00
+double precision, parameter :: c0 = .577215664901532860606512090082402d+00
+double precision, parameter :: c1 = -.655878071520253881077019515145390d+00
+double precision, parameter :: c2 = -.420026350340952355290039348754298d-01
+double precision, parameter :: c3 = .166538611382291489501700795102105d+00
+double precision, parameter :: c4 = -.421977345555443367482083012891874d-01
+double precision, parameter :: c5 = -.962197152787697356211492167234820d-02
+double precision, parameter :: c6 = .721894324666309954239501034044657d-02
+double precision, parameter :: c7 = -.116516759185906511211397108401839d-02
+double precision, parameter :: c8 = -.215241674114950972815729963053648d-03
+double precision, parameter :: c9 = .128050282388116186153198626328164d-03
+double precision, parameter :: c10 = -.201348547807882386556893914210218d-04
+double precision, parameter :: c11 = -.125049348214267065734535947383309d-05
+double precision, parameter :: c12 = .113302723198169588237412962033074d-05
+double precision, parameter :: c13 = -.205633841697760710345015413002057d-06
+!----------------------------
+!----------------------------
+!----------------------------
+!     c = c0 - 1
+!----------------------------
+!----------------------------
+!----------------------------
+t = x
+d = x - 0.5d0
+if (d > 0.d0) t = d - 0.5d0
+nswc_ai_r8 = t
+if (nswc_ai_r8 < 0) go to 40
+if (nswc_ai_r8 == 0) go to 10
+go to 20
+10 dgam1 = 0.d0
+return
+!------------
+!                Case when 0 .LT. t .LE. 0.5
+!              w is a minimax approximation for
+!              the series A(15) + A(16)*t + ...
+!------------
+20 w = ((((((p6*t + p5)*t + p4)*t + p3)*t + p2)*t + p1)*t + p0)/ &
+   & ((((q4*t + q3)*t + q2)*t + q1)*t + 1.d0)
+z = (((((((((((((w*t + c13)*t + c12)*t + c11)*t + c10)*t + &
+   & c9)*t + c8)*t + c7)*t + c6)*t + c5)*t + c4)*t + &
+   & c3)*t + c2)*t + c1)*t + c0
+if (d > 0.d0) go to 30
+dgam1 = x*z
+return
+30 dgam1 = (t/x)*((z - 0.5d0) - 0.5d0)
+return
+!------------
+!                Case when -0.5 .LE. t .LT. 0
+!              w is a minimax approximation for
+!              the series A(15) + A(16)*t + ...
+!------------
+40 w = (a1*t + a0)/((((((((b8*t + b7)*t + b6)*t + b5)*t + &
+   & b4)*t + b3)*t + b2)*t + b1)*t + 1.d0)
+z = (((((((((((((w*t + c13)*t + c12)*t + c11)*t + c10)*t + &
+   & c9)*t + c8)*t + c7)*t + c6)*t + c5)*t + c4)*t + &
+   & c3)*t + c2)*t + c1)*t + c
+if (d > 0.d0) go to 50
+dgam1 = x*((z + 0.5d0) + 0.5d0)
+return
+50 dgam1 = t*z/x
+end function dgam1
+
 pure elemental double precision function dgamln(a)
 implicit none
 double precision, intent(in) :: a
@@ -10364,138 +10515,4 @@ e = exp(-z)
 k1 = k1*e
 k2 = k2*e
 end subroutine kml
-
-pure real function ai(x)
-implicit none
-real, intent(in) :: x
-!     beginning of local variable declarations
-integer :: n, n2
-real :: phi, r, rtx, t, w
-real, parameter :: x0 = 1.58740105196820
-real, parameter :: c = 1.94773404105468
-real, parameter :: an0 = .355028053887818e+00
-real, parameter :: an1 = -.187394912983414e+00
-real, parameter :: an2 = -.383735973881972e-01
-real, parameter :: an3 = .491952571236878e-01
-real, parameter :: an4 = -.967017625191329e-02
-real, parameter :: an5 = -.205648610308316e-02
-real, parameter :: an6 = .114176040526844e-02
-real, parameter :: an7 = -.117114823456866e-03
-real, parameter :: an8 = -.270165470074755e-04
-real, parameter :: an9 = .789002965889206e-05
-real, parameter :: ad0 = .100000000000000e+01
-real, parameter :: ad1 = .201179850513612e+00
-real, parameter :: ad2 = .385762517106249e-01
-real, parameter :: ad3 = .230887443780120e-04
-real, parameter :: bn0 = .355028053887817e+00
-real, parameter :: bn1 = -.997169317338190e-01
-real, parameter :: bn2 = -.602216060213075e-01
-real, parameter :: bn3 = .297705337630730e-01
-real, parameter :: bn4 = -.152969932286570e-02
-real, parameter :: bn5 = -.147868368189372e-02
-real, parameter :: bn6 = .350518617006107e-03
-real, parameter :: bn7 = -.257766924610873e-04
-real, parameter :: bd0 = .100000000000000e+01
-real, parameter :: bd1 = .448140563306831e+00
-real, parameter :: bd2 = .157074537566686e+00
-real, parameter :: bd3 = .316964519364865e-01
-real, parameter :: bd4 = .485922740843953e-02
-real, parameter :: bd5 = .423326964456309e-03
-real, parameter :: pn0 = .282094378896566e+00
-real, parameter :: pn1 = .807868561687271e-01
-real, parameter :: pn2 = .630644564152247e-02
-real, parameter :: pn3 = .147116711467936e-03
-real, parameter :: pn4 = .750490748341483e-06
-real, parameter :: pd0 = .100000000000000e+01
-real, parameter :: pd1 = .292890323271551e+00
-real, parameter :: pd2 = .239376862143358e-01
-real, parameter :: pd3 = .612353984250624e-03
-real, parameter :: pd4 = .384461189764830e-05
-real, parameter :: pd5 = .123247804102182e-08
-real, parameter :: qn0 = .282094791017188e+00
-real, parameter :: qn1 = .149585822742689e+00
-real, parameter :: qn2 = .241876418864958e-01
-real, parameter :: qn3 = .138190913282142e-02
-real, parameter :: qn4 = .241862862465003e-04
-real, parameter :: qn5 = .709733720554615e-07
-real, parameter :: qd0 = .100000000000000e+01
-real, parameter :: qd1 = .536778341756648e+00
-real, parameter :: qd2 = .889112579703465e-01
-real, parameter :: qd3 = .533368703697049e-02
-real, parameter :: qd4 = .103812739863315e-03
-real, parameter :: qd5 = .408838544650398e-06
-real, parameter :: rn0 = .282094791773878e+00
-real, parameter :: rn1 = .203731967781874e+00
-real, parameter :: rn2 = .436660479870037e-01
-real, parameter :: rn3 = .306595563073142e-02
-real, parameter :: rn4 = .517398800281618e-04
-real, parameter :: rd0 = .100000000000000e+01
-real, parameter :: rd1 = .728721438361672e+00
-real, parameter :: rd2 = .159210021472267e+00
-real, parameter :: rd3 = .116985268534248e-01
-real, parameter :: rd4 = .225973894323078e-03
-real, parameter :: rd5 = .232707159780478e-06
-interface
-   pure elemental subroutine aimp(x,r,phi)
-      implicit none
-      real, intent(in) :: x
-      real, intent(inout) :: r
-      real, intent(inout) :: phi
-   end subroutine aimp
-   pure elemental function exparg(l)
-      implicit none
-      integer, intent(in) :: l
-      real :: exparg
-   end function exparg
-end interface
-!-----------------------------------------------------------------------
-!     Evaluation of the Airy function ai(x)
-!-----------------------------------------------------------------------
-!     x0 = 2**(2/3)
-!     c = exp(2/3)
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------
-!-----------------------------------------------------------------------
-if (x >= -1.0) go to 10
-call aimp(-x, r, phi)
-ai = r*sin(phi)
-return
-10 if (x >= 0.0) go to 20
-ai = (((((((((an9*x + an8)*x + an7)*x + an6)*x + an5)*x &
-   & + an4)*x + an3)*x + an2)*x + an1)*x + an0) / &
-   & (((ad3*x + ad2)*x + ad1)*x + ad0)
-return
-20 if (x >= 1.0) go to 30
-ai = (((((((bn7*x + bn6)*x + bn5)*x + bn4)*x + bn3)*x + bn2)*x &
-   & + bn1)*x + bn0) / &
-   & (((((bd5*x + bd4)*x + bd3)*x + bd2)*x + bd1)*x + bd0)
-return
-30 rtx = sqrt(x)
-if (x > x0) go to 40
-t = 16.0/(x*rtx)
-w = ((((pn4*t + pn3)*t + pn2)*t + pn1)*t + pn0) / &
-   & (((((pd5*t + pd4)*t + pd3)*t + pd2)*t + pd1)*t + pd0)
-ai = (w/sqrt(rtx)) * exp(-2.0*x*rtx/3.0)
-return
-40 if (x > 4.0d0) go to 50
-t = 16.0/(x*rtx)
-w = (((((qn5*t + qn4)*t + qn3)*t + qn2)*t + qn1)*t + qn0) / &
-   & (((((qd5*t + qd4)*t + qd3)*t + qd2)*t + qd1)*t + qd0)
-ai = (w/sqrt(rtx)) * exp(-2.0*x*rtx/3.0)
-return
-50 if (x*rtx > 1.5*exparg(0)) go to 60
-t = 16.0/(x*rtx)
-w = ((((rn4*t + rn3)*t + rn2)*t + rn1)*t + rn0) / &
-   & (((((rd5*t + rd4)*t + rd3)*t + rd2)*t + rd1)*t + rd0)
-n = rtx
-n2 = n*n
-t = (x - n2)/(rtx + n)
-ai = ((w/sqrt(rtx)) / c**(n2*n)) * exp(-2.0*t*(n*rtx + t*t/3.0))
-return
-60 ai = 0.0
-end function ai
 

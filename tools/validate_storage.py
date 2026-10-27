@@ -1,4 +1,5 @@
 """Check alias removal, table bits, module state layout and optimized behavior."""
+from ford_documentation import strip as strip_ford
 import argparse
 import copy
 import json
@@ -20,7 +21,7 @@ from modernize_remaining_features import strict_standard
 from storage_modernization import (ALIASES, MANIFEST, common_views, equivalence_free,
                                    equivalence_review, module_state, normalize_module_records)
 from validate_explicit_typing import symbols
-from validate_interfaces import compare_signatures, module_caller
+from validate_interfaces import compare_signatures, module_caller, restrict_public
 from validate_obsolescent import baseline
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -110,8 +111,7 @@ def optimized_probe(compiler, work, intel=False, env=None):
             module_blocks = procedure_blocks(module)
             first = module.index(next(iter(module_blocks.values())))
             prefix = module[:first]
-            prefix = ''.join(line for line in prefix.splitlines(True)
-                             if not (m := re.match(r'^public :: (\w+)\s*$', line, re.I)) or m[1].upper() in selected)
+            prefix = restrict_public(prefix, selected)
             source = prefix + ''.join(body for name, body in module_blocks.items() if name in selected) + 'end module nswc_mod\n'
         subset = Path(work) / 'library.f90'
         subset.write_text(source, encoding='ascii', newline='\n')
@@ -162,11 +162,11 @@ def main():
     if equivalence_review(before) != {'equivalences': manifest['equivalences']}:
         raise ValueError('Equivalence review does not reproduce')
     after = equivalence_free(before)
-    if after != (ROOT / 'nswc.f90').read_text(encoding='ascii') or equivalence_free(after) != after:
+    if after != strip_ford((ROOT / 'nswc.f90').read_text(encoding='ascii')) or equivalence_free(after) != after:
         raise ValueError('Equivalence-free generation is stale or not idempotent')
     report = {}
     modern = remove_empty_free_markers(shared_module_pi(named_module_kinds(module_state(module_source(after, modern_state=False, named_kinds=False), report))))
-    if report != manifest['module_state'] or modern != (ROOT / 'nswc_mod.f90').read_text(encoding='ascii'):
+    if report != manifest['module_state'] or modern != strip_ford((ROOT / 'nswc_mod.f90').read_text(encoding='ascii')):
         raise ValueError('Private module state or review does not reproduce')
     if module_state(modern) != modern:
         raise ValueError('Private module state pass is not idempotent')

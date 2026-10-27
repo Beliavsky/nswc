@@ -1,3 +1,227 @@
+subroutine dnspiv(n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: max, n
+double precision, intent(in) :: a(*), b(n)
+double precision, intent(inout) :: u(max), x(n), y(n)
+integer, intent(inout) :: c(n)
+integer, intent(in) :: ia(*)
+integer, intent(inout) :: ic(n), iu(*)
+integer, intent(in) :: ja(*)
+integer, intent(inout) :: ju(max), p(*)
+integer, intent(in) :: r(n)
+!     beginning of local variable declarations
+integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk, nswc_ai_i4
+double precision :: dk, lki, xpv, xpvmax, yk
+!  dnspiv uses sparse Gaussian elimination with
+!  column interchanges to solve the linear system A x = b.  the
+!  elimination phase performs row operations on A and b to obtain
+!  a unit upper triangular matrix u and a vector y.  the solution
+!  phase solves u x = y.
+!  See dspslv for descriptions of all input and output arguments
+!  other than those described below
+!  ic  integer array of n entries which is the inverse of c
+!      (I.E., ic(c(i)) = i). ic is both an input and output
+!      argument.
+!  Input arguments (used internally only)---
+!  y   DOUBLE PRECISION ARRAY OF n ENTRIES USED TO COMPUTE
+!      the updated right hand side
+!  p   INTEGER ARRAY OF n+1 ENTRIES USED FOR A LINKED LIST.
+!      p(n+1) is the list header, and the entry following
+!      p(k) is in p(p(k)).  Thus, p(n+1) is the first data
+!      item, p(p(n+1)) is the second, etc.  a pointer of
+!      n+1 marks the end of the list
+!  iu  integer array of n+1 entries used for row pointers to u
+!      (see matrix storage description below)
+!  ju  integer array of max entries used for column numbers of
+!      the nonzeros in the strict upper triangle of u.  (See
+!      matrix storage description below)
+!  u   DOUBLE PRECISION ARRAY OF MAX ENTRIES USED FOR THE ACTUAL
+!      nonzeros in the strict upper triangle of u. (See matrix
+!      storage description below)
+!  storage of sparse matrices---
+!  the sparse matrix a is stored using three arrays ia, ja, and a.
+!  The array a contains the nonzeros of the matrix ROW-by-ROW, not
+!  necessarily in order of increasing column number.  The array ja
+!  contains the column numbers corresponding to the nonzeros stored
+!  in the array a (I.E., if the nonzero stored in a(k) is in
+!  column j, then ja(k) = j).  The array ia contains pointers to the
+!  rows of nonzeros/column indices in the array a/ja (I.E.,
+!  a(ia(i))/ja(ia(i)) is the first entry for row i in the array a/ja).
+!  ia(n+1) is set so that ia(n+1) - ia(1) = The number of nonzeros in
+!  A.  iu, ju, and u are used in a similar way to store the strict upper
+!  triangle of u, except that ju actually contains c(j) instead of j
+!  initialize work storage and pointers to ju
+do j = 1,n
+   x(j) = 0.d0
+end do
+iu(1) = 1
+juptr = 0
+!  Perform symbolic and numeric factorization row by row
+!  vk (vi,vj) is the graph vertex for row k (i,j) of u
+do k = 1,n
+!  Initialize linked list and free storage for this row
+!  the r(k)-TH row of a becomes the k-TH row of u.
+   p(n + 1) = n + 1
+   vk = r(k)
+!  Set up adjacency list for vk, ordered in
+!  current column order of u.  the loop index
+!  goes downward to exploit any columns
+!  from A in correct relative order
+   jmin = ia(vk)
+   jmax = ia(vk + 1) - 1
+   if (jmin > jmax) go to 1002
+   j = jmax
+20 jaj = ja(j)
+   vj = ic(jaj)
+!  Store a(k,j) in work vector
+   x(vj) = a(j)
+!  This code inserts vj into adjacency list of vk
+   ppk = n + 1
+30 pk = ppk
+   ppk = p(pk)
+   nswc_ai_i4 = ppk - vj
+   if (nswc_ai_i4 < 0) go to 30
+   if (nswc_ai_i4 == 0) go to 1003
+   go to 40
+40 p(vj) = ppk
+   p(pk) = vj
+   j = j - 1
+   if (j >= jmin) go to 20
+!  The following code computes the k-TH row of u
+   vi = n + 1
+   yk = b(vk)
+50 vi = p(vi)
+   if (vi >= k) go to 110
+!  vi LT vk -- process the L(k,i) element and merge the
+!  adjacency of vi with the ordered adjacency of vk
+   lki = - x(vi)
+   x(vi) = 0.d0
+!  Adjust right hand side to reflect elimination
+   yk = yk + lki * y(vi)
+   ppk = vi
+   jmin = iu(vi)
+   jmax = iu(vi + 1) - 1
+   if (jmin > jmax) go to 50
+   do j = jmin,jmax
+      juj = ju(j)
+      vj = ic(juj)
+!  If vj is already in the adjacency of vk,
+!  skip the insertion
+      if (x(vj) /= 0.d0) go to 90
+!  Insert vj in adjacency list of vk.
+!  Reset ppk to vi if we have passed the correct
+!  insertion spot.  (This happens when the adjacency of
+!  vi is not in current column order due to pivoting.)
+      nswc_ai_i4 = vj - ppk
+      if (nswc_ai_i4 < 0) go to 60
+      if (nswc_ai_i4 == 0) go to 90
+      go to 70
+60    ppk = vi
+70    pk = ppk
+      ppk = p(pk)
+      nswc_ai_i4 = ppk - vj
+      if (nswc_ai_i4 < 0) go to 70
+      if (nswc_ai_i4 == 0) go to 90
+      go to 80
+80    p(vj) = ppk
+      p(pk) = vj
+      ppk = vj
+!  Compute L(k,j) = L(k,j) - L(k,i)*u(i,j) for L(k,i) nonzero
+!  compute u*(k,j) = u*(k,j) - L(k,i)*u(i,j) for u(k,j) nonzero
+!  (u*(k,j) = u(k,j)*D(k,k))
+90    x(vj) = x(vj) + lki * u(j)
+   end do
+   go to 50
+!  Pivot--interchange largest entry of k-TH row of u with
+!  the diagonal entry.
+!  Find largest entry, counting off-diagonal nonzeros
+110 if (vi > n) go to 1004
+   xpvmax = abs(x(vi))
+   maxc = vi
+   nzcnt = 0
+   pv = vi
+120 v = pv
+   pv = p(pv)
+   if (pv > n) go to 130
+   nzcnt = nzcnt + 1
+   xpv = abs(x(pv))
+   if (xpv <= xpvmax) go to 120
+   xpvmax = xpv
+   maxc = pv
+   maxcl = v
+   go to 120
+130 if (xpvmax == 0.d0) go to 1004
+!  If vi = k, then there is an entry for diagonal
+!  which must be deleted.  Otherwise, delete the
+!  entry which will become the diagonal entry
+   if (vi == k) go to 140
+   if (vi == maxc) go to 140
+   p(maxcl) = p(maxc)
+   go to 150
+140 vi = p(vi)
+!  Compute D(k) = 1/L(k,k) and perform interchange.
+150 dk = 1.d0 / x(maxc)
+   x(maxc) = x(k)
+   i = c(k)
+   c(k) = c(maxc)
+   c(maxc) = i
+   ck = c(k)
+   ic(ck) = k
+   ic(i) = maxc
+   x(k) = 0.d0
+!  Update right hand side.
+   y(k) = yk * dk
+!  Compute value for iu(k+1) and check for storage overflow
+   iu(k + 1) = iu(k) + nzcnt
+   if (iu(k + 1) > max + 1) go to 1005
+!  Move column indices from linked list to ju.
+!  Columns are stored in current order with original
+!  column number (c(j)) stored for current column j
+   if (vi > n) go to 170
+   j = vi
+160 juptr = juptr + 1
+   ju(juptr) = c(j)
+   u(juptr) = x(j) * dk
+   x(j) = 0.d0
+   j = p(j)
+   if (j <= n) go to 160
+170 continue
+end do
+!  Backsolve u x = y, and reorder x to correspond with A
+k = n
+do i = 1,n
+   yk = y(k)
+   jmin = iu(k)
+   jmax = iu(k + 1) - 1
+   if (jmin > jmax) go to 190
+   do j = jmin,jmax
+      juj = ju(j)
+      juj = ic(juj)
+      yk = yk - u(j) * y(juj)
+   end do
+190 y(k) = yk
+   ck = c(k)
+   x(ck) = yk
+   k = k - 1
+end do
+!  RETURN WITH ierr = NUMBER OF OFF-DIAGONAL NONZEROS IN u
+ierr = iu(n + 1) - iu(1)
+return
+!  Error returns
+!  row k of A is null
+1002 ierr = -k
+return
+!  Row k of A has a duplicate entry
+1003 ierr = -(n + k)
+return
+!  Zero pivot in row k
+1004 ierr = -(2*n + k)
+return
+!  Storage for u exceeded on row k
+1005 ierr = -(3*n + k)
+end subroutine dnspiv
+
 subroutine dslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -10407,124 +10631,4 @@ return
 return
 410 krank = j - 1
 end subroutine u11us
-
-subroutine u12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
-implicit none
-integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
-real, intent(inout) :: a(mda,n), b(mdb,nb)
-real :: h(m)
-real, intent(inout) :: rnorm(nb)
-real :: w(m)
-integer, intent(inout) :: ic(n), ir(m)
-!     beginning of local variable declarations
-integer :: i, ij, ip1, j, jb, k, kp1, mmk
-real :: bb, tt
-real :: snrm2
-real :: sdot
-!        Given the Householder LQ factorization of A, this
-!        subroutine solves the system AX=b. if the system
-!        is of reduced rank, this routine returns a solution
-!        according to the selected mode.
-!       Note - If mode.NE.2, w is never accessed.
-k = krank
-kp1 = k + 1
-if (k > 0) go to 30
-!        rank=0
-do jb = 1,nb
-   rnorm(jb) = snrm2(m,b(1,jb),1)
-end do
-do jb = 1,nb
-   do i = 1,n
-      b(i,jb) = 0.0
-   end do
-end do
-return
-30 i = 0
-!     Reorder b to reflect row interchanges
-40 i = i + 1
-if (i == m) go to 100
-j = ir(i)
-if (j == i) go to 40
-if (j < 0) go to 40
-ir(i) = -ir(i)
-do jb = 1,nb
-   rnorm(jb) = b(i,jb)
-end do
-ij = i
-60 do jb = 1,nb
-   b(ij,jb) = b(j,jb)
-end do
-ij = j
-j = ir(ij)
-ir(ij) = -ir(ij)
-if (j /= i) go to 60
-do jb = 1,nb
-   b(ij,jb) = rnorm(jb)
-end do
-go to 40
-100 do i = 1,m
-   ir(i) = abs(ir(i))
-end do
-!     If A is of reduced rank and mode=2,
-!     apply Householder transformations to b
-if (mode < 2 .or. k == m) go to 140
-mmk = m - k
-do jb = 1,nb
-   do j = 1,k
-      i = kp1 - j
-      tt = -sdot(mmk,a(kp1,i),1,b(kp1,jb),1)/w(i)
-      tt = tt - b(i,jb)
-      call saxpy(mmk,tt,a(kp1,i),1,b(kp1,jb),1)
-      b(i,jb) = b(i,jb) + tt*w(i)
-   end do
-end do
-!     Find norms of residual vector(S)..(before overwrite b)
-140 do jb = 1,nb
-   rnorm(jb) = snrm2(m - k,b(kp1,jb),1)
-end do
-!     Back solve lower triangular L
-do jb = 1,nb
-   do i = 1,k
-      b(i,jb) = b(i,jb)/a(i,i)
-      if (i == k) exit
-      ip1 = i + 1
-      call saxpy(k - i,-b(i,jb),a(ip1,i),1,b(ip1,jb),1)
-   end do
-end do
-!      Truncated solution
-if (k == n) go to 210
-do jb = 1,nb
-   do i = kp1,n
-      b(i,jb) = 0.0
-   end do
-end do
-!     Apply Householder transformations to b
-210 do i = 1,k
-   j = kp1 - i
-   tt = a(j,j)
-   a(j,j) = h(j)
-   do jb = 1,nb
-      bb = -sdot(n - j + 1,a(j,j),mda,b(j,jb),1)/h(j)
-      call saxpy(n - j + 1,bb,a(j,j),mda,b(j,jb),1)
-   end do
-   a(j,j) = tt
-end do
-!     Reorder b to reflect column interchanges
-i = 0
-240 i = i + 1
-if (i == n) go to 260
-j = ic(i)
-if (j == i) go to 240
-if (j < 0) go to 240
-ic(i) = -ic(i)
-250 call sswap(nb,b(j,1),mdb,b(i,1),mdb)
-ij = ic(j)
-ic(j) = -ic(j)
-j = ij
-if (j /= i) go to 250
-go to 240
-260 do i = 1,n
-   ic(i) = abs(ic(i))
-end do
-end subroutine u12us
 

@@ -9425,6 +9425,35 @@ end subroutine intyd
 
 subroutine stod(neq, y, yh, nyh, yh1, ewt, savf, acor, &
    & wm, iwm, f, jac, rpar, ipar)
+!! <!-- nswc-ford:begin STOD -->
+!! Perform one integration step for the stiff ODE solver.
+!!
+!! This is a solver helper. Applications normally enter through [[sfode]] or
+!! [[sfode1]], which initialize solver state and partition caller-provided work arrays.
+!!
+!! | Argument | Intent | Meaning |
+!! |---|---|---|
+!! | `neq` | IN | Number of equations |
+!! | `nyh` | IN | Leading dimension of the history array |
+!! | `ewt` | IN | Error weights used to measure local errors |
+!! | `y` | INOUT | Solution values used for derivative and Jacobian calls |
+!! | `yh`, `yh1` | INOUT | Two views of the same scaled solution-history storage |
+!! | `savf` | INOUT | Saved derivative and temporary values |
+!! | `acor` | INOUT | Accumulated correction and temporary values |
+!! | `wm`, `iwm` | INOUT | Matrix and iteration workspaces |
+!! | `rpar`, `ipar` | INOUT | User parameters passed to callbacks; updates are returned |
+!! | `f` | Procedure | Derivative callback |
+!! | `jac` | Procedure | Jacobian callback selected by the driver |
+!!
+!! The derivative callback has the form `f(t, y, yp, rpar, ipar)`: time and solution
+!! are inputs, derivatives are outputs, and the parameter arrays are read/write.
+!! The Jacobian conventions depend on the selected iteration method.
+!!
+!! The history views intentionally share storage. Other workspace regions are
+!! partitioned by the driver. Incoming workspace values must be preserved; they
+!! must not be treated as wholly initialized outputs. The ordinary source comments
+!! describe step selection, correction, error control, and solver-state flags.
+!! <!-- nswc-ford:end -->
 implicit none
 integer, intent(inout) :: ipar(*)
 real, intent(inout) :: rpar(*)

@@ -26,6 +26,7 @@ from coalesce_local_declarations import transform as coalesce_locals
 from remove_final_returns import transform_free as remove_final_returns
 from modernize_obsolescent import transform as modernize_obsolescent, computed_gotos
 from storage_modernization import equivalence_free
+from ford_documentation import transform as ford_comments, line_numbers
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,6 +42,9 @@ def generate(root=ROOT):
     baseline = simplify_style(apply_free_fixes(baseline))
     baseline = remove_final_returns(coalesce_locals(apply_generics(baseline)))
     free = equivalence_free(modernize_obsolescent(baseline))
+    semantic_free = free
+    free = ford_comments(free)
+    documentation_lines = line_numbers(semantic_free, free)
     lines = free.splitlines(keepends=True)
     declarations = {}
     for name, start, end in procedure_spans(free):
@@ -56,10 +60,10 @@ def generate(root=ROOT):
     bounds = starts + [len(lines) + 1]
     report = comments.report(original_free)
     before_comments = [(i, s) for i, s in enumerate(comments.text.splitlines(True), 1) if s.lstrip().startswith('!')]
-    after_comments = [(i, s) for i, s in enumerate(free.splitlines(True), 1) if s.lstrip().startswith('!')]
+    after_comments = [(i, s) for i, s in enumerate(semantic_free.splitlines(True), 1) if s.lstrip().startswith('!')]
     if [s for _, s in before_comments] != [s for _, s in after_comments]:
         raise ValueError('Purity annotation changed the comment stream')
-    comment_lines = {a[0]: b[0] for a, b in zip(before_comments, after_comments)}
+    comment_lines = {a[0]: documentation_lines[b[0]] for a, b in zip(before_comments, after_comments)}
     for entry in report['unrecognized_prose_words'].values():
         entry['first_line'] = comment_lines[entry['first_line']]
     for entry in report['uncertain_prose']:

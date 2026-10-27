@@ -1,4 +1,5 @@
 """Verify free-form obsolescent cleanup, helper scopes, types and signatures."""
+from ford_documentation import strip as strip_ford
 import copy
 import json
 from pathlib import Path
@@ -70,7 +71,7 @@ def main():
     before = baseline()
     manifest = json.loads(MANIFEST.read_text())
     after = transform(before, manifest)
-    if equivalence_free(after) != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
+    if equivalence_free(after) != strip_ford((ROOT / 'nswc.f90').read_text(encoding='ascii')):
         raise ValueError('Obsolescent-feature generation differs from maintained free form')
     if transform(after, manifest) != after:
         raise ValueError('Obsolescent cleanup is not idempotent')

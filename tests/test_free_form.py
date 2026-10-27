@@ -7,6 +7,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
+from ford_documentation import strip as strip_ford
 from fixed_to_free import convert_text
 from regenerate_sources import generate, HEADER, LINK
 from lowercase_fortran import lowercase
@@ -129,7 +130,7 @@ class FreeFormTests(unittest.TestCase):
                          [s for s in comments.text.splitlines(True) if not s.lstrip().startswith('!')])
         self.assertEqual(statements(formatted, False), statements(comments.text, False))
         self.assertEqual(sentence_case(comments.text).text, comments.text)
-        self.assertEqual(equivalence_free(modernize_obsolescent(remove_final_returns(coalesce_locals(apply_generics(simplify_style(apply_free_fixes(apply_purity(portable_intrinsics(apply_constants(comments.text)))))))))), (ROOT / "nswc.f90").read_text())
+        self.assertEqual(equivalence_free(modernize_obsolescent(remove_final_returns(coalesce_locals(apply_generics(simplify_style(apply_free_fixes(apply_purity(portable_intrinsics(apply_constants(comments.text)))))))))), strip_ford((ROOT / "nswc.f90").read_text()))
 
     def test_generated_partitions_and_links(self):
         outputs, count = generate()

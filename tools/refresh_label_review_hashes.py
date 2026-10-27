@@ -6,6 +6,7 @@ constant values, purity/intents, calls, intrinsic bindings, helper expressions,
 and COMMON layouts must agree with the existing reviews. The intents mode
 permits only the separately proved supplemental dummy intent attributes.
 """
+from ford_documentation import strip as strip_ford
 import argparse
 import copy
 import json
@@ -69,7 +70,7 @@ def migrate(before, after, transformer=transform, review_generics=False):
         raise ValueError('Control-flow cleanup changed equivalence bindings')
     old = equivalence_free(old, storage)
     new = equivalence_free(new, storage_new)
-    if old != (ROOT/'nswc.f90').read_text():
+    if old != strip_ford((ROOT/'nswc.f90').read_text()):
         raise ValueError('Old pipeline does not reproduce maintained free form')
     state = {}
     module_state(module_source(new, modern_state=False, named_kinds=False), state)

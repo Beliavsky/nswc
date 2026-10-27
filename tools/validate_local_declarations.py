@@ -1,5 +1,6 @@
 """Verify coalescing for the complete external and module implementations."""
 from pathlib import Path
+from ford_documentation import strip as strip_ford
 
 from coalesce_local_declarations import transform, verify
 from generic_intrinsics import transform as apply_generics
@@ -16,12 +17,14 @@ def main():
     original = apply_generics(baseline_source())
     combined = transform(original)
     modern = equivalence_free(modernize_obsolescent(remove_final_returns(combined)))
-    if modern != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
+    if modern != strip_ford((ROOT / 'nswc.f90').read_text(encoding='ascii')):
         raise ValueError('External declaration coalescing differs from maintained source')
     for name, before, after in [('nswc.f90', original, combined),
                               ('nswc_mod.f90', module_source(original, coalesce=False, modern_state=False, named_kinds=False), module_source(combined, modern_state=False, named_kinds=False))]:
         expected = modern if name == 'nswc.f90' else module_source(modern)
-        if expected != (ROOT / name).read_text(encoding='ascii'):
+        actual = (ROOT / name).read_text(encoding='ascii')
+        if name == 'nswc.f90': actual = strip_ford(actual)
+        if expected != actual:
             raise ValueError(f'{name}: generated source differs')
         if transform(after) != after:
             raise ValueError(f'{name}: declaration coalescing is not idempotent')

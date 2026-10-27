@@ -95,6 +95,21 @@ def verify_signatures(compiler, folder):
     return set(interfaces)
 
 
+def restrict_public(text, selected):
+    """Limit a test module's exports, including grouped PUBLIC declarations."""
+    selected = {name.upper() for name in selected}
+    output = []
+    for line in text.splitlines(True):
+        match = re.match(r'^(\s*)public\s*::\s*(.*?)\s*$', line, re.I)
+        if not match:
+            output.append(line)
+            continue
+        names = [name.strip() for name in match[2].split(',') if name.strip().upper() in selected]
+        if names:
+            output.append(match[1] + 'public :: ' + ', '.join(names) + '\n')
+    return ''.join(output)
+
+
 def module_caller(text, library_names):
     """Replace this suite's local library interfaces with USE ... ONLY imports."""
     names, kept, depth, preserve = set(), [], 0, False

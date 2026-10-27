@@ -417,3 +417,11 @@ warnings; the standalone module compiles without warnings.
 The maintained sources compile without argument-mismatch tolerance; the archive
 still needs it. The [warning review](docs/compiler-warnings.md) records the changes,
 remaining issues, and the checks that reject new compiler warnings.
+
+## Generated API documentation
+
+Build the FORD reference with `python -m pip install -r requirements-docs.txt`
+and `python tools/build_ford.py`, then open `reports/ford-site/index.html`.
+The site indexes all 1,062 module procedures. Five reviewed procedure prologues
+form the first documentation batch; remaining procedures include signatures
+and source views. See the [FORD guide](docs/ford.md) for maintenance and checks.

@@ -1,4 +1,5 @@
 """Verify purity legality, unchanged data/control flow, and elemental array calls."""
+from ford_documentation import strip as strip_ford
 import argparse
 from collections import Counter
 import difflib
@@ -92,7 +93,7 @@ def main():
     baseline = portable_intrinsics(apply_constants(sentence_case(format_source(lowercase(convert_text((ROOT / 'nswc.f').read_text(encoding='ascii'))))).text))
     manifest = json.loads(MANIFEST.read_text())
     annotated = transform(baseline, manifest)
-    if equivalence_free(modernize_obsolescent(remove_final_returns(coalesce_locals(apply_generics(simplify_style(apply_free_fixes(annotated))))))) != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
+    if equivalence_free(modernize_obsolescent(remove_final_returns(coalesce_locals(apply_generics(simplify_style(apply_free_fixes(annotated))))))) != strip_ford((ROOT / 'nswc.f90').read_text(encoding='ascii')):
         raise ValueError('Purity regeneration differs from maintained source')
     inventories, code, warnings = [], [], []
     with tempfile.TemporaryDirectory(prefix='nswc-purity-validation-') as work:

@@ -68,7 +68,9 @@ def public_declarations(names, root=ROOT, width=100):
     return ''.join(output)
 
 
-def module_source(text, calls=None, intrinsics=None, coalesce=True, modern_state=True, named_kinds=True, pi_constants=True):
+def module_source(text, calls=None, intrinsics=None, coalesce=True, modern_state=True, named_kinds=True, pi_constants=True, documentation=True):
+    from ford_documentation import strip, transform as ford_comments
+    text = strip(text)
     if calls is None:
         calls = json.loads(MANIFEST.read_text())['calls']
         review = json.loads(BINDINGS.read_text())
@@ -188,7 +190,8 @@ def module_source(text, calls=None, intrinsics=None, coalesce=True, modern_state
         return generated
     generated = named_module_kinds(generated)
     generated = shared_module_pi(generated) if pi_constants else generated
-    return remove_empty_free_markers(generated)
+    generated = remove_empty_free_markers(generated)
+    return ford_comments(generated) if documentation else generated
 
 
 def review_intrinsics(text, compiler):

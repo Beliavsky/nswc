@@ -1,3 +1,130 @@
+pure real function scnrm2(n, cx, incx)
+implicit none
+integer, intent(in) :: incx, n
+complex, intent(in) :: cx(*)
+!     beginning of local variable declarations
+integer :: i, nn, next
+logical :: imag, scale
+real :: hitest, sum, xmax, absx
+real, parameter :: zero = 0.0e0
+real, parameter :: one = 1.0e0
+real, parameter :: cutlo = 4.441e-16
+real, parameter :: cuthi = 1.304e19
+!     Unitary norm of the complex n-vector stored in cx() with storage
+!     increment incx .
+!     If    n .LE. 0 return with result = 0.
+!     If n .GE. 1 then incx must be .GE. 1
+!           C.L.Lawson , 1978 jan 08
+!     FOUR PHASE METHOD     USING TWO BUILT-IN CONSTANTS THAT ARE
+!     hopefully applicable to all machines.
+!         cutlo = Maximum of  sqrt(U/EPS)  over all known machines.
+!         cuthi = Minimum of  sqrt(V)      over all known machines.
+!     Where
+!         eps = Smallest no. such that eps + 1. .GT. 1.
+!         U   = Smallest positive no.   (underflow limit)
+!         V   = Largest  no.            (overflow  limit)
+!     brief outline of algorithm..
+!     PHASE 1    SCANS ZERO COMPONENTS.
+!     Move to phase 2 when a component is nonzero and .LE. cutlo
+!     move to phase 3 when a component is .GT. cutlo
+!     move to phase 4 when a component is .GE. cuthi/M
+!     where M = n for X() real and M = 2*n for complex.
+!     Values for cutlo and cuthi..
+!     From the environmental parameters listed in the IMSL converter
+!     document the limiting values are as follows..
+!     cutlo, S.P.   U/eps = 2**(-102) for  Honeywell.  Close seconds are
+!                   Univac and DEC at 2**(-103)
+!                   THUS cutlo = 2**(-51) = 4.44089E-16
+!     cuthi, S.P.   V = 2**127 for Univac, Honeywell, and DEC.
+!                   THUS cuthi = 2**(63.5) = 1.30438E19
+!     cutlo, D.P.   U/eps = 2**(-67) for Honeywell and DEC.
+!                   THUS cutlo = 2**(-33.5) = 8.23181D-11
+!     cuthi, D.P.   SAME AS S.P.  cuthi = 1.30438D19
+!     DATA cutlo, cuthi / 8.232D-11,  1.304D19 /
+!     DATA cutlo, cuthi / 4.441E-16,  1.304E19 /
+if (n > 0) go to 10
+scnrm2 = zero
+go to 300
+10 next = 30
+sum = zero
+nn = n * incx
+!                                                 Begin main loop
+do i = 1,nn,incx
+   absx = abs(real(cx(i)))
+   imag = .false.
+   select case (next)
+   case (30)
+      go to 30
+   case (50)
+      go to 50
+   case (70)
+      go to 70
+   case (90)
+      go to 90
+   case (110)
+      go to 110
+   end select
+30 if (absx > cutlo) go to 85
+   next = 50
+   scale = .false.
+!                        Phase 1.  Sum is zero
+50 if (absx == zero) go to 200
+   if (absx > cutlo) go to 85
+!                                Prepare for phase 2.
+   next = 70
+   go to 105
+!                                Prepare for phase 4.
+100 next = 110
+   sum = (sum / absx) / absx
+105 scale = .true.
+   xmax = absx
+   go to 115
+!                   Phase 2.  Sum is small.
+!                             Scale to avoid destructive underflow.
+70 if (absx > cutlo) go to 75
+!                     Common code for phases 2 and 4.
+!                     In phase 4 sum is large.  Scale to avoid overflow.
+110 if (absx <= xmax) go to 115
+   sum = one + sum * (xmax / absx)**2
+   xmax = absx
+   go to 200
+115 sum = sum + (absx/xmax)**2
+   go to 200
+!                  Prepare for phase 3.
+75 sum = (sum * xmax) * xmax
+85 next = 90
+   scale = .false.
+!     For real or D.P. set hitest = cuthi/n
+!     for complex      set hitest = cuthi/(2*n)
+   hitest = cuthi/float(n)
+   hitest = hitest * 0.5
+!                   Phase 3.  Sum is mid-range.  No scaling.
+90 if (absx >= hitest) go to 100
+   sum = sum + absx**2
+200 continue
+!                  Control selection of real and imaginary parts.
+   if (imag) go to 210
+   absx = abs(aimag(cx(i)))
+   imag = .true.
+   select case (next)
+   case (50)
+      go to 50
+   case (70)
+      go to 70
+   case (90)
+      go to 90
+   case (110)
+      go to 110
+   end select
+210 continue
+end do
+!              END OF MAIN LOOP.
+!              Compute square root and adjust for scaling.
+scnrm2 = sqrt(sum)
+if (scale) scnrm2 = scnrm2 * xmax
+300 continue
+end function scnrm2
+
 pure integer function isamax(n,sx,incx)
 implicit none
 !     Finds the index of element having max. Absolute value.
@@ -10432,126 +10559,4 @@ return
 320 continue
 end do
 end subroutine schur
-
-pure subroutine shrslv(a,b,c,m,n,na,nb,nc,ierr)
-implicit none
-!     ------------------------------------------------------------------
-!     shrslv solves the matrix equation AX + XB = c where
-!     A is in lower Schur form and b in upper Schur form.
-!     ------------------------------------------------------------------
-integer, intent(in) :: m, n, na, nb, nc
-integer, intent(inout) :: ierr
-real, intent(in) :: a(na,m), b(nb,n)
-real, intent(inout) :: c(nc,n)
-!     beginning of local variable declarations
-real :: sum, p(4), t(4,4)
-integer :: dk, dl, i, ib, j, ja, k, km1, kk, l, lm1, ll
-interface
-   pure subroutine slv(n,m,a,ka,b,kb,ierr)
-      implicit none
-      integer, intent(in) :: kb
-      integer, intent(in) :: ka
-      integer, intent(in) :: m
-      integer, intent(in) :: n
-      real, intent(inout) :: a(ka,n)
-      real, intent(inout) :: b(kb,m)
-      integer, intent(out) :: ierr
-   end subroutine slv
-end interface
-l = 1
-10 lm1 = l - 1
-dl = 1
-if (l == n) go to 15
-if (b(l + 1,l) /= 0.0) dl = 2
-15 ll = l + dl - 1
-if (l == 1) go to 30
-do j = l,ll
-   do i = 1,m
-      sum = c(i,j)
-      do ib = 1,lm1
-         sum = sum - c(i,ib)*b(ib,j)
-      end do
-      c(i,j) = sum
-   end do
-end do
-30 k = 1
-40 km1 = k - 1
-dk = 1
-if (k == m) go to 45
-if (a(k,k + 1) /= 0.0) dk = 2
-45 kk = k + dk - 1
-if (k == 1) go to 60
-do i = k,kk
-   do j = l,ll
-      sum = c(i,j)
-      do ja = 1,km1
-         sum = sum - a(i,ja)*c(ja,j)
-      end do
-      c(i,j) = sum
-   end do
-end do
-60 if (dl == 2) go to 80
-if (dk == 2) go to 70
-t(1,1) = a(k,k) + b(l,l)
-if (t(1,1) == 0.0) go to 200
-c(k,l) = c(k,l)/t(1,1)
-ierr = 0
-go to 100
-70 t(1,1) = a(k,k) + b(l,l)
-t(1,2) = a(k,kk)
-t(2,1) = a(kk,k)
-t(2,2) = a(kk,kk) + b(l,l)
-p(1) = c(k,l)
-p(2) = c(kk,l)
-call slv(2, 1, t, 4, p, 4, ierr)
-if (ierr /= 0) go to 200
-c(k,l) = p(1)
-c(kk,l) = p(2)
-go to 100
-80 if (dk == 2) go to 90
-t(1,1) = a(k,k) + b(l,l)
-t(1,2) = b(ll,l)
-t(2,1) = b(l,ll)
-t(2,2) = a(k,k) + b(ll,ll)
-p(1) = c(k,l)
-p(2) = c(k,ll)
-call slv(2, 1, t, 4, p, 4, ierr)
-if (ierr /= 0) go to 200
-c(k,l) = p(1)
-c(k,ll) = p(2)
-go to 100
-90 t(1,1) = a(k,k) + b(l,l)
-t(1,2) = a(k,kk)
-t(1,3) = b(ll,l)
-t(1,4) = 0.0
-t(2,1) = a(kk,k)
-t(2,2) = a(kk,kk) + b(l,l)
-t(2,3) = 0.0
-t(2,4) = t(1,3)
-t(3,1) = b(l,ll)
-t(3,2) = 0.0
-t(3,3) = a(k,k) + b(ll,ll)
-t(3,4) = t(1,2)
-t(4,1) = 0.0
-t(4,2) = t(3,1)
-t(4,3) = t(2,1)
-t(4,4) = a(kk,kk) + b(ll,ll)
-p(1) = c(k,l)
-p(2) = c(kk,l)
-p(3) = c(k,ll)
-p(4) = c(kk,ll)
-call slv(4, 1, t, 4, p, 4, ierr)
-if (ierr /= 0) go to 200
-c(k,l) = p(1)
-c(kk,l) = p(2)
-c(k,ll) = p(3)
-c(kk,ll) = p(4)
-100 k = k + dk
-if (k <= m) go to 40
-l = l + dl
-if (l <= n) go to 10
-return
-!     Error return
-200 ierr = 1
-end subroutine shrslv
 

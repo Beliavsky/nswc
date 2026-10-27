@@ -1,4 +1,29 @@
 pure elemental integer function ipmpar(i)
+!! <!-- nswc-ford:begin IPMPAR -->
+!! Return an integer machine constant selected by `i`.
+!!
+!! ### Argument and result
+!!
+!! `i` is an input selector from 1 through 10. The integer function result is:
+!!
+!! | i | Meaning |
+!! |---|---|
+!! | 1 | Integer radix |
+!! | 2 | Integer digits in that radix |
+!! | 3 | Largest positive integer |
+!! | 4 | Floating-point radix |
+!! | 5, 6, 7 | Single-precision digits, minimum exponent, maximum exponent |
+!! | 8, 9, 10 | Double-precision digits, minimum exponent, maximum exponent |
+!!
+!! ### Implementation
+!!
+!! The active values are the `imach` named constant. The historical machine-specific
+!! DATA tables in the ordinary comments are reference material. They are not selected
+!! by uncommenting lines in this version. The supplied floating-point model is binary32
+!! and binary64; changing compiler default kinds requires a separate model review.
+!!
+!! Adapted by A. H. Morris from I1MACH by P. A. Fox, A. D. Hall, and N. L. Schryer.
+!! <!-- nswc-ford:end -->
 implicit none
 integer, intent(in) :: i
 !     beginning of local variable declarations
@@ -31,6 +56,7 @@ integer, parameter :: imach(10) = [2, 31, 2147483647, 2, 24, -125, 128, 53, -102
 !     ipmpar(9) = EMIN, the smallest exponent E.
 !     ipmpar(10) = EMAX, the largest exponent E.
 !-----------------------------------------------------------------------
+! FORD historical instructions begin: nswc_orig.f only; see the active model above.
 !     To define this function for the computer being used, activate
 !     the data statments for the computer by removing the C from
 !     column 1. (All the other data statements should have C in
@@ -42,6 +68,7 @@ integer, parameter :: imach(10) = [2, 31, 2147483647, 2, 24, -125, 128, 53, -102
 !     ipmpar(4),...,ipmpar(10) for the single and double precision
 !     arithmetics. The subroutines mach and radix are provided for
 !     this purpose.
+! FORD historical instructions end.
 !-----------------------------------------------------------------------
 !     ipmpar is an adaptation of the function i1mach, written by
 !     P.A. Fox, A.D. Hall, and N.L. Schryer (Bell Laboratories).
@@ -1047,6 +1074,23 @@ d2 = b
 end subroutine dstor2
 
 pure elemental real function spmpar(i)
+!! <!-- nswc-ford:begin SPMPAR -->
+!! Return a single-precision floating-point model constant.
+!!
+!! `i` is an input selector: 1 returns machine precision, 2 the smallest positive
+!! normal magnitude, and 3 the largest finite magnitude of the configured model.
+!! Only selectors 1 through 3 are supported by the documented interface.
+!!
+!! For radix `b`, precision `m`, and exponents `emin` and `emax` from [[ipmpar]]:
+!!
+!! ```text
+!! spmpar(1) = b**(1 - m)
+!! spmpar(2) = b**(emin - 1)
+!! spmpar(3) = b**emax * (1 - b**(-m))
+!! ```
+!!
+!! The function is pure and elemental. Written by Alfred H. Morris, Jr., NSWC.
+!! <!-- nswc-ford:end -->
 implicit none
 integer, intent(in) :: i
 !     beginning of local variable declarations
@@ -1339,6 +1383,18 @@ end do
 end subroutine ishell
 
 pure subroutine shell(a, n)
+!! <!-- nswc-ford:begin SHELL -->
+!! Sort the real array `a` into ascending order in place.
+!!
+!! | Argument | Intent | Meaning |
+!! |---|---|---|
+!! | `n` | IN | Number of elements; the documented interface assumes `n >= 1` |
+!! | `a(n)` | INOUT | Input values, replaced by values in ascending order |
+!!
+!! The routine uses Shell sorting and does not promise a stable ordering of equal
+!! values. It returns immediately when `n < 2`. It is a pure subroutine.
+!! See [[shell2]] for sorting with an accompanying array.
+!! <!-- nswc-ford:end -->
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
@@ -2418,6 +2474,15 @@ end do
 end subroutine dorder
 
 pure elemental real function cbrt(x)
+!! <!-- nswc-ford:begin CBRT -->
+!! Compute the real cube root of `x` using logarithms and exponentials.
+!!
+!! `x` is a real input. The real function result has the sign of `x`; zero returns
+!! zero without evaluating a logarithm. Negative inputs are supported.
+!!
+!! The function is pure and elemental, so it can also be applied to arrays.
+!! See [[dcbrt]] for the double-precision counterpart.
+!! <!-- nswc-ford:end -->
 implicit none
 real, intent(in) :: x
 !     beginning of local variable declarations
@@ -10461,155 +10526,4 @@ do i = 1,14
 end do
 dpdel = w/x
 end function dpdel
-
-pure elemental double precision function dgam1(x)
-implicit none
-!-----------------------------------------------------------------------
-!     Evaluation of 1/gamma(1 + x) - 1  For -0.5 .LE. x .LE. 1.5
-!-----------------------------------------------------------------------
-!     The following are the first 49 coefficients of the Maclaurin
-!     expansion for 1/gamma(1 + x) - 1. The coefficients are
-!     correct to 40 digits. The coefficients were obtained by
-!     Alfred H. Morris Jr. (Naval Surface Warfare Center) and are
-!     given here for reference. Only the first 14 coefficients are
-!     used in this code.
-!                           -----------
-!     data a(1)  / .5772156649015328606065120900824024310422d+00/,
-!    *     A(2)  /-.6558780715202538810770195151453904812798d+00/,
-!    *     A(3)  /-.4200263503409523552900393487542981871139d-01/,
-!    *     A(4)  / .1665386113822914895017007951021052357178d+00/,
-!    *     A(5)  /-.4219773455554433674820830128918739130165d-01/,
-!    *     A(6)  /-.9621971527876973562114921672348198975363d-02/,
-!    *     A(7)  / .7218943246663099542395010340446572709905d-02/,
-!    *     A(8)  /-.1165167591859065112113971084018388666809d-02/,
-!    *     A(9)  /-.2152416741149509728157299630536478064782d-03/,
-!    *     A(10) / .1280502823881161861531986263281643233949d-03/
-!     data a(11) /-.2013485478078823865568939142102181838229d-04/,
-!    *     A(12) /-.1250493482142670657345359473833092242323d-05/,
-!    *     A(13) / .1133027231981695882374129620330744943324d-05/,
-!    *     A(14) /-.2056338416977607103450154130020572836513d-06/,
-!    *     A(15) / .6116095104481415817862498682855342867276d-08/,
-!    *     A(16) / .5002007644469222930055665048059991303045d-08/,
-!    *     A(17) /-.1181274570487020144588126565436505577739d-08/,
-!    *     A(18) / .1043426711691100510491540332312250191401d-09/,
-!    *     A(19) / .7782263439905071254049937311360777226068d-11/,
-!    *     A(20) /-.3696805618642205708187815878085766236571d-11/
-!     data a(21) / .5100370287454475979015481322863231802727d-12/,
-!    *     A(22) /-.2058326053566506783222429544855237419746d-13/,
-!    *     A(23) /-.5348122539423017982370017318727939948990d-14/,
-!    *     A(24) / .1226778628238260790158893846622422428165d-14/,
-!    *     A(25) /-.1181259301697458769513764586842297831212d-15/,
-!    *     A(26) / .1186692254751600332579777242928674071088d-17/,
-!    *     A(27) / .1412380655318031781555803947566709037086d-17/,
-!    *     A(28) /-.2298745684435370206592478580633699260285d-18/,
-!    *     A(29) / .1714406321927337433383963370267257066813d-19/,
-!    *     A(30) / .1337351730493693114864781395122268022875d-21/
-!     data a(31) /-.2054233551766672789325025351355733796682d-21/,
-!    *     A(32) / .2736030048607999844831509904330982014865d-22/,
-!    *     A(33) /-.1732356445910516639057428451564779799070d-23/,
-!    *     A(34) /-.2360619024499287287343450735427531007926d-25/,
-!    *     A(35) / .1864982941717294430718413161878666898946d-25/,
-!    *     A(36) /-.2218095624207197204399716913626860379732d-26/,
-!    *     A(37) / .1297781974947993668824414486330594165619d-27/,
-!    *     A(38) / .1180697474966528406222745415509971518560d-29/,
-!    *     A(39) /-.1124584349277088090293654674261439512119d-29/,
-!    *     A(40) / .1277085175140866203990206677751124647749d-30/
-!     data a(41) /-.7391451169615140823461289330108552823711d-32/,
-!    *     A(42) / .1134750257554215760954165259469306393009d-34/,
-!    *     A(43) / .4639134641058722029944804907952228463058d-34/,
-!    *     A(44) /-.5347336818439198875077418196709893320905d-35/,
-!    *     A(45) / .3207995923613352622861237279082794391090d-36/,
-!    *     A(46) /-.4445829736550756882101590352124643637401d-38/,
-!    *     A(47) /-.1311174518881988712901058494389922190237d-38/,
-!    *     A(48) / .1647033352543813886818259327906394145400d-39/,
-!    *     A(49) /-.1056233178503581218600561071538285049997d-40/
-!                           -----------
-!     c = A(1) - 1 Is also frequently needed. c has the value ...
-!     data c /-.4227843350984671393934879099175975689578d+00/
-!-----------------------------------------------------------------------
-double precision, intent(in) :: x
-!     beginning of local variable declarations
-double precision :: d, t, w, z, nswc_ai_r8
-double precision, parameter :: a0 = .611609510448141581788d-08
-double precision, parameter :: a1 = .624730830116465516210d-08
-double precision, parameter :: b1 = .203610414066806987300d+00
-double precision, parameter :: b2 = .266205348428949217746d-01
-double precision, parameter :: b3 = .493944979382446875238d-03
-double precision, parameter :: b4 = -.851419432440314906588d-05
-double precision, parameter :: b5 = -.643045481779353022248d-05
-double precision, parameter :: b6 = .992641840672773722196d-06
-double precision, parameter :: b7 = -.607761895722825260739d-07
-double precision, parameter :: b8 = .195755836614639731882d-09
-double precision, parameter :: p0 = .6116095104481415817861d-08
-double precision, parameter :: p1 = .6871674113067198736152d-08
-double precision, parameter :: p2 = .6820161668496170657918d-09
-double precision, parameter :: p3 = .4686843322948848031080d-10
-double precision, parameter :: p4 = .1572833027710446286995d-11
-double precision, parameter :: p5 = -.1249441572276366213222d-12
-double precision, parameter :: p6 = .4343529937408594255178d-14
-double precision, parameter :: q1 = .3056961078365221025009d+00
-double precision, parameter :: q2 = .5464213086042296536016d-01
-double precision, parameter :: q3 = .4956830093825887312020d-02
-double precision, parameter :: q4 = .2692369466186361192876d-03
-double precision, parameter :: c = -.422784335098467139393487909917598d+00
-double precision, parameter :: c0 = .577215664901532860606512090082402d+00
-double precision, parameter :: c1 = -.655878071520253881077019515145390d+00
-double precision, parameter :: c2 = -.420026350340952355290039348754298d-01
-double precision, parameter :: c3 = .166538611382291489501700795102105d+00
-double precision, parameter :: c4 = -.421977345555443367482083012891874d-01
-double precision, parameter :: c5 = -.962197152787697356211492167234820d-02
-double precision, parameter :: c6 = .721894324666309954239501034044657d-02
-double precision, parameter :: c7 = -.116516759185906511211397108401839d-02
-double precision, parameter :: c8 = -.215241674114950972815729963053648d-03
-double precision, parameter :: c9 = .128050282388116186153198626328164d-03
-double precision, parameter :: c10 = -.201348547807882386556893914210218d-04
-double precision, parameter :: c11 = -.125049348214267065734535947383309d-05
-double precision, parameter :: c12 = .113302723198169588237412962033074d-05
-double precision, parameter :: c13 = -.205633841697760710345015413002057d-06
-!----------------------------
-!----------------------------
-!----------------------------
-!     c = c0 - 1
-!----------------------------
-!----------------------------
-!----------------------------
-t = x
-d = x - 0.5d0
-if (d > 0.d0) t = d - 0.5d0
-nswc_ai_r8 = t
-if (nswc_ai_r8 < 0) go to 40
-if (nswc_ai_r8 == 0) go to 10
-go to 20
-10 dgam1 = 0.d0
-return
-!------------
-!                Case when 0 .LT. t .LE. 0.5
-!              w is a minimax approximation for
-!              the series A(15) + A(16)*t + ...
-!------------
-20 w = ((((((p6*t + p5)*t + p4)*t + p3)*t + p2)*t + p1)*t + p0)/ &
-   & ((((q4*t + q3)*t + q2)*t + q1)*t + 1.d0)
-z = (((((((((((((w*t + c13)*t + c12)*t + c11)*t + c10)*t + &
-   & c9)*t + c8)*t + c7)*t + c6)*t + c5)*t + c4)*t + &
-   & c3)*t + c2)*t + c1)*t + c0
-if (d > 0.d0) go to 30
-dgam1 = x*z
-return
-30 dgam1 = (t/x)*((z - 0.5d0) - 0.5d0)
-return
-!------------
-!                Case when -0.5 .LE. t .LT. 0
-!              w is a minimax approximation for
-!              the series A(15) + A(16)*t + ...
-!------------
-40 w = (a1*t + a0)/((((((((b8*t + b7)*t + b6)*t + b5)*t + &
-   & b4)*t + b3)*t + b2)*t + b1)*t + 1.d0)
-z = (((((((((((((w*t + c13)*t + c12)*t + c11)*t + c10)*t + &
-   & c9)*t + c8)*t + c7)*t + c6)*t + c5)*t + c4)*t + &
-   & c3)*t + c2)*t + c1)*t + c
-if (d > 0.d0) go to 50
-dgam1 = x*((z + 0.5d0) + 0.5d0)
-return
-50 dgam1 = t*z/x
-end function dgam1
 

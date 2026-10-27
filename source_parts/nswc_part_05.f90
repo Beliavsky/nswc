@@ -1,3 +1,125 @@
+pure subroutine shrslv(a,b,c,m,n,na,nb,nc,ierr)
+implicit none
+!     ------------------------------------------------------------------
+!     shrslv solves the matrix equation AX + XB = c where
+!     A is in lower Schur form and b in upper Schur form.
+!     ------------------------------------------------------------------
+integer, intent(in) :: m, n, na, nb, nc
+integer, intent(inout) :: ierr
+real, intent(in) :: a(na,m), b(nb,n)
+real, intent(inout) :: c(nc,n)
+!     beginning of local variable declarations
+real :: sum, p(4), t(4,4)
+integer :: dk, dl, i, ib, j, ja, k, km1, kk, l, lm1, ll
+interface
+   pure subroutine slv(n,m,a,ka,b,kb,ierr)
+      implicit none
+      integer, intent(in) :: kb
+      integer, intent(in) :: ka
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      real, intent(inout) :: a(ka,n)
+      real, intent(inout) :: b(kb,m)
+      integer, intent(out) :: ierr
+   end subroutine slv
+end interface
+l = 1
+10 lm1 = l - 1
+dl = 1
+if (l == n) go to 15
+if (b(l + 1,l) /= 0.0) dl = 2
+15 ll = l + dl - 1
+if (l == 1) go to 30
+do j = l,ll
+   do i = 1,m
+      sum = c(i,j)
+      do ib = 1,lm1
+         sum = sum - c(i,ib)*b(ib,j)
+      end do
+      c(i,j) = sum
+   end do
+end do
+30 k = 1
+40 km1 = k - 1
+dk = 1
+if (k == m) go to 45
+if (a(k,k + 1) /= 0.0) dk = 2
+45 kk = k + dk - 1
+if (k == 1) go to 60
+do i = k,kk
+   do j = l,ll
+      sum = c(i,j)
+      do ja = 1,km1
+         sum = sum - a(i,ja)*c(ja,j)
+      end do
+      c(i,j) = sum
+   end do
+end do
+60 if (dl == 2) go to 80
+if (dk == 2) go to 70
+t(1,1) = a(k,k) + b(l,l)
+if (t(1,1) == 0.0) go to 200
+c(k,l) = c(k,l)/t(1,1)
+ierr = 0
+go to 100
+70 t(1,1) = a(k,k) + b(l,l)
+t(1,2) = a(k,kk)
+t(2,1) = a(kk,k)
+t(2,2) = a(kk,kk) + b(l,l)
+p(1) = c(k,l)
+p(2) = c(kk,l)
+call slv(2, 1, t, 4, p, 4, ierr)
+if (ierr /= 0) go to 200
+c(k,l) = p(1)
+c(kk,l) = p(2)
+go to 100
+80 if (dk == 2) go to 90
+t(1,1) = a(k,k) + b(l,l)
+t(1,2) = b(ll,l)
+t(2,1) = b(l,ll)
+t(2,2) = a(k,k) + b(ll,ll)
+p(1) = c(k,l)
+p(2) = c(k,ll)
+call slv(2, 1, t, 4, p, 4, ierr)
+if (ierr /= 0) go to 200
+c(k,l) = p(1)
+c(k,ll) = p(2)
+go to 100
+90 t(1,1) = a(k,k) + b(l,l)
+t(1,2) = a(k,kk)
+t(1,3) = b(ll,l)
+t(1,4) = 0.0
+t(2,1) = a(kk,k)
+t(2,2) = a(kk,kk) + b(l,l)
+t(2,3) = 0.0
+t(2,4) = t(1,3)
+t(3,1) = b(l,ll)
+t(3,2) = 0.0
+t(3,3) = a(k,k) + b(ll,ll)
+t(3,4) = t(1,2)
+t(4,1) = 0.0
+t(4,2) = t(3,1)
+t(4,3) = t(2,1)
+t(4,4) = a(kk,kk) + b(ll,ll)
+p(1) = c(k,l)
+p(2) = c(kk,l)
+p(3) = c(k,ll)
+p(4) = c(kk,ll)
+call slv(4, 1, t, 4, p, 4, ierr)
+if (ierr /= 0) go to 200
+c(k,l) = p(1)
+c(kk,l) = p(2)
+c(k,ll) = p(3)
+c(kk,ll) = p(4)
+100 k = k + dk
+if (k <= m) go to 40
+l = l + dl
+if (l <= n) go to 10
+return
+!     Error return
+200 ierr = 1
+end subroutine shrslv
+
 subroutine dabslv(mo,m,n,a,na,b,nb,c,nc,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -10423,228 +10545,4 @@ call dnspiv(n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
    & itemp(iu),itemp(ju),rtemp(u),ierr)
 if (ierr == 0) ierr = 1
 end subroutine dspslv
-
-subroutine dnspiv(n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: max, n
-double precision, intent(in) :: a(*), b(n)
-double precision, intent(inout) :: u(max), x(n), y(n)
-integer, intent(inout) :: c(n)
-integer, intent(in) :: ia(*)
-integer, intent(inout) :: ic(n), iu(*)
-integer, intent(in) :: ja(*)
-integer, intent(inout) :: ju(max), p(*)
-integer, intent(in) :: r(n)
-!     beginning of local variable declarations
-integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk, nswc_ai_i4
-double precision :: dk, lki, xpv, xpvmax, yk
-!  dnspiv uses sparse Gaussian elimination with
-!  column interchanges to solve the linear system A x = b.  the
-!  elimination phase performs row operations on A and b to obtain
-!  a unit upper triangular matrix u and a vector y.  the solution
-!  phase solves u x = y.
-!  See dspslv for descriptions of all input and output arguments
-!  other than those described below
-!  ic  integer array of n entries which is the inverse of c
-!      (I.E., ic(c(i)) = i). ic is both an input and output
-!      argument.
-!  Input arguments (used internally only)---
-!  y   DOUBLE PRECISION ARRAY OF n ENTRIES USED TO COMPUTE
-!      the updated right hand side
-!  p   INTEGER ARRAY OF n+1 ENTRIES USED FOR A LINKED LIST.
-!      p(n+1) is the list header, and the entry following
-!      p(k) is in p(p(k)).  Thus, p(n+1) is the first data
-!      item, p(p(n+1)) is the second, etc.  a pointer of
-!      n+1 marks the end of the list
-!  iu  integer array of n+1 entries used for row pointers to u
-!      (see matrix storage description below)
-!  ju  integer array of max entries used for column numbers of
-!      the nonzeros in the strict upper triangle of u.  (See
-!      matrix storage description below)
-!  u   DOUBLE PRECISION ARRAY OF MAX ENTRIES USED FOR THE ACTUAL
-!      nonzeros in the strict upper triangle of u. (See matrix
-!      storage description below)
-!  storage of sparse matrices---
-!  the sparse matrix a is stored using three arrays ia, ja, and a.
-!  The array a contains the nonzeros of the matrix ROW-by-ROW, not
-!  necessarily in order of increasing column number.  The array ja
-!  contains the column numbers corresponding to the nonzeros stored
-!  in the array a (I.E., if the nonzero stored in a(k) is in
-!  column j, then ja(k) = j).  The array ia contains pointers to the
-!  rows of nonzeros/column indices in the array a/ja (I.E.,
-!  a(ia(i))/ja(ia(i)) is the first entry for row i in the array a/ja).
-!  ia(n+1) is set so that ia(n+1) - ia(1) = The number of nonzeros in
-!  A.  iu, ju, and u are used in a similar way to store the strict upper
-!  triangle of u, except that ju actually contains c(j) instead of j
-!  initialize work storage and pointers to ju
-do j = 1,n
-   x(j) = 0.d0
-end do
-iu(1) = 1
-juptr = 0
-!  Perform symbolic and numeric factorization row by row
-!  vk (vi,vj) is the graph vertex for row k (i,j) of u
-do k = 1,n
-!  Initialize linked list and free storage for this row
-!  the r(k)-TH row of a becomes the k-TH row of u.
-   p(n + 1) = n + 1
-   vk = r(k)
-!  Set up adjacency list for vk, ordered in
-!  current column order of u.  the loop index
-!  goes downward to exploit any columns
-!  from A in correct relative order
-   jmin = ia(vk)
-   jmax = ia(vk + 1) - 1
-   if (jmin > jmax) go to 1002
-   j = jmax
-20 jaj = ja(j)
-   vj = ic(jaj)
-!  Store a(k,j) in work vector
-   x(vj) = a(j)
-!  This code inserts vj into adjacency list of vk
-   ppk = n + 1
-30 pk = ppk
-   ppk = p(pk)
-   nswc_ai_i4 = ppk - vj
-   if (nswc_ai_i4 < 0) go to 30
-   if (nswc_ai_i4 == 0) go to 1003
-   go to 40
-40 p(vj) = ppk
-   p(pk) = vj
-   j = j - 1
-   if (j >= jmin) go to 20
-!  The following code computes the k-TH row of u
-   vi = n + 1
-   yk = b(vk)
-50 vi = p(vi)
-   if (vi >= k) go to 110
-!  vi LT vk -- process the L(k,i) element and merge the
-!  adjacency of vi with the ordered adjacency of vk
-   lki = - x(vi)
-   x(vi) = 0.d0
-!  Adjust right hand side to reflect elimination
-   yk = yk + lki * y(vi)
-   ppk = vi
-   jmin = iu(vi)
-   jmax = iu(vi + 1) - 1
-   if (jmin > jmax) go to 50
-   do j = jmin,jmax
-      juj = ju(j)
-      vj = ic(juj)
-!  If vj is already in the adjacency of vk,
-!  skip the insertion
-      if (x(vj) /= 0.d0) go to 90
-!  Insert vj in adjacency list of vk.
-!  Reset ppk to vi if we have passed the correct
-!  insertion spot.  (This happens when the adjacency of
-!  vi is not in current column order due to pivoting.)
-      nswc_ai_i4 = vj - ppk
-      if (nswc_ai_i4 < 0) go to 60
-      if (nswc_ai_i4 == 0) go to 90
-      go to 70
-60    ppk = vi
-70    pk = ppk
-      ppk = p(pk)
-      nswc_ai_i4 = ppk - vj
-      if (nswc_ai_i4 < 0) go to 70
-      if (nswc_ai_i4 == 0) go to 90
-      go to 80
-80    p(vj) = ppk
-      p(pk) = vj
-      ppk = vj
-!  Compute L(k,j) = L(k,j) - L(k,i)*u(i,j) for L(k,i) nonzero
-!  compute u*(k,j) = u*(k,j) - L(k,i)*u(i,j) for u(k,j) nonzero
-!  (u*(k,j) = u(k,j)*D(k,k))
-90    x(vj) = x(vj) + lki * u(j)
-   end do
-   go to 50
-!  Pivot--interchange largest entry of k-TH row of u with
-!  the diagonal entry.
-!  Find largest entry, counting off-diagonal nonzeros
-110 if (vi > n) go to 1004
-   xpvmax = abs(x(vi))
-   maxc = vi
-   nzcnt = 0
-   pv = vi
-120 v = pv
-   pv = p(pv)
-   if (pv > n) go to 130
-   nzcnt = nzcnt + 1
-   xpv = abs(x(pv))
-   if (xpv <= xpvmax) go to 120
-   xpvmax = xpv
-   maxc = pv
-   maxcl = v
-   go to 120
-130 if (xpvmax == 0.d0) go to 1004
-!  If vi = k, then there is an entry for diagonal
-!  which must be deleted.  Otherwise, delete the
-!  entry which will become the diagonal entry
-   if (vi == k) go to 140
-   if (vi == maxc) go to 140
-   p(maxcl) = p(maxc)
-   go to 150
-140 vi = p(vi)
-!  Compute D(k) = 1/L(k,k) and perform interchange.
-150 dk = 1.d0 / x(maxc)
-   x(maxc) = x(k)
-   i = c(k)
-   c(k) = c(maxc)
-   c(maxc) = i
-   ck = c(k)
-   ic(ck) = k
-   ic(i) = maxc
-   x(k) = 0.d0
-!  Update right hand side.
-   y(k) = yk * dk
-!  Compute value for iu(k+1) and check for storage overflow
-   iu(k + 1) = iu(k) + nzcnt
-   if (iu(k + 1) > max + 1) go to 1005
-!  Move column indices from linked list to ju.
-!  Columns are stored in current order with original
-!  column number (c(j)) stored for current column j
-   if (vi > n) go to 170
-   j = vi
-160 juptr = juptr + 1
-   ju(juptr) = c(j)
-   u(juptr) = x(j) * dk
-   x(j) = 0.d0
-   j = p(j)
-   if (j <= n) go to 160
-170 continue
-end do
-!  Backsolve u x = y, and reorder x to correspond with A
-k = n
-do i = 1,n
-   yk = y(k)
-   jmin = iu(k)
-   jmax = iu(k + 1) - 1
-   if (jmin > jmax) go to 190
-   do j = jmin,jmax
-      juj = ju(j)
-      juj = ic(juj)
-      yk = yk - u(j) * y(juj)
-   end do
-190 y(k) = yk
-   ck = c(k)
-   x(ck) = yk
-   k = k - 1
-end do
-!  RETURN WITH ierr = NUMBER OF OFF-DIAGONAL NONZEROS IN u
-ierr = iu(n + 1) - iu(1)
-return
-!  Error returns
-!  row k of A is null
-1002 ierr = -k
-return
-!  Row k of A has a duplicate entry
-1003 ierr = -(n + k)
-return
-!  Zero pivot in row k
-1004 ierr = -(2*n + k)
-return
-!  Storage for u exceeded on row k
-1005 ierr = -(3*n + k)
-end subroutine dnspiv
 

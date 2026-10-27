@@ -4,6 +4,7 @@ Reject any other fixed-source edit. Require equal GNU assembly and data/procedur
 symbols before updating hashes. All constant values, intents, purity selections,
 call graphs and intrinsic selections are carried forward unchanged.
 """
+from ford_documentation import strip as strip_ford
 import argparse
 import copy
 import json
@@ -71,7 +72,7 @@ def migrate_reviewed_pipeline(before, after, expected_free=None):
     old = returns(coalesce(generics(old, generic_old)))
     new = returns(coalesce(generics(new, generic_new)))
     if expected_free is None:
-        expected_free = (ROOT / 'nswc.f90').read_text(encoding='ascii')
+        expected_free = strip_ford((ROOT / 'nswc.f90').read_text(encoding='ascii'))
         old = equivalence_free(modernize_obsolescent(old))
     if old != expected_free:
         raise ValueError('Old reviewed pipeline does not reproduce maintained free form')

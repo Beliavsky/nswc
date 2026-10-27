@@ -3,6 +3,7 @@
 All recorded constants, purity contracts, call graphs and intrinsic selections
 are retained. This narrowly scoped migration refuses any other source change.
 """
+from ford_documentation import strip as strip_ford
 import argparse
 import copy
 import json
@@ -64,7 +65,7 @@ def migrate(before, after):
     generic_new, generic_count = refresh(old, new, generic_old)
     old = coalesce(generics(old, generic_old))
     new = coalesce(generics(new, generic_new))
-    if old != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
+    if old != strip_ford((ROOT / 'nswc.f90').read_text(encoding='ascii')):
         raise ValueError('Existing free-form source does not reproduce from supplied old fixed source')
     if transform_free(old) != new:
         raise ValueError('Final free-form output changed beyond terminal RETURN removal')

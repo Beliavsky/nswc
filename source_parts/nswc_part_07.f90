@@ -1,3 +1,123 @@
+subroutine u12us(a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
+implicit none
+integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
+real, intent(inout) :: a(mda,n), b(mdb,nb)
+real :: h(m)
+real, intent(inout) :: rnorm(nb)
+real :: w(m)
+integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
+integer :: i, ij, ip1, j, jb, k, kp1, mmk
+real :: bb, tt
+real :: snrm2
+real :: sdot
+!        Given the Householder LQ factorization of A, this
+!        subroutine solves the system AX=b. if the system
+!        is of reduced rank, this routine returns a solution
+!        according to the selected mode.
+!       Note - If mode.NE.2, w is never accessed.
+k = krank
+kp1 = k + 1
+if (k > 0) go to 30
+!        rank=0
+do jb = 1,nb
+   rnorm(jb) = snrm2(m,b(1,jb),1)
+end do
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.0
+   end do
+end do
+return
+30 i = 0
+!     Reorder b to reflect row interchanges
+40 i = i + 1
+if (i == m) go to 100
+j = ir(i)
+if (j == i) go to 40
+if (j < 0) go to 40
+ir(i) = -ir(i)
+do jb = 1,nb
+   rnorm(jb) = b(i,jb)
+end do
+ij = i
+60 do jb = 1,nb
+   b(ij,jb) = b(j,jb)
+end do
+ij = j
+j = ir(ij)
+ir(ij) = -ir(ij)
+if (j /= i) go to 60
+do jb = 1,nb
+   b(ij,jb) = rnorm(jb)
+end do
+go to 40
+100 do i = 1,m
+   ir(i) = abs(ir(i))
+end do
+!     If A is of reduced rank and mode=2,
+!     apply Householder transformations to b
+if (mode < 2 .or. k == m) go to 140
+mmk = m - k
+do jb = 1,nb
+   do j = 1,k
+      i = kp1 - j
+      tt = -sdot(mmk,a(kp1,i),1,b(kp1,jb),1)/w(i)
+      tt = tt - b(i,jb)
+      call saxpy(mmk,tt,a(kp1,i),1,b(kp1,jb),1)
+      b(i,jb) = b(i,jb) + tt*w(i)
+   end do
+end do
+!     Find norms of residual vector(S)..(before overwrite b)
+140 do jb = 1,nb
+   rnorm(jb) = snrm2(m - k,b(kp1,jb),1)
+end do
+!     Back solve lower triangular L
+do jb = 1,nb
+   do i = 1,k
+      b(i,jb) = b(i,jb)/a(i,i)
+      if (i == k) exit
+      ip1 = i + 1
+      call saxpy(k - i,-b(i,jb),a(ip1,i),1,b(ip1,jb),1)
+   end do
+end do
+!      Truncated solution
+if (k == n) go to 210
+do jb = 1,nb
+   do i = kp1,n
+      b(i,jb) = 0.0
+   end do
+end do
+!     Apply Householder transformations to b
+210 do i = 1,k
+   j = kp1 - i
+   tt = a(j,j)
+   a(j,j) = h(j)
+   do jb = 1,nb
+      bb = -sdot(n - j + 1,a(j,j),mda,b(j,jb),1)/h(j)
+      call saxpy(n - j + 1,bb,a(j,j),mda,b(j,jb),1)
+   end do
+   a(j,j) = tt
+end do
+!     Reorder b to reflect column interchanges
+i = 0
+240 i = i + 1
+if (i == n) go to 260
+j = ic(i)
+if (j == i) go to 240
+if (j < 0) go to 240
+ic(i) = -ic(i)
+250 call sswap(nb,b(j,1),mdb,b(i,1),mdb)
+ij = ic(j)
+ic(j) = -ic(j)
+j = ij
+if (j /= i) go to 250
+go to 240
+260 do i = 1,n
+   ic(i) = abs(ic(i))
+end do
+end subroutine u12us
+
 pure subroutine dlsqr(ind, a, mda, m, n, b, mdb, nb, re, ae, krank, &
    & ksure, rnorm, work, lw, iwork, liw, ierr)
 implicit none

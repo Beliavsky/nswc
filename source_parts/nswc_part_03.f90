@@ -1,3 +1,137 @@
+pure real function ai(x)
+implicit none
+real, intent(in) :: x
+!     beginning of local variable declarations
+integer :: n, n2
+real :: phi, r, rtx, t, w
+real, parameter :: x0 = 1.58740105196820
+real, parameter :: c = 1.94773404105468
+real, parameter :: an0 = .355028053887818e+00
+real, parameter :: an1 = -.187394912983414e+00
+real, parameter :: an2 = -.383735973881972e-01
+real, parameter :: an3 = .491952571236878e-01
+real, parameter :: an4 = -.967017625191329e-02
+real, parameter :: an5 = -.205648610308316e-02
+real, parameter :: an6 = .114176040526844e-02
+real, parameter :: an7 = -.117114823456866e-03
+real, parameter :: an8 = -.270165470074755e-04
+real, parameter :: an9 = .789002965889206e-05
+real, parameter :: ad0 = .100000000000000e+01
+real, parameter :: ad1 = .201179850513612e+00
+real, parameter :: ad2 = .385762517106249e-01
+real, parameter :: ad3 = .230887443780120e-04
+real, parameter :: bn0 = .355028053887817e+00
+real, parameter :: bn1 = -.997169317338190e-01
+real, parameter :: bn2 = -.602216060213075e-01
+real, parameter :: bn3 = .297705337630730e-01
+real, parameter :: bn4 = -.152969932286570e-02
+real, parameter :: bn5 = -.147868368189372e-02
+real, parameter :: bn6 = .350518617006107e-03
+real, parameter :: bn7 = -.257766924610873e-04
+real, parameter :: bd0 = .100000000000000e+01
+real, parameter :: bd1 = .448140563306831e+00
+real, parameter :: bd2 = .157074537566686e+00
+real, parameter :: bd3 = .316964519364865e-01
+real, parameter :: bd4 = .485922740843953e-02
+real, parameter :: bd5 = .423326964456309e-03
+real, parameter :: pn0 = .282094378896566e+00
+real, parameter :: pn1 = .807868561687271e-01
+real, parameter :: pn2 = .630644564152247e-02
+real, parameter :: pn3 = .147116711467936e-03
+real, parameter :: pn4 = .750490748341483e-06
+real, parameter :: pd0 = .100000000000000e+01
+real, parameter :: pd1 = .292890323271551e+00
+real, parameter :: pd2 = .239376862143358e-01
+real, parameter :: pd3 = .612353984250624e-03
+real, parameter :: pd4 = .384461189764830e-05
+real, parameter :: pd5 = .123247804102182e-08
+real, parameter :: qn0 = .282094791017188e+00
+real, parameter :: qn1 = .149585822742689e+00
+real, parameter :: qn2 = .241876418864958e-01
+real, parameter :: qn3 = .138190913282142e-02
+real, parameter :: qn4 = .241862862465003e-04
+real, parameter :: qn5 = .709733720554615e-07
+real, parameter :: qd0 = .100000000000000e+01
+real, parameter :: qd1 = .536778341756648e+00
+real, parameter :: qd2 = .889112579703465e-01
+real, parameter :: qd3 = .533368703697049e-02
+real, parameter :: qd4 = .103812739863315e-03
+real, parameter :: qd5 = .408838544650398e-06
+real, parameter :: rn0 = .282094791773878e+00
+real, parameter :: rn1 = .203731967781874e+00
+real, parameter :: rn2 = .436660479870037e-01
+real, parameter :: rn3 = .306595563073142e-02
+real, parameter :: rn4 = .517398800281618e-04
+real, parameter :: rd0 = .100000000000000e+01
+real, parameter :: rd1 = .728721438361672e+00
+real, parameter :: rd2 = .159210021472267e+00
+real, parameter :: rd3 = .116985268534248e-01
+real, parameter :: rd4 = .225973894323078e-03
+real, parameter :: rd5 = .232707159780478e-06
+interface
+   pure elemental subroutine aimp(x,r,phi)
+      implicit none
+      real, intent(in) :: x
+      real, intent(inout) :: r
+      real, intent(inout) :: phi
+   end subroutine aimp
+   pure elemental function exparg(l)
+      implicit none
+      integer, intent(in) :: l
+      real :: exparg
+   end function exparg
+end interface
+!-----------------------------------------------------------------------
+!     Evaluation of the Airy function ai(x)
+!-----------------------------------------------------------------------
+!     x0 = 2**(2/3)
+!     c = exp(2/3)
+!-----------------------
+!-----------------------
+!-----------------------
+!-----------------------
+!-----------------------
+!-----------------------
+!-----------------------------------------------------------------------
+if (x >= -1.0) go to 10
+call aimp(-x, r, phi)
+ai = r*sin(phi)
+return
+10 if (x >= 0.0) go to 20
+ai = (((((((((an9*x + an8)*x + an7)*x + an6)*x + an5)*x &
+   & + an4)*x + an3)*x + an2)*x + an1)*x + an0) / &
+   & (((ad3*x + ad2)*x + ad1)*x + ad0)
+return
+20 if (x >= 1.0) go to 30
+ai = (((((((bn7*x + bn6)*x + bn5)*x + bn4)*x + bn3)*x + bn2)*x &
+   & + bn1)*x + bn0) / &
+   & (((((bd5*x + bd4)*x + bd3)*x + bd2)*x + bd1)*x + bd0)
+return
+30 rtx = sqrt(x)
+if (x > x0) go to 40
+t = 16.0/(x*rtx)
+w = ((((pn4*t + pn3)*t + pn2)*t + pn1)*t + pn0) / &
+   & (((((pd5*t + pd4)*t + pd3)*t + pd2)*t + pd1)*t + pd0)
+ai = (w/sqrt(rtx)) * exp(-2.0*x*rtx/3.0)
+return
+40 if (x > 4.0d0) go to 50
+t = 16.0/(x*rtx)
+w = (((((qn5*t + qn4)*t + qn3)*t + qn2)*t + qn1)*t + qn0) / &
+   & (((((qd5*t + qd4)*t + qd3)*t + qd2)*t + qd1)*t + qd0)
+ai = (w/sqrt(rtx)) * exp(-2.0*x*rtx/3.0)
+return
+50 if (x*rtx > 1.5*exparg(0)) go to 60
+t = 16.0/(x*rtx)
+w = ((((rn4*t + rn3)*t + rn2)*t + rn1)*t + rn0) / &
+   & (((((rd5*t + rd4)*t + rd3)*t + rd2)*t + rd1)*t + rd0)
+n = rtx
+n2 = n*n
+t = (x - n2)/(rtx + n)
+ai = ((w/sqrt(rtx)) / c**(n2*n)) * exp(-2.0*t*(n*rtx + t*t/3.0))
+return
+60 ai = 0.0
+end function ai
+
 pure elemental real function aie(x)
 implicit none
 real, intent(in) :: x
@@ -10378,131 +10512,4 @@ if (i <= nn) go to 20
 dnrm2 = xmax * sqrt(sum)
 300 continue
 end function dnrm2
-
-pure real function scnrm2(n, cx, incx)
-implicit none
-integer, intent(in) :: incx, n
-complex, intent(in) :: cx(*)
-!     beginning of local variable declarations
-integer :: i, nn, next
-logical :: imag, scale
-real :: hitest, sum, xmax, absx
-real, parameter :: zero = 0.0e0
-real, parameter :: one = 1.0e0
-real, parameter :: cutlo = 4.441e-16
-real, parameter :: cuthi = 1.304e19
-!     Unitary norm of the complex n-vector stored in cx() with storage
-!     increment incx .
-!     If    n .LE. 0 return with result = 0.
-!     If n .GE. 1 then incx must be .GE. 1
-!           C.L.Lawson , 1978 jan 08
-!     FOUR PHASE METHOD     USING TWO BUILT-IN CONSTANTS THAT ARE
-!     hopefully applicable to all machines.
-!         cutlo = Maximum of  sqrt(U/EPS)  over all known machines.
-!         cuthi = Minimum of  sqrt(V)      over all known machines.
-!     Where
-!         eps = Smallest no. such that eps + 1. .GT. 1.
-!         U   = Smallest positive no.   (underflow limit)
-!         V   = Largest  no.            (overflow  limit)
-!     brief outline of algorithm..
-!     PHASE 1    SCANS ZERO COMPONENTS.
-!     Move to phase 2 when a component is nonzero and .LE. cutlo
-!     move to phase 3 when a component is .GT. cutlo
-!     move to phase 4 when a component is .GE. cuthi/M
-!     where M = n for X() real and M = 2*n for complex.
-!     Values for cutlo and cuthi..
-!     From the environmental parameters listed in the IMSL converter
-!     document the limiting values are as follows..
-!     cutlo, S.P.   U/eps = 2**(-102) for  Honeywell.  Close seconds are
-!                   Univac and DEC at 2**(-103)
-!                   THUS cutlo = 2**(-51) = 4.44089E-16
-!     cuthi, S.P.   V = 2**127 for Univac, Honeywell, and DEC.
-!                   THUS cuthi = 2**(63.5) = 1.30438E19
-!     cutlo, D.P.   U/eps = 2**(-67) for Honeywell and DEC.
-!                   THUS cutlo = 2**(-33.5) = 8.23181D-11
-!     cuthi, D.P.   SAME AS S.P.  cuthi = 1.30438D19
-!     DATA cutlo, cuthi / 8.232D-11,  1.304D19 /
-!     DATA cutlo, cuthi / 4.441E-16,  1.304E19 /
-if (n > 0) go to 10
-scnrm2 = zero
-go to 300
-10 next = 30
-sum = zero
-nn = n * incx
-!                                                 Begin main loop
-do i = 1,nn,incx
-   absx = abs(real(cx(i)))
-   imag = .false.
-   select case (next)
-   case (30)
-      go to 30
-   case (50)
-      go to 50
-   case (70)
-      go to 70
-   case (90)
-      go to 90
-   case (110)
-      go to 110
-   end select
-30 if (absx > cutlo) go to 85
-   next = 50
-   scale = .false.
-!                        Phase 1.  Sum is zero
-50 if (absx == zero) go to 200
-   if (absx > cutlo) go to 85
-!                                Prepare for phase 2.
-   next = 70
-   go to 105
-!                                Prepare for phase 4.
-100 next = 110
-   sum = (sum / absx) / absx
-105 scale = .true.
-   xmax = absx
-   go to 115
-!                   Phase 2.  Sum is small.
-!                             Scale to avoid destructive underflow.
-70 if (absx > cutlo) go to 75
-!                     Common code for phases 2 and 4.
-!                     In phase 4 sum is large.  Scale to avoid overflow.
-110 if (absx <= xmax) go to 115
-   sum = one + sum * (xmax / absx)**2
-   xmax = absx
-   go to 200
-115 sum = sum + (absx/xmax)**2
-   go to 200
-!                  Prepare for phase 3.
-75 sum = (sum * xmax) * xmax
-85 next = 90
-   scale = .false.
-!     For real or D.P. set hitest = cuthi/n
-!     for complex      set hitest = cuthi/(2*n)
-   hitest = cuthi/float(n)
-   hitest = hitest * 0.5
-!                   Phase 3.  Sum is mid-range.  No scaling.
-90 if (absx >= hitest) go to 100
-   sum = sum + absx**2
-200 continue
-!                  Control selection of real and imaginary parts.
-   if (imag) go to 210
-   absx = abs(aimag(cx(i)))
-   imag = .true.
-   select case (next)
-   case (50)
-      go to 50
-   case (70)
-      go to 70
-   case (90)
-      go to 90
-   case (110)
-      go to 110
-   end select
-210 continue
-end do
-!              END OF MAIN LOOP.
-!              Compute square root and adjust for scaling.
-scnrm2 = sqrt(sum)
-if (scale) scnrm2 = scnrm2 * xmax
-300 continue
-end function scnrm2
 

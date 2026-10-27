@@ -1,4 +1,5 @@
 """Reproduce the generic-intrinsic review and compare compiled code and types."""
+from ford_documentation import strip as strip_ford
 import json
 from pathlib import Path
 import tempfile
@@ -31,7 +32,7 @@ def main():
     baseline = baseline_source()
     manifest = json.loads(MANIFEST.read_text())
     converted = transform(baseline, manifest)
-    if equivalence_free(modernize_obsolescent(remove_final_returns(coalesce_locals(converted)))) != (ROOT / 'nswc.f90').read_text(encoding='ascii'):
+    if equivalence_free(modernize_obsolescent(remove_final_returns(coalesce_locals(converted)))) != strip_ford((ROOT / 'nswc.f90').read_text(encoding='ascii')):
         raise ValueError('Generic intrinsic regeneration differs from maintained source')
     with tempfile.TemporaryDirectory(prefix='nswc-generic-validation-') as work:
         before = compile_dump(baseline, work)
