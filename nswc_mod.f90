@@ -76332,7 +76332,7 @@ pure subroutine hfti(a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
 !! ```text
 !!      dimension a(mda,n),(b(mdb,nb) or b(m)),rnorm(nb),h(n),g(n),ip(n)
 !!      written by C.L. Lawson and R.J. Hanson.
-!!      From the book solving least squares problems, Prentice-Hall, 1974.
+!!      From the book Solving Least Squares Problems, Prentice-Hall, 1974.
 !!      For algorithmic details see algorithm hfti in chapter 14.
 !!      Abstract
 !!      this subroutine solves a linear least squares problem or a set of
@@ -76426,7 +76426,7 @@ real(nswc_sp), parameter :: factor = 1.e-3
 !-----------------------------------------------------------------------
 !     dimension a(mda,n),(b(mdb,nb) or b(m)),rnorm(nb),h(n),g(n),ip(n)
 !     written by C.L. Lawson and R.J. Hanson.
-!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     From the book Solving Least Squares Problems, Prentice-Hall, 1974.
 !     For algorithmic details see algorithm hfti in chapter 14.
 !     Abstract
 !     this subroutine solves a linear least squares problem or a set of
@@ -76643,7 +76643,7 @@ pure subroutine hfti2(a,mda,m,n,b,mdb,nb,d,tau,k,rnorm,h,g,ip,ierr)
 !!      dimension d(l) where l = min(m,n)
 !!      dimension rnorm(nb),h(n),g(n),ip(n)
 !!      written by C.L. Lawson and R.J. Hanson. Modified by A.H. Morris.
-!!      From the book solving least squares problems, Prentice-Hall, 1974.
+!!      From the book Solving Least Squares Problems, Prentice-Hall, 1974.
 !!      For algorithmic details see algorithm hfti in chapter 14.
 !!      Abstract
 !!      this subroutine solves a linear least squares problem or a set of
@@ -76749,7 +76749,7 @@ real(nswc_sp), parameter :: factor = 1.e-3
 !     dimension d(l) where l = min(m,n)
 !     dimension rnorm(nb),h(n),g(n),ip(n)
 !     written by C.L. Lawson and R.J. Hanson. Modified by A.H. Morris.
-!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     From the book Solving Least Squares Problems, Prentice-Hall, 1974.
 !     For algorithmic details see algorithm hfti in chapter 14.
 !     Abstract
 !     this subroutine solves a linear least squares problem or a set of
@@ -76984,7 +76984,7 @@ pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
 !!
 !! ```text
 !!      Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
-!!      From the book solving least squares problems, Prentice-Hall, 1974.
+!!      From the book Solving Least Squares Problems, Prentice-Hall, 1974.
 !!      Construction and/or application of a single
 !!      Householder transformation..     Q = i + u*(u**T)/b
 !!      mode    = 1 Or 2   to select algorithm  H1  or  H2 .
@@ -77018,7 +77018,7 @@ real(nswc_sp) :: cl, d, sm1
 real(nswc_dp) :: sm, b
 !-----------------------------------------------------------------------
 !     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
-!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     From the book Solving Least Squares Problems, Prentice-Hall, 1974.
 !     Construction and/or application of a single
 !     Householder transformation..     Q = i + u*(u**T)/b
 !     mode    = 1 Or 2   to select algorithm  H1  or  H2 .
@@ -77107,7 +77107,7 @@ pure subroutine dhfti(a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
 !!      double precision tau,rnorm(nb),h(n),g(n)
 !!      integer ip(n)
 !!      written by C.L. Lawson and R.J. Hanson.
-!!      From the book solving least squares problems, Prentice-Hall, 1974.
+!!      From the book Solving Least Squares Problems, Prentice-Hall, 1974.
 !!      For algorithmic details see algorithm hfti in chapter 14.
 !!      Abstract
 !!      this subroutine solves a linear least squares problem or a set of
@@ -77203,7 +77203,7 @@ real(nswc_dp), parameter :: factor = 1.d-3
 !     double precision tau,rnorm(nb),h(n),g(n)
 !     integer ip(n)
 !     written by C.L. Lawson and R.J. Hanson.
-!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     From the book Solving Least Squares Problems, Prentice-Hall, 1974.
 !     For algorithmic details see algorithm hfti in chapter 14.
 !     Abstract
 !     this subroutine solves a linear least squares problem or a set of
@@ -77421,7 +77421,7 @@ pure subroutine dhfti2(a,mda,m,n,b,mdb,nb,d,tau,k,rnorm,h,g,ip,ierr)
 !!      double precision tau,rnorm(nb),h(n),g(n)
 !!      integer ip(n)
 !!      written by C.L. Lawson and R.J. Hanson. Modified by A.H. Morris.
-!!      From the book solving least squares problems, Prentice-Hall, 1974.
+!!      From the book Solving Least Squares Problems, Prentice-Hall, 1974.
 !!      For algorithmic details see algorithm hfti in chapter 14.
 !!      Abstract
 !!      this subroutine solves a linear least squares problem or a set of
@@ -77527,7 +77527,7 @@ real(nswc_dp), parameter :: factor = 1.d-3
 !     double precision tau,rnorm(nb),h(n),g(n)
 !     integer ip(n)
 !     written by C.L. Lawson and R.J. Hanson. Modified by A.H. Morris.
-!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     From the book Solving Least Squares Problems, Prentice-Hall, 1974.
 !     For algorithmic details see algorithm hfti in chapter 14.
 !     Abstract
 !     this subroutine solves a linear least squares problem or a set of
@@ -77762,7 +77762,7 @@ pure subroutine dh12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
 !!
 !! ```text
 !!      Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
-!!      From the book solving least squares problems, Prentice-Hall, 1974.
+!!      From the book Solving Least Squares Problems, Prentice-Hall, 1974.
 !!      Construction and/or application of a single
 !!      Householder transformation..     Q = i + u*(u**T)/b
 !!      mode    = 1 Or 2   to select algorithm  H1  or  H2 .
@@ -77795,7 +77795,7 @@ integer :: i, i2, i3, i4, incr, j
 real(nswc_dp) :: b, cl, d, sm
 !-----------------------------------------------------------------------
 !     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
-!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     From the book Solving Least Squares Problems, Prentice-Hall, 1974.
 !     Construction and/or application of a single
 !     Householder transformation..     Q = i + u*(u**T)/b
 !     mode    = 1 Or 2   to select algorithm  H1  or  H2 .
@@ -79322,7 +79322,7 @@ subroutine wnnls(w, mdw, me, ma, n, l, prgopt, x, rnorm, mode, &
 !!      wnlsm         COMPANION SUBROUTINE TO wnnls( ), WHERE
 !!                    most of the computation takes place.
 !!      References
-!!      1. Solving least squares problems, by C.L. Lawson
+!!      1. Solving Least Squares Problems, by C.L. Lawson
 !!         and R.J. Hanson.  Prentice-Hall, inc. (1974).
 !!      2. BASIC linear algebra subprograms for Fortran usage, by
 !!         C.L. Lawson, R.J. Hanson, D.R. kincaid, and F.T. krogh.
@@ -79512,7 +79512,7 @@ integer :: l1, l2, l3, l4, l5
 !     wnlsm         COMPANION SUBROUTINE TO wnnls( ), WHERE
 !                   most of the computation takes place.
 !     References
-!     1. Solving least squares problems, by C.L. Lawson
+!     1. Solving Least Squares Problems, by C.L. Lawson
 !        and R.J. Hanson.  Prentice-Hall, inc. (1974).
 !     2. BASIC linear algebra subprograms for Fortran usage, by
 !        C.L. Lawson, R.J. Hanson, D.R. kincaid, and F.T. krogh.

@@ -1,6 +1,6 @@
 {
   "source": "nswc.f90",
-  "source_sha256": "c8cebe0217dbc785bea741a530220c7b2e662713d06b0e32ff0afa137093cd91",
+  "source_sha256": "5aeb7fd9e71a58d6749bbc47a1e1bcfc4f36befcf11f675027650304003ca5e3",
   "module_sha256": "4ff678e672c8e84e65206381382f8fb07e4f97310777d625dd34605a690b9679",
   "compiler": "Intel(R) Fortran Compiler for applications running on Intel(R) 64, Version 2025.0.4 Build 20241205",
   "procedures": 1062,
