@@ -20,7 +20,8 @@ def main():
     after = transform(before,actual)
     from remove_redundant_copies import transform as copies
     from declaration_sections import transform as sections
-    if sections(copies(after)) != (ROOT/'nswc.f').read_bytes() or transform(after,actual) != after:
+    from additional_intents import transform as intents
+    if intents(sections(copies(after))) != (ROOT/'nswc.f').read_bytes() or transform(after,actual) != after:
         raise ValueError('Fixed generic source does not reproduce or is not idempotent')
     print(actual['summary'])
     print('Assembly, unreviewed symbols, executable trees and warning messages agree.')

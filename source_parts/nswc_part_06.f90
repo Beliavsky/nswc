@@ -8889,7 +8889,7 @@ implicit none
 integer, intent(out) :: ierr
 integer, intent(inout) :: iwk
 integer, intent(in) :: ka, kb, m, n, nb
-real :: a(ka,n)
+real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,nb), wk(*)
 dimension iwk(n)
 !     beginning of local variable declarations
@@ -9046,7 +9046,7 @@ end subroutine ortho
 
 subroutine orsol(m, n, qr, ms, s, ip, x)
 implicit none
-integer :: ip
+integer, intent(in) :: ip
 integer, intent(in) :: m, ms, n
 real :: qr(ms,n), s(n)
 real, intent(inout) :: x(m)
@@ -9139,9 +9139,10 @@ end subroutine orsol
 
 subroutine orimp(m, n, a, ka, qr, ms, s, ip, b, x, r, exit)
 implicit none
-integer :: ip
+integer, intent(in) :: ip
 integer, intent(in) :: ka, m, ms, n
-real :: a(ka,n), b(m), qr(ms,n)
+real, intent(in) :: a(ka,n), b(m)
+real :: qr(ms,n)
 real, intent(inout) :: r(m)
 real :: s(n)
 real, intent(inout) :: x(m)

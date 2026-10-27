@@ -169,7 +169,8 @@ subroutine sepde(cofx, cofy, g, edge, bval, iord, a, b, mp1, &
    & c, d, np1, u, ku, w, nw, ierr)
 implicit none
 integer, intent(inout) :: ierr
-integer :: iord, ku, mp1
+integer, intent(in) :: iord
+integer :: ku, mp1
 integer, intent(in) :: np1
 integer, intent(inout) :: nw
 real :: a, b, c, d
@@ -403,10 +404,12 @@ subroutine sepell(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
 implicit none
 integer :: idmn
 integer, intent(inout) :: ierror
-integer :: intl, iorder, m, mbdcnd, mn, n, nbdcnd
-real :: a, alpha, b, beta, c, d, gama
+integer, intent(in) :: intl, iorder, m, mbdcnd
+integer :: mn
+integer, intent(in) :: n, nbdcnd
+real, intent(in) :: a, alpha, b, beta, c, d, gama
 real, intent(inout) :: pertrb
-real :: xnu
+real, intent(in) :: xnu
 real, intent(inout) :: grhs(mn,*), usol(idmn,*)
 real :: bda(*), bdb(*), bdc(*), bdd(*)
 real, intent(inout) :: w(*)
@@ -831,11 +834,27 @@ subroutine sepel1(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
    & cn,dn,un,zn,am,bm,cm,dm,um,zm,grhs,mn,usol, &
    & idmn,w,pertrb,ierror)
 implicit none
-integer :: idmn, ierror, intl, iorder, m, mbdcnd, mn, n, nbdcnd
-real :: a, alpha, am(*), an(*), b, bda(*), bdb(*), bdc(*), bdd(*), &
-   & beta, bm(*), bn(*), c, cm(*), cn(*), d, dm(*), dn(*), gama, &
-   & grhs(mn,*), pertrb, um(*), un(*), usol(idmn,*), w(*), xnu, zm(*), &
-   & zn(*)
+integer :: idmn
+integer, intent(inout) :: ierror
+integer, intent(in) :: intl, iorder, m, mbdcnd
+integer :: mn
+integer, intent(in) :: n, nbdcnd
+real, intent(in) :: a, alpha
+real :: am(*), an(*)
+real, intent(in) :: b
+real :: bda(*), bdb(*), bdc(*), bdd(*)
+real, intent(in) :: beta
+real :: bm(*), bn(*)
+real, intent(in) :: c
+real :: cm(*), cn(*)
+real, intent(in) :: d
+real :: dm(*), dn(*)
+real, intent(in) :: gama
+real :: grhs(mn,*)
+real, intent(inout) :: pertrb
+real :: um(*), un(*), usol(idmn,*), w(*)
+real, intent(in) :: xnu
+real :: zm(*), zn(*)
 external cofx, cofy
 !     beginning of local variable declarations
 integer :: i, i1, iord, j, mp, np
@@ -845,9 +864,9 @@ integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 logical :: singlr
 !     sepel1 sets up vectors and arrays for input to blktri
-!     and computes a second order solution in USOL.  A return jump to
+!     and computes a second order solution in usol.  A return jump to
 !     sepell OCCURRS IF iorder=2.  IF iorder=4 A FOURTH ORDER
-!     solution is generated in USOL.
+!     solution is generated in usol.
 common /splp/   kswx       ,kswy       ,k          ,l          , &
    & ait        ,bit        ,cit        ,dit        , &
    & mit        ,nit        ,is         ,ms         , &
@@ -862,7 +881,7 @@ ait = a
 bit = b
 cit = c
 dit = d
-!     Set right hand side values from GRHS in USOL on the interior
+!     Set right hand side values from grhs in usol on the interior
 !     and non-specified boundaries.
 do i = 2,m
    do j = 2,n
@@ -1028,7 +1047,7 @@ an(nit) = an(nit) + fyn
 bn(nit) = bn(nit) - 2.0*dly*xnu*fyn
 cn(nit) = 0.0
 220 if (kswx == 1) go to 270
-!     Adjust USOL along X edge
+!     Adjust usol along X edge
 do j = js,ns
    if (kswx /= 2 .and. kswx /= 3) go to 230
    usol(is,j) = usol(is,j) - ax1*usol(1,j)
@@ -1041,7 +1060,7 @@ do j = js,ns
 260 continue
 end do
 270 if (kswy == 1) go to 320
-!     Adjust USOL along Y edge
+!     Adjust usol along Y edge
 do i = is,ms
    if (kswy /= 2 .and. kswy /= 3) go to 280
    usol(i,js) = usol(i,js) - dy1*usol(i,1)
@@ -1054,7 +1073,7 @@ do i = is,ms
 310 continue
 end do
 320 continue
-!     Save adjusted edges in GRHS if iorder=4
+!     Save adjusted edges in grhs if iorder=4
 if (iorder /= 4) go to 350
 do j = js,ns
    grhs(is,j) = usol(is,j)
@@ -1164,9 +1183,9 @@ end subroutine chkprm
 subroutine chksng(mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy, &
    & singlr)
 implicit none
-integer :: mbdcnd, nbdcnd
-real :: alpha, beta, gama, xnu
-logical :: singlr
+integer, intent(in) :: mbdcnd, nbdcnd
+real, intent(in) :: alpha, beta, gama, xnu
+logical, intent(inout) :: singlr
 !     beginning of local variable declarations
 integer :: i, j
 real :: ai, bi, ci, dj, ej, fj, xi, yj
@@ -1209,7 +1228,8 @@ end subroutine chksng
 subroutine orthg(usol,idmn,zn,zm,pertrb)
 implicit none
 integer :: idmn
-real :: pertrb, usol(idmn,*), zm(*), zn(*)
+real, intent(inout) :: pertrb
+real :: usol(idmn,*), zm(*), zn(*)
 !     beginning of local variable declarations
 integer :: i, ifnl, ii, istr, j, jfnl, jj, jstr
 real :: ete, ute
@@ -1250,7 +1270,8 @@ end subroutine orthg
 subroutine minsol(usol,idmn,zn,zm,pertb)
 implicit none
 integer :: idmn
-real :: pertb, usol(idmn,*), zm(*), zn(*)
+real, intent(in) :: pertb
+real :: usol(idmn,*), zm(*), zn(*)
 !     beginning of local variable declarations
 integer :: i, ifnl, ii, istr, j, jfnl, jj, jstr
 real :: ete, pertrb, ute
@@ -1390,8 +1411,11 @@ end subroutine defer
 
 subroutine dxfn(u,idmn,i,j,uxxx,uxxxx)
 implicit none
-integer :: i, idmn, j
-real :: u(idmn,*), uxxx, uxxxx
+integer, intent(in) :: i
+integer :: idmn
+integer, intent(in) :: j
+real :: u(idmn,*)
+real, intent(inout) :: uxxx, uxxxx
 !     beginning of local variable declarations
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
@@ -1457,8 +1481,11 @@ end subroutine dxfn
 
 subroutine dyfn(u,idmn,i,j,uyyy,uyyyy)
 implicit none
-integer :: i, idmn, j
-real :: u(idmn,*), uyyy, uyyyy
+integer, intent(in) :: i
+integer :: idmn
+integer, intent(in) :: j
+real :: u(idmn,*)
+real, intent(inout) :: uyyy, uyyyy
 !     beginning of local variable declarations
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
@@ -1526,7 +1553,13 @@ end subroutine dyfn
 subroutine blktri(iflg,np,n,an,bn,cn,mp,m,am,bm,cm,idimy,y, &
    & ierror,w)
 implicit none
-integer :: idimy, ierror, iflg, m, mp, n, np
+integer :: idimy
+integer, intent(inout) :: ierror
+integer, intent(in) :: iflg
+integer :: m
+integer, intent(in) :: mp
+integer :: n
+integer, intent(in) :: np
 real :: am(*), an(*), bm(*), bn(*), cm(*), cn(*), w(*), y(idimy,*)
 !     beginning of local variable declarations
 integer :: iw1, iw2, iw3, iwah, iwbh, iwd, iwu, iww, nh, nl
@@ -1696,7 +1729,8 @@ end subroutine blktri
 subroutine blktr1(n,an,bn,cn,m,am,bm,cm,idimy,y,b,w1,w2,w3,wd, &
    & ww,wu,prdct,cprdct)
 implicit none
-integer :: idimy, m, n
+integer :: idimy, m
+integer, intent(in) :: n
 real :: am(*), an(*), b(*), bm(*), bn(*), cm(*), cn(*), w1(*), &
    & w2(*), w3(*), wd(*), wu(*), ww(*), y(idimy,*)
 !     beginning of local variable declarations
@@ -1969,7 +2003,10 @@ end subroutine blktr1
 
 subroutine indxa(i,ir,idxa,na)
 implicit none
-integer :: i, idxa, ir, na
+integer, intent(in) :: i
+integer, intent(inout) :: idxa
+integer, intent(in) :: ir
+integer, intent(inout) :: na
 !     beginning of local variable declarations
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
@@ -1985,7 +2022,10 @@ end subroutine indxa
 
 subroutine indxc(i,ir,idxc,nc)
 implicit none
-integer :: i, idxc, ir, nc
+integer, intent(in) :: i
+integer, intent(inout) :: idxc
+integer, intent(in) :: ir
+integer, intent(inout) :: nc
 !     beginning of local variable declarations
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
@@ -2926,7 +2966,9 @@ end function psgf
 function bsrh(xll,xrr,iz,c,a,bh,f,sgn)
 implicit none
 integer :: iz
-real :: a(*), bh(*), c(*), sgn, xll, xrr
+real :: a(*), bh(*), c(*)
+real, intent(in) :: sgn
+real :: xll, xrr
 real :: f
 real :: bsrh
 !     beginning of local variable declarations

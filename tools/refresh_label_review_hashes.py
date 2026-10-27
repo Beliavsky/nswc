@@ -3,7 +3,8 @@
 Normally only hashes and computed-transfer source line numbers may change.
 The generics mode also repeats the downstream intrinsic binding review. Types,
 constant values, purity/intents, calls, intrinsic bindings, helper expressions,
-and COMMON layouts must agree with the existing reviews.
+and COMMON layouts must agree with the existing reviews. The intents mode
+permits only the separately proved supplemental dummy intent attributes.
 """
 import argparse
 import copy
@@ -84,11 +85,15 @@ def main():
     parser.add_argument('before', type=Path)
     parser.add_argument('after', type=Path)
     parser.add_argument('--apply', action='store_true')
-    parser.add_argument('--conversion', choices=['labels', 'exits', 'generics', 'copies', 'sections'], default='labels')
+    parser.add_argument('--conversion', choices=['labels', 'exits', 'generics', 'copies', 'sections', 'intents'], default='labels')
     parser.add_argument('--compiler', help='Also verify fixed-form symbols, warnings and assembly')
     args = parser.parse_args()
     before, after = args.before.read_bytes(), args.after.read_bytes()
     transformer = transform
+    if args.conversion == 'intents':
+        from additional_intents import transform as transformer, MANIFEST as intent_manifest
+        from validate_additional_intents import verify as verify_intents
+        verify_intents(before, after, json.loads(intent_manifest.read_text()), args.compiler or 'gfortran')
     if args.conversion == 'exits':
         from goto_to_exit import transform as transformer
     if args.conversion == 'generics':
@@ -104,7 +109,7 @@ def main():
         if transformer(before, report) != after:
             raise ValueError('Source change does not match copy cleanup')
         verify_copies(before, after, report, args.compiler or 'gfortran')
-    if args.compiler and args.conversion not in ('copies', 'sections'):
+    if args.compiler and args.conversion not in ('copies', 'sections', 'intents'):
         if args.conversion == 'generics':
             from fixed_generic_intrinsics import review as fixed_review, MANIFEST as fixed_manifest
             if fixed_review(before, args.compiler) != json.loads(fixed_manifest.read_text()):

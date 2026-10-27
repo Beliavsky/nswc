@@ -356,7 +356,7 @@ C     DATA IMACH(10) /  1023 /
 C-----------------------------------------------------------------------
       SUBROUTINE MACH(MO, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
       IMPLICIT NONE
-      INTEGER :: IBETA
+      INTEGER, INTENT(IN) :: IBETA
       INTEGER, INTENT(IN) :: IDMAX, IMAX, MO, N
       REAL, INTENT(INOUT) :: RMACH(3)
       DOUBLE PRECISION, INTENT(INOUT) :: DMACH(3)
@@ -572,7 +572,7 @@ C-----------------------------------------------------------------------
 
       SUBROUTINE RADIX(IBETA)
       IMPLICIT NONE
-      INTEGER :: IBETA
+      INTEGER, INTENT(INOUT) :: IBETA
 C     beginning of local variable declarations
       REAL :: A, B, ONE, Y
       REAL :: D1, D2
@@ -596,8 +596,10 @@ C-----------------------------------------------------------------------
       SUBROUTINE MACH1(N, IBETA, M, MINEXP, MAXEXP, EPS, XINT,
      *                  XMIN, XMAX)
       IMPLICIT NONE
-      INTEGER :: IBETA, M, MAXEXP, MINEXP, N
-      REAL :: EPS, XINT, XMIN, XMAX
+      INTEGER, INTENT(IN) :: IBETA
+      INTEGER, INTENT(INOUT) :: M, MAXEXP, MINEXP
+      INTEGER :: N
+      REAL, INTENT(INOUT) :: EPS, XINT, XMIN, XMAX
 C     beginning of local variable declarations
       INTEGER :: J, K, KM, L
       REAL :: B, B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z, ZERO
@@ -825,8 +827,10 @@ C-----------------------------------------------------------------------
       SUBROUTINE MACH2(N, IBETA, M, MINEXP, MAXEXP, EPS, XINT,
      *                  XMIN, XMAX)
       IMPLICIT NONE
-      INTEGER :: IBETA, M, MAXEXP, MINEXP, N
-      DOUBLE PRECISION :: EPS, XINT, XMIN, XMAX
+      INTEGER, INTENT(IN) :: IBETA
+      INTEGER, INTENT(INOUT) :: M, MAXEXP, MINEXP
+      INTEGER :: N
+      DOUBLE PRECISION, INTENT(INOUT) :: EPS, XINT, XMIN, XMAX
 C     beginning of local variable declarations
       INTEGER :: J, K, KM, L
       DOUBLE PRECISION :: B, B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z,
@@ -2850,7 +2854,7 @@ C *** HERE DA = DB = 0.D0 ***
 
       SUBROUTINE ROT3(A, THETA)
       IMPLICIT NONE
-      REAL :: A(3,3)
+      REAL, INTENT(IN) :: A(3,3)
       REAL, INTENT(INOUT) :: THETA(3)
 C     beginning of local variable declarations
       REAL :: PIHALF, R, T, U, V
@@ -25198,7 +25202,7 @@ C              COMPUTE THE COEFFICIENTS OF THE INVERSE
       SUBROUTINE MPLNMV(MO, AU, NC, AC, FV)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO, NC
-      REAL :: AC(*)
+      REAL, INTENT(IN) :: AC(*)
       REAL, INTENT(IN) :: AU
       REAL, INTENT(OUT) :: FV
 C     beginning of local variable declarations
@@ -25309,7 +25313,7 @@ C-----------------------------------------------------------------------
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NA
       REAL, INTENT(INOUT) :: AN(*)
-      REAL :: AU(*)
+      REAL, INTENT(IN) :: AU(*)
 C     beginning of local variable declarations
       INTEGER :: K, M
       REAL :: DM, TM
@@ -25334,7 +25338,7 @@ C     AN = NORMALIZATION FACTORS (N-ARRAY)
       SUBROUTINE LGRNGV(MO, NA, QU, AU, AN, FF, DF, SF)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO, NA
-      REAL :: AN(*), AU(*)
+      REAL, INTENT(IN) :: AN(*), AU(*)
       REAL, INTENT(INOUT) :: DF(*), FF(*)
       REAL, INTENT(IN) :: QU
       REAL, INTENT(INOUT) :: SF(*)
@@ -25453,7 +25457,7 @@ C     CALL LGRNGV (2, NA, QU, AU, AN, FF, DF, SF) FOR SECOND DERIVATIVES
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NA
       REAL, INTENT(INOUT) :: AC(*)
-      REAL :: AU(*)
+      REAL, INTENT(IN) :: AU(*)
 C     beginning of local variable declarations
       INTEGER :: I, J, K, L
       REAL :: SM, TD, TM
@@ -25506,7 +25510,7 @@ C     AC = POLYNOMIAL COEFFICIENTS (NX(N+1) ARRAY)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MA, NA
       REAL, INTENT(INOUT) :: AA(*), AR(*)
-      REAL :: AU(*)
+      REAL, INTENT(IN) :: AU(*)
 C     beginning of local variable declarations
       INTEGER :: I, J, K, L, M
       REAL :: RM, RN, SM, SN
@@ -25587,7 +25591,7 @@ C     AR = RECURRENCE COEFFICIENTS (2*M-2 ARRAY)
       SUBROUTINE ORTHOV(MO, NA, AU, AR, NF, FF, DF, SF)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO, NA, NF
-      REAL :: AR(*)
+      REAL, INTENT(IN) :: AR(*)
       REAL, INTENT(IN) :: AU
       REAL, INTENT(INOUT) :: DF(*), FF(*), SF(*)
 C     beginning of local variable declarations
@@ -25645,7 +25649,7 @@ C     CALL ORTHOV (2, NA, AU, AR, NF, FF, DF, SF) FOR SECOND DERIVATIVES
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NA, NC
       REAL, INTENT(INOUT) :: AC(*)
-      REAL :: AR(*)
+      REAL, INTENT(IN) :: AR(*)
 C     beginning of local variable declarations
       INTEGER :: J, K, L, M, N
       REAL :: RN, SN, TM
@@ -27077,7 +27081,7 @@ C                         CASE WHEN A(1) = 0
       IMPLICIT NONE
       INTEGER :: IDEG
       INTEGER, INTENT(INOUT) :: NUM
-      DOUBLE PRECISION :: OP(*)
+      DOUBLE PRECISION, INTENT(IN) :: OP(*)
       DOUBLE PRECISION, INTENT(INOUT) :: ZEROR(IDEG), ZEROI(IDEG),
      &DWK(*)
       REAL, INTENT(INOUT) :: WK(*)
@@ -27125,10 +27129,14 @@ C     ERROR RETURN
       SUBROUTINE DRPLY1(OP,IDEG,IDP1,ZEROR,ZEROI,P,QP,K,QK,SVK,
      *                   TEMP,PT,NUM)
       IMPLICIT NONE
-      INTEGER :: IDEG, IDP1, NUM
-      DOUBLE PRECISION :: OP(IDP1), ZEROR(IDEG), ZEROI(IDEG), P(IDP1),
-     &QP(IDP1), K(IDP1), QK(IDP1), SVK(IDP1), TEMP(IDP1)
-      REAL :: PT(IDP1)
+      INTEGER :: IDEG
+      INTEGER, INTENT(IN) :: IDP1
+      INTEGER, INTENT(INOUT) :: NUM
+      DOUBLE PRECISION, INTENT(IN) :: OP(IDP1)
+      DOUBLE PRECISION, INTENT(INOUT) :: ZEROR(IDEG), ZEROI(IDEG)
+      DOUBLE PRECISION :: P(IDP1), QP(IDP1), K(IDP1), QK(IDP1),
+     &SVK(IDP1), TEMP(IDP1)
+      REAL, INTENT(INOUT) :: PT(IDP1)
 C     beginning of local variable declarations
       INTEGER :: I, J, JJ, L, N, NM1, NN, NZ
       DOUBLE PRECISION :: AA, BB, CC, FACTOR, T
@@ -27343,9 +27351,10 @@ C     STORE THE ZEROS OBTAINED AND DEFLATE THE POLYNOMIAL.
 
       SUBROUTINE FXSHFR(L2, NZ, NN, P, QP, K, QK, SVK)
       IMPLICIT NONE
-      INTEGER :: NN
+      INTEGER, INTENT(IN) :: NN
       DOUBLE PRECISION :: P(NN), QP(NN), K(NN), QK(NN), SVK(NN)
-      INTEGER :: L2, NZ
+      INTEGER, INTENT(IN) :: L2
+      INTEGER, INTENT(INOUT) :: NZ
 C     beginning of local variable declarations
       INTEGER :: N
       DOUBLE PRECISION :: SVU, SVV, UI, VI, S
@@ -27459,9 +27468,10 @@ C     SECOND STAGE
 
       SUBROUTINE QUADIT(UU, VV, NZ, NN, P, QP, K, QK)
       IMPLICIT NONE
-      INTEGER :: NN
-      DOUBLE PRECISION :: UU, VV, P(NN), QP(NN), K(NN), QK(NN)
-      INTEGER :: NZ
+      INTEGER, INTENT(IN) :: NN
+      DOUBLE PRECISION, INTENT(IN) :: UU, VV
+      DOUBLE PRECISION :: P(NN), QP(NN), K(NN), QK(NN)
+      INTEGER, INTENT(INOUT) :: NZ
 C     beginning of local variable declarations
       INTEGER :: N
       DOUBLE PRECISION :: UI, VI
@@ -27545,8 +27555,11 @@ C     IF VI IS ZERO THE ITERATION IS NOT CONVERGING
 
       SUBROUTINE REALIT(SSS, NZ, IFLAG, NN, P, QP, K, QK)
       IMPLICIT NONE
-      INTEGER :: IFLAG, NN, NZ
-      DOUBLE PRECISION :: SSS, P(NN), QP(NN), K(NN), QK(NN)
+      INTEGER, INTENT(INOUT) :: IFLAG
+      INTEGER, INTENT(IN) :: NN
+      INTEGER, INTENT(INOUT) :: NZ
+      DOUBLE PRECISION, INTENT(INOUT) :: SSS
+      DOUBLE PRECISION :: P(NN), QP(NN), K(NN), QK(NN)
 C     beginning of local variable declarations
       INTEGER :: I, J, N
       DOUBLE PRECISION :: PV, KV, T, S
@@ -27635,8 +27648,8 @@ C     USE UNSCALED FORM
 
       SUBROUTINE CALCSC(TYPE, N, K, QK)
       IMPLICIT NONE
-      INTEGER :: N
-      INTEGER :: TYPE
+      INTEGER, INTENT(IN) :: N
+      INTEGER, INTENT(INOUT) :: TYPE
       DOUBLE PRECISION :: K(N), QK(N)
 C     beginning of local variable declarations
       DOUBLE PRECISION :: TOL
@@ -27682,8 +27695,8 @@ C     TYPE=1 INDICATES THAT ALL FORMULAS ARE DIVIDED BY C
 
       SUBROUTINE NEXTK(TYPE, N, QP, K, QK)
       IMPLICIT NONE
-      INTEGER :: N
-      INTEGER :: TYPE
+      INTEGER, INTENT(IN) :: N
+      INTEGER, INTENT(IN) :: TYPE
       DOUBLE PRECISION :: QP(N), K(N), QK(N)
 C     beginning of local variable declarations
       INTEGER :: I
@@ -27726,9 +27739,10 @@ C     USE UNSCALED FORM OF THE RECURRENCE IF TYPE IS 3
 
       SUBROUTINE NEWEST(TYPE, UU, VV, NN, P, K)
       IMPLICIT NONE
-      INTEGER :: NN
-      INTEGER :: TYPE
-      DOUBLE PRECISION :: UU, VV, P(NN), K(NN)
+      INTEGER, INTENT(IN) :: NN
+      INTEGER, INTENT(IN) :: TYPE
+      DOUBLE PRECISION, INTENT(INOUT) :: UU, VV
+      DOUBLE PRECISION :: P(NN), K(NN)
 C     beginning of local variable declarations
       INTEGER :: N
       DOUBLE PRECISION :: A4, A5, B1, B2, C1, C2, C3, C4, TEMP
@@ -29248,7 +29262,7 @@ C     PROCEDURE..SCALE-CHECK
       SUBROUTINE SROTM(N,SX,INCX,SY,INCY,SPARAM)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, INCY, N
-      REAL :: SPARAM(5)
+      REAL, INTENT(IN) :: SPARAM(5)
       REAL, INTENT(INOUT) :: SX(*), SY(*)
 C     beginning of local variable declarations
       INTEGER :: I, KX, KY, NSTEPS
@@ -29496,7 +29510,7 @@ C     PROCEDURE..SCALE-CHECK
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, INCY, N
       DOUBLE PRECISION, INTENT(INOUT) :: DX(*)
-      DOUBLE PRECISION :: DPARAM(5)
+      DOUBLE PRECISION, INTENT(IN) :: DPARAM(5)
       DOUBLE PRECISION, INTENT(INOUT) :: DY(*)
 C     beginning of local variable declarations
       INTEGER :: I, KX, KY, NSTEPS
@@ -32491,9 +32505,9 @@ C DO NOT USE IF DEC HAS SET IER .NE. 0.
 C OUTPUT..
 C   B = SOLUTION VECTOR, X .
 C-----------------------------------------------------------------------
-      INTEGER :: IP
+      INTEGER, INTENT(IN) :: IP
       INTEGER, INTENT(IN) :: N, NDIM
-      REAL :: A(NDIM, N)
+      REAL, INTENT(IN) :: A(NDIM, N)
       REAL, INTENT(INOUT) :: B(N)
       DIMENSION IP(N)
 C     beginning of local variable declarations
@@ -32821,7 +32835,7 @@ C                          ERROR RETURN
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IWK
       INTEGER, INTENT(IN) :: KA, MO, N
-      REAL :: A(KA,N), B(N)
+      REAL, INTENT(IN) :: A(KA,N), B(N)
       REAL, INTENT(INOUT) :: WK(*), X(N)
       DIMENSION IWK(N)
 C     beginning of local variable declarations
@@ -32851,9 +32865,10 @@ C            SOLVE THE SYSTEM OF EQUATIONS AX = B
       SUBROUTINE LUIMP(A, KA, N, Q, KQ, IPVT, B, X, R, IND)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IND
-      INTEGER :: IPVT
+      INTEGER, INTENT(IN) :: IPVT
       INTEGER, INTENT(IN) :: KA, KQ, N
-      REAL :: A(KA,N), B(N), Q(KQ,N)
+      REAL, INTENT(IN) :: A(KA,N), B(N)
+      REAL :: Q(KQ,N)
       REAL, INTENT(INOUT) :: R(N), X(N)
       DIMENSION IPVT(N)
 C     beginning of local variable declarations
@@ -34397,9 +34412,9 @@ C       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
       SUBROUTINE ARCESL(ARRAY, MTRSTR, NMBLKS, PIVOT, B, X)
       IMPLICIT NONE
-      INTEGER :: MTRSTR(3,*)
+      INTEGER, INTENT(IN) :: MTRSTR(3,*)
       INTEGER, INTENT(IN) :: NMBLKS
-      REAL :: ARRAY(*)
+      REAL, INTENT(IN) :: ARRAY(*)
       REAL, INTENT(INOUT) :: B(*), X(*)
       INTEGER, INTENT(IN) :: PIVOT(*)
 C     beginning of local variable declarations
@@ -34574,7 +34589,7 @@ C       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE ARCEFS(BLOCK, NRWBLK, NCLPIV, NOVRLP, B, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCLPIV, NOVRLP, NRWBLK
-      REAL :: BLOCK(NRWBLK,NOVRLP)
+      REAL, INTENT(IN) :: BLOCK(NRWBLK,NOVRLP)
       REAL, INTENT(INOUT) :: B(*), X(*)
 C     beginning of local variable declarations
       INTEGER :: I, IPLUSL, J, JPLUSL, L, LONG
@@ -34600,9 +34615,9 @@ C***************************************************************
       SUBROUTINE ARCEFM(BLOCK, NRWBLK, NCLPIV, B, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCLPIV, NRWBLK
-      REAL :: BLOCK(NRWBLK,NCLPIV)
+      REAL, INTENT(IN) :: BLOCK(NRWBLK,NCLPIV)
       REAL, INTENT(INOUT) :: B(*)
-      REAL :: X(*)
+      REAL, INTENT(IN) :: X(*)
 C     beginning of local variable declarations
       INTEGER :: J, L, NCLPVL
       REAL :: XJ
@@ -34622,7 +34637,7 @@ C***************************************************************
       SUBROUTINE ARCEFE(BLOCK, NRWBLK, NRWPIV, PIVOT, B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NRWBLK, NRWPIV
-      REAL :: BLOCK(NRWBLK,NRWPIV)
+      REAL, INTENT(IN) :: BLOCK(NRWBLK,NRWPIV)
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: PIVOT(NRWPIV)
 C     beginning of local variable declarations
@@ -34652,7 +34667,7 @@ C***************************************************************
       SUBROUTINE ARCEBS(BLOCK, NRWBLK, NCLBLK, NRWPIV, B, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCLBLK, NRWBLK, NRWPIV
-      REAL :: BLOCK(NRWBLK,NCLBLK)
+      REAL, INTENT(IN) :: BLOCK(NRWBLK,NCLBLK)
       REAL, INTENT(INOUT) :: B(*), X(*)
 C     beginning of local variable declarations
       INTEGER :: J, JMIN1, L, NJ
@@ -34676,9 +34691,9 @@ C***************************************************************
       SUBROUTINE ARCEBM(BLOCK, NRWBLK, NCLBLK, NRWPIV, B, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCLBLK, NRWBLK, NRWPIV
-      REAL :: BLOCK(NRWBLK,NCLBLK)
+      REAL, INTENT(IN) :: BLOCK(NRWBLK,NCLBLK)
       REAL, INTENT(INOUT) :: B(*)
-      REAL :: X(*)
+      REAL, INTENT(IN) :: X(*)
 C     beginning of local variable declarations
       INTEGER :: J, L, NRWPV1
       REAL :: XJ
@@ -34698,7 +34713,7 @@ C***************************************************************
       SUBROUTINE ARCEBE(BLOCK, NRWBLK, NCLPIV, NOVRLP, PIVOT, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCLPIV, NOVRLP, NRWBLK
-      REAL :: BLOCK(NRWBLK,NOVRLP)
+      REAL, INTENT(IN) :: BLOCK(NRWBLK,NOVRLP)
       REAL, INTENT(INOUT) :: X(*)
       INTEGER, INTENT(IN) :: PIVOT(NRWBLK)
 C     beginning of local variable declarations
@@ -34864,8 +34879,9 @@ C-----------------------  END OF SUBROUTINE DECBT  ---------------------
       SUBROUTINE SOLBT(M, N, A, B, C, Y, IP)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
-      INTEGER :: N, IP(M,N)
-      REAL :: A(M,M,N)
+      INTEGER :: N
+      INTEGER, INTENT(IN) :: IP(M,N)
+      REAL, INTENT(IN) :: A(M,M,N)
       REAL, INTENT(IN) :: B(M,M,N), C(M,M,N)
       REAL, INTENT(INOUT) :: Y(M,N)
 C     beginning of local variable declarations
@@ -58729,7 +58745,7 @@ C     --------------
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(INOUT) :: IWK
       INTEGER, INTENT(IN) :: KA, KB, M, N, NB
-      REAL :: A(KA,N)
+      REAL, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,NB), WK(*)
       DIMENSION IWK(N)
 C     beginning of local variable declarations
@@ -58886,7 +58902,7 @@ C                                       ORTHOGONAL MATRIX.
 
       SUBROUTINE ORSOL(M, N, QR, MS, S, IP, X)
       IMPLICIT NONE
-      INTEGER :: IP
+      INTEGER, INTENT(IN) :: IP
       INTEGER, INTENT(IN) :: M, MS, N
       REAL :: QR(MS,N), S(N)
       REAL, INTENT(INOUT) :: X(M)
@@ -58979,9 +58995,10 @@ C                                       LEAST SQUARES SOLUTION.
 
       SUBROUTINE ORIMP(M, N, A, KA, QR, MS, S, IP, B, X, R, EXIT)
       IMPLICIT NONE
-      INTEGER :: IP
+      INTEGER, INTENT(IN) :: IP
       INTEGER, INTENT(IN) :: KA, M, MS, N
-      REAL :: A(KA,N), B(M), QR(MS,N)
+      REAL, INTENT(IN) :: A(KA,N), B(M)
+      REAL :: QR(MS,N)
       REAL, INTENT(INOUT) :: R(M)
       REAL :: S(N)
       REAL, INTENT(INOUT) :: X(M)
@@ -68964,9 +68981,9 @@ C     LAST CARD OF SUBROUTINE R1UPDT.
       INTEGER, INTENT(IN) :: KA
       INTEGER :: M
       INTEGER, INTENT(IN) :: MXITER, N0, NUMGE, NUMLE
-      REAL :: A(KA,N0), B0(M)
+      REAL, INTENT(IN) :: A(KA,N0), B0(M)
       REAL, INTENT(INOUT) :: BI(M,M)
-      REAL :: C(N0)
+      REAL, INTENT(IN) :: C(N0)
       REAL, INTENT(INOUT) :: WK(*), X(*), Z
       DIMENSION IBASIS(M)
 C     beginning of local variable declarations
@@ -69797,13 +69814,14 @@ C              COMPUTE Z  (NSTEP = 3)
      *                       NUMLE,NUMGE,BI,WK,IWK)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IBASIS, IND
-      INTEGER :: ITA(*)
+      INTEGER, INTENT(IN) :: ITA(*)
       INTEGER, INTENT(INOUT) :: ITER, IWK(*)
-      INTEGER :: JTA(*), M
+      INTEGER, INTENT(IN) :: JTA(*)
+      INTEGER :: M
       INTEGER, INTENT(IN) :: MXITER, N0, NUMGE, NUMLE
-      REAL :: B0(M)
+      REAL, INTENT(IN) :: B0(M)
       REAL, INTENT(INOUT) :: BI(M,M)
-      REAL :: C(N0), TA(*)
+      REAL, INTENT(IN) :: C(N0), TA(*)
       REAL, INTENT(INOUT) :: WK(*), X(*), Z
       DIMENSION IBASIS(M)
 C     beginning of local variable declarations
@@ -76304,11 +76322,15 @@ C     THE ROUTINE HAS COMPLETELY FAILED - THE RESULTS SHOULD BE IGNORED
      * COEFS, IERR, KMAX, NDEG, NSMTH, ANORM, DX, MO, KBREAK, BRAKPT,
      * KDIFF, VALLFT, VALRGT)
       IMPLICIT NONE
-      INTEGER :: IERR, KBREAK, KDIFF(KBREAK), KMAX, MO, NDEG, NPIECE,
-     &NSMTH
-      DOUBLE PRECISION :: XKNOTS(*), COEFS(KMAX,*)
-      DOUBLE PRECISION :: ANORM, BRAKPT(KBREAK), DX, EPSLN, ERREST,
-     &VALLFT(KBREAK), VALRGT(KBREAK), XLFT, XRGT
+      INTEGER, INTENT(INOUT) :: IERR
+      INTEGER, INTENT(IN) :: KBREAK, KDIFF(KBREAK), KMAX, MO, NDEG
+      INTEGER, INTENT(INOUT) :: NPIECE
+      INTEGER, INTENT(IN) :: NSMTH
+      DOUBLE PRECISION, INTENT(INOUT) :: XKNOTS(*), COEFS(KMAX,*)
+      DOUBLE PRECISION, INTENT(IN) :: ANORM, BRAKPT(KBREAK), DX, EPSLN
+      DOUBLE PRECISION, INTENT(INOUT) :: ERREST
+      DOUBLE PRECISION, INTENT(IN) :: VALLFT(KBREAK), VALRGT(KBREAK),
+     &XLFT, XRGT
       DOUBLE PRECISION :: F
       EXTERNAL F
 C     beginning of local variable declarations
@@ -76382,8 +76404,10 @@ C     BRIGHT     VALRGT
 
       SUBROUTINE ADAPT1(F, XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
       IMPLICIT NONE
-      INTEGER :: IERR, KDIMEN, KMAX, NDIMEN
-      DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
+      INTEGER, INTENT(INOUT) :: IERR
+      INTEGER, INTENT(IN) :: KDIMEN, KMAX, NDIMEN
+      DOUBLE PRECISION, INTENT(INOUT) :: XKNOTS(KDIMEN),
+     &COEFS(KMAX,NDIMEN)
       DOUBLE PRECISION :: F
       EXTERNAL F
 C     beginning of local variable declarations
@@ -76577,8 +76601,10 @@ C                CHECK ON THE NUMBER OF KNOTS GENERATED
 
       SUBROUTINE ADSET(XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
       IMPLICIT NONE
-      INTEGER :: IERR, KDIMEN, KMAX, NDIMEN
-      DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
+      INTEGER, INTENT(INOUT) :: IERR
+      INTEGER, INTENT(IN) :: KDIMEN, KMAX, NDIMEN
+      DOUBLE PRECISION, INTENT(INOUT) :: XKNOTS(KDIMEN)
+      DOUBLE PRECISION, INTENT(IN) :: COEFS(KMAX,NDIMEN)
 C     beginning of local variable declarations
       INTEGER :: J, K, KBOTH, KLEFT, KRIGHT, LIMSM
       INTEGER :: LEFTX, NINTRP
@@ -76688,7 +76714,7 @@ C         BAD VALUE IN DERIVATIVE BREAKS
 
       SUBROUTINE ADTAKE(IERR)
       IMPLICIT NONE
-      INTEGER :: IERR
+      INTEGER, INTENT(INOUT) :: IERR
 C     beginning of local variable declarations
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
@@ -77150,8 +77176,10 @@ C             CHECK FOR DISCARD OF INTERVAL
 
       SUBROUTINE ADPUT(XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
       IMPLICIT NONE
-      INTEGER :: IERR, KDIMEN, KMAX, NDIMEN
-      DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
+      INTEGER, INTENT(INOUT) :: IERR
+      INTEGER, INTENT(IN) :: KDIMEN, KMAX, NDIMEN
+      DOUBLE PRECISION, INTENT(INOUT) :: XKNOTS(KDIMEN),
+     &COEFS(KMAX,NDIMEN)
 C     beginning of local variable declarations
       INTEGER :: K
       INTEGER :: LEFTX, NINTRP
@@ -77223,7 +77251,8 @@ C            PUT THE NEW KNOTS IN XKNOTS
 
       SUBROUTINE ADTRAN(D, POWERS)
       IMPLICIT NONE
-      DOUBLE PRECISION :: D(20,*), POWERS(*)
+      DOUBLE PRECISION :: D(20,*)
+      DOUBLE PRECISION, INTENT(INOUT) :: POWERS(*)
 C     beginning of local variable declarations
       INTEGER :: I, II, J, K, KHI, KOEF, L, LTOP, NI, NI1, NL, NR, NRI,
      &NRI1, NRL, NRLI, NRLK
@@ -77826,7 +77855,7 @@ C  ERROR RETURN.
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A
-      REAL :: X(N), Y(N)
+      REAL, INTENT(IN) :: X(N), Y(N)
       REAL :: TRP
 C     beginning of local variable declarations
       INTEGER :: I, IL, IR, NM1
@@ -77862,7 +77891,7 @@ C     EVALUATION
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NI
       REAL, INTENT(INOUT) :: T(M)
-      REAL :: X(N), XI(NI), Y(N)
+      REAL, INTENT(IN) :: X(N), XI(NI), Y(N)
       REAL, INTENT(INOUT) :: YI(NI)
 C     beginning of local variable declarations
       INTEGER :: I, II, IL, ILM1, ILOLD, IPM, IR, ISTEP, J, JMAX, K, L,
@@ -78016,7 +78045,7 @@ C     ERROR RETURN
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N), T(N)
-      REAL :: X(N), Y(N)
+      REAL, INTENT(IN) :: X(N), Y(N)
 C     beginning of local variable declarations
       INTEGER :: I, IBEG, IEND, K
       REAL :: DIFF, F, R
@@ -81900,7 +81929,7 @@ C          PIECEWISE CONSTANT CASE
       SUBROUTINE PPVAL(X, A, L, N, XI, YI, NI)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L, N, NI
-      REAL :: A(L,N), X(N), XI(NI)
+      REAL, INTENT(IN) :: A(L,N), X(N), XI(NI)
       REAL, INTENT(INOUT) :: YI(NI)
 C     beginning of local variable declarations
       INTEGER :: I, IL, IR, J, K, LM1, LMJ
@@ -94904,8 +94933,17 @@ C     beginning of local variable declarations
       IMPLICIT NONE
       REAL :: F
       EXTERNAL F
-      INTEGER :: IDATA(*), IER, MCALLS, NCALLS, NW
-      REAL :: ANS, EPS, ERR, RDATA(*), T(2,*), W(6,NW)
+      INTEGER :: IDATA(*)
+      INTEGER, INTENT(INOUT) :: IER
+      INTEGER, INTENT(IN) :: MCALLS
+      INTEGER, INTENT(INOUT) :: NCALLS
+      INTEGER, INTENT(IN) :: NW
+      REAL, INTENT(INOUT) :: ANS
+      REAL, INTENT(IN) :: EPS
+      REAL, INTENT(INOUT) :: ERR
+      REAL :: RDATA(*)
+      REAL, INTENT(IN) :: T(2,*)
+      REAL, INTENT(INOUT) :: W(6,NW)
 C     beginning of local variable declarations
       INTEGER :: I, J, JKP, K, L, MAXC, MAXK, MW, NFE
       REAL :: ONE, POINT5, ZERO
@@ -95235,10 +95273,17 @@ C       COMPUTE ESTIMATES FOR INTEGRAL AND ERROR
       SUBROUTINE IESLV(KERNEL,RHFCN,A,B,EP,IFLAG,T,X,NT,NUPPER,
      *                     MUPPER,NF,MF,NORM,W,IER)
       IMPLICIT NONE
-      INTEGER :: IER, IFLAG, MF, MUPPER, NF, NT, NUPPER
-      REAL :: A, B, EP, T(*), W(*), X(*)
+      INTEGER, INTENT(INOUT) :: IER
+      INTEGER, INTENT(IN) :: IFLAG
+      INTEGER, INTENT(INOUT) :: MF
+      INTEGER, INTENT(IN) :: MUPPER
+      INTEGER, INTENT(INOUT) :: NF, NT
+      INTEGER, INTENT(IN) :: NUPPER
+      REAL, INTENT(IN) :: A, B
+      REAL, INTENT(INOUT) :: EP, T(*), W(*), X(*)
       REAL :: RHFCN
-      REAL :: KERNEL, NORM
+      REAL :: KERNEL
+      REAL, INTENT(INOUT) :: NORM
       EXTERNAL KERNEL, RHFCN
 C     beginning of local variable declarations
       INTEGER :: I1, I10, I11, I12, I13, I14, I15, I16, I17, I18, I19,
@@ -95402,11 +95447,24 @@ C   WHICH W IS TO BE SPLIT.
      *   DELN,TM,TN,XM,XMZ,WM,WN,OLDX,SAVE,XN,SAVE2,ASIDE,ASIDE3,
      *   IMKNN)
       IMPLICIT NONE
-      INTEGER :: IER, IFLAG, MUP, NHALF, NT, NUP
-      REAL :: A, ASIDE(NUP,*), ASIDE3(NUP,NUP), B, CUTOFF, DELN(NUP),
-     &EP, OLDX(MUP), R(MUP), RH(NUP), RHS(MUP), ROOTRT, SAVE(MUP),
-     &SAVE2(MUP), T(*), TM(MUP), TN(NUP), UNITRD, WM(MUP), WN(NUP),
-     &X(*), XM(MUP), XMZ(MUP), XN(NUP)
+      INTEGER, INTENT(INOUT) :: IER
+      INTEGER, INTENT(IN) :: IFLAG, MUP, NHALF
+      INTEGER, INTENT(INOUT) :: NT
+      INTEGER, INTENT(IN) :: NUP
+      REAL, INTENT(IN) :: A
+      REAL :: ASIDE(NUP,*), ASIDE3(NUP,NUP)
+      REAL, INTENT(IN) :: B, CUTOFF
+      REAL :: DELN(NUP)
+      REAL, INTENT(INOUT) :: EP
+      REAL :: OLDX(MUP), R(MUP), RH(NUP), RHS(MUP)
+      REAL, INTENT(IN) :: ROOTRT
+      REAL :: SAVE(MUP), SAVE2(MUP)
+      REAL, INTENT(INOUT) :: T(*)
+      REAL :: TM(MUP), TN(NUP)
+      REAL, INTENT(IN) :: UNITRD
+      REAL :: WM(MUP), WN(NUP)
+      REAL, INTENT(INOUT) :: X(*)
+      REAL :: XM(MUP), XMZ(MUP), XN(NUP)
       REAL :: RHFCN
       REAL :: KERNEL, LUFACT(NUP,NUP), KMM(NUP,NUP), KMN(NUP,NHALF),
      &KNM(NHALF,NUP), IMKNN(NUP,NUP)
@@ -96091,10 +96149,22 @@ C   POINT FORMULA IS APPLIED TO EACH SUBINTERVAL.
      *   IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM,XMZ,KMM,KMN,KNM,
      *   RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
       IMPLICIT NONE
-      INTEGER :: IER, IERSET, IFLAG, MF, NF, NHALF, NT, NUP
-      REAL :: DELN(NF), ELINSY, EP, EPS, ERROR, R(MF), RH(NF), RHS(MF),
-     &T(*), TM(MF), TN(NF), TV(MF), WM(MF), WN(NF), WV(MF), X(*),
-     &XM(MF), XMZ(MF), XNORM, XV(MF)
+      INTEGER, INTENT(INOUT) :: IER
+      INTEGER, INTENT(IN) :: IERSET, IFLAG
+      INTEGER :: MF, NF
+      INTEGER, INTENT(IN) :: NHALF
+      INTEGER, INTENT(INOUT) :: NT
+      INTEGER, INTENT(IN) :: NUP
+      REAL :: DELN(NF), ELINSY
+      REAL, INTENT(INOUT) :: EP
+      REAL, INTENT(IN) :: EPS, ERROR
+      REAL :: R(MF), RH(NF), RHS(MF)
+      REAL, INTENT(INOUT) :: T(*)
+      REAL :: TM(MF), TN(NF), TV(MF), WM(MF), WN(NF), WV(MF)
+      REAL, INTENT(INOUT) :: X(*)
+      REAL :: XM(MF), XMZ(MF)
+      REAL, INTENT(IN) :: XNORM
+      REAL :: XV(MF)
       REAL :: RHFCN
       REAL :: KERNEL, KMM(NUP,NUP), KMN(NUP,NHALF), KNM(NHALF,NUP),
      &IMKNN(NUP,NUP), LUFACT(NUP,NUP)
@@ -96199,7 +96269,7 @@ C   COMPUTE NYSTROM INTERPOLATES AT THE NODES IN T.
       INTEGER, INTENT(IN) :: IFLG, M
       INTEGER :: N
       INTEGER, INTENT(IN) :: NHALF
-      INTEGER :: NUP
+      INTEGER, INTENT(IN) :: NUP
       REAL, INTENT(INOUT) :: DELN(N), R(M), RH(N)
       REAL :: RHFCN, RHS(M), TM(M), TN(N), WM(M), WN(N)
       REAL, INTENT(INOUT) :: XM(M)
@@ -96302,9 +96372,11 @@ C   CALCULATE XM.
 
       SUBROUTINE LNSYS(A,D,M,N,B,X,OPTION,IERR)
       IMPLICIT NONE
-      INTEGER :: IERR, M, N
+      INTEGER, INTENT(INOUT) :: IERR
+      INTEGER, INTENT(IN) :: M
+      INTEGER :: N
       REAL :: A(M,N), D(M,N), B(N), X(N)
-      INTEGER :: OPTION
+      INTEGER, INTENT(IN) :: OPTION
 C     beginning of local variable declarations
       INTEGER :: I, IP1, ISWIT, J, K, KP1, L, NM1, NMI
       REAL :: C, SUM, T
@@ -99051,7 +99123,8 @@ C     INTERVAL MODE
      *                  RWORK,LRW,IWORK,LIW,RPAR,IPAR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IDID
-      INTEGER :: LIW, LRW, NEQ
+      INTEGER, INTENT(IN) :: LIW, LRW
+      INTEGER :: NEQ
       REAL, INTENT(INOUT) :: AERR, RERR, T
       REAL :: TOUT
       EXTERNAL F
@@ -99086,7 +99159,8 @@ C     --------------
      *                   RWORK,LRW,IWORK,LIW,RPAR,IPAR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IDID
-      INTEGER :: LIW, LRW, NEQ
+      INTEGER, INTENT(IN) :: LIW, LRW
+      INTEGER :: NEQ
       REAL, INTENT(INOUT) :: T
       REAL :: TOUT
       EXTERNAL F
@@ -99128,8 +99202,16 @@ C     -------------
       SUBROUTINE STFODE(F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID,
      1                   RWORK,LRW,IWORK,LIW,RPAR,IPAR,JAC)
       IMPLICIT NONE
-      INTEGER :: IDID, INFO(*), IPAR(*), IWORK, LIW, LRW, NEQ
-      REAL :: ATOL(*), RPAR(*), RTOL(*), RWORK(LRW), T, TOUT, Y(NEQ)
+      INTEGER, INTENT(INOUT) :: IDID, INFO(*)
+      INTEGER :: IPAR(*)
+      INTEGER, INTENT(INOUT) :: IWORK
+      INTEGER, INTENT(IN) :: LIW, LRW
+      INTEGER :: NEQ
+      REAL, INTENT(INOUT) :: ATOL(*)
+      REAL :: RPAR(*)
+      REAL, INTENT(INOUT) :: RTOL(*), RWORK(LRW), T
+      REAL :: TOUT
+      REAL, INTENT(INOUT) :: Y(NEQ)
       EXTERNAL F, JAC
       DIMENSION IWORK(LIW)
 C     beginning of local variable declarations
@@ -99775,8 +99857,8 @@ C-----------------------------------------------------------------------
 C THIS ROUTINE RESTORES FROM RSAV AND ISAV THE CONTENTS OF COMMON
 C BLOCK DEBDF1, WHICH IS USED INTERNALLY IN THE SFODE PACKAGE.
 C-----------------------------------------------------------------------
-      INTEGER :: ISAV(*)
-      REAL :: RSAV(*)
+      INTEGER, INTENT(IN) :: ISAV(*)
+      REAL, INTENT(IN) :: RSAV(*)
 C     beginning of local variable declarations
       INTEGER :: I, ILS, LENILS, LENRLS
       REAL :: RLS
@@ -99799,8 +99881,8 @@ C DEBDF1, WHICH IS USED INTERNALLY IN THE SFODE PACKAGE.
 C RSAV = REAL ARRAY OF LENGTH 218 OR MORE.
 C ISAV = INTEGER ARRAY OF LENGTH 33 OR MORE.
 C-----------------------------------------------------------------------
-      INTEGER :: ISAV(*)
-      REAL :: RSAV(*)
+      INTEGER, INTENT(INOUT) :: ISAV(*)
+      REAL, INTENT(INOUT) :: RSAV(*)
 C     beginning of local variable declarations
       INTEGER :: I, ILS, LENILS, LENRLS
       REAL :: RLS
@@ -99819,11 +99901,20 @@ C----------------------- END OF SUBROUTINE SVCO -----------------------
      1                YH,YH1,EWT,SAVF,ACOR,WM,IWM,JAC,INTOUT,
      2                TSTOP,TOLFAC,DELSGN,RPAR,IPAR)
       IMPLICIT NONE
-      INTEGER :: IDID, IPAR(*), IWM(*), NEQ
-      REAL :: ACOR(NEQ), ATOL(*), DELSGN, EWT(NEQ), RPAR(*), RTOL(*),
-     &SAVF(NEQ), T, TOLFAC, TOUT, TSTOP, WM(*), Y(NEQ), YH(NEQ,*),
-     &YH1(*), YPOUT(NEQ)
-      LOGICAL :: INTOUT
+      INTEGER, INTENT(INOUT) :: IDID
+      INTEGER :: IPAR(*)
+      INTEGER, INTENT(INOUT) :: IWM(*)
+      INTEGER :: NEQ
+      REAL :: ACOR(NEQ)
+      REAL, INTENT(INOUT) :: ATOL(*)
+      REAL :: DELSGN, EWT(NEQ), RPAR(*)
+      REAL, INTENT(INOUT) :: RTOL(*)
+      REAL :: SAVF(NEQ)
+      REAL, INTENT(INOUT) :: T
+      REAL :: TOLFAC, TOUT, TSTOP, WM(*)
+      REAL, INTENT(INOUT) :: Y(NEQ)
+      REAL :: YH(NEQ,*), YH1(*), YPOUT(NEQ)
+      LOGICAL, INTENT(INOUT) :: INTOUT
       EXTERNAL F, JAC
 C     beginning of local variable declarations
       INTEGER :: INTFLG, K, L, LTOL, MAX, MAXNUM
@@ -100363,8 +100454,10 @@ C THE QUANTITIES  NQ = NQCUR, L = NQ+1, N = NEQ, TN, AND H ARE
 C COMMUNICATED BY COMMON.  THE ABOVE SUM IS DONE IN REVERSE ORDER.
 C IFLAG IS RETURNED NEGATIVE IF EITHER K OR T IS OUT OF BOUNDS.
 C-----------------------------------------------------------------------
-      INTEGER :: K, NYH, IFLAG
-      REAL :: T, YH(NYH,*), DKY(*)
+      INTEGER, INTENT(IN) :: K, NYH
+      INTEGER, INTENT(INOUT) :: IFLAG
+      REAL, INTENT(IN) :: T
+      REAL :: YH(NYH,*), DKY(*)
 C     beginning of local variable declarations
       INTEGER :: I, IC, IER, IOWND, IOWNS, J, JB, JB2, JJ, JJ1, JP1,
      &JSTART, KFLAG, L, MAXORD, METH, MITER, N, NFE, NJE, NQ, NQU, NST
@@ -100423,8 +100516,10 @@ C----------------------- END OF SUBROUTINE INTYD -----------------------
       INTEGER :: IPAR(*)
       REAL :: RPAR(*)
       EXTERNAL F, JAC
-      INTEGER :: NEQ, NYH, IWM(*)
-      REAL :: Y(*), YH(NYH,*), YH1(*), EWT(*), SAVF(*), ACOR(*), WM(*)
+      INTEGER :: NEQ, NYH
+      INTEGER, INTENT(INOUT) :: IWM(*)
+      REAL, INTENT(INOUT) :: Y(*)
+      REAL :: YH(NYH,*), YH1(*), EWT(*), SAVF(*), ACOR(*), WM(*)
 C     beginning of local variable declarations
       INTEGER :: IPNYH
       INTEGER :: IOD, KSTEPS
@@ -101012,9 +101107,11 @@ C----------------------- END OF SUBROUTINE CFOD  -----------------------
       IMPLICIT NONE
       INTEGER :: IPAR(*)
       REAL :: RPAR(*)
-      INTEGER :: NEQ, NYH, IWM(*)
+      INTEGER :: NEQ, NYH
+      INTEGER, INTENT(INOUT) :: IWM(*)
       EXTERNAL F, JAC
-      REAL :: Y(*), YH(NYH,*), EWT(*), FTEM(*), SAVF(*), WM(*)
+      REAL, INTENT(INOUT) :: Y(*)
+      REAL :: YH(NYH,*), EWT(*), FTEM(*), SAVF(*), WM(*)
 C     beginning of local variable declarations
       INTEGER :: I, I1, I2, IER, II, IOWND, IOWNS, J, J1, JJ, JSTART,
      &KFLAG, L, LENP, MAXORD, MBA, MBAND, MEB1, MEBAND, METH, MITER, ML,
@@ -101186,8 +101283,10 @@ C----------------------- END OF SUBROUTINE PJAC -----------------------
 C   SLVS SOLVES THE LINEAR SYSTEM IN THE ITERATION SCHEME FOR THE
 C   INTEGRATOR PACKAGE SFODE.
 C***ROUTINES CALLED  SGESL,SGBSL
-      INTEGER :: IWM(*)
-      REAL :: WM(*), X(*), TEM(*)
+      INTEGER, INTENT(IN) :: IWM(*)
+      REAL :: WM(*)
+      REAL, INTENT(INOUT) :: X(*)
+      REAL :: TEM(*)
 C     beginning of local variable declarations
       INTEGER :: I, IER, IOWND, IOWNS, JSTART, KFLAG, L, MAXORD, MEBAND,
      &METH, MITER, ML, MU, N, NFE, NJE, NQ, NQU, NST
@@ -101672,7 +101771,8 @@ C     -------------------
      *                         C, D, NP1, U, KU, W, NW, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
-      INTEGER :: IORD, KU, MP1
+      INTEGER, INTENT(IN) :: IORD
+      INTEGER :: KU, MP1
       INTEGER, INTENT(IN) :: NP1
       INTEGER, INTENT(INOUT) :: NW
       REAL :: A, B, C, D
@@ -101907,10 +102007,12 @@ C                   ERROR RETURN
       IMPLICIT NONE
       INTEGER :: IDMN
       INTEGER, INTENT(INOUT) :: IERROR
-      INTEGER :: INTL, IORDER, M, MBDCND, MN, N, NBDCND
-      REAL :: A, ALPHA, B, BETA, C, D, GAMA
+      INTEGER, INTENT(IN) :: INTL, IORDER, M, MBDCND
+      INTEGER :: MN
+      INTEGER, INTENT(IN) :: N, NBDCND
+      REAL, INTENT(IN) :: A, ALPHA, B, BETA, C, D, GAMA
       REAL, INTENT(INOUT) :: PERTRB
-      REAL :: XNU
+      REAL, INTENT(IN) :: XNU
       REAL, INTENT(INOUT) :: GRHS(MN,*), USOL(IDMN,*)
       REAL :: BDA(*), BDB(*), BDC(*), BDD(*)
       REAL, INTENT(INOUT) :: W(*)
@@ -102335,11 +102437,27 @@ C     SET WORK SPACE INDICES
      2                   CN,DN,UN,ZN,AM,BM,CM,DM,UM,ZM,GRHS,MN,USOL,
      3                   IDMN,W,PERTRB,IERROR)
       IMPLICIT NONE
-      INTEGER :: IDMN, IERROR, INTL, IORDER, M, MBDCND, MN, N, NBDCND
-      REAL :: A, ALPHA, AM(*), AN(*), B, BDA(*), BDB(*), BDC(*), BDD(*),
-     &BETA, BM(*), BN(*), C, CM(*), CN(*), D, DM(*), DN(*), GAMA,
-     &GRHS(MN,*), PERTRB, UM(*), UN(*), USOL(IDMN,*), W(*), XNU, ZM(*),
-     &ZN(*)
+      INTEGER :: IDMN
+      INTEGER, INTENT(INOUT) :: IERROR
+      INTEGER, INTENT(IN) :: INTL, IORDER, M, MBDCND
+      INTEGER :: MN
+      INTEGER, INTENT(IN) :: N, NBDCND
+      REAL, INTENT(IN) :: A, ALPHA
+      REAL :: AM(*), AN(*)
+      REAL, INTENT(IN) :: B
+      REAL :: BDA(*), BDB(*), BDC(*), BDD(*)
+      REAL, INTENT(IN) :: BETA
+      REAL :: BM(*), BN(*)
+      REAL, INTENT(IN) :: C
+      REAL :: CM(*), CN(*)
+      REAL, INTENT(IN) :: D
+      REAL :: DM(*), DN(*)
+      REAL, INTENT(IN) :: GAMA
+      REAL :: GRHS(MN,*)
+      REAL, INTENT(INOUT) :: PERTRB
+      REAL :: UM(*), UN(*), USOL(IDMN,*), W(*)
+      REAL, INTENT(IN) :: XNU
+      REAL :: ZM(*), ZN(*)
       EXTERNAL COFX, COFY
 C     beginning of local variable declarations
       INTEGER :: I, I1, IORD, J, MP, NP
@@ -102646,9 +102764,9 @@ C     NO ERROR FOUND
       SUBROUTINE CHKSNG(MBDCND,NBDCND,ALPHA,BETA,GAMA,XNU,COFX,COFY,
      1                   SINGLR)
       IMPLICIT NONE
-      INTEGER :: MBDCND, NBDCND
-      REAL :: ALPHA, BETA, GAMA, XNU
-      LOGICAL :: SINGLR
+      INTEGER, INTENT(IN) :: MBDCND, NBDCND
+      REAL, INTENT(IN) :: ALPHA, BETA, GAMA, XNU
+      LOGICAL, INTENT(INOUT) :: SINGLR
 C     beginning of local variable declarations
       INTEGER :: I, J
       REAL :: AI, BI, CI, DJ, EJ, FJ, XI, YJ
@@ -102691,7 +102809,8 @@ C     THE OPERATOR MUST BE SINGULAR IF THIS POINT IS REACHED
       SUBROUTINE ORTHG(USOL,IDMN,ZN,ZM,PERTRB)
       IMPLICIT NONE
       INTEGER :: IDMN
-      REAL :: PERTRB, USOL(IDMN,*), ZM(*), ZN(*)
+      REAL, INTENT(INOUT) :: PERTRB
+      REAL :: USOL(IDMN,*), ZM(*), ZN(*)
 C     beginning of local variable declarations
       INTEGER :: I, IFNL, II, ISTR, J, JFNL, JJ, JSTR
       REAL :: ETE, UTE
@@ -102732,7 +102851,8 @@ C     SUBTRACT OFF CONSTANT PERTRB
       SUBROUTINE MINSOL(USOL,IDMN,ZN,ZM,PERTB)
       IMPLICIT NONE
       INTEGER :: IDMN
-      REAL :: PERTB, USOL(IDMN,*), ZM(*), ZN(*)
+      REAL, INTENT(IN) :: PERTB
+      REAL :: USOL(IDMN,*), ZM(*), ZN(*)
 C     beginning of local variable declarations
       INTEGER :: I, IFNL, II, ISTR, J, JFNL, JJ, JSTR
       REAL :: ETE, PERTRB, UTE
@@ -102872,8 +102992,11 @@ C     RESET THE RIGHT HAND SIDE IN USOL
 
       SUBROUTINE DXFN(U,IDMN,I,J,UXXX,UXXXX)
       IMPLICIT NONE
-      INTEGER :: I, IDMN, J
-      REAL :: U(IDMN,*), UXXX, UXXXX
+      INTEGER, INTENT(IN) :: I
+      INTEGER :: IDMN
+      INTEGER, INTENT(IN) :: J
+      REAL :: U(IDMN,*)
+      REAL, INTENT(INOUT) :: UXXX, UXXXX
 C     beginning of local variable declarations
       INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
       REAL :: AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
@@ -102939,8 +103062,11 @@ C     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT X=B
 
       SUBROUTINE DYFN(U,IDMN,I,J,UYYY,UYYYY)
       IMPLICIT NONE
-      INTEGER :: I, IDMN, J
-      REAL :: U(IDMN,*), UYYY, UYYYY
+      INTEGER, INTENT(IN) :: I
+      INTEGER :: IDMN
+      INTEGER, INTENT(IN) :: J
+      REAL :: U(IDMN,*)
+      REAL, INTENT(INOUT) :: UYYY, UYYYY
 C     beginning of local variable declarations
       INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
       REAL :: AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
@@ -103008,7 +103134,13 @@ C     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT Y=D
       SUBROUTINE BLKTRI(IFLG,NP,N,AN,BN,CN,MP,M,AM,BM,CM,IDIMY,Y,
      1                   IERROR,W)
       IMPLICIT NONE
-      INTEGER :: IDIMY, IERROR, IFLG, M, MP, N, NP
+      INTEGER :: IDIMY
+      INTEGER, INTENT(INOUT) :: IERROR
+      INTEGER, INTENT(IN) :: IFLG
+      INTEGER :: M
+      INTEGER, INTENT(IN) :: MP
+      INTEGER :: N
+      INTEGER, INTENT(IN) :: NP
       REAL :: AM(*), AN(*), BM(*), BN(*), CM(*), CN(*), W(*), Y(IDIMY,*)
 C     beginning of local variable declarations
       INTEGER :: IW1, IW2, IW3, IWAH, IWBH, IWD, IWU, IWW, NH, NL
@@ -103178,7 +103310,8 @@ C SUBROUTINE BLKTR1 SOLVES THE LINEAR SYSTEM
       SUBROUTINE BLKTR1(N,AN,BN,CN,M,AM,BM,CM,IDIMY,Y,B,W1,W2,W3,WD,
      1                   WW,WU,PRDCT,CPRDCT)
       IMPLICIT NONE
-      INTEGER :: IDIMY, M, N
+      INTEGER :: IDIMY, M
+      INTEGER, INTENT(IN) :: N
       REAL :: AM(*), AN(*), B(*), BM(*), BN(*), CM(*), CN(*), W1(*),
      &W2(*), W3(*), WD(*), WU(*), WW(*), Y(IDIMY,*)
 C     beginning of local variable declarations
@@ -103451,7 +103584,10 @@ C BEGIN BACK SUBSTITUTION PHASE
 
       SUBROUTINE INDXA(I,IR,IDXA,NA)
       IMPLICIT NONE
-      INTEGER :: I, IDXA, IR, NA
+      INTEGER, INTENT(IN) :: I
+      INTEGER, INTENT(INOUT) :: IDXA
+      INTEGER, INTENT(IN) :: IR
+      INTEGER, INTENT(INOUT) :: NA
 C     beginning of local variable declarations
       INTEGER :: IK, K, NCMPLX, NM, NPP
       REAL :: CNV, EPS
@@ -103467,7 +103603,10 @@ C     beginning of local variable declarations
 
       SUBROUTINE INDXC(I,IR,IDXC,NC)
       IMPLICIT NONE
-      INTEGER :: I, IDXC, IR, NC
+      INTEGER, INTENT(IN) :: I
+      INTEGER, INTENT(INOUT) :: IDXC
+      INTEGER, INTENT(IN) :: IR
+      INTEGER, INTENT(INOUT) :: NC
 C     beginning of local variable declarations
       INTEGER :: IK, K, NCMPLX, NM, NPP
       REAL :: CNV, EPS
@@ -104402,7 +104541,9 @@ C     beginning of local variable declarations
       FUNCTION BSRH(XLL,XRR,IZ,C,A,BH,F,SGN)
       IMPLICIT NONE
       INTEGER :: IZ
-      REAL :: A(*), BH(*), C(*), SGN, XLL, XRR
+      REAL :: A(*), BH(*), C(*)
+      REAL, INTENT(IN) :: SGN
+      REAL :: XLL, XRR
       REAL :: F
       REAL :: BSRH
 C     beginning of local variable declarations

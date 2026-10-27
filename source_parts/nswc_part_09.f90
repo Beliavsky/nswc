@@ -1225,7 +1225,7 @@ end subroutine bspp
 subroutine ppval(x, a, l, n, xi, yi, ni)
 implicit none
 integer, intent(in) :: l, n, ni
-real :: a(l,n), x(n), xi(ni)
+real, intent(in) :: a(l,n), x(n), xi(ni)
 real, intent(inout) :: yi(ni)
 !     beginning of local variable declarations
 integer :: i, il, ir, j, k, lm1, lmj

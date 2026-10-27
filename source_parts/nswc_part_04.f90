@@ -1,3 +1,39 @@
+pure integer function isamax(n,sx,incx)
+implicit none
+!     Finds the index of element having max. Absolute value.
+!     Jack dongarra, LINPACK, 3/11/78.
+real, intent(in) :: sx(*)
+integer, intent(in) :: incx
+integer, intent(in) :: n
+!     beginning of local variable declarations
+real :: smax
+integer :: i, ix
+isamax = 0
+if (n < 1) return
+isamax = 1
+if (n == 1) return
+if (incx == 1) go to 20
+!        Code for increment not equal to 1
+ix = 1
+smax = abs(sx(1))
+ix = ix + incx
+do i = 2,n
+   if (abs(sx(ix)) <= smax) go to 5
+   isamax = i
+   smax = abs(sx(ix))
+5  ix = ix + incx
+end do
+return
+!        Code for increment equal to 1
+20 smax = abs(sx(1))
+do i = 2,n
+   if (abs(sx(i)) <= smax) go to 30
+   isamax = i
+   smax = abs(sx(i))
+30 continue
+end do
+end function isamax
+
 pure integer function idamax(n,dx,incx)
 implicit none
 !     Finds the index of element having max. Absolute value.
@@ -2098,9 +2134,9 @@ implicit none
 ! Output..
 !   b = Solution vector, X .
 !-----------------------------------------------------------------------
-integer :: ip
+integer, intent(in) :: ip
 integer, intent(in) :: n, ndim
-real :: a(ndim, n)
+real, intent(in) :: a(ndim, n)
 real, intent(inout) :: b(n)
 dimension ip(n)
 !     beginning of local variable declarations
@@ -2426,7 +2462,7 @@ subroutine slvmp(mo, n, a, ka, b, x, wk, iwk, ierr)
 implicit none
 integer, intent(inout) :: ierr, iwk
 integer, intent(in) :: ka, mo, n
-real :: a(ka,n), b(n)
+real, intent(in) :: a(ka,n), b(n)
 real, intent(inout) :: wk(*), x(n)
 dimension iwk(n)
 !     beginning of local variable declarations
@@ -2456,9 +2492,10 @@ end subroutine slvmp
 subroutine luimp(a, ka, n, q, kq, ipvt, b, x, r, ind)
 implicit none
 integer, intent(out) :: ind
-integer :: ipvt
+integer, intent(in) :: ipvt
 integer, intent(in) :: ka, kq, n
-real :: a(ka,n), b(n), q(kq,n)
+real, intent(in) :: a(ka,n), b(n)
+real :: q(kq,n)
 real, intent(inout) :: r(n), x(n)
 dimension ipvt(n)
 !     beginning of local variable declarations
@@ -4199,9 +4236,9 @@ end subroutine arcepc
 
 subroutine arcesl(array, mtrstr, nmblks, pivot, b, x)
 implicit none
-integer :: mtrstr(3,*)
+integer, intent(in) :: mtrstr(3,*)
 integer, intent(in) :: nmblks
-real :: array(*)
+real, intent(in) :: array(*)
 real, intent(inout) :: b(*), x(*)
 integer, intent(in) :: pivot(*)
 !     beginning of local variable declarations
@@ -4376,7 +4413,7 @@ end subroutine arcesl
 subroutine arcefs(block, nrwblk, nclpiv, novrlp, b, x)
 implicit none
 integer, intent(in) :: nclpiv, novrlp, nrwblk
-real :: block(nrwblk,novrlp)
+real, intent(in) :: block(nrwblk,novrlp)
 real, intent(inout) :: b(*), x(*)
 !     beginning of local variable declarations
 integer :: i, iplusl, j, jplusl, l, long
@@ -4402,9 +4439,9 @@ end subroutine arcefs
 subroutine arcefm(block, nrwblk, nclpiv, b, x)
 implicit none
 integer, intent(in) :: nclpiv, nrwblk
-real :: block(nrwblk,nclpiv)
+real, intent(in) :: block(nrwblk,nclpiv)
 real, intent(inout) :: b(*)
-real :: x(*)
+real, intent(in) :: x(*)
 !     beginning of local variable declarations
 integer :: j, l, nclpvl
 real :: xj
@@ -4424,7 +4461,7 @@ end subroutine arcefm
 subroutine arcefe(block, nrwblk, nrwpiv, pivot, b)
 implicit none
 integer, intent(in) :: nrwblk, nrwpiv
-real :: block(nrwblk,nrwpiv)
+real, intent(in) :: block(nrwblk,nrwpiv)
 real, intent(inout) :: b(*)
 integer, intent(in) :: pivot(nrwpiv)
 !     beginning of local variable declarations
@@ -4453,7 +4490,7 @@ end subroutine arcefe
 subroutine arcebs(block, nrwblk, nclblk, nrwpiv, b, x)
 implicit none
 integer, intent(in) :: nclblk, nrwblk, nrwpiv
-real :: block(nrwblk,nclblk)
+real, intent(in) :: block(nrwblk,nclblk)
 real, intent(inout) :: b(*), x(*)
 !     beginning of local variable declarations
 integer :: j, jmin1, l, nj
@@ -4477,9 +4514,9 @@ end subroutine arcebs
 subroutine arcebm(block, nrwblk, nclblk, nrwpiv, b, x)
 implicit none
 integer, intent(in) :: nclblk, nrwblk, nrwpiv
-real :: block(nrwblk,nclblk)
+real, intent(in) :: block(nrwblk,nclblk)
 real, intent(inout) :: b(*)
-real :: x(*)
+real, intent(in) :: x(*)
 !     beginning of local variable declarations
 integer :: j, l, nrwpv1
 real :: xj
@@ -4499,7 +4536,7 @@ end subroutine arcebm
 subroutine arcebe(block, nrwblk, nclpiv, novrlp, pivot, x)
 implicit none
 integer, intent(in) :: nclpiv, novrlp, nrwblk
-real :: block(nrwblk,novrlp)
+real, intent(in) :: block(nrwblk,novrlp)
 real, intent(inout) :: x(*)
 integer, intent(in) :: pivot(nrwblk)
 !     beginning of local variable declarations
@@ -4664,8 +4701,9 @@ end subroutine decbt
 subroutine solbt(m, n, a, b, c, y, ip)
 implicit none
 integer, intent(in) :: m
-integer :: n, ip(m,n)
-real :: a(m,m,n)
+integer :: n
+integer, intent(in) :: ip(m,n)
+real, intent(in) :: a(m,m,n)
 real, intent(in) :: b(m,m,n), c(m,m,n)
 real, intent(inout) :: y(m,n)
 !     beginning of local variable declarations

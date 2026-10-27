@@ -22,10 +22,10 @@ fit within the actual argument's available element sequence; the original
 three-element declaration overstated that requirement.
 [Intel array argument rules](https://www.intel.com/content/www/us/en/docs/fortran-compiler/developer-guide-reference/2025-3/array-arguments.html)
 
-The callback correction also adjusts the intent inventory: there are now 8,101
-data arguments, including 4,176 `IN`, 262 `OUT`, and 2,821 `INOUT` annotations.
-The unused callback is excluded from the data count. The 842 unannotated data
-arguments are unchanged.
+After the callback correction and subsequent intent analysis, there are 8,101
+data arguments, including 4,359 `IN`, 262 `OUT`, and 2,924 `INOUT` annotations.
+The unused callback is excluded from the data count. The 556 unannotated data
+arguments remain pending further review.
 
 ## Remaining warnings
 

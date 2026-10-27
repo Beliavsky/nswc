@@ -9300,9 +9300,9 @@ integer, intent(inout) :: ibasis, ind, iter, iwk(*)
 integer, intent(in) :: ka
 integer :: m
 integer, intent(in) :: mxiter, n0, numge, numle
-real :: a(ka,n0), b0(m)
+real, intent(in) :: a(ka,n0), b0(m)
 real, intent(inout) :: bi(m,m)
-real :: c(n0)
+real, intent(in) :: c(n0)
 real, intent(inout) :: wk(*), x(*), z
 dimension ibasis(m)
 !     beginning of local variable declarations
@@ -10151,13 +10151,14 @@ subroutine ssplx(ta,ita,jta,b0,c,m,n0,ind,ibasis,x,z,iter,mxiter, &
    & numle,numge,bi,wk,iwk)
 implicit none
 integer, intent(inout) :: ibasis, ind
-integer :: ita(*)
+integer, intent(in) :: ita(*)
 integer, intent(inout) :: iter, iwk(*)
-integer :: jta(*), m
+integer, intent(in) :: jta(*)
+integer :: m
 integer, intent(in) :: mxiter, n0, numge, numle
-real :: b0(m)
+real, intent(in) :: b0(m)
 real, intent(inout) :: bi(m,m)
-real :: c(n0), ta(*)
+real, intent(in) :: c(n0), ta(*)
 real, intent(inout) :: wk(*), x(*), z
 dimension ibasis(m)
 !     beginning of local variable declarations

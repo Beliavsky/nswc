@@ -1,7 +1,7 @@
 {
   "source": "nswc.f90",
-  "source_sha256": "37702941995564a814053807095e17fdd9366b2e92ed43bc8af9a44ba7fb9b25",
-  "module_sha256": "bf58901b8a4aefb2c9af3ecc758ec8d1dbd791f2de338ffe59f223e226dd760f",
+  "source_sha256": "d658087e4e544a6162c863c3fe747dd34171df97e00e69398cdbbca4deed1207",
+  "module_sha256": "04c27adbff93f3bdf5ae203be30a9900c17d0b426f632bca6472459bf1137267",
   "compiler": "Intel(R) Fortran Compiler for applications running on Intel(R) 64, Version 2025.0.4 Build 20241205",
   "procedures": 1062,
   "kind_mappings": {

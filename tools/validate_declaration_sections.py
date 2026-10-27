@@ -36,7 +36,8 @@ def historical_input():
 
 def main():
     before=historical_input();report={};after=transform(before,report)
-    if report!=json.loads(MANIFEST.read_text()) or after!=(ROOT/'nswc.f').read_bytes():
+    from additional_intents import transform as intents
+    if report!=json.loads(MANIFEST.read_text()) or intents(after)!=(ROOT/'nswc.f').read_bytes():
         raise ValueError('Declaration sections or review do not reproduce')
     verify(before,after)
     print(len(report['marked']),'procedures marked;',len(report['reordered']),'reorganized.')

@@ -1,8 +1,8 @@
 # Argument intents
 
-The maintained sources have 4,176 `INTENT(IN)`, 262 `INTENT(OUT)`, and 2,821
-`INTENT(INOUT)` data arguments across 1,007 of the 1,062 library procedures.
-Of 8,101 data arguments, 842 remain without intents pending further review.
+The maintained sources have 4,359 `INTENT(IN)`, 262 `INTENT(OUT)`, and 2,924
+`INTENT(INOUT)` data arguments across 1,047 of the 1,062 library procedures.
+Of 8,101 data arguments, 556 remain without intents pending further review.
 Procedure callbacks are excluded from these data-argument counts.
 The maintained `nswc.f`, generated `nswc.f90`, and source partitions contain the
 same annotations. The archived `nswc_orig.f` is unchanged.
@@ -86,6 +86,48 @@ dependency, and the initial assignment supporting each `OUT` annotation. Source
 line numbers in this evidence refer to the declaration-only baseline. These
 rules are deliberately conservative and do not constitute a general Fortran
 control-flow or alias analysis. Further refinements require additional review.
+
+## Additional argument-level analysis
+
+`tools/additional_intents.py` extends the writable analyzer to examine
+arguments in procedures containing `COMMON`. The supplemental review adds
+183 `IN` and 103 `INOUT` annotations across 77 procedures, including 40
+procedures previously without any intents.
+
+The compiler inventory identifies data arguments, existing intents, arrays,
+procedures, and common-block objects. Direct writes and known-call write effects
+rule out inputs. Input proofs require all downstream arguments to be proved
+read-only; unknown callbacks and unresolved dependency cycles remain unproved.
+New writable annotations require established writes and definable actual arguments at
+known calls. This pass adds no `OUT` annotations.
+
+Observed repeated actual variables, common-block actual arguments, and actual arguments from
+excluded storage-association scopes block new contracts. These hazards propagate
+through forwarded arguments, covering workspace views whose names differ in
+intermediate procedures. This deliberately also rejects some disjoint array
+slices and harmless repeated read-only arguments. `EQUIVALENCE`, alternate
+entries, pointers, and unsupported I/O still require separate review. Library
+procedures passed as callbacks keep their existing interfaces pending a review
+of the corresponding callback contracts.
+
+For example, `STOD` gains `INOUT` for `Y` and `IWM`. Its overlapping real
+workspace views and callback parameters remain unresolved. The manifest
+`tools/additional-intents.json` records evidence for each addition and a reason
+for each of the 556 remaining data arguments.
+
+Generate a draft from the source before this supplemental pass:
+
+```sh
+python tools/additional_intents.py before.f --report draft.json --output candidate.f
+```
+
+Outputs must be new files. The reviewed transformation is appended after the
+historical declaration-section pass; earlier manifests remain reproducible.
+`tools/validate_additional_intents.py` reconstructs that input, repeats the
+analysis, and checks compiler-confirmed intents. Only the reviewed dummy intent
+attributes may change; all other symbols and executable compiler trees must
+agree. The maintained sources and generated explicit interfaces include the
+additional annotations.
 
 ## Reproduction
 

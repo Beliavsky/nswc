@@ -199,37 +199,37 @@ module nswc_interfaces
       &VALRGT)
       IMPORT :: nswc_cb_value_derivative
       IMPLICIT NONE
-      INTEGER :: KBREAK
-      INTEGER :: KMAX
+      INTEGER, INTENT(IN) :: KBREAK
+      INTEGER, INTENT(IN) :: KMAX
       PROCEDURE(nswc_cb_value_derivative) :: F
-      DOUBLE PRECISION :: XLFT
-      DOUBLE PRECISION :: XRGT
-      DOUBLE PRECISION :: EPSLN
-      INTEGER :: NPIECE
-      DOUBLE PRECISION :: ERREST
-      DOUBLE PRECISION :: XKNOTS(*)
-      DOUBLE PRECISION :: COEFS(KMAX,*)
-      INTEGER :: IERR
-      INTEGER :: NDEG
-      INTEGER :: NSMTH
-      DOUBLE PRECISION :: ANORM
-      DOUBLE PRECISION :: DX
-      INTEGER :: MO
-      DOUBLE PRECISION :: BRAKPT(KBREAK)
-      INTEGER :: KDIFF(KBREAK)
-      DOUBLE PRECISION :: VALLFT(KBREAK)
-      DOUBLE PRECISION :: VALRGT(KBREAK)
+      DOUBLE PRECISION, INTENT(IN) :: XLFT
+      DOUBLE PRECISION, INTENT(IN) :: XRGT
+      DOUBLE PRECISION, INTENT(IN) :: EPSLN
+      INTEGER, INTENT(INOUT) :: NPIECE
+      DOUBLE PRECISION, INTENT(INOUT) :: ERREST
+      DOUBLE PRECISION, INTENT(INOUT) :: XKNOTS(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: COEFS(KMAX,*)
+      INTEGER, INTENT(INOUT) :: IERR
+      INTEGER, INTENT(IN) :: NDEG
+      INTEGER, INTENT(IN) :: NSMTH
+      DOUBLE PRECISION, INTENT(IN) :: ANORM
+      DOUBLE PRECISION, INTENT(IN) :: DX
+      INTEGER, INTENT(IN) :: MO
+      DOUBLE PRECISION, INTENT(IN) :: BRAKPT(KBREAK)
+      INTEGER, INTENT(IN) :: KDIFF(KBREAK)
+      DOUBLE PRECISION, INTENT(IN) :: VALLFT(KBREAK)
+      DOUBLE PRECISION, INTENT(IN) :: VALRGT(KBREAK)
     END SUBROUTINE ADAPT
     SUBROUTINE ADAPT1(F,XKNOTS,COEFS,KDIMEN,KMAX,NDIMEN,IERR)
       IMPORT :: nswc_cb_value_derivative
       IMPLICIT NONE
-      INTEGER :: NDIMEN
-      INTEGER :: KMAX
-      INTEGER :: KDIMEN
+      INTEGER, INTENT(IN) :: NDIMEN
+      INTEGER, INTENT(IN) :: KMAX
+      INTEGER, INTENT(IN) :: KDIMEN
       PROCEDURE(nswc_cb_value_derivative) :: F
-      DOUBLE PRECISION :: XKNOTS(KDIMEN)
-      DOUBLE PRECISION :: COEFS(KMAX,NDIMEN)
-      INTEGER :: IERR
+      DOUBLE PRECISION, INTENT(INOUT) :: XKNOTS(KDIMEN)
+      DOUBLE PRECISION, INTENT(INOUT) :: COEFS(KMAX,NDIMEN)
+      INTEGER, INTENT(INOUT) :: IERR
     END SUBROUTINE ADAPT1
     SUBROUTINE ADCHK
       IMPLICIT NONE
@@ -250,30 +250,30 @@ module nswc_interfaces
     END SUBROUTINE ADNODE
     SUBROUTINE ADPUT(XKNOTS,COEFS,KDIMEN,KMAX,NDIMEN,IERR)
       IMPLICIT NONE
-      INTEGER :: NDIMEN
-      INTEGER :: KMAX
-      INTEGER :: KDIMEN
-      DOUBLE PRECISION :: XKNOTS(KDIMEN)
-      DOUBLE PRECISION :: COEFS(KMAX,NDIMEN)
-      INTEGER :: IERR
+      INTEGER, INTENT(IN) :: NDIMEN
+      INTEGER, INTENT(IN) :: KMAX
+      INTEGER, INTENT(IN) :: KDIMEN
+      DOUBLE PRECISION, INTENT(INOUT) :: XKNOTS(KDIMEN)
+      DOUBLE PRECISION, INTENT(INOUT) :: COEFS(KMAX,NDIMEN)
+      INTEGER, INTENT(INOUT) :: IERR
     END SUBROUTINE ADPUT
     SUBROUTINE ADSET(XKNOTS,COEFS,KDIMEN,KMAX,NDIMEN,IERR)
       IMPLICIT NONE
-      INTEGER :: NDIMEN
-      INTEGER :: KMAX
-      INTEGER :: KDIMEN
-      DOUBLE PRECISION :: XKNOTS(KDIMEN)
-      DOUBLE PRECISION :: COEFS(KMAX,NDIMEN)
-      INTEGER :: IERR
+      INTEGER, INTENT(IN) :: NDIMEN
+      INTEGER, INTENT(IN) :: KMAX
+      INTEGER, INTENT(IN) :: KDIMEN
+      DOUBLE PRECISION, INTENT(INOUT) :: XKNOTS(KDIMEN)
+      DOUBLE PRECISION, INTENT(IN) :: COEFS(KMAX,NDIMEN)
+      INTEGER, INTENT(INOUT) :: IERR
     END SUBROUTINE ADSET
     SUBROUTINE ADTAKE(IERR)
       IMPLICIT NONE
-      INTEGER :: IERR
+      INTEGER, INTENT(INOUT) :: IERR
     END SUBROUTINE ADTAKE
     SUBROUTINE ADTRAN(D,POWERS)
       IMPLICIT NONE
       DOUBLE PRECISION :: D(20,*)
-      DOUBLE PRECISION :: POWERS(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: POWERS(*)
     END SUBROUTINE ADTRAN
     PURE ELEMENTAL FUNCTION AERF(X,H)
       IMPLICIT NONE
@@ -375,7 +375,7 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NOVRLP
       INTEGER, INTENT(IN) :: NRWBLK
-      REAL :: BLOCK(NRWBLK,NOVRLP)
+      REAL, INTENT(IN) :: BLOCK(NRWBLK,NOVRLP)
       INTEGER, INTENT(IN) :: NCLPIV
       INTEGER, INTENT(IN) :: PIVOT(NRWBLK)
       REAL, INTENT(INOUT) :: X(*)
@@ -384,16 +384,16 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCLBLK
       INTEGER, INTENT(IN) :: NRWBLK
-      REAL :: BLOCK(NRWBLK,NCLBLK)
+      REAL, INTENT(IN) :: BLOCK(NRWBLK,NCLBLK)
       INTEGER, INTENT(IN) :: NRWPIV
       REAL, INTENT(INOUT) :: B(*)
-      REAL :: X(*)
+      REAL, INTENT(IN) :: X(*)
     END SUBROUTINE ARCEBM
     SUBROUTINE ARCEBS(BLOCK,NRWBLK,NCLBLK,NRWPIV,B,X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCLBLK
       INTEGER, INTENT(IN) :: NRWBLK
-      REAL :: BLOCK(NRWBLK,NCLBLK)
+      REAL, INTENT(IN) :: BLOCK(NRWBLK,NCLBLK)
       INTEGER, INTENT(IN) :: NRWPIV
       REAL, INTENT(INOUT) :: B(*)
       REAL, INTENT(INOUT) :: X(*)
@@ -422,7 +422,7 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NRWPIV
       INTEGER, INTENT(IN) :: NRWBLK
-      REAL :: BLOCK(NRWBLK,NRWPIV)
+      REAL, INTENT(IN) :: BLOCK(NRWBLK,NRWPIV)
       INTEGER, INTENT(IN) :: PIVOT(NRWPIV)
       REAL, INTENT(INOUT) :: B(*)
     END SUBROUTINE ARCEFE
@@ -430,15 +430,15 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCLPIV
       INTEGER, INTENT(IN) :: NRWBLK
-      REAL :: BLOCK(NRWBLK,NCLPIV)
+      REAL, INTENT(IN) :: BLOCK(NRWBLK,NCLPIV)
       REAL, INTENT(INOUT) :: B(*)
-      REAL :: X(*)
+      REAL, INTENT(IN) :: X(*)
     END SUBROUTINE ARCEFM
     SUBROUTINE ARCEFS(BLOCK,NRWBLK,NCLPIV,NOVRLP,B,X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NOVRLP
       INTEGER, INTENT(IN) :: NRWBLK
-      REAL :: BLOCK(NRWBLK,NOVRLP)
+      REAL, INTENT(IN) :: BLOCK(NRWBLK,NOVRLP)
       INTEGER, INTENT(IN) :: NCLPIV
       REAL, INTENT(INOUT) :: B(*)
       REAL, INTENT(INOUT) :: X(*)
@@ -469,8 +469,8 @@ module nswc_interfaces
     END SUBROUTINE ARCEPR
     SUBROUTINE ARCESL(ARRAY,MTRSTR,NMBLKS,PIVOT,B,X)
       IMPLICIT NONE
-      REAL :: ARRAY(*)
-      INTEGER :: MTRSTR(3,*)
+      REAL, INTENT(IN) :: ARRAY(*)
+      INTEGER, INTENT(IN) :: MTRSTR(3,*)
       INTEGER, INTENT(IN) :: NMBLKS
       INTEGER, INTENT(IN) :: PIVOT(*)
       REAL, INTENT(INOUT) :: B(*)
@@ -880,7 +880,7 @@ module nswc_interfaces
       &WD,WW,WU,PRDCT,CPRDCT)
       IMPLICIT NONE
       INTEGER :: IDIMY
-      INTEGER :: N
+      INTEGER, INTENT(IN) :: N
       REAL :: AN(*)
       REAL :: BN(*)
       REAL :: CN(*)
@@ -903,19 +903,19 @@ module nswc_interfaces
       &IERROR,W)
       IMPLICIT NONE
       INTEGER :: IDIMY
-      INTEGER :: IFLG
-      INTEGER :: NP
+      INTEGER, INTENT(IN) :: IFLG
+      INTEGER, INTENT(IN) :: NP
       INTEGER :: N
       REAL :: AN(*)
       REAL :: BN(*)
       REAL :: CN(*)
-      INTEGER :: MP
+      INTEGER, INTENT(IN) :: MP
       INTEGER :: M
       REAL :: AM(*)
       REAL :: BM(*)
       REAL :: CM(*)
       REAL :: Y(IDIMY,*)
-      INTEGER :: IERROR
+      INTEGER, INTENT(INOUT) :: IERROR
       REAL :: W(*)
     END SUBROUTINE BLKTRI
     PURE ELEMENTAL FUNCTION BLND(A,B)
@@ -1200,7 +1200,7 @@ module nswc_interfaces
       REAL :: A(*)
       REAL :: BH(*)
       PROCEDURE(nswc_cb_spectral) :: F
-      REAL :: SGN
+      REAL, INTENT(IN) :: SGN
       REAL :: BSRH
     END FUNCTION BSRH
     PURE ELEMENTAL SUBROUTINE BSSLI(MO,A,IN,W)
@@ -1434,8 +1434,8 @@ module nswc_interfaces
     END SUBROUTINE CAI
     SUBROUTINE CALCSC(TYPE,N,K,QK)
       IMPLICIT NONE
-      INTEGER :: N
-      INTEGER :: TYPE
+      INTEGER, INTENT(IN) :: N
+      INTEGER, INTENT(INOUT) :: TYPE
       DOUBLE PRECISION :: K(N)
       DOUBLE PRECISION :: QK(N)
     END SUBROUTINE CALCSC
@@ -2034,15 +2034,15 @@ module nswc_interfaces
       &COFY,SINGLR)
       IMPORT :: nswc_cb_coefficient
       IMPLICIT NONE
-      INTEGER :: MBDCND
-      INTEGER :: NBDCND
-      REAL :: ALPHA
-      REAL :: BETA
-      REAL :: GAMA
-      REAL :: XNU
+      INTEGER, INTENT(IN) :: MBDCND
+      INTEGER, INTENT(IN) :: NBDCND
+      REAL, INTENT(IN) :: ALPHA
+      REAL, INTENT(IN) :: BETA
+      REAL, INTENT(IN) :: GAMA
+      REAL, INTENT(IN) :: XNU
       PROCEDURE(nswc_cb_coefficient) :: COFX
       PROCEDURE(nswc_cb_coefficient) :: COFY
-      LOGICAL :: SINGLR
+      LOGICAL, INTENT(INOUT) :: SINGLR
     END SUBROUTINE CHKSNG
     PURE ELEMENTAL FUNCTION CIN(X)
       IMPLICIT NONE
@@ -3089,18 +3089,18 @@ module nswc_interfaces
       &RDATA,IER)
       IMPORT :: nswc_cb_triangle
       IMPLICIT NONE
-      INTEGER :: NW
+      INTEGER, INTENT(IN) :: NW
       PROCEDURE(nswc_cb_triangle) :: F
-      REAL :: T(2,*)
-      REAL :: EPS
-      INTEGER :: MCALLS
-      REAL :: ANS
-      REAL :: ERR
-      INTEGER :: NCALLS
-      REAL :: W(6,NW)
+      REAL, INTENT(IN) :: T(2,*)
+      REAL, INTENT(IN) :: EPS
+      INTEGER, INTENT(IN) :: MCALLS
+      REAL, INTENT(INOUT) :: ANS
+      REAL, INTENT(INOUT) :: ERR
+      INTEGER, INTENT(INOUT) :: NCALLS
+      REAL, INTENT(INOUT) :: W(6,NW)
       INTEGER :: IDATA(*)
       REAL :: RDATA(*)
-      INTEGER :: IER
+      INTEGER, INTENT(INOUT) :: IER
     END SUBROUTINE CUBTRI
     PURE SUBROUTINE CURV1(N,X,Y,SLP1,SLPN,ISLPSW,YP,TEMP,SIGMA, &
       &IERR)
@@ -5322,7 +5322,7 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: INCX
       DOUBLE PRECISION, INTENT(INOUT) :: DY(*)
       INTEGER, INTENT(IN) :: INCY
-      DOUBLE PRECISION :: DPARAM(5)
+      DOUBLE PRECISION, INTENT(IN) :: DPARAM(5)
     END SUBROUTINE DROTM
     PURE SUBROUTINE DROTMG(DD1,DD2,DX1,DY1,DPARAM)
       IMPLICIT NONE
@@ -5335,24 +5335,24 @@ module nswc_interfaces
     SUBROUTINE DRPLY1(OP,IDEG,IDP1,ZEROR,ZEROI,P,QP,K,QK,SVK,   &
       &TEMP,PT,NUM)
       IMPLICIT NONE
-      INTEGER :: IDP1
+      INTEGER, INTENT(IN) :: IDP1
       INTEGER :: IDEG
-      DOUBLE PRECISION :: OP(IDP1)
-      DOUBLE PRECISION :: ZEROR(IDEG)
-      DOUBLE PRECISION :: ZEROI(IDEG)
+      DOUBLE PRECISION, INTENT(IN) :: OP(IDP1)
+      DOUBLE PRECISION, INTENT(INOUT) :: ZEROR(IDEG)
+      DOUBLE PRECISION, INTENT(INOUT) :: ZEROI(IDEG)
       DOUBLE PRECISION :: P(IDP1)
       DOUBLE PRECISION :: QP(IDP1)
       DOUBLE PRECISION :: K(IDP1)
       DOUBLE PRECISION :: QK(IDP1)
       DOUBLE PRECISION :: SVK(IDP1)
       DOUBLE PRECISION :: TEMP(IDP1)
-      REAL :: PT(IDP1)
-      INTEGER :: NUM
+      REAL, INTENT(INOUT) :: PT(IDP1)
+      INTEGER, INTENT(INOUT) :: NUM
     END SUBROUTINE DRPLY1
     SUBROUTINE DRPOLY(OP,IDEG,ZEROR,ZEROI,NUM,WK,DWK)
       IMPLICIT NONE
       INTEGER :: IDEG
-      DOUBLE PRECISION :: OP(*)
+      DOUBLE PRECISION, INTENT(IN) :: OP(*)
       DOUBLE PRECISION, INTENT(INOUT) :: ZEROR(IDEG)
       DOUBLE PRECISION, INTENT(INOUT) :: ZEROI(IDEG)
       INTEGER, INTENT(INOUT) :: NUM
@@ -5977,10 +5977,10 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER :: IDMN
       REAL :: U(IDMN,*)
-      INTEGER :: I
-      INTEGER :: J
-      REAL :: UXXX
-      REAL :: UXXXX
+      INTEGER, INTENT(IN) :: I
+      INTEGER, INTENT(IN) :: J
+      REAL, INTENT(INOUT) :: UXXX
+      REAL, INTENT(INOUT) :: UXXXX
     END SUBROUTINE DXFN
     PURE ELEMENTAL FUNCTION DXPARG(L)
       IMPLICIT NONE
@@ -5997,10 +5997,10 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER :: IDMN
       REAL :: U(IDMN,*)
-      INTEGER :: I
-      INTEGER :: J
-      REAL :: UYYY
-      REAL :: UYYYY
+      INTEGER, INTENT(IN) :: I
+      INTEGER, INTENT(IN) :: J
+      REAL, INTENT(INOUT) :: UYYY
+      REAL, INTENT(INOUT) :: UYYYY
     END SUBROUTINE DYFN
     FUNCTION DZERO(F,AX,BX,AERR,RERR)
       IMPORT :: nswc_cb_double
@@ -6403,9 +6403,9 @@ module nswc_interfaces
     END SUBROUTINE FXDEC
     SUBROUTINE FXSHFR(L2,NZ,NN,P,QP,K,QK,SVK)
       IMPLICIT NONE
-      INTEGER :: NN
-      INTEGER :: L2
-      INTEGER :: NZ
+      INTEGER, INTENT(IN) :: NN
+      INTEGER, INTENT(IN) :: L2
+      INTEGER, INTENT(INOUT) :: NZ
       DOUBLE PRECISION :: P(NN)
       DOUBLE PRECISION :: QP(NN)
       DOUBLE PRECISION :: K(NN)
@@ -6773,8 +6773,8 @@ module nswc_interfaces
     SUBROUTINE HTRP(N,X,Y,A,T,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      REAL :: X(N)
-      REAL :: Y(N)
+      REAL, INTENT(IN) :: X(N)
+      REAL, INTENT(IN) :: Y(N)
       REAL, INTENT(INOUT) :: A(N)
       REAL, INTENT(INOUT) :: T(N)
       INTEGER, INTENT(INOUT) :: IERR
@@ -6847,22 +6847,22 @@ module nswc_interfaces
       &,XM,XMZ,WM,WN,OLDX,SAVE,XN,SAVE2,ASIDE,ASIDE3,IMKNN)
       IMPORT :: nswc_cb_kernel, nswc_cb_real
       IMPLICIT NONE
-      INTEGER :: NHALF
-      INTEGER :: MUP
-      INTEGER :: NUP
+      INTEGER, INTENT(IN) :: NHALF
+      INTEGER, INTENT(IN) :: MUP
+      INTEGER, INTENT(IN) :: NUP
       PROCEDURE(nswc_cb_kernel) :: KERNEL
       PROCEDURE(nswc_cb_real) :: RHFCN
-      REAL :: A
-      REAL :: B
-      REAL :: EP
-      INTEGER :: IFLAG
-      REAL :: X(*)
-      REAL :: T(*)
-      INTEGER :: NT
-      INTEGER :: IER
-      REAL :: CUTOFF
-      REAL :: ROOTRT
-      REAL :: UNITRD
+      REAL, INTENT(IN) :: A
+      REAL, INTENT(IN) :: B
+      REAL, INTENT(INOUT) :: EP
+      INTEGER, INTENT(IN) :: IFLAG
+      REAL, INTENT(INOUT) :: X(*)
+      REAL, INTENT(INOUT) :: T(*)
+      INTEGER, INTENT(INOUT) :: NT
+      INTEGER, INTENT(INOUT) :: IER
+      REAL, INTENT(IN) :: CUTOFF
+      REAL, INTENT(IN) :: ROOTRT
+      REAL, INTENT(IN) :: UNITRD
       REAL :: LUFACT(NUP,NUP)
       REAL :: KMM(NUP,NUP)
       REAL :: KMN(NUP,NHALF)
@@ -6891,20 +6891,20 @@ module nswc_interfaces
       IMPLICIT NONE
       PROCEDURE(nswc_cb_kernel) :: KERNEL
       PROCEDURE(nswc_cb_real) :: RHFCN
-      REAL :: A
-      REAL :: B
-      REAL :: EP
-      INTEGER :: IFLAG
-      REAL :: T(*)
-      REAL :: X(*)
-      INTEGER :: NT
-      INTEGER :: NUPPER
-      INTEGER :: MUPPER
-      INTEGER :: NF
-      INTEGER :: MF
-      REAL :: NORM
-      REAL :: W(*)
-      INTEGER :: IER
+      REAL, INTENT(IN) :: A
+      REAL, INTENT(IN) :: B
+      REAL, INTENT(INOUT) :: EP
+      INTEGER, INTENT(IN) :: IFLAG
+      REAL, INTENT(INOUT) :: T(*)
+      REAL, INTENT(INOUT) :: X(*)
+      INTEGER, INTENT(INOUT) :: NT
+      INTEGER, INTENT(IN) :: NUPPER
+      INTEGER, INTENT(IN) :: MUPPER
+      INTEGER, INTENT(INOUT) :: NF
+      INTEGER, INTENT(INOUT) :: MF
+      REAL, INTENT(INOUT) :: NORM
+      REAL, INTENT(INOUT) :: W(*)
+      INTEGER, INTENT(INOUT) :: IER
     END SUBROUTINE IESLV
     SUBROUTINE IMC(Z,I1,I2,I1M,I2M)
       IMPLICIT NONE
@@ -6957,10 +6957,10 @@ module nswc_interfaces
     END SUBROUTINE INCDG
     SUBROUTINE INDXA(I,IR,IDXA,NA)
       IMPLICIT NONE
-      INTEGER :: I
-      INTEGER :: IR
-      INTEGER :: IDXA
-      INTEGER :: NA
+      INTEGER, INTENT(IN) :: I
+      INTEGER, INTENT(IN) :: IR
+      INTEGER, INTENT(INOUT) :: IDXA
+      INTEGER, INTENT(INOUT) :: NA
     END SUBROUTINE INDXA
     SUBROUTINE INDXB(I,IR,IDX,IDP)
       IMPLICIT NONE
@@ -6971,10 +6971,10 @@ module nswc_interfaces
     END SUBROUTINE INDXB
     SUBROUTINE INDXC(I,IR,IDXC,NC)
       IMPLICIT NONE
-      INTEGER :: I
-      INTEGER :: IR
-      INTEGER :: IDXC
-      INTEGER :: NC
+      INTEGER, INTENT(IN) :: I
+      INTEGER, INTENT(IN) :: IR
+      INTEGER, INTENT(INOUT) :: IDXC
+      INTEGER, INTENT(INOUT) :: NC
     END SUBROUTINE INDXC
     PURE SUBROUTINE INFCTR(N,IFACT,IPOWER,NEXP,NPOWER)
       IMPLICIT NONE
@@ -7031,12 +7031,12 @@ module nswc_interfaces
     END FUNCTION INTRVL
     SUBROUTINE INTYD(T,K,YH,NYH,DKY,IFLAG)
       IMPLICIT NONE
-      INTEGER :: NYH
-      REAL :: T
-      INTEGER :: K
+      INTEGER, INTENT(IN) :: NYH
+      REAL, INTENT(IN) :: T
+      INTEGER, INTENT(IN) :: K
       REAL :: YH(NYH,*)
       REAL :: DKY(*)
-      INTEGER :: IFLAG
+      INTEGER, INTENT(INOUT) :: IFLAG
     END SUBROUTINE INTYD
     PURE SUBROUTINE IORDER(A,IP,N)
       IMPLICIT NONE
@@ -7102,7 +7102,7 @@ module nswc_interfaces
       IMPORT :: nswc_cb_kernel, nswc_cb_real
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NHALF
-      INTEGER :: NUP
+      INTEGER, INTENT(IN) :: NUP
       INTEGER, INTENT(IN) :: M
       INTEGER :: N
       PROCEDURE(nswc_cb_kernel) :: KERNEL
@@ -7346,24 +7346,24 @@ module nswc_interfaces
       &IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
       IMPORT :: nswc_cb_kernel, nswc_cb_real
       IMPLICIT NONE
-      INTEGER :: NHALF
-      INTEGER :: NUP
+      INTEGER, INTENT(IN) :: NHALF
+      INTEGER, INTENT(IN) :: NUP
       INTEGER :: MF
       INTEGER :: NF
-      INTEGER :: IERSET
+      INTEGER, INTENT(IN) :: IERSET
       REAL :: XV(MF)
       REAL :: TV(MF)
       REAL :: WV(MF)
-      REAL :: ERROR
+      REAL, INTENT(IN) :: ERROR
       PROCEDURE(nswc_cb_kernel) :: KERNEL
       PROCEDURE(nswc_cb_real) :: RHFCN
-      REAL :: EP
-      INTEGER :: IFLAG
-      REAL :: X(*)
-      REAL :: T(*)
-      INTEGER :: NT
-      INTEGER :: IER
-      REAL :: EPS
+      REAL, INTENT(INOUT) :: EP
+      INTEGER, INTENT(IN) :: IFLAG
+      REAL, INTENT(INOUT) :: X(*)
+      REAL, INTENT(INOUT) :: T(*)
+      INTEGER, INTENT(INOUT) :: NT
+      INTEGER, INTENT(INOUT) :: IER
+      REAL, INTENT(IN) :: EPS
       REAL :: ELINSY
       REAL :: TN(NF)
       REAL :: WN(NF)
@@ -7380,11 +7380,11 @@ module nswc_interfaces
       REAL :: R(MF)
       REAL :: RH(NF)
       REAL :: DELN(NF)
-      REAL :: XNORM
+      REAL, INTENT(IN) :: XNORM
     END SUBROUTINE LEAVE
     SUBROUTINE LGRNGN(AU,NA,AN)
       IMPLICIT NONE
-      REAL :: AU(*)
+      REAL, INTENT(IN) :: AU(*)
       INTEGER, INTENT(IN) :: NA
       REAL, INTENT(INOUT) :: AN(*)
     END SUBROUTINE LGRNGN
@@ -7393,15 +7393,15 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: MO
       INTEGER, INTENT(IN) :: NA
       REAL, INTENT(IN) :: QU
-      REAL :: AU(*)
-      REAL :: AN(*)
+      REAL, INTENT(IN) :: AU(*)
+      REAL, INTENT(IN) :: AN(*)
       REAL, INTENT(INOUT) :: FF(*)
       REAL, INTENT(INOUT) :: DF(*)
       REAL, INTENT(INOUT) :: SF(*)
     END SUBROUTINE LGRNGV
     SUBROUTINE LGRNGX(AU,NA,AC)
       IMPLICIT NONE
-      REAL :: AU(*)
+      REAL, INTENT(IN) :: AU(*)
       INTEGER, INTENT(IN) :: NA
       REAL, INTENT(INOUT) :: AC(*)
     END SUBROUTINE LGRNGX
@@ -7425,7 +7425,7 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: KA
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: M
-      REAL :: A(KA,N)
+      REAL, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,NB)
       REAL, INTENT(INOUT) :: WK(*)
       INTEGER, INTENT(INOUT) :: IWK(N)
@@ -7521,13 +7521,13 @@ module nswc_interfaces
     SUBROUTINE LNSYS(A,D,M,N,B,X,OPTION,IERR)
       IMPLICIT NONE
       INTEGER :: N
-      INTEGER :: M
+      INTEGER, INTENT(IN) :: M
       REAL :: A(M,N)
       REAL :: D(M,N)
       REAL :: B(N)
       REAL :: X(N)
-      INTEGER :: OPTION
-      INTEGER :: IERR
+      INTEGER, INTENT(IN) :: OPTION
+      INTEGER, INTENT(INOUT) :: IERR
     END SUBROUTINE LNSYS
     PURE SUBROUTINE LOCPT(X0,Y0,X,Y,N,L,M)
       IMPLICIT NONE
@@ -7623,12 +7623,12 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER :: NEQ
       PROCEDURE(nswc_cb_parameter_ode) :: F
-      REAL :: T
-      REAL :: Y(NEQ)
+      REAL, INTENT(INOUT) :: T
+      REAL, INTENT(INOUT) :: Y(NEQ)
       REAL :: TOUT
-      REAL :: RTOL(*)
-      REAL :: ATOL(*)
-      INTEGER :: IDID
+      REAL, INTENT(INOUT) :: RTOL(*)
+      REAL, INTENT(INOUT) :: ATOL(*)
+      INTEGER, INTENT(INOUT) :: IDID
       REAL :: YPOUT(NEQ)
       REAL :: YH(NEQ,*)
       REAL :: YH1(*)
@@ -7636,9 +7636,9 @@ module nswc_interfaces
       REAL :: SAVF(NEQ)
       REAL :: ACOR(NEQ)
       REAL :: WM(*)
-      INTEGER :: IWM(*)
+      INTEGER, INTENT(INOUT) :: IWM(*)
       EXTERNAL JAC
-      LOGICAL :: INTOUT
+      LOGICAL, INTENT(INOUT) :: INTOUT
       REAL :: TSTOP
       REAL :: TOLFAC
       REAL :: DELSGN
@@ -7672,9 +7672,9 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: NI
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: M
-      REAL :: X(N)
-      REAL :: Y(N)
-      REAL :: XI(NI)
+      REAL, INTENT(IN) :: X(N)
+      REAL, INTENT(IN) :: Y(N)
+      REAL, INTENT(IN) :: XI(NI)
       REAL, INTENT(INOUT) :: YI(NI)
       REAL, INTENT(INOUT) :: T(M)
       INTEGER, INTENT(INOUT) :: IERR
@@ -7684,10 +7684,10 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: KQ
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: KA
-      REAL :: A(KA,N)
+      REAL, INTENT(IN) :: A(KA,N)
       REAL :: Q(KQ,N)
-      INTEGER :: IPVT(N)
-      REAL :: B(N)
+      INTEGER, INTENT(IN) :: IPVT(N)
+      REAL, INTENT(IN) :: B(N)
       REAL, INTENT(INOUT) :: X(N)
       REAL, INTENT(INOUT) :: R(N)
       INTEGER, INTENT(OUT) :: IND
@@ -7696,7 +7696,7 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
       INTEGER, INTENT(IN) :: N
-      INTEGER :: IBETA
+      INTEGER, INTENT(IN) :: IBETA
       INTEGER, INTENT(IN) :: IMAX
       INTEGER, INTENT(IN) :: IDMAX
       INTEGER, INTENT(INOUT) :: IMACH(10)
@@ -7706,26 +7706,26 @@ module nswc_interfaces
     SUBROUTINE MACH1(N,IBETA,M,MINEXP,MAXEXP,EPS,XINT,XMIN,XMAX)
       IMPLICIT NONE
       INTEGER :: N
-      INTEGER :: IBETA
-      INTEGER :: M
-      INTEGER :: MINEXP
-      INTEGER :: MAXEXP
-      REAL :: EPS
-      REAL :: XINT
-      REAL :: XMIN
-      REAL :: XMAX
+      INTEGER, INTENT(IN) :: IBETA
+      INTEGER, INTENT(INOUT) :: M
+      INTEGER, INTENT(INOUT) :: MINEXP
+      INTEGER, INTENT(INOUT) :: MAXEXP
+      REAL, INTENT(INOUT) :: EPS
+      REAL, INTENT(INOUT) :: XINT
+      REAL, INTENT(INOUT) :: XMIN
+      REAL, INTENT(INOUT) :: XMAX
     END SUBROUTINE MACH1
     SUBROUTINE MACH2(N,IBETA,M,MINEXP,MAXEXP,EPS,XINT,XMIN,XMAX)
       IMPLICIT NONE
       INTEGER :: N
-      INTEGER :: IBETA
-      INTEGER :: M
-      INTEGER :: MINEXP
-      INTEGER :: MAXEXP
-      DOUBLE PRECISION :: EPS
-      DOUBLE PRECISION :: XINT
-      DOUBLE PRECISION :: XMIN
-      DOUBLE PRECISION :: XMAX
+      INTEGER, INTENT(IN) :: IBETA
+      INTEGER, INTENT(INOUT) :: M
+      INTEGER, INTENT(INOUT) :: MINEXP
+      INTEGER, INTENT(INOUT) :: MAXEXP
+      DOUBLE PRECISION, INTENT(INOUT) :: EPS
+      DOUBLE PRECISION, INTENT(INOUT) :: XINT
+      DOUBLE PRECISION, INTENT(INOUT) :: XMIN
+      DOUBLE PRECISION, INTENT(INOUT) :: XMAX
     END SUBROUTINE MACH2
     PURE SUBROUTINE MADD(M,N,A,KA,B,KB,C,KC)
       IMPLICIT NONE
@@ -7957,7 +7957,7 @@ module nswc_interfaces
       REAL :: USOL(IDMN,*)
       REAL :: ZN(*)
       REAL :: ZM(*)
-      REAL :: PERTB
+      REAL, INTENT(IN) :: PERTB
     END SUBROUTINE MINSOL
     PURE SUBROUTINE MKP(N,M,P,W,K,BCK,XSTAR,VSTAR,WK,IWK,NUM)
       IMPLICIT NONE
@@ -8009,7 +8009,7 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: MO
       REAL, INTENT(IN) :: AU
       INTEGER, INTENT(IN) :: NC
-      REAL :: AC(*)
+      REAL, INTENT(IN) :: AC(*)
       REAL, INTENT(OUT) :: FV
     END SUBROUTINE MPLNMV
     SUBROUTINE MPROD(M,N,L,A,KA,B,KB,C,KC,ROW)
@@ -8128,10 +8128,10 @@ module nswc_interfaces
     END SUBROUTINE MVPRD1
     SUBROUTINE NEWEST(TYPE,UU,VV,NN,P,K)
       IMPLICIT NONE
-      INTEGER :: NN
-      INTEGER :: TYPE
-      DOUBLE PRECISION :: UU
-      DOUBLE PRECISION :: VV
+      INTEGER, INTENT(IN) :: NN
+      INTEGER, INTENT(IN) :: TYPE
+      DOUBLE PRECISION, INTENT(INOUT) :: UU
+      DOUBLE PRECISION, INTENT(INOUT) :: VV
       DOUBLE PRECISION :: P(NN)
       DOUBLE PRECISION :: K(NN)
     END SUBROUTINE NEWEST
@@ -8156,8 +8156,8 @@ module nswc_interfaces
     END SUBROUTINE NEXTH
     SUBROUTINE NEXTK(TYPE,N,QP,K,QK)
       IMPLICIT NONE
-      INTEGER :: N
-      INTEGER :: TYPE
+      INTEGER, INTENT(IN) :: N
+      INTEGER, INTENT(IN) :: TYPE
       DOUBLE PRECISION :: QP(N)
       DOUBLE PRECISION :: K(N)
       DOUBLE PRECISION :: QK(N)
@@ -8378,11 +8378,11 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: KA
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: M
-      REAL :: A(KA,N)
+      REAL, INTENT(IN) :: A(KA,N)
       REAL :: QR(MS,N)
       REAL :: S(N)
-      INTEGER :: IP(N)
-      REAL :: B(M)
+      INTEGER, INTENT(IN) :: IP(N)
+      REAL, INTENT(IN) :: B(M)
       REAL, INTENT(INOUT) :: X(M)
       REAL, INTENT(INOUT) :: R(M)
       LOGICAL, INTENT(OUT) :: EXIT
@@ -8394,7 +8394,7 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: M
       REAL :: QR(MS,N)
       REAL :: S(N)
-      INTEGER :: IP(N)
+      INTEGER, INTENT(IN) :: IP(N)
       REAL, INTENT(INOUT) :: X(M)
     END SUBROUTINE ORSOL
     PURE SUBROUTINE ORTHES(NM,N,LOW,IGH,A,ORT)
@@ -8412,7 +8412,7 @@ module nswc_interfaces
       REAL :: USOL(IDMN,*)
       REAL :: ZN(*)
       REAL :: ZM(*)
-      REAL :: PERTRB
+      REAL, INTENT(INOUT) :: PERTRB
     END SUBROUTINE ORTHG
     PURE SUBROUTINE ORTHO(M,N,QR,MS,S,IP,EXIT)
       IMPLICIT NONE
@@ -8426,7 +8426,7 @@ module nswc_interfaces
     END SUBROUTINE ORTHO
     SUBROUTINE ORTHOS(AU,MA,AA,NA,AR)
       IMPLICIT NONE
-      REAL :: AU(*)
+      REAL, INTENT(IN) :: AU(*)
       INTEGER, INTENT(IN) :: MA
       REAL, INTENT(INOUT) :: AA(*)
       INTEGER, INTENT(IN) :: NA
@@ -8437,7 +8437,7 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: MO
       INTEGER, INTENT(IN) :: NA
       REAL, INTENT(IN) :: AU
-      REAL :: AR(*)
+      REAL, INTENT(IN) :: AR(*)
       INTEGER, INTENT(IN) :: NF
       REAL, INTENT(INOUT) :: FF(*)
       REAL, INTENT(INOUT) :: DF(*)
@@ -8446,7 +8446,7 @@ module nswc_interfaces
     SUBROUTINE ORTHOX(NA,AR,NC,AC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NA
-      REAL :: AR(*)
+      REAL, INTENT(IN) :: AR(*)
       INTEGER, INTENT(IN) :: NC
       REAL, INTENT(INOUT) :: AC(*)
     END SUBROUTINE ORTHOX
@@ -8654,13 +8654,13 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER :: NYH
       INTEGER :: NEQ
-      REAL :: Y(*)
+      REAL, INTENT(INOUT) :: Y(*)
       REAL :: YH(NYH,*)
       REAL :: EWT(*)
       REAL :: FTEM(*)
       REAL :: SAVF(*)
       REAL :: WM(*)
-      INTEGER :: IWM(*)
+      INTEGER, INTENT(INOUT) :: IWM(*)
       PROCEDURE(nswc_cb_parameter_ode) :: F
       EXTERNAL JAC
       REAL :: RPAR(*)
@@ -8790,9 +8790,9 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: NI
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: L
-      REAL :: X(N)
-      REAL :: A(L,N)
-      REAL :: XI(NI)
+      REAL, INTENT(IN) :: X(N)
+      REAL, INTENT(IN) :: A(L,N)
+      REAL, INTENT(IN) :: XI(NI)
       REAL, INTENT(INOUT) :: YI(NI)
     END SUBROUTINE PPVAL
     SUBROUTINE PROD0(ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,W&
@@ -9196,10 +9196,10 @@ module nswc_interfaces
     END SUBROUTINE QUAD
     SUBROUTINE QUADIT(UU,VV,NZ,NN,P,QP,K,QK)
       IMPLICIT NONE
-      INTEGER :: NN
-      DOUBLE PRECISION :: UU
-      DOUBLE PRECISION :: VV
-      INTEGER :: NZ
+      INTEGER, INTENT(IN) :: NN
+      DOUBLE PRECISION, INTENT(IN) :: UU
+      DOUBLE PRECISION, INTENT(IN) :: VV
+      INTEGER, INTENT(INOUT) :: NZ
       DOUBLE PRECISION :: P(NN)
       DOUBLE PRECISION :: QP(NN)
       DOUBLE PRECISION :: K(NN)
@@ -9485,7 +9485,7 @@ module nswc_interfaces
     END SUBROUTINE RADFG
     SUBROUTINE RADIX(IBETA)
       IMPLICIT NONE
-      INTEGER :: IBETA
+      INTEGER, INTENT(INOUT) :: IBETA
     END SUBROUTINE RADIX
     PURE SUBROUTINE RANEXP(N,A,ISEED,X,IERROR)
       IMPLICIT NONE
@@ -9574,10 +9574,10 @@ module nswc_interfaces
     END SUBROUTINE RDVAL
     SUBROUTINE REALIT(SSS,NZ,IFLAG,NN,P,QP,K,QK)
       IMPLICIT NONE
-      INTEGER :: NN
-      DOUBLE PRECISION :: SSS
-      INTEGER :: NZ
-      INTEGER :: IFLAG
+      INTEGER, INTENT(IN) :: NN
+      DOUBLE PRECISION, INTENT(INOUT) :: SSS
+      INTEGER, INTENT(INOUT) :: NZ
+      INTEGER, INTENT(INOUT) :: IFLAG
       DOUBLE PRECISION :: P(NN)
       DOUBLE PRECISION :: QP(NN)
       DOUBLE PRECISION :: K(NN)
@@ -9841,7 +9841,7 @@ module nswc_interfaces
     END SUBROUTINE RORDER
     SUBROUTINE ROT3(A,THETA)
       IMPLICIT NONE
-      REAL :: A(3,3)
+      REAL, INTENT(IN) :: A(3,3)
       REAL, INTENT(INOUT) :: THETA(3)
     END SUBROUTINE ROT3
     PURE ELEMENTAL SUBROUTINE ROTA(X1,Y1,A,X2,Y2)
@@ -9883,8 +9883,8 @@ module nswc_interfaces
     END SUBROUTINE RRSORT
     SUBROUTINE RSCO(RSAV,ISAV)
       IMPLICIT NONE
-      REAL :: RSAV(*)
-      INTEGER :: ISAV(*)
+      REAL, INTENT(IN) :: RSAV(*)
+      INTEGER, INTENT(IN) :: ISAV(*)
     END SUBROUTINE RSCO
     SUBROUTINE RSCOPY(A,IA,JA,B,IB,JB,M)
       IMPLICIT NONE
@@ -10252,7 +10252,7 @@ module nswc_interfaces
       PROCEDURE(nswc_cb_kernel) :: G
       INTEGER, INTENT(IN) :: EDGE(4)
       PROCEDURE(nswc_cb_boundary) :: BVAL
-      INTEGER :: IORD
+      INTEGER, INTENT(IN) :: IORD
       REAL :: A
       REAL :: B
       INTEGER :: MP1
@@ -10269,24 +10269,24 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER :: IDMN
       INTEGER :: MN
-      INTEGER :: INTL
-      INTEGER :: IORDER
-      REAL :: A
-      REAL :: B
-      INTEGER :: M
-      INTEGER :: MBDCND
+      INTEGER, INTENT(IN) :: INTL
+      INTEGER, INTENT(IN) :: IORDER
+      REAL, INTENT(IN) :: A
+      REAL, INTENT(IN) :: B
+      INTEGER, INTENT(IN) :: M
+      INTEGER, INTENT(IN) :: MBDCND
       REAL :: BDA(*)
-      REAL :: ALPHA
+      REAL, INTENT(IN) :: ALPHA
       REAL :: BDB(*)
-      REAL :: BETA
-      REAL :: C
-      REAL :: D
-      INTEGER :: N
-      INTEGER :: NBDCND
+      REAL, INTENT(IN) :: BETA
+      REAL, INTENT(IN) :: C
+      REAL, INTENT(IN) :: D
+      INTEGER, INTENT(IN) :: N
+      INTEGER, INTENT(IN) :: NBDCND
       REAL :: BDC(*)
-      REAL :: GAMA
+      REAL, INTENT(IN) :: GAMA
       REAL :: BDD(*)
-      REAL :: XNU
+      REAL, INTENT(IN) :: XNU
       PROCEDURE(nswc_cb_coefficient) :: COFX
       PROCEDURE(nswc_cb_coefficient) :: COFY
       REAL :: AN(*)
@@ -10304,8 +10304,8 @@ module nswc_interfaces
       REAL :: GRHS(MN,*)
       REAL :: USOL(IDMN,*)
       REAL :: W(*)
-      REAL :: PERTRB
-      INTEGER :: IERROR
+      REAL, INTENT(INOUT) :: PERTRB
+      INTEGER, INTENT(INOUT) :: IERROR
     END SUBROUTINE SEPEL1
     SUBROUTINE SEPELL(INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,   &
       &BETA,C,D,N,NBDCND,BDC,GAMA,BDD,XNU,COFX,COFY,GRHS,MN,USOL,IDMN,W, &
@@ -10314,24 +10314,24 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER :: IDMN
       INTEGER :: MN
-      INTEGER :: INTL
-      INTEGER :: IORDER
-      REAL :: A
-      REAL :: B
-      INTEGER :: M
-      INTEGER :: MBDCND
+      INTEGER, INTENT(IN) :: INTL
+      INTEGER, INTENT(IN) :: IORDER
+      REAL, INTENT(IN) :: A
+      REAL, INTENT(IN) :: B
+      INTEGER, INTENT(IN) :: M
+      INTEGER, INTENT(IN) :: MBDCND
       REAL :: BDA(*)
-      REAL :: ALPHA
+      REAL, INTENT(IN) :: ALPHA
       REAL :: BDB(*)
-      REAL :: BETA
-      REAL :: C
-      REAL :: D
-      INTEGER :: N
-      INTEGER :: NBDCND
+      REAL, INTENT(IN) :: BETA
+      REAL, INTENT(IN) :: C
+      REAL, INTENT(IN) :: D
+      INTEGER, INTENT(IN) :: N
+      INTEGER, INTENT(IN) :: NBDCND
       REAL :: BDC(*)
-      REAL :: GAMA
+      REAL, INTENT(IN) :: GAMA
       REAL :: BDD(*)
-      REAL :: XNU
+      REAL, INTENT(IN) :: XNU
       PROCEDURE(nswc_cb_coefficient) :: COFX
       PROCEDURE(nswc_cb_coefficient) :: COFY
       REAL, INTENT(INOUT) :: GRHS(MN,*)
@@ -10408,8 +10408,8 @@ module nswc_interfaces
       &LRW,IWORK,LIW,RPAR,IPAR)
       IMPORT :: nswc_cb_parameter_ode
       IMPLICIT NONE
-      INTEGER :: LIW
-      INTEGER :: LRW
+      INTEGER, INTENT(IN) :: LIW
+      INTEGER, INTENT(IN) :: LRW
       INTEGER :: NEQ
       PROCEDURE(nswc_cb_parameter_ode) :: F
       REAL, INTENT(INOUT) :: Y(NEQ)
@@ -10428,8 +10428,8 @@ module nswc_interfaces
       &LRW,IWORK,LIW,RPAR,IPAR)
       IMPORT :: nswc_cb_parameter_ode
       IMPLICIT NONE
-      INTEGER :: LIW
-      INTEGER :: LRW
+      INTEGER, INTENT(IN) :: LIW
+      INTEGER, INTENT(IN) :: LRW
       INTEGER :: NEQ
       PROCEDURE(nswc_cb_parameter_ode) :: F
       REAL, INTENT(INOUT) :: Y(NEQ)
@@ -10660,8 +10660,8 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: KA
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: MO
-      REAL :: A(KA,N)
-      REAL :: B(N)
+      REAL, INTENT(IN) :: A(KA,N)
+      REAL, INTENT(IN) :: B(N)
       REAL, INTENT(INOUT) :: X(N)
       REAL, INTENT(INOUT) :: WK(*)
       INTEGER, INTENT(INOUT) :: IWK(N)
@@ -10670,8 +10670,8 @@ module nswc_interfaces
     SUBROUTINE SLVS(WM,IWM,X,TEM)
       IMPLICIT NONE
       REAL :: WM(*)
-      INTEGER :: IWM(*)
-      REAL :: X(*)
+      INTEGER, INTENT(IN) :: IWM(*)
+      REAL, INTENT(INOUT) :: X(*)
       REAL :: TEM(*)
     END SUBROUTINE SLVS
     PURE SUBROUTINE SMADD(N,A,B,C)
@@ -10693,9 +10693,9 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: N0
       INTEGER :: M
       INTEGER, INTENT(IN) :: KA
-      REAL :: A(KA,N0)
-      REAL :: B0(M)
-      REAL :: C(N0)
+      REAL, INTENT(IN) :: A(KA,N0)
+      REAL, INTENT(IN) :: B0(M)
+      REAL, INTENT(IN) :: C(N0)
       INTEGER, INTENT(INOUT) :: IND
       INTEGER, INTENT(INOUT) :: IBASIS(M)
       REAL, INTENT(INOUT) :: X(*)
@@ -10813,19 +10813,19 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NDIM
       INTEGER, INTENT(IN) :: N
-      REAL :: A(NDIM,N)
+      REAL, INTENT(IN) :: A(NDIM,N)
       REAL, INTENT(INOUT) :: B(N)
-      INTEGER :: IP(N)
+      INTEGER, INTENT(IN) :: IP(N)
     END SUBROUTINE SOL
     SUBROUTINE SOLBT(M,N,A,B,C,Y,IP)
       IMPLICIT NONE
       INTEGER :: N
       INTEGER, INTENT(IN) :: M
-      REAL :: A(M,M,N)
+      REAL, INTENT(IN) :: A(M,M,N)
       REAL, INTENT(IN) :: B(M,M,N)
       REAL, INTENT(IN) :: C(M,M,N)
       REAL, INTENT(INOUT) :: Y(M,N)
-      INTEGER :: IP(M,N)
+      INTEGER, INTENT(IN) :: IP(M,N)
     END SUBROUTINE SOLBT
     PURE SUBROUTINE SOLVE2(M,N,M1,A,B,W,N1,IPIVOT,QR,D,ETA,FAIL,&
       &NUMIT,DIGITX,X,RES,WRES,Y1,Y2,Y,F,G,MM,MMPNN)
@@ -11110,7 +11110,7 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: INCX
       REAL, INTENT(INOUT) :: SY(*)
       INTEGER, INTENT(IN) :: INCY
-      REAL :: SPARAM(5)
+      REAL, INTENT(IN) :: SPARAM(5)
     END SUBROUTINE SROTM
     PURE SUBROUTINE SROTMG(SD1,SD2,SX1,SY1,SPARAM)
       IMPLICIT NONE
@@ -11157,11 +11157,11 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N0
       INTEGER :: M
-      REAL :: TA(*)
-      INTEGER :: ITA(*)
-      INTEGER :: JTA(*)
-      REAL :: B0(M)
-      REAL :: C(N0)
+      REAL, INTENT(IN) :: TA(*)
+      INTEGER, INTENT(IN) :: ITA(*)
+      INTEGER, INTENT(IN) :: JTA(*)
+      REAL, INTENT(IN) :: B0(M)
+      REAL, INTENT(IN) :: C(N0)
       INTEGER, INTENT(INOUT) :: IND
       INTEGER, INTENT(INOUT) :: IBASIS(M)
       REAL, INTENT(INOUT) :: X(*)
@@ -11286,19 +11286,19 @@ module nswc_interfaces
       &LRW,IWORK,LIW,RPAR,IPAR,JAC)
       IMPORT :: nswc_cb_parameter_ode
       IMPLICIT NONE
-      INTEGER :: LIW
-      INTEGER :: LRW
+      INTEGER, INTENT(IN) :: LIW
+      INTEGER, INTENT(IN) :: LRW
       INTEGER :: NEQ
       PROCEDURE(nswc_cb_parameter_ode) :: F
-      REAL :: Y(NEQ)
-      REAL :: T
+      REAL, INTENT(INOUT) :: Y(NEQ)
+      REAL, INTENT(INOUT) :: T
       REAL :: TOUT
-      INTEGER :: INFO(*)
-      REAL :: RTOL(*)
-      REAL :: ATOL(*)
-      INTEGER :: IDID
-      REAL :: RWORK(LRW)
-      INTEGER :: IWORK(LIW)
+      INTEGER, INTENT(INOUT) :: INFO(*)
+      REAL, INTENT(INOUT) :: RTOL(*)
+      REAL, INTENT(INOUT) :: ATOL(*)
+      INTEGER, INTENT(INOUT) :: IDID
+      REAL, INTENT(INOUT) :: RWORK(LRW)
+      INTEGER, INTENT(INOUT) :: IWORK(LIW)
       REAL :: RPAR(*)
       INTEGER :: IPAR(*)
       EXTERNAL JAC
@@ -11331,14 +11331,14 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER :: NYH
       INTEGER :: NEQ
-      REAL :: Y(*)
+      REAL, INTENT(INOUT) :: Y(*)
       REAL :: YH(NYH,*)
       REAL :: YH1(*)
       REAL :: EWT(*)
       REAL :: SAVF(*)
       REAL :: ACOR(*)
       REAL :: WM(*)
-      INTEGER :: IWM(*)
+      INTEGER, INTENT(INOUT) :: IWM(*)
       PROCEDURE(nswc_cb_parameter_ode) :: F
       EXTERNAL JAC
       REAL :: RPAR(*)
@@ -11379,8 +11379,8 @@ module nswc_interfaces
     END FUNCTION SURF2
     SUBROUTINE SVCO(RSAV,ISAV)
       IMPLICIT NONE
-      REAL :: RSAV(*)
-      INTEGER :: ISAV(*)
+      REAL, INTENT(INOUT) :: RSAV(*)
+      INTEGER, INTENT(INOUT) :: ISAV(*)
     END SUBROUTINE SVCO
     PURE SUBROUTINE SVPRD(A,N,X,Y)
       IMPLICIT NONE
@@ -11601,8 +11601,8 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A
-      REAL :: X(N)
-      REAL :: Y(N)
+      REAL, INTENT(IN) :: X(N)
+      REAL, INTENT(IN) :: Y(N)
       REAL :: TRP
     END FUNCTION TRP
     SUBROUTINE TSLV(M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)

@@ -127,7 +127,8 @@ def finish_fixed(data):
     from fixed_generic_intrinsics import transform as generics
     from remove_redundant_copies import transform as copies
     from declaration_sections import transform as sections
-    return sections(copies(generics(transform(spacing(data)))))
+    from additional_intents import transform as intents
+    return intents(sections(copies(generics(transform(spacing(data))))))
 
 
 def main():

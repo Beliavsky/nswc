@@ -156,7 +156,8 @@ def initial_scalar_outputs(body, candidates, records, spec_reads):
     return result
 
 
-def infer(base, inventory, existing):
+def infer(base, inventory, existing, allow_common=False):
+    """Infer writes; COMMON opt-in requires the supplemental alias checks."""
     lines, scopes = units(base)
     formal_order, bodies, direct, calls, excluded, spec_reads = {}, {}, {}, {}, {}, {}
     for name, (start, insert, end) in scopes.items():
@@ -170,7 +171,8 @@ def infer(base, inventory, existing):
         dummies = data_dummies(records)
         for line, whole in body:
             executable = strip_if(whole)
-            if UNSAFE_STORAGE.match(whole) or UNSUPPORTED_IO.match(executable):
+            unsafe = UNSAFE_STORAGE.match(whole)
+            if (unsafe and not (allow_common and re.match(r'common\b', whole))) or UNSUPPORTED_IO.match(executable):
                 excluded[name] = "Storage association, alternate entry, pointer, or unsupported I/O"
             if is_specification(whole):
                 # Dummy bounds and character lengths use incoming values.

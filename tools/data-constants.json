@@ -205,7 +205,7 @@
       }
     },
     "ROT3": {
-      "source_hash": "52f5479a7546a4ae84ae750494b824d37c0bbb1aa9bb2d598346476ca423b260",
+      "source_hash": "517c57691db05648315c7745d0ac0ff901db6fb054b689601ea009f9c8486b3d",
       "constants": {
         "pihalf": [
           "1.5707963267949"
@@ -8767,7 +8767,7 @@
       }
     },
     "SROTM": {
-      "source_hash": "4292558518a785156732197893d7309a2a8879f234e8bf15f14906a4c2ff1cb4",
+      "source_hash": "9d4253dd33c1db84f67bd31b37318af63be507ed700e3ba4e8132ff3a1741b2b",
       "constants": {
         "zero": [
           "0.e0"
@@ -8801,7 +8801,7 @@
       }
     },
     "DROTM": {
-      "source_hash": "3ad895e9aa8e439f9c72566b923d2f942f45c8beb0936a894cbe69038e4c0110",
+      "source_hash": "bdc165cd6b212414d61f1a3bba456c50bf3703a64e9f126f5b4986a4a0097ec8",
       "constants": {
         "zero": [
           "0.d0"
@@ -8988,7 +8988,7 @@
       }
     },
     "ORIMP": {
-      "source_hash": "48899bf2e567e9184d521f7fe32bbf0a292afd7c8a5aa83e57730c8d133e691c",
+      "source_hash": "8dcee7672eeeb8b7694a25e75691c9881b1be789f6ff85e6cbe5335bd7e319db",
       "constants": {
         "zero": [
           "0.0"
@@ -9514,7 +9514,7 @@
       }
     },
     "ADSET": {
-      "source_hash": "862e1f733aeb2e432a7f000add156a724da20ca06ff4b000d56eb325bd98a20f",
+      "source_hash": "5b84a08333cff8c4008b5e373eb4a2d45ecf05ad62869bae1aa6696ce7f900bc",
       "constants": {
         "eps0": [
           "1.d-30"
@@ -9568,7 +9568,7 @@
       }
     },
     "ADPUT": {
-      "source_hash": "5fb9ff6486523f6b553aa4bd2b0249523b1d5837c6005f5437a36f0ec0dd1368",
+      "source_hash": "27c0a8707f9ff5ae68e6eeb9c70bacee7f5a500f081f1322e8973b8fd2e94d53",
       "constants": {
         "half": [
           ".5d0"
@@ -10410,7 +10410,7 @@
       }
     },
     "CUBTRI": {
-      "source_hash": "ab7b0a2a0341e56211d1b45d87a1f8c1325eeab7a346e1a675df537a7646b12e",
+      "source_hash": "353a952e1e94a686caab5fd9d94d290324ff11f229f8bfc14d6fbfeb67456be0",
       "constants": {
         "nfe": [
           "19"
@@ -10501,7 +10501,7 @@
       }
     },
     "IESLV": {
-      "source_hash": "e6d91e30697dd52f1020a816bd35071de527f3773610586859896b3333b4e450",
+      "source_hash": "2bd12f82ade15aaddc19f49428ae7962557684a48a0cd57c276c5ce5b2c738cb",
       "constants": {
         "nmax": [
           "64"
@@ -11323,7 +11323,7 @@
       }
     },
     "RSCO": {
-      "source_hash": "f48df2a78c2af59543fcc8238e7bd0d7ed867ae5192738b0767d01590c0fc00a",
+      "source_hash": "d289698a8c1cad7545e1be104c8a16781804a3dfa944ac222d312d44e6596628",
       "constants": {
         "lenrls": [
           "218"
@@ -11334,7 +11334,7 @@
       }
     },
     "SVCO": {
-      "source_hash": "934c8bec884dc3d161a1a2f0cf38d7ea68fcaab7701360fa90459125f0d53a2d",
+      "source_hash": "cb266e499685bf037d089140b5dba1f6b817a32c42269a7be167727e29be7d22",
       "constants": {
         "lenrls": [
           "218"
@@ -11345,7 +11345,7 @@
       }
     },
     "LSOD1": {
-      "source_hash": "868c7e5853e33c21abec6e3c6408258d4e44980e4ed5f6779aefc760b7a96471",
+      "source_hash": "cf352b1c19608cee7d7e93ae48c0c89f73d9044cb527fe5fd1607c0dd5125d08",
       "constants": {
         "maxnum": [
           "500"

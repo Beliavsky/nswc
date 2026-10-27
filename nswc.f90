@@ -346,7 +346,7 @@ end function ipmpar
 !-----------------------------------------------------------------------
 subroutine mach(mo, n, ibeta, imax, idmax, imach, rmach, dmach)
 implicit none
-integer :: ibeta
+integer, intent(in) :: ibeta
 integer, intent(in) :: idmax, imax, mo, n
 real, intent(inout) :: rmach(3)
 double precision, intent(inout) :: dmach(3)
@@ -562,7 +562,7 @@ end subroutine mach
 
 subroutine radix(ibeta)
 implicit none
-integer :: ibeta
+integer, intent(inout) :: ibeta
 !     beginning of local variable declarations
 real :: a, b, one, y
 real :: d1, d2
@@ -586,8 +586,10 @@ end subroutine radix
 subroutine mach1(n, ibeta, m, minexp, maxexp, eps, xint, &
    & xmin, xmax)
 implicit none
-integer :: ibeta, m, maxexp, minexp, n
-real :: eps, xint, xmin, xmax
+integer, intent(in) :: ibeta
+integer, intent(inout) :: m, maxexp, minexp
+integer :: n
+real, intent(inout) :: eps, xint, xmin, xmax
 !     beginning of local variable declarations
 integer :: j, k, km, l
 real :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, zero
@@ -815,8 +817,10 @@ end subroutine store2
 subroutine mach2(n, ibeta, m, minexp, maxexp, eps, xint, &
    & xmin, xmax)
 implicit none
-integer :: ibeta, m, maxexp, minexp, n
-double precision :: eps, xint, xmin, xmax
+integer, intent(in) :: ibeta
+integer, intent(inout) :: m, maxexp, minexp
+integer :: n
+double precision, intent(inout) :: eps, xint, xmin, xmax
 !     beginning of local variable declarations
 integer :: j, k, km, l
 double precision :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, &
@@ -2856,7 +2860,7 @@ end subroutine drotg
 
 subroutine rot3(a, theta)
 implicit none
-real :: a(3,3)
+real, intent(in) :: a(3,3)
 real, intent(inout) :: theta(3)
 !     beginning of local variable declarations
 real :: r, t, u, v
@@ -26014,7 +26018,7 @@ end subroutine dpinv
 subroutine mplnmv(mo, au, nc, ac, fv)
 implicit none
 integer, intent(in) :: mo, nc
-real :: ac(*)
+real, intent(in) :: ac(*)
 real, intent(in) :: au
 real, intent(out) :: fv
 !     beginning of local variable declarations
@@ -26125,7 +26129,7 @@ subroutine lgrngn(au, na, an)
 implicit none
 integer, intent(in) :: na
 real, intent(inout) :: an(*)
-real :: au(*)
+real, intent(in) :: au(*)
 !     beginning of local variable declarations
 integer :: k, m
 real :: dm, tm
@@ -26150,7 +26154,7 @@ end subroutine lgrngn
 subroutine lgrngv(mo, na, qu, au, an, ff, df, sf)
 implicit none
 integer, intent(in) :: mo, na
-real :: an(*), au(*)
+real, intent(in) :: an(*), au(*)
 real, intent(inout) :: df(*), ff(*)
 real, intent(in) :: qu
 real, intent(inout) :: sf(*)
@@ -26269,7 +26273,7 @@ subroutine lgrngx(au, na, ac)
 implicit none
 integer, intent(in) :: na
 real, intent(inout) :: ac(*)
-real :: au(*)
+real, intent(in) :: au(*)
 !     beginning of local variable declarations
 integer :: i, j, k, l
 real :: sm, td, tm
@@ -26322,7 +26326,7 @@ subroutine orthos(au, ma, aa, na, ar)
 implicit none
 integer, intent(in) :: ma, na
 real, intent(inout) :: aa(*), ar(*)
-real :: au(*)
+real, intent(in) :: au(*)
 !     beginning of local variable declarations
 integer :: i, j, k, l, m
 real :: rm, rn, sm, sn
@@ -26403,7 +26407,7 @@ end subroutine orthos
 subroutine orthov(mo, na, au, ar, nf, ff, df, sf)
 implicit none
 integer, intent(in) :: mo, na, nf
-real :: ar(*)
+real, intent(in) :: ar(*)
 real, intent(in) :: au
 real, intent(inout) :: df(*), ff(*), sf(*)
 !     beginning of local variable declarations
@@ -26461,7 +26465,7 @@ subroutine orthox(na, ar, nc, ac)
 implicit none
 integer, intent(in) :: na, nc
 real, intent(inout) :: ac(*)
-real :: ar(*)
+real, intent(in) :: ar(*)
 !     beginning of local variable declarations
 integer :: j, k, l, m, n
 real :: rn, sn, tm
@@ -27981,7 +27985,7 @@ subroutine drpoly(op, ideg, zeror, zeroi, num, wk, dwk)
 implicit none
 integer :: ideg
 integer, intent(inout) :: num
-double precision :: op(*)
+double precision, intent(in) :: op(*)
 double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
    & dwk(*)
 real, intent(inout) :: wk(*)
@@ -28028,10 +28032,14 @@ end subroutine drpoly
 subroutine drply1(op,ideg,idp1,zeror,zeroi,p,qp,k,qk,svk, &
    & temp,pt,num)
 implicit none
-integer :: ideg, idp1, num
-double precision :: op(idp1), zeror(ideg), zeroi(ideg), p(idp1), &
-   & qp(idp1), k(idp1), qk(idp1), svk(idp1), temp(idp1)
-real :: pt(idp1)
+integer :: ideg
+integer, intent(in) :: idp1
+integer, intent(inout) :: num
+double precision, intent(in) :: op(idp1)
+double precision, intent(inout) :: zeror(ideg), zeroi(ideg)
+double precision :: p(idp1), qp(idp1), k(idp1), qk(idp1), &
+   & svk(idp1), temp(idp1)
+real, intent(inout) :: pt(idp1)
 !     beginning of local variable declarations
 integer :: i, j, jj, l, n, nm1, nn, nz, cnt
 double precision :: aa, bb, cc, factor, t
@@ -28190,7 +28198,7 @@ dx = ff/df
 x = x - dx
 go to 160
 180 bnd = x
-!     Compute the derivative as the intial K polynomial
+!     Compute the derivative as the intial k polynomial
 !     and do 5 steps with no shift.
 nm1 = n - 1
 do i = 2,n
@@ -28203,7 +28211,7 @@ zerok = k(n) == 0.d0
 do jj = 1,5
    cc = k(n)
    if (zerok) go to 210
-!     Use scaled form of recurrence if value of K at 0 is nonzero.
+!     Use scaled form of recurrence if value of k at 0 is nonzero.
    t = -aa/cc
    do i = 1,nm1
       j = nn - i
@@ -28221,7 +28229,7 @@ do jj = 1,5
    zerok = k(n) == 0.d0
 230 continue
 end do
-!     Save K for restarts with new shifts
+!     Save k for restarts with new shifts
 do i = 1,n
    temp(i) = k(i)
 end do
@@ -28244,7 +28252,7 @@ do cnt = 1,20
    call fxshfr(20*cnt, nz, nn, p, qp, k, qk, svk)
    if (nz /= 0) go to 300
 !     If the iteration is unsuccessful another quadratic
-!     is chosen after restoring K.
+!     is chosen after restoring k.
    do i = 1,n
       k(i) = temp(i)
    end do
@@ -28269,9 +28277,10 @@ end subroutine drply1
 
 subroutine fxshfr(l2, nz, nn, p, qp, k, qk, svk)
 implicit none
-integer :: nn
+integer, intent(in) :: nn
 double precision :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
-integer :: l2, nz
+integer, intent(in) :: l2
+integer, intent(inout) :: nz
 !     beginning of local variable declarations
 integer :: n, type, i, j, iflag
 double precision :: svu, svv, ui, vi, s
@@ -28384,9 +28393,10 @@ end subroutine fxshfr
 
 subroutine quadit(uu, vv, nz, nn, p, qp, k, qk)
 implicit none
-integer :: nn
-double precision :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
-integer :: nz
+integer, intent(in) :: nn
+double precision, intent(in) :: uu, vv
+double precision :: p(nn), qp(nn), k(nn), qk(nn)
+integer, intent(inout) :: nz
 !     beginning of local variable declarations
 integer :: n, type, i, j
 double precision :: ui, vi
@@ -28481,8 +28491,11 @@ end subroutine quadit
 
 subroutine realit(sss, nz, iflag, nn, p, qp, k, qk)
 implicit none
-integer :: iflag, nn, nz
-double precision :: sss, p(nn), qp(nn), k(nn), qk(nn)
+integer, intent(inout) :: iflag
+integer, intent(in) :: nn
+integer, intent(inout) :: nz
+double precision, intent(inout) :: sss
+double precision :: p(nn), qp(nn), k(nn), qk(nn)
 !     beginning of local variable declarations
 integer :: i, j, n
 double precision :: pv, kv, t, s
@@ -28571,8 +28584,8 @@ end subroutine realit
 
 subroutine calcsc(type, n, k, qk)
 implicit none
-integer :: n
-integer :: type
+integer, intent(in) :: n
+integer, intent(inout) :: type
 double precision :: k(n), qk(n)
 !     beginning of local variable declarations
 double precision :: tol
@@ -28618,8 +28631,8 @@ end subroutine calcsc
 
 subroutine nextk(type, n, qp, k, qk)
 implicit none
-integer :: n
-integer :: type
+integer, intent(in) :: n
+integer, intent(in) :: type
 double precision :: qp(n), k(n), qk(n)
 !     beginning of local variable declarations
 integer :: i
@@ -28662,9 +28675,10 @@ end subroutine nextk
 
 subroutine newest(type, uu, vv, nn, p, k)
 implicit none
-integer :: nn
-integer :: type
-double precision :: uu, vv, p(nn), k(nn)
+integer, intent(in) :: nn
+integer, intent(in) :: type
+double precision, intent(inout) :: uu, vv
+double precision :: p(nn), k(nn)
 !     beginning of local variable declarations
 integer :: n
 double precision :: a4, a5, b1, b2, c1, c2, c3, c4, temp
@@ -30413,7 +30427,7 @@ end subroutine srotmg
 subroutine srotm(n,sx,incx,sy,incy,sparam)
 implicit none
 integer, intent(in) :: incx, incy, n
-real :: sparam(5)
+real, intent(in) :: sparam(5)
 real, intent(inout) :: sx(*), sy(*)
 !     beginning of local variable declarations
 integer :: i, kx, ky, nsteps
@@ -30659,7 +30673,7 @@ subroutine drotm(n,dx,incx,dy,incy,dparam)
 implicit none
 integer, intent(in) :: incx, incy, n
 double precision, intent(inout) :: dx(*)
-double precision :: dparam(5)
+double precision, intent(in) :: dparam(5)
 double precision, intent(inout) :: dy(*)
 !     beginning of local variable declarations
 integer :: i, kx, ky, nsteps
@@ -33744,9 +33758,9 @@ implicit none
 ! Output..
 !   b = Solution vector, X .
 !-----------------------------------------------------------------------
-integer :: ip
+integer, intent(in) :: ip
 integer, intent(in) :: n, ndim
-real :: a(ndim, n)
+real, intent(in) :: a(ndim, n)
 real, intent(inout) :: b(n)
 dimension ip(n)
 !     beginning of local variable declarations
@@ -34072,7 +34086,7 @@ subroutine slvmp(mo, n, a, ka, b, x, wk, iwk, ierr)
 implicit none
 integer, intent(inout) :: ierr, iwk
 integer, intent(in) :: ka, mo, n
-real :: a(ka,n), b(n)
+real, intent(in) :: a(ka,n), b(n)
 real, intent(inout) :: wk(*), x(n)
 dimension iwk(n)
 !     beginning of local variable declarations
@@ -34102,9 +34116,10 @@ end subroutine slvmp
 subroutine luimp(a, ka, n, q, kq, ipvt, b, x, r, ind)
 implicit none
 integer, intent(out) :: ind
-integer :: ipvt
+integer, intent(in) :: ipvt
 integer, intent(in) :: ka, kq, n
-real :: a(ka,n), b(n), q(kq,n)
+real, intent(in) :: a(ka,n), b(n)
+real :: q(kq,n)
 real, intent(inout) :: r(n), x(n)
 dimension ipvt(n)
 !     beginning of local variable declarations
@@ -35845,9 +35860,9 @@ end subroutine arcepc
 
 subroutine arcesl(array, mtrstr, nmblks, pivot, b, x)
 implicit none
-integer :: mtrstr(3,*)
+integer, intent(in) :: mtrstr(3,*)
 integer, intent(in) :: nmblks
-real :: array(*)
+real, intent(in) :: array(*)
 real, intent(inout) :: b(*), x(*)
 integer, intent(in) :: pivot(*)
 !     beginning of local variable declarations
@@ -36022,7 +36037,7 @@ end subroutine arcesl
 subroutine arcefs(block, nrwblk, nclpiv, novrlp, b, x)
 implicit none
 integer, intent(in) :: nclpiv, novrlp, nrwblk
-real :: block(nrwblk,novrlp)
+real, intent(in) :: block(nrwblk,novrlp)
 real, intent(inout) :: b(*), x(*)
 !     beginning of local variable declarations
 integer :: i, iplusl, j, jplusl, l, long
@@ -36048,9 +36063,9 @@ end subroutine arcefs
 subroutine arcefm(block, nrwblk, nclpiv, b, x)
 implicit none
 integer, intent(in) :: nclpiv, nrwblk
-real :: block(nrwblk,nclpiv)
+real, intent(in) :: block(nrwblk,nclpiv)
 real, intent(inout) :: b(*)
-real :: x(*)
+real, intent(in) :: x(*)
 !     beginning of local variable declarations
 integer :: j, l, nclpvl
 real :: xj
@@ -36070,7 +36085,7 @@ end subroutine arcefm
 subroutine arcefe(block, nrwblk, nrwpiv, pivot, b)
 implicit none
 integer, intent(in) :: nrwblk, nrwpiv
-real :: block(nrwblk,nrwpiv)
+real, intent(in) :: block(nrwblk,nrwpiv)
 real, intent(inout) :: b(*)
 integer, intent(in) :: pivot(nrwpiv)
 !     beginning of local variable declarations
@@ -36099,7 +36114,7 @@ end subroutine arcefe
 subroutine arcebs(block, nrwblk, nclblk, nrwpiv, b, x)
 implicit none
 integer, intent(in) :: nclblk, nrwblk, nrwpiv
-real :: block(nrwblk,nclblk)
+real, intent(in) :: block(nrwblk,nclblk)
 real, intent(inout) :: b(*), x(*)
 !     beginning of local variable declarations
 integer :: j, jmin1, l, nj
@@ -36123,9 +36138,9 @@ end subroutine arcebs
 subroutine arcebm(block, nrwblk, nclblk, nrwpiv, b, x)
 implicit none
 integer, intent(in) :: nclblk, nrwblk, nrwpiv
-real :: block(nrwblk,nclblk)
+real, intent(in) :: block(nrwblk,nclblk)
 real, intent(inout) :: b(*)
-real :: x(*)
+real, intent(in) :: x(*)
 !     beginning of local variable declarations
 integer :: j, l, nrwpv1
 real :: xj
@@ -36145,7 +36160,7 @@ end subroutine arcebm
 subroutine arcebe(block, nrwblk, nclpiv, novrlp, pivot, x)
 implicit none
 integer, intent(in) :: nclpiv, novrlp, nrwblk
-real :: block(nrwblk,novrlp)
+real, intent(in) :: block(nrwblk,novrlp)
 real, intent(inout) :: x(*)
 integer, intent(in) :: pivot(nrwblk)
 !     beginning of local variable declarations
@@ -36310,8 +36325,9 @@ end subroutine decbt
 subroutine solbt(m, n, a, b, c, y, ip)
 implicit none
 integer, intent(in) :: m
-integer :: n, ip(m,n)
-real :: a(m,m,n)
+integer :: n
+integer, intent(in) :: ip(m,n)
+real, intent(in) :: a(m,m,n)
 real, intent(in) :: b(m,m,n), c(m,m,n)
 real, intent(inout) :: y(m,n)
 !     beginning of local variable declarations
@@ -61704,7 +61720,7 @@ implicit none
 integer, intent(out) :: ierr
 integer, intent(inout) :: iwk
 integer, intent(in) :: ka, kb, m, n, nb
-real :: a(ka,n)
+real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,nb), wk(*)
 dimension iwk(n)
 !     beginning of local variable declarations
@@ -61861,7 +61877,7 @@ end subroutine ortho
 
 subroutine orsol(m, n, qr, ms, s, ip, x)
 implicit none
-integer :: ip
+integer, intent(in) :: ip
 integer, intent(in) :: m, ms, n
 real :: qr(ms,n), s(n)
 real, intent(inout) :: x(m)
@@ -61954,9 +61970,10 @@ end subroutine orsol
 
 subroutine orimp(m, n, a, ka, qr, ms, s, ip, b, x, r, exit)
 implicit none
-integer :: ip
+integer, intent(in) :: ip
 integer, intent(in) :: ka, m, ms, n
-real :: a(ka,n), b(m), qr(ms,n)
+real, intent(in) :: a(ka,n), b(m)
+real :: qr(ms,n)
 real, intent(inout) :: r(m)
 real :: s(n)
 real, intent(inout) :: x(m)
@@ -72644,9 +72661,9 @@ integer, intent(inout) :: ibasis, ind, iter, iwk(*)
 integer, intent(in) :: ka
 integer :: m
 integer, intent(in) :: mxiter, n0, numge, numle
-real :: a(ka,n0), b0(m)
+real, intent(in) :: a(ka,n0), b0(m)
 real, intent(inout) :: bi(m,m)
-real :: c(n0)
+real, intent(in) :: c(n0)
 real, intent(inout) :: wk(*), x(*), z
 dimension ibasis(m)
 !     beginning of local variable declarations
@@ -73495,13 +73512,14 @@ subroutine ssplx(ta,ita,jta,b0,c,m,n0,ind,ibasis,x,z,iter,mxiter, &
    & numle,numge,bi,wk,iwk)
 implicit none
 integer, intent(inout) :: ibasis, ind
-integer :: ita(*)
+integer, intent(in) :: ita(*)
 integer, intent(inout) :: iter, iwk(*)
-integer :: jta(*), m
+integer, intent(in) :: jta(*)
+integer :: m
 integer, intent(in) :: mxiter, n0, numge, numle
-real :: b0(m)
+real, intent(in) :: b0(m)
 real, intent(inout) :: bi(m,m)
-real :: c(n0), ta(*)
+real, intent(in) :: c(n0), ta(*)
 real, intent(inout) :: wk(*), x(*), z
 dimension ibasis(m)
 !     beginning of local variable declarations
@@ -80246,11 +80264,15 @@ subroutine adapt(f, xlft, xrgt, epsln, npiece, errest, xknots, &
    & coefs, ierr, kmax, ndeg, nsmth, anorm, dx, mo, kbreak, brakpt, &
    & kdiff, vallft, valrgt)
 implicit none
-integer :: ierr, kbreak, kdiff(kbreak), kmax, mo, ndeg, npiece, &
-   & nsmth
-double precision :: xknots(*), coefs(kmax,*)
-double precision :: anorm, brakpt(kbreak), dx, epsln, errest, &
-   & vallft(kbreak), valrgt(kbreak), xlft, xrgt
+integer, intent(inout) :: ierr
+integer, intent(in) :: kbreak, kdiff(kbreak), kmax, mo, ndeg
+integer, intent(inout) :: npiece
+integer, intent(in) :: nsmth
+double precision, intent(inout) :: xknots(*), coefs(kmax,*)
+double precision, intent(in) :: anorm, brakpt(kbreak), dx, epsln
+double precision, intent(inout) :: errest
+double precision, intent(in) :: vallft(kbreak), valrgt(kbreak), &
+   & xlft, xrgt
 double precision :: f
 external f
 !     beginning of local variable declarations
@@ -80281,15 +80303,15 @@ logical :: discrd
 !     ierr       ierr
 !     kmax       kmax
 !     DEGREE     ndeg
-!     SMOOTH     NSMTH
+!     SMOOTH     nsmth
 !     NORM       anorm
 !     charf      dx
 !     edist      mo
 !     nbreak     kbreak
 !     XBREAK     brakpt
 !     dbreak     kdiff
-!     bleft      VALLFT
-!     BRIGHT     VALRGT
+!     bleft      vallft
+!     BRIGHT     valrgt
 common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
    & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
 common /resulz/ error, knots
@@ -80324,8 +80346,10 @@ end subroutine adapt
 
 subroutine adapt1(f, xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
-integer :: ierr, kdimen, kmax, ndimen
-double precision :: xknots(kdimen), coefs(kmax,ndimen)
+integer, intent(inout) :: ierr
+integer, intent(in) :: kdimen, kmax, ndimen
+double precision, intent(inout) :: xknots(kdimen), &
+   & coefs(kmax,ndimen)
 double precision :: f
 external f
 !     beginning of local variable declarations
@@ -80380,15 +80404,15 @@ logical :: discrd
 !  ********** OUTPUT **********
 !     the output of the computation consists of 4 parts, each returned
 !     to the user in a different way. They are
-!   xknots,coefs - Arrays defining the piecewise polynomial result.
+!   xknots,COEFS - Arrays defining the piecewise polynomial result.
 !            xknots(K)  = knots of the approximation ( K = 1 To knots)
 !                         the last one is right end point of interval
-!            coefs(K,N) = Coefficient of (X - XKNOT(K))**(N-1) in the
+!            COEFS(K,N) = Coefficient of (X - XKNOT(K))**(N-1) in the
 !                         interval XKNOT(K) to XKNOT(K+1)
 !                           K = 1 To knots-1  and  N = 1 To degree+1
 !            these arrays are passed as arguments so as to use variable
 !            dimensions. The arrays are of dimension xknots(kdimen) and
-!            coefs(kmax,ndimen). It is assumed that kdimen = kmax+1.
+!            COEFS(kmax,ndimen). It is assumed that kdimen = kmax+1.
 !               ***** Note ***** several small arrays here have fixed
 !                        dimensions that limit degree and thus ndimen
 !                        should not exceed this limit (currently = 20)
@@ -80418,7 +80442,7 @@ logical :: discrd
 !  ********** Dimension constraints **********
 !     maxknt - Max number of knots taken from user via kdimen
 !              arrays with this dimension (or related values)
-!                   coefs   xknots
+!                   COEFS   xknots
 !     maxpar - Max number of parameters per interval (currently = 20)
 !                   user provided ndimen must have ndimen le maxpar
 !                   must have  degree + 1 le maxpar
@@ -80519,8 +80543,10 @@ end subroutine adapt1
 
 subroutine adset(xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
-integer :: ierr, kdimen, kmax, ndimen
-double precision :: xknots(kdimen), coefs(kmax,ndimen)
+integer, intent(inout) :: ierr
+integer, intent(in) :: kdimen, kmax, ndimen
+double precision, intent(inout) :: xknots(kdimen)
+double precision, intent(in) :: coefs(kmax,ndimen)
 !     beginning of local variable declarations
 integer :: j, k, limsm
 integer :: leftx, nintrp
@@ -80641,7 +80667,7 @@ end subroutine adset
 
 subroutine adtake(ierr)
 implicit none
-integer :: ierr
+integer, intent(inout) :: ierr
 !     beginning of local variable declarations
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
@@ -81102,8 +81128,10 @@ end subroutine adchk
 
 subroutine adput(xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
-integer :: ierr, kdimen, kmax, ndimen
-double precision :: xknots(kdimen), coefs(kmax,ndimen)
+integer, intent(inout) :: ierr
+integer, intent(in) :: kdimen, kmax, ndimen
+double precision, intent(inout) :: xknots(kdimen), &
+   & coefs(kmax,ndimen)
 !     beginning of local variable declarations
 integer :: k
 integer :: leftx, nintrp
@@ -81156,7 +81184,7 @@ xleft(nstack) = xleft(nstack - 1)
 xleft(nstack - 1) = xright(nstack - 1) - dx
 xright(nstack) = xleft(nstack - 1)
 return
-!            Discard interval, update global error, xknots and coefs
+!            Discard interval, update global error, xknots and COEFS
 30 p = abs(norm)
 if (norm == three) error = max(error,errori)
 if (norm /= three) error = (error**p + errori)**(one/p)
@@ -81165,7 +81193,7 @@ if (break == left .or. break == both) ibreak = ibreak + 1
 !             Transform representation of polynomial from divided
 !             differences to powers of X with origin at xknots (knots)
 call adtran(ddtemp, powers)
-!             Put coefs into the main array
+!             Put COEFS into the main array
 do k = 1,npar
    coefs(knots,k) = powers(k)
 end do
@@ -81177,7 +81205,8 @@ end subroutine adput
 
 subroutine adtran(d, powers)
 implicit none
-double precision :: d(20,*), powers(*)
+double precision :: d(20,*)
+double precision, intent(inout) :: powers(*)
 !     beginning of local variable declarations
 integer :: i, ii, j, k, khi, koef, l, ltop, ni, ni1, nl, nr, nri, &
    & nri1, nrl, nrli, nrlk
@@ -81791,7 +81820,7 @@ function trp(a,n,x,y)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a
-real :: x(n), y(n)
+real, intent(in) :: x(n), y(n)
 real :: trp
 !     beginning of local variable declarations
 integer :: i, il, ir, nm1
@@ -81826,7 +81855,7 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, ni
 real, intent(inout) :: t(m)
-real :: x(n), xi(ni), y(n)
+real, intent(in) :: x(n), xi(ni), y(n)
 real, intent(inout) :: yi(ni)
 !     beginning of local variable declarations
 integer :: i, ii, il, ilm1, ilold, ipm, ir, istep, j, jmax, k, l, &
@@ -81979,7 +82008,7 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
 real, intent(inout) :: a(n), t(n)
-real :: x(n), y(n)
+real, intent(in) :: x(n), y(n)
 !     beginning of local variable declarations
 integer :: i, ibeg, iend, k
 real :: diff, f, r
@@ -86129,7 +86158,7 @@ end subroutine bspp
 subroutine ppval(x, a, l, n, xi, yi, ni)
 implicit none
 integer, intent(in) :: l, n, ni
-real :: a(l,n), x(n), xi(ni)
+real, intent(in) :: a(l,n), x(n), xi(ni)
 real, intent(inout) :: yi(ni)
 !     beginning of local variable declarations
 integer :: i, il, ir, j, k, lm1, lmj
@@ -99328,8 +99357,17 @@ subroutine cubtri(f, t, eps, mcalls, ans, err, ncalls, w, nw, &
 implicit none
 real :: f
 external f
-integer :: idata(*), ier, mcalls, ncalls, nw
-real :: ans, eps, err, rdata(*), t(2,*), w(6,nw)
+integer :: idata(*)
+integer, intent(inout) :: ier
+integer, intent(in) :: mcalls
+integer, intent(inout) :: ncalls
+integer, intent(in) :: nw
+real, intent(inout) :: ans
+real, intent(in) :: eps
+real, intent(inout) :: err
+real :: rdata(*)
+real, intent(in) :: t(2,*)
+real, intent(inout) :: w(6,nw)
 !     beginning of local variable declarations
 integer :: i, j, jkp, k, l, maxc, maxk, mw
 real :: rnderr
@@ -99652,10 +99690,17 @@ end subroutine cubrul
 subroutine ieslv(kernel,rhfcn,a,b,ep,iflag,t,x,nt,nupper, &
    & mupper,nf,mf,norm,w,ier)
 implicit none
-integer :: ier, iflag, mf, mupper, nf, nt, nupper
-real :: a, b, ep, t(*), w(*), x(*)
+integer, intent(inout) :: ier
+integer, intent(in) :: iflag
+integer, intent(inout) :: mf
+integer, intent(in) :: mupper
+integer, intent(inout) :: nf, nt
+integer, intent(in) :: nupper
+real, intent(in) :: a, b
+real, intent(inout) :: ep, t(*), w(*), x(*)
 real :: rhfcn
-real :: kernel, norm
+real :: kernel
+real, intent(inout) :: norm
 external kernel, rhfcn
 !     beginning of local variable declarations
 integer :: i1, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i2, i20, i21, i3, i4, i5, i6, i7, i8, i9, m, n, nhalf, nsq, nup
@@ -99823,11 +99868,24 @@ subroutine iegs(kernel,rhfcn,a,b,ep,iflag,x,t,nt,nup,mup,ier, &
    & deln,tm,tn,xm,xmz,wm,wn,oldx,save,xn,save2,aside,aside3, &
    & imknn)
 implicit none
-integer :: ier, iflag, mup, nhalf, nt, nup
-real :: a, aside(nup,*), aside3(nup,nup), b, cutoff, deln(nup), &
-   & ep, oldx(mup), r(mup), rh(nup), rhs(mup), rootrt, save(mup), &
-   & save2(mup), t(*), tm(mup), tn(nup), unitrd, wm(mup), wn(nup), &
-   & x(*), xm(mup), xmz(mup), xn(nup)
+integer, intent(inout) :: ier
+integer, intent(in) :: iflag, mup, nhalf
+integer, intent(inout) :: nt
+integer, intent(in) :: nup
+real, intent(in) :: a
+real :: aside(nup,*), aside3(nup,nup)
+real, intent(in) :: b, cutoff
+real :: deln(nup)
+real, intent(inout) :: ep
+real :: oldx(mup), r(mup), rh(nup), rhs(mup)
+real, intent(in) :: rootrt
+real :: save(mup), save2(mup)
+real, intent(inout) :: t(*)
+real :: tm(mup), tn(nup)
+real, intent(in) :: unitrd
+real :: wm(mup), wn(nup)
+real, intent(inout) :: x(*)
+real :: xm(mup), xmz(mup), xn(nup)
 real :: rhfcn
 real :: kernel, lufact(nup,nup), kmm(nup,nup), kmn(nup,nhalf), &
    & knm(nhalf,nup), imknn(nup,nup)
@@ -99868,12 +99926,12 @@ cond = 1.0
 pastc = 1.0
 pastre = 0.0
 eps = ep
-!   Stage A. direct solution of linear system (i-KN)*XN=RHS, while
+!   Stage A. direct solution of linear system (i-KN)*xn=rhs, while
 !   trying to find a good approximate inverse to implement
 !   iterative method of solution.
-!   Create the nodes and weights TN(i) and WN(i), i=1,...,n
+!   Create the nodes and weights tn(i) and wn(i), i=1,...,n
 call wandt(wn,tn,n,a,b)
-!   Set up matrix for (i-KN)*XN=rhfcn
+!   Set up matrix for (i-KN)*xn=rhfcn
 do j = 1,n
    do i = 1,n
       imknn(i,j) = -wn(j)*kernel(tn(i),tn(j))
@@ -99883,7 +99941,7 @@ do j = 1,n
 end do
 go to 6
 !   This is entrance for an increased value of n, using previously
-!   stored values in kmm to define matrix for (i-KN)*XN=rhfcn with
+!   stored values in kmm to define matrix for (i-KN)*xn=rhfcn with
 !   new value of n.
 3 do j = 1,n
    do i = 1,n
@@ -99897,7 +99955,7 @@ end do
 !   This is the entrance when iteration in stage b fails and we need
 !   to increase n to obtain a better iterative rate.
 6 continue
-!   Solve (i-KN)*XN=rhfcn at all TN(i).Also obtain the LU
+!   Solve (i-KN)*xn=rhfcn at all tn(i).Also obtain the LU
 !   decomposition for later use in the stage b iterative method.
 !*******************************************************************
 !                                                                  *
@@ -99913,12 +99971,12 @@ cond = conew(cond,elinsy,relrsd,averr,pastc,pastre)
 relmin = rmin(n,n,cond,unitrd,averr)
 if (loop == 1) go to 11
 if (loop == 2) go to 9
-!   Set up approximate rate of convergence of solutions XN to true
-!   solution X. also set up desired ratio for iterative method.
+!   Set up approximate rate of convergence of solutions xn to true
+!   solution x. also set up desired ratio for iterative method.
 numr2 = rnrm(xn,oldx,n,1)
 r2 = min(0.5,max(numr2/denr2,1.0e-4))
 r1rat = min(rootrt,sqrt(r2))
-!   Check for error in XN using test involving r2 and OLDX,according
+!   Check for error in xn using test involving r2 and oldx,according
 !   to theory for asymptotic error bounds. Modify error if it is
 !   outside precision range of computer, possibly due to
 !   ill-conditioning.
@@ -99942,13 +100000,13 @@ go to 8
    & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
    & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
-!   Attempt to solve (i-km)*XM=rhfcn iteratively, checking to see if
+!   Attempt to solve (i-km)*xm=rhfcn iteratively, checking to see if
 !   the rate of convergence is sufficiently fast so as to enter
 !   STAGE b.
-!   Calculate TM(i) and WM(i), i=1,...,m.
+!   Calculate tm(i) and wm(i), i=1,...,m.
 11 call wandt(wm,tm,m,a,b)
 flag = 0
-!   Calculate initial guess XMZ for iteration method.
+!   Calculate initial guess xmz for iteration method.
 call nsterp(tm,wm,xmz,m,tn,wn,xn,n, &
    & kernel,rhfcn,rhs,kmn,nhalf,nup)
 do i = 1,m
@@ -99975,7 +100033,7 @@ rate = r1
 if (m > nup) go to 19
 if (r1 <= r1rat) go to 15
 !   The iteration did not work well enough, and stage A is to be
-!   repeated. RE-initialize for solving (i-KN)*XN=rhfcn again
+!   repeated. RE-initialize for solving (i-KN)*xn=rhfcn again
 !   with a larger n.
 n = m
 loop = loop + 1
@@ -99999,7 +100057,7 @@ do j = 1,m
       aside3(i,j) = kmm(i,j)
    end do
 end do
-!   Stage b. iterative method of solution of (i-km)*XM=RHS.
+!   Stage b. iterative method of solution of (i-km)*xm=rhs.
 19 oldm = n
 aside2(2) = m
 if (r1 <= cutoff) go to 22
@@ -100014,8 +100072,8 @@ return
    & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
    & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
-!   Test to see if the current iterate XM is sufficiently accurate
-!   compared to the true XM.
+!   Test to see if the current iterate xm is sufficiently accurate
+!   compared to the true xm.
 22 rate = r1*rate
 temp = rnrm(xm,oldx,m,1)
 if (loop == 1) temp2 = 0.5
@@ -100069,9 +100127,9 @@ call leave(1,n,oldm,save,tm,wm,error, &
    & kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
    & xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 return
-!   An accurate value of XM has been obtained. r2 is to be tested as
-!   to whether it should be reset. Then check error in XM compared
-!   with the true solution X.
+!   An accurate value of xm has been obtained. r2 is to be tested as
+!   to whether it should be reset. Then check error in xm compared
+!   with the true solution x.
 33 if (loop == 1) go to 37
 numr2 = temp
 r2 = max(1.0e-4,rate,min(numr2/denr2,0.5))
@@ -100373,10 +100431,22 @@ subroutine leave(ierset,nf,mf,xv,tv,wv,error,kernel,rhfcn,ep, &
    & iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm,xmz,kmm,kmn,knm, &
    & rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
 implicit none
-integer :: ier, ierset, iflag, mf, nf, nhalf, nt, nup
-real :: deln(nf), elinsy, ep, eps, error, r(mf), rh(nf), rhs(mf), &
-   & t(*), tm(mf), tn(nf), tv(mf), wm(mf), wn(nf), wv(mf), x(*), &
-   & xm(mf), xmz(mf), xnorm, xv(mf)
+integer, intent(inout) :: ier
+integer, intent(in) :: ierset, iflag
+integer :: mf, nf
+integer, intent(in) :: nhalf
+integer, intent(inout) :: nt
+integer, intent(in) :: nup
+real :: deln(nf), elinsy
+real, intent(inout) :: ep
+real, intent(in) :: eps, error
+real :: r(mf), rh(nf), rhs(mf)
+real, intent(inout) :: t(*)
+real :: tm(mf), tn(nf), tv(mf), wm(mf), wn(nf), wv(mf)
+real, intent(inout) :: x(*)
+real :: xm(mf), xmz(mf)
+real, intent(in) :: xnorm
+real :: xv(mf)
 real :: rhfcn
 real :: kernel, kmm(nup,nup), kmn(nup,nhalf), knm(nhalf,nup), &
    & imknn(nup,nup), lufact(nup,nup)
@@ -100390,7 +100460,7 @@ real :: rnrm
 real :: normk, numr1
 !   This routine sets all necessary parameters for leaving IEGAUS.
 !   If nt .GT. 0, it also performs the necessary Nystrom
-!   interpolation at the nodes given in T.
+!   interpolation at the nodes given in t.
 common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
 !   Set error parameters for return.
 normk = 0.0
@@ -100432,7 +100502,7 @@ do i = 1,nf
    imknn(i,i) = imknn(i,i) + 1.0
 end do
 if (nf == mf) go to 50
-!   Iterate to decrease the noise level in X. this should reduce
+!   Iterate to decrease the noise level in x. this should reduce
 !   possible errors in Nystrom interpolation.
 derror = ((1.0 - r1)/r1)*eps/normk
 if (iflag == 1) derror = derror*xnorm
@@ -100456,12 +100526,12 @@ temp = normk*(r1/(1.0 - r1))*numr1
 if (iflag == 1) temp = temp/xnorm
 ep = max(ep,temp)
 go to 60
-!   No iteration used in computing X. just compute error estimate
+!   No iteration used in computing x. just compute error estimate
 !   in Nystrom interpolate.
 50 temp = normk*elinsy
 if (iflag == 0) temp = temp*xnorm
 if (ier /= 2) ep = max(ep,temp)
-!   Compute Nystrom interpolates at the nodes in T.
+!   Compute Nystrom interpolates at the nodes in t.
 60 do i = 1,nt
    sum = 0.0
    do j = 1,mf
@@ -100481,7 +100551,7 @@ implicit none
 integer, intent(in) :: iflg, m
 integer :: n
 integer, intent(in) :: nhalf
-integer :: nup
+integer, intent(in) :: nup
 real, intent(inout) :: deln(n), r(m), rh(n)
 real :: rhfcn, rhs(m), tm(m), tn(n), wm(m), wn(n)
 real, intent(inout) :: xm(m)
@@ -100584,9 +100654,11 @@ end subroutine itert
 
 subroutine lnsys(a,d,m,n,b,x,option,ierr)
 implicit none
-integer :: ierr, m, n
+integer, intent(inout) :: ierr
+integer, intent(in) :: m
+integer :: n
 real :: a(m,n), d(m,n), b(n), x(n)
-integer :: option
+integer, intent(in) :: option
 !     beginning of local variable declarations
 integer :: i, ip1, iswit, j, k, kp1, l, nm1, nmi
 real :: c, sum, t
@@ -103396,7 +103468,8 @@ subroutine sfode(f,neq,y,t,tout,info,rerr,aerr,idid, &
    & rwork,lrw,iwork,liw,rpar,ipar)
 implicit none
 integer, intent(inout) :: idid
-integer :: liw, lrw, neq
+integer, intent(in) :: liw, lrw
+integer :: neq
 real, intent(inout) :: aerr, rerr, t
 real :: tout
 external f
@@ -103431,7 +103504,8 @@ subroutine sfode1(f,neq,y,t,tout,info,rtol,atol,idid, &
    & rwork,lrw,iwork,liw,rpar,ipar)
 implicit none
 integer, intent(inout) :: idid
-integer :: liw, lrw, neq
+integer, intent(in) :: liw, lrw
+integer :: neq
 real, intent(inout) :: t
 real :: tout
 external f
@@ -103473,8 +103547,16 @@ end subroutine zzzjac
 subroutine stfode(f,neq,y,t,tout,info,rtol,atol,idid, &
    & rwork,lrw,iwork,liw,rpar,ipar,jac)
 implicit none
-integer :: idid, info(*), ipar(*), iwork, liw, lrw, neq
-real :: atol(*), rpar(*), rtol(*), rwork(lrw), t, tout, y(neq)
+integer, intent(inout) :: idid, info(*)
+integer :: ipar(*)
+integer, intent(inout) :: iwork
+integer, intent(in) :: liw, lrw
+integer :: neq
+real, intent(inout) :: atol(*)
+real :: rpar(*)
+real, intent(inout) :: rtol(*), rwork(lrw), t
+real :: tout
+real, intent(inout) :: y(neq)
 external f, jac
 dimension iwork(liw)
 !     beginning of local variable declarations
@@ -104120,8 +104202,8 @@ implicit none
 ! This routine restores from rsav and isav the contents of common
 ! block debdf1, which is used internally in the sfode package.
 !-----------------------------------------------------------------------
-integer :: isav(*)
-real :: rsav(*)
+integer, intent(in) :: isav(*)
+real, intent(in) :: rsav(*)
 !     beginning of local variable declarations
 integer :: i, ils
 real :: rls
@@ -104145,8 +104227,8 @@ implicit none
 ! rsav = Real array of length 218 or more.
 ! isav = Integer array of length 33 or more.
 !-----------------------------------------------------------------------
-integer :: isav(*)
-real :: rsav(*)
+integer, intent(inout) :: isav(*)
+real, intent(inout) :: rsav(*)
 !     beginning of local variable declarations
 integer :: i, ils
 real :: rls
@@ -104166,11 +104248,20 @@ subroutine lsod1(f,neq,t,y,tout,rtol,atol,idid,ypout, &
    & yh,yh1,ewt,savf,acor,wm,iwm,jac,intout, &
    & tstop,tolfac,delsgn,rpar,ipar)
 implicit none
-integer :: idid, ipar(*), iwm(*), neq
-real :: acor(neq), atol(*), delsgn, ewt(neq), rpar(*), rtol(*), &
-   & savf(neq), t, tolfac, tout, tstop, wm(*), y(neq), yh(neq,*), &
-   & yh1(*), ypout(neq)
-logical :: intout
+integer, intent(inout) :: idid
+integer :: ipar(*)
+integer, intent(inout) :: iwm(*)
+integer :: neq
+real :: acor(neq)
+real, intent(inout) :: atol(*)
+real :: delsgn, ewt(neq), rpar(*)
+real, intent(inout) :: rtol(*)
+real :: savf(neq)
+real, intent(inout) :: t
+real :: tolfac, tout, tstop, wm(*)
+real, intent(inout) :: y(neq)
+real :: yh(neq,*), yh1(*), ypout(neq)
+logical, intent(inout) :: intout
 external f, jac
 !     beginning of local variable declarations
 integer :: intflg, k, l, ltol, max
@@ -104312,7 +104403,7 @@ return
 !                         -- Compute initial step size
 !                         -- save sign of integration direction
 !                         -- set independent and dependent variables
-!                                              x and YH(*) for stod
+!                                              x and yh(*) for stod
 220 ltol = 1
 do l = 1,neq
    if (itol == 1) ltol = l
@@ -104347,7 +104438,7 @@ intout = .false.
 260 t = tout
 told = t
 return
-!   If cannot go past TSTOP and sufficiently close,
+!   If cannot go past tstop and sufficiently close,
 !   extrapolate and return
 270 if (itstop /= 1) go to 290
 if (abs(tstop - x) >= 100.*u*abs(x)) go to 290
@@ -104716,8 +104807,10 @@ implicit none
 ! communicated by common.  The above sum is done in reverse order.
 ! iflag is returned negative if either k or t is out of bounds.
 !-----------------------------------------------------------------------
-integer :: k, nyh, iflag
-real :: t, yh(nyh,*), dky(*)
+integer, intent(in) :: k, nyh
+integer, intent(inout) :: iflag
+real, intent(in) :: t
+real :: yh(nyh,*), dky(*)
 !     beginning of local variable declarations
 integer :: i, ic, ier, iownd, iowns, j, jb, jb2, jj, jj1, jp1, &
    & jstart, kflag, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
@@ -104776,8 +104869,10 @@ implicit none
 integer :: ipar(*)
 real :: rpar(*)
 external f, jac
-integer :: neq, nyh, iwm(*)
-real :: y(*), yh(nyh,*), yh1(*), ewt(*), savf(*), acor(*), wm(*)
+integer :: neq, nyh
+integer, intent(inout) :: iwm(*)
+real, intent(inout) :: y(*)
+real :: yh(nyh,*), yh1(*), ewt(*), savf(*), acor(*), wm(*)
 !     beginning of local variable declarations
 integer :: ipnyh
 integer :: iod, ksteps
@@ -105377,9 +105472,11 @@ subroutine pjac(neq, y, yh, nyh, ewt, ftem, savf, wm, iwm, &
 implicit none
 integer :: ipar(*)
 real :: rpar(*)
-integer :: neq, nyh, iwm(*)
+integer :: neq, nyh
+integer, intent(inout) :: iwm(*)
 external f, jac
-real :: y(*), yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*)
+real, intent(inout) :: y(*)
+real :: yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*)
 !     beginning of local variable declarations
 integer :: i, i1, i2, ier, ii, iownd, iowns, j, j1, jj, jstart, &
    & kflag, l, lenp, maxord, mba, mband, meb1, meband, meth, miter, ml, &
@@ -105562,8 +105659,10 @@ implicit none
 !   slvs solves the linear system in the iteration scheme for the
 !   integrator package sfode.
 !***Routines called  sgesl,sgbsl
-integer :: iwm(*)
-real :: wm(*), x(*), tem(*)
+integer, intent(in) :: iwm(*)
+real :: wm(*)
+real, intent(inout) :: x(*)
+real :: tem(*)
 !     beginning of local variable declarations
 integer :: i, ier, iownd, iowns, jstart, kflag, l, maxord, meband, &
    & meth, miter, ml, mu, n, nfe, nje, nq, nqu, nst
@@ -106098,7 +106197,8 @@ subroutine sepde(cofx, cofy, g, edge, bval, iord, a, b, mp1, &
    & c, d, np1, u, ku, w, nw, ierr)
 implicit none
 integer, intent(inout) :: ierr
-integer :: iord, ku, mp1
+integer, intent(in) :: iord
+integer :: ku, mp1
 integer, intent(in) :: np1
 integer, intent(inout) :: nw
 real :: a, b, c, d
@@ -106332,10 +106432,12 @@ subroutine sepell(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
 implicit none
 integer :: idmn
 integer, intent(inout) :: ierror
-integer :: intl, iorder, m, mbdcnd, mn, n, nbdcnd
-real :: a, alpha, b, beta, c, d, gama
+integer, intent(in) :: intl, iorder, m, mbdcnd
+integer :: mn
+integer, intent(in) :: n, nbdcnd
+real, intent(in) :: a, alpha, b, beta, c, d, gama
 real, intent(inout) :: pertrb
-real :: xnu
+real, intent(in) :: xnu
 real, intent(inout) :: grhs(mn,*), usol(idmn,*)
 real :: bda(*), bdb(*), bdc(*), bdd(*)
 real, intent(inout) :: w(*)
@@ -106760,11 +106862,27 @@ subroutine sepel1(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
    & cn,dn,un,zn,am,bm,cm,dm,um,zm,grhs,mn,usol, &
    & idmn,w,pertrb,ierror)
 implicit none
-integer :: idmn, ierror, intl, iorder, m, mbdcnd, mn, n, nbdcnd
-real :: a, alpha, am(*), an(*), b, bda(*), bdb(*), bdc(*), bdd(*), &
-   & beta, bm(*), bn(*), c, cm(*), cn(*), d, dm(*), dn(*), gama, &
-   & grhs(mn,*), pertrb, um(*), un(*), usol(idmn,*), w(*), xnu, zm(*), &
-   & zn(*)
+integer :: idmn
+integer, intent(inout) :: ierror
+integer, intent(in) :: intl, iorder, m, mbdcnd
+integer :: mn
+integer, intent(in) :: n, nbdcnd
+real, intent(in) :: a, alpha
+real :: am(*), an(*)
+real, intent(in) :: b
+real :: bda(*), bdb(*), bdc(*), bdd(*)
+real, intent(in) :: beta
+real :: bm(*), bn(*)
+real, intent(in) :: c
+real :: cm(*), cn(*)
+real, intent(in) :: d
+real :: dm(*), dn(*)
+real, intent(in) :: gama
+real :: grhs(mn,*)
+real, intent(inout) :: pertrb
+real :: um(*), un(*), usol(idmn,*), w(*)
+real, intent(in) :: xnu
+real :: zm(*), zn(*)
 external cofx, cofy
 !     beginning of local variable declarations
 integer :: i, i1, iord, j, mp, np
@@ -106774,9 +106892,9 @@ integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 logical :: singlr
 !     sepel1 sets up vectors and arrays for input to blktri
-!     and computes a second order solution in USOL.  A return jump to
+!     and computes a second order solution in usol.  A return jump to
 !     sepell OCCURRS IF iorder=2.  IF iorder=4 A FOURTH ORDER
-!     solution is generated in USOL.
+!     solution is generated in usol.
 common /splp/   kswx       ,kswy       ,k          ,l          , &
    & ait        ,bit        ,cit        ,dit        , &
    & mit        ,nit        ,is         ,ms         , &
@@ -106791,7 +106909,7 @@ ait = a
 bit = b
 cit = c
 dit = d
-!     Set right hand side values from GRHS in USOL on the interior
+!     Set right hand side values from grhs in usol on the interior
 !     and non-specified boundaries.
 do i = 2,m
    do j = 2,n
@@ -106957,7 +107075,7 @@ an(nit) = an(nit) + fyn
 bn(nit) = bn(nit) - 2.0*dly*xnu*fyn
 cn(nit) = 0.0
 220 if (kswx == 1) go to 270
-!     Adjust USOL along X edge
+!     Adjust usol along X edge
 do j = js,ns
    if (kswx /= 2 .and. kswx /= 3) go to 230
    usol(is,j) = usol(is,j) - ax1*usol(1,j)
@@ -106970,7 +107088,7 @@ do j = js,ns
 260 continue
 end do
 270 if (kswy == 1) go to 320
-!     Adjust USOL along Y edge
+!     Adjust usol along Y edge
 do i = is,ms
    if (kswy /= 2 .and. kswy /= 3) go to 280
    usol(i,js) = usol(i,js) - dy1*usol(i,1)
@@ -106983,7 +107101,7 @@ do i = is,ms
 310 continue
 end do
 320 continue
-!     Save adjusted edges in GRHS if iorder=4
+!     Save adjusted edges in grhs if iorder=4
 if (iorder /= 4) go to 350
 do j = js,ns
    grhs(is,j) = usol(is,j)
@@ -107093,9 +107211,9 @@ end subroutine chkprm
 subroutine chksng(mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy, &
    & singlr)
 implicit none
-integer :: mbdcnd, nbdcnd
-real :: alpha, beta, gama, xnu
-logical :: singlr
+integer, intent(in) :: mbdcnd, nbdcnd
+real, intent(in) :: alpha, beta, gama, xnu
+logical, intent(inout) :: singlr
 !     beginning of local variable declarations
 integer :: i, j
 real :: ai, bi, ci, dj, ej, fj, xi, yj
@@ -107138,7 +107256,8 @@ end subroutine chksng
 subroutine orthg(usol,idmn,zn,zm,pertrb)
 implicit none
 integer :: idmn
-real :: pertrb, usol(idmn,*), zm(*), zn(*)
+real, intent(inout) :: pertrb
+real :: usol(idmn,*), zm(*), zn(*)
 !     beginning of local variable declarations
 integer :: i, ifnl, ii, istr, j, jfnl, jj, jstr
 real :: ete, ute
@@ -107179,7 +107298,8 @@ end subroutine orthg
 subroutine minsol(usol,idmn,zn,zm,pertb)
 implicit none
 integer :: idmn
-real :: pertb, usol(idmn,*), zm(*), zn(*)
+real, intent(in) :: pertb
+real :: usol(idmn,*), zm(*), zn(*)
 !     beginning of local variable declarations
 integer :: i, ifnl, ii, istr, j, jfnl, jj, jstr
 real :: ete, pertrb, ute
@@ -107319,8 +107439,11 @@ end subroutine defer
 
 subroutine dxfn(u,idmn,i,j,uxxx,uxxxx)
 implicit none
-integer :: i, idmn, j
-real :: u(idmn,*), uxxx, uxxxx
+integer, intent(in) :: i
+integer :: idmn
+integer, intent(in) :: j
+real :: u(idmn,*)
+real, intent(inout) :: uxxx, uxxxx
 !     beginning of local variable declarations
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
@@ -107386,8 +107509,11 @@ end subroutine dxfn
 
 subroutine dyfn(u,idmn,i,j,uyyy,uyyyy)
 implicit none
-integer :: i, idmn, j
-real :: u(idmn,*), uyyy, uyyyy
+integer, intent(in) :: i
+integer :: idmn
+integer, intent(in) :: j
+real :: u(idmn,*)
+real, intent(inout) :: uyyy, uyyyy
 !     beginning of local variable declarations
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
@@ -107455,7 +107581,13 @@ end subroutine dyfn
 subroutine blktri(iflg,np,n,an,bn,cn,mp,m,am,bm,cm,idimy,y, &
    & ierror,w)
 implicit none
-integer :: idimy, ierror, iflg, m, mp, n, np
+integer :: idimy
+integer, intent(inout) :: ierror
+integer, intent(in) :: iflg
+integer :: m
+integer, intent(in) :: mp
+integer :: n
+integer, intent(in) :: np
 real :: am(*), an(*), bm(*), bn(*), cm(*), cn(*), w(*), y(idimy,*)
 !     beginning of local variable declarations
 integer :: iw1, iw2, iw3, iwah, iwbh, iwd, iwu, iww, nh, nl
@@ -107625,7 +107757,8 @@ end subroutine blktri
 subroutine blktr1(n,an,bn,cn,m,am,bm,cm,idimy,y,b,w1,w2,w3,wd, &
    & ww,wu,prdct,cprdct)
 implicit none
-integer :: idimy, m, n
+integer :: idimy, m
+integer, intent(in) :: n
 real :: am(*), an(*), b(*), bm(*), bn(*), cm(*), cn(*), w1(*), &
    & w2(*), w3(*), wd(*), wu(*), ww(*), y(idimy,*)
 !     beginning of local variable declarations
@@ -107898,7 +108031,10 @@ end subroutine blktr1
 
 subroutine indxa(i,ir,idxa,na)
 implicit none
-integer :: i, idxa, ir, na
+integer, intent(in) :: i
+integer, intent(inout) :: idxa
+integer, intent(in) :: ir
+integer, intent(inout) :: na
 !     beginning of local variable declarations
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
@@ -107914,7 +108050,10 @@ end subroutine indxa
 
 subroutine indxc(i,ir,idxc,nc)
 implicit none
-integer :: i, idxc, ir, nc
+integer, intent(in) :: i
+integer, intent(inout) :: idxc
+integer, intent(in) :: ir
+integer, intent(inout) :: nc
 !     beginning of local variable declarations
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
@@ -108855,7 +108994,9 @@ end function psgf
 function bsrh(xll,xrr,iz,c,a,bh,f,sgn)
 implicit none
 integer :: iz
-real :: a(*), bh(*), c(*), sgn, xll, xrr
+real :: a(*), bh(*), c(*)
+real, intent(in) :: sgn
+real :: xll, xrr
 real :: f
 real :: bsrh
 !     beginning of local variable declarations

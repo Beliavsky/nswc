@@ -346,7 +346,7 @@ end function ipmpar
 !-----------------------------------------------------------------------
 subroutine mach(mo, n, ibeta, imax, idmax, imach, rmach, dmach)
 implicit none
-integer :: ibeta
+integer, intent(in) :: ibeta
 integer, intent(in) :: idmax, imax, mo, n
 real, intent(inout) :: rmach(3)
 double precision, intent(inout) :: dmach(3)
@@ -562,7 +562,7 @@ end subroutine mach
 
 subroutine radix(ibeta)
 implicit none
-integer :: ibeta
+integer, intent(inout) :: ibeta
 !     beginning of local variable declarations
 real :: a, b, one, y
 real :: d1, d2
@@ -586,8 +586,10 @@ end subroutine radix
 subroutine mach1(n, ibeta, m, minexp, maxexp, eps, xint, &
    & xmin, xmax)
 implicit none
-integer :: ibeta, m, maxexp, minexp, n
-real :: eps, xint, xmin, xmax
+integer, intent(in) :: ibeta
+integer, intent(inout) :: m, maxexp, minexp
+integer :: n
+real, intent(inout) :: eps, xint, xmin, xmax
 !     beginning of local variable declarations
 integer :: j, k, km, l
 real :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, zero
@@ -815,8 +817,10 @@ end subroutine store2
 subroutine mach2(n, ibeta, m, minexp, maxexp, eps, xint, &
    & xmin, xmax)
 implicit none
-integer :: ibeta, m, maxexp, minexp, n
-double precision :: eps, xint, xmin, xmax
+integer, intent(in) :: ibeta
+integer, intent(inout) :: m, maxexp, minexp
+integer :: n
+double precision, intent(inout) :: eps, xint, xmin, xmax
 !     beginning of local variable declarations
 integer :: j, k, km, l
 double precision :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, &
@@ -2856,7 +2860,7 @@ end subroutine drotg
 
 subroutine rot3(a, theta)
 implicit none
-real :: a(3,3)
+real, intent(in) :: a(3,3)
 real, intent(inout) :: theta(3)
 !     beginning of local variable declarations
 real :: r, t, u, v

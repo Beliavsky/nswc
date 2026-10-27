@@ -1,0 +1,3794 @@
+{
+  "input_sha256": "d76b38ae86b3fb9cc0ad4bf0e4934f8f6b0283f141ae181f783d3effa09784ad",
+  "procedures": {
+    "MACH": {
+      "IBETA": {
+        "intent": "IN",
+        "dependencies": [
+          "MACH1:IBETA",
+          "MACH2:IBETA"
+        ]
+      }
+    },
+    "RADIX": {
+      "IBETA": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 593,
+              "statement": "ibeta = int(d1 - d2)"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "MACH1": {
+      "EPS": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 706,
+              "statement": "eps = one/z"
+            }
+          ],
+          "via": []
+        }
+      },
+      "IBETA": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "M": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 690,
+              "statement": "m = 1"
+            },
+            {
+              "line": 692,
+              "statement": "m = m + 1"
+            },
+            {
+              "line": 701,
+              "statement": "m = m - 1"
+            }
+          ],
+          "via": []
+        }
+      },
+      "MAXEXP": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 756,
+              "statement": "maxexp = k - 3"
+            },
+            {
+              "line": 763,
+              "statement": "maxexp = km - k - 3"
+            },
+            {
+              "line": 780,
+              "statement": "maxexp = maxexp + 1"
+            }
+          ],
+          "via": []
+        }
+      },
+      "MINEXP": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 748,
+              "statement": "minexp = 1 - k"
+            }
+          ],
+          "via": []
+        }
+      },
+      "XINT": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 698,
+              "statement": "xint = (z - one)*b + bm1"
+            },
+            {
+              "line": 704,
+              "statement": "xint = (z - one)*b + bm1"
+            }
+          ],
+          "via": []
+        }
+      },
+      "XMAX": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 699,
+              "statement": "xmax = xint/t"
+            },
+            {
+              "line": 705,
+              "statement": "xmax = xint/t"
+            },
+            {
+              "line": 759,
+              "statement": "xmax = (xmax*t)*b"
+            },
+            {
+              "line": 766,
+              "statement": "xmax = ((xmax*t)*b)*b"
+            },
+            {
+              "line": 779,
+              "statement": "xmax = xmax*b"
+            }
+          ],
+          "via": []
+        }
+      },
+      "XMIN": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 728,
+              "statement": "xmin = x"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "MACH2": {
+      "EPS": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 936,
+              "statement": "eps = one/z"
+            }
+          ],
+          "via": []
+        }
+      },
+      "IBETA": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "M": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 920,
+              "statement": "m = 1"
+            },
+            {
+              "line": 922,
+              "statement": "m = m + 1"
+            },
+            {
+              "line": 931,
+              "statement": "m = m - 1"
+            }
+          ],
+          "via": []
+        }
+      },
+      "MAXEXP": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 986,
+              "statement": "maxexp = k - 3"
+            },
+            {
+              "line": 993,
+              "statement": "maxexp = km - k - 3"
+            },
+            {
+              "line": 1010,
+              "statement": "maxexp = maxexp + 1"
+            }
+          ],
+          "via": []
+        }
+      },
+      "MINEXP": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 978,
+              "statement": "minexp = 1 - k"
+            }
+          ],
+          "via": []
+        }
+      },
+      "XINT": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 928,
+              "statement": "xint = (z - one)*b + bm1"
+            },
+            {
+              "line": 934,
+              "statement": "xint = (z - one)*b + bm1"
+            }
+          ],
+          "via": []
+        }
+      },
+      "XMAX": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 929,
+              "statement": "xmax = xint/t"
+            },
+            {
+              "line": 935,
+              "statement": "xmax = xint/t"
+            },
+            {
+              "line": 989,
+              "statement": "xmax = (xmax*t)*b"
+            },
+            {
+              "line": 996,
+              "statement": "xmax = ((xmax*t)*b)*b"
+            },
+            {
+              "line": 1009,
+              "statement": "xmax = xmax*b"
+            }
+          ],
+          "via": []
+        }
+      },
+      "XMIN": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 958,
+              "statement": "xmin = x"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "ROT3": {
+      "A": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "MPLNMV": {
+      "AC": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "LGRNGN": {
+      "AU": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "LGRNGV": {
+      "AN": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "AU": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "LGRNGX": {
+      "AU": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "ORTHOS": {
+      "AU": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "ORTHOV": {
+      "AR": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "ORTHOX": {
+      "AR": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "DRPOLY": {
+      "OP": {
+        "intent": "IN",
+        "dependencies": [
+          "DRPLY1:OP"
+        ]
+      }
+    },
+    "DRPLY1": {
+      "IDP1": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NUM": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 27178,
+              "statement": "num = 0"
+            },
+            {
+              "line": 27181,
+              "statement": "num = -1"
+            },
+            {
+              "line": 27185,
+              "statement": "num = num + 1"
+            },
+            {
+              "line": 27199,
+              "statement": "num = ideg"
+            },
+            {
+              "line": 27329,
+              "statement": "num = num + 1"
+            },
+            {
+              "line": 27338,
+              "statement": "num = num + 1"
+            }
+          ],
+          "via": []
+        }
+      },
+      "OP": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "PT": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 27235,
+              "statement": "pt(i) = abs(sngl(p(i)))"
+            },
+            {
+              "line": 27237,
+              "statement": "pt(nn) = -pt(nn)"
+            }
+          ],
+          "via": []
+        }
+      },
+      "ZEROI": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 27187,
+              "statement": "zeroi(num) = 0.d0"
+            },
+            {
+              "line": 27202,
+              "statement": "zeroi(ideg) = 0.0d0"
+            },
+            {
+              "line": 27331,
+              "statement": "zeroi(num) = szi"
+            },
+            {
+              "line": 27340,
+              "statement": "zeroi(num) = lzi"
+            }
+          ],
+          "via": []
+        }
+      },
+      "ZEROR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 27186,
+              "statement": "zeror(num) = 0.d0"
+            },
+            {
+              "line": 27201,
+              "statement": "zeror(ideg) = -p(2)/p(1)"
+            },
+            {
+              "line": 27330,
+              "statement": "zeror(num) = szr"
+            },
+            {
+              "line": 27339,
+              "statement": "zeror(num) = lzr"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "FXSHFR": {
+      "L2": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NN": {
+        "intent": "IN",
+        "dependencies": [
+          "NEWEST:NN",
+          "QUADIT:NN",
+          "QUADSD:NN",
+          "REALIT:NN"
+        ]
+      },
+      "NZ": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 27368,
+              "statement": "nz = 0"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "QUADIT": {
+      "NN": {
+        "intent": "IN",
+        "dependencies": [
+          "NEWEST:NN",
+          "QUADSD:NN"
+        ]
+      },
+      "NZ": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 27482,
+              "statement": "nz = 0"
+            },
+            {
+              "line": 27511,
+              "statement": "nz = 2"
+            }
+          ],
+          "via": []
+        }
+      },
+      "UU": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "VV": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "REALIT": {
+      "IFLAG": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 27567,
+              "statement": "iflag = 0"
+            },
+            {
+              "line": 27599,
+              "statement": "iflag = 1"
+            }
+          ],
+          "via": []
+        }
+      },
+      "NN": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NZ": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 27565,
+              "statement": "nz = 0"
+            },
+            {
+              "line": 27586,
+              "statement": "nz = 1"
+            }
+          ],
+          "via": []
+        }
+      },
+      "SSS": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 27600,
+              "statement": "sss = s"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "CALCSC": {
+      "N": {
+        "intent": "IN",
+        "dependencies": [
+          "QUADSD:NN"
+        ]
+      },
+      "TYPE": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 27658,
+              "statement": "type = 3"
+            },
+            {
+              "line": 27662,
+              "statement": "type = 2"
+            },
+            {
+              "line": 27672,
+              "statement": "type = 1"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "NEXTK": {
+      "N": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "TYPE": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "NEWEST": {
+      "NN": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "TYPE": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "UU": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 27760,
+              "statement": "uu = u - (u*(c3 + c2) + v*(b1*a1 + b2*a7))/temp"
+            },
+            {
+              "line": 27764,
+              "statement": "uu = 0.d0"
+            }
+          ],
+          "via": []
+        }
+      },
+      "VV": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 27761,
+              "statement": "vv = v*(1.d0 + c4/temp)"
+            },
+            {
+              "line": 27765,
+              "statement": "vv = 0.d0"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "SROTM": {
+      "SPARAM": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "DROTM": {
+      "DPARAM": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "SOL": {
+      "A": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "IP": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "SLVMP": {
+      "A": {
+        "intent": "IN",
+        "dependencies": [
+          "LUIMP:A",
+          "MCOPY:A"
+        ]
+      },
+      "B": {
+        "intent": "IN",
+        "dependencies": [
+          "LUIMP:B"
+        ]
+      }
+    },
+    "LUIMP": {
+      "A": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "B": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "IPVT": {
+        "intent": "IN",
+        "dependencies": [
+          "SGESL:IPVT"
+        ]
+      }
+    },
+    "ARCESL": {
+      "ARRAY": {
+        "intent": "IN",
+        "dependencies": [
+          "ARCEBE:BLOCK",
+          "ARCEBM:BLOCK",
+          "ARCEBS:BLOCK",
+          "ARCEFE:BLOCK",
+          "ARCEFM:BLOCK",
+          "ARCEFS:BLOCK"
+        ]
+      },
+      "MTRSTR": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "ARCEFS": {
+      "BLOCK": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "ARCEFM": {
+      "BLOCK": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "X": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "ARCEFE": {
+      "BLOCK": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "ARCEBS": {
+      "BLOCK": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "ARCEBM": {
+      "BLOCK": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "X": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "ARCEBE": {
+      "BLOCK": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "SOLBT": {
+      "A": {
+        "intent": "IN",
+        "dependencies": [
+          "SOL:A"
+        ]
+      },
+      "IP": {
+        "intent": "IN",
+        "dependencies": [
+          "SOL:IP"
+        ]
+      }
+    },
+    "LLSQMP": {
+      "A": {
+        "intent": "IN",
+        "dependencies": [
+          "MCOPY:A",
+          "ORIMP:A"
+        ]
+      }
+    },
+    "ORSOL": {
+      "IP": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "ORIMP": {
+      "A": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "B": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "IP": {
+        "intent": "IN",
+        "dependencies": [
+          "ORSOL:IP"
+        ]
+      }
+    },
+    "SMPLX": {
+      "A": {
+        "intent": "IN",
+        "dependencies": [
+          "SMPLX1:A"
+        ]
+      },
+      "B0": {
+        "intent": "IN",
+        "dependencies": [
+          "SMPLX1:B0"
+        ]
+      },
+      "C": {
+        "intent": "IN",
+        "dependencies": [
+          "SMPLX1:C"
+        ]
+      }
+    },
+    "SSPLX": {
+      "B0": {
+        "intent": "IN",
+        "dependencies": [
+          "SSPLX1:B0"
+        ]
+      },
+      "C": {
+        "intent": "IN",
+        "dependencies": [
+          "SSPLX1:C"
+        ]
+      },
+      "ITA": {
+        "intent": "IN",
+        "dependencies": [
+          "SSPLX1:ITA"
+        ]
+      },
+      "JTA": {
+        "intent": "IN",
+        "dependencies": [
+          "SSPLX1:JTA"
+        ]
+      },
+      "TA": {
+        "intent": "IN",
+        "dependencies": [
+          "SSPLX1:TA"
+        ]
+      }
+    },
+    "ADAPT": {
+      "ANORM": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "BRAKPT": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "COEFS": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 76378,
+              "callee": "ADAPT1",
+              "argument": "COEFS"
+            }
+          ]
+        }
+      },
+      "DX": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "EPSLN": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "ERREST": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 76380,
+              "statement": "errest = error"
+            }
+          ],
+          "via": []
+        }
+      },
+      "IERR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 76378,
+              "callee": "ADAPT1",
+              "argument": "IERR"
+            }
+          ]
+        }
+      },
+      "KBREAK": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "KDIFF": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "KMAX": {
+        "intent": "IN",
+        "dependencies": [
+          "ADAPT1:KMAX"
+        ]
+      },
+      "MO": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NDEG": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NPIECE": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 76379,
+              "statement": "npiece = knots"
+            }
+          ],
+          "via": []
+        }
+      },
+      "NSMTH": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "VALLFT": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "VALRGT": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "XKNOTS": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 76378,
+              "callee": "ADAPT1",
+              "argument": "XKNOTS"
+            }
+          ]
+        }
+      },
+      "XLFT": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "XRGT": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "ADAPT1": {
+      "COEFS": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 76569,
+              "callee": "ADPUT",
+              "argument": "COEFS"
+            }
+          ]
+        }
+      },
+      "IERR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 76575,
+              "statement": "ierr = 1"
+            }
+          ],
+          "via": []
+        }
+      },
+      "KDIMEN": {
+        "intent": "IN",
+        "dependencies": [
+          "ADPUT:KDIMEN",
+          "ADSET:KDIMEN"
+        ]
+      },
+      "KMAX": {
+        "intent": "IN",
+        "dependencies": [
+          "ADPUT:KMAX",
+          "ADSET:KMAX"
+        ]
+      },
+      "NDIMEN": {
+        "intent": "IN",
+        "dependencies": [
+          "ADPUT:NDIMEN",
+          "ADSET:NDIMEN"
+        ]
+      },
+      "XKNOTS": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 76560,
+              "callee": "ADSET",
+              "argument": "XKNOTS"
+            },
+            {
+              "line": 76569,
+              "callee": "ADPUT",
+              "argument": "XKNOTS"
+            }
+          ]
+        }
+      }
+    },
+    "ADSET": {
+      "COEFS": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "IERR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 76626,
+              "statement": "ierr = 0"
+            },
+            {
+              "line": 76674,
+              "statement": "ierr = -1"
+            },
+            {
+              "line": 76677,
+              "statement": "ierr = -2"
+            },
+            {
+              "line": 76680,
+              "statement": "ierr = -3"
+            },
+            {
+              "line": 76683,
+              "statement": "ierr = -4"
+            },
+            {
+              "line": 76686,
+              "statement": "ierr = -5"
+            }
+          ],
+          "via": []
+        }
+      },
+      "KDIMEN": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "KMAX": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NDIMEN": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "XKNOTS": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 76663,
+              "statement": "xknots(1) = a"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "ADTAKE": {
+      "IERR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 76761,
+              "statement": "ierr = 2"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "ADPUT": {
+      "COEFS": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 77216,
+              "statement": "coefs(knots,k) = powers(k)"
+            }
+          ],
+          "via": []
+        }
+      },
+      "IERR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 77190,
+              "statement": "ierr = 4"
+            },
+            {
+              "line": 77192,
+              "statement": "if (dx.gt.charf) ierr = 3"
+            },
+            {
+              "line": 77198,
+              "statement": "ierr = 4"
+            }
+          ],
+          "via": []
+        }
+      },
+      "KDIMEN": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "KMAX": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NDIMEN": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "XKNOTS": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 77220,
+              "statement": "xknots(knots) = xright(nstack)"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "ADTRAN": {
+      "POWERS": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 77285,
+              "statement": "powers(1) = d(nrl+1,1)"
+            },
+            {
+              "line": 77287,
+              "statement": "powers(1) = d(nrl+1,1) + (xr-xintrp(1))*d(nrl+2,1)"
+            },
+            {
+              "line": 77288,
+              "statement": "powers(2) = d(nrl+2,1)"
+            },
+            {
+              "line": 77296,
+              "statement": "powers(k) = d(nrlk,1)"
+            },
+            {
+              "line": 77304,
+              "statement": "powers(i) = powers(i) + (xr-xtemp(i))*powers(i+1)"
+            },
+            {
+              "line": 77318,
+              "statement": "powers(ltop) = powers(l)"
+            },
+            {
+              "line": 77324,
+              "statement": "powers(j) = d(j,1)"
+            },
+            {
+              "line": 77336,
+              "statement": "powers(koef) = powers(koef) - shift*powers(koef+1)"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "TRP": {
+      "X": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "Y": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "LTRP": {
+      "X": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "XI": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "Y": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "HTRP": {
+      "X": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "Y": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "PPVAL": {
+      "A": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "X": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "XI": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "CUBTRI": {
+      "ANS": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 95017,
+              "statement": "ans = tans"
+            },
+            {
+              "line": 95077,
+              "statement": "ans = tans"
+            }
+          ],
+          "via": []
+        }
+      },
+      "EPS": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "ERR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 95018,
+              "statement": "err = terr"
+            },
+            {
+              "line": 95078,
+              "statement": "err = terr"
+            }
+          ],
+          "via": []
+        }
+      },
+      "IER": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 94993,
+              "statement": "ier = 1"
+            },
+            {
+              "line": 94995,
+              "statement": "if (maxc.gt.maxk) ier = 2"
+            },
+            {
+              "line": 95072,
+              "statement": "ier = 0"
+            },
+            {
+              "line": 95074,
+              "statement": "ier = 1"
+            },
+            {
+              "line": 95076,
+              "statement": "ier = 2"
+            },
+            {
+              "line": 95080,
+              "statement": "ier = 3"
+            },
+            {
+              "line": 95082,
+              "statement": "ier = 4"
+            },
+            {
+              "line": 95084,
+              "statement": "ier = 5"
+            }
+          ],
+          "via": []
+        }
+      },
+      "MCALLS": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NCALLS": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 95015,
+              "statement": "ncalls = nfe"
+            },
+            {
+              "line": 95064,
+              "statement": "ncalls = ncalls + 4*nfe"
+            }
+          ],
+          "via": []
+        }
+      },
+      "NW": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "T": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "W": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 95009,
+              "statement": "w(1,1) = zero"
+            },
+            {
+              "line": 95010,
+              "statement": "w(2,1) = zero"
+            },
+            {
+              "line": 95011,
+              "statement": "w(3,1) = one"
+            },
+            {
+              "line": 95046,
+              "statement": "w(l,j) = x(l) + h*d(l,i)"
+            },
+            {
+              "line": 95048,
+              "statement": "w(3,j) = h*s(i)"
+            },
+            {
+              "line": 95058,
+              "statement": "w(6,j) = w(6,j)/alfa"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "IESLV": {
+      "A": {
+        "intent": "IN",
+        "dependencies": [
+          "IEGS:A"
+        ]
+      },
+      "B": {
+        "intent": "IN",
+        "dependencies": [
+          "IEGS:B"
+        ]
+      },
+      "EP": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 95391,
+              "callee": "IEGS",
+              "argument": "EP"
+            }
+          ]
+        }
+      },
+      "IER": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 95391,
+              "callee": "IEGS",
+              "argument": "IER"
+            }
+          ]
+        }
+      },
+      "IFLAG": {
+        "intent": "IN",
+        "dependencies": [
+          "IEGS:IFLAG"
+        ]
+      },
+      "MF": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 95397,
+              "statement": "mf=mfinal"
+            }
+          ],
+          "via": []
+        }
+      },
+      "MUPPER": {
+        "intent": "IN",
+        "dependencies": [
+          "IEGS:MUP"
+        ]
+      },
+      "NF": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 95396,
+              "statement": "nf=nfinal"
+            }
+          ],
+          "via": []
+        }
+      },
+      "NORM": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 95395,
+              "statement": "norm=normk"
+            }
+          ],
+          "via": []
+        }
+      },
+      "NT": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 95391,
+              "callee": "IEGS",
+              "argument": "NT"
+            }
+          ]
+        }
+      },
+      "NUPPER": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "T": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 95391,
+              "callee": "IEGS",
+              "argument": "T"
+            }
+          ]
+        }
+      },
+      "W": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 95391,
+              "callee": "IEGS",
+              "argument": "TN"
+            },
+            {
+              "line": 95391,
+              "callee": "IEGS",
+              "argument": "XMZ"
+            },
+            {
+              "line": 95391,
+              "callee": "IEGS",
+              "argument": "WN"
+            },
+            {
+              "line": 95391,
+              "callee": "IEGS",
+              "argument": "OLDX"
+            },
+            {
+              "line": 95391,
+              "callee": "IEGS",
+              "argument": "SAVE"
+            },
+            {
+              "line": 95391,
+              "callee": "IEGS",
+              "argument": "SAVE2"
+            },
+            {
+              "line": 95391,
+              "callee": "IEGS",
+              "argument": "ASIDE"
+            },
+            {
+              "line": 95391,
+              "callee": "IEGS",
+              "argument": "ASIDE3"
+            },
+            {
+              "line": 95391,
+              "callee": "IEGS",
+              "argument": "IMKNN"
+            }
+          ]
+        }
+      },
+      "X": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 95391,
+              "callee": "IEGS",
+              "argument": "X"
+            }
+          ]
+        }
+      }
+    },
+    "IEGS": {
+      "A": {
+        "intent": "IN",
+        "dependencies": [
+          "WANDT:A"
+        ]
+      },
+      "B": {
+        "intent": "IN",
+        "dependencies": [
+          "WANDT:B"
+        ]
+      },
+      "CUTOFF": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "EP": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 95510,
+              "callee": "LEAVE",
+              "argument": "EP"
+            },
+            {
+              "line": 95578,
+              "callee": "LEAVE",
+              "argument": "EP"
+            },
+            {
+              "line": 95582,
+              "callee": "LEAVE",
+              "argument": "EP"
+            },
+            {
+              "line": 95637,
+              "callee": "LEAVE",
+              "argument": "EP"
+            },
+            {
+              "line": 95658,
+              "callee": "LEAVE",
+              "argument": "EP"
+            },
+            {
+              "line": 95665,
+              "callee": "LEAVE",
+              "argument": "EP"
+            }
+          ]
+        }
+      },
+      "IER": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 95510,
+              "callee": "LEAVE",
+              "argument": "IER"
+            },
+            {
+              "line": 95578,
+              "callee": "LEAVE",
+              "argument": "IER"
+            },
+            {
+              "line": 95582,
+              "callee": "LEAVE",
+              "argument": "IER"
+            },
+            {
+              "line": 95637,
+              "callee": "LEAVE",
+              "argument": "IER"
+            },
+            {
+              "line": 95658,
+              "callee": "LEAVE",
+              "argument": "IER"
+            },
+            {
+              "line": 95665,
+              "callee": "LEAVE",
+              "argument": "IER"
+            }
+          ]
+        }
+      },
+      "IFLAG": {
+        "intent": "IN",
+        "dependencies": [
+          "LEAVE:IFLAG"
+        ]
+      },
+      "MUP": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NHALF": {
+        "intent": "IN",
+        "dependencies": [
+          "ITERT:NHALF",
+          "LEAVE:NHALF",
+          "NSTERP:NHALF"
+        ]
+      },
+      "NT": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 95510,
+              "callee": "LEAVE",
+              "argument": "NT"
+            },
+            {
+              "line": 95578,
+              "callee": "LEAVE",
+              "argument": "NT"
+            },
+            {
+              "line": 95582,
+              "callee": "LEAVE",
+              "argument": "NT"
+            },
+            {
+              "line": 95637,
+              "callee": "LEAVE",
+              "argument": "NT"
+            },
+            {
+              "line": 95658,
+              "callee": "LEAVE",
+              "argument": "NT"
+            },
+            {
+              "line": 95665,
+              "callee": "LEAVE",
+              "argument": "NT"
+            }
+          ]
+        }
+      },
+      "NUP": {
+        "intent": "IN",
+        "dependencies": [
+          "ITERT:NUP",
+          "LEAVE:NUP",
+          "LNSYS:M",
+          "NSTERP:NUP"
+        ]
+      },
+      "ROOTRT": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "T": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 95510,
+              "callee": "LEAVE",
+              "argument": "T"
+            },
+            {
+              "line": 95578,
+              "callee": "LEAVE",
+              "argument": "T"
+            },
+            {
+              "line": 95582,
+              "callee": "LEAVE",
+              "argument": "T"
+            },
+            {
+              "line": 95637,
+              "callee": "LEAVE",
+              "argument": "T"
+            },
+            {
+              "line": 95658,
+              "callee": "LEAVE",
+              "argument": "T"
+            },
+            {
+              "line": 95665,
+              "callee": "LEAVE",
+              "argument": "T"
+            }
+          ]
+        }
+      },
+      "UNITRD": {
+        "intent": "IN",
+        "dependencies": [
+          "RMIN:UNITRD"
+        ]
+      },
+      "X": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 95510,
+              "callee": "LEAVE",
+              "argument": "X"
+            },
+            {
+              "line": 95578,
+              "callee": "LEAVE",
+              "argument": "X"
+            },
+            {
+              "line": 95582,
+              "callee": "LEAVE",
+              "argument": "X"
+            },
+            {
+              "line": 95637,
+              "callee": "LEAVE",
+              "argument": "X"
+            },
+            {
+              "line": 95658,
+              "callee": "LEAVE",
+              "argument": "X"
+            },
+            {
+              "line": 95665,
+              "callee": "LEAVE",
+              "argument": "X"
+            }
+          ]
+        }
+      }
+    },
+    "LEAVE": {
+      "EP": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 96120,
+              "statement": "ep=error"
+            },
+            {
+              "line": 96126,
+              "statement": "ep=eps"
+            },
+            {
+              "line": 96175,
+              "statement": "ep=max(ep,temp)"
+            },
+            {
+              "line": 96181,
+              "statement": "if(ier .ne. 2) ep=max(ep,temp)"
+            },
+            {
+              "line": 96193,
+              "statement": "ep=savep"
+            }
+          ],
+          "via": []
+        }
+      },
+      "EPS": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "ERROR": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "IER": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 96119,
+              "statement": "ier=ierset"
+            },
+            {
+              "line": 96123,
+              "statement": "ier=3"
+            },
+            {
+              "line": 96190,
+              "statement": "if((ier .eq. 0) .and. (ep .gt. eps)) ier=4"
+            },
+            {
+              "line": 96191,
+              "statement": "if((ier .eq. 1) .and. (ep .gt. error)) ier=5"
+            },
+            {
+              "line": 96192,
+              "statement": "if((ier .eq. 3) .and. (ep .gt. eps)) ier=6"
+            }
+          ],
+          "via": []
+        }
+      },
+      "IERSET": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "IFLAG": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NHALF": {
+        "intent": "IN",
+        "dependencies": [
+          "ITERT:NHALF"
+        ]
+      },
+      "NT": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 96134,
+              "statement": "nt=mf"
+            }
+          ],
+          "via": []
+        }
+      },
+      "NUP": {
+        "intent": "IN",
+        "dependencies": [
+          "ITERT:NUP"
+        ]
+      },
+      "T": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 96132,
+              "statement": "t(i)=tv(i)"
+            }
+          ],
+          "via": []
+        }
+      },
+      "X": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 96131,
+              "statement": "x(i)=xv(i)"
+            },
+            {
+              "line": 96188,
+              "statement": "x(i)=rhfcn(t(i))+sum"
+            }
+          ],
+          "via": []
+        }
+      },
+      "XNORM": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "ITERT": {
+      "NUP": {
+        "intent": "IN",
+        "dependencies": [
+          "LNSYS:M"
+        ]
+      }
+    },
+    "LNSYS": {
+      "IERR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 96354,
+              "statement": "ierr = -i"
+            },
+            {
+              "line": 96359,
+              "statement": "ierr = 0"
+            },
+            {
+              "line": 96372,
+              "statement": "ierr = k"
+            },
+            {
+              "line": 96395,
+              "statement": "ierr = n"
+            }
+          ],
+          "via": []
+        }
+      },
+      "M": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "OPTION": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "SFODE": {
+      "LIW": {
+        "intent": "IN",
+        "dependencies": [
+          "STFODE:LIW"
+        ]
+      },
+      "LRW": {
+        "intent": "IN",
+        "dependencies": [
+          "STFODE:LRW"
+        ]
+      }
+    },
+    "SFODE1": {
+      "LIW": {
+        "intent": "IN",
+        "dependencies": [
+          "STFODE:LIW"
+        ]
+      },
+      "LRW": {
+        "intent": "IN",
+        "dependencies": [
+          "STFODE:LRW"
+        ]
+      }
+    },
+    "STFODE": {
+      "ATOL": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 99760,
+              "callee": "LSOD1",
+              "argument": "ATOL"
+            }
+          ]
+        }
+      },
+      "IDID": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 99706,
+              "statement": "idid = 0"
+            },
+            {
+              "line": 99710,
+              "statement": "idid = -44"
+            },
+            {
+              "line": 99725,
+              "statement": "idid = -40"
+            },
+            {
+              "line": 99730,
+              "statement": "idid = -41"
+            },
+            {
+              "line": 99732,
+              "statement": "idid = -42"
+            },
+            {
+              "line": 99735,
+              "statement": "idid = -43"
+            }
+          ],
+          "via": []
+        }
+      },
+      "INFO": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 99712,
+              "statement": "if (info(2) .ne. 0) info(2) = 1"
+            },
+            {
+              "line": 99713,
+              "statement": "if (info(3) .ne. 0) info(3) = 1"
+            },
+            {
+              "line": 99714,
+              "statement": "if (info(4) .ne. 0) info(4) = 1"
+            },
+            {
+              "line": 99715,
+              "statement": "if (info(5) .ne. 0) info(5) = 1"
+            },
+            {
+              "line": 99716,
+              "statement": "if (info(6) .ne. 0) info(6) = 1"
+            },
+            {
+              "line": 99769,
+              "statement": "info(1) = ibegin"
+            }
+          ],
+          "via": []
+        }
+      },
+      "IWORK": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 99764,
+              "statement": "iwork(iinout) = -1"
+            },
+            {
+              "line": 99765,
+              "statement": "if (intout) iwork(iinout) = 1"
+            }
+          ],
+          "via": []
+        }
+      },
+      "LIW": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "LRW": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "RTOL": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 99760,
+              "callee": "LSOD1",
+              "argument": "RTOL"
+            }
+          ]
+        }
+      },
+      "RWORK": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 99759,
+              "statement": "rwork(itstar) = t"
+            },
+            {
+              "line": 99767,
+              "statement": "rwork(11) = h"
+            },
+            {
+              "line": 99768,
+              "statement": "rwork(13) = tn"
+            }
+          ],
+          "via": []
+        }
+      },
+      "T": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 99760,
+              "callee": "LSOD1",
+              "argument": "T"
+            }
+          ]
+        }
+      },
+      "Y": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 99760,
+              "callee": "LSOD1",
+              "argument": "Y"
+            }
+          ]
+        }
+      }
+    },
+    "RSCO": {
+      "ISAV": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "RSAV": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "SVCO": {
+      "ISAV": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 99813,
+              "statement": "isav(i) = ils(i)"
+            }
+          ],
+          "via": []
+        }
+      },
+      "RSAV": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 99810,
+              "statement": "rsav(i) = rls(i)"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "LSOD1": {
+      "ATOL": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100042,
+              "statement": "atol(l) = tolfac*atol(l)"
+            }
+          ],
+          "via": []
+        }
+      },
+      "IDID": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 99893,
+              "statement": "idid = -33"
+            },
+            {
+              "line": 99899,
+              "statement": "idid = -34"
+            },
+            {
+              "line": 99902,
+              "statement": "idid = -35"
+            },
+            {
+              "line": 99909,
+              "statement": "idid = -36"
+            },
+            {
+              "line": 99914,
+              "statement": "idid = -37"
+            },
+            {
+              "line": 99917,
+              "statement": "idid = -38"
+            },
+            {
+              "line": 99921,
+              "statement": "idid = -39"
+            },
+            {
+              "line": 99934,
+              "statement": "idid = -2"
+            },
+            {
+              "line": 99953,
+              "statement": "idid = 2"
+            },
+            {
+              "line": 99990,
+              "statement": "idid = 3"
+            },
+            {
+              "line": 99992,
+              "statement": "idid = 2"
+            },
+            {
+              "line": 100007,
+              "statement": "idid = 3"
+            },
+            {
+              "line": 100013,
+              "statement": "idid = 1"
+            },
+            {
+              "line": 100019,
+              "statement": "idid = -1"
+            },
+            {
+              "line": 100038,
+              "statement": "idid = -2"
+            },
+            {
+              "line": 100046,
+              "statement": "idid = -3"
+            },
+            {
+              "line": 100058,
+              "statement": "idid = -6"
+            },
+            {
+              "line": 100063,
+              "statement": "idid = -7"
+            }
+          ],
+          "via": []
+        }
+      },
+      "INTOUT": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 99869,
+              "statement": "intout= .false."
+            },
+            {
+              "line": 99993,
+              "statement": "intout = .false."
+            },
+            {
+              "line": 100053,
+              "statement": "intout = .true."
+            },
+            {
+              "line": 100074,
+              "statement": "intout = .false."
+            }
+          ],
+          "via": []
+        }
+      },
+      "IWM": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 100051,
+              "callee": "STOD",
+              "argument": "IWM"
+            }
+          ]
+        }
+      },
+      "RTOL": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 99933,
+              "statement": "rtol(k) = 100.*u"
+            },
+            {
+              "line": 100041,
+              "statement": "rtol(l) = tolfac*rtol(l)"
+            }
+          ],
+          "via": []
+        }
+      },
+      "T": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 99994,
+              "statement": "t = tout"
+            },
+            {
+              "line": 100008,
+              "statement": "t = tout"
+            },
+            {
+              "line": 100072,
+              "statement": "t = x"
+            }
+          ],
+          "via": []
+        }
+      },
+      "Y": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100003,
+              "statement": "y(l) = yh(l,1) + (dt/h)*yh(l,2)"
+            },
+            {
+              "line": 100069,
+              "statement": "y(l) = yh(l,1)"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "INTYD": {
+      "IFLAG": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100377,
+              "statement": "iflag = 0"
+            },
+            {
+              "line": 100414,
+              "statement": "iflag = -1"
+            },
+            {
+              "line": 100416,
+              "statement": "iflag = -2"
+            }
+          ],
+          "via": []
+        }
+      },
+      "K": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NYH": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "T": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "STOD": {
+      "IWM": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 100657,
+              "callee": "PJAC",
+              "argument": "IWM"
+            }
+          ]
+        }
+      },
+      "Y": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100643,
+              "statement": "y(i) = yh(i,1)"
+            },
+            {
+              "line": 100670,
+              "statement": "y(i) = savf(i) - acor(i)"
+            },
+            {
+              "line": 100674,
+              "statement": "y(i) = yh(i,1) + el(1)*savf(i)"
+            },
+            {
+              "line": 100684,
+              "statement": "y(i) = h*savf(i) - (yh(i,2) + acor(i))"
+            },
+            {
+              "line": 100691,
+              "statement": "y(i) = yh(i,1) + el(1)*acor(i)"
+            },
+            {
+              "line": 100866,
+              "statement": "y(i) = yh(i,1)"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "PJAC": {
+      "IWM": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 101102,
+              "callee": "SGEFA",
+              "argument": "IPVT"
+            },
+            {
+              "line": 101180,
+              "callee": "SGBFA",
+              "argument": "IPVT"
+            }
+          ]
+        }
+      },
+      "Y": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 101085,
+              "statement": "y(j) = y(j) + r"
+            },
+            {
+              "line": 101091,
+              "statement": "y(j) = yj"
+            },
+            {
+              "line": 101109,
+              "statement": "y(i) = y(i) + r*(h*savf(i) - yh(i,2))"
+            },
+            {
+              "line": 101156,
+              "statement": "y(i) = y(i) + r"
+            },
+            {
+              "line": 101160,
+              "statement": "y(jj) = yh(jj,1)"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "SLVS": {
+      "IWM": {
+        "intent": "IN",
+        "dependencies": [
+          "SGBSL:IPVT",
+          "SGESL:IPVT"
+        ]
+      },
+      "X": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 101239,
+              "statement": "x(i) = wm(i+2)*x(i)"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "SEPDE": {
+      "IORD": {
+        "intent": "IN",
+        "dependencies": [
+          "SEPELL:IORDER"
+        ]
+      }
+    },
+    "SEPELL": {
+      "A": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKPRM:A",
+          "SEPEL1:A"
+        ]
+      },
+      "ALPHA": {
+        "intent": "IN",
+        "dependencies": [
+          "SEPEL1:ALPHA"
+        ]
+      },
+      "B": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKPRM:B",
+          "SEPEL1:B"
+        ]
+      },
+      "BETA": {
+        "intent": "IN",
+        "dependencies": [
+          "SEPEL1:BETA"
+        ]
+      },
+      "C": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKPRM:C",
+          "SEPEL1:C"
+        ]
+      },
+      "D": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKPRM:D",
+          "SEPEL1:D"
+        ]
+      },
+      "GAMA": {
+        "intent": "IN",
+        "dependencies": [
+          "SEPEL1:GAMA"
+        ]
+      },
+      "INTL": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKPRM:INTL",
+          "SEPEL1:INTL"
+        ]
+      },
+      "IORDER": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKPRM:IORDER",
+          "SEPEL1:IORDER"
+        ]
+      },
+      "M": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKPRM:M",
+          "SEPEL1:M"
+        ]
+      },
+      "MBDCND": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKPRM:MBDCND",
+          "SEPEL1:MBDCND"
+        ]
+      },
+      "N": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKPRM:N",
+          "SEPEL1:N"
+        ]
+      },
+      "NBDCND": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKPRM:NBDCND",
+          "SEPEL1:NBDCND"
+        ]
+      },
+      "XNU": {
+        "intent": "IN",
+        "dependencies": [
+          "SEPEL1:XNU"
+        ]
+      }
+    },
+    "SEPEL1": {
+      "A": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "ALPHA": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKSNG:ALPHA"
+        ]
+      },
+      "B": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "BETA": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKSNG:BETA"
+        ]
+      },
+      "C": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "D": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "GAMA": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKSNG:GAMA"
+        ]
+      },
+      "IERROR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 102559,
+              "callee": "BLKTRI",
+              "argument": "IERROR"
+            },
+            {
+              "line": 102567,
+              "callee": "BLKTRI",
+              "argument": "IERROR"
+            }
+          ]
+        }
+      },
+      "INTL": {
+        "intent": "IN",
+        "dependencies": [
+          "BLKTRI:IFLG"
+        ]
+      },
+      "IORDER": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "M": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "MBDCND": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKSNG:MBDCND"
+        ]
+      },
+      "N": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NBDCND": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKSNG:NBDCND"
+        ]
+      },
+      "PERTRB": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 102551,
+              "statement": "pertrb = 0.0"
+            }
+          ],
+          "via": []
+        }
+      },
+      "XNU": {
+        "intent": "IN",
+        "dependencies": [
+          "CHKSNG:XNU"
+        ]
+      }
+    },
+    "CHKSNG": {
+      "ALPHA": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "BETA": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "GAMA": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "MBDCND": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NBDCND": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "SINGLR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 102664,
+              "statement": "singlr = .false."
+            },
+            {
+              "line": 102688,
+              "statement": "singlr = .true."
+            }
+          ],
+          "via": []
+        }
+      },
+      "XNU": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "ORTHG": {
+      "PERTRB": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 102723,
+              "statement": "pertrb = ute/ete"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "MINSOL": {
+      "PERTB": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "DXFN": {
+      "I": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "J": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "UXXX": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 102895,
+              "statement": "uxxx = (-5.0*u(1,j)+18.0*u(2,j)-24.0*u(3,j)+14.0*u(4,j)-                                               3.0*u(5,j))/(tdlx3)"
+            },
+            {
+              "line": 102901,
+              "statement": "uxxx = (-u(k-2,j)+2.0*u(k-1,j)-2.0*u(2,j)+u(3,j))/(tdlx3)"
+            },
+            {
+              "line": 102906,
+              "statement": "uxxx = (-3.0*u(1,j)+10.0*u(2,j)-12.0*u(3,j)+6.0*u(4,j)-u(5,j))/       tdlx3"
+            },
+            {
+              "line": 102912,
+              "statement": "uxxx = (-u(k-1,j)+2.0*u(1,j)-2.0*u(3,j)+u(4,j))/(tdlx3)"
+            },
+            {
+              "line": 102917,
+              "statement": "uxxx = (-u(i-2,j)+2.0*u(i-1,j)-2.0*u(i+1,j)+u(i+2,j))/tdlx3"
+            },
+            {
+              "line": 102923,
+              "statement": "uxxx = (u(k-4,j)-6.0*u(k-3,j)+12.0*u(k-2,j)-10.0*u(k-1,j)+                                                 3.0*u(k,j))/tdlx3"
+            },
+            {
+              "line": 102929,
+              "statement": "uxxx = (-u(k-3,j)+2.0*u(k-2,j)-2.0*u(1,j)+u(2,j))/tdlx3"
+            },
+            {
+              "line": 102934,
+              "statement": "uxxx = -(3.0*u(k-4,j)-14.0*u(k-3,j)+24.0*u(k-2,j)-18.0*u(k-1,j)+                                                 5.0*u(k,j))/tdlx3"
+            }
+          ],
+          "via": []
+        }
+      },
+      "UXXXX": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 102897,
+              "statement": "uxxxx = (3.0*u(1,j)-14.0*u(2,j)+26.0*u(3,j)-24.0*u(4,j)+                                      11.0*u(5,j)-2.0*u(6,j))/dlx4"
+            },
+            {
+              "line": 102902,
+              "statement": "uxxxx = (u(k-2,j)-4.0*u(k-1,j)+6.0*u(1,j)-4.0*u(2,j)+u(3,j))/dlx4"
+            },
+            {
+              "line": 102908,
+              "statement": "uxxxx = (2.0*u(1,j)-9.0*u(2,j)+16.0*u(3,j)-14.0*u(4,j)+6.0*u(5,j)-                                                      u(6,j))/dlx4"
+            },
+            {
+              "line": 102913,
+              "statement": "uxxxx = (u(k-1,j)-4.0*u(1,j)+6.0*u(2,j)-4.0*u(3,j)+u(4,j))/dlx4"
+            },
+            {
+              "line": 102918,
+              "statement": "uxxxx = (u(i-2,j)-4.0*u(i-1,j)+6.0*u(i,j)-4.0*u(i+1,j)+u(i+2,j))/        dlx4"
+            },
+            {
+              "line": 102925,
+              "statement": "uxxxx = (-u(k-5,j)+6.0*u(k-4,j)-14.0*u(k-3,j)+16.0*u(k-2,j)-                                     9.0*u(k-1,j)+2.0*u(k,j))/dlx4"
+            },
+            {
+              "line": 102930,
+              "statement": "uxxxx = (u(k-3,j)-4.0*u(k-2,j)+6.0*u(k-1,j)-4.0*u(1,j)+u(2,j))/        dlx4"
+            },
+            {
+              "line": 102936,
+              "statement": "uxxxx = (-2.0*u(k-5,j)+11.0*u(k-4,j)-24.0*u(k-3,j)+26.0*u(k-2,j)-                                    14.0*u(k-1,j)+3.0*u(k,j))/dlx4"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "DYFN": {
+      "I": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "J": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "UYYY": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 102962,
+              "statement": "uyyy = (-5.0*u(i,1)+18.0*u(i,2)-24.0*u(i,3)+14.0*u(i,4)-                                                 3.0*u(i,5))/tdly3"
+            },
+            {
+              "line": 102968,
+              "statement": "uyyy = (-u(i,l-2)+2.0*u(i,l-1)-2.0*u(i,2)+u(i,3))/tdly3"
+            },
+            {
+              "line": 102973,
+              "statement": "uyyy = (-3.0*u(i,1)+10.0*u(i,2)-12.0*u(i,3)+6.0*u(i,4)-u(i,5))/       tdly3"
+            },
+            {
+              "line": 102979,
+              "statement": "uyyy = (-u(i,l-1)+2.0*u(i,1)-2.0*u(i,3)+u(i,4))/tdly3"
+            },
+            {
+              "line": 102984,
+              "statement": "uyyy = (-u(i,j-2)+2.0*u(i,j-1)-2.0*u(i,j+1)+u(i,j+2))/tdly3"
+            },
+            {
+              "line": 102990,
+              "statement": "uyyy = (u(i,l-4)-6.0*u(i,l-3)+12.0*u(i,l-2)-10.0*u(i,l-1)+                                                 3.0*u(i,l))/tdly3"
+            },
+            {
+              "line": 102997,
+              "statement": "uyyy = (-u(i,l-3)+2.0*u(i,l-2)-2.0*u(i,1)+u(i,2))/tdly3"
+            },
+            {
+              "line": 103002,
+              "statement": "uyyy = -(3.0*u(i,l-4)-14.0*u(i,l-3)+24.0*u(i,l-2)-18.0*u(i,l-1)+                                                 5.0*u(i,l))/tdly3"
+            }
+          ],
+          "via": []
+        }
+      },
+      "UYYYY": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 102964,
+              "statement": "uyyyy = (3.0*u(i,1)-14.0*u(i,2)+26.0*u(i,3)-24.0*u(i,4)+                                      11.0*u(i,5)-2.0*u(i,6))/dly4"
+            },
+            {
+              "line": 102969,
+              "statement": "uyyyy = (u(i,l-2)-4.0*u(i,l-1)+6.0*u(i,1)-4.0*u(i,2)+u(i,3))/dly4"
+            },
+            {
+              "line": 102975,
+              "statement": "uyyyy = (2.0*u(i,1)-9.0*u(i,2)+16.0*u(i,3)-14.0*u(i,4)+6.0*u(i,5)-                                                      u(i,6))/dly4"
+            },
+            {
+              "line": 102980,
+              "statement": "uyyyy = (u(i,l-1)-4.0*u(i,1)+6.0*u(i,2)-4.0*u(i,3)+u(i,4))/dly4"
+            },
+            {
+              "line": 102985,
+              "statement": "uyyyy = (u(i,j-2)-4.0*u(i,j-1)+6.0*u(i,j)-4.0*u(i,j+1)+u(i,j+2))/        dly4"
+            },
+            {
+              "line": 102992,
+              "statement": "uyyyy = (-u(i,l-5)+6.0*u(i,l-4)-14.0*u(i,l-3)+16.0*u(i,l-2)-                                     9.0*u(i,l-1)+2.0*u(i,l))/dly4"
+            },
+            {
+              "line": 102998,
+              "statement": "uyyyy = (u(i,l-3)-4.0*u(i,l-2)+6.0*u(i,l-1)-4.0*u(i,1)+u(i,2))/        dly4"
+            },
+            {
+              "line": 103004,
+              "statement": "uyyyy = (-2.0*u(i,l-5)+11.0*u(i,l-4)-24.0*u(i,l-3)+26.0*u(i,l-2)-                                    14.0*u(i,l-1)+3.0*u(i,l))/dly4"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "BLKTRI": {
+      "IERROR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 103116,
+              "statement": "ierror = 0"
+            },
+            {
+              "line": 103119,
+              "statement": "ierror = 1"
+            },
+            {
+              "line": 103123,
+              "statement": "ierror = 2"
+            },
+            {
+              "line": 103127,
+              "statement": "ierror = 3"
+            }
+          ],
+          "via": []
+        }
+      },
+      "IFLG": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "MP": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NP": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "BLKTR1": {
+      "N": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    },
+    "INDXA": {
+      "I": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "IDXA": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 103461,
+              "statement": "idxa = i-na+1"
+            }
+          ],
+          "via": []
+        }
+      },
+      "IR": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NA": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 103460,
+              "statement": "na = 2**ir"
+            },
+            {
+              "line": 103464,
+              "statement": "na = 0"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "INDXC": {
+      "I": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "IDXC": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 103477,
+              "statement": "idxc = i"
+            }
+          ],
+          "via": []
+        }
+      },
+      "IR": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NC": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 103476,
+              "statement": "nc = 2**ir"
+            },
+            {
+              "line": 103480,
+              "statement": "nc = 0"
+            }
+          ],
+          "via": []
+        }
+      }
+    },
+    "BSRH": {
+      "SGN": {
+        "intent": "IN",
+        "dependencies": []
+      }
+    }
+  },
+  "remaining": {
+    "MACH1:N": "I/O reference needs separate review",
+    "STORE2:A": "Shared or storage-associated actual in MACH1",
+    "STORE2:B": "Shared or storage-associated actual in MACH1",
+    "MACH2:N": "I/O reference needs separate review",
+    "DSTOR2:A": "Shared or storage-associated actual in MACH2",
+    "DSTOR2:B": "Shared or storage-associated actual in MACH2",
+    "CBSSLJ:Z": "Unproved call dependency or no established write",
+    "CBJM:Z": "Unknown or callback effects: anorm",
+    "BESJ:X": "Unproved call dependency or no established write",
+    "ASJY:ELIM": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:FLGJY": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:FNU": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:IFLW": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:IN": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:TOL": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:WK": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:X": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:Y": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "CBESK:Z": "Unproved call dependency or no established write",
+    "CBKA:Z": "Unknown or callback effects: anorm",
+    "CKPS:NU": "Unknown or callback effects: anorm",
+    "CBSSLK:Z": "Unproved call dependency or no established write",
+    "CKA:Z": "Unknown or callback effects: anorm",
+    "IA:Z": "Unproved call dependency or no established write",
+    "IMC:Z": "Unproved call dependency or no established write",
+    "BIM:Z": "Unknown or callback effects: anorm",
+    "JA:Z": "Unproved call dependency or no established write",
+    "JMC:Z": "Unproved call dependency or no established write",
+    "BJM:Z": "Unknown or callback effects: anorm",
+    "HBRD:N": "Unproved call dependency or no established write",
+    "HYBRD:N": "Shared or storage-associated actual in HBRD",
+    "HYBRD:WA4": "Shared or storage-associated actual in HBRD",
+    "DRPOLY:IDEG": "Unproved call dependency or no established write",
+    "DRPLY1:IDEG": "Unproved call dependency or no established write",
+    "DRPLY1:K": "Shared or storage-associated actual in DRPOLY",
+    "DRPLY1:P": "Shared or storage-associated actual in DRPOLY",
+    "DRPLY1:QK": "Shared or storage-associated actual in DRPOLY",
+    "DRPLY1:QP": "Shared or storage-associated actual in DRPOLY",
+    "DRPLY1:SVK": "Shared or storage-associated actual in DRPOLY",
+    "DRPLY1:TEMP": "Shared or storage-associated actual in DRPOLY",
+    "FXSHFR:K": "Forwarded shared storage from DRPLY1",
+    "FXSHFR:P": "Forwarded shared storage from DRPLY1",
+    "FXSHFR:QK": "Forwarded shared storage from DRPLY1",
+    "FXSHFR:QP": "Forwarded shared storage from DRPLY1",
+    "FXSHFR:SVK": "Forwarded shared storage from DRPLY1",
+    "QUADIT:K": "Forwarded shared storage from FXSHFR",
+    "QUADIT:P": "Forwarded shared storage from FXSHFR",
+    "QUADIT:QK": "Forwarded shared storage from FXSHFR",
+    "QUADIT:QP": "Forwarded shared storage from FXSHFR",
+    "REALIT:K": "Forwarded shared storage from FXSHFR",
+    "REALIT:P": "Forwarded shared storage from FXSHFR",
+    "REALIT:QK": "Forwarded shared storage from FXSHFR",
+    "REALIT:QP": "Forwarded shared storage from FXSHFR",
+    "CALCSC:K": "Forwarded shared storage from FXSHFR",
+    "CALCSC:QK": "Forwarded shared storage from FXSHFR",
+    "NEXTK:K": "Forwarded shared storage from FXSHFR",
+    "NEXTK:QK": "Forwarded shared storage from FXSHFR",
+    "NEXTK:QP": "Forwarded shared storage from FXSHFR",
+    "NEWEST:K": "Forwarded shared storage from FXSHFR",
+    "NEWEST:P": "Forwarded shared storage from FXSHFR",
+    "DCPOLY:IDEG": "Unproved call dependency or no established write",
+    "DCPLY1:IDEG": "Unproved call dependency or no established write",
+    "ICAMAX:CX": "Unknown or callback effects: cabs1",
+    "LUIMP:Q": "Shared or storage-associated actual in SLVMP",
+    "BTSLV:N": "Unproved call dependency or no established write",
+    "DECBT:N": "Unproved call dependency or no established write",
+    "SOLBT:N": "Unproved call dependency or no established write",
+    "CMSLV:N": "Unproved call dependency or no established write",
+    "CMSLV1:N": "Unproved call dependency or no established write",
+    "CSLVMP:N": "Unproved call dependency or no established write",
+    "CGECO:N": "Unproved call dependency or no established write",
+    "CGEFA:N": "Shared or storage-associated actual in CSLVMP",
+    "DCMSLV:N": "Unproved call dependency or no established write",
+    "DCMINV:N": "Unproved call dependency or no established write",
+    "ABSLV:M": "Unproved call dependency or no established write",
+    "ABSLV:N": "Unproved call dependency or no established write",
+    "ABSLV1:M": "Shared or storage-associated actual in ABSLV",
+    "ABSLV1:N": "Shared or storage-associated actual in ABSLV",
+    "DABSLV:M": "Unproved call dependency or no established write",
+    "DABSLV:N": "Unproved call dependency or no established write",
+    "DABSV1:M": "Shared or storage-associated actual in DABSLV",
+    "DABSV1:N": "Shared or storage-associated actual in DABSLV",
+    "TASLV:N": "Unproved call dependency or no established write",
+    "TASLV1:N": "Shared or storage-associated actual in TASLV",
+    "DTASLV:N": "Unproved call dependency or no established write",
+    "DTASV1:N": "Shared or storage-associated actual in DTASLV",
+    "MEXP:N": "Unproved call dependency or no established write",
+    "DMEXP:N": "Unproved call dependency or no established write",
+    "LE:N": "Unknown or callback effects: rowk",
+    "DPLE:N": "Unknown or callback effects: rowk",
+    "CLE:N": "Unknown or callback effects: rowk",
+    "BLKORD:N": "Unproved call dependency or no established write",
+    "SEIG:N": "Unproved call dependency or no established write",
+    "DSEIG:N": "Unproved call dependency or no established write",
+    "ORSOL:QR": "Shared or storage-associated actual in LLSQMP",
+    "ORSOL:S": "Shared or storage-associated actual in LLSQMP",
+    "ORIMP:QR": "Shared or storage-associated actual in LLSQMP",
+    "ORIMP:S": "Shared or storage-associated actual in LLSQMP",
+    "U12LS:H": "Shared or storage-associated actual in LSQR",
+    "U12LS:W": "Shared or storage-associated actual in LSQR",
+    "U12US:H": "Shared or storage-associated actual in LSQR",
+    "U12US:W": "Shared or storage-associated actual in LSQR",
+    "LSEI:N": "Unproved call dependency or no established write",
+    "LSI:N": "Unproved call dependency or no established write",
+    "LPDP:PRGOPT": "Unproved call dependency or no established write",
+    "SPLSQ:N": "Unproved call dependency or no established write",
+    "STLSQ:N": "Unproved call dependency or no established write",
+    "BLSQ:N": "Unproved call dependency or no established write",
+    "OPTF:N": "Unproved call dependency or no established write",
+    "OPTDRV:N": "Shared or storage-associated actual in OPTF",
+    "FXDEC:N": "Forwarded shared storage from OPTDRV",
+    "FSTOFD:N": "Forwarded shared storage from OPTDRV",
+    "FSTOFD:TYPSIZ": "Forwarded shared storage from OPTDRV",
+    "FSTOCD:N": "Forwarded shared storage from OPTDRV",
+    "LNSRCH:FPLS": "Unknown or callback effects: fcn",
+    "LNSRCH:N": "Forwarded shared storage from OPTDRV",
+    "LMDIFF:M": "Unproved call dependency or no established write",
+    "LMDIFF:N": "Unproved call dependency or no established write",
+    "LMDIF:M": "Shared or storage-associated actual in LMDIFF",
+    "LMDIF:N": "Unknown or callback effects: fcn",
+    "FDJAC1:IFLAG": "Unknown or callback effects: fcn",
+    "FDJAC1:N": "Forwarded shared storage from HYBRD",
+    "FDJAC1:WA1": "Forwarded shared storage from HYBRD",
+    "FDJAC2:IFLAG": "Unknown or callback effects: fcn",
+    "FDJAC2:M": "Forwarded shared storage from LMDIF",
+    "FDJAC2:N": "Unknown or callback effects: fcn",
+    "FDJAC2:WA": "Forwarded shared storage from LMDIF",
+    "SMPLX:M": "Unproved call dependency or no established write",
+    "SSPLX:M": "Unproved call dependency or no established write",
+    "ACONDF:X": "Procedure passed as a callback: preserve its interface",
+    "ACONDG:C": "Procedure passed as a callback: preserve its interface",
+    "ACONDG:X": "Procedure passed as a callback: preserve its interface",
+    "XCOND:X": "Procedure passed as a callback: preserve its interface",
+    "XCONDX:X": "Shared or storage-associated actual in XCOND",
+    "XCONDX:Y": "Shared or storage-associated actual in XCOND",
+    "XCONDY:X": "Procedure passed as a callback: preserve its interface",
+    "XCONDY:Y": "Procedure passed as a callback: preserve its interface",
+    "QAGI1:C": "Shared or storage-associated actual in XCOND",
+    "QAGI1:Y": "Shared or storage-associated actual in XCOND",
+    "QAGIE1:C": "Forwarded shared storage from QAGI1",
+    "QAGIE1:Y": "Forwarded shared storage from QAGI1",
+    "QK15I1:C": "Forwarded shared storage from QAGIE1",
+    "QK15I1:Y": "Forwarded shared storage from QAGIE1",
+    "FFT:ISN": "Unproved call dependency or no established write",
+    "FFT:N": "Unproved call dependency or no established write",
+    "FFT1:ISN": "Unproved call dependency or no established write",
+    "FFT1:N": "Unproved call dependency or no established write",
+    "MFFT:N": "Unproved call dependency or no established write",
+    "MFFT1:ISN": "Unproved call dependency or no established write",
+    "MFFT1:N": "Unproved call dependency or no established write",
+    "SFFT:A": "Shared or storage-associated actual in MFFT",
+    "SFFT:B": "Shared or storage-associated actual in MFFT",
+    "SFFT:IERR": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "SFFT:ISN": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "SFFT:N": "Shared or storage-associated actual in FFT1",
+    "SFFT:NSPAN": "Shared or storage-associated actual in FFT1",
+    "SFFT:NTOT": "Shared or storage-associated actual in FFT1",
+    "COSQI:N": "Unproved call dependency or no established write",
+    "COSQF:N": "Unproved call dependency or no established write",
+    "COSQF1:N": "Unproved call dependency or no established write",
+    "COSQF1:W": "Shared or storage-associated actual in COSQF",
+    "COSQB:N": "Unproved call dependency or no established write",
+    "COSQB1:N": "Unproved call dependency or no established write",
+    "COSQB1:W": "Shared or storage-associated actual in COSQB",
+    "SINQF:N": "Unproved call dependency or no established write",
+    "SINQB:N": "Unproved call dependency or no established write",
+    "RFFTI:N": "Unproved call dependency or no established write",
+    "RFFTB:N": "Unproved call dependency or no established write",
+    "RFFTB1:WA": "Shared or storage-associated actual in RFFTB",
+    "RADB2:CC": "Forwarded shared storage from RFFTB1",
+    "RADB2:WA1": "Forwarded shared storage from RFFTB1",
+    "RADB3:CC": "Forwarded shared storage from RFFTB1",
+    "RADB3:WA1": "Shared or storage-associated actual in RFFTB1",
+    "RADB3:WA2": "Shared or storage-associated actual in RFFTB1",
+    "RADB4:CC": "Forwarded shared storage from RFFTB1",
+    "RADB4:WA1": "Shared or storage-associated actual in RFFTB1",
+    "RADB4:WA2": "Shared or storage-associated actual in RFFTB1",
+    "RADB4:WA3": "Shared or storage-associated actual in RFFTB1",
+    "RADB5:CC": "Forwarded shared storage from RFFTB1",
+    "RADB5:WA1": "Shared or storage-associated actual in RFFTB1",
+    "RADB5:WA2": "Shared or storage-associated actual in RFFTB1",
+    "RADB5:WA3": "Shared or storage-associated actual in RFFTB1",
+    "RADB5:WA4": "Shared or storage-associated actual in RFFTB1",
+    "RADBG:CC": "Shared or storage-associated actual in RFFTB1",
+    "RADBG:WA": "Forwarded shared storage from RFFTB1",
+    "RFFTF:N": "Unproved call dependency or no established write",
+    "RFFTF1:WA": "Shared or storage-associated actual in RFFTF",
+    "RADF2:CC": "Forwarded shared storage from RFFTF1",
+    "RADF2:WA1": "Forwarded shared storage from RFFTF1",
+    "RADF3:CC": "Forwarded shared storage from RFFTF1",
+    "RADF3:WA1": "Shared or storage-associated actual in RFFTF1",
+    "RADF3:WA2": "Shared or storage-associated actual in RFFTF1",
+    "RADF4:CC": "Forwarded shared storage from RFFTF1",
+    "RADF4:WA1": "Shared or storage-associated actual in RFFTF1",
+    "RADF4:WA2": "Shared or storage-associated actual in RFFTF1",
+    "RADF4:WA3": "Shared or storage-associated actual in RFFTF1",
+    "RADF5:CC": "Forwarded shared storage from RFFTF1",
+    "RADF5:WA1": "Shared or storage-associated actual in RFFTF1",
+    "RADF5:WA2": "Shared or storage-associated actual in RFFTF1",
+    "RADF5:WA3": "Shared or storage-associated actual in RFFTF1",
+    "RADF5:WA4": "Shared or storage-associated actual in RFFTF1",
+    "RADFG:WA": "Forwarded shared storage from RFFTF1",
+    "ERRINT:AAA": "Shared or storage-associated actual in ADCOMP",
+    "ERRINT:BBB": "Shared or storage-associated actual in ADCOMP",
+    "ERRINT:POINTS": "Shared or storage-associated actual in ADCOMP",
+    "ERRINT:WEIGHT": "Shared or storage-associated actual in ADCOMP",
+    "NEWTON:NI": "Shared or storage-associated actual in ADCOMP",
+    "NEWTON:NL": "Shared or storage-associated actual in ADCOMP",
+    "NEWTON:NR": "Shared or storage-associated actual in ADCOMP",
+    "POLYDD:X": "Procedure passed as a callback: preserve its interface",
+    "ADTRAN:D": "Shared or storage-associated actual in ADPUT",
+    "CPSC:Z": "Unknown or callback effects: f",
+    "DCPSC:X": "Unknown or callback effects: fun",
+    "DCPSC:Y": "Unknown or callback effects: fun",
+    "BNDSL:G": "Forwarded shared storage from BFIT0",
+    "SURF2:Z": "Unknown or callback effects: hermnz",
+    "SURF2:ZP": "Unknown or callback effects: hermnz",
+    "TRMESH:X": "Unproved call dependency or no established write",
+    "TRMESH:Y": "Unproved call dependency or no established write",
+    "ADNODE:X": "Unproved call dependency or no established write",
+    "ADNODE:Y": "Unproved call dependency or no established write",
+    "TRFIND:X": "Unknown or callback effects: left",
+    "TRFIND:Y": "Unknown or callback effects: left",
+    "SFVAL:X": "Unproved call dependency or no established write",
+    "SFVAL:Y": "Unproved call dependency or no established write",
+    "SFVAL2:X": "Unproved call dependency or no established write",
+    "SFVAL2:Y": "Unproved call dependency or no established write",
+    "INTRC1:X": "Unproved call dependency or no established write",
+    "INTRC1:Y": "Unproved call dependency or no established write",
+    "GNRTP:DIMP1": "Unproved call dependency or no established write",
+    "DGNRTP:DIMP1": "Unproved call dependency or no established write",
+    "QPSRT:ELIST": "Forwarded shared storage from QXGSE",
+    "QXGS:A": "Unproved call dependency or no established write",
+    "QXGS:B": "Unproved call dependency or no established write",
+    "QXGSE:A": "Unknown or callback effects: f",
+    "QXGSE:B": "Unknown or callback effects: f",
+    "QXRRD:Z": "Forwarded shared storage from QXGSE",
+    "DQPSRT:ELIST": "Forwarded shared storage from DQXGSE",
+    "DQXGS:A": "Unproved call dependency or no established write",
+    "DQXGS:B": "Unproved call dependency or no established write",
+    "DQXGSE:A": "Unknown or callback effects: f",
+    "DQXGSE:B": "Unknown or callback effects: f",
+    "DQXRRD:Z": "Forwarded shared storage from DQXGSE",
+    "CUBTRI:IDATA": "Unproved call dependency or no established write",
+    "CUBTRI:RDATA": "Unproved call dependency or no established write",
+    "RNDERR:A": "Shared or storage-associated actual in CUBTRI",
+    "RNDERR:B": "Shared or storage-associated actual in CUBTRI",
+    "RNDERR:X": "Shared or storage-associated actual in CUBTRI",
+    "RNDERR:Y": "Shared or storage-associated actual in CUBTRI",
+    "CUBRUL:IDATA": "Unknown or callback effects: f",
+    "CUBRUL:RDATA": "Unknown or callback effects: f",
+    "IEGS:ASIDE": "Shared or storage-associated actual in IESLV",
+    "IEGS:ASIDE3": "Shared or storage-associated actual in IESLV",
+    "IEGS:DELN": "Shared or storage-associated actual in IESLV",
+    "IEGS:IMKNN": "Shared or storage-associated actual in IESLV",
+    "IEGS:KMM": "Shared or storage-associated actual in IESLV",
+    "IEGS:KMN": "Shared or storage-associated actual in IESLV",
+    "IEGS:KNM": "Shared or storage-associated actual in IESLV",
+    "IEGS:LUFACT": "Shared or storage-associated actual in IESLV",
+    "IEGS:OLDX": "Shared or storage-associated actual in IESLV",
+    "IEGS:R": "Shared or storage-associated actual in IESLV",
+    "IEGS:RH": "Shared or storage-associated actual in IESLV",
+    "IEGS:RHS": "Shared or storage-associated actual in IESLV",
+    "IEGS:SAVE": "Shared or storage-associated actual in IESLV",
+    "IEGS:SAVE2": "Shared or storage-associated actual in IESLV",
+    "IEGS:TM": "Shared or storage-associated actual in IESLV",
+    "IEGS:TN": "Shared or storage-associated actual in IESLV",
+    "IEGS:WM": "Shared or storage-associated actual in IESLV",
+    "IEGS:WN": "Shared or storage-associated actual in IESLV",
+    "IEGS:XM": "Shared or storage-associated actual in IESLV",
+    "IEGS:XMZ": "Shared or storage-associated actual in IESLV",
+    "IEGS:XN": "Shared or storage-associated actual in IESLV",
+    "NSTERP:TM": "Forwarded shared storage from IEGS",
+    "NSTERP:TN": "Forwarded shared storage from IEGS",
+    "NSTERP:WM": "Forwarded shared storage from IEGS",
+    "NSTERP:WN": "Forwarded shared storage from IEGS",
+    "NSTERP:XN": "Forwarded shared storage from IEGS",
+    "RNRM:X": "Shared or storage-associated actual in IEGS",
+    "RNRM:Y": "Shared or storage-associated actual in IEGS",
+    "LEAVE:DELN": "Forwarded shared storage from IEGS",
+    "LEAVE:ELINSY": "Shared or storage-associated actual in IEGS",
+    "LEAVE:IMKNN": "Forwarded shared storage from IEGS",
+    "LEAVE:KMM": "Forwarded shared storage from IEGS",
+    "LEAVE:KMN": "Forwarded shared storage from IEGS",
+    "LEAVE:KNM": "Forwarded shared storage from IEGS",
+    "LEAVE:LUFACT": "Forwarded shared storage from IEGS",
+    "LEAVE:MF": "Shared or storage-associated actual in IEGS",
+    "LEAVE:NF": "Shared or storage-associated actual in IEGS",
+    "LEAVE:R": "Forwarded shared storage from IEGS",
+    "LEAVE:RH": "Forwarded shared storage from IEGS",
+    "LEAVE:RHS": "Forwarded shared storage from IEGS",
+    "LEAVE:TM": "Shared or storage-associated actual in IEGS",
+    "LEAVE:TN": "Shared or storage-associated actual in IEGS",
+    "LEAVE:TV": "Shared or storage-associated actual in IEGS",
+    "LEAVE:WM": "Shared or storage-associated actual in IEGS",
+    "LEAVE:WN": "Shared or storage-associated actual in IEGS",
+    "LEAVE:WV": "Shared or storage-associated actual in IEGS",
+    "LEAVE:XM": "Shared or storage-associated actual in IEGS",
+    "LEAVE:XMZ": "Forwarded shared storage from IEGS",
+    "LEAVE:XV": "Shared or storage-associated actual in IEGS",
+    "ITERT:IMKNN": "Forwarded shared storage from IEGS",
+    "ITERT:KMN": "Forwarded shared storage from IEGS",
+    "ITERT:N": "Forwarded shared storage from LEAVE",
+    "ITERT:RHS": "Forwarded shared storage from IEGS",
+    "ITERT:TM": "Forwarded shared storage from LEAVE",
+    "ITERT:TN": "Forwarded shared storage from LEAVE",
+    "ITERT:WM": "Forwarded shared storage from LEAVE",
+    "ITERT:WN": "Forwarded shared storage from LEAVE",
+    "ITERT:XMZ": "Forwarded shared storage from IEGS",
+    "LNSYS:A": "Forwarded shared storage from IEGS",
+    "LNSYS:B": "Forwarded shared storage from IEGS",
+    "LNSYS:D": "Forwarded shared storage from IEGS",
+    "LNSYS:N": "Forwarded shared storage from ITERT",
+    "LNSYS:X": "Forwarded shared storage from IEGS",
+    "DE1:YP": "Shared or storage-associated actual in ODE",
+    "STEP1:WT": "Forwarded shared storage from DE1",
+    "STEP1:YP": "Forwarded shared storage from DE1",
+    "INTRP:PHI": "Forwarded shared storage from DE1",
+    "INTRP:PSI": "Forwarded shared storage from DE1",
+    "INTRP:Y": "Forwarded shared storage from DE1",
+    "RKFC:F1": "Shared or storage-associated actual in BRKF45",
+    "RKFC:F4": "Shared or storage-associated actual in BRKF45",
+    "RKFC:F7": "Shared or storage-associated actual in BRKF45",
+    "EXTRA:F": "Forwarded shared storage from RKFC",
+    "EXTRA:F1": "Forwarded shared storage from RKFC",
+    "EXTRA:F2": "Forwarded shared storage from RKFC",
+    "EXTRA:Y": "Forwarded shared storage from RKFC",
+    "EXTRA:YINC1": "Forwarded shared storage from RKFC",
+    "EXTRA:YINC2": "Forwarded shared storage from RKFC",
+    "RKFS:F2": "Shared or storage-associated actual in RKF45",
+    "RKFS:F3": "Shared or storage-associated actual in RKF45",
+    "RKFS:F4": "Shared or storage-associated actual in RKF45",
+    "RKFS:YP": "Shared or storage-associated actual in RKF45",
+    "FEHL:F2": "Forwarded shared storage from GERKS",
+    "FEHL:F3": "Forwarded shared storage from GERKS",
+    "FEHL:F4": "Forwarded shared storage from GERKS",
+    "FEHL:H": "Forwarded shared storage from GERKS",
+    "FEHL:T": "Unknown or callback effects: f",
+    "GERKS:F2": "Shared or storage-associated actual in GERK",
+    "GERKS:F3": "Shared or storage-associated actual in GERK",
+    "GERKS:F4": "Shared or storage-associated actual in GERK",
+    "GERKS:YP": "Shared or storage-associated actual in GERK",
+    "SFODE:IPAR": "Unproved call dependency or no established write",
+    "SFODE:NEQ": "Unproved call dependency or no established write",
+    "SFODE:RPAR": "Unproved call dependency or no established write",
+    "SFODE:TOUT": "Unproved call dependency or no established write",
+    "SFODE1:IPAR": "Unproved call dependency or no established write",
+    "SFODE1:NEQ": "Unproved call dependency or no established write",
+    "SFODE1:RPAR": "Unproved call dependency or no established write",
+    "SFODE1:TOUT": "Unproved call dependency or no established write",
+    "ZZZJAC:IPAR": "Procedure passed as a callback: preserve its interface",
+    "ZZZJAC:PD": "Procedure passed as a callback: preserve its interface",
+    "ZZZJAC:RPAR": "Procedure passed as a callback: preserve its interface",
+    "ZZZJAC:Y": "Procedure passed as a callback: preserve its interface",
+    "STFODE:IPAR": "Unproved call dependency or no established write",
+    "STFODE:NEQ": "Unproved call dependency or no established write",
+    "STFODE:RPAR": "Unproved call dependency or no established write",
+    "STFODE:TOUT": "Unproved call dependency or no established write",
+    "LSOD1:ACOR": "Shared or storage-associated actual in STFODE",
+    "LSOD1:DELSGN": "Shared or storage-associated actual in STFODE",
+    "LSOD1:EWT": "Shared or storage-associated actual in STFODE",
+    "LSOD1:IPAR": "Unknown or callback effects: f",
+    "LSOD1:NEQ": "Unproved call dependency or no established write",
+    "LSOD1:RPAR": "Unknown or callback effects: f",
+    "LSOD1:SAVF": "Shared or storage-associated actual in STFODE",
+    "LSOD1:TOLFAC": "Shared or storage-associated actual in STFODE",
+    "LSOD1:TOUT": "Unknown or callback effects: f",
+    "LSOD1:TSTOP": "Shared or storage-associated actual in STFODE",
+    "LSOD1:WM": "Shared or storage-associated actual in STFODE",
+    "LSOD1:YH": "Shared or storage-associated actual in STFODE",
+    "LSOD1:YH1": "Shared or storage-associated actual in STFODE",
+    "LSOD1:YPOUT": "Shared or storage-associated actual in STFODE",
+    "HSTART:A": "Unknown or callback effects: f",
+    "HSTART:ETOL": "Forwarded shared storage from LSOD1",
+    "HSTART:IPAR": "Unknown or callback effects: f",
+    "HSTART:RPAR": "Unknown or callback effects: f",
+    "HSTART:SF": "Shared or storage-associated actual in LSOD1",
+    "HSTART:Y": "Unknown or callback effects: f",
+    "HSTART:YPRIME": "Shared or storage-associated actual in LSOD1",
+    "INTYD:DKY": "Forwarded shared storage from LSOD1",
+    "INTYD:YH": "Forwarded shared storage from LSOD1",
+    "STOD:ACOR": "Forwarded shared storage from LSOD1",
+    "STOD:EWT": "Forwarded shared storage from LSOD1",
+    "STOD:IPAR": "Unknown or callback effects: f",
+    "STOD:NEQ": "Shared or storage-associated actual in LSOD1",
+    "STOD:NYH": "Shared or storage-associated actual in LSOD1",
+    "STOD:RPAR": "Unknown or callback effects: f",
+    "STOD:SAVF": "Forwarded shared storage from LSOD1",
+    "STOD:WM": "Forwarded shared storage from LSOD1",
+    "STOD:YH": "Forwarded shared storage from LSOD1",
+    "STOD:YH1": "Forwarded shared storage from LSOD1",
+    "PJAC:EWT": "Forwarded shared storage from STOD",
+    "PJAC:FTEM": "Forwarded shared storage from STOD",
+    "PJAC:IPAR": "Unknown or callback effects: f",
+    "PJAC:NEQ": "Forwarded shared storage from STOD",
+    "PJAC:NYH": "Forwarded shared storage from STOD",
+    "PJAC:RPAR": "Unknown or callback effects: f",
+    "PJAC:SAVF": "Forwarded shared storage from STOD",
+    "PJAC:WM": "Forwarded shared storage from STOD",
+    "PJAC:YH": "Forwarded shared storage from STOD",
+    "SLVS:TEM": "Forwarded shared storage from STOD",
+    "SLVS:WM": "Forwarded shared storage from STOD",
+    "VNORM:V": "Forwarded shared storage from HSTART",
+    "VNWRMS:V": "Forwarded shared storage from LSOD1",
+    "VNWRMS:W": "Forwarded shared storage from LSOD1",
+    "RK8:H": "Unknown or callback effects: f",
+    "SEPDE:A": "Unknown or callback effects: bval",
+    "SEPDE:B": "Unknown or callback effects: bval",
+    "SEPDE:C": "Unknown or callback effects: bval",
+    "SEPDE:D": "Unknown or callback effects: bval",
+    "SEPDE:KU": "Unproved call dependency or no established write",
+    "SEPDE:MP1": "Unproved call dependency or no established write",
+    "SEPELL:BDA": "Shared or storage-associated actual in SEPDE",
+    "SEPELL:BDB": "Shared or storage-associated actual in SEPDE",
+    "SEPELL:BDC": "Shared or storage-associated actual in SEPDE",
+    "SEPELL:BDD": "Shared or storage-associated actual in SEPDE",
+    "SEPELL:IDMN": "Shared or storage-associated actual in SEPDE",
+    "SEPELL:MN": "Shared or storage-associated actual in SEPDE",
+    "SEPEL1:AM": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:AN": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:BDA": "Forwarded shared storage from SEPELL",
+    "SEPEL1:BDB": "Forwarded shared storage from SEPELL",
+    "SEPEL1:BDC": "Forwarded shared storage from SEPELL",
+    "SEPEL1:BDD": "Forwarded shared storage from SEPELL",
+    "SEPEL1:BM": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:BN": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:CM": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:CN": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:DM": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:DN": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:GRHS": "Forwarded shared storage from SEPELL",
+    "SEPEL1:IDMN": "Forwarded shared storage from SEPELL",
+    "SEPEL1:MN": "Forwarded shared storage from SEPELL",
+    "SEPEL1:UM": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:UN": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:USOL": "Forwarded shared storage from SEPELL",
+    "SEPEL1:W": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:ZM": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:ZN": "Shared or storage-associated actual in SEPELL",
+    "ORTHG:IDMN": "Forwarded shared storage from SEPEL1",
+    "ORTHG:USOL": "Forwarded shared storage from SEPEL1",
+    "ORTHG:ZM": "Forwarded shared storage from SEPEL1",
+    "ORTHG:ZN": "Forwarded shared storage from SEPEL1",
+    "MINSOL:IDMN": "Forwarded shared storage from SEPEL1",
+    "MINSOL:USOL": "Forwarded shared storage from SEPEL1",
+    "MINSOL:ZM": "Forwarded shared storage from SEPEL1",
+    "MINSOL:ZN": "Forwarded shared storage from SEPEL1",
+    "TRISP:A": "Forwarded shared storage from SEPEL1",
+    "TRISP:B": "Forwarded shared storage from SEPEL1",
+    "TRISP:C": "Forwarded shared storage from SEPEL1",
+    "DEFER:GRHS": "Forwarded shared storage from SEPEL1",
+    "DEFER:IDMN": "Forwarded shared storage from SEPEL1",
+    "DEFER:MN": "Forwarded shared storage from SEPEL1",
+    "DEFER:USOL": "Forwarded shared storage from SEPEL1",
+    "DXFN:IDMN": "Forwarded shared storage from DEFER",
+    "DXFN:U": "Forwarded shared storage from DEFER",
+    "DYFN:IDMN": "Forwarded shared storage from DEFER",
+    "DYFN:U": "Forwarded shared storage from DEFER",
+    "BLKTRI:AM": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:AN": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:BM": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:BN": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:CM": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:CN": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:IDIMY": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:M": "Shared or storage-associated actual in SEPEL1",
+    "BLKTRI:N": "Shared or storage-associated actual in SEPEL1",
+    "BLKTRI:W": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:Y": "Forwarded shared storage from SEPEL1",
+    "BLKTR1:AM": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:AN": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:B": "Shared or storage-associated actual in BLKTRI",
+    "BLKTR1:BM": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:BN": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:CM": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:CN": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:IDIMY": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:M": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:W1": "Shared or storage-associated actual in BLKTRI",
+    "BLKTR1:W2": "Shared or storage-associated actual in BLKTRI",
+    "BLKTR1:W3": "Shared or storage-associated actual in BLKTRI",
+    "BLKTR1:WD": "Shared or storage-associated actual in BLKTRI",
+    "BLKTR1:WU": "Shared or storage-associated actual in BLKTRI",
+    "BLKTR1:WW": "Shared or storage-associated actual in BLKTRI",
+    "BLKTR1:Y": "Forwarded shared storage from BLKTRI",
+    "INDXB:I": "Shared or storage-associated actual in COMPB",
+    "INDXB:IDP": "Shared or storage-associated actual in COMPB",
+    "INDXB:IDX": "Shared or storage-associated actual in COMPB",
+    "INDXB:IR": "Shared or storage-associated actual in COMPB",
+    "PROD0:A": "Procedure passed as a callback: preserve its interface",
+    "PROD0:AA": "Procedure passed as a callback: preserve its interface",
+    "PROD0:B": "Procedure passed as a callback: preserve its interface",
+    "PROD0:BD": "Procedure passed as a callback: preserve its interface",
+    "PROD0:BM1": "Procedure passed as a callback: preserve its interface",
+    "PROD0:BM2": "Procedure passed as a callback: preserve its interface",
+    "PROD0:C": "Procedure passed as a callback: preserve its interface",
+    "PROD0:U": "Procedure passed as a callback: preserve its interface",
+    "PROD0:X": "Procedure passed as a callback: preserve its interface",
+    "PRODP:A": "Procedure passed as a callback: preserve its interface",
+    "PRODP:AA": "Procedure passed as a callback: preserve its interface",
+    "PRODP:B": "Procedure passed as a callback: preserve its interface",
+    "PRODP:BD": "Procedure passed as a callback: preserve its interface",
+    "PRODP:BM1": "Procedure passed as a callback: preserve its interface",
+    "PRODP:BM2": "Procedure passed as a callback: preserve its interface",
+    "PRODP:C": "Procedure passed as a callback: preserve its interface",
+    "PRODP:X": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:A": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:AA": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:B": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:BD": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:BM1": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:BM2": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:C": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:X": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:A": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:AA": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:B": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:BD": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:BM1": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:BM2": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:C": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:X": "Procedure passed as a callback: preserve its interface",
+    "COMPB:AH": "Shared or storage-associated actual in BLKTRI",
+    "COMPB:AN": "Forwarded shared storage from BLKTRI",
+    "COMPB:B": "Shared or storage-associated actual in BLKTRI",
+    "COMPB:BH": "Shared or storage-associated actual in BLKTRI",
+    "COMPB:BN": "Forwarded shared storage from BLKTRI",
+    "COMPB:CN": "Forwarded shared storage from BLKTRI",
+    "COMPB:IERROR": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "COMPB:N": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "TQLRT0:D": "Shared or storage-associated actual in COMPB",
+    "TQLRT0:E2": "Shared or storage-associated actual in COMPB",
+    "TQLRT0:IERR": "Shared or storage-associated actual in COMPB",
+    "TQLRT0:N": "Shared or storage-associated actual in COMPB",
+    "PPADD:A": "Shared or storage-associated actual in COMPB",
+    "PPADD:BH": "Shared or storage-associated actual in COMPB",
+    "PPADD:BP": "Shared or storage-associated actual in COMPB",
+    "PPADD:C": "Shared or storage-associated actual in COMPB",
+    "PPADD:CBP": "Shared or storage-associated actual in COMPB",
+    "PPADD:IERROR": "Shared or storage-associated actual in COMPB",
+    "PPADD:N": "Shared or storage-associated actual in COMPB",
+    "PSGF:A": "Forwarded shared storage from PPADD",
+    "PSGF:BH": "Forwarded shared storage from PPADD",
+    "PSGF:C": "Forwarded shared storage from PPADD",
+    "BSRH:A": "Forwarded shared storage from PPADD",
+    "BSRH:BH": "Shared or storage-associated actual in PPADD",
+    "BSRH:C": "Forwarded shared storage from PPADD",
+    "BSRH:IZ": "Unknown or callback effects: f",
+    "BSRH:XLL": "Shared or storage-associated actual in PPADD",
+    "BSRH:XRR": "Shared or storage-associated actual in PPADD",
+    "PPSGF:A": "Forwarded shared storage from PPADD",
+    "PPSGF:BH": "Forwarded shared storage from PPADD",
+    "PPSGF:C": "Forwarded shared storage from PPADD",
+    "PPSPF:A": "Procedure passed as a callback: preserve its interface",
+    "PPSPF:BH": "Procedure passed as a callback: preserve its interface",
+    "PPSPF:C": "Procedure passed as a callback: preserve its interface"
+  },
+  "output_sha256": "167ca8d4ce2ac9c7bded35cfee77071a33409555e03044dfcc5dfb8345082015"
+}

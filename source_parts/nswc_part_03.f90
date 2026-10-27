@@ -4902,7 +4902,7 @@ end subroutine dpinv
 subroutine mplnmv(mo, au, nc, ac, fv)
 implicit none
 integer, intent(in) :: mo, nc
-real :: ac(*)
+real, intent(in) :: ac(*)
 real, intent(in) :: au
 real, intent(out) :: fv
 !     beginning of local variable declarations
@@ -5013,7 +5013,7 @@ subroutine lgrngn(au, na, an)
 implicit none
 integer, intent(in) :: na
 real, intent(inout) :: an(*)
-real :: au(*)
+real, intent(in) :: au(*)
 !     beginning of local variable declarations
 integer :: k, m
 real :: dm, tm
@@ -5038,7 +5038,7 @@ end subroutine lgrngn
 subroutine lgrngv(mo, na, qu, au, an, ff, df, sf)
 implicit none
 integer, intent(in) :: mo, na
-real :: an(*), au(*)
+real, intent(in) :: an(*), au(*)
 real, intent(inout) :: df(*), ff(*)
 real, intent(in) :: qu
 real, intent(inout) :: sf(*)
@@ -5157,7 +5157,7 @@ subroutine lgrngx(au, na, ac)
 implicit none
 integer, intent(in) :: na
 real, intent(inout) :: ac(*)
-real :: au(*)
+real, intent(in) :: au(*)
 !     beginning of local variable declarations
 integer :: i, j, k, l
 real :: sm, td, tm
@@ -5210,7 +5210,7 @@ subroutine orthos(au, ma, aa, na, ar)
 implicit none
 integer, intent(in) :: ma, na
 real, intent(inout) :: aa(*), ar(*)
-real :: au(*)
+real, intent(in) :: au(*)
 !     beginning of local variable declarations
 integer :: i, j, k, l, m
 real :: rm, rn, sm, sn
@@ -5291,7 +5291,7 @@ end subroutine orthos
 subroutine orthov(mo, na, au, ar, nf, ff, df, sf)
 implicit none
 integer, intent(in) :: mo, na, nf
-real :: ar(*)
+real, intent(in) :: ar(*)
 real, intent(in) :: au
 real, intent(inout) :: df(*), ff(*), sf(*)
 !     beginning of local variable declarations
@@ -5349,7 +5349,7 @@ subroutine orthox(na, ar, nc, ac)
 implicit none
 integer, intent(in) :: na, nc
 real, intent(inout) :: ac(*)
-real :: ar(*)
+real, intent(in) :: ar(*)
 !     beginning of local variable declarations
 integer :: j, k, l, m, n
 real :: rn, sn, tm
@@ -6869,7 +6869,7 @@ subroutine drpoly(op, ideg, zeror, zeroi, num, wk, dwk)
 implicit none
 integer :: ideg
 integer, intent(inout) :: num
-double precision :: op(*)
+double precision, intent(in) :: op(*)
 double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
    & dwk(*)
 real, intent(inout) :: wk(*)
@@ -6916,10 +6916,14 @@ end subroutine drpoly
 subroutine drply1(op,ideg,idp1,zeror,zeroi,p,qp,k,qk,svk, &
    & temp,pt,num)
 implicit none
-integer :: ideg, idp1, num
-double precision :: op(idp1), zeror(ideg), zeroi(ideg), p(idp1), &
-   & qp(idp1), k(idp1), qk(idp1), svk(idp1), temp(idp1)
-real :: pt(idp1)
+integer :: ideg
+integer, intent(in) :: idp1
+integer, intent(inout) :: num
+double precision, intent(in) :: op(idp1)
+double precision, intent(inout) :: zeror(ideg), zeroi(ideg)
+double precision :: p(idp1), qp(idp1), k(idp1), qk(idp1), &
+   & svk(idp1), temp(idp1)
+real, intent(inout) :: pt(idp1)
 !     beginning of local variable declarations
 integer :: i, j, jj, l, n, nm1, nn, nz, cnt
 double precision :: aa, bb, cc, factor, t
@@ -7078,7 +7082,7 @@ dx = ff/df
 x = x - dx
 go to 160
 180 bnd = x
-!     Compute the derivative as the intial K polynomial
+!     Compute the derivative as the intial k polynomial
 !     and do 5 steps with no shift.
 nm1 = n - 1
 do i = 2,n
@@ -7091,7 +7095,7 @@ zerok = k(n) == 0.d0
 do jj = 1,5
    cc = k(n)
    if (zerok) go to 210
-!     Use scaled form of recurrence if value of K at 0 is nonzero.
+!     Use scaled form of recurrence if value of k at 0 is nonzero.
    t = -aa/cc
    do i = 1,nm1
       j = nn - i
@@ -7109,7 +7113,7 @@ do jj = 1,5
    zerok = k(n) == 0.d0
 230 continue
 end do
-!     Save K for restarts with new shifts
+!     Save k for restarts with new shifts
 do i = 1,n
    temp(i) = k(i)
 end do
@@ -7132,7 +7136,7 @@ do cnt = 1,20
    call fxshfr(20*cnt, nz, nn, p, qp, k, qk, svk)
    if (nz /= 0) go to 300
 !     If the iteration is unsuccessful another quadratic
-!     is chosen after restoring K.
+!     is chosen after restoring k.
    do i = 1,n
       k(i) = temp(i)
    end do
@@ -7157,9 +7161,10 @@ end subroutine drply1
 
 subroutine fxshfr(l2, nz, nn, p, qp, k, qk, svk)
 implicit none
-integer :: nn
+integer, intent(in) :: nn
 double precision :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
-integer :: l2, nz
+integer, intent(in) :: l2
+integer, intent(inout) :: nz
 !     beginning of local variable declarations
 integer :: n, type, i, j, iflag
 double precision :: svu, svv, ui, vi, s
@@ -7272,9 +7277,10 @@ end subroutine fxshfr
 
 subroutine quadit(uu, vv, nz, nn, p, qp, k, qk)
 implicit none
-integer :: nn
-double precision :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
-integer :: nz
+integer, intent(in) :: nn
+double precision, intent(in) :: uu, vv
+double precision :: p(nn), qp(nn), k(nn), qk(nn)
+integer, intent(inout) :: nz
 !     beginning of local variable declarations
 integer :: n, type, i, j
 double precision :: ui, vi
@@ -7369,8 +7375,11 @@ end subroutine quadit
 
 subroutine realit(sss, nz, iflag, nn, p, qp, k, qk)
 implicit none
-integer :: iflag, nn, nz
-double precision :: sss, p(nn), qp(nn), k(nn), qk(nn)
+integer, intent(inout) :: iflag
+integer, intent(in) :: nn
+integer, intent(inout) :: nz
+double precision, intent(inout) :: sss
+double precision :: p(nn), qp(nn), k(nn), qk(nn)
 !     beginning of local variable declarations
 integer :: i, j, n
 double precision :: pv, kv, t, s
@@ -7459,8 +7468,8 @@ end subroutine realit
 
 subroutine calcsc(type, n, k, qk)
 implicit none
-integer :: n
-integer :: type
+integer, intent(in) :: n
+integer, intent(inout) :: type
 double precision :: k(n), qk(n)
 !     beginning of local variable declarations
 double precision :: tol
@@ -7506,8 +7515,8 @@ end subroutine calcsc
 
 subroutine nextk(type, n, qp, k, qk)
 implicit none
-integer :: n
-integer :: type
+integer, intent(in) :: n
+integer, intent(in) :: type
 double precision :: qp(n), k(n), qk(n)
 !     beginning of local variable declarations
 integer :: i
@@ -7550,9 +7559,10 @@ end subroutine nextk
 
 subroutine newest(type, uu, vv, nn, p, k)
 implicit none
-integer :: nn
-integer :: type
-double precision :: uu, vv, p(nn), k(nn)
+integer, intent(in) :: nn
+integer, intent(in) :: type
+double precision, intent(inout) :: uu, vv
+double precision :: p(nn), k(nn)
 !     beginning of local variable declarations
 integer :: n
 double precision :: a4, a5, b1, b2, c1, c2, c3, c4, temp
@@ -9301,7 +9311,7 @@ end subroutine srotmg
 subroutine srotm(n,sx,incx,sy,incy,sparam)
 implicit none
 integer, intent(in) :: incx, incy, n
-real :: sparam(5)
+real, intent(in) :: sparam(5)
 real, intent(inout) :: sx(*), sy(*)
 !     beginning of local variable declarations
 integer :: i, kx, ky, nsteps
@@ -9547,7 +9557,7 @@ subroutine drotm(n,dx,incx,dy,incy,dparam)
 implicit none
 integer, intent(in) :: incx, incy, n
 double precision, intent(inout) :: dx(*)
-double precision :: dparam(5)
+double precision, intent(in) :: dparam(5)
 double precision, intent(inout) :: dy(*)
 !     beginning of local variable declarations
 integer :: i, kx, ky, nsteps
@@ -10495,40 +10505,4 @@ scnrm2 = sqrt(sum)
 if (scale) scnrm2 = scnrm2 * xmax
 300 continue
 end function scnrm2
-
-pure integer function isamax(n,sx,incx)
-implicit none
-!     Finds the index of element having max. Absolute value.
-!     Jack dongarra, LINPACK, 3/11/78.
-real, intent(in) :: sx(*)
-integer, intent(in) :: incx
-integer, intent(in) :: n
-!     beginning of local variable declarations
-real :: smax
-integer :: i, ix
-isamax = 0
-if (n < 1) return
-isamax = 1
-if (n == 1) return
-if (incx == 1) go to 20
-!        Code for increment not equal to 1
-ix = 1
-smax = abs(sx(1))
-ix = ix + incx
-do i = 2,n
-   if (abs(sx(ix)) <= smax) go to 5
-   isamax = i
-   smax = abs(sx(ix))
-5  ix = ix + incx
-end do
-return
-!        Code for increment equal to 1
-20 smax = abs(sx(1))
-do i = 2,n
-   if (abs(sx(i)) <= smax) go to 30
-   isamax = i
-   smax = abs(sx(i))
-30 continue
-end do
-end function isamax
 

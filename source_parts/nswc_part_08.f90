@@ -5871,11 +5871,15 @@ subroutine adapt(f, xlft, xrgt, epsln, npiece, errest, xknots, &
    & coefs, ierr, kmax, ndeg, nsmth, anorm, dx, mo, kbreak, brakpt, &
    & kdiff, vallft, valrgt)
 implicit none
-integer :: ierr, kbreak, kdiff(kbreak), kmax, mo, ndeg, npiece, &
-   & nsmth
-double precision :: xknots(*), coefs(kmax,*)
-double precision :: anorm, brakpt(kbreak), dx, epsln, errest, &
-   & vallft(kbreak), valrgt(kbreak), xlft, xrgt
+integer, intent(inout) :: ierr
+integer, intent(in) :: kbreak, kdiff(kbreak), kmax, mo, ndeg
+integer, intent(inout) :: npiece
+integer, intent(in) :: nsmth
+double precision, intent(inout) :: xknots(*), coefs(kmax,*)
+double precision, intent(in) :: anorm, brakpt(kbreak), dx, epsln
+double precision, intent(inout) :: errest
+double precision, intent(in) :: vallft(kbreak), valrgt(kbreak), &
+   & xlft, xrgt
 double precision :: f
 external f
 !     beginning of local variable declarations
@@ -5906,15 +5910,15 @@ logical :: discrd
 !     ierr       ierr
 !     kmax       kmax
 !     DEGREE     ndeg
-!     SMOOTH     NSMTH
+!     SMOOTH     nsmth
 !     NORM       anorm
 !     charf      dx
 !     edist      mo
 !     nbreak     kbreak
 !     XBREAK     brakpt
 !     dbreak     kdiff
-!     bleft      VALLFT
-!     BRIGHT     VALRGT
+!     bleft      vallft
+!     BRIGHT     valrgt
 common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
    & dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
 common /resulz/ error, knots
@@ -5949,8 +5953,10 @@ end subroutine adapt
 
 subroutine adapt1(f, xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
-integer :: ierr, kdimen, kmax, ndimen
-double precision :: xknots(kdimen), coefs(kmax,ndimen)
+integer, intent(inout) :: ierr
+integer, intent(in) :: kdimen, kmax, ndimen
+double precision, intent(inout) :: xknots(kdimen), &
+   & coefs(kmax,ndimen)
 double precision :: f
 external f
 !     beginning of local variable declarations
@@ -6005,15 +6011,15 @@ logical :: discrd
 !  ********** OUTPUT **********
 !     the output of the computation consists of 4 parts, each returned
 !     to the user in a different way. They are
-!   xknots,coefs - Arrays defining the piecewise polynomial result.
+!   xknots,COEFS - Arrays defining the piecewise polynomial result.
 !            xknots(K)  = knots of the approximation ( K = 1 To knots)
 !                         the last one is right end point of interval
-!            coefs(K,N) = Coefficient of (X - XKNOT(K))**(N-1) in the
+!            COEFS(K,N) = Coefficient of (X - XKNOT(K))**(N-1) in the
 !                         interval XKNOT(K) to XKNOT(K+1)
 !                           K = 1 To knots-1  and  N = 1 To degree+1
 !            these arrays are passed as arguments so as to use variable
 !            dimensions. The arrays are of dimension xknots(kdimen) and
-!            coefs(kmax,ndimen). It is assumed that kdimen = kmax+1.
+!            COEFS(kmax,ndimen). It is assumed that kdimen = kmax+1.
 !               ***** Note ***** several small arrays here have fixed
 !                        dimensions that limit degree and thus ndimen
 !                        should not exceed this limit (currently = 20)
@@ -6043,7 +6049,7 @@ logical :: discrd
 !  ********** Dimension constraints **********
 !     maxknt - Max number of knots taken from user via kdimen
 !              arrays with this dimension (or related values)
-!                   coefs   xknots
+!                   COEFS   xknots
 !     maxpar - Max number of parameters per interval (currently = 20)
 !                   user provided ndimen must have ndimen le maxpar
 !                   must have  degree + 1 le maxpar
@@ -6144,8 +6150,10 @@ end subroutine adapt1
 
 subroutine adset(xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
-integer :: ierr, kdimen, kmax, ndimen
-double precision :: xknots(kdimen), coefs(kmax,ndimen)
+integer, intent(inout) :: ierr
+integer, intent(in) :: kdimen, kmax, ndimen
+double precision, intent(inout) :: xknots(kdimen)
+double precision, intent(in) :: coefs(kmax,ndimen)
 !     beginning of local variable declarations
 integer :: j, k, limsm
 integer :: leftx, nintrp
@@ -6266,7 +6274,7 @@ end subroutine adset
 
 subroutine adtake(ierr)
 implicit none
-integer :: ierr
+integer, intent(inout) :: ierr
 !     beginning of local variable declarations
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
@@ -6727,8 +6735,10 @@ end subroutine adchk
 
 subroutine adput(xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
-integer :: ierr, kdimen, kmax, ndimen
-double precision :: xknots(kdimen), coefs(kmax,ndimen)
+integer, intent(inout) :: ierr
+integer, intent(in) :: kdimen, kmax, ndimen
+double precision, intent(inout) :: xknots(kdimen), &
+   & coefs(kmax,ndimen)
 !     beginning of local variable declarations
 integer :: k
 integer :: leftx, nintrp
@@ -6781,7 +6791,7 @@ xleft(nstack) = xleft(nstack - 1)
 xleft(nstack - 1) = xright(nstack - 1) - dx
 xright(nstack) = xleft(nstack - 1)
 return
-!            Discard interval, update global error, xknots and coefs
+!            Discard interval, update global error, xknots and COEFS
 30 p = abs(norm)
 if (norm == three) error = max(error,errori)
 if (norm /= three) error = (error**p + errori)**(one/p)
@@ -6790,7 +6800,7 @@ if (break == left .or. break == both) ibreak = ibreak + 1
 !             Transform representation of polynomial from divided
 !             differences to powers of X with origin at xknots (knots)
 call adtran(ddtemp, powers)
-!             Put coefs into the main array
+!             Put COEFS into the main array
 do k = 1,npar
    coefs(knots,k) = powers(k)
 end do
@@ -6802,7 +6812,8 @@ end subroutine adput
 
 subroutine adtran(d, powers)
 implicit none
-double precision :: d(20,*), powers(*)
+double precision :: d(20,*)
+double precision, intent(inout) :: powers(*)
 !     beginning of local variable declarations
 integer :: i, ii, j, k, khi, koef, l, ltop, ni, ni1, nl, nr, nri, &
    & nri1, nrl, nrli, nrlk
@@ -7416,7 +7427,7 @@ function trp(a,n,x,y)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a
-real :: x(n), y(n)
+real, intent(in) :: x(n), y(n)
 real :: trp
 !     beginning of local variable declarations
 integer :: i, il, ir, nm1
@@ -7451,7 +7462,7 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, ni
 real, intent(inout) :: t(m)
-real :: x(n), xi(ni), y(n)
+real, intent(in) :: x(n), xi(ni), y(n)
 real, intent(inout) :: yi(ni)
 !     beginning of local variable declarations
 integer :: i, ii, il, ilm1, ilold, ipm, ir, istep, j, jmax, k, l, &
@@ -7604,7 +7615,7 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
 real, intent(inout) :: a(n), t(n)
-real :: x(n), y(n)
+real, intent(in) :: x(n), y(n)
 !     beginning of local variable declarations
 integer :: i, ibeg, iend, k
 real :: diff, f, r
