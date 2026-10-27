@@ -76,6 +76,8 @@ class DeclarationOrderingTests(unittest.TestCase):
             body = list(statements(lines[start:end]))
             header = body[0].code
             args = {n.strip().upper() for n in header[header.index('(') + 1:header.rindex(')')].split(',')} if '(' in header else set()
+            if 'FUNCTION' in header.upper():
+                args.add(name)
             local_seen = False
             for s in body[1:]:
                 decl = type_declaration(s.code)
@@ -90,7 +92,8 @@ class DeclarationOrderingTests(unittest.TestCase):
                         self.assertFalse(local_seen, f'{name}: argument {entity} follows local declarations')
                     else:
                         local_seen = True
-        self.assertEqual(transform(data).data, data)
+        from declaration_sections import transform as sections
+        self.assertEqual(sections(data), data)
 
 
 if __name__ == '__main__':

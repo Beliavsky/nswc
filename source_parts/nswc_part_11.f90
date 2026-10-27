@@ -1,3 +1,1112 @@
+function vnorm(v,ncomp)
+implicit none
+integer, intent(in) :: ncomp
+real :: v(ncomp)
+real :: vnorm
+!     beginning of local variable declarations
+integer :: k
+!     Compute the maximum norm of the vector v(*) of length ncomp and
+!     RETURN THE RESULT AS vnorm
+vnorm = 0.
+do k = 1,ncomp
+   vnorm = max(vnorm,abs(v(k)))
+end do
+end function vnorm
+
+real function vnwrms(n, v, w)
+implicit none
+!-----------------------------------------------------------------------
+! This function routine computes the weighted root-mean-square norm
+! of the vector of length n contained in the array v, with weights
+! contained in the array w of length n..
+!   vnwrms = sqrt( (1/n) * sum( v(i)/w(i) )**2 )
+!-----------------------------------------------------------------------
+integer, intent(in) :: n
+real :: v(n), w(n)
+!     beginning of local variable declarations
+integer :: i
+real :: sum
+sum = 0.0e0
+do i = 1,n
+   sum = sum + (v(i)/w(i))**2
+end do
+vnwrms = sqrt(sum/float(n))
+!----------------------- End of function vnwrms ------------------------
+end function vnwrms
+
+subroutine rk(n,t,h,a,f)
+implicit none
+integer, intent(in) :: n
+real, intent(inout) :: a(*)
+real, intent(in) :: h
+real, intent(inout) :: t
+external f
+!     beginning of local variable declarations
+integer :: k, m, m1, mk, nk, np1
+real :: ha, ta
+!     ******************************************************************
+!     Fourth order Runge-Kutta procedure for solving DY=F(t,Y)
+!     ******************************************************************
+np1 = n + 1
+if (h == 0.0) go to 50
+ha = .5*h
+ta = t + ha
+m = n + n
+m1 = m + 1
+do k = 1,n
+   nk = n + k
+   mk = m + k
+   a(nk) = ha*a(nk)
+   a(mk) = a(k) + a(nk)
+end do
+call f(ta,a(m1))
+do k = 1,n
+   nk = n + k
+   mk = m + k
+   a(nk) = a(nk) + h*a(mk)
+   a(mk) = a(k) + ha*a(mk)
+end do
+call f(ta,a(m1))
+t = t + h
+do k = 1,n
+   nk = n + k
+   mk = m + k
+   a(mk) = h*a(mk)
+   a(nk) = a(nk) + a(mk)
+   a(mk) = a(k) + a(mk)
+end do
+call f(t,a(m1))
+do k = 1,n
+   nk = n + k
+   mk = m + k
+   a(k) = a(k) + (a(nk) + ha*a(mk))/3.0
+   a(nk) = a(k)
+end do
+call f(t,a(np1))
+return
+50 do k = 1,n
+   nk = n + k
+   a(nk) = a(k)
+end do
+call f(t,a(np1))
+end subroutine rk
+
+subroutine rk8(n,t,h,y,dy,w,f)
+implicit none
+integer, intent(in) :: n
+real :: h
+real, intent(inout) :: t
+real, intent(inout) :: y(n), dy(n), w(*)
+external f
+!     beginning of local variable declarations
+integer :: i, j, k, l, m, m1
+real :: ha, sum, b(8,7)
+real, parameter :: a(7) = [.3333333333333333, .5, .6666666666666666, .1666666666666666, 1., .8333333333333333, 1.]
+real, parameter :: c(7) = [12., 8., 54., 4320., 20., 288., 820.]
+real, parameter :: d(9) = [41., 0., 27., 272., 27., 216., 0., 216., 41.]
+!     ******************************************************************
+!     Eighth order Runge-Kutta procedure for solving dy=F(t,y)
+!     ******************************************************************
+!     -------------------
+data b(1,1)/1./,  b(2,1)/3./
+data b(1,2)/1./,  b(2,2)/0./,  b(3,2)/3./
+data b(1,3)/13./,  b(2,3)/-27./,  b(3,3)/42./,  b(4,3)/8./
+data b(1,4)/389./,  b(2,4)/-54./,  b(3,4)/966./,  b(4,4)/-824./, &
+   & b(5,4)/243./
+data b(1,5)/-231./,  b(2,5)/81./,  b(3,5)/-1164./,  b(4,5)/656./, &
+   & b(5,5)/-122./,  b(6,5)/800./
+data b(1,6)/-127./,  b(2,6)/18./,  b(3,6)/-678./,  b(4,6)/456./, &
+   & b(5,6)/-9./,  b(6,6)/576./,  b(7,6)/4./
+data b(1,7)/1481./,  b(2,7)/-81./,  b(3,7)/7104./, &
+   & b(4,7)/-3376./,  b(5,7)/72./,  b(6,7)/-5040./, &
+   & b(7,7)/-60./,  b(8,7)/720./
+!     -------------------
+if (h == 0.) go to 40
+ha = h*4./27.
+do k = 1,n
+   w(k) = y(k) + ha*dy(k)
+end do
+call f(t + ha,w(1))
+do k = 1,n
+   w(k) = y(k) + h*(dy(k)/18. + w(k)/6.)
+end do
+call f(t + h*2./9.,w(1))
+i = 1
+do m = 2,8
+   i = i + n
+   m1 = m - 1
+   do k = 1,n
+      sum = b(1,m1)*dy(k)
+      l = k
+      do j = 2,m
+         sum = sum + b(j,m1)*w(l)
+         l = l + n
+      end do
+      w(l) = y(k) + sum*h/c(m1)
+   end do
+   call f(t + a(m1)*h,w(i))
+end do
+do k = 1,n
+   sum = d(1)*dy(k)
+   l = k
+   do m = 2,9
+      sum = sum + d(m)*w(l)
+      l = l + n
+   end do
+   y(k) = y(k) + h*sum/840.
+   dy(k) = y(k)
+end do
+t = t + h
+call f(t,dy)
+return
+40 do k = 1,n
+   dy(k) = y(k)
+end do
+call f(t,dy)
+end subroutine rk8
+
+subroutine sepde(cofx, cofy, g, edge, bval, iord, a, b, mp1, &
+   & c, d, np1, u, ku, w, nw, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer :: iord, ku, mp1
+integer, intent(in) :: np1
+integer, intent(inout) :: nw
+real :: a, b, c, d
+real :: g
+real :: bval
+real, intent(inout) :: u(ku,np1), w(nw)
+integer, intent(in) :: edge(4)
+external cofx, cofy
+!     beginning of local variable declarations
+integer :: i, ia, ib, ic, id, ij, imax, imin, indx, indy, iw, j, &
+   & jcol, jmax, jmin, l, m, mn, n
+real :: alpha, beta, del, gam, hx, hy, p, xi, xmin, yj, ymin, dum(1)
+! ----------------------------------------------------------------------
+!     Solution of separable elliptic partial differential equations
+!                     on rectangular domains
+! ----------------------------------------------------------------------
+!     --------------
+data alpha/0.0/, beta/0.0/, gam/0.0/, del/0.0/
+!     --------------
+call pdedge(edge, indx, indy, ierr)
+if (ierr /= 0) return
+if (a >= b .or. c >= d) go to 300
+if (mp1 < 7) go to 320
+if (np1 < 6) go to 330
+m = mp1 - 1
+n = np1 - 1
+hx = (b - a)/float(m)
+hy = (d - c)/float(n)
+!     Define the maximum and minimum row and column
+!     that is needed for the right-hand side matrix
+xmin = a
+ymin = c
+imin = 1
+imax = mp1
+jmin = 1
+jmax = np1
+jcol = 0
+if (edge(1) /= 0) go to 10
+jmin = 2
+ymin = c + hy
+jcol = mp1
+10 if (edge(2) /= 0) go to 20
+imin = 2
+xmin = a + hx
+20 if (edge(3) == 0) jmax = n
+if (edge(4) == 0) imax = m
+!     Define the right-hand side matrix for iord = 2
+if (ku < mp1) go to 310
+if (iord /= 2) go to 40
+mn = 0
+yj = ymin
+do j = jmin,jmax
+   xi = xmin
+   do i = imin,imax
+      u(i,j) = g(xi, yj)
+      xi = xi + hx
+   end do
+   yj = yj + hy
+end do
+go to 60
+!     Define the right-hand side matrix for iord = 4
+40 if (iord /= 4) go to 340
+mn = mp1*np1
+if (mn >= nw) go to 100
+yj = ymin
+do j = jmin,jmax
+   xi = xmin
+   do i = imin,imax
+      ij = i + jcol
+      w(ij) = g(xi, yj)
+      xi = xi + hx
+   end do
+   yj = yj + hy
+   jcol = jcol + mp1
+end do
+!     Store the boundary values of u
+60 if (edge(1) /= 0) go to 70
+xi = a
+do i = 1,mp1
+   u(i,1) = bval(1,xi,c)
+   xi = xi + hx
+end do
+70 if (edge(2) /= 0) go to 80
+yj = c
+do j = 1,np1
+   u(1,j) = bval(2,a,yj)
+   yj = yj + hy
+end do
+80 if (edge(3) /= 0) go to 90
+xi = a
+do i = 1,mp1
+   u(i,np1) = bval(3,xi,d)
+   xi = xi + hx
+end do
+90 if (edge(4) /= 0) go to 100
+yj = c
+do j = 1,np1
+   u(mp1,j) = bval(4,b,yj)
+   yj = yj + hy
+end do
+!     Store the mixed boundary conditions
+100 ic = mn + 1
+if (edge(1) /= 1) go to 120
+mn = mn + mp1
+if (mn >= nw) go to 120
+xi = a
+l = ic
+do i = 1,mp1
+   w(l) = bval(1,xi,c)
+   xi = xi + hx
+   l = l + 1
+end do
+120 ia = mn + 1
+if (edge(2) /= 1) go to 140
+mn = mn + np1
+if (mn >= nw) go to 140
+yj = c
+l = ia
+do j = 1,np1
+   w(l) = bval(2,a,yj)
+   yj = yj + hy
+   l = l + 1
+end do
+140 id = mn + 1
+if (edge(3) /= 1) go to 160
+mn = mn + mp1
+if (mn >= nw) go to 160
+xi = a
+l = id
+do i = 1,mp1
+   w(l) = bval(3,xi,d)
+   xi = xi + hx
+   l = l + 1
+end do
+160 ib = mn + 1
+if (edge(4) /= 1) go to 200
+mn = mn + np1
+if (mn >= nw) go to 200
+yj = c
+l = ib
+do j = 1,np1
+   w(l) = bval(4,b,yj)
+   yj = yj + hy
+   l = l + 1
+end do
+!     CALL THE DIFFERENTIAL EQUATION SOLVER
+200 if (mn >= nw) go to 350
+iw = mn + 1
+w(iw) = nw - mn
+if (iord == 4) go to 210
+call sepell(0, iord, a, b, m, indx, w(ia), alpha, w(ib), beta, &
+   & c, d, n, indy, w(ic), gam, w(id), del, cofx, cofy, &
+   & u, ku, u, ku, w(iw), p, ierr)
+go to 220
+210 call sepell(0, iord, a, b, m, indx, w(ia), alpha, w(ib), beta, &
+   & c, d, n, indy, w(ic), gam, w(id), del, cofx, cofy, &
+   & w(1),mp1, u, ku, w(iw), p, ierr)
+220 nw = w(iw) + mn
+if (ierr /= 0) return
+if (p == 0.0) return
+ierr = -1
+w(1) = p
+return
+!     Error return
+300 ierr = 1
+return
+310 ierr = 5
+return
+320 ierr = 6
+return
+330 ierr = 7
+return
+340 ierr = 8
+return
+350 dum(1) = 1.0
+call sepell(0, iord, a, b, m, indx, dum, alpha, dum, beta, &
+   & c, d, n, indy, dum, gam, dum, del, cofx, cofy, &
+   & u, ku, u, ku, dum, p, ierr)
+nw = dum(1) + mn
+end subroutine sepde
+
+pure subroutine pdedge(edge, indx, indy, ierr)
+implicit none
+integer, intent(inout) :: ierr, indx, indy
+integer, intent(in) :: edge(4)
+!     beginning of local variable declarations
+integer :: nswc_ai_i4
+if (abs(edge(1)) > 1) go to 200
+if (abs(edge(2)) > 1) go to 200
+if (abs(edge(3)) > 1) go to 200
+if (abs(edge(4)) > 1) go to 200
+ierr = 0
+!               Process edges 1 and 3
+nswc_ai_i4 = edge(1)
+if (nswc_ai_i4 < 0) go to 10
+if (nswc_ai_i4 == 0) go to 20
+go to 30
+10 if (edge(3) /= -1) go to 210
+indy = 0
+go to 100
+20 if (edge(3) == -1) go to 210
+indy = 1 + edge(3)
+go to 100
+30 if (edge(3) == -1) go to 210
+indy = 4 - edge(3)
+!               Process edges 2 and 4
+100 nswc_ai_i4 = edge(2)
+if (nswc_ai_i4 < 0) go to 110
+if (nswc_ai_i4 == 0) go to 120
+go to 130
+110 if (edge(4) /= -1) go to 220
+indx = 0
+return
+120 if (edge(4) == -1) go to 220
+indx = 1 + edge(4)
+return
+130 if (edge(4) == -1) go to 220
+indx = 4 - edge(4)
+return
+!                   Error return
+200 ierr = 2
+return
+210 ierr = 12
+return
+220 ierr = 13
+end subroutine pdedge
+
+subroutine sepell(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
+   & d,n,nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,grhs,mn, &
+   & usol,idmn,w,pertrb,ierror)
+implicit none
+integer :: idmn
+integer, intent(inout) :: ierror
+integer :: intl, iorder, m, mbdcnd, mn, n, nbdcnd
+real :: a, alpha, b, beta, c, d, gama
+real, intent(inout) :: pertrb
+real :: xnu
+real, intent(inout) :: grhs(mn,*), usol(idmn,*)
+real :: bda(*), bdb(*), bdc(*), bdd(*)
+real, intent(inout) :: w(*)
+external cofx, cofy
+!     beginning of local variable declarations
+integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
+   & k, l, length, linput, ll, logb2n, loutpt
+! DIMENSION OF           bda(n+1), bdb(n+1), bdc(m+1), bdd(m+1),
+! ARGUMENTS              usol(idmn,n+1), grhs(mn,n+1),
+!                        w (see argument list)
+! LATEST REVISION        JANUARY 1978 (BY THE AUTHORS)
+!                        modified 1986 by A.H. Morris (NSWC)
+! PURPOSE                sepell SOLVES FOR EITHER THE SECOND-ORDER
+!                        finite difference approximation or A
+!                        fourth-order approximation to a separable
+!                        elliptic equation
+!                                    2    2
+!                             AF(X)*d U/DX + BF(X)*DU/DX  + CF(X)*U +
+!                                    2    2
+!                             DF(Y)*d U/DY  + EF(Y)*DU/DY + FF(Y)*U
+!                             = G(X,Y)
+!                        on a rectangle (X greater than or equal to A
+!                        and less than or equal to b, Y greater than
+!                        or equal to c and less than or equal to d).
+!                        Any combination of periodic or mixed boundary
+!                        conditions is allowed.
+! PURPOSE                THE POSSIBLE BOUNDARY CONDITIONS ARE ...
+!                        In the X-direction..
+!                         (0) Periodic, U(X+b-a,Y)=U(X,Y) for all Y,X
+!                         (1) U(a,Y), U(b,Y) are specified for all Y
+!                         (2) U(a,Y), DU(b,Y)/DX+beta*U(b,Y) are
+!                             specified for all Y
+!                         (3) DU(a,Y)/DX+alpha*U(a,Y),DU(b,Y)/DX+
+!                             beta*U(b,Y) are specified for all Y
+!                         (4) DU(a,Y)/DX+alpha*U(a,Y),U(b,Y) are
+!                             specified for all Y
+!                        in the Y-direction..
+!                         (0) Periodic, U(X,Y+d-c)=U(X,Y) for all X,Y
+!                         (1) U(X,c),U(X,d) are specified for all X
+!                         (2) U(X,c),DU(X,d)/DY+xnu*U(X,d) are specified
+!                             for all X
+!                         (3) DU(X,c)/DY+gama*U(X,c),DU(X,d)/DY+
+!                             xnu*U(X,d) are specified for all X
+!                         (4) DU(X,c)/DY+gama*U(X,c),U(X,d) are
+!                             specified for all X
+! arguments
+! ON INPUT               INTL
+!                          = 0 On initial entry to sepell or if any of
+!                              the arguments c, d, n, nbdcnd, COFY are
+!                              changed from a previous call
+!                          = 1 IF c, d, n, nbdcnd, COFY ARE UNCHANGED
+!                              from the previous call.
+!                        iorder
+!                          = 2 If a second-order approximation is sought
+!                          = 4 If a fourth-order approximation is sought
+!                        A,b
+!                          the range of the X-independent variable,
+!                          I.E., X is greater than or equal to A and
+!                          less than or equal to b. A must be less than
+!                          b.
+!                        m
+!                          the number of panels into which the interval
+!                          (A,b) is subdivided.  Hence, there will be
+!                          m+1 grid points in the X-direction given by
+!                          XI=a+(I-1)*DLX FOR I=1,2,...,m+1 WHERE
+!                          DLX=(b-a)/m is the panel width.  m must be
+!                          less than idmn and greater than 5.
+!                        mbdcnd
+!                          indicates the type of boundary condition at
+!                          X=a AND X=b
+!                          = 0 If the solution is periodic in X, I.E.,
+!                              U(X+b-a,Y)=U(X,Y) for all Y,X
+!                          = 1 If the solution is specified at X=a and
+!                              X=b, I.E., U(a,Y) and U(b,Y) are
+!                              specified for all Y
+!                          = 2 If the solution is specified at X=a and
+!                              the boundary condition is mixed at X=b,
+!                              I.E., U(a,Y) and DU(b,Y)/DX+beta*U(b,Y)
+!                              are specified for all Y
+!                          = 3 If the boundary conditions at X=a and X=b
+!                              are mixed, I.E., DU(a,Y)/DX+alpha*U(a,Y)
+!                              and DU(b,Y)/DX+beta*U(b,Y) are specified
+!                              for all Y
+!                          = 4 If the boundary condition at X=a is mixed
+!                              and the solution is specified at X=b,
+!                              I.E., DU(a,Y)/DX+alpha*U(a,Y) and U(b,Y)
+!                              are specified for all Y
+!                        bda
+!                          a one-dimensional array of length n+1 that
+!                          specifies the values of DU(a,Y)/DX+
+!                          alpha*U(a,Y) AT X=a. WHEN mbdcnd=3 OR 4
+!                               bda(j) = du(a,yj)/dx+alpha*u(a,yj),
+!                               j=1,2,...,n+1.
+!                          When mbdcnd has any other value, bda is A
+!                          dummy parameter.
+! ON INPUT               alpha
+!                          the scalar multiplying the solution in case
+!                          of a mixed boundary condition at X=a (see
+!                          argument bda). If mbdcnd.NE.3,4 then alpha
+!                          is a dummy parameter.
+!                        bdb
+!                          a one-dimensional array of length n+1 that
+!                          specifies the values of DU(b,Y)/DX+
+!                          beta*U(b,Y) AT X=b.  WHEN mbdcnd=2 OR 3
+!                               bdb(j) = du(b,yj)/dx+beta*u(b,yj),
+!                               j=1,2,...,n+1.
+!                          When mbdcnd has any other value, bdb is A
+!                          dummy parameter.
+!                        beta
+!                          the scalar multiplying the solution in case
+!                          of a mixed boundary condition at X=b (see
+!                          argument bdb). If mbdcnd.NE.2,3 then beta is
+!                          a dummy parameter.
+!                        c,d
+!                          the range of the Y-independent variable,
+!                          I.E., Y is greater than or equal to c and
+!                          less than or equal to d.  c must be less
+!                          THAN d.
+!                        n
+!                          the number of panels into which the interval
+!                          (c,d) is subdivided.  Hence, there will be
+!                          n+1 grid points in the Y-direction given by
+!                          YJ=c+(J-1)*DLY FOR J=1,2,...,n+1 WHERE
+!                          DLY=(d-c)/n is the panel width. In addition,
+!                          n must be greater than 4.
+!                        nbdcnd
+!                          indicates the types of boundary conditions
+!                          AT Y=c AND Y=d
+!                          = 0 If the solution is periodic in Y, I.E.,
+!                              U(X,Y+d-c)=U(X,Y) for all X,Y
+!                          = 1 If the solution is specified at Y=c and
+!                              Y = d, I.E., U(X,c) and U(X,d) are
+!                              specified for all X
+!                          = 2 If the solution is specified at Y=c and
+!                              the boundary condition is mixed at Y=d,
+!                              I.E., U(X,c) AND DU(X,d)/DY+xnu*U(X,d)
+!                              are specified for all X
+!                          = 3 If the boundary conditions are mixed at
+!                              Y=c AND Y=d, I.E., DU(X,d)/DY+gama*U(X,c)
+!                              and DU(X,d)/DY+xnu*U(X,d) are specified
+!                              for all X
+!                          = 4 If the boundary condition is mixed at Y=c
+!                              and the solution is specified at Y=d,
+!                              I.E. DU(X,c)/DY+gama*U(X,c) and U(X,d)
+!                              are specified for all X
+!                        bdc
+!                          a one-dimensional array of length m+1 that
+!                          specifies the value of DU(X,c)/DY+gama*U(X,c)
+!                          AT Y=c.  WHEN nbdcnd=3 OR 4
+!                             bdc(i) = du(xi,c)/dy + gama*u(xi,c),
+!                             i=1,2,...,m+1.
+!                          When nbdcnd has any other value, bdc is A
+!                          dummy parameter.
+!                        Gama
+!                          the scalar multiplying the solution in case
+!                          of a mixed boundary condition at Y=c (see
+!                          argument bdc). If nbdcnd.NE.3,4 then gama is
+!                          a dummy parameter.
+!                        bdd
+!                          a one-dimensional array of length m+1 that
+!                          specifies the value of DU(X,d)/DY +
+!                          xnu*U(X,d) AT Y=c.  WHEN nbdcnd=2 OR 3
+!                            bdd(i) = du(xi,d)/dy + xnu*u(xi,d),
+!                            i=1,2,...,m+1.
+!                          When nbdcnd has any other value, bdd is A
+!                          dummy parameter.
+!                        xnu
+!                          the scalar multiplying the solution in case
+!                          of a mixed boundary condition at Y=d (see
+!                          ARGUMENT bdd). IF nbdcnd.NE.2 OR 3 THEN xnu
+!                          is a dummy parameter.
+!                        COFX
+!                          a user-supplied subprogram with
+!                          PARAMETERS X, AFUN, BFUN, CFUN WHICH
+!                          returns the values of the X-dependent
+!                          coefficients AF(X), BF(X), CF(X) in
+!                          the elliptic equation at X.
+!                        COFY
+!                          a user-supplied subprogram with
+!                          PARAMETERS Y, DFUN, EFUN, FFUN WHICH
+!                          returns the values of the Y-dependent
+!                          coefficients DF(Y), EF(Y), FF(Y) in
+!                          the elliptic equation at Y.
+!                        Note.  COFX and COFY must be declared external
+!                        in the calling routine. The values returned in
+!                        AFUN AND DFUN MUST SATISFY AFUN*DFUN GREATER
+!                        than 0 for a less than X less than b,
+!                        c less than Y less than d (see ierror=10).
+!                        The coefficients provided may lead to a matrix
+!                        equation which is not diagonally dominant in
+!                        which case solution may fail (see ierror=4).
+!                        grhs
+!                          a two-dimensional array that specifies the
+!                          values of the right-hand side of the elliptic
+!                          EQUATION, I.E., grhs(I,J)=G(XI,YI), FOR
+!                          I=2,...,m, J=2,...,n.  at the boundaries,
+!                          grhs is defined by
+!                          mbdcnd   grhs(1,J)   grhs(m+1,J)
+!                          ------   ---------   -----------
+!                            0      G(a,YJ)     G(b,YJ)
+!                            1         *           *
+!                            2         *        G(b,YJ)  J=1,2,...,n+1
+!                            3      G(a,YJ)     G(b,YJ)
+!                            4      G(a,YJ)        *
+!                          nbdcnd   grhs(I,1)   grhs(I,n+1)
+!                          ------   ---------   -----------
+!                            0      G(XI,c)     G(XI,d)
+!                            1         *           *
+!                            2         *        G(XI,d)  I=1,2,...,m+1
+!                            3      G(XI,c)     G(XI,d)
+!                            4      G(XI,c)        *
+!                          where * means these quantites are not used.
+!                          grhs should be dimensioned mn by at least
+!                          n+1 in the calling routine.
+!                        mn
+!                          the row (or first) dimension of the array
+!                          grhs as it appears in the program calling
+!                          sepell. mn must be at least 7 and greater
+!                          than or equal to m+1.
+!                        usol
+!                          a two-dimensional array that specifies the
+!                          values of the solution along the boundaries.
+!                          At the boundaries, usol is defined by
+!                          mbdcnd   usol(1,J)   usol(m+1,J)
+!                          ------   ---------   -----------
+!                            0         *           *
+!                            1      U(a,YJ)     U(b,YJ)
+!                            2      U(a,YJ)        *     J=1,2,...,n+1
+!                            3         *           *
+!                            4         *        U(b,YJ)
+!                          nbdcnd   usol(I,1)   usol(I,n+1)
+!                          ------   ---------   -----------
+!                            0         *           *
+!                            1      U(XI,c)     U(XI,d)
+!                            2      U(XI,c)        *     I=1,2,...,m+1
+!                            3         *           *
+!                            4         *        U(XI,d)
+!                          where * means the quantites are not used in
+!                          the solution.
+!                          If iorder=2 And idmn=mn, then the user may
+!                          equivalence grhs and usol. Note that in this
+!                          case the tables specifying the boundaries of
+!                          the grhs and usol arrays determine the
+!                          boundaries uniquely except at the corners.
+!                          If the tables call for both G(X,Y) and
+!                          U(X,Y) at a corner then the solution must be
+!                          chosen.  For example, if mbdcnd=2 And
+!                          nbdcnd=4, then U(a,c), U(a,d), U(b,d) must be
+!                          chosen at the corners in addition to G(b,c).
+!                          If iorder=4, then the two arrays, usol and
+!                          grhs, must be distinct.
+!                          usol should be dimensioned idmn by at least
+!                          n+1 in the calling routine.
+!                        idmn
+!                          the row (or first) dimension of the array
+!                          usol as it appears in the program calling
+!                          sepell. idmn must be at least 7 and greater
+!                          than or equal to m+1.
+!                        w
+!                          a one-dimensional array that must be provided
+!                          by the user for work space.  Let
+!                          K=int(LOG2(n+1))+1 and set  L=2**(K+1).
+!                          Then (K-2)*L+K+10*n+12*m+27 will suffice
+!                          as a length of w.  the actual length of w in
+!                          the calling routine must be set in w(1) (see
+!                          ierror=11).
+! ON OUTPUT              usol
+!                          contains the approximate solution to the
+!                          elliptic equation.  usol(I,J) is the
+!                          approximation to U(XI,YJ) for I=1,2...,m+1
+!                          and J=1,2,...,n+1.  The approximation has
+!                          error O(DLX**2+DLY**2) if called with
+!                          iorder=2 And O(DLX**4+DLY**4) if called with
+!                          iorder=4.
+!                        w
+!                          contains intermediate values that must not be
+!                          destroyed if sepell is called again with
+!                          intl=1.  In addition w(1) contains the exact
+!                          minimal length (in floating point) required
+!                          for the work space (see ierror=11).
+!                        pertrb
+!                          if a combination of periodic or derivative
+!                          boundary conditions (I.E., alpha=beta=0 If
+!                          mbdcnd=3, gama=xnu=0 IF nbdcnd=3) IS
+!                          specified and if the coefficients of U(X,Y)
+!                          in the separable elliptic equation are zero
+!                          (I.E., CF(X)=0 For X greater than or equal to
+!                          A and less than or equal to b, FF(Y)=0 For
+!                          Y greater than or equal to c and less than
+!                          or equal to d) then a solution may not exist.
+!                          pertrb is a constant calculated and
+!                          subtracted from the right-hand side of the
+!                          matrix equations generated by sepell which
+!                          insures that a solution exists.  sepell then
+!                          computes this solution which is a weighted
+!                          minimal least squares solution to the
+!                          original problem.
+!                        Ierror
+!                          an error flag that indicates invalid input
+!                          parameters or failure to find a solution
+!                          = 0 No error
+!                          = 1 If a greater than b or c greater than d
+!                          = 2 If mbdcnd less than 0 or mbdcnd greater
+!                              than 4
+!                          = 3 If nbdcnd less than 0 or nbdcnd greater
+!                              than 4
+!                          = 4 If attempt to find a solution fails.
+!                              (The linear system generated is not
+!                              diagonally dominant.)
+!                          = 5 If idmn or mn is too small.
+!                          = 6 If m is too small or too large (see
+!                              discussion of m)
+!                          = 7 If n is too small (see discussion of n)
+!                          = 8 If iorder is not 2 or 4
+!                          = 9 If intl is not 0 or 1
+!                          = 10 If AFUN*DFUN less than or equal to 0 for
+!                               some interior mesh point (XI,YJ)
+!                          = 11 If the work space length input in w(1)
+!                               is less than the exact minimal work
+!                               space length required output in w(1).
+!                          Note (concerning ierror=4).  For the
+!                          coefficients input through COFX, COFY, the
+!                          discretization may lead to a block
+!                          tridiagonal linear system which is not
+!                          diagonally dominant (for example, this
+!                          happens if CFUN=0 And BFUN/(2.*DLX) greater
+!                          than AFUN/DLX**2).  In this case solution may
+!                          fail.  This cannot happen in the limit as
+!                          DLX, DLY approach zero.  Hence, the condition
+!                          may be remedied by taking larger values for m
+!                          or n.
+! ENTRY POINTS           sepell, sepel1, chkprm, chksng, orthg, minsol,
+!                        trisp, defer, dxfn, dyfn, blktri, blktr1,indxb,
+!                        indxa, indxc, prod0, prodp, cprod0, cprodp,
+!                        ppadd, psgf, bsrh, ppsgf, ppspf, compb,
+!                        tqlrt0, spmpar
+! SPECIAL CONDITIONS     NONE
+! COMMON BLOCKS          SPLP, CBLKT
+! I/O                    NONE
+! PRECISION              SINGLE
+! SPECIALIST             JOHN c. ADAMS, NCAR, BOULDER, COLORADO  80307
+! HISTORY                DEVELOPED AT NCAR DURING 1975-76.
+! ALGORITHM              sepell AUTOMATICALLY DISCRETIZES THE SEPARABLE
+!                        elliptic equation which is then solved by A
+!                        generalized cyclic reduction algorithm in the
+!                        subroutine, blktri.  The fourth-order solution
+!                        is obtained using deferred corrections, which
+!                        is described and referenced in sections,
+!                        references and method.
+! ACCURACY AND TIMING    THE FOLLOWING COMPUTATIONAL RESULTS WERE
+!                        obtained by solving the sample problem at the
+!                        END OF THIS WRITE-UP ON THE CONTROL DATA 7600.
+!                        The OP count is proportional to m*n*LOG2(n).
+!                        In contrast to the other routines in this
+!                        chapter, accuracy is tested by computing and
+!                        tabulating second- and fourth-order
+!                        discretization errors.  Below is a table
+!                        containing computational results.  The times
+!                        given do not include initialization (I.E.,
+!                        times are for intl=1).  Note that the
+!                        fourth-order accuracy is not realized until the
+!                        mesh is sufficiently refined.
+!              SECOND-ORDER    FOURTH-ORDER   SECOND-ORDER  FOURTH-ORDER
+!    m    n   EXECUTION TIME  EXECUTION TIME    ERROR         ERROR
+!               (m SEC)         (m SEC)
+!     6    6         6              14          6.8E-1        1.2E0
+!    14   14        23              58          1.4E-1        1.8E-1
+!    30   30       100             247          3.2E-2        9.7E-3
+!    62   62       445           1,091          7.5E-3        3.0E-4
+!   126  126     2,002           4,772          1.8E-3        3.5E-6
+! PORTABILITY            THE VALUE GIVEN BY spmpar(1) IS THE ONLY
+!                        machine dependent constant that is used.
+! REFERENCES             KELLER, H.B., NUMERICAL METHODS FOR TWO-POINT
+!                          boundary-value problems, Blaisdel (1968),
+!                          WALTHAM, mass.
+!                        Swarztrauber, P., And R. sweet (1975),
+!                          efficient Fortran subprograms for the
+!                          solution of elliptic partial differential
+!                          equations.  NCAR technical note
+!                          NCAR-TN/ia-109, PP. 135-137.
+!     check input parameters
+call chkprm(intl,iorder,a,b,m,mbdcnd,c,d,n,nbdcnd,cofx,cofy, &
+   & idmn,mn,ierror)
+if (ierror /= 0) return
+!     Compute minimum work space and check work space length input
+l = n + 1
+if (nbdcnd == 0) l = n
+logb2n = int(log(float(l) + 0.5)/log(2.0)) + 1
+ll = 2**(logb2n + 1)
+k = m + 1
+l = n + 1
+length = (logb2n - 2)*ll + logb2n + max(2*l,6*k) + 5
+if (nbdcnd == 0) length = length + 2*l
+ierror = 11
+linput = int(w(1) + 0.5)
+loutpt = length + 6*(k + l) + 1
+w(1) = float(loutpt)
+if (loutpt > linput) return
+ierror = 0
+!     Set work space indices
+i1 = length + 2
+i2 = i1 + l
+i3 = i2 + l
+i4 = i3 + l
+i5 = i4 + l
+i6 = i5 + l
+i7 = i6 + l
+i8 = i7 + k
+i9 = i8 + k
+i10 = i9 + k
+i11 = i10 + k
+i12 = i11 + k
+i13 = 2
+call sepel1(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c,d,n, &
+   & nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,w(i1),w(i2),w(i3), &
+   & w(i4),w(i5),w(i6),w(i7),w(i8),w(i9),w(i10),w(i11), &
+   & w(i12),grhs,mn,usol,idmn,w(i13),pertrb,ierror)
+end subroutine sepell
+
+subroutine sepel1(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
+   & d,n,nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,an,bn, &
+   & cn,dn,un,zn,am,bm,cm,dm,um,zm,grhs,mn,usol, &
+   & idmn,w,pertrb,ierror)
+implicit none
+integer :: idmn, ierror, intl, iorder, m, mbdcnd, mn, n, nbdcnd
+real :: a, alpha, am(*), an(*), b, bda(*), bdb(*), bdc(*), bdd(*), &
+   & beta, bm(*), bn(*), c, cm(*), cn(*), d, dm(*), dn(*), gama, &
+   & grhs(mn,*), pertrb, um(*), un(*), usol(idmn,*), w(*), xnu, zm(*), &
+   & zn(*)
+external cofx, cofy
+!     beginning of local variable declarations
+integer :: i, i1, iord, j, mp, np
+real :: ai, ax1, axi, bi, bxi, ci, cxi, cxm, dj, dy1, dyj, ej, &
+   & eyj, fj, fyj, fyn, prtrb, xi, yj
+integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
+real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
+logical :: singlr
+!     sepel1 sets up vectors and arrays for input to blktri
+!     and computes a second order solution in USOL.  A return jump to
+!     sepell OCCURRS IF iorder=2.  IF iorder=4 A FOURTH ORDER
+!     solution is generated in USOL.
+common /splp/   kswx       ,kswy       ,k          ,l          , &
+   & ait        ,bit        ,cit        ,dit        , &
+   & mit        ,nit        ,is         ,ms         , &
+   & js         ,ns         ,dlx        ,dly        , &
+   & tdlx3      ,tdly3      ,dlx4       ,dly4
+!     Set parameters internally
+kswx = mbdcnd + 1
+kswy = nbdcnd + 1
+k = m + 1
+l = n + 1
+ait = a
+bit = b
+cit = c
+dit = d
+!     Set right hand side values from GRHS in USOL on the interior
+!     and non-specified boundaries.
+do i = 2,m
+   do j = 2,n
+      usol(i,j) = grhs(i,j)
+   end do
+end do
+if (kswx == 2 .or. kswx == 3) go to  40
+do j = 2,n
+   usol(1,j) = grhs(1,j)
+end do
+40 continue
+if (kswx == 2 .or. kswx == 5) go to  60
+do j = 2,n
+   usol(k,j) = grhs(k,j)
+end do
+60 continue
+if (kswy == 2 .or. kswy == 3) go to  80
+do i = 2,m
+   usol(i,1) = grhs(i,1)
+end do
+80 continue
+if (kswy == 2 .or. kswy == 5) go to 100
+do i = 2,m
+   usol(i,l) = grhs(i,l)
+end do
+100 continue
+if (kswx /= 2 .and. kswx /= 3 .and. kswy /= 2 .and. kswy /= 3) &
+   & usol(1,1) = grhs(1,1)
+if (kswx /= 2 .and. kswx /= 5 .and. kswy /= 2 .and. kswy /= 3) &
+   & usol(k,1) = grhs(k,1)
+if (kswx /= 2 .and. kswx /= 3 .and. kswy /= 2 .and. kswy /= 5) &
+   & usol(1,l) = grhs(1,l)
+if (kswx /= 2 .and. kswx /= 5 .and. kswy /= 2 .and. kswy /= 5) &
+   & usol(k,l) = grhs(k,l)
+i1 = 1
+!     Set switches for periodic or non-periodic boundaries
+mp = 1
+np = 1
+if (kswx == 1) mp = 0
+if (kswy == 1) np = 0
+!     Set dlx,dly and size of block tri-diagonal system generated
+!     in NINT,mint
+dlx = (bit - ait)/float(m)
+mit = k - 1
+if (kswx == 2) mit = k - 2
+if (kswx == 4) mit = k
+dly = (dit - cit)/float(n)
+nit = l - 1
+if (kswy == 2) nit = l - 2
+if (kswy == 4) nit = l
+tdlx3 = 2.0*dlx**3
+dlx4 = dlx**4
+tdly3 = 2.0*dly**3
+dly4 = dly**4
+!     Set subscript limits for portion of array to input to blktri
+is = 1
+js = 1
+if (kswx == 2 .or. kswx == 3) is = 2
+if (kswy == 2 .or. kswy == 3) js = 2
+ns = nit + js - 1
+ms = mit + is - 1
+!     Set X - Direction
+do i = 1,mit
+   xi = ait + float(is + i - 2)*dlx
+   call cofx(xi,ai,bi,ci)
+   axi = (ai/dlx - 0.5*bi)/dlx
+   bxi = -2.*ai/dlx**2 + ci
+   cxi = (ai/dlx + 0.5*bi)/dlx
+   am(i) = axi
+   bm(i) = bxi
+   cm(i) = cxi
+end do
+!     Set Y direction
+do j = 1,nit
+   yj = cit + float(js + j - 2)*dly
+   call cofy(yj,dj,ej,fj)
+   dyj = (dj/dly - 0.5*ej)/dly
+   eyj = (-2.*dj/dly**2 + fj)
+   fyj = (dj/dly + 0.5*ej)/dly
+   an(j) = dyj
+   bn(j) = eyj
+   cn(j) = fyj
+end do
+!     Adjust edges in X direction unless periodic
+ax1 = am(1)
+cxm = cm(mit)
+select case (kswx)
+case (1)
+   go to 170
+case (2)
+   go to 130
+case (3)
+   go to 150
+case (4)
+   go to 160
+case (5)
+   go to 140
+end select
+!     Dirichlet-Dirichlet in X direction
+130 am(1) = 0.0
+cm(mit) = 0.0
+go to 170
+!     Mixed-Dirichlet in X direction
+140 am(1) = 0.0
+bm(1) = bm(1) + 2.*alpha*dlx*ax1
+cm(1) = cm(1) + ax1
+cm(mit) = 0.0
+go to 170
+!     Dirichlet-mixed in X direction
+150 am(1) = 0.0
+am(mit) = am(mit) + cxm
+bm(mit) = bm(mit) - 2.*beta*dlx*cxm
+cm(mit) = 0.0
+go to 170
+!     Mixed - Mixed in X direction
+160 continue
+am(1) = 0.0
+bm(1) = bm(1) + 2.*dlx*alpha*ax1
+cm(1) = cm(1) + ax1
+am(mit) = am(mit) + cxm
+bm(mit) = bm(mit) - 2.*dlx*beta*cxm
+cm(mit) = 0.0
+170 continue
+!     Adjust in Y direction unless periodic
+dy1 = an(1)
+fyn = cn(nit)
+select case (kswy)
+case (1)
+   go to 220
+case (2)
+   go to 180
+case (3)
+   go to 200
+case (4)
+   go to 210
+case (5)
+   go to 190
+end select
+!     Dirichlet-Dirichlet in Y direction
+180 continue
+an(1) = 0.0
+cn(nit) = 0.0
+go to 220
+!     Mixed-Dirichlet in Y direction
+190 continue
+an(1) = 0.0
+bn(1) = bn(1) + 2.*dly*gama*dy1
+cn(1) = cn(1) + dy1
+cn(nit) = 0.0
+go to 220
+!     Dirichlet-mixed in Y direction
+200 an(1) = 0.0
+an(nit) = an(nit) + fyn
+bn(nit) = bn(nit) - 2.*dly*xnu*fyn
+cn(nit) = 0.0
+go to 220
+!     Mixed - Mixed direction in Y direction
+210 continue
+an(1) = 0.0
+bn(1) = bn(1) + 2.*dly*gama*dy1
+cn(1) = cn(1) + dy1
+an(nit) = an(nit) + fyn
+bn(nit) = bn(nit) - 2.0*dly*xnu*fyn
+cn(nit) = 0.0
+220 if (kswx == 1) go to 270
+!     Adjust USOL along X edge
+do j = js,ns
+   if (kswx /= 2 .and. kswx /= 3) go to 230
+   usol(is,j) = usol(is,j) - ax1*usol(1,j)
+   go to 240
+230 usol(is,j) = usol(is,j) + 2.0*dlx*ax1*bda(j)
+240 if (kswx /= 2 .and. kswx /= 5) go to 250
+   usol(ms,j) = usol(ms,j) - cxm*usol(k,j)
+   go to 260
+250 usol(ms,j) = usol(ms,j) - 2.0*dlx*cxm*bdb(j)
+260 continue
+end do
+270 if (kswy == 1) go to 320
+!     Adjust USOL along Y edge
+do i = is,ms
+   if (kswy /= 2 .and. kswy /= 3) go to 280
+   usol(i,js) = usol(i,js) - dy1*usol(i,1)
+   go to 290
+280 usol(i,js) = usol(i,js) + 2.0*dly*dy1*bdc(i)
+290 if (kswy /= 2 .and. kswy /= 5) go to 300
+   usol(i,ns) = usol(i,ns) - fyn*usol(i,l)
+   go to 310
+300 usol(i,ns) = usol(i,ns) - 2.0*dly*fyn*bdd(i)
+310 continue
+end do
+320 continue
+!     Save adjusted edges in GRHS if iorder=4
+if (iorder /= 4) go to 350
+do j = js,ns
+   grhs(is,j) = usol(is,j)
+   grhs(ms,j) = usol(ms,j)
+end do
+do i = is,ms
+   grhs(i,js) = usol(i,js)
+   grhs(i,ns) = usol(i,ns)
+end do
+350 continue
+iord = iorder
+pertrb = 0.0
+!     Check if operator is singular
+call chksng(mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy,singlr)
+!     Compute non-zero eigenvector in null space of transpose
+!     if singular
+if (singlr) call trisp(mit,am,bm,cm,dm,um,zm)
+if (singlr) call trisp(nit,an,bn,cn,dn,un,zn)
+!     Make initialization call to blktri
+if (intl == 0) &
+   & call blktri(intl,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn, &
+   & usol(is,js),ierror,w)
+if (ierror /= 0) return
+!     Adjust right hand side if necessary
+360 continue
+if (singlr) call orthg(usol,idmn,zn,zm,pertrb)
+!     Compute solution
+call blktri(i1,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn,usol(is,js), &
+   & ierror,w)
+if (ierror /= 0) return
+!     Set periodic boundaries if necessary
+if (kswx /= 1) go to 380
+do j = 1,l
+   usol(k,j) = usol(1,j)
+end do
+380 if (kswy /= 1) go to 400
+do i = 1,k
+   usol(i,l) = usol(i,1)
+end do
+400 continue
+!     Minimize solution with respect to weighted least squares
+!     norm if operator is singular
+if (singlr) call minsol(usol,idmn,zn,zm,prtrb)
+!     RETURN IF DEFERRED CORRECTIONS AND A FOURTH ORDER SOLUTION ARE
+!     not flagged
+if (iord == 2) return
+iord = 2
+!     Compute new right hand side for fourth order solution
+call defer(cofx,cofy,usol,idmn,grhs,mn)
+go to 360
+end subroutine sepel1
+
 subroutine chkprm(intl,iorder,a,b,m,mbdcnd,c,d,n,nbdcnd,cofx, &
    & cofy,idmn,mn,ierror)
 implicit none
@@ -5,6 +1114,7 @@ integer, intent(in) :: idmn
 integer, intent(out) :: ierror
 integer, intent(in) :: intl, iorder, m, mbdcnd, mn, n, nbdcnd
 real, intent(in) :: a, b, c, d
+!     beginning of local variable declarations
 integer :: i, j
 real :: ai, bi, ci, dj, dlx, dly, ej, fj, xi, yj
 !     This program checks the input parameters for errors
@@ -57,6 +1167,7 @@ implicit none
 integer :: mbdcnd, nbdcnd
 real :: alpha, beta, gama, xnu
 logical :: singlr
+!     beginning of local variable declarations
 integer :: i, j
 real :: ai, bi, ci, dj, ej, fj, xi, yj
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
@@ -99,6 +1210,7 @@ subroutine orthg(usol,idmn,zn,zm,pertrb)
 implicit none
 integer :: idmn
 real :: pertrb, usol(idmn,*), zm(*), zn(*)
+!     beginning of local variable declarations
 integer :: i, ifnl, ii, istr, j, jfnl, jj, jstr
 real :: ete, ute
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
@@ -139,6 +1251,7 @@ subroutine minsol(usol,idmn,zn,zm,pertb)
 implicit none
 integer :: idmn
 real :: pertb, usol(idmn,*), zm(*), zn(*)
+!     beginning of local variable declarations
 integer :: i, ifnl, ii, istr, j, jfnl, jj, jstr
 real :: ete, pertrb, ute
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
@@ -183,6 +1296,7 @@ implicit none
 integer, intent(in) :: n
 real :: a(n), b(n), c(n)
 real, intent(inout) :: d(n), u(n), z(n)
+!     beginning of local variable declarations
 integer :: j, k, nm1, nm2
 real :: an, bn, den, v
 !     This subroutine solves for a non-zero eigenvector corresponding
@@ -221,6 +1335,7 @@ subroutine defer(cofx,cofy,usol,idmn,grhs,mn)
 implicit none
 integer :: idmn, mn
 real :: grhs(mn,*), usol(idmn,*)
+!     beginning of local variable declarations
 integer :: i, j
 real :: ai, bi, ci, dj, ej, fj, tx, ty, uxxx, uxxxx, uyyy, uyyyy, &
    & xi, yj
@@ -277,6 +1392,7 @@ subroutine dxfn(u,idmn,i,j,uxxx,uxxxx)
 implicit none
 integer :: i, idmn, j
 real :: u(idmn,*), uxxx, uxxxx
+!     beginning of local variable declarations
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !     This program computes second order finite difference
@@ -343,6 +1459,7 @@ subroutine dyfn(u,idmn,i,j,uyyy,uyyyy)
 implicit none
 integer :: i, idmn, j
 real :: u(idmn,*), uyyy, uyyyy
+!     beginning of local variable declarations
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !     This program computes second order finite difference
@@ -411,6 +1528,7 @@ subroutine blktri(iflg,np,n,an,bn,cn,mp,m,am,bm,cm,idimy,y, &
 implicit none
 integer :: idimy, ierror, iflg, m, mp, n, np
 real :: am(*), an(*), bm(*), bn(*), cm(*), cn(*), w(*), y(idimy,*)
+!     beginning of local variable declarations
 integer :: iw1, iw2, iw3, iwah, iwbh, iwd, iwu, iww, nh, nl
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
@@ -581,6 +1699,7 @@ implicit none
 integer :: idimy, m, n
 real :: am(*), an(*), b(*), bm(*), bn(*), cm(*), cn(*), w1(*), &
    & w2(*), w3(*), wd(*), wu(*), ww(*), y(idimy,*)
+!     beginning of local variable declarations
 integer :: i, i1, i2, i3, i4, idxa, idxc, if, ifd, im1, im2, im3, &
    & imi1, imi2, ip, ip1, ip2, ip3, ipi1, ipi2, ipi3, ir, irm1, iz, &
    & izr, j, kdo, l, ll, na, nc, nm1, nm2, nm3, np, np1, np2, np3, nz
@@ -851,6 +1970,7 @@ end subroutine blktr1
 subroutine indxa(i,ir,idxa,na)
 implicit none
 integer :: i, idxa, ir, na
+!     beginning of local variable declarations
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
@@ -866,6 +1986,7 @@ end subroutine indxa
 subroutine indxc(i,ir,idxc,nc)
 implicit none
 integer :: i, idxc, ir, nc
+!     beginning of local variable declarations
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
@@ -881,6 +2002,7 @@ end subroutine indxc
 subroutine indxb(i,ir,idx,idp)
 implicit none
 integer :: i, idp, idx, ir
+!     beginning of local variable declarations
 integer :: id, ipl, izh
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
@@ -922,6 +2044,7 @@ real :: u(*)
 real, intent(inout) :: w(*)
 real :: x(*)
 real, intent(inout) :: y(*)
+!     beginning of local variable declarations
 integer :: ia, ibr, id, j, k, m1, m2, mm
 real :: den, rt
 ! prod0 applies a sequence of matrix operations to the vector x and
@@ -1021,6 +2144,7 @@ real :: a(*), aa(*), b(*), bd(*), bm1(*), bm2(*), c(*)
 real, intent(inout) :: d(*), u(*), w(*)
 real :: x(*)
 real, intent(inout) :: y(*)
+!     beginning of local variable declarations
 integer :: ia, ibr, id, j, k, m1, m2, mm, mm2
 real :: am, bh, den, rt, v, ym
 ! prodp applies a sequence of matrix operations to the vector x and
@@ -1139,6 +2263,7 @@ real :: a(*), aa(*), b(*), bm1(*), bm2(*), c(*), x(*)
 real, intent(inout) :: yy(*)
 complex, intent(inout) :: y(*), d(*), w(*)
 complex :: bd(*)
+!     beginning of local variable declarations
 integer :: ia, id, iflg, j, k, m1, m2, mm
 real :: rt
 complex :: crt, den, y1, y2
@@ -1240,6 +2365,7 @@ real :: a(*), aa(*), b(*), bm1(*), bm2(*), c(*), x(*)
 real, intent(inout) :: yy(*)
 complex, intent(inout) :: y(*), d(*), u(*)
 complex :: bd(*)
+!     beginning of local variable declarations
 integer :: ia, id, iflg, j, k, m1, m2, mm, mm2
 real :: rt
 complex :: v, den, bh, ym, am, y1, y2, yh, crt
@@ -1360,6 +2486,7 @@ subroutine compb(n,ierror,an,bn,cn,b,ah,bh)
 implicit none
 integer :: ierror, n
 real :: ah(*), an(*), b(*), bh(*), bn(*), cn(*)
+!     beginning of local variable declarations
 integer :: i, i2, i4, ib, if, ifd, ipl, ir, j, j1, j2, jf, js, &
    & kdo, l, l1, l2, lh, ls, n2m2, nb, nmp
 real :: arg, bnorm, d1, d2, d3
@@ -1477,6 +2604,7 @@ subroutine tqlrt0(n,d,e2,ierr)
 implicit none
 integer :: n, ierr
 real :: d(n), e2(n)
+!     beginning of local variable declarations
 integer :: nhalf, ntop
 real :: dhold
 integer :: ik, k, ncmplx, nm, npp
@@ -1598,6 +2726,7 @@ implicit none
 integer :: ierror, n
 real :: a(*), bh(*), bp(*), c(*)
 complex :: cbp(*)
+!     beginning of local variable declarations
 integer :: i2, i3, icv, if, ig, is, it, iz, izm, izm2, j, modiz, &
    & nhalf, nt
 real :: db, psg, scnv, sgn, xl, xm, xr
@@ -1776,9 +2905,10 @@ implicit none
 integer, intent(in) :: iz
 real :: a(*), bh(*), c(*)
 real, intent(in) :: x
+real :: psgf
+!     beginning of local variable declarations
 integer :: j
 real :: dd, fsg, hsg
-real :: psgf
 fsg = 1.
 hsg = 1.
 do j = 1,iz
@@ -1798,10 +2928,11 @@ implicit none
 integer :: iz
 real :: a(*), bh(*), c(*), sgn, xll, xrr
 real :: f
+real :: bsrh
+!     beginning of local variable declarations
 real :: dx, x, xl, xr
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
-real :: bsrh
 real :: nswc_ai_r4
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
    & nm         ,ncmplx     ,ik
@@ -1827,9 +2958,10 @@ implicit none
 integer, intent(in) :: iz
 real :: a(*), bh(*), c(*)
 real, intent(in) :: x
+real :: ppsgf
+!     beginning of local variable declarations
 integer :: j
 real :: sum
-real :: ppsgf
 sum = 0.
 do j = 1,iz
    sum = sum - 1./(x - bh(j))**2
@@ -1842,9 +2974,10 @@ implicit none
 integer, intent(in) :: iz
 real :: a(*), bh(*), c(*)
 real, intent(in) :: x
+real :: ppspf
+!     beginning of local variable declarations
 integer :: j
 real :: sum
-real :: ppspf
 sum = 0.
 do j = 1,iz
    sum = sum + 1./(x - bh(j))
@@ -1858,6 +2991,7 @@ integer, intent(in) :: ibeg, iend
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 integer, intent(inout) :: l(n)
+!     beginning of local variable declarations
 integer :: i, k, leftlo, fhi, xalo, xhi
 double precision :: c, m, t
 integer, parameter :: a = 16807
@@ -1944,6 +3078,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: k, l, leftlo, fhi, xalo, xhi
 real :: t
 integer, parameter :: a = 16807
@@ -2006,6 +3141,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: k, l, leftlo, fhi, xalo, xhi
 double precision :: t
 integer, parameter :: a = 16807
@@ -2066,6 +3202,7 @@ pure elemental subroutine urng0(ix, u, v)
 implicit none
 integer, intent(inout) :: ix
 real, intent(inout) :: u, v
+!     beginning of local variable declarations
 integer :: k, leftlo, fhi, xalo, xhi
 real :: t
 integer, parameter :: a = 16807
@@ -2120,6 +3257,7 @@ pure elemental subroutine durng0(ix, u, v)
 implicit none
 integer, intent(inout) :: ix
 double precision, intent(inout) :: u, v
+!     beginning of local variable declarations
 integer :: k, leftlo, fhi, xalo, xhi
 double precision :: t
 integer, parameter :: a = 16807
@@ -2174,6 +3312,7 @@ pure elemental subroutine urng1(ix, u, v, d)
 implicit none
 integer, intent(inout) :: ix
 real, intent(inout) :: d, u, v
+!     beginning of local variable declarations
 integer :: j, k, leftlo, fhi, xalo, xhi
 real :: t
 integer, parameter :: a = 16807
@@ -2232,6 +3371,7 @@ pure elemental subroutine durng1(ix, u, v, d)
 implicit none
 integer, intent(inout) :: ix
 double precision, intent(inout) :: u, v, d
+!     beginning of local variable declarations
 integer :: j, k, leftlo, fhi, xalo, xhi
 double precision :: t
 integer, parameter :: a = 16807
@@ -2291,6 +3431,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: k, l, leftlo, fhi, xalo, xhi
 real :: t
 integer, parameter :: a = 16807
@@ -2351,6 +3492,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: k, l, leftlo, fhi, xalo, xhi
 double precision :: t
 integer, parameter :: a = 16807
@@ -2436,6 +3578,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, ky, n
 real, intent(inout) :: x(*), y(*)
+!     beginning of local variable declarations
 integer :: i, i1, i2, j, k, leftlo, fhi, xalo, xhi
 real :: r, u, v
 integer, parameter :: a = 16807
@@ -2534,6 +3677,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, ky, n
 double precision, intent(inout) :: x(*), y(*)
+!     beginning of local variable declarations
 integer :: i, i1, i2, j, k, leftlo, fhi, xalo, xhi
 double precision :: r, u, v
 integer, parameter :: a = 16807
@@ -2607,6 +3751,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: i, m
 real :: r, s, u, v, t(2)
 integer, parameter :: max = 2147483647
@@ -2661,6 +3806,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: i, m
 double precision :: r, s, u, v, t(2)
 integer, parameter :: max = 2147483647
@@ -2715,6 +3861,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: i, m
 real :: phi, r, temp(1)
 real, parameter :: pi2 = 6.2831853071796
@@ -2752,6 +3899,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: i, m
 double precision :: phi, r, temp(1)
 double precision, parameter :: pi2 = 6.28318530717958647692528676656d0
@@ -2791,6 +3939,7 @@ integer, intent(in) :: kx, m, mo, n
 real, intent(inout) :: a(*)
 real, intent(in) :: fmu(m)
 real, intent(inout) :: x(kx,n)
+!     beginning of local variable declarations
 integer :: i, ii, j, k, l, l0, ldim
 real :: sum
 integer, parameter :: max = 2147483647
@@ -2916,6 +4065,7 @@ integer, intent(in) :: kx, m, mo, n
 real, intent(inout) :: a(m)
 real, intent(in) :: fmu(m)
 real, intent(inout) :: x(kx,n)
+!     beginning of local variable declarations
 integer :: i, j
 integer, parameter :: max = 2147483647
 interface
@@ -3012,6 +4162,7 @@ integer, intent(in) :: kx, m, mo, n
 double precision, intent(inout) :: a(*)
 double precision, intent(in) :: fmu(m)
 double precision, intent(inout) :: x(kx,n)
+!     beginning of local variable declarations
 integer :: i, ii, j, k, l, l0, ldim
 double precision :: sum
 integer, parameter :: max = 2147483647
@@ -3137,6 +4288,7 @@ integer, intent(in) :: kx, m, mo, n
 double precision, intent(inout) :: a(m)
 double precision, intent(in) :: fmu(m)
 double precision, intent(inout) :: x(kx,n)
+!     beginning of local variable declarations
 integer :: i, j
 integer, parameter :: max = 2147483647
 interface
@@ -3232,6 +4384,7 @@ integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
 real, intent(in) :: a
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i
 interface
    pure subroutine urng(ix,x,n,ierr)
@@ -3302,6 +4455,7 @@ integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
 double precision, intent(in) :: a
 double precision, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i
 interface
    pure subroutine durng(ix,x,n,ierr)
@@ -3372,6 +4526,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 real :: u, v, w
 integer, parameter :: max = 2147483647
@@ -3438,6 +4593,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(in) :: a
 double precision, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 double precision :: u, v, w
 integer, parameter :: max = 2147483647
@@ -3503,6 +4659,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 real :: u, v, x1, x2
 integer, parameter :: max = 2147483647
@@ -3591,6 +4748,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(in) :: a, b
 double precision, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 double precision :: u, v, x1, x2
 integer, parameter :: max = 2147483647
@@ -3679,6 +4837,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 real :: ahalf, bhalf, big, bound, c, t, u, v, x1, x2, xmax
 integer, parameter :: max = 2147483647
@@ -3783,6 +4942,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(in) :: a, b
 double precision, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 double precision :: ahalf, bhalf, big, bound, c, t, u, v, xmax, &
    & x1, x2
@@ -3888,6 +5048,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 real :: ahalf, d, s, u, v, w, z
 integer, parameter :: max = 2147483647
@@ -3988,6 +5149,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(in) :: a
 double precision, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 double precision :: ahalf, d, s, u, v, w, z
 integer, parameter :: max = 2147483647
@@ -4088,6 +5250,7 @@ integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
 real, intent(in) :: alpha, fmu, sig
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i
 real :: c, sigi, t
 interface
@@ -4186,6 +5349,7 @@ integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
 double precision, intent(in) :: fmu, sig, alpha
 double precision, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i
 double precision :: c, sigi, t
 interface

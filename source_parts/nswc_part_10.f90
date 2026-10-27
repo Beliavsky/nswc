@@ -1,8 +1,959 @@
+subroutine qk15i(f, boun, inf, a, b, result, abserr, resabs, &
+   & resasc, epmach, uflow)
+implicit none
+integer, intent(in) :: inf
+real, intent(in) :: a
+real, intent(inout) :: abserr
+real, intent(in) :: b, boun, epmach
+real, intent(inout) :: resabs, resasc, result
+real, intent(in) :: uflow
+real :: f
+external f
+!     beginning of local variable declarations
+integer :: j
+real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, fv1(7), fv2(7)
+real, parameter :: xgk(8) = [0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
+   & 0.7415311855993944e+00, 0.5860872354676911e+00, 0.4058451513773972e+00, 0.2077849550078985e+00, 0.0000000000000000e+00]
+real, parameter :: wgk(8) = [0.2293532201052922e-01, 0.6309209262997855e-01, 0.1047900103222502e+00, &
+   & 0.1406532597155259e+00, 0.1690047266392679e+00, 0.1903505780647854e+00, 0.2044329400752989e+00, 0.2094821410847278e+00]
+real, parameter :: wg(8) = [0.0000000000000000e+00, 0.1294849661688697e+00, 0.0000000000000000e+00, 0.2797053914892767e+00 &
+   & , 0.0000000000000000e+00, 0.3818300505051189e+00, 0.0000000000000000e+00, 0.4179591836734694e+00]
+!-----------------------------------------------------------------------
+! 1.        PURPOSE
+!              the original (infinite) integration range is mapped
+!              onto the interval (0,1) and (a,b) is a part of (0,1).
+!              It is the purpose to compute
+!              I = Integral of transformed integrand over (a,b),
+!              j = Integral of abs(transformed integrand) over (a,b).
+! 2.        PARAMETERS
+!            on entry
+!              f      - REAL
+!                       function subprogram defining the integrand
+!                       function f(x). the actual name for f needs
+!                       to be declared E X T E R N A L in the
+!                       calling program.
+!              boun   - REAL
+!                       finite bound of original integration
+!                       RANGE (SET TO ZERO IF inf = +2)
+!              inf    - INTEGER
+!                       if inf = -1, the original interval is
+!                                   (-INFINITY,BOUND),
+!                       if inf = +1, the original interval is
+!                                   (BOUND,+INFINITY),
+!                       if inf = +2, the original interval is
+!                                   (-INFINITY,+INFINITY) and
+!                       the integral is computed as the sum of two
+!                       integrals, one over (-INFINITY,0)
+!                       and one over (0,+INFINITY).
+!              a      - REAL
+!                       lower limit for integration over subrange
+!                       of (0,1)
+!              b      - REAL
+!                       upper limit for integration over subrange
+!                       of (0,1)
+!              epmach - REAL
+!                       the relative precision of the floating
+!                       arithmetic being used.
+!              uflow  - REAL
+!                       the smallest positive magnitude.
+!            On return
+!              result - Real
+!                       approximation to the integral I
+!                       result is computed by applying the 15-point
+!                       Kronrod rule(RESK) obtained by optimal
+!                       addition of abscissae to the 7-point Gauss
+!                       RULE(RESG).
+!              abserr - REAL
+!                       estimate of the modulus of the absolute error,
+!                       which should equal or exceed abs(I-result)
+!              resabs - REAL
+!                       approximation to the integral j
+!              resasc - REAL
+!                       approximation to the integral of
+!                       abs((transformed integrand)-I/(b-a))
+!                       OVER (a,b)
+! 3.        SUBROUTINES OR FUNCTIONS NEEDED
+!                 - f (user-provided function)
+!-----------------------------------------------------------------------
+!           The abscissae and weights are supplied for the interval
+!           (-1,1).  Because of symmetry only the positive abscissae and
+!           their corresponding weights are given.
+!           xgk    - Abscissae of the 15-point Kronrod rule
+!                    xgk(2), xgk(4), ... abscissae of the 7-point
+!                    Gauss rule
+!                    xgk(1), xgk(3), ...  abscissae which are optimally
+!                    added to the 7-point Gauss rule
+!           wgk    - Weights of the 15-point Kronrod rule
+!           wg     - Weights of the 7-point Gauss rule, corresponding
+!                    to the abscissae xgk(2), xgk(4), ...
+!                    wg(1), wg(3), ... are set to zero.
+!           List of major variables
+!           -----------------------
+!           centr  - Mid point of the interval
+!           HLGTH  - Half-length of the interval
+!           absc*  - ABSCISSA
+!           TABSC* - Transformed abscissa
+!           FVAL*  - Function VALUE
+!           RESG   - result of the 7-point Gauss formula
+!           RESK   - result of the 15-point Kronrod formula
+!           RESKH  - Approximation to the mean value of the transformed
+!                    integrand over (a,b), I.E. to I/(b-a)
+dinf = min(1,inf)
+centr = 0.5*(a + b)
+hlgth = 0.5*(b - a)
+tabsc1 = boun + dinf*(1.0 - centr)/centr
+fval1 = f(tabsc1)
+if (inf == 2) fval1 = fval1 + f(-tabsc1)
+fc = (fval1/centr)/centr
+!           Compute the 15-point Kronrod approximation to
+!           the integral, and estimate the error.
+resg = wg(8)*fc
+resk = wgk(8)*fc
+resabs = abs(resk)
+do j = 1,7
+   absc = hlgth*xgk(j)
+   absc1 = centr - absc
+   absc2 = centr + absc
+   tabsc1 = boun + dinf*(1.0 - absc1)/absc1
+   tabsc2 = boun + dinf*(1.0 - absc2)/absc2
+   fval1 = f(tabsc1)
+   fval2 = f(tabsc2)
+   if (inf == 2) fval1 = fval1 + f(-tabsc1)
+   if (inf == 2) fval2 = fval2 + f(-tabsc2)
+   fval1 = (fval1/absc1)/absc1
+   fval2 = (fval2/absc2)/absc2
+   fv1(j) = fval1
+   fv2(j) = fval2
+   fsum = fval1 + fval2
+   resg = resg + wg(j)*fsum
+   resk = resk + wgk(j)*fsum
+   resabs = resabs + wgk(j)*(abs(fval1) + abs(fval2))
+end do
+reskh = resk*0.5
+resasc = wgk(8)*abs(fc - reskh)
+do j = 1,7
+   resasc = resasc + wgk(j)*(abs(fv1(j) - reskh) + &
+      & abs(fv2(j) - reskh))
+end do
+result = resk*hlgth
+resasc = resasc*hlgth
+resabs = resabs*hlgth
+abserr = abs((resk - resg)*hlgth)
+if (resasc /= 0.0 .and. abserr /= 0.0) abserr = resasc* &
+   & min(1.0, (0.2e+03*abserr/resasc)**1.5)
+tol = 50.0*epmach
+if (resabs > uflow/tol) abserr = max(abserr, tol*resabs)
+end subroutine qk15i
+
+subroutine qpsrt(limit,last,maxerr,ermax,elist,iord,nrmax)
+implicit none
+!     ..................................................................
+! 1.        qpsrt
+!           ordering routine
+!              standard Fortran subroutine
+!              real version
+! 2.        PURPOSE
+!              this routine maintains the descending ordering
+!              in the list of the local error estimates resulting from
+!              the interval subdivision process. At each call two error
+!              estimates are inserted using the sequential search
+!              method, top-down for the largest error estimate
+!              and bottom-up for the smallest error estimate.
+! 3.        CALLING SEQUENCE
+!              call qpsrt(limit,last,maxerr,ermax,elist,iord,nrmax)
+!           parameters (meaning at output)
+!              limit  - Integer
+!                       maximum number of error estimates the list
+!                       can contain
+!              last   - INTEGER
+!                       number of error estimates currently
+!                       in the list
+!              maxerr - Integer
+!                       maxerr points to the nrmax-TH largest error
+!                       estimate currently in the list
+!              ermax  - Real
+!                       nrmax-TH largest error estimate
+!                       ermax = elist(maxerr)
+!              elist  - Real
+!                       vector of dimension last containing
+!                       the error estimates
+!              iord   - INTEGER
+!                       vector of dimension last, the first k
+!                       elements of which contain pointers
+!                       to the error estimates, such that
+!                       elist(iord(1)),... , elist(iord(k))
+!                       form a decreasing sequence, with
+!                       k = last if last.LE.(limit/2+2), and
+!                       k = limit+1-last otherwise
+!              nrmax  - Integer
+!                       maxerr = iord(nrmax)
+! 4.        NO SUBROUTINES OR FUNCTIONS NEEDED
+!     ..................................................................
+real :: elist
+real, intent(inout) :: ermax
+integer, intent(inout) :: iord
+integer, intent(in) :: last, limit
+integer, intent(inout) :: maxerr, nrmax
+dimension elist(last), iord(last)
+!     beginning of local variable declarations
+real :: errmax, errmin
+integer :: i, ibeg, ido, isucc, j, jbnd, jupbn, k
+!           Check whether the list contains more than
+!           two error estimates.
+!***First executable statement  qpsrt
+if (last > 2) go to 10
+iord(1) = 1
+iord(2) = 2
+go to 90
+!           This part of the routine is only executed
+!           if, due to a difficult integrand, subdivision
+!           increased the error estimate. In the normal case
+!           the insert procedure should start after the
+!           nrmax-TH largest error estimate.
+10 errmax = elist(maxerr)
+if (nrmax == 1) go to 30
+ido = nrmax - 1
+do i = 1,ido
+   isucc = iord(nrmax - 1)
+! ***Jump out of do-loop
+   if (errmax <= elist(isucc)) exit
+   iord(nrmax) = isucc
+   nrmax = nrmax - 1
+end do
+!           Compute the number of elements in the list to
+!           be maintained in descending order. This number
+!           depends on the number of subdivisions still
+!           allowed.
+30 jupbn = last
+if (last > (limit/2 + 2)) jupbn = limit + 3 - last
+errmin = elist(last)
+!           Insert errmax by traversing the list top-down,
+!           starting comparison from the element elist(iord(nrmax+1)).
+jbnd = jupbn - 1
+ibeg = nrmax + 1
+if (ibeg > jbnd) go to 50
+do i = ibeg,jbnd
+   isucc = iord(i)
+! ***Jump out of do-loop
+   if (errmax >= elist(isucc)) go to 60
+   iord(i - 1) = isucc
+end do
+50 iord(jbnd) = maxerr
+iord(jupbn) = last
+go to 90
+!           Insert errmin by traversing the list bottom-up.
+60 iord(i - 1) = maxerr
+k = jbnd
+do j = i,jbnd
+   isucc = iord(k)
+! ***Jump out of do-loop
+   if (errmin < elist(isucc)) go to 80
+   iord(k + 1) = isucc
+   k = k - 1
+end do
+iord(i) = last
+go to 90
+80 iord(k + 1) = last
+!           Set maxerr and ermax.
+90 maxerr = iord(nrmax)
+ermax = elist(maxerr)
+end subroutine qpsrt
+
+pure subroutine qelg(n, epstab, result, abserr, res3la, nres, &
+   & epmach, oflow)
+implicit none
+integer, intent(inout) :: n, nres
+real, intent(out) :: abserr
+real, intent(in) :: epmach, oflow
+real, intent(out) :: result
+real, intent(inout) :: epstab(52), res3la(3)
+!     beginning of local variable declarations
+integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp, newelm, num
+real :: delta1, delta2, delta3, e0, e1, e1abs, e2, e3, epsinf, &
+   & err1, err2, err3, error, res, ss, tol1, tol2, tol3
+!-----------------------------------------------------------------------
+! 1.        PURPOSE
+!              the routine determines the limit of a given sequence of
+!              approximations, by means of the epsilon algorithm
+!              of P. wynn.
+!              An estimate of the absolute error is also given.
+!              The condensed epsilon table is computed. Only those
+!              elements needed for the computation of the next diagonal
+!              are preserved.
+! 2.        PARAMETERS
+!              n      - INTEGER
+!                       epstab(n) contains the new element in the
+!                       first column of the epsilon table.
+!              epstab - REAL
+!                       vector of dimension 52 containing the
+!                       elements of the two lower diagonals of
+!                       the triangular epsilon table
+!                       the elements are numbered starting at the
+!                       right-hand corner of the triangle.
+!              result - Real
+!                       resulting approximation to the integral
+!              abserr - REAL
+!                       estimate of the absolute error computed from
+!                       result and the 3 previous results
+!              res3la - REAL
+!                       vector of dimension 3 containing the last 3
+!                       results
+!              nres   - INTEGER
+!                       number of calls to the routine
+!                       (should be zero at first call)
+!              epmach - REAL
+!                       the relative precision of the floating
+!                       arithmetic being used.
+!              oflow  - REAL
+!                       the largest positive magnitude.
+! 3.        NO SUBROUTINES OR FUNCTIONS USED
+!-----------------------------------------------------------------------
+!---------------------
+!           List of major variables
+!           -----------------------
+!           e0     - The 4 elements on which the
+!           e1       COMPUTATION OF A NEW ELEMENT IN
+!           e2       THE EPSILON TABLE IS BASED
+!           e3                 e0
+!                        e3    e1    NEW
+!                              e2
+!           newelm - Number of elements to be computed in the new
+!                    diagonal
+!           ERROR  - ERROR = abs(e1-e0)+abs(e2-e1)+abs(NEW-e2)
+!           result - The element in the new diagonal with least value
+!                    of error
+!           limexp is the maximum number of elements the epsilon
+!           table can contain. If this number is reached, the upper
+!           diagonal of the epsilon table is deleted.
+nres = nres + 1
+abserr = oflow
+result = epstab(n)
+if (n < 3) go to 100
+limexp = 50
+epstab(n + 2) = epstab(n)
+newelm = (n - 1)/2
+epstab(n) = oflow
+num = n
+k1 = n
+do i = 1,newelm
+   k2 = k1 - 1
+   k3 = k1 - 2
+   res = epstab(k1 + 2)
+   e0 = epstab(k3)
+   e1 = epstab(k2)
+   e2 = res
+   e1abs = abs(e1)
+   delta2 = e2 - e1
+   err2 = abs(delta2)
+   tol2 = max(abs(e2),e1abs)*epmach
+   delta3 = e1 - e0
+   err3 = abs(delta3)
+   tol3 = max(e1abs,abs(e0))*epmach
+   if (err2 > tol2 .or. err3 > tol3) go to 10
+!           If e0, e1 and e2 are equal to within machine
+!           accuracy, convergence is assumed.
+!           result = e2
+!           abserr = abs(e1-e0) + abs(e2-e1)
+   result = res
+   abserr = err2 + err3
+! ***Jump out of do-loop
+   go to 100
+10 e3 = epstab(k1)
+   epstab(k1) = e1
+   delta1 = e1 - e3
+   err1 = abs(delta1)
+   tol1 = max(e1abs,abs(e3))*epmach
+!           If two elements are very close to each other, omit
+!           a part of the table by adjusting the value of n
+   if (err1 <= tol1 .or. err2 <= tol2 .or. err3 <= tol3) go to 20
+   ss = 1.0/delta1 + 1.0/delta2 - 1.0/delta3
+   epsinf = abs(ss*e1)
+!           Test to detect irregular behaviour in the table, and
+!           eventually omit a part of the table adjusting the value
+!           OF n.
+   if (epsinf > 0.1e-03) go to 30
+20 n = i + i - 1
+! ***Jump out of do-loop
+   exit
+!           Compute a new element and eventually adjust
+!           the value of result.
+30 res = e1 + 1.0/ss
+   epstab(k1) = res
+   k1 = k1 - 2
+   error = err2 + abs(res - e2) + err3
+   if (error > abserr) go to 40
+   abserr = error
+   result = res
+40 continue
+end do
+!           Shift the table.
+if (n == limexp) n = 2*(limexp/2) - 1
+ib = 1
+if ((num/2)*2 == num) ib = 2
+ie = newelm + 1
+do i = 1,ie
+   ib2 = ib + 2
+   epstab(ib) = epstab(ib2)
+   ib = ib2
+end do
+if (num == n) go to 80
+indx = num - n + 1
+do i = 1,n
+   epstab(i) = epstab(indx)
+   indx = indx + 1
+end do
+80 if (nres >= 4) go to 90
+res3la(nres) = result
+abserr = oflow
+go to 100
+!           Compute error estimate
+90 abserr = abs(result - res3la(3)) + abs(result - res3la(2)) + &
+   & abs(result - res3la(1))
+res3la(1) = res3la(2)
+res3la(2) = res3la(3)
+res3la(3) = result
+100 abserr = max(abserr,5.0*epmach*abs(result))
+end subroutine qelg
+
+subroutine qxgs(f,a,b,epsabs,epsrel,result,abserr,ier, &
+   & limit,leniw,lenw,last,iwork,work)
+implicit none
+!            The routine calculates an approximation result to a given
+!            definite integral  I = Integral of f over (a,b),
+!            hopefully satisfying following claim for accuracy
+!            abs(I-result).LE.max(epsabs,epsrel*abs(I)).
+!        Parameters
+!         on entry
+!            f      - REAL
+!                     function subprogram defining the integrand
+!                     function f(x). the actual name for f needs to be
+!                     declared E X T E R N A L in the driver program.
+!            a      - REAL
+!                     lower limit of integration
+!            b      - REAL
+!                     upper limit of integration
+!            epsabs - REAL
+!                     absolute accuracy requested
+!            epsrel - REAL
+!                     relative accuracy requested
+!         on return
+!            result - Real
+!                     approximation to the integral
+!            abserr - REAL
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed abs(I-result)
+!            ier    - INTEGER
+!                     ier = 0 Normal and reliable termination of the
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
+!                     ier.GT.0 abnormal termination of the routine
+!                             the estimates for integral and error are
+!                             less reliable. It is assumed that the
+!                             requested accuracy has not been achieved.
+!            Error messages
+!                     ier = 1 Maximum number of subdivisions allowed
+!                             has been achieved. One can allow more sub-
+!                             divisions by increasing the value of limit
+!                             (and taking the according dimension
+!                             adjustments into account. However, if
+!                             this yields no improvement it is advised
+!                             to analyze the integrand in order to
+!                             determine the integration difficulties. If
+!                             the position of a local difficulty can be
+!                             determined (E.G. singularity,
+!                             discontinuity within the interval) one
+!                             will probably gain from splitting up the
+!                             interval at this point and calling the
+!                             integrator on the subranges. If possible,
+!                             an appropriate special-purpose integrator
+!                             should be used, which is designed for
+!                             handling the type of difficulty involved.
+!                         = 2 The occurrence of roundoff error is DETEC-
+!                             ted, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
+!                         = 3 Extremely bad integrand behaviour
+!                             occurs at some points of the integration
+!                             interval.
+!                         = 4 The algorithm does not converge.
+!                             Roundoff error is detected in the
+!                             extrapolation table. It is presumed that
+!                             the requested tolerance cannot be
+!                             achieved, and that the returned result is
+!                             the best which can be obtained.
+!                         = 5 The integral is probably divergent, or
+!                             slowly convergent. It must be noted that
+!                             divergence can occur with any other value
+!                             of ier.
+!                         = 6 The input is invalid because epsabs or
+!                             epsrel IS NEGATIVE, limit .LT. 1,
+!                             lenw .LT. 46*limit, OR
+!                             leniw .LT. 3*limit.
+!                             Result, abserr, last are set to
+!                             zero. Except when limit or lenw or leniw
+!                             is invalid, iwork(1), work(limit*2+1) and
+!                             work(limit*3+1) are set to zero, work(1)
+!                             is set to A, and work(limit+1) to b.
+!         Dimensioning parameters
+!            limit - Integer
+!                    limit determines the maximum number of subintervals
+!                    in the partition of the given integration interval
+!                    (A,b), limit.GE.1.
+!                    If limit.LT.1, the routine will end with ier = 6.
+!            lenw  - INTEGER
+!                    dimensioning parameter for work
+!                    lenw must be at least limit*46.
+!                    If lenw.LT.limit*46, the routine will end
+!                    with ier = 6.
+!            leniw - INTEGER
+!                    dimensioning parameter for iwork
+!                    leniw must be at least limit*3.
+!                    If lenw.LT.limit*3, the routine will end
+!                    with ier = 6.
+!            last  - Integer
+!                    on return, last equals the number of subintervals
+!                    produced in the subdivision process, which deter-
+!                    mines the number of significant elements actually
+!                    in the work arrays.
+!         Work arrays
+!            iwork - INTEGER
+!                    vector of dimension at least 3*limit, the first K
+!                    elements of which contain pointers
+!                    to the error estimates over the subintervals
+!                    such that work(limit*3+iwork(1)),... ,
+!                    work(limit*3+iwork(K)) form a decreasing
+!                    sequence, with K = last if last.LE.(limit/2+2),
+!                    and K = limit+1-last otherwise.
+!            work  - Real
+!                    vector of dimension at least lenw
+!                    on return
+!                    work(1), ..., work(last) contain the left
+!                     END-POINTS OF THE SUBINTERVALS IN THE
+!                     partition of (a,b),
+!                    work(limit+1), ..., work(limit+last) contain
+!                     the right end-points,
+!                    work(limit*2+1), ..., work(limit*2+last) contain
+!                     the integral approximations over the subintervals,
+!                    work(limit*3+1), ..., work(limit*3+last)
+!                     contain the error estimates.
+!                    work(limit*4+1), ... is the area reserved to store
+!                     functional values.
+real :: a
+real, intent(out) :: abserr
+real :: b
+real, intent(in) :: epsabs, epsrel
+real :: f
+real, intent(out) :: result
+real, intent(inout) :: work
+integer, intent(out) :: ier
+integer, intent(inout) :: iwork
+integer, intent(out) :: last
+integer, intent(in) :: leniw, lenw, limit
+external f
+dimension iwork(leniw), work(lenw)
+!     beginning of local variable declarations
+integer :: l1, l2, l3, l4, l5
+!         Check validity of limit,leniw and lenw.
+ier = 6
+last = 0
+result = 0.0
+abserr = 0.0
+if (limit < 1 .or. leniw < limit*3 .or. lenw < limit*46) &
+   & return
+!         Prepare call for qxgse.
+l1 = limit + 1
+l2 = limit + l1
+l3 = limit + l2
+l4 = limit + l3
+l5 = 21*limit + l4
+call qxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
+   & ier,work(1),work(l1),work(l2),work(l3),iwork,last, &
+   & work(l4),work(l5),iwork(l1),iwork(l2))
+end subroutine qxgs
+
+subroutine qxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
+   & ier,alist,blist,rlist,elist,iord,last,valp,valn,lp,ln)
+implicit none
+!            The routine calculates an approximation result to A
+!            definite integral I = Integral of f over (a,b),
+!            hopefully satisfying following claim for accuracy
+!            abs(I-result).LE.max(epsabs,epsrel*abs(I)).
+!        Parameters
+!         on entry
+!            f      - REAL
+!                     function subprogram defining the integrand
+!                     function f(x). the actual name for f needs to be
+!                     declared E X t E R N A L in the driver program.
+!            a      - REAL
+!                     lower limit of integration
+!            b      - REAL
+!                     upper limit of integration
+!            epsabs - Real
+!                     absolute accuracy requested
+!            epsrel - Real
+!                     relative accuracy requested
+!            limit  - Integer
+!                     gives an upperbound on the number of subintervals
+!                     in the partition of (a,b)
+!         on return
+!            result - Real
+!                     approximation to the integral
+!            abserr - Real
+!                     estimate of the modulus of the absolute error,
+!                     which should equal or exceed abs(I-result)
+!            ier    - INTEGER
+!                     ier = 0 Normal and reliable termination of the
+!                             routine. It is assumed that the requested
+!                             accuracy has been achieved.
+!                     ier.GT.0 abnormal termination of the routine
+!                             the estimates for integral and error are
+!                             less reliable. It is assumed that the
+!                             requested accuracy has not been achieved.
+!            Error messages
+!                         = 1 Maximum number of subdivisions allowed
+!                             has been achieved. One can allow more sub-
+!                             divisions by increasing the value of limit
+!                             (and taking the according dimension
+!                             adjustments into account). However, if
+!                             this yields no improvement it is advised
+!                             to analyze the integrand in order to
+!                             determine the integration difficulties. If
+!                             the position of a local difficulty can be
+!                             determined (E.G. singularity,
+!                             discontinuity within the interval) one
+!                             will probably gain from splitting up the
+!                             interval at this point and calling the
+!                             integrator on the subranges. If possible,
+!                             an appropriate special-purpose integrator
+!                             should be used, which is designed for
+!                             handling the type of difficulty involved.
+!                         = 2 The occurrence of roundoff error is DETEC-
+!                             ted, which prevents the requested
+!                             tolerance from being achieved.
+!                             The error may be under-estimated.
+!                         = 3 Extremely bad integrand behaviour
+!                             occurs at some points of the integration
+!                             interval.
+!                         = 4 The algorithm does not converge.
+!                             Roundoff error is detected in the
+!                             extrapolation table.
+!                             It is presumed that the requested
+!                             tolerance cannot be achieved, and that the
+!                             returned result is the best which can be
+!                             obtained.
+!                         = 5 The integral is probably divergent, or
+!                             slowly convergent. It must be noted that
+!                             divergence can occur with any other value
+!                             of ier.
+!                         = 6 The input is invalid because epsabs or
+!                             epsrel is negative. Result, abserr,
+!                             last, rlist(1), iord(1), and elist(1)
+!                             are set to zero. alist(1) and blist(1)
+!                             are set to A and b respectively.
+!            alist  - Real
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the left end points
+!                     of the subintervals in the partition of the
+!                     given integration range (a,b)
+!            blist  - Real
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the right end points
+!                     of the subintervals in the partition of the given
+!                     integration range (a,b)
+!            rlist  - Real
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the integral
+!                     approximations on the subintervals
+!            elist  - Real
+!                     vector of dimension at least limit, the first
+!                      last  elements of which are the moduli of the
+!                     absolute error estimates on the subintervals
+!            iord   - INTEGER
+!                     vector of dimension at least limit, the first k
+!                     elements of which are pointers to the
+!                     error estimates over the subintervals,
+!                     such that elist(iord(1)), ..., elist(iord(k))
+!                     form a decreasing sequence, with k = last
+!                     if last.LE.(limit/2+2), and k = limit+1-last
+!                     otherwise
+!            last   - INTEGER
+!                     number of subintervals actually produced in the
+!                     subdivision process
+!            valp   - REAL
+!            valn     ARRAYS OF DIMENSION AT LEAST (21,limit) USED TO
+!                     save the functional values
+!            lp     - INTEGER
+!            ln       VECTORS OF DIMENSION AT LEAST LIMIT, USED TO
+!                     store the actual number of functional values
+!                     saved in the corresponding column
+!                     of valp,valn
+!***routines called  f,spmpar,qelg,qxlqm,qpsrt,qxrrd,qxcpy
+real :: a
+real, intent(out) :: abserr
+real, intent(inout) :: alist
+real :: b
+real, intent(inout) :: blist
+real, intent(inout) :: elist
+real, intent(in) :: epsabs, epsrel
+real :: f
+real, intent(out) :: result
+real, intent(inout) :: rlist
+real, intent(inout) :: valp, valn
+integer, intent(out) :: ier
+integer, intent(inout) :: iord
+integer, intent(out) :: last
+integer, intent(in) :: limit
+integer, intent(inout) :: lp(limit), ln(limit)
+external f
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+   & rlist(limit), valp(21,limit), valn(21,limit)
+!     beginning of local variable declarations
+real :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, errbnd, &
+   & errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, uflow, vp1(21), &
+   & vp2(21), vn1(21), vn2(21)
+integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2, lp1, lp2, ln1, ln2
+logical :: extrap, noext
+interface
+   pure elemental function spmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      real :: spmpar
+   end function spmpar
+end interface
+!            Machine dependent constants
+!            ---------------------------
+!          epmach is the largest relative spacing.
+!          uflow is the smallest positive magnitude.
+!          OFLOW is the largest positive magnitude.
+epmach = spmpar(1)
+uflow = spmpar(2)
+oflow = spmpar(3)
+!            Test on validity of parameters
+!            ------------------------------
+last = 0
+result = 0.0
+abserr = 0.0
+alist(1) = a
+blist(1) = b
+rlist(1) = 0.0
+elist(1) = 0.0
+ier = 6
+if (epsabs < 0.0 .or. epsrel < 0.0) go to 999
+ier = 0
+rerr = max(epsrel, 50.0*epmach)
+!           First approximation to the integral
+!           -----------------------------------
+ierro = 0
+lp(1) = 1
+ln(1) = 1
+valp(1,1) = f((a + b)*0.5)
+valn(1,1) = valp(1,1)
+call qxlqm(f,a,b,result,abserr,defabs,resabs, &
+   & valp(1,1),valn(1,1),lp(1),ln(1),2, &
+   & epmach,uflow,oflow)
+!           Test on accuracy.
+dres = abs(result)
+errbnd = max(epsabs,rerr*dres)
+last = 1
+rlist(1) = result
+elist(1) = abserr
+iord(1) = 1
+if (abserr <= 100.0*epmach*defabs .and. abserr > &
+   & errbnd) ier = 2
+if (limit == 1) ier = 1
+if (ier /= 0 .or. (abserr <= errbnd.and.abserr /= resabs) .or. &
+   & abserr == 0.0) go to 999
+!           Initialization
+!           --------------
+rlist2(1) = result
+errmax = abserr
+maxerr = 1
+area = result
+errsum = abserr
+abserr = oflow
+nrmax = 1
+nres = 0
+numrl2 = 2
+ktmin = 0
+extrap = .false.
+noext = .false.
+iroff1 = 0
+iroff2 = 0
+iroff3 = 0
+ksgn = -1
+if (dres >= (1.0 - 50.0*epmach)*defabs) ksgn = 1
+t = 1.0 + 100.0*epmach
+!           Main do-loop
+!           ------------
+do last = 2,limit
+!           Bisect the subinterval with the nrmax-TH largest error
+!           estimate.
+   a1 = alist(maxerr)
+   b1 = 0.5*(alist(maxerr) + blist(maxerr))
+   a2 = b1
+   b2 = blist(maxerr)
+   erlast = errmax
+   call qxrrd(f,valn(1,maxerr),ln(maxerr),b1,a1,vn1,vp1,ln1,lp1)
+   call qxlqm(f,a1,b1,area1,error1,resabs,defab1,vp1,vn1,lp1,ln1, &
+      & 2,epmach,uflow,oflow)
+   call qxrrd(f,valp(1,maxerr),lp(maxerr),a2,b2,vp2,vn2,lp2,ln2)
+   call qxlqm(f,a2,b2,area2,error2,resabs,defab2,vp2,vn2,lp2,ln2, &
+      & 2,epmach,uflow,oflow)
+!           Improve previous approximations to integral
+!           and error and test for accuracy.
+   area12 = area1 + area2
+   erro12 = error1 + error2
+   errsum = errsum + erro12 - errmax
+   area = area + area12 - rlist(maxerr)
+   if (defab1 == error1 .or. defab2 == error2) go to 15
+   if (abs(rlist(maxerr) - area12) > 0.1e-04*abs(area12) &
+      & .or. erro12 < 0.99*errmax) go to 10
+   if (extrap) iroff2 = iroff2 + 1
+   if (.not.extrap) iroff1 = iroff1 + 1
+10 if (last > 10 .and. erro12 > errmax) iroff3 = iroff3 + 1
+15 rlist(maxerr) = area1
+   rlist(last) = area2
+   errbnd = max(epsabs,rerr*abs(area))
+!           Test for roundoff error and eventually set error flag.
+   if (iroff1 + iroff2 >= 10 .or. iroff3 >= 20) ier = 2
+   if (iroff2 >= 5) ierro = 3
+!           Set error flag in the case that the number of subintervals
+!           equals limit.
+   if (last == limit) ier = 1
+!           Set error flag in the case of bad integrand behaviour
+!           at a point of the integration range.
+   if (max(abs(a1),abs(b2)) <= &
+      & t*(abs(a2) + 1.e+03*uflow)) ier = 4
+!           Append the newly-created intervals to the list.
+   if (error2 > error1) go to 20
+   alist(last) = a2
+   blist(maxerr) = b1
+   blist(last) = b2
+   elist(maxerr) = error1
+   elist(last) = error2
+   call qxcpy(valp(1,maxerr),vp1,lp1)
+   lp(maxerr) = lp1
+   call qxcpy(valn(1,maxerr),vn1,ln1)
+   ln(maxerr) = ln1
+   call qxcpy(valp(1,last),vp2,lp2)
+   lp(last) = lp2
+   call qxcpy(valn(1,last),vn2,ln2)
+   ln(last) = ln2
+   go to 30
+20 alist(maxerr) = a2
+   alist(last) = a1
+   blist(last) = b1
+   rlist(maxerr) = area2
+   rlist(last) = area1
+   elist(maxerr) = error2
+   elist(last) = error1
+   call qxcpy(valp(1,maxerr),vp2,lp2)
+   lp(maxerr) = lp2
+   call qxcpy(valn(1,maxerr),vn2,ln2)
+   ln(maxerr) = ln2
+   call qxcpy(valp(1,last),vp1,lp1)
+   lp(last) = lp1
+   call qxcpy(valn(1,last),vn1,ln1)
+   ln(last) = ln1
+!           CALL SUBROUTINE qpsrt TO MAINTAIN THE DESCENDING ORDERING
+!           in the list of error estimates and select the subinterval
+!           with nrmax-TH largest error estimate (to be bisected next).
+30 call qpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
+! ***Jump out of do-loop
+   if (errsum <= errbnd) go to 115
+! ***Jump out of do-loop
+   if (ier /= 0) exit
+   if (last == 2) go to 80
+   if (noext) go to 90
+   erlarg = erlarg - erlast
+   if (abs(b1 - a1) > small) erlarg = erlarg + erro12
+   if (extrap) go to 40
+!           Test whether the interval to be bisected next is the
+!           smallest interval.
+   if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
+   extrap = .true.
+   nrmax = 2
+!           The bound 0.3*ERTEST has been introduced to perform A
+!           more cautious extrapolation than in the original dqagse
+!           routine
+40 if (ierro == 3 .or. erlarg <= 0.3*ertest) go to 60
+!           The smallest interval has the largest error.
+!           Before bisecting decrease the sum of the errors over the
+!           larger intervals (erlarg) and perform extrapolation.
+   id = nrmax
+   jupbnd = last
+   if (last > (2 + limit/2)) jupbnd = limit + 3 - last
+   do k = id,jupbnd
+      maxerr = iord(nrmax)
+      errmax = elist(maxerr)
+! ***Jump out of do-loop
+      if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
+      nrmax = nrmax + 1
+   end do
+!           Perform extrapolation.
+60 numrl2 = numrl2 + 1
+   rlist2(numrl2) = area
+   call qelg(numrl2,rlist2,reseps,abseps,res3la,nres, &
+      & epmach,oflow)
+   ktmin = ktmin + 1
+   if (ktmin > 5 .and. abserr < 0.1e-02*errsum) ier = 5
+   if (abseps >= abserr) go to 70
+   ktmin = 0
+   abserr = abseps
+   result = reseps
+   correc = erlarg
+   ertest = max(epsabs,rerr*abs(reseps))
+! ***Jump out of do-loop
+   if (abserr <= ertest) exit
+!           Prepare bisection of the smallest interval.
+70 if (numrl2 == 1) noext = .true.
+   if (ier == 5) exit
+   maxerr = iord(1)
+   errmax = elist(maxerr)
+   nrmax = 1
+   extrap = .false.
+   small = small*0.5
+   erlarg = errsum
+   go to 90
+80 small = abs(b - a)*0.375
+   erlarg = errsum
+   ertest = errbnd
+   rlist2(2) = area
+90 continue
+end do
+!           Set final result and error estimate.
+!           ------------------------------------
+if (abserr == oflow) go to 115
+if (ier + ierro == 0) go to 110
+if (ierro == 3) abserr = abserr + correc
+if (ier == 0) ier = 3
+if (result /= 0.0 .and. area /= 0.0) go to 105
+if (abserr > errsum) go to 115
+if (area == 0.0) go to 130
+go to 110
+105 if (abserr/abs(result) > errsum/abs(area)) go to 115
+!           Test on divergence.
+110 if (ksgn == (-1).and.max(abs(result),abs(area)) <= &
+   & defabs*0.1e-01) go to 130
+if (0.1e-01 > (result/area).or.(result/area) > 0.1e+03 &
+   & .or.errsum > abs(area)) ier = 6
+go to 130
+!           Compute global integral sum.
+115 result = 0.0
+do k = 1,last
+   result = result + rlist(k)
+end do
+abserr = errsum
+130 if (ier > 2) ier = ier - 1
+999 return
+end subroutine qxgse
+
 pure subroutine qxcpy(a, b, l)
 implicit none
 integer, intent(in) :: l
 real, intent(inout) :: a(l)
 real, intent(in) :: b(l)
+!     beginning of local variable declarations
 integer :: i
 !  TO COPY THE REAL VECTOR b OF LENGTH l   i N T O
 !          the real vector a of length l
@@ -82,6 +1033,7 @@ real, intent(inout) :: vr(21), vs(21)
 integer, intent(in) :: key
 integer, intent(inout) :: lr, ls
 external f
+!     beginning of local variable declarations
 real :: t, resg, resk, errold
 integer :: k, k0, k1, k2, key1
 key1 = max(key ,  0)
@@ -116,6 +1068,7 @@ real, intent(inout) :: fv1(21), fv2(21)
 integer, intent(in) :: ke, k1
 integer, intent(inout) :: l1, l2
 external f
+!     beginning of local variable declarations
 integer :: i, is, k, ks, j
 real :: ldl, y2, xx(41), aa, bb, c
 integer, parameter :: istart(4) = [0, 7, 17, 31]
@@ -295,6 +1248,7 @@ real :: z(21)
 real, intent(in) :: xu, xl
 integer, intent(inout) :: lr, ls
 integer, intent(in) :: lz
+!     beginning of local variable declarations
 real :: dlen, centr
 dlen = (xu - xl)*0.5
 centr = xl + dlen
@@ -363,6 +1317,8 @@ integer, intent(inout) :: iwork
 integer, intent(in) :: lenw, limit
 integer, intent(out) :: neval
 external f
+dimension iwork(limit), work(lenw)
+!     beginning of local variable declarations
 integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !           Double precision computation of a definite integral
@@ -490,7 +1446,6 @@ integer :: l1, l2, l3
 !              - f (user-provided function)
 !              - dpmpar
 !-----------------------------------------------------------------------
-dimension iwork(limit), work(lenw)
 !         Check validity of limit and lenw.
 ier = 6
 neval = 0
@@ -643,6 +1598,9 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+   & rlist(limit)
+!     beginning of local variable declarations
 double precision :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, &
    & erlast, errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, &
    & uflow
@@ -655,8 +1613,6 @@ interface
       double precision :: dpmpar
    end function dpmpar
 end interface
-dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-   & rlist(limit)
 !            The dimension of rlist2 is determined by the value of
 !            LIMEXP in subroutine dqelg (rlist2 should be of dimension
 !            (LIMEXP+2) at least).
@@ -967,6 +1923,7 @@ double precision, intent(in) :: uflow
 double precision, intent(inout) :: resasc
 integer, intent(out) :: isig
 external f
+!     beginning of local variable declarations
 double precision :: absc, centr, dhlgth, fc, fsum, fval1, fval2, fv1(10), fv2(10), hlgth, resg, resk, reskh, tol
 integer :: j, jtw, jtwm1
 double precision, parameter :: xgk(11) = [0.995657163025808080735527280689d+00, &
@@ -1071,6 +2028,8 @@ integer, intent(inout) :: iwork
 integer, intent(in) :: lenw, limit
 integer, intent(out) :: neval
 external f
+dimension iwork(limit), work(lenw)
+!     beginning of local variable declarations
 integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !         Double precision integration over infinite intervals
@@ -1205,7 +2164,6 @@ integer :: l1, l2, l3
 !              - f (user provided function)
 !              - dpmpar
 !-----------------------------------------------------------------------
-dimension iwork(limit),work(lenw)
 !         Check validity of limit and lenw.
 ier = 6
 neval = 0
@@ -1367,6 +2325,9 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+   & rlist(limit)
+!     beginning of local variable declarations
 double precision :: abseps, area, area1, area12, area2, a1, a2, boun, b1, b2, correc, defabs, defab1, defab2, dres, epmach, &
    & erlarg, erlast, errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), &
    & small, t, uflow
@@ -1379,8 +2340,6 @@ interface
       double precision :: dpmpar
    end function dpmpar
 end interface
-dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-   & rlist(limit)
 !            The dimension of rlist2 is determined by the value of
 !            LIMEXP in subroutine dqelg.
 !            List of major variables
@@ -1649,6 +2608,7 @@ double precision, intent(inout) :: resabs, resasc
 double precision, intent(inout) :: result
 double precision, intent(in) :: uflow
 external f
+!     beginning of local variable declarations
 integer :: j
 double precision :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, &
    & fv1(7), fv2(7)
@@ -1839,9 +2799,10 @@ double precision, intent(inout) :: ermax
 integer, intent(inout) :: iord
 integer, intent(in) :: last, limit
 integer, intent(inout) :: maxerr, nrmax
+dimension elist(last), iord(last)
+!     beginning of local variable declarations
 double precision :: errmax, errmin
 integer :: i, ibeg, ido, isucc, j, jbnd, jupbn, k
-dimension elist(last),iord(last)
 !           Check whether the list contains more than
 !           two error estimates.
 !***First executable statement dqpsrt
@@ -1951,6 +2912,7 @@ double precision, intent(out) :: result
 double precision, intent(inout) :: res3la(3)
 integer, intent(inout) :: n
 integer, intent(inout) :: nres
+!     beginning of local variable declarations
 double precision :: delta1, delta2, delta3, epsinf, error, err1, err2, err3, e0, e1, e1abs, e2, e3, res, ss, tol1, tol2, tol3
 integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp, newelm, num
 !---------------------
@@ -2195,8 +3157,9 @@ integer, intent(inout) :: iwork
 integer, intent(out) :: last
 integer, intent(in) :: leniw, lenw, limit
 external f
+dimension iwork(leniw), work(lenw)
+!     beginning of local variable declarations
 integer :: l1, l2, l3, l4, l5
-dimension iwork(leniw),work(lenw)
 !         Check validity of limit,leniw and lenw.
 ier = 6
 last = 0
@@ -2349,6 +3312,9 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(inout) :: lp(limit), ln(limit)
 external f
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+   & rlist(limit), valp(21,limit), valn(21,limit)
+!     beginning of local variable declarations
 double precision :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, &
    & erlast, errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, &
    & uflow, vp1(21), vp2(21), vn1(21), vn2(21)
@@ -2361,8 +3327,6 @@ interface
       double precision :: dpmpar
    end function dpmpar
 end interface
-dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-   & rlist(limit), valp(21,limit), valn(21,limit)
 !            Machine dependent constants
 !            ---------------------------
 !          epmach is the largest relative spacing.
@@ -2596,6 +3560,7 @@ implicit none
 integer, intent(in) :: l
 double precision, intent(inout) :: a(l)
 double precision, intent(in) :: b(l)
+!     beginning of local variable declarations
 integer :: i
 !  TO COPY THE DOUBLE PRECISION VECTOR b OF LENGTH l   i N T O
 !          the double precision vector a of length l
@@ -2675,6 +3640,7 @@ double precision, intent(inout) :: vr(21), vs(21)
 integer, intent(in) :: key
 integer, intent(inout) :: lr, ls
 external f
+!     beginning of local variable declarations
 double precision :: t, resg, resk, errold
 integer :: k, k0, k1, k2, key1
 key1 = max(key ,  0)
@@ -2709,6 +3675,7 @@ double precision, intent(inout) :: fv1(21), fv2(21)
 integer, intent(in) :: ke, k1
 integer, intent(inout) :: l1, l2
 external f
+!     beginning of local variable declarations
 integer :: i, is, k, ks, j
 double precision :: ldl, y2, xx(41), aa, bb, c
 integer, parameter :: istart(4) = [0, 7, 17, 31]
@@ -2888,6 +3855,7 @@ double precision :: z(21)
 double precision, intent(in) :: xu, xl
 integer, intent(inout) :: lr, ls
 integer, intent(in) :: lz
+!     beginning of local variable declarations
 double precision :: dlen, centr
 dlen = (xu - xl)*0.5d0
 centr = xl + dlen
@@ -2948,6 +3916,7 @@ real :: f
 external f
 integer :: idata(*), ier, mcalls, ncalls, nw
 real :: ans, eps, err, rdata(*), t(2,*), w(6,nw)
+!     beginning of local variable declarations
 integer :: i, j, jkp, k, l, maxc, maxk, mw
 real :: rnderr
 real :: alfa, anskp, area, errmax, h, q1, q2, r1, r2, vec(2,3), x(2)
@@ -3130,8 +4099,9 @@ end subroutine cubtri
 function rnderr(x, a, y, b)
 implicit none
 real :: a, b, x, y
-real :: s, t
 real :: rnderr
+!     beginning of local variable declarations
+real :: s, t
 !       This function computes the rounding error committed when the
 !       sum x+a is formed.  In the calling program, y must be the same
 !       as x and b must be the same as A.  they are declared as
@@ -3153,6 +4123,7 @@ real :: rdata(*)
 real, intent(in) :: vec(2,*)
 integer :: idata(*)
 external f
+!     beginning of local variable declarations
 integer :: i, j, k
 real :: x, y, area, origin(2), tvec(2,3)
 double precision :: a1, a2, s, sn
@@ -3272,6 +4243,7 @@ real :: a, b, ep, t(*), w(*), x(*)
 real :: rhfcn
 real :: kernel, norm
 external kernel, rhfcn
+!     beginning of local variable declarations
 integer :: i1, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i2, i20, i21, i3, i4, i5, i6, i7, i8, i9, m, n, nhalf, nsq, nup
 real :: cutoff, rootrt, unitrd
 integer :: mfinal, nfinal
@@ -3446,6 +4418,7 @@ real :: rhfcn
 real :: kernel, lufact(nup,nup), kmm(nup,nup), kmn(nup,nhalf), &
    & knm(nhalf,nup), imknn(nup,nup)
 external kernel, rhfcn
+!     beginning of local variable declarations
 integer :: i, ind, j, loop, m, mnew, n
 real :: aside2(5), averr, cond, denr1, denr2, eps, error, esterr, &
    & pastc, pastre, r1rat, rate, relerr, relmin, rt, temp, temp2, test, &
@@ -3761,6 +4734,7 @@ real :: rhfcn
 real :: kernel
 real, intent(inout) :: kmn(nup,nhalf)
 external kernel, rhfcn
+!     beginning of local variable declarations
 integer :: i, j
 !   Use the values of xn(i), i=1,...,n, to calculate the Nystrom
 !   INTERPOLATES xm(i), i=1,...,m.
@@ -3798,8 +4772,9 @@ pure elemental function rmin(n,m,cond,unitrd,averr)
 implicit none
 integer, intent(in) :: m, n
 real, intent(in) :: averr, cond, unitrd
-real :: float1, float2
 real :: rmin
+!     beginning of local variable declarations
+real :: float1, float2
 !   For a linear system   (I-KMM)*XM=RHFCN   of order m, this is the
 !   value of RELMIN used in iegs. The variable unitrd is defined in
 !   IEGAUS, and the variables cond and averr are defined in iegs
@@ -3816,6 +4791,7 @@ real function rnrm(x,y,n,iflag)
 implicit none
 integer, intent(in) :: iflag, n
 real :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: i
 !   iflag=0    Calculate the maximum norm of x.
 !   iflag=1    Calculate the maximum norm of x-y.
@@ -3839,8 +4815,9 @@ real, intent(out) :: averr
 real, intent(in) :: cond, elinsy
 real, intent(inout) :: pastc, pastre
 real, intent(in) :: relrsd
-real :: c
 real :: conew
+!     beginning of local variable declarations
+real :: c
 !   This is used in updating the value of the condition number
 !   IN iegs.
 averr = sqrt(elinsy*pastre)
@@ -3858,6 +4835,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(inout) :: tv(n), wv(n)
+!     beginning of local variable declarations
 integer :: i, i1, i2, k, l, loop, m, mt, npi, nplace
 real :: al, bl, fl, floop, h, r, s, scale
 real, parameter :: t(255) = [.577350269189626e0, .861136311594053e0, .339981043584856e0, .960289856497536e0, &
@@ -3989,6 +4967,7 @@ real :: rhfcn
 real :: kernel, kmm(nup,nup), kmn(nup,nhalf), knm(nhalf,nup), &
    & imknn(nup,nup), lufact(nup,nup)
 external kernel, rhfcn
+!     beginning of local variable declarations
 integer :: i, itloop, j
 real :: derror, savep, sum, temp
 integer :: mfinal, nfinal
@@ -4100,6 +5079,7 @@ real, intent(inout) :: knm(nhalf,nup)
 real :: imknn(nup,nup)
 real, intent(inout) :: lufact(nup,nup)
 external kernel, rhfcn
+!     beginning of local variable declarations
 integer :: i, ind, j
 real :: sum
 !   This routine calculates one iterate xm given the initial guess
@@ -4193,6 +5173,7 @@ implicit none
 integer :: ierr, m, n
 real :: a(m,n), d(m,n), b(n), x(n)
 integer :: option
+!     beginning of local variable declarations
 integer :: i, ip1, iswit, j, k, kp1, l, nm1, nmi
 real :: c, sum, t
 real :: error, relrsd
@@ -4360,6 +5341,7 @@ real, intent(inout) :: abserr, relerr, t
 real, intent(in) :: tout
 real, intent(inout) :: work(*), y(neqn)
 external f
+!     beginning of local variable declarations
 integer :: ip, iphi, iwt, iyp, iypout, iyy
 logical :: start, phase1, nornd
 integer, parameter :: ialpha = 1
@@ -4530,6 +5512,7 @@ real :: yp(neqn)
 real, intent(inout) :: ypout(neqn), yy(neqn)
 logical, intent(inout) :: start, phase1, nornd
 external f
+!     beginning of local variable declarations
 integer :: isn, kle4, l, nostep
 real :: absdel, abseps, del, eps, fouru, releps, tend, u
 logical :: stiff, crash
@@ -4679,6 +5662,7 @@ logical, intent(inout) :: start
 logical, intent(out) :: crash
 logical, intent(inout) :: phase1, nornd
 external f
+!     beginning of local variable declarations
 integer :: i, ifail, im1, ip1, iq, j, km1, km2, knew, kp1, kp2, l, limit1, limit2, nsm2, nsp1, nsp2, nswc_ai_i4
 real :: absh, erk, erkm1, erkm2, erkp1, err, fouru, hnew, p5eps, r, reali, realns, rho, round, sum, tau, temp1, temp2, temp3, &
    & temp4, temp5, temp6, twou, u, xold
@@ -5121,6 +6105,7 @@ real :: phi(neqn,16), psi(12)
 real, intent(in) :: x, xout
 real :: y(neqn)
 real, intent(inout) :: yout(neqn), ypout(neqn)
+!     beginning of local variable declarations
 integer :: i, j, jm1, ki, kip1, l, limit1
 real :: eta, g(13), gamma, hi, psijm1, rho(13), temp1, temp2, &
    & temp3, term, w(13)
@@ -5199,6 +6184,7 @@ real, intent(inout) :: relerr, t
 real, intent(in) :: tend, tout
 real, intent(inout) :: work(*), y(neqn), yp(neqn)
 external fcn
+!     beginning of local variable declarations
 integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
    & kwp, kx, ky1, ky2
 logical :: endpnt, blkout
@@ -5466,6 +6452,7 @@ real, intent(inout) :: w(neqn), wp(neqn), x, y(neqn), y1(neqn), &
 logical, intent(inout) :: endpnt
 logical, intent(inout) :: blkout
 external fcn
+!     beginning of local variable declarations
 integer :: k, mflag, n
 real :: a, ae, dt, dtsign, ee, eeoet, errtol, esttol, ez, hmin, hstop, rer, s, scale, sf, swap, tol, toler, toln, u, u26, ypk
 logical :: hfaild, interp
@@ -5972,6 +6959,7 @@ real :: y(neqn)
 real, intent(inout) :: yex(neqn)
 real :: yinc1(neqn), yinc2(neqn)
 real, intent(inout) :: ypex(neqn)
+!     beginning of local variable declarations
 integer :: n
 real :: a1, a2, a3, a4, hf, hf1, hf2, sig
 !     This version of extra is the third of the three changes
@@ -6159,6 +7147,7 @@ real, intent(inout) :: relerr
 real, intent(in) :: abserr
 real, intent(inout) :: work(*)
 external f
+!     beginning of local variable declarations
 integer :: k1, k2, k3, k4, k5, k6, k1m
 !     Compute indices for the splitting of the work array
 k1m = neqn + 1
@@ -6202,6 +7191,7 @@ real, intent(inout) :: f1(neqn)
 real :: f2(neqn), f3(neqn), f4(neqn)
 real, intent(inout) :: f5(neqn), savre, savae
 external f
+!     beginning of local variable declarations
 logical :: hfaild, output
 real :: a, ae, dt, ee, eeoet, esttol, et, hmin, rer, s, scale, tol, toln, u26, eps, ypk
 integer :: k, mflag
@@ -6463,6 +7453,7 @@ real, intent(inout) :: f1(neqn)
 real :: f2(neqn), f3(neqn), f4(neqn)
 real, intent(inout) :: f5(neqn), s(neqn)
 external f
+!     beginning of local variable declarations
 real :: ch
 integer :: k
 ch = h/4.0
@@ -6513,6 +7504,7 @@ real, intent(inout) :: t
 real, intent(in) :: tout
 real, intent(inout) :: work(*), y(neqn)
 external f
+!     beginning of local variable declarations
 integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !     Fehlberg fourth(fifth) order Runge-Kutta method with
 !     global error assessment
@@ -6705,6 +7697,7 @@ real, intent(in) :: tout
 real, intent(inout) :: y(neqn), yg(neqn), ygp(neqn)
 real :: yp(neqn)
 external f
+!     beginning of local variable declarations
 integer :: k, maxnfe, mflag
 real :: a, ae, dt, ee, eeoet, esttol, et, hh, hmin, remin, rer, s, &
    & scale, tol, toln, ts, u, u26, ypk
@@ -6999,6 +7992,7 @@ real :: rpar(*)
 integer, intent(inout) :: info(*)
 integer, intent(inout) :: iwork(liw)
 integer :: ipar(*)
+!     beginning of local variable declarations
 external zzzjac
 real :: rtol(1), atol(1)
 integer :: info1(15)
@@ -7032,6 +8026,7 @@ real :: rpar(*)
 integer, intent(inout) :: info(*)
 integer, intent(inout) :: iwork(liw)
 integer :: ipar(*)
+!     beginning of local variable declarations
 external zzzjac
 integer :: info1(15)
 !     --------------
@@ -7067,6 +8062,8 @@ implicit none
 integer :: idid, info(*), ipar(*), iwork, liw, lrw, neq
 real :: atol(*), rpar(*), rtol(*), rwork(lrw), t, tout, y(neq)
 external f, jac
+dimension iwork(liw)
+!     beginning of local variable declarations
 integer :: icomi, icomr, idelsn, iinout, ilrw, itstar, iypout, ml, &
    & mu
 integer :: iacor, iband, ibegin, ier, iewt, iinteg, ijac, init, &
@@ -7630,7 +8627,6 @@ logical :: intout
 !***REFERENCES
 !   Shampine L.F., Watts H.A., *DEPAC - Design of a user oriented
 !   package of ODE solvers*, SAND79-2374, Sandia Laboratories, 1979.
-dimension iwork(liw)
 common /debdf1/ told, rowns(210), &
    & el0, h, hmin, hmxi, hu, tn, uround, &
    & iquit, init, iyh, iewt, iacor, isavf, iwm, ksteps, &
@@ -7712,6 +8708,7 @@ implicit none
 !-----------------------------------------------------------------------
 integer :: isav(*)
 real :: rsav(*)
+!     beginning of local variable declarations
 integer :: i, ils
 real :: rls
 common /debdf1/ rls(218), ils(33)
@@ -7736,6 +8733,7 @@ implicit none
 !-----------------------------------------------------------------------
 integer :: isav(*)
 real :: rsav(*)
+!     beginning of local variable declarations
 integer :: i, ils
 real :: rls
 common /debdf1/ rls(218), ils(33)
@@ -7760,6 +8758,7 @@ real :: acor(neq), atol(*), delsgn, ewt(neq), rpar(*), rtol(*), &
    & yh1(*), ypout(neq)
 logical :: intout
 external f, jac
+!     beginning of local variable declarations
 integer :: intflg, k, l, ltol, max
 real :: absdel, big, del, dt, ha, tol
 integer :: iband, ibegin, ier, iinteg, ijac, init, iowns, iquit, &
@@ -8030,6 +9029,7 @@ real :: y(neq)
 real, intent(inout) :: yp(neq)
 real :: yprime(neq)
 external f
+!     beginning of local variable declarations
 integer :: j, k, lk
 real :: absdx, da, delf, dely, dfdub, dfdxb, dx, dy, fbnd, relper, &
    & srydpb, tolexp, tolmin, tolp, tolsum, ydpb
@@ -8304,6 +9304,7 @@ implicit none
 !-----------------------------------------------------------------------
 integer :: k, nyh, iflag
 real :: t, yh(nyh,*), dky(*)
+!     beginning of local variable declarations
 integer :: i, ic, ier, iownd, iowns, j, jb, jb2, jj, jj1, jp1, &
    & jstart, kflag, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
 real :: rownd, rowns, el0, h, hmin, hmxi, hu, tn, uround, c, r, s, &
@@ -8363,6 +9364,7 @@ real :: rpar(*)
 external f, jac
 integer :: neq, nyh, iwm(*)
 real :: y(*), yh(nyh,*), yh1(*), ewt(*), savf(*), acor(*), wm(*)
+!     beginning of local variable declarations
 integer :: ipnyh
 integer :: iod, ksteps
 integer :: i, i1, ialth, ier, iownd, iredo, iret, ipup, j, jb, &
@@ -8844,6 +9846,7 @@ implicit none
 !   cfod defines coefficients needed in the integrator package sfode
 integer, intent(in) :: meth
 real, intent(inout) :: elco(13, *), tesco(3, *)
+!     beginning of local variable declarations
 integer :: i, ib, nq, nqm1, nqp1
 real :: agamq, fnq, fnqm1, pc(12), pint, ragq, rqfac, rq1fac, &
    & tsign, xpin
@@ -8963,6 +9966,7 @@ real :: rpar(*)
 integer :: neq, nyh, iwm(*)
 external f, jac
 real :: y(*), yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*)
+!     beginning of local variable declarations
 integer :: i, i1, i2, ier, ii, iownd, iowns, j, j1, jj, jstart, &
    & kflag, l, lenp, maxord, mba, mband, meb1, meband, meth, miter, ml, &
    & ml3, mu, n, nfe, nje, nq, nqu, nst
@@ -9146,6 +10150,7 @@ implicit none
 !***Routines called  sgesl,sgbsl
 integer :: iwm(*)
 real :: wm(*), x(*), tem(*)
+!     beginning of local variable declarations
 integer :: i, ier, iownd, iowns, jstart, kflag, l, maxord, meband, &
    & meth, miter, ml, mu, n, nfe, nje, nq, nqu, nst
 real :: rownd, rowns, el0, h, hmin, hmxi, hu, tn, uround, di, hl0, &
@@ -9222,6 +10227,7 @@ integer, intent(in) :: lda, n, ml, mu
 integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
 real, intent(inout) :: abd(lda,*)
+!     beginning of local variable declarations
 real :: t
 integer :: i, i0, j, ju, jz, j0, j1, k, kp1, l, lm, m, mm, nm1
 interface
@@ -9384,6 +10390,7 @@ implicit none
 integer, intent(in) :: lda, n, ml, mu, ipvt(*), job
 real, intent(in) :: abd(lda,*)
 real, intent(inout) :: b(*)
+!     beginning of local variable declarations
 real :: t
 integer :: k, kb, l, la, lb, lm, m, nm1
 interface
@@ -9505,1105 +10512,4 @@ end do
 90 continue
 100 continue
 end subroutine sgbsl
-
-function vnorm(v,ncomp)
-implicit none
-integer, intent(in) :: ncomp
-real :: v(ncomp)
-integer :: k
-real :: vnorm
-!     Compute the maximum norm of the vector v(*) of length ncomp and
-!     RETURN THE RESULT AS vnorm
-vnorm = 0.
-do k = 1,ncomp
-   vnorm = max(vnorm,abs(v(k)))
-end do
-end function vnorm
-
-real function vnwrms(n, v, w)
-implicit none
-!-----------------------------------------------------------------------
-! This function routine computes the weighted root-mean-square norm
-! of the vector of length n contained in the array v, with weights
-! contained in the array w of length n..
-!   vnwrms = sqrt( (1/n) * sum( v(i)/w(i) )**2 )
-!-----------------------------------------------------------------------
-integer, intent(in) :: n
-real :: v(n), w(n)
-integer :: i
-real :: sum
-sum = 0.0e0
-do i = 1,n
-   sum = sum + (v(i)/w(i))**2
-end do
-vnwrms = sqrt(sum/float(n))
-!----------------------- End of function vnwrms ------------------------
-end function vnwrms
-
-subroutine rk(n,t,h,a,f)
-implicit none
-integer, intent(in) :: n
-real, intent(inout) :: a(*)
-real, intent(in) :: h
-real, intent(inout) :: t
-external f
-integer :: k, m, m1, mk, nk, np1
-real :: ha, ta
-!     ******************************************************************
-!     Fourth order Runge-Kutta procedure for solving DY=F(t,Y)
-!     ******************************************************************
-np1 = n + 1
-if (h == 0.0) go to 50
-ha = .5*h
-ta = t + ha
-m = n + n
-m1 = m + 1
-do k = 1,n
-   nk = n + k
-   mk = m + k
-   a(nk) = ha*a(nk)
-   a(mk) = a(k) + a(nk)
-end do
-call f(ta,a(m1))
-do k = 1,n
-   nk = n + k
-   mk = m + k
-   a(nk) = a(nk) + h*a(mk)
-   a(mk) = a(k) + ha*a(mk)
-end do
-call f(ta,a(m1))
-t = t + h
-do k = 1,n
-   nk = n + k
-   mk = m + k
-   a(mk) = h*a(mk)
-   a(nk) = a(nk) + a(mk)
-   a(mk) = a(k) + a(mk)
-end do
-call f(t,a(m1))
-do k = 1,n
-   nk = n + k
-   mk = m + k
-   a(k) = a(k) + (a(nk) + ha*a(mk))/3.0
-   a(nk) = a(k)
-end do
-call f(t,a(np1))
-return
-50 do k = 1,n
-   nk = n + k
-   a(nk) = a(k)
-end do
-call f(t,a(np1))
-end subroutine rk
-
-subroutine rk8(n,t,h,y,dy,w,f)
-implicit none
-integer, intent(in) :: n
-real :: h
-real, intent(inout) :: t
-real, intent(inout) :: y(n), dy(n), w(*)
-external f
-integer :: i, j, k, l, m, m1
-real :: ha, sum, b(8,7)
-real, parameter :: a(7) = [.3333333333333333, .5, .6666666666666666, .1666666666666666, 1., .8333333333333333, 1.]
-real, parameter :: c(7) = [12., 8., 54., 4320., 20., 288., 820.]
-real, parameter :: d(9) = [41., 0., 27., 272., 27., 216., 0., 216., 41.]
-!     ******************************************************************
-!     Eighth order Runge-Kutta procedure for solving dy=F(t,y)
-!     ******************************************************************
-!     -------------------
-data b(1,1)/1./,  b(2,1)/3./
-data b(1,2)/1./,  b(2,2)/0./,  b(3,2)/3./
-data b(1,3)/13./,  b(2,3)/-27./,  b(3,3)/42./,  b(4,3)/8./
-data b(1,4)/389./,  b(2,4)/-54./,  b(3,4)/966./,  b(4,4)/-824./, &
-   & b(5,4)/243./
-data b(1,5)/-231./,  b(2,5)/81./,  b(3,5)/-1164./,  b(4,5)/656./, &
-   & b(5,5)/-122./,  b(6,5)/800./
-data b(1,6)/-127./,  b(2,6)/18./,  b(3,6)/-678./,  b(4,6)/456./, &
-   & b(5,6)/-9./,  b(6,6)/576./,  b(7,6)/4./
-data b(1,7)/1481./,  b(2,7)/-81./,  b(3,7)/7104./, &
-   & b(4,7)/-3376./,  b(5,7)/72./,  b(6,7)/-5040./, &
-   & b(7,7)/-60./,  b(8,7)/720./
-!     -------------------
-if (h == 0.) go to 40
-ha = h*4./27.
-do k = 1,n
-   w(k) = y(k) + ha*dy(k)
-end do
-call f(t + ha,w(1))
-do k = 1,n
-   w(k) = y(k) + h*(dy(k)/18. + w(k)/6.)
-end do
-call f(t + h*2./9.,w(1))
-i = 1
-do m = 2,8
-   i = i + n
-   m1 = m - 1
-   do k = 1,n
-      sum = b(1,m1)*dy(k)
-      l = k
-      do j = 2,m
-         sum = sum + b(j,m1)*w(l)
-         l = l + n
-      end do
-      w(l) = y(k) + sum*h/c(m1)
-   end do
-   call f(t + a(m1)*h,w(i))
-end do
-do k = 1,n
-   sum = d(1)*dy(k)
-   l = k
-   do m = 2,9
-      sum = sum + d(m)*w(l)
-      l = l + n
-   end do
-   y(k) = y(k) + h*sum/840.
-   dy(k) = y(k)
-end do
-t = t + h
-call f(t,dy)
-return
-40 do k = 1,n
-   dy(k) = y(k)
-end do
-call f(t,dy)
-end subroutine rk8
-
-subroutine sepde(cofx, cofy, g, edge, bval, iord, a, b, mp1, &
-   & c, d, np1, u, ku, w, nw, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer :: iord, ku, mp1
-integer, intent(in) :: np1
-integer, intent(inout) :: nw
-real :: a, b, c, d
-real :: g
-real :: bval
-real, intent(inout) :: u(ku,np1), w(nw)
-integer, intent(in) :: edge(4)
-external cofx, cofy
-integer :: i, ia, ib, ic, id, ij, imax, imin, indx, indy, iw, j, &
-   & jcol, jmax, jmin, l, m, mn, n
-real :: alpha, beta, del, gam, hx, hy, p, xi, xmin, yj, ymin, dum(1)
-! ----------------------------------------------------------------------
-!     Solution of separable elliptic partial differential equations
-!                     on rectangular domains
-! ----------------------------------------------------------------------
-!     --------------
-data alpha/0.0/, beta/0.0/, gam/0.0/, del/0.0/
-!     --------------
-call pdedge(edge, indx, indy, ierr)
-if (ierr /= 0) return
-if (a >= b .or. c >= d) go to 300
-if (mp1 < 7) go to 320
-if (np1 < 6) go to 330
-m = mp1 - 1
-n = np1 - 1
-hx = (b - a)/float(m)
-hy = (d - c)/float(n)
-!     Define the maximum and minimum row and column
-!     that is needed for the right-hand side matrix
-xmin = a
-ymin = c
-imin = 1
-imax = mp1
-jmin = 1
-jmax = np1
-jcol = 0
-if (edge(1) /= 0) go to 10
-jmin = 2
-ymin = c + hy
-jcol = mp1
-10 if (edge(2) /= 0) go to 20
-imin = 2
-xmin = a + hx
-20 if (edge(3) == 0) jmax = n
-if (edge(4) == 0) imax = m
-!     Define the right-hand side matrix for iord = 2
-if (ku < mp1) go to 310
-if (iord /= 2) go to 40
-mn = 0
-yj = ymin
-do j = jmin,jmax
-   xi = xmin
-   do i = imin,imax
-      u(i,j) = g(xi, yj)
-      xi = xi + hx
-   end do
-   yj = yj + hy
-end do
-go to 60
-!     Define the right-hand side matrix for iord = 4
-40 if (iord /= 4) go to 340
-mn = mp1*np1
-if (mn >= nw) go to 100
-yj = ymin
-do j = jmin,jmax
-   xi = xmin
-   do i = imin,imax
-      ij = i + jcol
-      w(ij) = g(xi, yj)
-      xi = xi + hx
-   end do
-   yj = yj + hy
-   jcol = jcol + mp1
-end do
-!     Store the boundary values of u
-60 if (edge(1) /= 0) go to 70
-xi = a
-do i = 1,mp1
-   u(i,1) = bval(1,xi,c)
-   xi = xi + hx
-end do
-70 if (edge(2) /= 0) go to 80
-yj = c
-do j = 1,np1
-   u(1,j) = bval(2,a,yj)
-   yj = yj + hy
-end do
-80 if (edge(3) /= 0) go to 90
-xi = a
-do i = 1,mp1
-   u(i,np1) = bval(3,xi,d)
-   xi = xi + hx
-end do
-90 if (edge(4) /= 0) go to 100
-yj = c
-do j = 1,np1
-   u(mp1,j) = bval(4,b,yj)
-   yj = yj + hy
-end do
-!     Store the mixed boundary conditions
-100 ic = mn + 1
-if (edge(1) /= 1) go to 120
-mn = mn + mp1
-if (mn >= nw) go to 120
-xi = a
-l = ic
-do i = 1,mp1
-   w(l) = bval(1,xi,c)
-   xi = xi + hx
-   l = l + 1
-end do
-120 ia = mn + 1
-if (edge(2) /= 1) go to 140
-mn = mn + np1
-if (mn >= nw) go to 140
-yj = c
-l = ia
-do j = 1,np1
-   w(l) = bval(2,a,yj)
-   yj = yj + hy
-   l = l + 1
-end do
-140 id = mn + 1
-if (edge(3) /= 1) go to 160
-mn = mn + mp1
-if (mn >= nw) go to 160
-xi = a
-l = id
-do i = 1,mp1
-   w(l) = bval(3,xi,d)
-   xi = xi + hx
-   l = l + 1
-end do
-160 ib = mn + 1
-if (edge(4) /= 1) go to 200
-mn = mn + np1
-if (mn >= nw) go to 200
-yj = c
-l = ib
-do j = 1,np1
-   w(l) = bval(4,b,yj)
-   yj = yj + hy
-   l = l + 1
-end do
-!     CALL THE DIFFERENTIAL EQUATION SOLVER
-200 if (mn >= nw) go to 350
-iw = mn + 1
-w(iw) = nw - mn
-if (iord == 4) go to 210
-call sepell(0, iord, a, b, m, indx, w(ia), alpha, w(ib), beta, &
-   & c, d, n, indy, w(ic), gam, w(id), del, cofx, cofy, &
-   & u, ku, u, ku, w(iw), p, ierr)
-go to 220
-210 call sepell(0, iord, a, b, m, indx, w(ia), alpha, w(ib), beta, &
-   & c, d, n, indy, w(ic), gam, w(id), del, cofx, cofy, &
-   & w(1),mp1, u, ku, w(iw), p, ierr)
-220 nw = w(iw) + mn
-if (ierr /= 0) return
-if (p == 0.0) return
-ierr = -1
-w(1) = p
-return
-!     Error return
-300 ierr = 1
-return
-310 ierr = 5
-return
-320 ierr = 6
-return
-330 ierr = 7
-return
-340 ierr = 8
-return
-350 dum(1) = 1.0
-call sepell(0, iord, a, b, m, indx, dum, alpha, dum, beta, &
-   & c, d, n, indy, dum, gam, dum, del, cofx, cofy, &
-   & u, ku, u, ku, dum, p, ierr)
-nw = dum(1) + mn
-end subroutine sepde
-
-pure subroutine pdedge(edge, indx, indy, ierr)
-implicit none
-integer, intent(inout) :: ierr, indx, indy
-integer, intent(in) :: edge(4)
-integer :: nswc_ai_i4
-if (abs(edge(1)) > 1) go to 200
-if (abs(edge(2)) > 1) go to 200
-if (abs(edge(3)) > 1) go to 200
-if (abs(edge(4)) > 1) go to 200
-ierr = 0
-!               Process edges 1 and 3
-nswc_ai_i4 = edge(1)
-if (nswc_ai_i4 < 0) go to 10
-if (nswc_ai_i4 == 0) go to 20
-go to 30
-10 if (edge(3) /= -1) go to 210
-indy = 0
-go to 100
-20 if (edge(3) == -1) go to 210
-indy = 1 + edge(3)
-go to 100
-30 if (edge(3) == -1) go to 210
-indy = 4 - edge(3)
-!               Process edges 2 and 4
-100 nswc_ai_i4 = edge(2)
-if (nswc_ai_i4 < 0) go to 110
-if (nswc_ai_i4 == 0) go to 120
-go to 130
-110 if (edge(4) /= -1) go to 220
-indx = 0
-return
-120 if (edge(4) == -1) go to 220
-indx = 1 + edge(4)
-return
-130 if (edge(4) == -1) go to 220
-indx = 4 - edge(4)
-return
-!                   Error return
-200 ierr = 2
-return
-210 ierr = 12
-return
-220 ierr = 13
-end subroutine pdedge
-
-subroutine sepell(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
-   & d,n,nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,grhs,mn, &
-   & usol,idmn,w,pertrb,ierror)
-implicit none
-integer :: idmn
-integer, intent(inout) :: ierror
-integer :: intl, iorder, m, mbdcnd, mn, n, nbdcnd
-real :: a, alpha, b, beta, c, d, gama
-real, intent(inout) :: pertrb
-real :: xnu
-real, intent(inout) :: grhs(mn,*), usol(idmn,*)
-real :: bda(*), bdb(*), bdc(*), bdd(*)
-real, intent(inout) :: w(*)
-external cofx, cofy
-integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
-   & k, l, length, linput, ll, logb2n, loutpt
-! DIMENSION OF           bda(n+1), bdb(n+1), bdc(m+1), bdd(m+1),
-! ARGUMENTS              usol(idmn,n+1), grhs(mn,n+1),
-!                        w (see argument list)
-! LATEST REVISION        JANUARY 1978 (BY THE AUTHORS)
-!                        modified 1986 by A.H. Morris (NSWC)
-! PURPOSE                sepell SOLVES FOR EITHER THE SECOND-ORDER
-!                        finite difference approximation or A
-!                        fourth-order approximation to a separable
-!                        elliptic equation
-!                                    2    2
-!                             AF(X)*d U/DX + BF(X)*DU/DX  + CF(X)*U +
-!                                    2    2
-!                             DF(Y)*d U/DY  + EF(Y)*DU/DY + FF(Y)*U
-!                             = G(X,Y)
-!                        on a rectangle (X greater than or equal to A
-!                        and less than or equal to b, Y greater than
-!                        or equal to c and less than or equal to d).
-!                        Any combination of periodic or mixed boundary
-!                        conditions is allowed.
-! PURPOSE                THE POSSIBLE BOUNDARY CONDITIONS ARE ...
-!                        In the X-direction..
-!                         (0) Periodic, U(X+b-a,Y)=U(X,Y) for all Y,X
-!                         (1) U(a,Y), U(b,Y) are specified for all Y
-!                         (2) U(a,Y), DU(b,Y)/DX+beta*U(b,Y) are
-!                             specified for all Y
-!                         (3) DU(a,Y)/DX+alpha*U(a,Y),DU(b,Y)/DX+
-!                             beta*U(b,Y) are specified for all Y
-!                         (4) DU(a,Y)/DX+alpha*U(a,Y),U(b,Y) are
-!                             specified for all Y
-!                        in the Y-direction..
-!                         (0) Periodic, U(X,Y+d-c)=U(X,Y) for all X,Y
-!                         (1) U(X,c),U(X,d) are specified for all X
-!                         (2) U(X,c),DU(X,d)/DY+xnu*U(X,d) are specified
-!                             for all X
-!                         (3) DU(X,c)/DY+gama*U(X,c),DU(X,d)/DY+
-!                             xnu*U(X,d) are specified for all X
-!                         (4) DU(X,c)/DY+gama*U(X,c),U(X,d) are
-!                             specified for all X
-! arguments
-! ON INPUT               INTL
-!                          = 0 On initial entry to sepell or if any of
-!                              the arguments c, d, n, nbdcnd, COFY are
-!                              changed from a previous call
-!                          = 1 IF c, d, n, nbdcnd, COFY ARE UNCHANGED
-!                              from the previous call.
-!                        iorder
-!                          = 2 If a second-order approximation is sought
-!                          = 4 If a fourth-order approximation is sought
-!                        A,b
-!                          the range of the X-independent variable,
-!                          I.E., X is greater than or equal to A and
-!                          less than or equal to b. A must be less than
-!                          b.
-!                        m
-!                          the number of panels into which the interval
-!                          (A,b) is subdivided.  Hence, there will be
-!                          m+1 grid points in the X-direction given by
-!                          XI=a+(I-1)*DLX FOR I=1,2,...,m+1 WHERE
-!                          DLX=(b-a)/m is the panel width.  m must be
-!                          less than idmn and greater than 5.
-!                        mbdcnd
-!                          indicates the type of boundary condition at
-!                          X=a AND X=b
-!                          = 0 If the solution is periodic in X, I.E.,
-!                              U(X+b-a,Y)=U(X,Y) for all Y,X
-!                          = 1 If the solution is specified at X=a and
-!                              X=b, I.E., U(a,Y) and U(b,Y) are
-!                              specified for all Y
-!                          = 2 If the solution is specified at X=a and
-!                              the boundary condition is mixed at X=b,
-!                              I.E., U(a,Y) and DU(b,Y)/DX+beta*U(b,Y)
-!                              are specified for all Y
-!                          = 3 If the boundary conditions at X=a and X=b
-!                              are mixed, I.E., DU(a,Y)/DX+alpha*U(a,Y)
-!                              and DU(b,Y)/DX+beta*U(b,Y) are specified
-!                              for all Y
-!                          = 4 If the boundary condition at X=a is mixed
-!                              and the solution is specified at X=b,
-!                              I.E., DU(a,Y)/DX+alpha*U(a,Y) and U(b,Y)
-!                              are specified for all Y
-!                        bda
-!                          a one-dimensional array of length n+1 that
-!                          specifies the values of DU(a,Y)/DX+
-!                          alpha*U(a,Y) AT X=a. WHEN mbdcnd=3 OR 4
-!                               bda(j) = du(a,yj)/dx+alpha*u(a,yj),
-!                               j=1,2,...,n+1.
-!                          When mbdcnd has any other value, bda is A
-!                          dummy parameter.
-! ON INPUT               alpha
-!                          the scalar multiplying the solution in case
-!                          of a mixed boundary condition at X=a (see
-!                          argument bda). If mbdcnd.NE.3,4 then alpha
-!                          is a dummy parameter.
-!                        bdb
-!                          a one-dimensional array of length n+1 that
-!                          specifies the values of DU(b,Y)/DX+
-!                          beta*U(b,Y) AT X=b.  WHEN mbdcnd=2 OR 3
-!                               bdb(j) = du(b,yj)/dx+beta*u(b,yj),
-!                               j=1,2,...,n+1.
-!                          When mbdcnd has any other value, bdb is A
-!                          dummy parameter.
-!                        beta
-!                          the scalar multiplying the solution in case
-!                          of a mixed boundary condition at X=b (see
-!                          argument bdb). If mbdcnd.NE.2,3 then beta is
-!                          a dummy parameter.
-!                        c,d
-!                          the range of the Y-independent variable,
-!                          I.E., Y is greater than or equal to c and
-!                          less than or equal to d.  c must be less
-!                          THAN d.
-!                        n
-!                          the number of panels into which the interval
-!                          (c,d) is subdivided.  Hence, there will be
-!                          n+1 grid points in the Y-direction given by
-!                          YJ=c+(J-1)*DLY FOR J=1,2,...,n+1 WHERE
-!                          DLY=(d-c)/n is the panel width. In addition,
-!                          n must be greater than 4.
-!                        nbdcnd
-!                          indicates the types of boundary conditions
-!                          AT Y=c AND Y=d
-!                          = 0 If the solution is periodic in Y, I.E.,
-!                              U(X,Y+d-c)=U(X,Y) for all X,Y
-!                          = 1 If the solution is specified at Y=c and
-!                              Y = d, I.E., U(X,c) and U(X,d) are
-!                              specified for all X
-!                          = 2 If the solution is specified at Y=c and
-!                              the boundary condition is mixed at Y=d,
-!                              I.E., U(X,c) AND DU(X,d)/DY+xnu*U(X,d)
-!                              are specified for all X
-!                          = 3 If the boundary conditions are mixed at
-!                              Y=c AND Y=d, I.E., DU(X,d)/DY+gama*U(X,c)
-!                              and DU(X,d)/DY+xnu*U(X,d) are specified
-!                              for all X
-!                          = 4 If the boundary condition is mixed at Y=c
-!                              and the solution is specified at Y=d,
-!                              I.E. DU(X,c)/DY+gama*U(X,c) and U(X,d)
-!                              are specified for all X
-!                        bdc
-!                          a one-dimensional array of length m+1 that
-!                          specifies the value of DU(X,c)/DY+gama*U(X,c)
-!                          AT Y=c.  WHEN nbdcnd=3 OR 4
-!                             bdc(i) = du(xi,c)/dy + gama*u(xi,c),
-!                             i=1,2,...,m+1.
-!                          When nbdcnd has any other value, bdc is A
-!                          dummy parameter.
-!                        Gama
-!                          the scalar multiplying the solution in case
-!                          of a mixed boundary condition at Y=c (see
-!                          argument bdc). If nbdcnd.NE.3,4 then gama is
-!                          a dummy parameter.
-!                        bdd
-!                          a one-dimensional array of length m+1 that
-!                          specifies the value of DU(X,d)/DY +
-!                          xnu*U(X,d) AT Y=c.  WHEN nbdcnd=2 OR 3
-!                            bdd(i) = du(xi,d)/dy + xnu*u(xi,d),
-!                            i=1,2,...,m+1.
-!                          When nbdcnd has any other value, bdd is A
-!                          dummy parameter.
-!                        xnu
-!                          the scalar multiplying the solution in case
-!                          of a mixed boundary condition at Y=d (see
-!                          ARGUMENT bdd). IF nbdcnd.NE.2 OR 3 THEN xnu
-!                          is a dummy parameter.
-!                        COFX
-!                          a user-supplied subprogram with
-!                          PARAMETERS X, AFUN, BFUN, CFUN WHICH
-!                          returns the values of the X-dependent
-!                          coefficients AF(X), BF(X), CF(X) in
-!                          the elliptic equation at X.
-!                        COFY
-!                          a user-supplied subprogram with
-!                          PARAMETERS Y, DFUN, EFUN, FFUN WHICH
-!                          returns the values of the Y-dependent
-!                          coefficients DF(Y), EF(Y), FF(Y) in
-!                          the elliptic equation at Y.
-!                        Note.  COFX and COFY must be declared external
-!                        in the calling routine. The values returned in
-!                        AFUN AND DFUN MUST SATISFY AFUN*DFUN GREATER
-!                        than 0 for a less than X less than b,
-!                        c less than Y less than d (see ierror=10).
-!                        The coefficients provided may lead to a matrix
-!                        equation which is not diagonally dominant in
-!                        which case solution may fail (see ierror=4).
-!                        grhs
-!                          a two-dimensional array that specifies the
-!                          values of the right-hand side of the elliptic
-!                          EQUATION, I.E., grhs(I,J)=G(XI,YI), FOR
-!                          I=2,...,m, J=2,...,n.  at the boundaries,
-!                          grhs is defined by
-!                          mbdcnd   grhs(1,J)   grhs(m+1,J)
-!                          ------   ---------   -----------
-!                            0      G(a,YJ)     G(b,YJ)
-!                            1         *           *
-!                            2         *        G(b,YJ)  J=1,2,...,n+1
-!                            3      G(a,YJ)     G(b,YJ)
-!                            4      G(a,YJ)        *
-!                          nbdcnd   grhs(I,1)   grhs(I,n+1)
-!                          ------   ---------   -----------
-!                            0      G(XI,c)     G(XI,d)
-!                            1         *           *
-!                            2         *        G(XI,d)  I=1,2,...,m+1
-!                            3      G(XI,c)     G(XI,d)
-!                            4      G(XI,c)        *
-!                          where * means these quantites are not used.
-!                          grhs should be dimensioned mn by at least
-!                          n+1 in the calling routine.
-!                        mn
-!                          the row (or first) dimension of the array
-!                          grhs as it appears in the program calling
-!                          sepell. mn must be at least 7 and greater
-!                          than or equal to m+1.
-!                        usol
-!                          a two-dimensional array that specifies the
-!                          values of the solution along the boundaries.
-!                          At the boundaries, usol is defined by
-!                          mbdcnd   usol(1,J)   usol(m+1,J)
-!                          ------   ---------   -----------
-!                            0         *           *
-!                            1      U(a,YJ)     U(b,YJ)
-!                            2      U(a,YJ)        *     J=1,2,...,n+1
-!                            3         *           *
-!                            4         *        U(b,YJ)
-!                          nbdcnd   usol(I,1)   usol(I,n+1)
-!                          ------   ---------   -----------
-!                            0         *           *
-!                            1      U(XI,c)     U(XI,d)
-!                            2      U(XI,c)        *     I=1,2,...,m+1
-!                            3         *           *
-!                            4         *        U(XI,d)
-!                          where * means the quantites are not used in
-!                          the solution.
-!                          If iorder=2 And idmn=mn, then the user may
-!                          equivalence grhs and usol. Note that in this
-!                          case the tables specifying the boundaries of
-!                          the grhs and usol arrays determine the
-!                          boundaries uniquely except at the corners.
-!                          If the tables call for both G(X,Y) and
-!                          U(X,Y) at a corner then the solution must be
-!                          chosen.  For example, if mbdcnd=2 And
-!                          nbdcnd=4, then U(a,c), U(a,d), U(b,d) must be
-!                          chosen at the corners in addition to G(b,c).
-!                          If iorder=4, then the two arrays, usol and
-!                          grhs, must be distinct.
-!                          usol should be dimensioned idmn by at least
-!                          n+1 in the calling routine.
-!                        idmn
-!                          the row (or first) dimension of the array
-!                          usol as it appears in the program calling
-!                          sepell. idmn must be at least 7 and greater
-!                          than or equal to m+1.
-!                        w
-!                          a one-dimensional array that must be provided
-!                          by the user for work space.  Let
-!                          K=int(LOG2(n+1))+1 and set  L=2**(K+1).
-!                          Then (K-2)*L+K+10*n+12*m+27 will suffice
-!                          as a length of w.  the actual length of w in
-!                          the calling routine must be set in w(1) (see
-!                          ierror=11).
-! ON OUTPUT              usol
-!                          contains the approximate solution to the
-!                          elliptic equation.  usol(I,J) is the
-!                          approximation to U(XI,YJ) for I=1,2...,m+1
-!                          and J=1,2,...,n+1.  The approximation has
-!                          error O(DLX**2+DLY**2) if called with
-!                          iorder=2 And O(DLX**4+DLY**4) if called with
-!                          iorder=4.
-!                        w
-!                          contains intermediate values that must not be
-!                          destroyed if sepell is called again with
-!                          intl=1.  In addition w(1) contains the exact
-!                          minimal length (in floating point) required
-!                          for the work space (see ierror=11).
-!                        pertrb
-!                          if a combination of periodic or derivative
-!                          boundary conditions (I.E., alpha=beta=0 If
-!                          mbdcnd=3, gama=xnu=0 IF nbdcnd=3) IS
-!                          specified and if the coefficients of U(X,Y)
-!                          in the separable elliptic equation are zero
-!                          (I.E., CF(X)=0 For X greater than or equal to
-!                          A and less than or equal to b, FF(Y)=0 For
-!                          Y greater than or equal to c and less than
-!                          or equal to d) then a solution may not exist.
-!                          pertrb is a constant calculated and
-!                          subtracted from the right-hand side of the
-!                          matrix equations generated by sepell which
-!                          insures that a solution exists.  sepell then
-!                          computes this solution which is a weighted
-!                          minimal least squares solution to the
-!                          original problem.
-!                        Ierror
-!                          an error flag that indicates invalid input
-!                          parameters or failure to find a solution
-!                          = 0 No error
-!                          = 1 If a greater than b or c greater than d
-!                          = 2 If mbdcnd less than 0 or mbdcnd greater
-!                              than 4
-!                          = 3 If nbdcnd less than 0 or nbdcnd greater
-!                              than 4
-!                          = 4 If attempt to find a solution fails.
-!                              (The linear system generated is not
-!                              diagonally dominant.)
-!                          = 5 If idmn or mn is too small.
-!                          = 6 If m is too small or too large (see
-!                              discussion of m)
-!                          = 7 If n is too small (see discussion of n)
-!                          = 8 If iorder is not 2 or 4
-!                          = 9 If intl is not 0 or 1
-!                          = 10 If AFUN*DFUN less than or equal to 0 for
-!                               some interior mesh point (XI,YJ)
-!                          = 11 If the work space length input in w(1)
-!                               is less than the exact minimal work
-!                               space length required output in w(1).
-!                          Note (concerning ierror=4).  For the
-!                          coefficients input through COFX, COFY, the
-!                          discretization may lead to a block
-!                          tridiagonal linear system which is not
-!                          diagonally dominant (for example, this
-!                          happens if CFUN=0 And BFUN/(2.*DLX) greater
-!                          than AFUN/DLX**2).  In this case solution may
-!                          fail.  This cannot happen in the limit as
-!                          DLX, DLY approach zero.  Hence, the condition
-!                          may be remedied by taking larger values for m
-!                          or n.
-! ENTRY POINTS           sepell, sepel1, chkprm, chksng, orthg, minsol,
-!                        trisp, defer, dxfn, dyfn, blktri, blktr1,indxb,
-!                        indxa, indxc, prod0, prodp, cprod0, cprodp,
-!                        ppadd, psgf, bsrh, ppsgf, ppspf, compb,
-!                        tqlrt0, spmpar
-! SPECIAL CONDITIONS     NONE
-! COMMON BLOCKS          SPLP, CBLKT
-! I/O                    NONE
-! PRECISION              SINGLE
-! SPECIALIST             JOHN c. ADAMS, NCAR, BOULDER, COLORADO  80307
-! HISTORY                DEVELOPED AT NCAR DURING 1975-76.
-! ALGORITHM              sepell AUTOMATICALLY DISCRETIZES THE SEPARABLE
-!                        elliptic equation which is then solved by A
-!                        generalized cyclic reduction algorithm in the
-!                        subroutine, blktri.  The fourth-order solution
-!                        is obtained using deferred corrections, which
-!                        is described and referenced in sections,
-!                        references and method.
-! ACCURACY AND TIMING    THE FOLLOWING COMPUTATIONAL RESULTS WERE
-!                        obtained by solving the sample problem at the
-!                        END OF THIS WRITE-UP ON THE CONTROL DATA 7600.
-!                        The OP count is proportional to m*n*LOG2(n).
-!                        In contrast to the other routines in this
-!                        chapter, accuracy is tested by computing and
-!                        tabulating second- and fourth-order
-!                        discretization errors.  Below is a table
-!                        containing computational results.  The times
-!                        given do not include initialization (I.E.,
-!                        times are for intl=1).  Note that the
-!                        fourth-order accuracy is not realized until the
-!                        mesh is sufficiently refined.
-!              SECOND-ORDER    FOURTH-ORDER   SECOND-ORDER  FOURTH-ORDER
-!    m    n   EXECUTION TIME  EXECUTION TIME    ERROR         ERROR
-!               (m SEC)         (m SEC)
-!     6    6         6              14          6.8E-1        1.2E0
-!    14   14        23              58          1.4E-1        1.8E-1
-!    30   30       100             247          3.2E-2        9.7E-3
-!    62   62       445           1,091          7.5E-3        3.0E-4
-!   126  126     2,002           4,772          1.8E-3        3.5E-6
-! PORTABILITY            THE VALUE GIVEN BY spmpar(1) IS THE ONLY
-!                        machine dependent constant that is used.
-! REFERENCES             KELLER, H.B., NUMERICAL METHODS FOR TWO-POINT
-!                          boundary-value problems, Blaisdel (1968),
-!                          WALTHAM, mass.
-!                        Swarztrauber, P., And R. sweet (1975),
-!                          efficient Fortran subprograms for the
-!                          solution of elliptic partial differential
-!                          equations.  NCAR technical note
-!                          NCAR-TN/ia-109, PP. 135-137.
-!     check input parameters
-call chkprm(intl,iorder,a,b,m,mbdcnd,c,d,n,nbdcnd,cofx,cofy, &
-   & idmn,mn,ierror)
-if (ierror /= 0) return
-!     Compute minimum work space and check work space length input
-l = n + 1
-if (nbdcnd == 0) l = n
-logb2n = int(log(float(l) + 0.5)/log(2.0)) + 1
-ll = 2**(logb2n + 1)
-k = m + 1
-l = n + 1
-length = (logb2n - 2)*ll + logb2n + max(2*l,6*k) + 5
-if (nbdcnd == 0) length = length + 2*l
-ierror = 11
-linput = int(w(1) + 0.5)
-loutpt = length + 6*(k + l) + 1
-w(1) = float(loutpt)
-if (loutpt > linput) return
-ierror = 0
-!     Set work space indices
-i1 = length + 2
-i2 = i1 + l
-i3 = i2 + l
-i4 = i3 + l
-i5 = i4 + l
-i6 = i5 + l
-i7 = i6 + l
-i8 = i7 + k
-i9 = i8 + k
-i10 = i9 + k
-i11 = i10 + k
-i12 = i11 + k
-i13 = 2
-call sepel1(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c,d,n, &
-   & nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,w(i1),w(i2),w(i3), &
-   & w(i4),w(i5),w(i6),w(i7),w(i8),w(i9),w(i10),w(i11), &
-   & w(i12),grhs,mn,usol,idmn,w(i13),pertrb,ierror)
-end subroutine sepell
-
-subroutine sepel1(intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
-   & d,n,nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,an,bn, &
-   & cn,dn,un,zn,am,bm,cm,dm,um,zm,grhs,mn,usol, &
-   & idmn,w,pertrb,ierror)
-implicit none
-integer :: idmn, ierror, intl, iorder, m, mbdcnd, mn, n, nbdcnd
-real :: a, alpha, am(*), an(*), b, bda(*), bdb(*), bdc(*), bdd(*), &
-   & beta, bm(*), bn(*), c, cm(*), cn(*), d, dm(*), dn(*), gama, &
-   & grhs(mn,*), pertrb, um(*), un(*), usol(idmn,*), w(*), xnu, zm(*), &
-   & zn(*)
-external cofx, cofy
-integer :: i, i1, iord, j, mp, np
-real :: ai, ax1, axi, bi, bxi, ci, cxi, cxm, dj, dy1, dyj, ej, &
-   & eyj, fj, fyj, fyn, prtrb, xi, yj
-integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
-real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
-logical :: singlr
-!     sepel1 sets up vectors and arrays for input to blktri
-!     and computes a second order solution in USOL.  A return jump to
-!     sepell OCCURRS IF iorder=2.  IF iorder=4 A FOURTH ORDER
-!     solution is generated in USOL.
-common /splp/   kswx       ,kswy       ,k          ,l          , &
-   & ait        ,bit        ,cit        ,dit        , &
-   & mit        ,nit        ,is         ,ms         , &
-   & js         ,ns         ,dlx        ,dly        , &
-   & tdlx3      ,tdly3      ,dlx4       ,dly4
-!     Set parameters internally
-kswx = mbdcnd + 1
-kswy = nbdcnd + 1
-k = m + 1
-l = n + 1
-ait = a
-bit = b
-cit = c
-dit = d
-!     Set right hand side values from GRHS in USOL on the interior
-!     and non-specified boundaries.
-do i = 2,m
-   do j = 2,n
-      usol(i,j) = grhs(i,j)
-   end do
-end do
-if (kswx == 2 .or. kswx == 3) go to  40
-do j = 2,n
-   usol(1,j) = grhs(1,j)
-end do
-40 continue
-if (kswx == 2 .or. kswx == 5) go to  60
-do j = 2,n
-   usol(k,j) = grhs(k,j)
-end do
-60 continue
-if (kswy == 2 .or. kswy == 3) go to  80
-do i = 2,m
-   usol(i,1) = grhs(i,1)
-end do
-80 continue
-if (kswy == 2 .or. kswy == 5) go to 100
-do i = 2,m
-   usol(i,l) = grhs(i,l)
-end do
-100 continue
-if (kswx /= 2 .and. kswx /= 3 .and. kswy /= 2 .and. kswy /= 3) &
-   & usol(1,1) = grhs(1,1)
-if (kswx /= 2 .and. kswx /= 5 .and. kswy /= 2 .and. kswy /= 3) &
-   & usol(k,1) = grhs(k,1)
-if (kswx /= 2 .and. kswx /= 3 .and. kswy /= 2 .and. kswy /= 5) &
-   & usol(1,l) = grhs(1,l)
-if (kswx /= 2 .and. kswx /= 5 .and. kswy /= 2 .and. kswy /= 5) &
-   & usol(k,l) = grhs(k,l)
-i1 = 1
-!     Set switches for periodic or non-periodic boundaries
-mp = 1
-np = 1
-if (kswx == 1) mp = 0
-if (kswy == 1) np = 0
-!     Set dlx,dly and size of block tri-diagonal system generated
-!     in NINT,mint
-dlx = (bit - ait)/float(m)
-mit = k - 1
-if (kswx == 2) mit = k - 2
-if (kswx == 4) mit = k
-dly = (dit - cit)/float(n)
-nit = l - 1
-if (kswy == 2) nit = l - 2
-if (kswy == 4) nit = l
-tdlx3 = 2.0*dlx**3
-dlx4 = dlx**4
-tdly3 = 2.0*dly**3
-dly4 = dly**4
-!     Set subscript limits for portion of array to input to blktri
-is = 1
-js = 1
-if (kswx == 2 .or. kswx == 3) is = 2
-if (kswy == 2 .or. kswy == 3) js = 2
-ns = nit + js - 1
-ms = mit + is - 1
-!     Set X - Direction
-do i = 1,mit
-   xi = ait + float(is + i - 2)*dlx
-   call cofx(xi,ai,bi,ci)
-   axi = (ai/dlx - 0.5*bi)/dlx
-   bxi = -2.*ai/dlx**2 + ci
-   cxi = (ai/dlx + 0.5*bi)/dlx
-   am(i) = axi
-   bm(i) = bxi
-   cm(i) = cxi
-end do
-!     Set Y direction
-do j = 1,nit
-   yj = cit + float(js + j - 2)*dly
-   call cofy(yj,dj,ej,fj)
-   dyj = (dj/dly - 0.5*ej)/dly
-   eyj = (-2.*dj/dly**2 + fj)
-   fyj = (dj/dly + 0.5*ej)/dly
-   an(j) = dyj
-   bn(j) = eyj
-   cn(j) = fyj
-end do
-!     Adjust edges in X direction unless periodic
-ax1 = am(1)
-cxm = cm(mit)
-select case (kswx)
-case (1)
-   go to 170
-case (2)
-   go to 130
-case (3)
-   go to 150
-case (4)
-   go to 160
-case (5)
-   go to 140
-end select
-!     Dirichlet-Dirichlet in X direction
-130 am(1) = 0.0
-cm(mit) = 0.0
-go to 170
-!     Mixed-Dirichlet in X direction
-140 am(1) = 0.0
-bm(1) = bm(1) + 2.*alpha*dlx*ax1
-cm(1) = cm(1) + ax1
-cm(mit) = 0.0
-go to 170
-!     Dirichlet-mixed in X direction
-150 am(1) = 0.0
-am(mit) = am(mit) + cxm
-bm(mit) = bm(mit) - 2.*beta*dlx*cxm
-cm(mit) = 0.0
-go to 170
-!     Mixed - Mixed in X direction
-160 continue
-am(1) = 0.0
-bm(1) = bm(1) + 2.*dlx*alpha*ax1
-cm(1) = cm(1) + ax1
-am(mit) = am(mit) + cxm
-bm(mit) = bm(mit) - 2.*dlx*beta*cxm
-cm(mit) = 0.0
-170 continue
-!     Adjust in Y direction unless periodic
-dy1 = an(1)
-fyn = cn(nit)
-select case (kswy)
-case (1)
-   go to 220
-case (2)
-   go to 180
-case (3)
-   go to 200
-case (4)
-   go to 210
-case (5)
-   go to 190
-end select
-!     Dirichlet-Dirichlet in Y direction
-180 continue
-an(1) = 0.0
-cn(nit) = 0.0
-go to 220
-!     Mixed-Dirichlet in Y direction
-190 continue
-an(1) = 0.0
-bn(1) = bn(1) + 2.*dly*gama*dy1
-cn(1) = cn(1) + dy1
-cn(nit) = 0.0
-go to 220
-!     Dirichlet-mixed in Y direction
-200 an(1) = 0.0
-an(nit) = an(nit) + fyn
-bn(nit) = bn(nit) - 2.*dly*xnu*fyn
-cn(nit) = 0.0
-go to 220
-!     Mixed - Mixed direction in Y direction
-210 continue
-an(1) = 0.0
-bn(1) = bn(1) + 2.*dly*gama*dy1
-cn(1) = cn(1) + dy1
-an(nit) = an(nit) + fyn
-bn(nit) = bn(nit) - 2.0*dly*xnu*fyn
-cn(nit) = 0.0
-220 if (kswx == 1) go to 270
-!     Adjust USOL along X edge
-do j = js,ns
-   if (kswx /= 2 .and. kswx /= 3) go to 230
-   usol(is,j) = usol(is,j) - ax1*usol(1,j)
-   go to 240
-230 usol(is,j) = usol(is,j) + 2.0*dlx*ax1*bda(j)
-240 if (kswx /= 2 .and. kswx /= 5) go to 250
-   usol(ms,j) = usol(ms,j) - cxm*usol(k,j)
-   go to 260
-250 usol(ms,j) = usol(ms,j) - 2.0*dlx*cxm*bdb(j)
-260 continue
-end do
-270 if (kswy == 1) go to 320
-!     Adjust USOL along Y edge
-do i = is,ms
-   if (kswy /= 2 .and. kswy /= 3) go to 280
-   usol(i,js) = usol(i,js) - dy1*usol(i,1)
-   go to 290
-280 usol(i,js) = usol(i,js) + 2.0*dly*dy1*bdc(i)
-290 if (kswy /= 2 .and. kswy /= 5) go to 300
-   usol(i,ns) = usol(i,ns) - fyn*usol(i,l)
-   go to 310
-300 usol(i,ns) = usol(i,ns) - 2.0*dly*fyn*bdd(i)
-310 continue
-end do
-320 continue
-!     Save adjusted edges in GRHS if iorder=4
-if (iorder /= 4) go to 350
-do j = js,ns
-   grhs(is,j) = usol(is,j)
-   grhs(ms,j) = usol(ms,j)
-end do
-do i = is,ms
-   grhs(i,js) = usol(i,js)
-   grhs(i,ns) = usol(i,ns)
-end do
-350 continue
-iord = iorder
-pertrb = 0.0
-!     Check if operator is singular
-call chksng(mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy,singlr)
-!     Compute non-zero eigenvector in null space of transpose
-!     if singular
-if (singlr) call trisp(mit,am,bm,cm,dm,um,zm)
-if (singlr) call trisp(nit,an,bn,cn,dn,un,zn)
-!     Make initialization call to blktri
-if (intl == 0) &
-   & call blktri(intl,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn, &
-   & usol(is,js),ierror,w)
-if (ierror /= 0) return
-!     Adjust right hand side if necessary
-360 continue
-if (singlr) call orthg(usol,idmn,zn,zm,pertrb)
-!     Compute solution
-call blktri(i1,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn,usol(is,js), &
-   & ierror,w)
-if (ierror /= 0) return
-!     Set periodic boundaries if necessary
-if (kswx /= 1) go to 380
-do j = 1,l
-   usol(k,j) = usol(1,j)
-end do
-380 if (kswy /= 1) go to 400
-do i = 1,k
-   usol(i,l) = usol(i,1)
-end do
-400 continue
-!     Minimize solution with respect to weighted least squares
-!     norm if operator is singular
-if (singlr) call minsol(usol,idmn,zn,zm,prtrb)
-!     RETURN IF DEFERRED CORRECTIONS AND A FOURTH ORDER SOLUTION ARE
-!     not flagged
-if (iord == 2) return
-iord = 2
-!     Compute new right hand side for fourth order solution
-call defer(cofx,cofy,usol,idmn,grhs,mn)
-go to 360
-end subroutine sepel1
 

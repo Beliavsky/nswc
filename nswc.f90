@@ -1,6 +1,7 @@
 pure elemental integer function ipmpar(i)
 implicit none
 integer, intent(in) :: i
+!     beginning of local variable declarations
 integer, parameter :: imach(10) = [2, 31, 2147483647, 2, 24, -125, 128, 53, -1021, 1024]
 !-----------------------------------------------------------------------
 !     ipmpar provides the integer machine constants for the computer
@@ -350,6 +351,7 @@ integer, intent(in) :: idmax, imax, mo, n
 real, intent(inout) :: rmach(3)
 double precision, intent(inout) :: dmach(3)
 integer, intent(inout) :: imach(10)
+!     beginning of local variable declarations
 integer :: m, maxexp, minexp, n0
 real :: eps, xint, xmax, xmin
 double precision :: deps, dint, dmin, dmax
@@ -561,6 +563,7 @@ end subroutine mach
 subroutine radix(ibeta)
 implicit none
 integer :: ibeta
+!     beginning of local variable declarations
 real :: a, b, one, y
 real :: d1, d2
 !-----------------------------------------------------------------------
@@ -585,6 +588,7 @@ subroutine mach1(n, ibeta, m, minexp, maxexp, eps, xint, &
 implicit none
 integer :: ibeta, m, maxexp, minexp, n
 real :: eps, xint, xmin, xmax
+!     beginning of local variable declarations
 integer :: j, k, km, l
 real :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, zero
 !-----------------------------------------------------------------------
@@ -798,6 +802,7 @@ end subroutine mach1
 subroutine store2(a, b)
 implicit none
 real :: a, b
+!     beginning of local variable declarations
 real :: d1, d2
 !-----------------------------------------------------------------------
 !     Storage of single precision information into memory
@@ -812,6 +817,7 @@ subroutine mach2(n, ibeta, m, minexp, maxexp, eps, xint, &
 implicit none
 integer :: ibeta, m, maxexp, minexp, n
 double precision :: eps, xint, xmin, xmax
+!     beginning of local variable declarations
 integer :: j, k, km, l
 double precision :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, &
    & zero
@@ -1029,6 +1035,7 @@ implicit none
 !     Storage of double precision information into memory
 !-----------------------------------------------------------------------
 double precision :: a, b
+!     beginning of local variable declarations
 double precision :: d1, d2
 common /dpdata/ d1, d2
 d1 = a
@@ -1038,6 +1045,7 @@ end subroutine dstor2
 pure elemental real function spmpar(i)
 implicit none
 integer, intent(in) :: i
+!     beginning of local variable declarations
 integer :: ibeta, m, emin, emax
 real :: b, binv, bm1, one, w, z
 interface
@@ -1090,6 +1098,7 @@ end function spmpar
 pure elemental double precision function dpmpar(i)
 implicit none
 integer, intent(in) :: i
+!     beginning of local variable declarations
 integer :: ibeta, m, emin, emax
 double precision :: b, binv, bm1, one, w, z
 interface
@@ -1142,6 +1151,7 @@ end function dpmpar
 pure real function epsln(l)
 implicit none
 integer, intent(in) :: l
+!     beginning of local variable declarations
 integer :: m, b
 real :: lnb
 interface
@@ -1173,6 +1183,7 @@ end function epsln
 pure elemental double precision function depsln(l)
 implicit none
 integer, intent(in) :: l
+!     beginning of local variable declarations
 integer :: b
 double precision :: db, lnb, m
 interface
@@ -1205,6 +1216,7 @@ end function depsln
 pure elemental real function exparg(l)
 implicit none
 integer, intent(in) :: l
+!     beginning of local variable declarations
 integer :: m, b
 real :: lnb
 interface
@@ -1243,6 +1255,7 @@ end function exparg
 pure elemental double precision function dxparg(l)
 implicit none
 integer, intent(in) :: l
+!     beginning of local variable declarations
 integer :: m, b
 double precision :: db, lnb
 interface
@@ -1283,6 +1296,7 @@ pure subroutine ishell(a, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: i, ii, imax, j, jmax, ki, l, ll, s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
 !-----------------------------------------------------------------------
@@ -1324,6 +1338,7 @@ pure subroutine shell(a, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
@@ -1366,6 +1381,7 @@ pure subroutine shell2(a, b, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n), b(n)
+!     beginning of local variable declarations
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s, t
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
@@ -1412,6 +1428,7 @@ pure subroutine rsort(a, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
@@ -1455,6 +1472,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
 integer, intent(inout) :: m(n)
+!     beginning of local variable declarations
 integer :: i, ii, imax, j, jmax, ki, l, ll, t
 real :: s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
@@ -1501,6 +1519,7 @@ pure subroutine rrsort(a, b, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n), b(n)
+!     beginning of local variable declarations
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s, t
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
@@ -1547,6 +1566,7 @@ pure subroutine dsort(a, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: i, ii, imax, j, jmax, ki, l, ll
 double precision :: s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
@@ -1590,6 +1610,7 @@ implicit none
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
 integer, intent(inout) :: m(n)
+!     beginning of local variable declarations
 integer :: i, ii, imax, j, jmax, ki, l, ll, t
 double precision :: s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
@@ -1636,6 +1657,7 @@ pure subroutine ddsort(a, b, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n), b(n)
+!     beginning of local variable declarations
 integer :: i, ii, imax, j, jmax, ki, l, ll
 double precision :: s, t
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
@@ -1682,6 +1704,7 @@ pure subroutine aord(a, n)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
@@ -1725,6 +1748,7 @@ pure subroutine daord(a, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: i, ii, imax, j, jmax, ki, l, ll
 double precision :: s
 integer, parameter :: k(10) = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
@@ -1768,6 +1792,7 @@ pure subroutine qsorti(x, ind, n)
 implicit none
 integer, intent(in) :: n, x(n)
 integer, intent(inout) :: ind(n)
+!     beginning of local variable declarations
 integer :: iu(21), il(21), m, i, j, k, l, ij, it, itt, indx, t
 real :: r
 !***********************************************************
@@ -1921,6 +1946,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ind(n)
 real, intent(in) :: x(n)
+!     beginning of local variable declarations
 integer :: iu(21), il(21), m, i, j, k, l, ij, it, itt, indx
 real :: r, t
 !***********************************************************
@@ -2074,6 +2100,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ind(n)
 double precision, intent(in) :: x(n)
+!     beginning of local variable declarations
 integer :: iu(21), il(21), m, i, j, k, l, ij, it, itt, indx
 real :: r
 double precision :: t
@@ -2227,6 +2254,7 @@ pure subroutine iorder(a, ip, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: a(n), ip(n)
+!     beginning of local variable declarations
 integer :: nn, k, j, ipj, temp
 !***********************************************************
 !                                               Robert Renka
@@ -2280,6 +2308,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ip(n)
 real, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: nn, k, j, ipj
 real :: temp
 !***********************************************************
@@ -2334,6 +2363,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ip(n)
 double precision, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: nn, k, j, ipj
 double precision :: temp
 !***********************************************************
@@ -2386,6 +2416,7 @@ end subroutine dorder
 pure elemental real function cbrt(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: r
 !-----------------------------------------------------------------------
 !                   Cube root of a real number
@@ -2407,6 +2438,7 @@ implicit none
 !                   Cube root of a real number
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 double precision :: r
 if (x < 0) then
    r = log(-x)/3.d0
@@ -2423,6 +2455,7 @@ pure elemental function artnq(y,x)
 implicit none
 real, intent(in) :: x, y
 real :: artnq
+!     beginning of local variable declarations
 real :: nswc_ai_r4
 nswc_ai_r4 = x
 if (nswc_ai_r4 < 0) go to 1
@@ -2452,6 +2485,7 @@ end function artnq
 pure elemental double precision function dartnq(y,x)
 implicit none
 double precision, intent(in) :: x, y
+!     beginning of local variable declarations
 double precision :: nswc_ai_r8
 nswc_ai_r8 = x
 if (nswc_ai_r8 < 0) go to 1
@@ -2481,6 +2515,7 @@ end function dartnq
 pure elemental real function cpabs(x, y)
 implicit none
 real, intent(in) :: x, y
+!     beginning of local variable declarations
 real :: a
 !     --------------------------------------
 !     Evaluation of sqrt(x*x + y*y)
@@ -2499,6 +2534,7 @@ end function cpabs
 pure elemental double precision function dcpabs(x, y)
 implicit none
 double precision, intent(in) :: x, y
+!     beginning of local variable declarations
 double precision :: a
 !     --------------------------------------
 !     Evaluation of sqrt(x*x + y*y)
@@ -2518,6 +2554,7 @@ pure elemental subroutine crec(x, y, u, v)
 implicit none
 real, intent(inout) :: u, v
 real, intent(in) :: x, y
+!     beginning of local variable declarations
 real :: d, t
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL u + I*v = 1/(x + I*y)
@@ -2541,6 +2578,7 @@ implicit none
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x, y
 double precision, intent(inout) :: u, v
+!     beginning of local variable declarations
 double precision :: d, t
 if (abs(x) > abs(y)) go to 10
 t = x/y
@@ -2557,6 +2595,7 @@ end subroutine dcrec
 pure elemental complex function cdiv(a, b)
 implicit none
 complex, intent(in) :: a, b
+!     beginning of local variable declarations
 real :: ai, ar, bi, br, d, t, u, v
 !-----------------------------------------------------------------------
 !              COMPLEX DIVISION a/b WHERE b IS NONZERO
@@ -2586,6 +2625,7 @@ implicit none
 !-----------------------------------------------------------------------
 double precision, intent(in) :: ar, ai, br, bi
 double precision, intent(inout) :: cr, ci
+!     beginning of local variable declarations
 double precision :: d, t, u, v
 interface
    pure elemental function dpmpar(i)
@@ -2619,6 +2659,7 @@ pure subroutine dcsqrt(z, w)
 implicit none
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
+!     beginning of local variable declarations
 double precision :: x, y, r, nswc_ai_r8
 interface
    pure elemental function dcpabs(x,y)
@@ -2679,6 +2720,7 @@ pure elemental subroutine capo(x,y,r,theta)
 implicit none
 real, intent(inout) :: r, theta
 real, intent(in) :: x, y
+!     beginning of local variable declarations
 real :: a
 if (abs(x) <= abs(y)) go to 10
 a = y/x
@@ -2700,6 +2742,7 @@ real, intent(in) :: a, x1
 real, intent(out) :: x2
 real, intent(in) :: y1
 real, intent(out) :: y2
+!     beginning of local variable declarations
 real :: cosa, sina
 sina = sin(a)
 cosa = cos(a)
@@ -2710,6 +2753,7 @@ end subroutine rota
 pure elemental subroutine srotg(sa,sb,sc,ss)
 implicit none
 real, intent(inout) :: sa, sb, sc, ss
+!     beginning of local variable declarations
 real :: r, u, v
 !     Designed by C.L.Lawson, JPL, 1977 sept 08
 !     construct the Givens transformation
@@ -2776,6 +2820,7 @@ implicit none
 !     next be called to apply the transformation to A 2 by N matrix.
 ! ------------------------------------------------------------------
 double precision, intent(inout) :: da, db, dc, ds
+!     beginning of local variable declarations
 double precision :: u, v, r
 if (abs(da) <= abs(db)) go to 10
 ! *** HERE dabs(da) .GT. dabs(db) ***
@@ -2813,6 +2858,7 @@ subroutine rot3(a, theta)
 implicit none
 real :: a(3,3)
 real, intent(inout) :: theta(3)
+!     beginning of local variable declarations
 real :: r, t, u, v
 real, parameter :: pihalf = 1.5707963267949
 !     --------------------
@@ -2884,6 +2930,7 @@ pure real function ang(n, x, y)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: i
 real :: d, rx, ry
 interface
@@ -2923,6 +2970,7 @@ end function ang
 pure elemental real function sin0(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: t
 real, parameter :: a0 = .157079632679490e+01
 real, parameter :: a1 = -.645964097506244e+00
@@ -2943,6 +2991,7 @@ end function sin0
 pure elemental real function cos0(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: t
 real, parameter :: a1 = -.123370055013615e+01
 real, parameter :: a2 = .253669507899753e+00
@@ -2961,6 +3010,7 @@ end function cos0
 pure elemental real function sin1(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 integer :: max, n
 real :: a, t
 real, parameter :: a0 = .314159265358979e+01
@@ -3018,6 +3068,7 @@ end function sin1
 pure elemental real function cos1(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 integer :: max, n
 real :: a, t
 real, parameter :: a0 = .314159265358979e+01
@@ -3075,6 +3126,7 @@ end function cos1
 pure elemental double precision function dsin1(x)
 implicit none
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 integer :: max, n
 double precision :: a, t, w
 double precision, parameter :: pi = 3.141592653589793238462643383279502884197d+00
@@ -3159,6 +3211,7 @@ end function dsin1
 pure elemental double precision function dcos1(x)
 implicit none
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 integer :: max, n
 double precision :: a, t, w
 double precision, parameter :: pi = 3.141592653589793238462643383279502884197d+00
@@ -3245,6 +3298,7 @@ implicit none
 integer, intent(in) :: isw
 real, intent(inout) :: sinhm, coshm
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: ax, expx, xs, xx
 real, parameter :: sp5 = .255251817302048e-09
 real, parameter :: sp4 = .723809046696880e-07
@@ -3326,6 +3380,7 @@ pure elemental real function esum(mu, x)
 implicit none
 integer, intent(in) :: mu
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: w
 !-----------------------------------------------------------------------
 !                    Evaluation of exp(mu + x)
@@ -3349,6 +3404,7 @@ pure elemental double precision function desum(mu, x)
 implicit none
 integer, intent(in) :: mu
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 double precision :: w
 !-----------------------------------------------------------------------
 !                    Evaluation of exp(mu + x)
@@ -3371,6 +3427,7 @@ end function desum
 pure elemental real function rexp(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: e
 real, parameter :: p1 = .914041914819518e-09
 real, parameter :: p2 = .238082361044469e-01
@@ -3402,6 +3459,7 @@ implicit none
 !            Evaluation of the function exp(x) - 1
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 double precision :: e, w, z
 double precision, parameter :: a0 = .248015873015873015873016d-04
 double precision, parameter :: a1 = -.344452080605731005808147d-05
@@ -3450,6 +3508,7 @@ pure elemental subroutine rexp1(x, e, w)
 implicit none
 real, intent(inout) :: e, w
 real, intent(in) :: x
+!     beginning of local variable declarations
 real, parameter :: p1 = .914041914819518e-09
 real, parameter :: p2 = .238082361044469e-01
 real, parameter :: q1 = -.499999999085958e+00
@@ -3489,6 +3548,7 @@ implicit none
 double precision, intent(in) :: x
 double precision, intent(inout) :: e
 double precision, intent(out) :: w
+!     beginning of local variable declarations
 double precision :: z
 double precision, parameter :: a0 = .248015873015873015873016d-04
 double precision, parameter :: a1 = -.344452080605731005808147d-05
@@ -3538,6 +3598,7 @@ end subroutine drexp1
 pure elemental real function alnrel(a)
 implicit none
 real, intent(in) :: a
+!     beginning of local variable declarations
 real :: t, t2, w, x
 real, parameter :: p1 = -.129418923021993e+01
 real, parameter :: p2 = .405303492862024e+00
@@ -3567,6 +3628,7 @@ implicit none
 !            Evaluation of the function ln(1 + a)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
+!     beginning of local variable declarations
 double precision :: t, t2, w, z
 double precision, parameter :: p0 = .7692307692307692307680d-01
 double precision, parameter :: p1 = -.1505958055914600184836d+00
@@ -3609,6 +3671,7 @@ end function dlnrel
 pure elemental real function rlog(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: r, t, u, up2, w, w1
 real, parameter :: a = .566749439387324e-01
 real, parameter :: b = .456512608815524e-01
@@ -3654,6 +3717,7 @@ end function rlog
 pure elemental real function rlog1(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: r, t, u, up2, w, w1
 real, parameter :: a = .566749439387324e-01
 real, parameter :: b = .456512608815524e-01
@@ -3702,6 +3766,7 @@ implicit none
 !             Evaluation of the function x - 1 - LN(x)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 double precision :: r, t, u, up2, w, w1, z
 double precision, parameter :: a = .566749439387323789126387112411845d-01
 double precision, parameter :: b = .456512608815524058941143273395059d-01
@@ -3766,6 +3831,7 @@ implicit none
 !             Evaluation of the function x - LN(1 + x)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 double precision :: r, t, u, up2, w, w1, z
 double precision, parameter :: a = .566749439387323789126387112411845d-01
 double precision, parameter :: b = .456512608815524058941143273395059d-01
@@ -3830,6 +3896,7 @@ integer, intent(inout) :: l, m
 integer, intent(in) :: n
 real, intent(in) :: x0, y0
 real, intent(in) :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: i, n0
 real :: angle, eps, pi, pi2, sum, theta, theta1, thetai, tol, u, v
 interface
@@ -3905,6 +3972,7 @@ integer, intent(in) :: m, n
 integer, intent(out) :: num
 real, intent(in) :: a(2), b(2), x(n), y(n)
 real, intent(inout) :: u(m), v(m)
+!     beginning of local variable declarations
 integer :: i, ind, nm1
 real :: d, diff, diff1, eps, h, hi, onem, onep, p, q, s, t, tmax, tmin, tol, tol0, k, ki
 interface
@@ -4047,6 +4115,7 @@ integer, intent(in) :: m
 integer, intent(inout) :: n
 real, intent(inout) :: x(m), y(m)
 real, intent(inout) :: bx(*), by(*), vx(*), vy(*)
+!     beginning of local variable declarations
 integer :: i, ii, isav, j, j0, k0, kp1, ksav, l, lbeg, lmax, lmin, &
    & lsav, mm1, mp1, nn
 real :: dx, dx0, dy, dy0, eps, h, onep, r, x1, xm, xmax, xmin, &
@@ -4398,6 +4467,7 @@ pure real function parea(x, y, nb)
 implicit none
 integer, intent(in) :: nb
 real, intent(in) :: x(nb), y(nb)
+!     beginning of local variable declarations
 integer :: i, n, nm1, nswc_ai_i4
 real :: a
 !*****************************************************************
@@ -4435,6 +4505,7 @@ integer, intent(inout) :: nb
 integer, intent(in) :: num
 integer, intent(in) :: pr(*)
 integer, intent(inout) :: ar(m), s(n), iwk(num)
+!     beginning of local variable declarations
 integer :: i, ii, np1, s0, pc, ac, vr, vc, p, subr, rbus, tor
 interface
    pure subroutine hc1(ind,m,n,pr,ar,nb,s,np1,pc,ac,vr,vc,p, &
@@ -4555,6 +4626,7 @@ integer, intent(in) :: np1
 integer, intent(in) :: pr(np1)
 integer, intent(inout) :: pc(np1), ar(m), ac(m), s(n), vr(n), &
    & vc(n), p(n), subr(n), rbus(n), tor(n)
+!     beginning of local variable declarations
 integer :: i, iend, iff, ipi, it1, it2, j, j1, j2, ja, jj, jl, jsubr, k1, k2, l, l1, l2, ll, ll1, ll2, maxe, minu, mp1, nbo, np, &
    & nswc_ai_i4
 real :: dens, score
@@ -4960,6 +5032,7 @@ integer, intent(in) :: subr(n)
 integer, intent(inout) :: rbus(n)
 integer, intent(in) :: ar(m), pr(np1)
 integer, intent(inout) :: s(n)
+!     beginning of local variable declarations
 integer :: ja, k1, l, l1, l2
 ! Subroutine to find the starting vertex  i1  and the ending
 ! vertex  i2  of the largest path of implied arcs containing
@@ -5020,6 +5093,7 @@ integer, intent(in) :: i1, k1, m, n, np1
 integer, intent(inout) :: a1(m), a2(m)
 integer, intent(in) :: p1(np1), p2(np1)
 integer, intent(inout) :: v1(n), v2(n)
+!     beginning of local variable declarations
 integer :: ia, j, j1, j2, l, l1, l2
 ! Forward step updating
 j1 = p1(i1) + 1
@@ -5046,6 +5120,7 @@ integer, intent(in) :: ii, k1, k2, m, n, np1
 integer, intent(inout) :: a1(m), a2(m)
 integer, intent(in) :: p1(np1), p2(np1)
 integer, intent(inout) :: v1(n), v2(n)
+!     beginning of local variable declarations
 integer :: ia, l, l1, l2, ll, ll1, ll2
 ! Backtracking step updating
 l1 = p1(ii) + 1
@@ -5074,6 +5149,7 @@ integer, intent(in) :: ib, k1, l, m, n, np1
 integer, intent(inout) :: a1(m), a2(m)
 integer, intent(in) :: p1(np1), p2(np1)
 integer, intent(inout) :: v1(n), v2(n)
+!     beginning of local variable declarations
 integer :: iarc, j1, j2, jj, m1, m2, mm
 ! Updating for implied arc
 m1 = p1(ib) + 1
@@ -5111,6 +5187,7 @@ integer, intent(in) :: m, n, np1
 integer, intent(inout) :: ar(m), ac(m)
 integer, intent(in) :: pr(np1), pc(np1)
 integer, intent(inout) :: vr(n), vc(n)
+!     beginning of local variable declarations
 integer :: j1, j2, l1, l2
 ! Subroutine to remove arc  (ia,ib)  from the graph.
 ! Meaning of the output parameters  jj  and  ll ...
@@ -5152,6 +5229,7 @@ implicit none
 integer, intent(in) :: mo
 complex, intent(in) :: z
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: i
 real :: c2, dm, pm, qm, r, sn, ss, x, y, ef(2), qf(2), sm(2), sz(2), tm(2), ts(2)
 real, parameter :: c = .564189583547756
@@ -5280,6 +5358,7 @@ implicit none
 integer, intent(in) :: mo
 complex, intent(in) :: z
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: i
 real :: c2, dm, pm, qm, r, sn, ss, x, y, qf(2), sm(2), sz(2), tm(2), ts(2)
 real, parameter :: c = .564189583547756
@@ -5438,6 +5517,7 @@ end subroutine cerfc
 pure elemental real function erf(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: ax, bot, t, top, x2
 real, parameter :: c = .564189583547756
 real, parameter :: a(5) = [.771058495001320e-04, -.133733772997339e-02, .323076579225834e-01, .479137145607681e-01, &
@@ -5488,6 +5568,7 @@ end function erf
 pure elemental real function erfc(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: ax, bot, e, t, top
 double precision :: w
 real, parameter :: c = .564189583547756
@@ -5559,6 +5640,7 @@ pure elemental real function erfc1(ind, x)
 implicit none
 integer, intent(in) :: ind
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: ax, bot, e, t, top
 double precision :: w
 real, parameter :: c = .564189583547756
@@ -5639,6 +5721,7 @@ implicit none
 integer, intent(in) :: mo
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
+!     beginning of local variable declarations
 double precision :: m, n, n2, n4, np1, c2, d, d2, e, eps, r, sn, tol, x, y, a0(2), an(2), b0(2), bn(2), g0(2), gn(2), h0(2), &
    & hn(2), qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), wn(2)
 double precision, parameter :: c = .56418958354775628694807945156077d0
@@ -5917,6 +6000,7 @@ implicit none
 integer, intent(in) :: mo
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
+!     beginning of local variable declarations
 double precision :: m, n, n2, n4, np1, c2, d, d2, e, eps, r, sn, tol, x, y, a0(2), an(2), b0(2), bn(2), g0(2), gn(2), h0(2), &
    & hn(2), qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), wn(2)
 double precision, parameter :: c = .56418958354775628694807945156077d0
@@ -6203,6 +6287,7 @@ implicit none
 integer, intent(in) :: mo
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
+!     beginning of local variable declarations
 integer :: j, n
 double precision :: eps, h(2), t(2), tol, x, y
 double precision, parameter :: c = .20666985354092053857068941306585476d-01
@@ -6310,6 +6395,7 @@ end subroutine erfcm2
 pure elemental double precision function derf(x)
 implicit none
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 integer :: i, k
 double precision :: ax, t, w
 double precision, parameter :: a(21) = [.1283791670955125738961589031215d+00, - &
@@ -6355,6 +6441,7 @@ end function derf
 pure elemental double precision function derfc(x)
 implicit none
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 integer :: i, k
 double precision :: ax, t, w
 double precision, parameter :: a(21) = [.1283791670955125738961589031215d+00, - &
@@ -6412,6 +6499,7 @@ pure elemental double precision function derfc1(ind, x)
 implicit none
 integer, intent(in) :: ind
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 integer :: i, k
 double precision :: ax, t, w
 double precision, parameter :: a(21) = [.1283791670955125738961589031215d+00, - &
@@ -6487,6 +6575,7 @@ implicit none
 !        April 1992
 !-------------------------------
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 double precision :: t, u, v, z
 double precision, parameter :: rpinv = .56418958354775628694807945156077259d0
 double precision, parameter :: p0 = .16506148041280876191828601d-03
@@ -6619,6 +6708,7 @@ end function derfc0
 pure elemental real function erfi(p, q)
 implicit none
 real, intent(in) :: p, q
+!     beginning of local variable declarations
 real :: eps, s, t, v, v1
 real, parameter :: c = .5625
 real, parameter :: c1 = .87890625
@@ -6716,19 +6806,9 @@ end function erfi
 
 pure elemental double precision function derfi(p, q)
 implicit none
-intrinsic :: erf
-!-----------------------------------------------------------------------
-!                  Double precision computation of
-!                    the inverse error function
-!                         ----------------
-!     FOR 0 .LE. p .LE. 1,  W = derfi(p,q) WHERE erf(W) = p. IT
-!     is assumed that q = 1 - p. if p .LT. 0, q .LE. 0, or p + q
-!     is not 1, then derfi(p,q) is set to a negative value.
-!-----------------------------------------------------------------------
-!     Reference. Mathematics of computation,oct.1976,PP.827-830.
-!                  J.M.Blair,C.A.Edwards,J.H.Johnson
-!-----------------------------------------------------------------------
 double precision, intent(in) :: p, q
+!     beginning of local variable declarations
+intrinsic erf
 double precision :: eps, f, lnq, s, t, x
 double precision, parameter :: c = .5625d0
 double precision, parameter :: c1 = .87890625d0
@@ -6771,6 +6851,17 @@ interface
       double precision :: dpmpar
    end function dpmpar
 end interface
+!-----------------------------------------------------------------------
+!                  Double precision computation of
+!                    the inverse error function
+!                         ----------------
+!     FOR 0 .LE. p .LE. 1,  W = derfi(p,q) WHERE erf(W) = p. IT
+!     is assumed that q = 1 - p. if p .LT. 0, q .LE. 0, or p + q
+!     is not 1, then derfi(p,q) is set to a negative value.
+!-----------------------------------------------------------------------
+!     Reference. Mathematics of computation,oct.1976,PP.827-830.
+!                  J.M.Blair,C.A.Edwards,J.H.Johnson
+!-----------------------------------------------------------------------
 !-----------------------------------------------------------------------
 !     c2 = ln(1.e-100)
 !     r  = sqrt(pi)/2
@@ -6853,6 +6944,7 @@ end function derfi
 pure elemental real function aerf(x, h)
 implicit none
 real, intent(in) :: h, x
+!     beginning of local variable declarations
 integer :: j, n, n1
 real :: a2, ah, ax, dn2, e, eps, h2, h3, hf, hg, s, st, t, u, v, x2, xmh, xph, z
 real, parameter :: c = 1.12837916709551257
@@ -6982,8 +7074,9 @@ end function aerf
 
 pure elemental double precision function daerf(x, h)
 implicit none
-intrinsic :: erf, erfc
 double precision, intent(in) :: x, h
+!     beginning of local variable declarations
+intrinsic erf, erfc
 integer :: j
 double precision :: ah, ax, a2, dn2, e, eps, hf, hg, h2, h3, n, n1, s, st, t, u, v, xmh, xph, x2, z
 double precision, parameter :: c = 1.12837916709551257389615890312155d0
@@ -7116,8 +7209,9 @@ pure elemental function pndf(x,ind)
 implicit none
 integer, intent(in) :: ind
 real, intent(in) :: x
-real :: t
 real :: pndf
+!     beginning of local variable declarations
+real :: t
 real, parameter :: a = .707106781186548
 real, parameter :: c = .797884560802865
 interface
@@ -7151,6 +7245,7 @@ implicit none
 integer, intent(inout) :: ierr
 real, intent(in) :: d, p, q
 real, intent(inout) :: w
+!     beginning of local variable declarations
 real :: eps, t, u, v
 real, parameter :: rt2 = 1.414213562373095
 interface
@@ -7206,6 +7301,7 @@ implicit none
 integer, intent(inout) :: ierr
 double precision, intent(in) :: p, q, d
 double precision, intent(inout) :: w
+!     beginning of local variable declarations
 double precision :: eps, u, v, t
 double precision, parameter :: rt2 = 1.4142135623730950488016887242097d0
 interface
@@ -7260,6 +7356,7 @@ end subroutine dpni
 pure elemental real function daw(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 integer :: i
 real :: frac, sump, sumq, w2, y
 real, parameter :: xlarge = 16777216.0
@@ -7358,6 +7455,7 @@ end function daw
 pure elemental double precision function dpdaw(x)
 implicit none
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 integer :: i, k
 double precision :: ax, t, w
 double precision, parameter :: eps = 1.d-31
@@ -7434,6 +7532,7 @@ implicit none
 !                where daw(x) is the Dawson integral
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 double precision :: t, u, v, w
 double precision, parameter :: a0 = .59682223611279114961181337d-06
 double precision, parameter :: a1 = .17685355947137064277328544d-05
@@ -7606,6 +7705,7 @@ implicit none
 integer, intent(in) :: mo
 complex, intent(in) :: z
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: i
 real :: dm, pm, qm, r, ss, x, y, qf(2), sm(2), tm(2), ts(2), zr(2)
 real, parameter :: c = .564189583547756
@@ -7760,6 +7860,7 @@ pure elemental subroutine frnl(t, c, s)
 implicit none
 real, intent(inout) :: c, s
 real, intent(in) :: t
+!     beginning of local variable declarations
 integer :: i, l, m, max
 real :: cy, f, fd, fn, g, gd, gn, pix, pixx, r, sy, x, xx, y, n
 real, parameter :: pi = 3.1415926535898
@@ -7953,6 +8054,7 @@ implicit none
 integer, intent(in) :: mo
 complex, intent(in) :: z
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: i
 real :: c, cy, d, e, eps, qm, r, ss, sy, tol, u, x, y
 real :: n, np1, qf(2), sm(2), tm(2), ts(2), g0(2), gn(2), h0(2), hn(2), wn(2)
@@ -8126,6 +8228,7 @@ real, intent(in) :: arg
 real, intent(inout) :: result
 integer, intent(in) :: int
 integer, intent(out) :: ierr
+!     beginning of local variable declarations
 integer :: m, i
 real :: px(9), qx(9), frac, sump, sumq, t, w, x, xx0, xmx0, y, xmax, xmin, ei, nswc_ai_r4
 real, parameter :: dexp40 = .235385266837020e+18
@@ -8442,6 +8545,7 @@ end function dei1
 pure elemental double precision function de1e(x)
 implicit none
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 integer :: m
 double precision :: c, eps, t, w
 double precision, parameter :: a(50) = [.3284394579616699087873844201881d-01, - &
@@ -8697,6 +8801,7 @@ pure elemental double precision function dei0(x, eps)
 implicit none
 double precision, intent(in) :: eps
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 integer :: n
 double precision :: c, h, t, w, db2
 double precision, parameter :: dk1 = 25598514349.d0
@@ -8762,9 +8867,10 @@ end function dei0
 pure function si(x)
 implicit none
 real, intent(in) :: x
+real :: si
+!     beginning of local variable declarations
 integer :: i, j
 real :: aic, amax, ax, b1, b2, bx, rc, temp, tx
-real :: si
 integer, parameter :: n1 = 16
 integer, parameter :: n2 = 46
 integer, parameter :: m1 = 14
@@ -8861,9 +8967,10 @@ end function si
 pure elemental function cin(x)
 implicit none
 real, intent(in) :: x
+real :: cin
+!     beginning of local variable declarations
 integer :: i, j
 real :: aic, amax, ax, b1, b2, bx, rc, temp, tx
-real :: cin
 integer, parameter :: n1 = 16
 integer, parameter :: n2 = 46
 integer, parameter :: m1 = 14
@@ -8961,6 +9068,7 @@ pure elemental subroutine cexexi(z, w)
 implicit none
 complex, intent(in) :: z
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: i
 real :: pm, qm, r, ss, x, y, ts(2), sr(2), sm(2), tm(2), qf(2), zl(2)
 real, parameter :: const = 2.46740110027234
@@ -9151,6 +9259,7 @@ end subroutine cexexi
 pure elemental complex function cli(z)
 implicit none
 complex, intent(in) :: z
+!     beginning of local variable declarations
 integer :: n
 real :: qf(2), dl(2), ds, zd(2), zl(2), az(2), pm, r, sm(2), tm(2), ts(2), sr(2)
 real, parameter :: c = 1.64493406684823
@@ -9259,6 +9368,7 @@ end function cli
 pure elemental real function ali(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 integer :: i, l
 real :: t, w
 real, parameter :: const = 1.64493406684823
@@ -9382,6 +9492,7 @@ implicit none
 integer, intent(in) :: mo
 complex, intent(in) :: z
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: j, k, l, m, max, n, nm1
 real :: a, a1, a2, c, cn, cut, d, e2t, eps, et, h1, h2, s, s1, s2, sn, t, t1, t2, u, u1, u2, v1, v2, w1, w2, x, y, y2
 complex :: eta, eta2, sum
@@ -9594,6 +9705,7 @@ end subroutine cgamma
 pure elemental complex function cgam0(z)
 implicit none
 complex, intent(in) :: z
+!     beginning of local variable declarations
 integer :: i, k, n
 real :: x, y
 complex :: w
@@ -9624,6 +9736,7 @@ end function cgam0
 pure elemental real function gamma(a)
 implicit none
 real, intent(in) :: a
+!     beginning of local variable declarations
 integer :: i, j, m, n, nswc_ai_i4
 real :: bot, s, t, top, w, x
 double precision :: g, z, lnx
@@ -9754,6 +9867,7 @@ end function gamma
 pure elemental double precision function glog(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 integer :: n
 real :: t, t2
 double precision :: z
@@ -9814,6 +9928,7 @@ end function glog
 pure elemental real function gam1(a)
 implicit none
 real, intent(in) :: a
+!     beginning of local variable declarations
 real :: bot, d, t, top, w, nswc_ai_r4
 real, parameter :: p(7) = [.577215664901533e+00, -.409078193005776e+00, -.230975380857675e+00, .597275330452234e-01, &
    & .766968181649490e-02, -.514889771323592e-02, .589597428611429e-03]
@@ -9862,6 +9977,7 @@ end function gam1
 pure elemental real function gamln(a)
 implicit none
 real, intent(in) :: a
+!     beginning of local variable declarations
 integer :: i, n
 real :: t, w
 real, parameter :: d = .418938533204673
@@ -9914,6 +10030,7 @@ end function gamln
 pure elemental real function gamln1(a)
 implicit none
 real, intent(in) :: a
+!     beginning of local variable declarations
 real :: w, x
 real, parameter :: p0 = .577215664901533e+00
 real, parameter :: p1 = .844203922187225e+00
@@ -9960,6 +10077,7 @@ implicit none
 integer, intent(in) :: mo
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
+!     beginning of local variable declarations
 integer :: j, k, max, n, nm1
 double precision :: a, a1, a2, c, cn, cut, d, eps, et, e2t, h1, &
    & h2, q1, q2, s, sn, s1, s2, t, t1, t2, u, u1, u2, v1, v2, w1, w2, &
@@ -10198,6 +10316,7 @@ end subroutine dcgama
 pure elemental double precision function dgamma(a)
 implicit none
 double precision, intent(in) :: a
+!     beginning of local variable declarations
 integer :: j, n, nswc_ai_i4
 double precision :: s, t, x, w
 double precision, parameter :: pi = 3.14159265358979323846264338327950d0
@@ -10311,6 +10430,7 @@ end function dgamma
 pure elemental double precision function dpdel(x)
 implicit none
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 integer :: i, k
 double precision :: t, w
 double precision, parameter :: a(15) = [.833333333333333333333333333333d-01, - &
@@ -10404,6 +10524,7 @@ implicit none
 !     data c /-.4227843350984671393934879099175975689578d+00/
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 double precision :: d, t, w, z, nswc_ai_r8
 double precision, parameter :: a0 = .611609510448141581788d-08
 double precision, parameter :: a1 = .624730830116465516210d-08
@@ -10491,6 +10612,7 @@ end function dgam1
 pure elemental double precision function dgamln(a)
 implicit none
 double precision, intent(in) :: a
+!     beginning of local variable declarations
 integer :: i, n
 double precision :: x, w
 double precision, parameter :: d = 0.41893853320467274178032973640562d0
@@ -10545,6 +10667,7 @@ implicit none
 !     Evaluation of LN(gamma(1 + x)) for -0.5 .LE. x .LE. 1.5
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 double precision :: w
 interface
    pure elemental function dgam1(x)
@@ -10567,6 +10690,7 @@ pure elemental subroutine cpsi(z, w)
 implicit none
 complex, intent(in) :: z
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: j, k, l, m, max
 real :: a, a1, a2, c1, c2, cn, eps, et, h1, h2, s, s1, s2, sn, t, u, w1, w2, x, y, y2
 complex :: eta, eta2, sum
@@ -10697,6 +10821,7 @@ end subroutine cpsi
 pure real function psi(xx)
 implicit none
 real, intent(in) :: xx
+!     beginning of local variable declarations
 integer :: i, m, n, nq
 real :: aug, den, sgn, upper, w, x, xmax1, xmx0, xsmall, z
 real, parameter :: piov4 = .785398163397448e0
@@ -10859,6 +10984,7 @@ pure subroutine dcpsi(z, w)
 implicit none
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
+!     beginning of local variable declarations
 integer :: j, k, m, max
 double precision :: a, a1, a2, cn, cut, c1, c2, eps, et, h1, h2, &
    & q1, q2, s, sn, s1, s2, t, t1, t2, u, u1, u2, v1, v2, w1, w2, x, y, &
@@ -11017,6 +11143,7 @@ end subroutine dcpsi
 pure elemental double precision function dpsi(a)
 implicit none
 double precision, intent(in) :: a
+!     beginning of local variable declarations
 integer :: j, k, l, max, n, nswc_ai_i4
 double precision :: eps, s, t, x, xmax, w
 double precision, parameter :: pi = 3.1415926535897932384626433832795d0
@@ -11174,6 +11301,7 @@ end function dpsi
 pure elemental double precision function dpsi0(x)
 implicit none
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 integer :: i, l, n, nm1
 double precision :: h, w, db2
 double precision, parameter :: dk1 = 100442596182.d0
@@ -11227,6 +11355,7 @@ integer, intent(out) :: iflag
 integer, intent(in) :: m, n
 real, intent(in) :: x
 real, intent(inout) :: ans(m)
+!     beginning of local variable declarations
 integer :: i, j, k, mx, nn, np, nx
 real :: alpha, arg, beta, den, elim, eps, fln, fn, fnp, fns, fx, nd, rxsq, s, t, ta, tk, tol, tols, tss, tst, tt, t1, t2, wdtol, &
    & xdmln, xdmy, xinc, xln, xm, xmin, trm(22), trmr(100)
@@ -11512,6 +11641,7 @@ end subroutine psidf
 pure elemental real function betaln(a0, b0)
 implicit none
 real, intent(in) :: a0, b0
+!     beginning of local variable declarations
 integer :: i, n
 real :: a, b, c, h, u, v, w, z
 real, parameter :: e = .918938533204673
@@ -11622,6 +11752,7 @@ end function betaln
 pure elemental real function gsumln(a, b)
 implicit none
 real, intent(in) :: a, b
+!     beginning of local variable declarations
 real :: x
 interface
    pure elemental function alnrel(a)
@@ -11652,6 +11783,7 @@ end function gsumln
 pure elemental real function bcorr(a0, b0)
 implicit none
 real, intent(in) :: a0, b0
+!     beginning of local variable declarations
 real :: a, b, c, h, s11, s3, s5, s7, s9, t, w, x, x2
 real, parameter :: c0 = .833333333333333e-01
 real, parameter :: c1 = -.277777777760991e-02
@@ -11689,6 +11821,7 @@ end function bcorr
 pure elemental real function algdiv(a, b)
 implicit none
 real, intent(in) :: a, b
+!     beginning of local variable declarations
 real :: c, d, h, s11, s3, s5, s7, s9, t, u, v, w, x, x2
 real, parameter :: c0 = .833333333333333e-01
 real, parameter :: c1 = -.277777777760991e-02
@@ -11743,6 +11876,7 @@ end function algdiv
 pure elemental double precision function dbetln(a0, b0)
 implicit none
 double precision, intent(in) :: a0, b0
+!     beginning of local variable declarations
 integer :: i, n
 double precision :: a, b, c, h, sn, u, v, w, z
 double precision, parameter :: e = .9189385332046727417803297364056d0
@@ -11859,6 +11993,7 @@ implicit none
 !          FOR 1 .LE. a .LE. 2  AND  1 .LE. b .LE. 2
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a, b
+!     beginning of local variable declarations
 double precision :: x
 interface
    pure elemental function dgmln1(x)
@@ -11885,6 +12020,7 @@ end function dgsmln
 pure elemental double precision function dbcorr(a0, b0)
 implicit none
 double precision, intent(in) :: a0, b0
+!     beginning of local variable declarations
 integer :: j, k
 double precision :: a, b, c, h, s(15), t, w, x, x2, z
 double precision, parameter :: e(15) = [.833333333333333333333333333333d-01, - &
@@ -11937,6 +12073,7 @@ end function dbcorr
 pure elemental double precision function dlgdiv(a, b)
 implicit none
 double precision, intent(in) :: a, b
+!     beginning of local variable declarations
 integer :: j, k
 double precision :: c, d, h, s(15), t, u, v, w, x, x2
 double precision, parameter :: e(15) = [.833333333333333333333333333333d-01, - &
@@ -12003,6 +12140,7 @@ integer, intent(in) :: ind
 real, intent(in) :: a
 real, intent(inout) :: ans, qans
 real, intent(in) :: x
+!     beginning of local variable declarations
 integer :: i, iop, m, max, n, nswc_ai_i4
 real :: a2n, a2nm1, acc, amn, apn, b2n, b2nm1, c, c0, c1, c2, c3, c4, c5, c6, c7, c8, e, g, h, r, rta, rtx, s, sum, t, tol, twoa, &
    & u, w, y, z, j, l, wk(20)
@@ -12393,6 +12531,7 @@ end subroutine gratio
 pure elemental real function rcomp(a, x)
 implicit none
 real, intent(in) :: a, x
+!     beginning of local variable declarations
 real :: t, t1, u
 real, parameter :: rt2pin = .398942280401433
 interface
@@ -12443,6 +12582,7 @@ intrinsic :: gamma
 !              Evaluation of exp(-x)*x**a/gamma(a)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a, x
+!     beginning of local variable declarations
 double precision :: t, w
 double precision, parameter :: c = .398942280401432677939946059934d0
 interface
@@ -12493,6 +12633,7 @@ integer, intent(inout) :: ierr
 real, intent(in) :: a, p, q
 real, intent(out) :: x
 real, intent(in) :: x0
+!     beginning of local variable declarations
 integer :: ier, iop
 real :: am1, amax, amin, ap1, ap2, ap3, apn, b, c1, c2, c3, c4, c5, d, e, e2, eps, g, h, pn, qg, qn, r, rta, s, s2, sum, t, u, w, &
    & xmin, xn, y, z
@@ -12819,10 +12960,11 @@ end subroutine gaminv
 
 pure elemental subroutine dgrat(a, x, ans, qans, ierr)
 implicit none
-intrinsic :: erf
 integer, intent(inout) :: ierr
 double precision, intent(in) :: a, x
 double precision, intent(inout) :: ans, qans
+!     beginning of local variable declarations
+intrinsic erf
 integer :: i, m, max, n
 double precision :: amn, apn, a2n, a2nm1, big, b2n, b2nm1, c, e, g, h, j, l, r, rta, rtx, s, sum, t, tol, twoa, u, x0, y, z, wk(20)
 double precision, parameter :: alog10 = 2.30258509299404568401799145468d0
@@ -13097,6 +13239,7 @@ double precision, intent(in) :: a, y, l
 double precision, intent(inout) :: z
 double precision, intent(in) :: rta
 double precision, intent(inout) :: ans, qans
+!     beginning of local variable declarations
 double precision :: c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, e, t, u, w
 double precision, parameter :: rt2pin = .398942280401432677939946059934d0
 double precision, parameter :: d0(7) = [-.333333333333333333333333333333d+00, &
@@ -13298,6 +13441,7 @@ double precision, intent(in) :: a, y, l
 double precision, intent(inout) :: z
 double precision, intent(in) :: rta
 double precision, intent(inout) :: ans, qans
+!     beginning of local variable declarations
 double precision :: e, t, u, w, c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10
 double precision, parameter :: rt2pin = .398942280401432678d0
 double precision, parameter :: a0(5) = [-.73324404807556026d-03, -.11758531313175796d-01, - &
@@ -13396,6 +13540,7 @@ integer, intent(inout) :: ierr
 double precision, intent(in) :: a
 double precision, intent(out) :: x
 double precision, intent(in) :: p, q
+!     beginning of local variable declarations
 integer :: ier, ind
 real :: p0, q0, x0
 double precision :: am1, apn, ap1, ap2, ap3, b, c1, c2, c3, c4, c5, d, e, eps, g, h, pn, qg, qn, r, rta, s, sum, s2, t, u, w, xmin &
@@ -13727,6 +13872,7 @@ integer, intent(inout) :: ierr
 real, intent(in) :: a, b
 real, intent(out) :: w, w1
 real, intent(in) :: x, y
+!     beginning of local variable declarations
 integer :: ierr1, ind, n
 real :: a0, b0, eps, t, x0, y0, z, lambda
 interface
@@ -13970,6 +14116,7 @@ end subroutine bratio
 pure elemental real function fpser(a, b, x, eps)
 implicit none
 real, intent(in) :: a, b, eps, x
+!     beginning of local variable declarations
 real :: an, c, s, t, tol
 interface
    pure elemental function exparg(l)
@@ -14007,6 +14154,7 @@ end function fpser
 pure elemental real function apser(a, b, x, eps)
 implicit none
 real, intent(in) :: a, b, eps, x
+!     beginning of local variable declarations
 real :: aj, bx, c, s, t, tol, j
 real, parameter :: g = .577215664901533
 interface
@@ -14043,6 +14191,7 @@ end function apser
 pure elemental real function bpser(a, b, x, eps)
 implicit none
 real, intent(in) :: a, b, eps, x
+!     beginning of local variable declarations
 integer :: i, m
 real :: a0, apb, b0, c, sum, t, tol, u, w, z, n
 interface
@@ -14142,6 +14291,7 @@ pure elemental real function bup(a, b, x, y, n, eps)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b, eps, x, y
+!     beginning of local variable declarations
 integer :: i, k, kp1, mu, nm1
 real :: ap1, apb, d, r, t, w, l
 interface
@@ -14215,6 +14365,7 @@ pure elemental real function bfrac(a, b, x, y, lambda, eps)
 implicit none
 real, intent(in) :: a, b, eps, x, y
 real, intent(in) :: lambda
+!     beginning of local variable declarations
 real :: alpha, an, anp1, beta, bn, bnp1, c, c0, c1, e, p, r, r0, s, t, w, yp1, n
 interface
    pure elemental function brcomp(a,b,x,y)
@@ -14278,6 +14429,7 @@ end function bfrac
 pure elemental real function brcomp(a, b, x, y)
 implicit none
 real, intent(in) :: a, b, x, y
+!     beginning of local variable declarations
 integer :: i, n
 real :: a0, apb, b0, c, e, h, t, u, v, x0, y0, z, lambda, lnx, lny
 real, parameter :: const = .398942280401433
@@ -14419,6 +14571,7 @@ pure elemental real function brcmp1(mu, a, b, x, y)
 implicit none
 integer, intent(in) :: mu
 real, intent(in) :: a, b, x, y
+!     beginning of local variable declarations
 integer :: i, n
 real :: a0, apb, b0, c, e, h, t, u, v, x0, y0, z, lambda, lnx, lny
 real, parameter :: const = .398942280401433
@@ -14566,6 +14719,7 @@ integer, intent(inout) :: ierr
 real, intent(in) :: a, b, eps
 real, intent(inout) :: w
 real, intent(in) :: x, y
+!     beginning of local variable declarations
 integer :: i, n, nm1
 real :: bm1, bp2n, cn, coef, dj, p, q, r, s, sum, t, t2, u, v, z, j, l, lnx, nu, n2, c(30), d(30)
 interface
@@ -14659,6 +14813,7 @@ implicit none
 real, intent(in) :: a, eps
 real, intent(inout) :: p, q
 real, intent(in) :: r, x
+!     beginning of local variable declarations
 real :: a2n, a2nm1, am0, an, an0, b2n, b2nm1, c, cma, g, h, sum, t, tol, w, z, j, l
 interface
    pure elemental function erfc1(ind,x)
@@ -14756,6 +14911,7 @@ pure elemental real function basym(a, b, lambda, eps)
 implicit none
 real, intent(in) :: a, b, eps
 real, intent(in) :: lambda
+!     beginning of local variable declarations
 integer :: i, im1, imj, j, m, mm1, mmj, n, np1
 real :: bsum, dsum, f, h, h2, hn, r, r0, r1, s, sum, t, t0, t1, u, w, w0, z, z0, z2, zn, znm1, j0, j1, a0(21), b0(21), c(21), d(21)
 integer, parameter :: num = 20
@@ -14872,6 +15028,7 @@ integer, intent(out) :: ierr
 real, intent(in) :: a0, b0, eps
 real, intent(out) :: p
 real, intent(in) :: x0
+!     beginning of local variable declarations
 integer :: ind, l, max
 real :: a, afrac, am1, an, b, bfrac, c, gamrat, p0, rty, sum, t, temp, tol, x, y, i, j, k, lambda, m, n
 real, parameter :: w(10) = [6.6671344308688e-2, 1.4945134915058e-1, 2.1908636251598e-1, 2.6926671931000e-1, &
@@ -15117,6 +15274,7 @@ end function blnd
 pure elemental real function logam(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 integer :: n
 real :: t, z
 real, parameter :: d = .41893853320467
@@ -15175,6 +15333,7 @@ implicit none
 complex :: z
 complex, intent(in) :: cnu
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: i, k, m, n
 real :: a, cn1, cn2, e, fn, pn, qm, qn, qnp1, r, r2, rn2, sn, t1, t2, u, v, x, y
 complex :: c, nu, s, sm1, sm2, t, tsc, w0, w1, zn, zz
@@ -15376,6 +15535,7 @@ implicit none
 complex, intent(in) :: cnu
 complex, intent(inout) :: w
 complex :: z
+!     beginning of local variable declarations
 integer :: i, imin, k, km1, km2
 real :: a, a0, eps, rnu
 complex :: nu, nup1, p, s, sn, t, ti
@@ -15480,6 +15640,7 @@ implicit none
 real, intent(in) :: fn
 complex, intent(in) :: cz, cnu
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: ind, k, l, m
 real :: alpha, am, aq, ar, phi, sgn, theta, u, v, x, y, is, inu, izn
 complex :: c1, c2, eta, nu, p, p1, q, r, s, s1, s2, sm, t, z, zn
@@ -15651,6 +15812,7 @@ pure elemental subroutine cbja(cz, cnu, w)
 implicit none
 complex, intent(in) :: cz, cnu
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: i, ind
 real :: eps, r, rnu, tol, u, v, x, y
 real :: inu, m
@@ -15767,6 +15929,7 @@ implicit none
 integer, intent(in) :: in
 complex, intent(in) :: a
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: i, m, n
 real :: an, aq(2), az(2), fj(2), pm, pn, qf(2), qm, qn, qz(2), rm(4), rz(2), sm(4), sn, ss, sz(2), tm(2), ts(2), zm, zr(2), zs
 real, parameter :: cd(30) = [0.00000000000000e00, -1.64899505142212e-2, -7.18621880068536e-2, -1.67086878124866e-1, - &
@@ -16109,6 +16272,7 @@ integer, intent(inout) :: nz
 real, intent(in) :: alpha
 real :: x
 real, intent(inout) :: y(n)
+!     beginning of local variable declarations
 external jairy
 integer :: i, ialp, idalp, iflw, in, is, i1, i2, k, kk, km, kt, nn, ns, nswc_ai_i4
 real :: ak, akm, ans, ap, arg, coef, dalpha, dfn, dtm, earg, elim, etx, fidal, flgjy, fn, fnf, fni, fnp1, fnu, gln, rden, relb, &
@@ -16566,6 +16730,7 @@ implicit none
 integer :: iflw, in
 real :: elim, flgjy, fnu, tol, wk(*), x, y(*)
 external funjy
+!     beginning of local variable declarations
 integer :: i, j, jn, jr, ju, k, kb, klast, kmax(5), kp1, ks, ksp1, &
    & kstemp, l, lr, lrp1
 real :: abw2, akm, alfa(26,4), ap, ar(8), asum, az, beta(26,5), br(10), bsum, c(65), con1, con2, con3, con548, cr(10), crz32, dfi, &
@@ -16882,6 +17047,7 @@ real, intent(inout) :: ai
 real, intent(in) :: c
 real, intent(inout) :: dai
 real, intent(in) :: rx, x
+!     beginning of local variable declarations
 integer :: i, j
 real :: ccv, cv, e1, e2, ec, f1, f2, rtrx, scv, t, temp1, temp2, tt
 integer, parameter :: n1 = 14
@@ -17137,6 +17303,7 @@ implicit none
 integer, intent(in) :: in
 complex, intent(in) :: a
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: i, la, lr, ly, m, n
 real :: an, aq(2), az(2), pm, pn, qf(2), qm, qn, qz(2), rm, rn, rz(2), sl(2), sm(4), sn, sq(2), sr(2), ss, sz(2), tm(4), ts(2), zl &
    & (2), zs
@@ -17461,6 +17628,7 @@ subroutine cbssli(z, cnu, w)
 implicit none
 complex, intent(in) :: z, cnu
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 real :: t, x, y
 complex :: nu, z0
 real, parameter :: pihalf = 1.5707963267949
@@ -17509,6 +17677,7 @@ implicit none
 integer, intent(in) :: in, mo
 complex, intent(in) :: a
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: i, m, n
 real :: an, aq(2), az(2), fi(2), pm, pn, qf(2), qm, qn, qz(2), rm(4), rz(2), sm(4), sn, ss, sz(2), tm(2), ts(2), zm, zr(2), zs
 real, parameter :: cd(30) = [0.00000000000000e00, -1.64899505142212e-2, -7.18621880068536e-2, -1.67086878124866e-1, - &
@@ -17885,6 +18054,7 @@ integer, intent(inout) :: nz
 real, intent(in) :: alpha
 real, intent(in) :: x
 real, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: i, ialp, in, is, i1, i2, k, kk, km, kt, nn, ns, nswc_ai_i4
 real :: ain, ak, akm, ans, ap, arg, atol, tolln, dfn, dtm, dx, earg, elim, etx, flgik, fn, fnf, fni, fnp1, fnu, gln, ra, s, sx, &
    & sxo2, s1, s2, t, ta, tb, temp(3), tfn, tm, tol, trx, t2, xo2, xo2l, z, nswc_ai_r4
@@ -18336,6 +18506,7 @@ real, intent(inout) :: ra
 real, intent(in) :: tol
 real, intent(in) :: x
 real, intent(inout) :: y(*)
+!     beginning of local variable declarations
 integer :: j, jn, k, kk, l
 real :: ak, ap, coef, etx, fn, gln, s1, s2, t, t2, z
 real, parameter :: con(2) = [3.98942280401432678e-01, 1.25331413731550025e+00]
@@ -18396,6 +18567,7 @@ implicit none
 complex :: z
 complex, intent(in) :: cnu
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 real :: a, b, c, e, rn, rz, s, tau, x, y
 complex :: nu
 interface
@@ -18502,6 +18674,7 @@ subroutine cbki(z, cnu, w)
 implicit none
 complex, intent(in) :: z, cnu
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 real :: a, b, u1, u2
 complex :: w1, w2
 real, parameter :: pi = 3.14159265358979e+00
@@ -18543,6 +18716,7 @@ implicit none
 complex :: z
 complex, intent(in) :: cnu
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: i
 real :: eps, u, v
 real :: m
@@ -18606,6 +18780,7 @@ implicit none
 real, intent(in) :: rz
 complex, intent(in) :: z, cnu
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: i, ind, m, n, n1
 real :: a, ai, b, c, t, x, y, znorm, zr1, zr2, nu
 complex :: cz, ex, r, r1, u1, u2, u3, w1, w2, zr
@@ -18733,6 +18908,7 @@ real, intent(in) :: r
 complex, intent(in) :: z, zr
 complex :: nu
 complex, intent(inout) :: w1, w2
+!     beginning of local variable declarations
 integer :: k
 real :: ak, eps, eps0, phi, s, u, x, y
 complex :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
@@ -18861,6 +19037,7 @@ integer, intent(in) :: n
 real, intent(in) :: r
 complex, intent(in) :: z, zr, nu
 complex, intent(inout) :: w, w0
+!     beginning of local variable declarations
 integer :: i, m, num
 real :: a, b, c, e, eps, eps0, f, rnu, t, th, x, y, inu, l
 complex :: al, bl, s, u1, u2, u3
@@ -18966,6 +19143,7 @@ implicit none
 real, intent(in) :: r
 complex :: z
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: i, ind, m, n, n1
 real :: a, ai, rz, t, x, y, znorm, zr1, zr2, nu, nu1
 complex :: cn, cz, ex, u1, u2, u3, w1, w2, zr
@@ -19108,6 +19286,7 @@ implicit none
 complex :: z
 complex, intent(inout) :: w
 real, intent(in) :: nu
+!     beginning of local variable declarations
 integer :: i
 real :: a, eps, u, v
 real :: m
@@ -19172,6 +19351,7 @@ real, intent(in) :: r
 complex, intent(in) :: z, zr
 complex, intent(inout) :: w1, w2
 real, intent(in) :: nu
+!     beginning of local variable declarations
 integer :: k
 real :: a, ak, eps, eps0, g1, g2, gm1, gm2, phi, t, x, y
 complex :: c, ch, cl, f, mu, p, q, sh, t1, t2, w
@@ -19281,6 +19461,7 @@ real, intent(in) :: r
 complex, intent(in) :: z, zr
 complex, intent(inout) :: k1, k2
 real, intent(in) :: nu
+!     beginning of local variable declarations
 integer :: i, m
 real :: a, al, b, c, e, eps, eps0, th, x, y, l, nu2
 complex :: bl, s, u1, u2, u3
@@ -19369,6 +19550,7 @@ pure elemental complex function cxp(n, nu)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: nu
+!     beginning of local variable declarations
 integer :: k
 real :: c, s
 interface
@@ -19408,6 +19590,7 @@ implicit none
 integer, intent(in) :: in, mo
 complex, intent(in) :: a
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 integer :: i, la, lk, lr, m, n
 real :: an, aq(2), az(2), pm, pn, qf(2), qm, qn, rm, rn, rz(2), sl(2), sm(2), sn, sq(2), sr(2), ss, sz(2), tm(2), ts(2), zl(2), zs
 real, parameter :: cd(30) = [0.00000000000000e00, -1.64899505142212e-2, -7.18621880068536e-2, -1.67086878124866e-1, - &
@@ -19658,6 +19841,7 @@ integer, intent(in) :: ind
 complex, intent(in) :: z
 complex, intent(inout) :: ai
 complex, intent(inout) :: aip
+!     beginning of local variable declarations
 real :: a, b, r
 complex :: bi, bip
 interface
@@ -19710,6 +19894,7 @@ implicit none
 integer, intent(in) :: ind
 complex, intent(inout) :: ai, aip, bi, bip
 complex, intent(in) :: z
+!     beginning of local variable declarations
 integer :: i, n
 real :: x, y
 complex :: z1, z2, z3, zz, f, f1, g, g1, e, e1
@@ -19785,6 +19970,7 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ind
 complex, intent(in) :: z
 complex, intent(inout) :: ai, aip
+!     beginning of local variable declarations
 real :: a, b, r
 complex :: z1, z2, z3, zm, w1, w2, w1m, w2m, e
 real, parameter :: c1 = 1.83776298473931e-01
@@ -19846,6 +20032,7 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ind
 complex, intent(inout) :: ai, aip
 complex, intent(in) :: z
+!     beginning of local variable declarations
 integer :: i, k, m, m2
 real :: eps, r, t, u, u1, v, v1, xm, xneg, xpos
 complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn, alpha, beta, j
@@ -20011,6 +20198,7 @@ integer, intent(in) :: ind
 complex, intent(in) :: z
 complex, intent(inout) :: bi
 complex, intent(inout) :: bip
+!     beginning of local variable declarations
 real :: a, b, r
 complex :: ai, aip
 interface
@@ -20064,6 +20252,7 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ind
 complex, intent(in) :: z
 complex, intent(inout) :: bi, bip
+!     beginning of local variable declarations
 real :: a, r, x, y
 complex :: z1, z2, zm, w1, w2, w1m, w2m, e, e1
 real, parameter :: c1 = 5.77350269189626e-01
@@ -20135,6 +20324,7 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ind
 complex, intent(in) :: z
 complex, intent(inout) :: bi, bip
+!     beginning of local variable declarations
 integer :: i, k, m, m2
 real :: ce, cf, eps, r, s, t, u, u1, v, v1, x, xneg, xpos, y
 complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn, cf1, cf2, alpha, beta, j, cz
@@ -20373,6 +20563,7 @@ implicit none
 !-------------------------------------------------------------
 complex :: z
 complex, intent(inout) :: i1, i2, i1m, i2m
+!     beginning of local variable declarations
 complex :: cz
 complex, parameter :: ex13 = (5.0e-01, 8.66025403784439e-01)
 complex, parameter :: ex13c = (5.0e-01, -8.66025403784439e-01)
@@ -20405,6 +20596,7 @@ subroutine imc(z, i1, i2, i1m, i2m)
 implicit none
 complex :: z
 complex, intent(inout) :: i1, i2, i1m, i2m
+!     beginning of local variable declarations
 integer :: i, n, n1
 real :: a, an, b, cfa, cfb, cn1, cn2, m
 complex :: ia1, ia2, ia3, ib1, ib2, ib3, sz, zh, e, cf1, cf2, cf3, cf4
@@ -20467,6 +20659,7 @@ implicit none
 real, intent(in) :: cn
 complex :: z
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 real :: d, eps
 real :: m
 complex :: sz, t
@@ -20522,6 +20715,7 @@ implicit none
 !--------------------------------------------------------------
 complex :: z
 complex, intent(inout) :: i1, i2, i1m, i2m
+!     beginning of local variable declarations
 complex :: cz
 complex, parameter :: ex13 = (5.0e-01, 8.66025403784439e-01)
 complex, parameter :: ex13c = (5.0e-01, -8.66025403784439e-01)
@@ -20554,6 +20748,7 @@ subroutine jmc(z, i1, i2, i1m, i2m)
 implicit none
 complex :: z
 complex, intent(inout) :: i1, i2, i1m, i2m
+!     beginning of local variable declarations
 integer :: i, n, n1
 real :: a, an, b, cfa, cfb, cn1, cn2, m
 complex :: ia1, ia2, ia3, ib1, ib2, ib3, sz, zh, e, cf1, cf2, cf3, cf4
@@ -20616,6 +20811,7 @@ implicit none
 real, intent(in) :: cn
 complex :: z
 complex, intent(inout) :: w
+!     beginning of local variable declarations
 real :: d, eps
 real :: m
 complex :: sz, t
@@ -20664,6 +20860,7 @@ implicit none
 integer, intent(in) :: ind
 complex, intent(in) :: z
 complex, intent(inout) :: k1, k2
+!     beginning of local variable declarations
 integer :: ind1
 real :: a, b
 complex :: i1, i2, i1m, i2m, cz, e
@@ -20717,6 +20914,7 @@ implicit none
 integer, intent(in) :: ind
 complex, intent(in) :: z
 complex, intent(inout) :: k1, k2
+!     beginning of local variable declarations
 integer :: i, l, m
 real :: a, ai, al, b, c, eps, r, th, x1, x2
 complex :: bi, u1, u2, u3, s, e
@@ -20781,6 +20979,7 @@ end subroutine kml
 pure real function ai(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 integer :: n, n2
 real :: phi, r, rtx, t, w
 real, parameter :: x0 = 1.58740105196820
@@ -20914,6 +21113,7 @@ end function ai
 pure elemental real function aie(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: phi, r, rtx, t, w
 real, parameter :: x0 = .158740105196820e+01
 real, parameter :: an0 = .355028053887818e+00
@@ -21040,6 +21240,7 @@ end function aie
 pure real function bi(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 integer :: n, n2
 real :: phi, r, rtx, t, w
 real, parameter :: x0 = 6.3496042078728
@@ -21223,6 +21424,7 @@ end function bi
 pure elemental real function bie(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: phi, r, rtx, t, w
 real, parameter :: x0 = 6.3496042078728
 real, parameter :: an0 = .614926627446001e+00
@@ -21398,6 +21600,7 @@ pure elemental subroutine aimp(x, r, phi)
 implicit none
 real, intent(inout) :: phi, r
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: rtx, z
 real, parameter :: pi4 = .785398163397448
 real, parameter :: an0 = .297640916735064e+00
@@ -21522,6 +21725,7 @@ end subroutine aimp
 pure complex function ck(k,l)
 implicit none
 complex, intent(in) :: k, l
+!     beginning of local variable declarations
 integer :: i, ind
 real :: eps, phi, r, t, tol, u, v, x, xx, y
 complex :: ak, al, ak1, al1, al2, ckk, ckp, f1, f2, f3, fxk, aktemp, ck1, z
@@ -21726,6 +21930,7 @@ implicit none
 !     .LT. 0.0 or if z is on the negative imaginary axis.
 !---------------------------------------------------------
 complex, intent(in) :: z
+!     beginning of local variable declarations
 real :: nswc_ai_r4
 !     ----------
 nswc_ai_r4 = real(z)
@@ -21741,6 +21946,7 @@ end function cflect
 pure complex function km(k2)
 implicit none
 complex, intent(in) :: k2
+!     beginning of local variable declarations
 integer :: i
 real :: c, eps, ri, tol
 complex :: an, s1
@@ -21778,6 +21984,7 @@ pure subroutine kl(l, fk, fl)
 implicit none
 complex, intent(in) :: l
 complex, intent(inout) :: fk, fl
+!     beginning of local variable declarations
 integer :: i
 real :: bn, c, eps, ri, tol, u, x, y
 complex :: an, l2, s1, s2, w
@@ -21849,6 +22056,7 @@ implicit none
 integer, intent(inout) :: ierr
 complex, intent(in) :: k, l
 complex, intent(inout) :: ce, ck
+!     beginning of local variable declarations
 integer :: i, ind
 real :: c, eps, phi, r, t, tol, u, v, x, xx, y
 complex :: ak, al, ak1, al1, ckk, ckp, f1, f2, f3, aktemp, ck1, cee, cep, ce1, e1, e2, e3, at, fx, fxk, k1, l1, ak2, al2, z, g, &
@@ -22104,6 +22312,7 @@ end subroutine cke
 pure elemental complex function atn(z)
 implicit none
 complex, intent(in) :: z
+!     beginning of local variable declarations
 real :: atn1, atn2, d, da, db, t, x, y
 double precision :: dx, dy
 interface
@@ -22134,6 +22343,7 @@ pure elemental subroutine ekm(k2, fk, ek)
 implicit none
 complex, intent(in) :: k2
 complex, intent(inout) :: fk, ek
+!     beginning of local variable declarations
 integer :: i
 real :: c, eps, ri, tol
 complex :: an, cn, s1, s2
@@ -22175,6 +22385,7 @@ pure elemental subroutine ekl(l,fk,fl,ek,el,gk,gl)
 implicit none
 complex, intent(in) :: l
 complex, intent(inout) :: fk, fl, ek, el, gk, gl
+!     beginning of local variable declarations
 integer :: i
 real :: bn, c, dn, eps, fn, gn, ri, tol, u, x, y
 complex :: l2, an, cn, en, s1, s2, s3, s4, s5, s6, s7, w
@@ -22272,6 +22483,7 @@ real, intent(in) :: cphi
 real, intent(inout) :: e, f
 real, intent(in) :: phi
 real, intent(in) :: k, l
+!     beginning of local variable declarations
 real :: an, cn, d1, d2, d3, d4, dn, hn, p, pn, px, qn, qx, r, r0, r2, ri, rj, rk, rm, rn, s0, s1, s2, s3, s4, si, sj, sk, sn, ss, &
    & t1, t2, td, tr, ts, w, k2, l2
 real, parameter :: ln4 = 1.3862943611199
@@ -22408,6 +22620,7 @@ implicit none
 integer, intent(inout) :: ierr
 double precision, intent(in) :: phi, cphi, k, l
 double precision, intent(inout) :: f, e
+!     beginning of local variable declarations
 double precision :: an, cn, dn, d1, d2, d3, d4, hn, k2, l2, p, pn, px, qn, qx, r, ri, rj, rk, rm, rn, r0, r2, si, sj, sk, sn, ss, &
    & s0, s1, s2, s3, s4, td, tr, ts, t1, t2, w
 double precision, parameter :: ln4 = .1386294361119890618834464242916353136151d+01
@@ -22545,6 +22758,7 @@ implicit none
 integer, intent(inout) :: ierr
 real, intent(in) :: phi, cphi, k2, l2, n, m
 real, intent(inout) :: p
+!     beginning of local variable declarations
 real :: a, b, c, eps, r, rf, s, s2, tol
 real, parameter :: pihalf = 1.5707963267948966192
 interface
@@ -22622,6 +22836,7 @@ implicit none
 integer, intent(inout) :: ierr
 double precision, intent(in) :: phi, cphi, k2, l2, n, m
 double precision, intent(inout) :: p
+!     beginning of local variable declarations
 double precision :: a, b, c, eps, r, rf, s, s2, tol
 double precision, parameter :: pihalf = 1.570796326794896619231321691639751442099d0
 interface
@@ -22718,6 +22933,7 @@ real, intent(inout) :: rf
 real, intent(in) :: x
 real, intent(in) :: y
 real, intent(in) :: z
+!     beginning of local variable declarations
 real :: c1, c2, c3, e2, e3, epslon, errtol, lamda, lolim, mu, s, uplim, xn, xndev, xnroot, yn, yndev, ynroot, zn, zndev, znroot
 interface
    pure elemental function spmpar(i)
@@ -22814,6 +23030,7 @@ double precision, intent(inout) :: rf
 double precision, intent(in) :: x
 double precision, intent(in) :: y
 double precision, intent(in) :: z
+!     beginning of local variable declarations
 double precision :: c1, c2, c3, e2, e3, epslon, errtol, lamda, lolim, mu, s, uplim, xn, xndev, xnroot, yn, yndev, ynroot, zn, &
    & zndev, znroot
 interface
@@ -22911,6 +23128,7 @@ real, intent(inout) :: rd
 real, intent(in) :: x
 real, intent(in) :: y
 real, intent(in) :: z
+!     beginning of local variable declarations
 real :: c1, c2, c3, c4, ea, eb, ec, ed, ef, epslon, errtol, lamda, lolim, mu, power4, sigma, s1, s2, uplim, xn, xndev, xnroot, yn, &
    & yndev, ynroot, zn, zndev, znroot
 interface
@@ -23019,6 +23237,7 @@ double precision, intent(inout) :: rd
 double precision, intent(in) :: x
 double precision, intent(in) :: y
 double precision, intent(in) :: z
+!     beginning of local variable declarations
 double precision :: c1, c2, c3, c4, ea, eb, ec, ed, ef, epslon, errtol, lamda, lolim, mu, power4, sigma, s1, s2, uplim, xn, xndev, &
    & xnroot, yn, yndev, ynroot, zn, zndev, znroot
 interface
@@ -23129,6 +23348,7 @@ real, intent(in) :: p
 real, intent(in) :: x
 real, intent(in) :: y
 real, intent(in) :: z
+!     beginning of local variable declarations
 real :: rc, alfa, beta, c1, c2, c3, c4, ea, eb, ec, e2, e3, epslon, errtol, etolrc, lamda, lolim, mu, pn, pndev, power4, sigma, &
    & s1, s2, s3, uplim, xn, xndev, xnroot, yn, yndev, ynroot, zn, zndev, znroot
 interface
@@ -23261,6 +23481,7 @@ double precision, intent(in) :: p
 double precision, intent(in) :: x
 double precision, intent(in) :: y
 double precision, intent(in) :: z
+!     beginning of local variable declarations
 double precision :: rc, alfa, beta, c1, c2, c3, c4, ea, eb, ec, e2, e3, epslon, errtol, etolrc, lamda, lolim, mu, pn, pndev, &
    & power4, sigma, s1, s2, s3, uplim, xn, xndev, xnroot, yn, yndev, ynroot, zn, zndev, znroot
 interface
@@ -23391,6 +23612,7 @@ real, intent(inout) :: rc
 real, intent(in) :: errtol
 real, intent(in) :: x
 real, intent(in) :: y
+!     beginning of local variable declarations
 real :: c1, c2, lamda, lolim, mu, s, sn, uplim, xn, yn
 interface
    pure elemental function spmpar(i)
@@ -23480,6 +23702,7 @@ double precision, intent(inout) :: rc
 double precision, intent(in) :: errtol
 double precision, intent(in) :: x
 double precision, intent(in) :: y
+!     beginning of local variable declarations
 double precision :: c1, c2, lamda, lolim, mu, s, sn, uplim, xn, yn
 interface
    pure elemental function dpmpar(i)
@@ -23545,6 +23768,7 @@ integer, intent(inout) :: ierr
 real, intent(inout) :: c, d, s
 real, intent(in) :: u
 real, intent(in) :: k, l
+!     beginning of local variable declarations
 integer :: max, n
 real :: e, eps, f, f2, r, sg, tol, u1, u2, z
 real, parameter :: pihalf = 1.5707963267949
@@ -23650,6 +23874,7 @@ real, intent(in) :: f
 real, intent(inout) :: s
 real, intent(in) :: u
 real, intent(in) :: k, l
+!     beginning of local variable declarations
 integer :: ierr
 real :: c1, d1, e1, f1, s1, v
 real, parameter :: pihalf = 1.5707963267949
@@ -23736,6 +23961,7 @@ implicit none
 real, intent(out) :: c, d, s
 real, intent(in) :: u
 real, intent(in) :: k
+!     beginning of local variable declarations
 real :: c1, c2, c3, c4, u2, k2
 !     -------------------------------------------------
 !     Calculates SN(u,k), CN(u,k), and DN(u,k) for
@@ -23761,6 +23987,7 @@ real, intent(in) :: f, f1
 real, intent(inout) :: s
 real, intent(in) :: u
 real, intent(in) :: k, l
+!     beginning of local variable declarations
 real :: a, ai, coef, eps, q1, q2, qd, qh, qn, sum, temp, tol, v, w, x, i
 real, parameter :: pihalf = 1.5707963267949
 interface
@@ -23823,6 +24050,7 @@ real, intent(in) :: f, f1
 real, intent(inout) :: s
 real, intent(in) :: u
 real, intent(in) :: k, l
+!     beginning of local variable declarations
 real :: a, ch, coef, e1, e1n, e2, e2n, eps, q1, q1n, q2, q2n, sh, sum, temp, tol, v, w, x, x2, xn, n
 real, parameter :: pihalf = 1.5707963267949
 real, parameter :: pi = 3.1415926535898
@@ -23905,6 +24133,7 @@ integer, intent(inout) :: ierr
 complex, intent(in) :: u
 complex, intent(inout) :: s, c, d
 real, intent(in) :: k, l
+!     beginning of local variable declarations
 real :: c1, c2, ck, cl, coef, d1, d2, dk, dl, r, s1, s2, sk, sl, t, t1, t2, td1, td2, u1, u2, k2
 interface
    pure elemental subroutine ellpf(u,k,l,s,c,d,ierr)
@@ -23994,6 +24223,7 @@ implicit none
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer, intent(inout) :: ierr
+!     beginning of local variable declarations
 complex :: z1, z4, z6
 real :: zr, zi
 integer :: m, n
@@ -24032,6 +24262,7 @@ implicit none
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer, intent(inout) :: ierr
+!     beginning of local variable declarations
 complex :: z1, z3, z6
 real :: zr, zi
 integer :: m, n
@@ -24070,6 +24301,7 @@ implicit none
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer, intent(inout) :: ierr
+!     beginning of local variable declarations
 complex :: z1, z4, z6
 real :: zr, zi
 integer :: m, n
@@ -24110,6 +24342,7 @@ implicit none
 complex, intent(in) :: z
 complex, intent(inout) :: w
 integer, intent(inout) :: ierr
+!     beginning of local variable declarations
 complex :: z1, z3, z4
 real :: zr, zi
 integer :: m, n
@@ -24151,6 +24384,7 @@ integer, intent(in) :: iop
 integer, intent(inout) :: ko
 integer, intent(in) :: n0
 real, intent(inout) :: a, p, x(*), y(*)
+!     beginning of local variable declarations
 integer :: k, m, n, nswc_ai_i4
 real :: aj0, aj1, b, bgd1, bgd2, c, cape, caph, capv, cee, circm, d1sq, d2sq, f, g(2), h(2), p1, psi1, sum, t, t1, tau, tausq, u, &
    & v, w, xk, yk, ykm1, z, kom, l
@@ -24409,6 +24643,7 @@ integer, intent(in) :: j
 real, intent(in) :: d
 real, intent(out) :: p
 real, intent(in) :: r
+!     beginning of local variable declarations
 integer :: i, n
 real :: a, a1, an, anm1, bk2, c0, const, d2, delta, eps, eps0, expt, f, s, s0, s1, s2, sum, t, t0, t2, td, tn, tr, w, x, x0, y1, &
    & z, zm, zp, zr, zrs, m, m0
@@ -24677,6 +24912,7 @@ integer, intent(in) :: ind
 real, intent(inout) :: e
 real, intent(in) :: x
 real, intent(inout) :: y
+!     beginning of local variable declarations
 real :: ax, bot, eps, t, top
 double precision :: w
 real, parameter :: c = .564189583547756
@@ -24753,6 +24989,7 @@ end subroutine erfc0
 pure elemental real function erfcr(x)
 implicit none
 real, intent(in) :: x
+!     beginning of local variable declarations
 real :: bot, t, top
 real, parameter :: r(5) = [2.10144126479064e+00, 2.62370141675169e+01, 2.13688200555087e+01, 4.65807828718470e+00, &
    & 2.82094791773523e-01]
@@ -24774,6 +25011,7 @@ real, intent(in) :: h
 real, intent(out) :: p
 real, intent(in) :: r0, sx, sy
 real, intent(in) :: k
+!     beginning of local variable declarations
 integer :: i, ii, iy, iz, iz3, j, j8, n1, nt
 real :: a, a1, a2, a4, c8, d, d1, d2, dm, e3, e4, eps, f, g2, g3, h1, h2, h3, h5, h6, h8, q, q1, r, r8, s0, s1, s2, s9, sa, seps1, &
    & sqeps, t, t1, t2, t3, t4, t5, t9, u, x1, x5, yy, z, z1, z2, z3, z8, z9, k8, nswc_ai_r4
@@ -25236,6 +25474,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
+!     beginning of local variable declarations
 integer :: j, jmax, la, lb, mp1
 !     ------------------------------------------------------------------
 !     Copying real polynomials
@@ -25261,6 +25500,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
+!     beginning of local variable declarations
 integer :: j, jmax, la, lb, mp1
 !     ------------------------------------------------------------------
 !     Copying double precision polynomials
@@ -25286,6 +25526,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*)
+!     beginning of local variable declarations
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Addition of real polynomials
@@ -25308,6 +25549,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(*), b(*)
 double precision, intent(inout) :: c(*)
+!     beginning of local variable declarations
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Addition of double precision polynomials
@@ -25330,6 +25572,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*)
+!     beginning of local variable declarations
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Subtraction of real polynomials
@@ -25352,6 +25595,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(*), b(*)
 double precision, intent(inout) :: c(*)
+!     beginning of local variable declarations
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Subtraction of double precision polynomials
@@ -25374,6 +25618,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jmax, jmin, la, lb, lc
 double precision :: dsum
 !     ------------------------------------------------------------------
@@ -25413,6 +25658,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(*), b(*)
 double precision, intent(inout) :: c(*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jmax, jmin, la, lb, lc
 double precision :: sum
 !     ------------------------------------------------------------------
@@ -25453,6 +25699,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*)
+!     beginning of local variable declarations
 integer :: i, ib, ic, imax, j, la, lc
 real :: b0
 double precision :: dsum
@@ -25504,6 +25751,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(*), b(*)
 double precision, intent(inout) :: c(*)
+!     beginning of local variable declarations
 integer :: i, ib, ic, imax, j, la, lc
 double precision :: b0, sum
 !     ------------------------------------------------------------------
@@ -25555,6 +25803,7 @@ integer, intent(in) :: ka, kb, m, n
 real, intent(in) :: r
 real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
+!     beginning of local variable declarations
 integer :: i, ia, ib, imax, j, lb
 real :: a0, jm1
 double precision :: coeff, dsum, rp1
@@ -25605,6 +25854,7 @@ integer, intent(in) :: ka, kb, m, n
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
 double precision, intent(in) :: r
+!     beginning of local variable declarations
 integer :: i, ia, ib, imax, j, lb
 double precision :: a0, coeff, jm1, rp1, sum
 !     ------------------------------------------------------------------
@@ -25652,6 +25902,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: a(n)
 real, intent(inout) :: d(n), q(*)
+!     beginning of local variable declarations
 integer :: i, j, jj, k, l, l0, ll, m
 real :: s, sum, t, u
 !-----------------------------------------------------------------------
@@ -25708,6 +25959,7 @@ implicit none
 integer, intent(in) :: n
 double precision, intent(in) :: a(n)
 double precision, intent(inout) :: d(n), q(*)
+!     beginning of local variable declarations
 integer :: i, j, jj, k, l, l0, ll, m
 double precision :: s, sum, t, u
 !-----------------------------------------------------------------------
@@ -25765,6 +26017,7 @@ integer, intent(in) :: mo, nc
 real :: ac(*)
 real, intent(in) :: au
 real, intent(out) :: fv
+!     beginning of local variable declarations
 integer :: k, l
 real :: ql
 !     ******************************************************************
@@ -25820,6 +26073,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: x
 real, intent(in) :: a(n)
+!     beginning of local variable declarations
 integer :: i, k
 real :: s0, s1, s2, x2
 !-----------------------------------------------------------------------
@@ -25845,6 +26099,7 @@ pure double precision function dcsevl(x, a, n)
 implicit none
 integer, intent(in) :: n
 double precision, intent(in) :: a(n), x
+!     beginning of local variable declarations
 integer :: i, k
 double precision :: x2, s0, s1, s2
 !-----------------------------------------------------------------------
@@ -25871,6 +26126,7 @@ implicit none
 integer, intent(in) :: na
 real, intent(inout) :: an(*)
 real :: au(*)
+!     beginning of local variable declarations
 integer :: k, m
 real :: dm, tm
 !     ******************************************************************
@@ -25898,6 +26154,7 @@ real :: an(*), au(*)
 real, intent(inout) :: df(*), ff(*)
 real, intent(in) :: qu
 real, intent(inout) :: sf(*)
+!     beginning of local variable declarations
 integer :: k, l
 real :: dm, rm, sm, tm
 logical :: ln
@@ -26013,6 +26270,7 @@ implicit none
 integer, intent(in) :: na
 real, intent(inout) :: ac(*)
 real :: au(*)
+!     beginning of local variable declarations
 integer :: i, j, k, l
 real :: sm, td, tm
 !     ******************************************************************
@@ -26065,6 +26323,7 @@ implicit none
 integer, intent(in) :: ma, na
 real, intent(inout) :: aa(*), ar(*)
 real :: au(*)
+!     beginning of local variable declarations
 integer :: i, j, k, l, m
 real :: rm, rn, sm, sn
 !     ******************************************************************
@@ -26147,6 +26406,7 @@ integer, intent(in) :: mo, na, nf
 real :: ar(*)
 real, intent(in) :: au
 real, intent(inout) :: df(*), ff(*), sf(*)
+!     beginning of local variable declarations
 integer :: k, l
 real :: rn, sn
 !     ******************************************************************
@@ -26202,6 +26462,7 @@ implicit none
 integer, intent(in) :: na, nc
 real, intent(inout) :: ac(*)
 real :: ar(*)
+!     beginning of local variable declarations
 integer :: j, k, l, m, n
 real :: rn, sn, tm
 !     ******************************************************************
@@ -26262,6 +26523,7 @@ implicit none
 real :: f
 real, intent(in) :: ax, bx, aerr, rerr
 external f
+!     beginning of local variable declarations
 real :: a, b, c, d, e, eps, fa, fb, fc, tol, xm, p, q, r, s, atol, &
    & rtol
 interface
@@ -26360,6 +26622,7 @@ implicit none
 double precision :: f
 double precision, intent(in) :: ax, bx, aerr, rerr
 external f
+!     beginning of local variable declarations
 double precision :: a, b, c, d, e, eps, fa, fb, fc, tol, xm, p, q, &
    & r, s, atol, rtol
 interface
@@ -26443,6 +26706,7 @@ integer, intent(in) :: lwa
 real, intent(in) :: epsfcn, tol
 real, intent(inout) :: x(n), fvec(n), wa(lwa)
 external fcn
+!     beginning of local variable declarations
 integer :: index, j, lr, maxfev, ml, mode, mu, nfev, nprint
 real :: xtol
 real, parameter :: factor = 1.0e2
@@ -26551,6 +26815,7 @@ real, intent(inout) :: x(n), fvec(n), diag(n), fjac(ldfjac,n), &
    & r(lr), qtf(n), wa1(n), wa2(n), wa3(n)
 real :: wa4(n)
 external fcn
+!     beginning of local variable declarations
 integer :: i, iflag, iter, j, jm1, l, msum, ncfail, ncsuc, nslow1, nslow2, iwa(1)
 logical :: jeval, sing
 real :: actred, delta, epsmch, fnorm, fnorm1, pnorm, prered, ratio, sum, temp, xnorm
@@ -26901,6 +27166,7 @@ pure subroutine qdcrt(a, z)
 implicit none
 real, intent(in) :: a(3)
 complex, intent(inout) :: z(2)
+!     beginning of local variable declarations
 real :: d, eps, r, w, x, y
 interface
    pure elemental function spmpar(i)
@@ -26960,6 +27226,7 @@ implicit none
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(3)
 double precision, intent(inout) :: zr(2), zi(2)
+!     beginning of local variable declarations
 double precision :: d, eps, r, w
 interface
    pure elemental function dpmpar(i)
@@ -27012,6 +27279,7 @@ pure subroutine cbcrt(a, z)
 implicit none
 real, intent(in) :: a(4)
 complex, intent(inout) :: z(3)
+!     beginning of local variable declarations
 real :: arg, c, cf, d, eps, p, p1, q, q1, r, r1, ra, rb, rq, rt, s, sf, sq, sum, t, t1, tol, w, w1, w2, x, x1, x2, x3, y, y1, y2, &
    & y3, aq(3)
 real, parameter :: rt3 = 1.7320508075689
@@ -27207,6 +27475,7 @@ implicit none
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(4)
 double precision, intent(inout) :: zr(3), zi(3)
+!     beginning of local variable declarations
 double precision :: aq(3), arg, c, cf, d, eps, p, p1, q, q1, r, ra, rb, rq, rt, r1, s, sf, sq, sum, t, tol, t1, w, w1, w2, x, x1, &
    & x2, x3, y, y1, y2, y3
 double precision, parameter :: rt3 = 1.732050807568877293527446341505872366943d0
@@ -27404,6 +27673,7 @@ pure subroutine qtcrt(a, z)
 implicit none
 real, intent(in) :: a(5)
 complex, intent(inout) :: z(4)
+!     beginning of local variable declarations
 real :: b, b2, c, d, e, h, p, q, r, t, u, v, v1, v2, x, x1, x2, x3, y, temp(4), nswc_ai_r4
 complex :: w
 interface
@@ -27559,6 +27829,7 @@ implicit none
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(5)
 double precision, intent(inout) :: zr(4), zi(4)
+!     beginning of local variable declarations
 double precision :: b, b2, c, d, e, h, p, q, r, t, temp(4), u, v, v1, v2, w(2), x, x1, x2, x3, nswc_ai_r8
 interface
    pure subroutine daord(a,n)
@@ -27714,6 +27985,7 @@ double precision :: op(*)
 double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
    & dwk(*)
 real, intent(inout) :: wk(*)
+!     beginning of local variable declarations
 integer :: idp1, p, qp, k, qk, svk, tmp
 !     This subroutine finds the zeros of a real polynomial.
 !     op          - Double precision array of length ideg + 1.
@@ -27760,6 +28032,7 @@ integer :: ideg, idp1, num
 double precision :: op(idp1), zeror(ideg), zeroi(ideg), p(idp1), &
    & qp(idp1), k(idp1), qk(idp1), svk(idp1), temp(idp1)
 real :: pt(idp1)
+!     beginning of local variable declarations
 integer :: i, j, jj, l, n, nm1, nn, nz, cnt
 double precision :: aa, bb, cc, factor, t
 real :: lo, max, min, xx, yy, cosr, sinr, x, xxx, sc, bnd, xm, ff, &
@@ -27999,6 +28272,7 @@ implicit none
 integer :: nn
 double precision :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
 integer :: l2, nz
+!     beginning of local variable declarations
 integer :: n, type, i, j, iflag
 double precision :: svu, svv, ui, vi, s
 real :: betas, betav, oss, ovv, ss, vv, ts, tv, ots, otv, tvv, tss
@@ -28113,6 +28387,7 @@ implicit none
 integer :: nn
 double precision :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
 integer :: nz
+!     beginning of local variable declarations
 integer :: n, type, i, j
 double precision :: ui, vi
 real :: mp, omp, ee, relstp, t, zm
@@ -28208,6 +28483,7 @@ subroutine realit(sss, nz, iflag, nn, p, qp, k, qk)
 implicit none
 integer :: iflag, nn, nz
 double precision :: sss, p(nn), qp(nn), k(nn), qk(nn)
+!     beginning of local variable declarations
 integer :: i, j, n
 double precision :: pv, kv, t, s
 real :: ms, mp, omp, ee
@@ -28298,6 +28574,7 @@ implicit none
 integer :: n
 integer :: type
 double precision :: k(n), qk(n)
+!     beginning of local variable declarations
 double precision :: tol
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
@@ -28344,6 +28621,7 @@ implicit none
 integer :: n
 integer :: type
 double precision :: qp(n), k(n), qk(n)
+!     beginning of local variable declarations
 integer :: i
 double precision :: temp
 real :: eta, are, mre
@@ -28387,6 +28665,7 @@ implicit none
 integer :: nn
 integer :: type
 double precision :: uu, vv, p(nn), k(nn)
+!     beginning of local variable declarations
 integer :: n
 double precision :: a4, a5, b1, b2, c1, c2, c3, c4, temp
 real :: eta, are, mre
@@ -28429,6 +28708,7 @@ double precision, intent(in) :: p(nn)
 double precision, intent(inout) :: q(nn)
 double precision, intent(in) :: u, v
 double precision, intent(out) :: a, b
+!     beginning of local variable declarations
 integer :: i
 double precision :: c
 !     Divides p by the quadratic  1,u,v  placing the
@@ -28455,6 +28735,7 @@ implicit none
 !     product of the zeros c/a.
 double precision, intent(in) :: a, b1, c
 double precision, intent(inout) :: sr, si, lr, li
+!     beginning of local variable declarations
 double precision :: b, d, e
 if (a /= 0.d0) go to 20
 sr = 0.d0
@@ -28497,6 +28778,7 @@ integer, intent(inout) :: num
 integer :: ideg
 double precision, intent(in) :: opr(*), opi(*)
 double precision, intent(inout) :: zeror(ideg), zeroi(ideg), wk(*)
+!     beginning of local variable declarations
 integer :: idp1, pr, pi, qpr, qpi, hr, hi, qhr, qhi, shr, shi
 !     This subroutine finds the zeros of a complex polynomial.
 !     opr,opi     - DOUBLE PRECISION ARRAYS OF LENGTH ideg + 1.
@@ -28551,6 +28833,7 @@ double precision, intent(in) :: opr(idp1), opi(idp1)
 double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
    & pr(idp1), pi(idp1), qpr(idp1), qpi(idp1), hr(idp1), hi(idp1), &
    & qhr(idp1), qhi(idp1), shr(idp1), shi(idp1)
+!     beginning of local variable declarations
 integer :: i, nn
 double precision :: sr, si, tr, ti, pvr, pvi, are, mre, eta, infin
 double precision :: xx, yy, cosr, sinr, smalno, base, xxx, zr, zi, bnd, scalcp
@@ -28686,6 +28969,7 @@ pure double precision function scalcp(nn,pt,eta,infin,smalno,base)
 implicit none
 integer, intent(in) :: nn
 double precision, intent(in) :: pt(nn), eta, infin, smalno, base
+!     beginning of local variable declarations
 integer :: i, l
 double precision :: hi, lo, max, min, x, sc
 !     Returns a scale factor to multiply the coefficients of the
@@ -28722,6 +29006,7 @@ implicit none
 integer, intent(in) :: nn
 double precision, intent(inout) :: q(nn), pt(nn)
 double precision, intent(inout) :: bnd
+!     beginning of local variable declarations
 integer :: i, n
 double precision :: x, xm, f, dx, df
 !     Cauchy computes a lower bound bnd on the moduli of the zeros
@@ -28767,6 +29052,7 @@ integer, intent(in) :: l1, nn
 double precision, intent(inout) :: tr, ti
 double precision, intent(in) :: eta, pr(nn), pi(nn)
 double precision, intent(inout) :: hr(nn), hi(nn)
+!     beginning of local variable declarations
 integer :: i, j, jj, n, nm1
 double precision :: dn, t1, t2, xni
 interface
@@ -28834,6 +29120,7 @@ double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
    & hi(nn), qhr(nn), qhi(nn), shr(nn), shi(nn)
 double precision, intent(inout) :: zr, zi
 logical, intent(inout) :: conv
+!     beginning of local variable declarations
 integer :: i, j, n
 double precision :: otr, oti, svsr, svsi
 logical :: test, pasd, bool
@@ -28989,6 +29276,7 @@ double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
    & hi(nn), qhr(nn), qhi(nn)
 double precision, intent(inout) :: zr, zi
 logical, intent(out) :: conv
+!     beginning of local variable declarations
 integer :: i, j, n
 double precision :: mp, ms, omp, relstp, r1, r2, tp
 logical :: b, bool
@@ -29120,6 +29408,7 @@ double precision, intent(in) :: sr, si
 double precision, intent(inout) :: tr, ti
 double precision, intent(in) :: pvr, pvi, are, hr(n), hi(n)
 double precision, intent(inout) :: qhr(n), qhi(n)
+!     beginning of local variable declarations
 double precision :: hvr, hvi
 interface
    pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
@@ -29170,6 +29459,7 @@ logical, intent(in) :: bool
 double precision, intent(in) :: tr, ti
 double precision, intent(inout) :: hr(n), hi(n)
 double precision, intent(in) :: qpr(n), qpi(n), qhr(n), qhi(n)
+!     beginning of local variable declarations
 integer :: j
 double precision :: t1, t2
 !     Calculates the next shifted H polynomial.
@@ -29200,6 +29490,7 @@ double precision, intent(in) :: pr(n), pi(n)
 double precision, intent(inout) :: qr(n), qi(n)
 double precision, intent(in) :: sr, si
 double precision, intent(out) :: pvr, pvi
+!     beginning of local variable declarations
 integer :: i
 double precision :: t
 !     Evaluates a polynomial P at S by the Horner recurrence algo.,
@@ -29221,6 +29512,7 @@ pure double precision function errev(nn,qr,qi,ms,mp,are,mre)
 implicit none
 integer, intent(in) :: nn
 double precision, intent(in) :: qr(nn), qi(nn), ms, mp, are, mre
+!     beginning of local variable declarations
 integer :: i
 double precision :: e
 interface
@@ -29252,6 +29544,7 @@ complex, intent(in) :: w(n)
 integer, intent(inout) :: klust(n)
 real, intent(in) :: c(*)
 real, intent(inout) :: abserr(n), relerr(n)
+!     beginning of local variable declarations
 integer :: j, jp1, k, l, m, nm1, np1
 real :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
 complex :: z
@@ -29403,6 +29696,7 @@ integer, intent(in) :: n
 complex, intent(in) :: c(*), w(n)
 integer, intent(inout) :: klust(n)
 real, intent(inout) :: abserr(n), relerr(n)
+!     beginning of local variable declarations
 integer :: j, jp1, k, l, m, nm1, np1
 real :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
 complex :: z
@@ -29556,6 +29850,7 @@ real, intent(in) :: sx(*)
 real, intent(inout) :: sy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 integer :: i, ix, iy, m, mp1
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -29600,6 +29895,7 @@ double precision, intent(in) :: dx(*)
 double precision, intent(inout) :: dy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 integer :: i, ix, iy, m, mp1
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -29643,6 +29939,7 @@ complex, intent(in) :: cx(*)
 complex, intent(inout) :: cy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 integer :: i, ix, iy
 if (n <= 0) return
 if (incx == 1.and.incy == 1) go to 20
@@ -29668,6 +29965,7 @@ pure subroutine iswap(n,ix,incx,iy,incy)
 implicit none
 integer, intent(in) :: incx, incy, n
 integer, intent(inout) :: ix(*), iy(*)
+!     beginning of local variable declarations
 integer :: i, iix, iiy, m, mp1, ns, itemp1, itemp2, itemp3, nswc_ai_i4
 !                Extended B L A S  subprogram
 !    description of parameters
@@ -29745,6 +30043,7 @@ implicit none
 real, intent(inout) :: sx(*), sy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 real :: stemp
 integer :: i, ix, iy, m, mp1
 if (n <= 0) return
@@ -29795,6 +30094,7 @@ implicit none
 double precision, intent(inout) :: dx(*), dy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 double precision :: dtemp
 integer :: i, ix, iy, m, mp1
 if (n <= 0) return
@@ -29844,6 +30144,7 @@ implicit none
 complex, intent(inout) :: cx(*), cy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 complex :: ctemp
 integer :: i, ix, iy
 if (n <= 0) return
@@ -29878,6 +30179,7 @@ real, intent(inout) :: sx(*), sy(*)
 real, intent(in) :: c, s
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 real :: stemp
 integer :: i, ix, iy
 if (n <= 0) return
@@ -29912,6 +30214,7 @@ double precision, intent(inout) :: dx(*), dy(*)
 double precision, intent(in) :: c, s
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 double precision :: dtemp
 integer :: i, ix, iy
 if (n <= 0) return
@@ -29947,6 +30250,7 @@ complex, intent(inout) :: cx(*), cy(*)
 real, intent(in) :: c, s
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 complex :: ctemp
 integer :: i, ix, iy
 if (n <= 0) return
@@ -29977,6 +30281,7 @@ pure subroutine srotmg(sd1,sd2,sx1,sy1,sparam)
 implicit none
 real, intent(inout) :: sd1, sd2, sparam(5), sx1
 real, intent(in) :: sy1
+!     beginning of local variable declarations
 real :: sflag, sh11, sh12, sh21, sh22, sp1, sp2, sq1, sq2, stemp, su, nswc_ai_r4
 real, parameter :: zero = 0.e0
 real, parameter :: one = 1.e0
@@ -30110,6 +30415,7 @@ implicit none
 integer, intent(in) :: incx, incy, n
 real :: sparam(5)
 real, intent(inout) :: sx(*), sy(*)
+!     beginning of local variable declarations
 integer :: i, kx, ky, nsteps
 real :: sflag, sh11, sh12, sh21, sh22, w, z, nswc_ai_r4
 real, parameter :: zero = 0.e0
@@ -30235,6 +30541,7 @@ double precision, intent(inout) :: dparam(5)
 double precision, intent(in) :: dy1
 double precision, intent(inout) :: dd1
 double precision, intent(inout) :: dx1
+!     beginning of local variable declarations
 double precision :: dh11, dh21, dp2, dq2, du, dflag, dh12, dh22, dp1, dq1, dtemp, nswc_ai_r8
 double precision, parameter :: zero = 0.d0
 double precision, parameter :: one = 1.d0
@@ -30354,6 +30661,7 @@ integer, intent(in) :: incx, incy, n
 double precision, intent(inout) :: dx(*)
 double precision :: dparam(5)
 double precision, intent(inout) :: dy(*)
+!     beginning of local variable declarations
 integer :: i, kx, ky, nsteps
 double precision :: dflag, dh12, dh22, z, dh11, dh21, w, nswc_ai_r8
 double precision, parameter :: zero = 0.d0
@@ -30465,6 +30773,7 @@ implicit none
 real, intent(in) :: sx(*), sy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 real :: stemp
 integer :: i, ix, iy, m, mp1
 stemp = 0.0e0
@@ -30508,6 +30817,7 @@ implicit none
 double precision, intent(in) :: dx(*), dy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 double precision :: dtemp
 integer :: i, ix, iy, m, mp1
 ddot = 0.0d0
@@ -30551,6 +30861,7 @@ implicit none
 complex, intent(in) :: cx(*), cy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 complex :: ctemp
 integer :: i, ix, iy
 ctemp = (0.0,0.0)
@@ -30584,6 +30895,7 @@ implicit none
 complex, intent(in) :: cx(*), cy(*)
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 complex :: ctemp
 integer :: i, ix, iy
 ctemp = (0.0,0.0)
@@ -30619,6 +30931,7 @@ real, intent(in) :: sa
 real, intent(inout) :: sx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
+!     beginning of local variable declarations
 integer :: i, m, mp1, nincx
 if (n <= 0) return
 if (incx == 1) go to 20
@@ -30655,6 +30968,7 @@ double precision, intent(in) :: da
 double precision, intent(inout) :: dx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
+!     beginning of local variable declarations
 integer :: i, m, mp1, nincx
 if (n <= 0) return
 if (incx == 1) go to 20
@@ -30689,6 +31003,7 @@ implicit none
 complex, intent(in) :: ca
 complex, intent(inout) :: cx(*)
 integer, intent(in) :: incx, n
+!     beginning of local variable declarations
 integer :: i, nincx
 if (n <= 0) return
 if (incx == 1) go to 20
@@ -30711,6 +31026,7 @@ implicit none
 complex, intent(inout) :: cx(*)
 real, intent(in) :: sa
 integer, intent(in) :: incx, n
+!     beginning of local variable declarations
 integer :: i, nincx
 if (n <= 0) return
 if (incx == 1) go to 20
@@ -30736,6 +31052,7 @@ real, intent(inout) :: sy(*)
 real, intent(in) :: sa
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 integer :: i, ix, iy, m, mp1
 if (n <= 0) return
 if (sa == 0.0) return
@@ -30779,6 +31096,7 @@ double precision, intent(inout) :: dy(*)
 double precision, intent(in) :: da
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 integer :: i, ix, iy, m, mp1
 if (n <= 0) return
 if (da == 0.0d0) return
@@ -30821,6 +31139,7 @@ complex, intent(inout) :: cy(*)
 complex, intent(in) :: ca
 integer, intent(in) :: incx, incy
 integer, intent(in) :: n
+!     beginning of local variable declarations
 integer :: i, ix, iy
 if (n <= 0) return
 if (abs(real(ca)) + abs(aimag(ca)) == 0.0) return
@@ -30851,6 +31170,7 @@ implicit none
 real, intent(in) :: sx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
+!     beginning of local variable declarations
 real :: stemp
 integer :: i, m, mp1, nincx
 sasum = 0.0e0
@@ -30887,6 +31207,7 @@ implicit none
 double precision, intent(in) :: dx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
+!     beginning of local variable declarations
 double precision :: dtemp
 integer :: i, m, mp1, nincx
 dasum = 0.0d0
@@ -30923,6 +31244,7 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 complex, intent(in) :: cx(*)
 integer, intent(in) :: incx, n
+!     beginning of local variable declarations
 real :: stemp
 integer :: i, nincx
 scasum = 0.0e0
@@ -30947,6 +31269,7 @@ pure real function snrm2(n, sx, incx)
 implicit none
 integer, intent(in) :: incx, n
 real, intent(in) :: sx(*)
+!     beginning of local variable declarations
 integer :: i, j, nn, next
 real :: hitest, sum, xmax
 real, parameter :: zero = 0.0e0
@@ -31054,6 +31377,7 @@ pure double precision function dnrm2(n, dx, incx)
 implicit none
 integer, intent(in) :: incx, n
 double precision, intent(in) :: dx(*)
+!     beginning of local variable declarations
 integer :: i, j, nn, next
 double precision :: hitest, sum, xmax
 double precision, parameter :: zero = 0.0d0
@@ -31161,6 +31485,7 @@ pure real function scnrm2(n, cx, incx)
 implicit none
 integer, intent(in) :: incx, n
 complex, intent(in) :: cx(*)
+!     beginning of local variable declarations
 integer :: i, nn, next
 logical :: imag, scale
 real :: hitest, sum, xmax, absx
@@ -31290,6 +31615,7 @@ implicit none
 real, intent(in) :: sx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
+!     beginning of local variable declarations
 real :: smax
 integer :: i, ix
 isamax = 0
@@ -31325,6 +31651,7 @@ implicit none
 double precision, intent(in) :: dx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
+!     beginning of local variable declarations
 double precision :: dmax
 integer :: i, ix
 idamax = 0
@@ -31360,6 +31687,7 @@ implicit none
 complex :: cx(*)
 integer, intent(in) :: incx
 integer, intent(in) :: n
+!     beginning of local variable declarations
 real :: smax
 integer :: i, ix
 complex :: zdum
@@ -31401,6 +31729,7 @@ implicit none
 integer, intent(in) :: ka, n
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(*)
+!     beginning of local variable declarations
 integer :: i, j, l
 l = 0
 do j = 1,n
@@ -31416,6 +31745,7 @@ implicit none
 integer, intent(in) :: ka, n
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(*)
+!     beginning of local variable declarations
 integer :: i, j, l
 l = 0
 do j = 1,n
@@ -31431,6 +31761,7 @@ implicit none
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(ka,n)
 real, intent(in) :: b(*)
+!     beginning of local variable declarations
 integer :: i, ii, im1, j, jj, l
 a(1,1) = b(1)
 if (n < 2) return
@@ -31458,6 +31789,7 @@ implicit none
 integer, intent(in) :: ka, n
 double precision, intent(inout) :: a(ka,n)
 double precision, intent(in) :: b(*)
+!     beginning of local variable declarations
 integer :: i, ii, im1, j, jj, l
 a(1,1) = b(1)
 if (n < 2) return
@@ -31485,6 +31817,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 real, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,n)
+!     beginning of local variable declarations
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -31498,6 +31831,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 double precision, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,n)
+!     beginning of local variable declarations
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -31511,6 +31845,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 real, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,n)
+!     beginning of local variable declarations
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -31524,6 +31859,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 complex, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,n)
+!     beginning of local variable declarations
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -31537,6 +31873,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 complex, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,n)
+!     beginning of local variable declarations
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -31550,6 +31887,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,n)
+!     beginning of local variable declarations
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -31563,6 +31901,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
+!     beginning of local variable declarations
 integer :: k, l
 l = (n*(n + 1))/2
 do k = 1,l
@@ -31575,6 +31914,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,n)
+!     beginning of local variable declarations
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -31588,6 +31928,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,n)
+!     beginning of local variable declarations
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -31601,6 +31942,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,n)
+!     beginning of local variable declarations
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -31614,6 +31956,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,m)
+!     beginning of local variable declarations
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -31627,6 +31970,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,m)
+!     beginning of local variable declarations
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -31640,6 +31984,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,m)
+!     beginning of local variable declarations
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -31655,6 +32000,7 @@ integer, intent(inout) :: ndim
 integer, intent(in) :: nwork
 real, intent(inout) :: a(*)
 integer, intent(inout) :: moved(nwork)
+!     beginning of local variable declarations
 integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
    & npower, ifact(8), ipower(8), nexp(8), iexp(8)
 real :: atemp, btemp
@@ -31780,6 +32126,7 @@ integer, intent(inout) :: ndim
 integer, intent(in) :: nwork
 double precision, intent(inout) :: a(*)
 integer, intent(inout) :: moved(nwork)
+!     beginning of local variable declarations
 integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
    & npower, ifact(8), ipower(8), nexp(8), iexp(8)
 double precision :: atemp, btemp
@@ -31905,6 +32252,7 @@ integer, intent(inout) :: ndim
 integer, intent(in) :: nwork
 complex, intent(inout) :: a(*)
 integer, intent(inout) :: moved(nwork)
+!     beginning of local variable declarations
 integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
    & npower, ifact(8), ipower(8), nexp(8), iexp(8)
 complex :: atemp, btemp
@@ -32028,6 +32376,7 @@ implicit none
 integer, intent(inout) :: ifact(*), ipower(*)
 integer, intent(in) :: n
 integer, intent(inout) :: nexp(*), npower
+!     beginning of local variable declarations
 integer :: idiv, ifcur, ip, iquot, npart
 ! Factor n into its prime powers, npower in number.
 ! E.G., FOR n=1960=2**3 *5 *7**2, npower=3, ifact=2,5,7,
@@ -32078,6 +32427,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, n
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,m)
+!     beginning of local variable declarations
 integer :: i, j
 do j = 1,n
    do i = 1,m
@@ -32098,6 +32448,7 @@ implicit none
 !     a  contains its conjugate transpose.
 integer, intent(in) :: n, nm
 complex, intent(inout) :: a(nm,n)
+!     beginning of local variable declarations
 integer :: i, j
 complex :: temp
 do i = 1,n
@@ -32114,6 +32465,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 real, intent(in) :: a(ka,n), b(kb,n)
 real, intent(inout) :: c(kc,n)
+!     beginning of local variable declarations
 integer :: i, j
 !-----------------------------------------------------------------------
 !                      Addition of real matrices
@@ -32130,6 +32482,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 double precision, intent(in) :: a(ka,n), b(kb,n)
 double precision, intent(inout) :: c(kc,n)
+!     beginning of local variable declarations
 integer :: i, j
 !-----------------------------------------------------------------------
 !                Addition of double precision matrices
@@ -32146,6 +32499,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 complex, intent(in) :: a(ka,n), b(kb,n)
 complex, intent(inout) :: c(kc,n)
+!     beginning of local variable declarations
 integer :: i, j
 !-----------------------------------------------------------------------
 !                   Addition of complex matrices
@@ -32162,6 +32516,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*)
+!     beginning of local variable declarations
 integer :: k, m
 m = (n*(n + 1))/2
 do k = 1,m
@@ -32174,6 +32529,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 real, intent(in) :: a(ka,n), b(kb,n)
 real, intent(inout) :: c(kc,n)
+!     beginning of local variable declarations
 integer :: i, j
 !-----------------------------------------------------------------------
 !                     Subtraction of real matrices
@@ -32190,6 +32546,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 double precision, intent(in) :: a(ka,n), b(kb,n)
 double precision, intent(inout) :: c(kc,n)
+!     beginning of local variable declarations
 integer :: i, j
 !-----------------------------------------------------------------------
 !              Subtraction of double precision matrices
@@ -32206,6 +32563,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, m, n
 complex, intent(in) :: a(ka,n), b(kb,n)
 complex, intent(inout) :: c(kc,n)
+!     beginning of local variable declarations
 integer :: i, j
 !-----------------------------------------------------------------------
 !                  Subtraction of complex matrices
@@ -32222,6 +32580,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*)
+!     beginning of local variable declarations
 integer :: k, m
 m = (n*(n + 1))/2
 do k = 1,m
@@ -32234,6 +32593,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(ka,n), b(kb,l)
 real, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, j, k
 double precision :: w
 !-----------------------------------------------------------------------
@@ -32255,6 +32615,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(in) :: a(ka,n), b(kb,l)
 double precision, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, j, k
 double precision :: w
 !-----------------------------------------------------------------------
@@ -32276,6 +32637,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 complex, intent(in) :: a(ka,n), b(kb,l)
 complex, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, j, k
 complex :: w
 !-----------------------------------------------------------------------
@@ -32296,6 +32658,7 @@ subroutine mprod(m, n, l, a, ka, b, kb, c, kc, row)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
+!     beginning of local variable declarations
 integer :: i, j, k
 real :: save
 double precision :: w
@@ -32354,6 +32717,7 @@ logical function rloc(x, y)
 implicit none
 real, intent(in) :: x(*)
 real, intent(inout) :: y(*)
+!     beginning of local variable declarations
 real :: xold, yold
 !-----------------------------------------------------------------------
 !     x and y are arrays. It is assumed that x(1) and y(1) contain data.
@@ -32390,6 +32754,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 double precision, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), &
    & row(*)
+!     beginning of local variable declarations
 integer :: i, j, k
 double precision :: w
 logical :: dloc
@@ -32455,6 +32820,7 @@ implicit none
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x(*)
 double precision, intent(inout) :: y(*)
+!     beginning of local variable declarations
 double precision :: xold, yold
 xold = x(1)
 yold = y(1)
@@ -32482,6 +32848,7 @@ subroutine cmprod(m, n, l, a, ka, b, kb, c, kc, row)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 complex, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
+!     beginning of local variable declarations
 integer :: i, j, k
 complex :: w
 logical :: cloc
@@ -32547,6 +32914,7 @@ implicit none
 !-----------------------------------------------------------------------
 complex, intent(in) :: x(*)
 complex, intent(inout) :: y(*)
+!     beginning of local variable declarations
 complex :: xold, yold
 xold = x(1)
 yold = y(1)
@@ -32566,6 +32934,7 @@ implicit none
 complex, intent(in) :: x(*)
 complex, intent(inout) :: y(*)
 complex, intent(in) :: yold
+!     beginning of local variable declarations
 complex, parameter :: zero = (0.0,0.0)
 complex, parameter :: one = (1.0,0.0)
 y(1) = zero
@@ -32577,6 +32946,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: a(*), x(n)
 real, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: i, k, km1, l
 real :: xk, yk
 y(1) = a(1)*x(1)
@@ -32601,6 +32971,7 @@ implicit none
 integer, intent(in) :: n
 double precision, intent(in) :: a(*), x(n)
 double precision, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: i, k, km1, l
 double precision :: xk, yk
 y(1) = a(1)*x(1)
@@ -32625,6 +32996,7 @@ implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
 real, intent(in) :: a(ka,n), b(kb,l)
 real, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, j, k
 double precision :: s
 do j = 1,l
@@ -32643,6 +33015,7 @@ implicit none
 integer, intent(in) :: ka, m, n
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(*)
+!     beginning of local variable declarations
 integer :: i, ii, j, k
 double precision :: s
 ii = 1
@@ -32663,6 +33036,7 @@ implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
 real, intent(in) :: a(ka,n), b(kb,l)
 real, intent(inout) :: c(kc,*)
+!     beginning of local variable declarations
 integer :: i, ii, j, jj, r, s
 !     ******************************************************************
 !     Kronecker product of real matrices A and b
@@ -32688,6 +33062,7 @@ implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
 double precision, intent(in) :: a(ka,n), b(kb,l)
 double precision, intent(inout) :: c(kc,*)
+!     beginning of local variable declarations
 integer :: i, ii, j, jj, r, s
 !     ******************************************************************
 !     Kronecker product of double precision matrices A and b
@@ -32713,6 +33088,7 @@ implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
 complex, intent(in) :: a(ka,n), b(kb,l)
 complex, intent(inout) :: c(kc,*)
+!     beginning of local variable declarations
 integer :: i, ii, j, jj, r, s
 !     ******************************************************************
 !     Kronecker product of complex matrices A and b
@@ -32740,6 +33116,7 @@ integer, intent(in) :: m, mda, n
 real, intent(in) :: ae, re
 real, intent(inout) :: a(mda,n), work(*)
 integer, intent(inout) :: iwork(*)
+!     beginning of local variable declarations
 integer :: i, imax, m0, m1, m2, m3, m4, m5
 real :: eps, rerr
 interface
@@ -32827,6 +33204,7 @@ double precision, intent(inout) :: a(mda,n)
 double precision, intent(in) :: re, ae
 double precision, intent(inout) :: work(*)
 integer, intent(inout) :: iwork(*)
+!     beginning of local variable declarations
 integer :: i, imax, m0, m1, m2, m3, m4, m5
 double precision :: eps, rerr
 interface
@@ -32912,6 +33290,7 @@ implicit none
 integer, intent(inout) :: index(*)
 integer, intent(in) :: ka, kb, m, mo, n
 real, intent(inout) :: a(ka,n), b(*), d, temp(*)
+!     beginning of local variable declarations
 integer :: i, im1, j, jp1, k, kj, km1, kp1, l, lj, maxb, nj, nm1, nmj, nmk, onej
 real :: p, t
 double precision :: dsum
@@ -33091,6 +33470,7 @@ implicit none
 integer, intent(inout) :: ierr, index(*)
 integer, intent(in) :: ka, kb, m, mo, n
 real, intent(inout) :: a(ka,n), b(*), temp(*)
+!     beginning of local variable declarations
 integer :: i, im1, j, jp1, k, kj, km1, kp1, l, lj, maxb, nj, nm1, nmj, nmk, onej
 real :: d, p, t
 double precision :: dsum
@@ -33303,9 +33683,10 @@ integer, intent(out) :: ier
 integer, intent(inout) :: ip
 integer, intent(in) :: n, ndim
 real, intent(inout) :: a(ndim,n)
+dimension ip(n)
+!     beginning of local variable declarations
 integer :: i, j, k, kp1, m, nm1
 real :: t
-dimension ip(n)
 ier = 0
 ip(n) = 1
 if (n == 1) go to 70
@@ -33367,9 +33748,10 @@ integer :: ip
 integer, intent(in) :: n, ndim
 real :: a(ndim, n)
 real, intent(inout) :: b(n)
+dimension ip(n)
+!     beginning of local variable declarations
 integer :: i, k, kb, km1, kp1, m, nm1
 real :: t
-dimension ip(n)
 if (n == 1) go to 50
 nm1 = n - 1
 !  Apply row permutations and multipliers to b. ------------------------
@@ -33402,6 +33784,7 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
 real, intent(inout) :: d
 real, intent(inout) :: a(ka,n), b(*)
+!     beginning of local variable declarations
 integer :: j, jl, k, kl, l, maxb
 real :: pivot, t
 !-----------------------------------------------------------------------
@@ -33449,6 +33832,7 @@ implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
 real, intent(inout) :: a(ka,n), b(kb,m)
+!     beginning of local variable declarations
 integer :: i, ip1, j, jp1, k, l, nm1
 real :: p, sum, t
 !     ------------------------------------------------------------------
@@ -33534,6 +33918,7 @@ implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
 double precision, intent(inout) :: a(ka,n), b(kb,m)
+!     beginning of local variable declarations
 integer :: i, j, k, km1, kp1, l, nm1
 double precision :: p, t
 !     ------------------------------------------------------------------
@@ -33622,6 +34007,7 @@ real, intent(inout) :: a(ka,n), b(*)
 real, intent(inout) :: det(2), rcond
 real, intent(inout) :: wk(n)
 integer, intent(inout) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: j, job, onej
 real :: t
 !-----------------------------------------------------------------------
@@ -33655,6 +34041,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
 real, intent(inout) :: a(ka,n), b(*), wk(*)
 integer, intent(inout) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: j, onej
 real :: det(2)
 !-----------------------------------------------------------------------
@@ -33687,11 +34074,12 @@ integer, intent(inout) :: ierr, iwk
 integer, intent(in) :: ka, mo, n
 real :: a(ka,n), b(n)
 real, intent(inout) :: wk(*), x(n)
+dimension iwk(n)
+!     beginning of local variable declarations
 integer :: i, ir
 !     ******************************************************************
 !     Solution of real linear equations with iterative improvement
 !     ******************************************************************
-dimension iwk(n)
 !     -------------------
 !     dimension wk(n*n + n)
 !     -------------------
@@ -33718,6 +34106,8 @@ integer :: ipvt
 integer, intent(in) :: ka, kq, n
 real :: a(ka,n), b(n), q(kq,n)
 real, intent(inout) :: r(n), x(n)
+dimension ipvt(n)
+!     beginning of local variable declarations
 integer :: i, j
 real :: eps, eps2, rat, ratio, rnrm, xnrm
 double precision :: dsum
@@ -33756,7 +34146,6 @@ end interface
 !       computed to high accuracy using double precision. sgesl
 !       is then used to solve (1).
 ! ----------------------------------------------------------------------
-dimension ipvt(n)
 !     ********** eps is a machine dependent parameter. Assign eps
 !                the value U where U is the smallest floating point
 !                number such that 1.0 + U .GT. 1.0.
@@ -33805,6 +34194,7 @@ integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 real, intent(inout) :: a(lda,*), z(*)
 real, intent(inout) :: rcond
+!     beginning of local variable declarations
 real :: ek, t, wk, wkm, anorm, s, sm, ynorm
 integer :: info, j, k, kb, kp1, l
 interface
@@ -34009,6 +34399,7 @@ integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
 real, intent(inout) :: a(lda,*)
+!     beginning of local variable declarations
 real :: t
 integer :: j, k, kp1, l, nm1
 interface
@@ -34111,6 +34502,7 @@ implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 real, intent(in) :: a(lda,*)
 real, intent(inout) :: b(*)
+!     beginning of local variable declarations
 real :: t
 integer :: k, kb, l, nm1
 interface
@@ -34222,6 +34614,7 @@ subroutine sgedi(a,lda,n,ipvt,det,work,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 real, intent(inout) :: a(lda,*), det(2), work(*)
+!     beginning of local variable declarations
 real :: t, ten
 integer :: i, j, k, kb, kp1, l, nm1
 !     sgedi computes the determinant and inverse of a matrix
@@ -34328,6 +34721,7 @@ double precision, intent(inout) :: a(ka,n), b(*)
 double precision, intent(inout) :: det(2), rcond
 double precision, intent(inout) :: wk(n)
 integer, intent(inout) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: j, job, onej
 double precision :: t
 !-----------------------------------------------------------------------
@@ -34361,6 +34755,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
 double precision, intent(inout) :: a(ka,n), b(*), wk(*)
 integer, intent(inout) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: j, onej
 double precision :: det(2)
 !-----------------------------------------------------------------------
@@ -34393,6 +34788,7 @@ integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 double precision, intent(inout) :: a(lda,*), z(*)
 double precision, intent(inout) :: rcond
+!     beginning of local variable declarations
 double precision :: ek, t, wk, wkm, anorm, s, sm, ynorm
 integer :: info, j, k, kb, kp1, l
 interface
@@ -34597,6 +34993,7 @@ integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
 double precision, intent(inout) :: a(lda,*)
+!     beginning of local variable declarations
 double precision :: t
 integer :: j, k, kp1, l, nm1
 interface
@@ -34699,6 +35096,7 @@ implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 double precision, intent(in) :: a(lda,*)
 double precision, intent(inout) :: b(*)
+!     beginning of local variable declarations
 double precision :: t
 integer :: k, kb, l, nm1
 interface
@@ -34810,6 +35208,7 @@ subroutine dgedi(a,lda,n,ipvt,det,work,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 double precision, intent(inout) :: a(lda,*), det(2), work(*)
+!     beginning of local variable declarations
 double precision :: t, ten
 integer :: i, j, k, kb, kp1, l, nm1
 !     dgedi computes the determinant and inverse of a matrix
@@ -35024,6 +35423,7 @@ integer, intent(inout) :: iflag, mtrstr(3,*)
 integer, intent(in) :: n, nmblks
 real, intent(inout) :: array(*)
 integer, intent(inout) :: pivot(*)
+!     beginning of local variable declarations
 integer :: index1, index2, index3, indpiv, isum1, isum2, k, &
    & nclblk, nclpiv, novrlp, nrwbk2, nrwblk, nrwpiv
 real :: pivmax
@@ -35258,6 +35658,7 @@ integer, intent(in) :: nclblk, nrwblk, nrwpiv
 integer, intent(inout) :: pivot(nrwblk)
 real, intent(inout) :: block(nrwblk,nclblk)
 real, intent(inout) :: pivmax
+!     beginning of local variable declarations
 integer :: i1, j, j1, jplus1, l1, max
 real :: rowmax, tempiv, rowpiv, swap
 !***************************************************************
@@ -35351,6 +35752,7 @@ real, intent(inout) :: topblk(nrwtop,novrlp), &
    & botblk(nrwbot,novrlp)
 real, intent(inout) :: pivmax
 integer, intent(inout) :: pivot(nrwtop)
+!     beginning of local variable declarations
 integer :: i, i1, i2, iplus1, j, j1, jplus1, l1, max
 real :: colmax, colmlt, tempiv, swap
 !***************************************************************
@@ -35448,6 +35850,7 @@ integer, intent(in) :: nmblks
 real :: array(*)
 real, intent(inout) :: b(*), x(*)
 integer, intent(in) :: pivot(*)
+!     beginning of local variable declarations
 integer :: indexa, indpiv, k, ll, nclblk, nclpiv, novrlp, nrwblk, &
    & nrwpiv
 !***************************************************************
@@ -35621,6 +36024,7 @@ implicit none
 integer, intent(in) :: nclpiv, novrlp, nrwblk
 real :: block(nrwblk,novrlp)
 real, intent(inout) :: b(*), x(*)
+!     beginning of local variable declarations
 integer :: i, iplusl, j, jplusl, l, long
 real :: xj
 !***************************************************************
@@ -35647,6 +36051,7 @@ integer, intent(in) :: nclpiv, nrwblk
 real :: block(nrwblk,nclpiv)
 real, intent(inout) :: b(*)
 real :: x(*)
+!     beginning of local variable declarations
 integer :: j, l, nclpvl
 real :: xj
 !***************************************************************
@@ -35668,6 +36073,7 @@ integer, intent(in) :: nrwblk, nrwpiv
 real :: block(nrwblk,nrwpiv)
 real, intent(inout) :: b(*)
 integer, intent(in) :: pivot(nrwpiv)
+!     beginning of local variable declarations
 integer :: i, iplus1, l, pivoti
 real :: bi, swap
 !***************************************************************
@@ -35695,6 +36101,7 @@ implicit none
 integer, intent(in) :: nclblk, nrwblk, nrwpiv
 real :: block(nrwblk,nclblk)
 real, intent(inout) :: b(*), x(*)
+!     beginning of local variable declarations
 integer :: j, jmin1, l, nj
 real :: xj
 !***************************************************************
@@ -35719,6 +36126,7 @@ integer, intent(in) :: nclblk, nrwblk, nrwpiv
 real :: block(nrwblk,nclblk)
 real, intent(inout) :: b(*)
 real :: x(*)
+!     beginning of local variable declarations
 integer :: j, l, nrwpv1
 real :: xj
 !***************************************************************
@@ -35740,6 +36148,7 @@ integer, intent(in) :: nclpiv, novrlp, nrwblk
 real :: block(nrwblk,novrlp)
 real, intent(inout) :: x(*)
 integer, intent(in) :: pivot(nrwblk)
+!     beginning of local variable declarations
 integer :: i, j, j1, jplus1, nj, pivotj
 real :: dotprd, swap
 !***************************************************************
@@ -35787,6 +36196,7 @@ integer, intent(in) :: m
 integer :: n
 integer, intent(inout) :: ip(m,n), ier
 real, intent(inout) :: a(m,m,n), b(m,m,n), c(m,m,n)
+!     beginning of local variable declarations
 integer :: nm1, nm2, km1, i, j, k, l
 real :: dp
 !-----------------------------------------------------------------------
@@ -35904,6 +36314,7 @@ integer :: n, ip(m,n)
 real :: a(m,m,n)
 real, intent(in) :: b(m,m,n), c(m,m,n)
 real, intent(inout) :: y(m,n)
+!     beginning of local variable declarations
 integer :: kb, kp1, nm1, nm2, km1, i, j, k
 real :: dp
 !-----------------------------------------------------------------------
@@ -35977,6 +36388,7 @@ real, intent(inout) :: a(*), b(*)
 real, intent(inout) :: det(2), rcond
 real, intent(inout) :: wk(n)
 integer, intent(inout) :: inert(3), ipvt(n)
+!     beginning of local variable declarations
 integer :: j, job, onej
 real :: t
 !     ------------------
@@ -36008,6 +36420,7 @@ integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 real, intent(inout) :: ap(*), z(*)
 real, intent(inout) :: rcond
+!     beginning of local variable declarations
 real :: ak, akm1, bk, bkm1, denom, ek, t, anorm, s, ynorm
 integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1, k, kk, km1k, km1km1, kp, kps, ks
 interface
@@ -36300,6 +36713,7 @@ integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 integer, intent(out) :: info
 real, intent(inout) :: ap(*)
+!     beginning of local variable declarations
 real :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t, absakk, alpha, colmax, rowmax
 integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk, j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, km2, kstep
 logical :: swap
@@ -36541,6 +36955,7 @@ implicit none
 integer, intent(in) :: n, kpvt(*)
 real, intent(in) :: ap(*)
 real, intent(inout) :: b(*)
+!     beginning of local variable declarations
 real :: ak, akm1, bk, bkm1, denom, temp
 integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
 interface
@@ -36697,6 +37112,7 @@ real, intent(inout) :: ap(*), work(*)
 real, intent(inout) :: det(2)
 integer, intent(in) :: kpvt(*)
 integer, intent(inout) :: inert(3)
+!     beginning of local variable declarations
 real :: akkp1, sdot, temp
 real :: ten, d, t, ak, akp1
 integer :: ij, ik, ikp1, iks, j, jb, jk, jkp1, k, kk, kkp1, km1, ks, ksj, kskp1, kstep
@@ -36902,6 +37318,7 @@ double precision, intent(inout) :: a(*), b(*)
 double precision, intent(inout) :: det(2), rcond
 double precision, intent(inout) :: wk(n)
 integer, intent(inout) :: inert(3), ipvt(n)
+!     beginning of local variable declarations
 integer :: j, job, onej
 double precision :: t
 !     ------------------
@@ -36933,6 +37350,7 @@ integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 double precision, intent(inout) :: ap(*), z(*)
 double precision, intent(inout) :: rcond
+!     beginning of local variable declarations
 double precision :: ak, akm1, bk, bkm1, denom, ek, t, anorm, s, ynorm
 integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1, k, kk, km1k, km1km1, kp, kps, ks
 interface
@@ -37225,6 +37643,7 @@ integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 integer, intent(out) :: info
 double precision, intent(inout) :: ap(*)
+!     beginning of local variable declarations
 double precision :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t, absakk, alpha, colmax, rowmax
 integer :: ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, imk, j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, km2, kstep
 logical :: swap
@@ -37466,6 +37885,7 @@ implicit none
 integer, intent(in) :: n, kpvt(*)
 double precision, intent(in) :: ap(*)
 double precision, intent(inout) :: b(*)
+!     beginning of local variable declarations
 double precision :: ak, akm1, bk, bkm1, denom, temp
 integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
 interface
@@ -37622,6 +38042,7 @@ double precision, intent(inout) :: ap(*), work(*)
 double precision, intent(inout) :: det(2)
 integer, intent(in) :: kpvt(*)
 integer, intent(inout) :: inert(3)
+!     beginning of local variable declarations
 double precision :: akkp1, ddot, temp
 double precision :: ten, d, t, ak, akp1
 integer :: ij, ik, ikp1, iks, j, jb, jk, jkp1, k, kk, kkp1, km1, ks, ksj, kskp1, kstep
@@ -37824,6 +38245,7 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kb, m, mo, n
 real, intent(inout) :: a(*), b(*)
+!     beginning of local variable declarations
 integer :: j, onej
 real :: d(2)
 !     -----------------
@@ -37847,6 +38269,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: info
 real, intent(inout) :: ap(*)
+!     beginning of local variable declarations
 real :: t, s
 integer :: j, jj, jm1, k, kj, kk
 interface
@@ -37929,6 +38352,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: ap(*)
 real, intent(inout) :: b(*)
+!     beginning of local variable declarations
 real :: t
 integer :: k, kb, kk
 interface
@@ -38001,6 +38425,7 @@ implicit none
 integer, intent(in) :: n, job
 real, intent(inout) :: ap(*)
 real, intent(inout) :: det(2)
+!     beginning of local variable declarations
 real :: t, s
 integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !     sppdi computes the determinant and inverse
@@ -38106,6 +38531,7 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kb, m, mo, n
 double precision, intent(inout) :: a(*), b(*)
+!     beginning of local variable declarations
 integer :: j, onej
 double precision :: d(2)
 !     -----------------
@@ -38129,6 +38555,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: info
 double precision, intent(inout) :: ap(*)
+!     beginning of local variable declarations
 double precision :: t, s
 integer :: j, jj, jm1, k, kj, kk
 interface
@@ -38211,6 +38638,7 @@ implicit none
 integer, intent(in) :: n
 double precision, intent(in) :: ap(*)
 double precision, intent(inout) :: b(*)
+!     beginning of local variable declarations
 double precision :: t
 integer :: k, kb, kk
 interface
@@ -38283,6 +38711,7 @@ implicit none
 integer, intent(in) :: n, job
 double precision, intent(inout) :: ap(*)
 double precision, intent(inout) :: det(2)
+!     beginning of local variable declarations
 double precision :: t, s
 integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !     dppdi computes the determinant and inverse
@@ -38389,6 +38818,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n
 real, intent(in) :: a(*), b(n)
 real, intent(inout) :: x(n), g(n), h(n)
+!     beginning of local variable declarations
 integer :: j, k, l, m, max, mp1, nml, npl
 real :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
 !-----------------------------------------------------------------------
@@ -38469,6 +38899,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n
 double precision, intent(in) :: a(*), b(n)
 double precision, intent(inout) :: x(n), g(n), h(n)
+!     beginning of local variable declarations
 integer :: j, k, l, m, max, mp1, nml, npl
 double precision :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
 !-----------------------------------------------------------------------
@@ -38551,6 +38982,7 @@ integer :: n
 complex, intent(inout) :: a(ka,n), b(*), det(2), wk(n)
 real, intent(inout) :: rcond
 integer, intent(inout) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: j, job, onej
 real :: t
 !-----------------------------------------------------------------------
@@ -38585,6 +39017,7 @@ integer, intent(in) :: ka, kb, m, mo
 integer :: n
 complex, intent(inout) :: a(ka,n), b(*), wk(*)
 integer, intent(inout) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: j, onej
 complex :: d(2)
 !-----------------------------------------------------------------------
@@ -38619,6 +39052,7 @@ integer :: n
 complex, intent(in) :: a(ka,n), b(n)
 complex, intent(inout) :: x(n), wk(*)
 integer, intent(inout) :: iwk(n)
+!     beginning of local variable declarations
 integer :: i, ir
 !     ******************************************************************
 !     Solution of complex linear equations with iterative improvement
@@ -38649,6 +39083,7 @@ integer, intent(in) :: ka, kq, n
 complex, intent(in) :: a(ka,n), q(kq,n), b(n)
 complex, intent(inout) :: x(n), r(n)
 integer, intent(in) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: i, j
 real :: eps, eps2, rat, ratio, rnrm, xnrm
 double precision :: ra, ia, rx, ix, rsum, isum
@@ -38744,6 +39179,7 @@ integer :: n
 integer, intent(inout) :: ipvt(*)
 complex, intent(inout) :: a(lda,*), z(*)
 real, intent(inout) :: rcond
+!     beginning of local variable declarations
 complex :: cdotc, ek, t, wk, wkm
 real :: anorm, s, scasum, sm, ynorm
 integer :: info, j, k, kb, kp1, l
@@ -38922,6 +39358,7 @@ integer, intent(in) :: lda
 integer :: n
 integer, intent(inout) :: ipvt(*), info
 complex, intent(inout) :: a(lda,*)
+!     beginning of local variable declarations
 complex :: t
 integer :: icamax, j, k, kp1, l, nm1
 complex :: zdum
@@ -39008,6 +39445,7 @@ implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 complex, intent(in) :: a(lda,*)
 complex, intent(inout) :: b(*)
+!     beginning of local variable declarations
 complex :: t
 integer :: k, kb, l, nm1
 interface
@@ -39120,6 +39558,7 @@ subroutine cgedi(a,lda,n,ipvt,det,work,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 complex, intent(inout) :: a(lda,*), det(2), work(*)
+!     beginning of local variable declarations
 complex :: t, zdum
 real :: ten
 integer :: i, j, k, kb, kp1, l, nm1
@@ -39260,6 +39699,7 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, n
 double precision, intent(inout) :: ar(ka,n), ai(ka,n)
 integer, intent(inout) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: i, j, k, kp1, l, nm1
 double precision :: p, pr, pi, t, tr, ti
 interface
@@ -39357,6 +39797,7 @@ integer, intent(in) :: ka, kb, m, n
 double precision, intent(in) :: ar(ka,n), ai(ka,n)
 double precision, intent(inout) :: br(kb,m), bi(kb,m)
 integer, intent(in) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: i, j, k, km1, kp1, l, nm1
 double precision :: pr, pi, tr, ti
 interface
@@ -39444,6 +39885,7 @@ integer, intent(in) :: ka
 integer :: n
 double precision, intent(inout) :: ar(ka,n), ai(ka,n), temp(2,n)
 integer, intent(in) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: i, ip1, j, jb, k, kp1, l, nm1, nmi, nmk, np1
 double precision :: sr, si, tr, ti
 interface
@@ -39533,6 +39975,7 @@ integer, intent(in) :: ldx, n, p, ldu, ldv, job
 integer, intent(inout) :: info
 real, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), v(ldv,*), &
    & work(*)
+!     beginning of local variable declarations
 integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
    & ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
 real :: t, b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
@@ -40003,6 +40446,7 @@ integer, intent(in) :: ldx, n, p, ldu, ldv, job
 integer, intent(inout) :: info
 double precision, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
    & v(ldv,*), work(*)
+!     beginning of local variable declarations
 integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
    & ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
 double precision :: t, b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest
@@ -40473,6 +40917,7 @@ integer, intent(in) :: ldx, n, p, ldu, ldv, job
 integer, intent(inout) :: info
 complex, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
    & v(ldv,*), work(*)
+!     beginning of local variable declarations
 integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
    & ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
 complex :: t, r
@@ -40979,9 +41424,10 @@ implicit none
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(ka,n)
 real, intent(in) :: x
+real :: det
+!     beginning of local variable declarations
 integer :: i, j, k, kp1, l, nm1
 real :: c, pivot, s
-real :: det
 !     -------------------
 !     Evaluation of the determinant of a-xi where A is an NXN matrix,
 !     x is a scalar, and i is the NXN identity matrix.
@@ -41041,6 +41487,7 @@ implicit none
 integer, intent(in) :: ka, n
 double precision, intent(inout) :: a(ka,n)
 double precision, intent(in) :: x
+!     beginning of local variable declarations
 integer :: i, j, k, kp1, l, nm1
 double precision :: pivot, s, c
 !     -------------------
@@ -41102,6 +41549,7 @@ implicit none
 integer, intent(in) :: ka, n
 complex, intent(inout) :: a(ka,n)
 complex, intent(in) :: x
+!     beginning of local variable declarations
 integer :: i, j, k, kp1, l, nm1
 complex :: pivot, t
 real :: s, c
@@ -41168,6 +41616,7 @@ integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nb, nc
 real, intent(inout) :: a(na,m), b(nb,n), c(nc,n), wk(*)
+!     beginning of local variable declarations
 integer :: iu, iv, iw
 ! ----------------------------------------------------------------------
 !     abslv solves the real matrix equation AX + XB = c. A is reduced
@@ -41242,6 +41691,7 @@ integer, intent(in) :: na, nb, nc, nu, nv
 real, intent(inout) :: a(na,m), b(nb,n), c(nc,n)
 real, intent(inout) :: u(nu,m), v(nv,n)
 real, intent(inout) :: wk(*)
+!     beginning of local variable declarations
 integer :: i, j, k
 real :: temp
 ! ----------------------------------------------------------------------
@@ -41342,6 +41792,7 @@ integer, intent(in) :: nh, nz, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
 real, intent(inout) :: h(nh,n), wr(n), wi(n), z(nz,n)
+!     beginning of local variable declarations
 integer :: ip1, i, j, k, l, m, en, ll, mm, na, its, mp2, enm2
 real :: p, q, r, s, t, w, x, y, zz, norm, s1, s2
 logical :: notlas
@@ -41600,6 +42051,7 @@ integer, intent(in) :: m, n, na, nb, nc
 integer, intent(inout) :: ierr
 real, intent(in) :: a(na,m), b(nb,n)
 real, intent(inout) :: c(nc,n)
+!     beginning of local variable declarations
 real :: sum, p(4), t(4,4)
 integer :: dk, dl, i, ib, j, ja, k, km1, kk, l, lm1, ll
 interface
@@ -41720,6 +42172,7 @@ integer :: n
 integer, intent(in) :: na, nb, nc
 double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n), &
    & wk(*)
+!     beginning of local variable declarations
 integer :: iu, iv, iw
 ! ----------------------------------------------------------------------
 !     dabslv solves the real matrix equation AX + XB = c. A is reduced
@@ -41794,6 +42247,7 @@ integer, intent(in) :: na, nb, nc, nu, nv
 double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n)
 double precision, intent(inout) :: u(nu,m), v(nv,n)
 double precision, intent(inout) :: wk(*)
+!     beginning of local variable declarations
 integer :: i, j, k
 double precision :: temp
 ! ----------------------------------------------------------------------
@@ -41894,6 +42348,7 @@ integer, intent(in) :: nh, nz, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
 double precision, intent(inout) :: h(nh,n), wr(n), wi(n), z(nz,n)
+!     beginning of local variable declarations
 integer :: ip1, i, j, k, l, m, en, ll, mm, na, its, mp2, enm2
 double precision :: p, q, r, s, t, w, x, y, zz, norm, s1, s2
 logical :: notlas
@@ -42152,6 +42607,7 @@ integer, intent(in) :: m, n, na, nb, nc
 integer, intent(inout) :: ierr
 double precision, intent(in) :: a(na,m), b(nb,n)
 double precision, intent(inout) :: c(nc,n)
+!     beginning of local variable declarations
 double precision :: sum, p(4), t(4,4)
 integer :: dk, dl, i, ib, j, ja, k, km1, kk, l, lm1, ll
 interface
@@ -42270,6 +42726,7 @@ integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nc
 real, intent(inout) :: a(na,n), c(nc,n), wk(*)
+!     beginning of local variable declarations
 integer :: iw
 ! ----------------------------------------------------------------------
 !     taslv solves the real matrix equation transpose(a)*X + X*a = c
@@ -42326,6 +42783,7 @@ integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nc, nu
 real, intent(inout) :: a(na,n), u(nu,n), c(nc,n), wk(*)
+!     beginning of local variable declarations
 integer :: i, j, k
 ! ----------------------------------------------------------------------
 !     taslv1 solves the real matrix equation transpose(a)*X + X*a = c
@@ -42422,6 +42880,7 @@ integer, intent(in) :: n, na, nc
 integer, intent(inout) :: ierr
 real, intent(in) :: a(na,n)
 real, intent(inout) :: c(nc,n)
+!     beginning of local variable declarations
 real :: sum, p(4), t(4,4)
 integer :: dk, dl, i, ia, j, k, kk, km1, l, ll, ldl
 interface
@@ -42561,6 +43020,7 @@ integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nc
 double precision, intent(inout) :: a(na,n), c(nc,n), wk(*)
+!     beginning of local variable declarations
 integer :: iw
 ! ----------------------------------------------------------------------
 !     dtaslv solves the real matrix equation transpose(a)*X + X*a = c
@@ -42618,6 +43078,7 @@ integer :: n
 integer, intent(in) :: na, nc, nu
 double precision, intent(inout) :: a(na,n), u(nu,n), c(nc,n), &
    & wk(*)
+!     beginning of local variable declarations
 integer :: i, j, k
 ! ----------------------------------------------------------------------
 !     dtasv1 solves the real matrix equation transpose(a)*X + X*a = c
@@ -42714,6 +43175,7 @@ integer, intent(in) :: n, na, nc
 integer, intent(inout) :: ierr
 double precision, intent(in) :: a(na,n)
 double precision, intent(inout) :: c(nc,n)
+!     beginning of local variable declarations
 double precision :: sum, p(4), t(4,4)
 integer :: dk, dl, i, ia, j, k, kk, km1, l, ll, ldl
 interface
@@ -42906,6 +43368,7 @@ integer, intent(inout) :: maxits, ierr
 complex, intent(inout) :: work(nw)
 complex, intent(inout) :: a(nm,n), b(nm,n), c(nm,n), s(nm,n)
 real, intent(in) :: tol
+!     beginning of local variable declarations
 integer :: i1, i2, i3, i4, i5, i6, i7
 i1 = n*n + 1
 i2 = n*n + i1
@@ -42962,6 +43425,7 @@ complex, intent(inout) :: a(nm,n), b(nm,n), c(nm,n), s(nm,n), &
 complex, intent(inout) :: v(nm,n), z(nm,n), r(nm,n), xold(nm,n), &
    & eye(nm,n), temp(n)
 real, intent(in) :: tol
+!     beginning of local variable declarations
 integer :: its, mats, i, j, k
 real :: anorm, ani, bnorm, bni, cnorm, cni, xnorm, xni, fxnorm, fxni, gnorm, tnorm, t
 !     real sqrt, cabs, float
@@ -43180,6 +43644,7 @@ complex, intent(inout) :: f(nm,n)
 complex, intent(inout) :: g(nm,n)
 complex, intent(inout) :: h(nm,n)
 integer, intent(in) :: mats
+!     beginning of local variable declarations
 integer :: i, j, k, l, lb, l1, nk1, nm1, nm2
 complex :: rr, t, u1, u2, v1, v2, rho, tf, tg, th
 real :: r, s
@@ -43375,6 +43840,7 @@ complex, intent(inout) :: a(nm,n), b(nm,n), z(nm,n)
 complex, intent(inout) :: f(nm,n)
 real, intent(in) :: eps1
 integer, intent(in) :: mats
+!     beginning of local variable declarations
 integer :: i, j, k, l, en, jj, k1, k2, ld, ll, l1, na, ish, its, km1, lm1, enm2, lor1, enorn
 complex :: a11, a21, a33, a34, a43, a44, b11, b22, b33, b34, b44, a1, a2, u1, u2, v1, v2, t, rr, sh, ss, tf
 real :: epsa, epsb, anorm, bnorm, ani, bni, srelpr, r, s
@@ -43601,6 +44067,7 @@ integer, intent(in) :: n, nm
 complex, intent(in) :: u(nm,n), v(nm,n), l(nm,n)
 complex, intent(inout) :: f(nm,n)
 complex, intent(inout) :: temp(n)
+!     beginning of local variable declarations
 integer :: i, j, jp1, k, kk, km1, m, nm1
 complex :: denom, sum
 real :: s, t
@@ -43666,6 +44133,7 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kz
 integer :: n
 real, intent(inout) :: a(ka,n), z(kz,n), wk(n,*)
+!     beginning of local variable declarations
 integer :: i, igh, j, k, kp1, l, ll, low, m, np1, np6
 real :: anorm, anorm1, factor, p, q, s, s1
 real, parameter :: c(8) = [.500000000000000e+00, .116666666666667e+00, .166666666666667e-01, .160256410256410e-02, &
@@ -43804,6 +44272,7 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kz
 integer :: n
 double precision, intent(inout) :: a(ka,n), z(kz,n), wk(n,*)
+!     beginning of local variable declarations
 integer :: i, igh, j, k, kp1, l, ll, low, m, np1, np10
 double precision :: anorm, anorm1, factor, p, q, s, s1
 double precision, parameter :: c(12) = [.500000000000000000000000000000d+00, &
@@ -43947,6 +44416,7 @@ real, intent(in) :: b(n)
 real, intent(inout) :: c(n), d(*)
 integer, intent(inout) :: ip(*)
 external rowk
+!     beginning of local variable declarations
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
 real :: bk, c1, cj, ck, dkj
@@ -44087,6 +44557,7 @@ double precision, intent(in) :: b(n)
 double precision, intent(inout) :: c(n), d(*)
 integer, intent(inout) :: ip(*)
 external rowk
+!     beginning of local variable declarations
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
 double precision :: bk, cj, ck, c1, dkj
@@ -44227,6 +44698,7 @@ complex, intent(in) :: b(n)
 complex, intent(inout) :: c(n), d(*)
 integer, intent(inout) :: ip(*)
 external rowk
+!     beginning of local variable declarations
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
 real :: s, si
@@ -44375,6 +44847,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 real, intent(inout) :: a(ka,n)
 real, intent(in) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !           Conversion of real matrices from banded to
@@ -44439,6 +44912,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of real matrices from standard to banded
@@ -44506,6 +44980,7 @@ integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,nb)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 interface
    pure subroutine cvrb(a,ka,m,n,ml,mu,b,kb)
@@ -44566,6 +45041,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 double precision, intent(inout) :: a(ka,n)
 double precision, intent(in) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of double precision matrices from banded
@@ -44630,6 +45106,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of double precision matrices from standard
@@ -44697,6 +45174,7 @@ integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,nb)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 interface
    pure subroutine cvdb(a,ka,m,n,ml,mu,b,kb)
@@ -44757,6 +45235,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 complex, intent(inout) :: a(ka,n)
 complex, intent(in) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !          Conversion of complex matrices from banded to
@@ -44821,6 +45300,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of complex matrices from standard to banded
@@ -44888,6 +45368,7 @@ integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,nb)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 interface
    pure subroutine cvcb(a,ka,m,n,ml,mu,b,kb)
@@ -44950,6 +45431,7 @@ integer, intent(in) :: ka, m, ml, mu, n, num
 real, intent(in) :: a(ka,*)
 real, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
 !                Conversion of real matrices from banded
@@ -45007,6 +45489,7 @@ integer, intent(in) :: ka, m, ml, mu, n, num
 double precision, intent(in) :: a(ka,*)
 double precision, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
 !          Conversion of double precision matrices from banded
@@ -45064,6 +45547,7 @@ integer, intent(in) :: ka, m, ml, mu, n, num
 complex, intent(in) :: a(ka,*)
 complex, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
 !              Conversion of complex matrices from banded
@@ -45123,6 +45607,7 @@ integer, intent(in) :: n, nb
 real, intent(in) :: a(*)
 real, intent(inout) :: b(kb,nb)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
 !                Conversion of real matrices from sparse
@@ -45182,6 +45667,7 @@ integer, intent(in) :: n, nb
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(kb,nb)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
 !          Conversion of double precision matrices from sparse
@@ -45241,6 +45727,7 @@ integer, intent(in) :: n, nb
 complex, intent(in) :: a(*)
 complex, intent(inout) :: b(kb,nb)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
 !              Conversion of complex matrices from sparse
@@ -45296,6 +45783,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 real, intent(in) :: a(ka,*)
 double precision, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, j, num
 !-----------------------------------------------------------------------
 !        Conversion of banded matrices from single to double
@@ -45314,6 +45802,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 double precision, intent(in) :: a(ka,*)
 real, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, j, num
 !-----------------------------------------------------------------------
 !        Conversion of banded matrices from double to single
@@ -45335,6 +45824,7 @@ integer, intent(out) :: nl
 integer, intent(inout) :: nu
 complex, intent(in) :: a(ka,*)
 real, intent(inout) :: b(kb,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, k, num
 !-----------------------------------------------------------------------
 !              Real part of a banded complex matrix
@@ -45384,6 +45874,7 @@ integer, intent(out) :: nl
 integer, intent(inout) :: nu
 complex, intent(in) :: a(ka,*)
 real, intent(inout) :: b(kb,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, k, num
 !-----------------------------------------------------------------------
 !            Imaginary part of a banded complex matrix
@@ -45433,6 +45924,7 @@ integer, intent(out) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 real, intent(in) :: a(ka,*), b(kb,*)
 complex, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, j, ja, jb, jc, jmax, k, num
 !-----------------------------------------------------------------------
 !        Compute a + bi for the banded real matrices A and b
@@ -45504,6 +45996,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 real, intent(in) :: a(ka,*)
 real, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !-----------------------------------------------------------------------
 !                Transposition of real banded matrices
@@ -45554,6 +46047,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 double precision, intent(in) :: a(ka,*)
 double precision, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !-----------------------------------------------------------------------
 !          Transposition of double precision banded matrices
@@ -45604,6 +46098,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 complex, intent(in) :: a(ka,*)
 complex, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !-----------------------------------------------------------------------
 !              Transposition of complex banded matrices
@@ -45657,6 +46152,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 real, intent(in) :: a(ka,*), b(kb,*)
 real, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !                 Addition of real banded matrices
@@ -45791,6 +46287,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 double precision, intent(in) :: a(ka,*), b(kb,*)
 double precision, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !           Addition of double precision banded matrices
@@ -45925,6 +46422,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 complex, intent(in) :: a(ka,*), b(kb,*)
 complex, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !                Addition of complex banded matrices
@@ -46060,6 +46558,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 real, intent(in) :: a(ka,*), b(kb,*)
 real, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !                Subtraction of real banded matrices
@@ -46194,6 +46693,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 double precision, intent(in) :: a(ka,*), b(kb,*)
 double precision, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !          Subtraction of double precision banded matrices
@@ -46328,6 +46828,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 complex, intent(in) :: a(ka,*), b(kb,*)
 complex, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !             Subtraction of complex banded matrices
@@ -46464,6 +46965,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nc, nl, nu
 real, intent(in) :: a(ka,*), b(kb,*)
 real, intent(inout) :: c(kc,nc)
+!     beginning of local variable declarations
 integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
    & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
 real :: sum
@@ -46602,6 +47104,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nc, nl, nu
 double precision, intent(in) :: a(ka,*), b(kb,*)
 double precision, intent(inout) :: c(kc,nc)
+!     beginning of local variable declarations
 integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
    & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
 double precision :: sum
@@ -46740,6 +47243,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nc, nl, nu
 complex, intent(in) :: a(ka,*), b(kb,*)
 complex, intent(inout) :: c(kc,nc)
+!     beginning of local variable declarations
 integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
    & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
 complex :: sum
@@ -46874,6 +47378,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(n)
 real, intent(inout) :: y(m)
+!     beginning of local variable declarations
 integer :: i, imax, imin, jmin, k, kk, kmax, kmin, mlp1
 real :: sum
 !-----------------------------------------------------------------------
@@ -46920,6 +47425,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(n)
 real, intent(inout) :: y(m)
+!     beginning of local variable declarations
 integer :: i, imax, jmin, k, kk, kmax, kmin, mlp1
 real :: sum
 !-----------------------------------------------------------------------
@@ -46961,6 +47467,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(n)
 double precision, intent(inout) :: y(m)
+!     beginning of local variable declarations
 integer :: i, imax, imin, jmin, k, kk, kmax, kmin, mlp1
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -47008,6 +47515,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(n)
 double precision, intent(inout) :: y(m)
+!     beginning of local variable declarations
 integer :: i, imax, jmin, k, kk, kmax, kmin, mlp1
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -47049,6 +47557,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(n)
 complex, intent(inout) :: y(m)
+!     beginning of local variable declarations
 integer :: i, imax, imin, jmin, k, kk, kmax, kmin, mlp1
 complex :: sum
 !-----------------------------------------------------------------------
@@ -47095,6 +47604,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(n)
 complex, intent(inout) :: y(m)
+!     beginning of local variable declarations
 integer :: i, imax, jmin, k, kk, kmax, kmin, mlp1
 complex :: sum
 !-----------------------------------------------------------------------
@@ -47136,6 +47646,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(m)
 real, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
 real :: sum
 !-----------------------------------------------------------------------
@@ -47181,6 +47692,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(m)
 real, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
 real :: sum
 !-----------------------------------------------------------------------
@@ -47221,6 +47733,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(m)
 double precision, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -47267,6 +47780,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(m)
 double precision, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -47307,6 +47821,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(m)
 complex, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
 complex :: sum
 !-----------------------------------------------------------------------
@@ -47352,6 +47867,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(m)
 complex, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
 complex :: sum
 !-----------------------------------------------------------------------
@@ -47391,6 +47907,7 @@ pure real function bnrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*)
+!     beginning of local variable declarations
 integer :: i, j, num
 real :: sum
 !-----------------------------------------------------------------------
@@ -47412,6 +47929,7 @@ pure real function b1nrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, incr, j, jmax, jmin, num
 interface
    pure function sasum(n,sx,incx)
@@ -47467,6 +47985,7 @@ pure double precision function dbnrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*)
+!     beginning of local variable declarations
 integer :: i, j, num
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -47488,6 +48007,7 @@ pure double precision function db1nrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, incr, j, jmax, jmin, num
 interface
    pure function dasum(n,dx,incx)
@@ -47708,6 +48228,7 @@ integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
 real, intent(inout) :: a(lda,*)
 integer, intent(inout) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
    & ml1, mp, n1
 real :: t
@@ -47876,6 +48397,7 @@ integer, intent(in) :: lda, n, ml, mu, job
 real, intent(in) :: a(lda,*)
 real, intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: ml1, ml2, k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 real :: t
 interface
@@ -48168,6 +48690,7 @@ integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
 double precision, intent(inout) :: a(lda,*)
 integer, intent(inout) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
    & ml1, mp, n1
 double precision :: t
@@ -48336,6 +48859,7 @@ integer, intent(in) :: lda, n, ml, mu, job
 double precision, intent(in) :: a(lda,*)
 double precision, intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: ml1, ml2, k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 double precision :: t
 interface
@@ -48467,6 +48991,7 @@ integer, intent(in) :: ka, ml, mu, n
 real, intent(out) :: cond
 real, intent(inout) :: a(ka,*), wk(*)
 integer, intent(inout) :: iwk(*)
+!     beginning of local variable declarations
 integer :: isgn, iter, iv, ix, j, jump, kase
 real :: ainorm, anorm
 interface
@@ -48573,6 +49098,7 @@ double precision, intent(inout) :: a(ka,*)
 double precision, intent(out) :: cond
 double precision, intent(inout) :: wk(*)
 integer, intent(inout) :: iwk(*)
+!     beginning of local variable declarations
 integer :: isgn, iter, iv, ix, j, jump, kase
 double precision :: anorm, ainorm
 interface
@@ -48795,6 +49321,7 @@ integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
 complex, intent(inout) :: a(lda,*)
 integer, intent(inout) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
    & ml1, mp, n1
 integer :: icamax
@@ -48931,6 +49458,7 @@ integer, intent(in) :: lda, n, ml, mu, job
 complex, intent(in) :: a(lda,*)
 complex, intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: ml1, ml2, k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 complex :: t
 interface
@@ -49062,6 +49590,7 @@ integer, intent(in) :: ka, m, n, num
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ip, j
 !                 Store the i-TH row
 ip = 1
@@ -49091,6 +49620,7 @@ integer, intent(in) :: ka, m, n, num
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ip, j
 !                 Store the i-TH row
 ip = 1
@@ -49120,6 +49650,7 @@ integer, intent(in) :: ka, m, n, num
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ip, j
 complex, parameter :: zero = (0.0,0.0)
 !                 Store the i-TH row
@@ -49149,6 +49680,7 @@ integer, intent(in) :: kb, m, n
 real, intent(in) :: a(*)
 real, intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin, j
 do i = 1,m
 !                 Clear the i-TH row
@@ -49173,6 +49705,7 @@ integer, intent(in) :: kb, m, n
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin, j
 do i = 1,m
 !                 Clear the i-TH row
@@ -49197,6 +49730,7 @@ integer, intent(in) :: kb, m, n
 complex, intent(in) :: a(*)
 complex, intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin, j
 do i = 1,m
 !                 Clear the i-TH row
@@ -49222,6 +49756,7 @@ real, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
 l = 1
 do i = 1,m
@@ -49248,6 +49783,7 @@ double precision, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
 l = 1
 do i = 1,m
@@ -49274,6 +49810,7 @@ complex, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
 real :: t
 !-----------------------------------------------------------------------
@@ -49305,6 +49842,7 @@ complex, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
 real :: t
 !-----------------------------------------------------------------------
@@ -49338,6 +49876,7 @@ real, intent(inout) :: wk(n)
 complex, intent(inout) :: c(*)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 complex :: t
 !-----------------------------------------------------------------------
@@ -49399,6 +49938,7 @@ real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
 !-----------------------------------------------------------------------
 !                  Copying a sparse real matrix
@@ -49428,6 +49968,7 @@ double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
 !-----------------------------------------------------------------------
 !              Copying a sparse double precision matrix
@@ -49457,6 +49998,7 @@ complex, intent(in) :: a(*)
 complex, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
 complex, parameter :: zero = (0.0,0.0)
 !-----------------------------------------------------------------------
@@ -49487,6 +50029,7 @@ complex, intent(in) :: a(*)
 complex, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l, mp1
 !-----------------------------------------------------------------------
 !     Computation of the conjugate of a sparse complex matrix
@@ -49514,6 +50057,7 @@ real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
 !-----------------------------------------------------------------------
 !                 Transposing a sparse real matrix
@@ -49571,6 +50115,7 @@ real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
 !-----------------------------------------------------------------------
 !                 Transposing a sparse real matrix
@@ -49629,6 +50174,7 @@ double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
 !-----------------------------------------------------------------------
 !           Transposing a sparse double precision matrix
@@ -49686,6 +50232,7 @@ double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
 !-----------------------------------------------------------------------
 !           Transposing a sparse double precision matrix
@@ -49744,6 +50291,7 @@ complex, intent(in) :: a(*)
 complex, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
 !-----------------------------------------------------------------------
 !               Transposing a sparse complex matrix
@@ -49801,6 +50349,7 @@ complex, intent(in) :: a(*)
 complex, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
 !-----------------------------------------------------------------------
 !               Transposing a sparse complex matrix
@@ -49860,6 +50409,7 @@ real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 real :: t
 !-----------------------------------------------------------------------
@@ -49922,6 +50472,7 @@ double precision, intent(in) :: a(*), b(*)
 double precision, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 double precision :: t
 !-----------------------------------------------------------------------
@@ -49984,6 +50535,7 @@ complex, intent(in) :: a(*), b(*)
 complex, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 complex :: t
 !-----------------------------------------------------------------------
@@ -50046,6 +50598,7 @@ real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 real :: t
 !-----------------------------------------------------------------------
@@ -50108,6 +50661,7 @@ double precision, intent(in) :: a(*), b(*)
 double precision, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 double precision :: t
 !-----------------------------------------------------------------------
@@ -50170,6 +50724,7 @@ complex, intent(in) :: a(*), b(*)
 complex, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 complex :: t
 !-----------------------------------------------------------------------
@@ -50232,6 +50787,7 @@ real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, jp, jpmax, jpmin, k, kp, kpmax, kpmin
 real :: t
 !-----------------------------------------------------------------------
@@ -50287,6 +50843,7 @@ double precision, intent(in) :: a(*), b(*)
 double precision, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, jp, jpmax, jpmin, k, kp, kpmax, kpmin
 double precision :: t
 !-----------------------------------------------------------------------
@@ -50342,6 +50899,7 @@ complex, intent(in) :: a(*), b(*)
 complex, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, jp, jpmax, jpmin, k, kp, kpmax, kpmin
 complex :: t
 !-----------------------------------------------------------------------
@@ -50395,6 +50953,7 @@ integer, intent(in) :: m, n
 real, intent(in) :: a(*), x(n)
 real, intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 real :: sum
 !-----------------------------------------------------------------------
@@ -50419,6 +50978,7 @@ integer, intent(in) :: m, n
 real, intent(in) :: a(*), x(n)
 real, intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 real :: sum
 !-----------------------------------------------------------------------
@@ -50443,6 +51003,7 @@ integer, intent(in) :: m, n
 real, intent(in) :: a(*), x(m)
 real, intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 real :: t
 !-----------------------------------------------------------------------
@@ -50470,6 +51031,7 @@ integer, intent(in) :: m, n
 real, intent(in) :: a(*), x(m)
 real, intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 real :: t
 !-----------------------------------------------------------------------
@@ -50494,6 +51056,7 @@ integer, intent(in) :: m, n
 double precision, intent(in) :: a(*), x(n)
 double precision, intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -50518,6 +51081,7 @@ integer, intent(in) :: m, n
 double precision, intent(in) :: a(*), x(n)
 double precision, intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -50542,6 +51106,7 @@ integer, intent(in) :: m, n
 double precision, intent(in) :: a(*), x(m)
 double precision, intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 double precision :: t
 !-----------------------------------------------------------------------
@@ -50569,6 +51134,7 @@ integer, intent(in) :: m, n
 double precision, intent(in) :: a(*), x(m)
 double precision, intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 double precision :: t
 !-----------------------------------------------------------------------
@@ -50593,6 +51159,7 @@ integer, intent(in) :: m, n
 complex, intent(in) :: a(*), x(n)
 complex, intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 complex :: sum
 !-----------------------------------------------------------------------
@@ -50617,6 +51184,7 @@ integer, intent(in) :: m, n
 complex, intent(in) :: a(*), x(n)
 complex, intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 complex :: sum
 !-----------------------------------------------------------------------
@@ -50641,6 +51209,7 @@ integer, intent(in) :: m, n
 complex, intent(in) :: a(*), x(m)
 complex, intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 complex :: t
 !-----------------------------------------------------------------------
@@ -50668,6 +51237,7 @@ integer, intent(in) :: m, n
 complex, intent(in) :: a(*), x(m)
 complex, intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 complex :: t
 !-----------------------------------------------------------------------
@@ -50691,6 +51261,7 @@ implicit none
 integer, intent(in) :: m, n
 real, intent(in) :: a(*)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin
 real :: sum
 !-----------------------------------------------------------------------
@@ -50718,6 +51289,7 @@ real, intent(out) :: anorm
 real, intent(in) :: a(*)
 real, intent(inout) :: wk(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: ip, ipmax, ipmin, j
 !-----------------------------------------------------------------------
 !        Computation of the L1 norm of a real sparse matrix a
@@ -50744,6 +51316,7 @@ implicit none
 integer, intent(in) :: m, n
 double precision, intent(in) :: a(*)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -50771,6 +51344,7 @@ double precision, intent(in) :: a(*)
 double precision, intent(out) :: anorm
 double precision, intent(inout) :: wk(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: ip, ipmax, ipmin, j
 !-----------------------------------------------------------------------
 !               Computation of the L1 norm of a sparse
@@ -50798,6 +51372,7 @@ implicit none
 integer, intent(in) :: m, n
 integer, intent(in) :: ia(*)
 integer, intent(inout) :: r(m), iwk(*)
+!     beginning of local variable declarations
 integer :: i, ii, k, l, np1, num
 !-----------------------------------------------------------------------
 !        spord orders the rows of an MXN sparse matrix A,ia,ja
@@ -50838,6 +51413,7 @@ integer, intent(inout) :: num
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: r(n), c(n), ib(n)
 integer, intent(inout) :: iwk(*)
+!     beginning of local variable declarations
 integer :: i, length, li, np1, npi
 !-----------------------------------------------------------------------
 !        Reordering a sparse matrix into block triangular form
@@ -50922,6 +51498,7 @@ integer, intent(in) :: licn, n
 integer, intent(inout) :: numnz
 integer, intent(in) :: ip(n), icn(licn), lenr(n)
 integer, intent(inout) :: iperm(n), pr(n), cv(n), arp(n), out(n)
+!     beginning of local variable declarations
 integer :: i, ii, in1, in2, ioutk, j, j1, jord, k, kk
 !-----------------------------------------------------------------------
 !     Division of work array is now described.
@@ -51079,6 +51656,7 @@ integer, intent(out) :: num
 integer, intent(in) :: ip(n)
 integer, intent(in) :: icn(licn), lenr(n)
 integer, intent(inout) :: arp(n), ib(n), lowl(n), numb(n), prev(n)
+!     beginning of local variable declarations
 integer :: i, i1, i2, icnt, ii, isn, ist, ist1, iv, iw, j, k, lcnt, nnm1, stp, dummy
 ! arp(i) is one less than the number of unsearched edges leaving
 !     node i.  at the end of the algorithm it is set to A
@@ -51190,6 +51768,7 @@ real, intent(in) :: a(*), b(n)
 real, intent(inout) :: x(n), rtemp(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), itemp(*)
+!     beginning of local variable declarations
 integer :: k, l, iu, ju, u, y, p
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
@@ -51280,6 +51859,7 @@ integer, intent(inout) :: ic(n), iu(*)
 integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
+!     beginning of local variable declarations
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk, nswc_ai_i4
 real :: dk, lki, xpv, xpvmax, yk
 !  nspiv1 uses sparse Gaussian elimination with
@@ -51501,6 +52081,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n)
+!     beginning of local variable declarations
 integer :: it, iu, jt, k, l, y, t, p
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
@@ -51575,6 +52156,7 @@ integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
 real, intent(in) :: b(n), d(n), t(*)
 real, intent(inout) :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: i, j, jj, jmax, jmin, k, lj, lk
 real :: sum
 !            Solve LY = b by forward substitution
@@ -51621,6 +52203,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n)
+!     beginning of local variable declarations
 integer :: it, iu, jt, k, l, y, t, p
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
@@ -51695,6 +52278,7 @@ integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
 real, intent(in) :: b(n), d(n), t(*)
 real, intent(inout) :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: i, j, jj, jmax, jmin, k, lj, lk
 !            Solve YU = b by forward substitution
 do k = 1,n
@@ -51747,6 +52331,7 @@ integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
+!     beginning of local variable declarations
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm, nswc_ai_i4
 real :: const, wi, wmax
 !-----------------------------------------------------------------------
@@ -51922,6 +52507,7 @@ double precision, intent(in) :: a(*), b(n)
 double precision, intent(inout) :: x(n), rtemp(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), itemp(*)
+!     beginning of local variable declarations
 integer :: k, l, iu, ju, u, y, p
 !-----------------------------------------------------------------------
 !          Solution of double precision sparse equations
@@ -52015,6 +52601,7 @@ integer, intent(inout) :: ic(n), iu(*)
 integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
+!     beginning of local variable declarations
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk, nswc_ai_i4
 double precision :: dk, lki, xpv, xpvmax, yk
 !  dnspiv uses sparse Gaussian elimination with
@@ -52236,6 +52823,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n)
+!     beginning of local variable declarations
 integer :: it, iu, jt, k, l, y, t, p
 !-----------------------------------------------------------------------
 !          Solution of double precision sparse equations
@@ -52311,6 +52899,7 @@ integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
 double precision, intent(in) :: b(n), d(n), t(*)
 double precision, intent(inout) :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: i, j, jj, jmax, jmin, k, lj, lk
 double precision :: sum
 !            Solve LY = b by forward substitution
@@ -52357,6 +52946,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n)
+!     beginning of local variable declarations
 integer :: it, iu, jt, k, l, y, t, p
 !-----------------------------------------------------------------------
 !          Solution of double precision sparse equations
@@ -52432,6 +53022,7 @@ integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
 double precision, intent(in) :: b(n), d(n), t(*)
 double precision, intent(inout) :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: i, j, jj, jmax, jmin, k, lj, lk
 !            Solve YU = b by forward substitution
 do k = 1,n
@@ -52484,6 +53075,7 @@ integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
+!     beginning of local variable declarations
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm, nswc_ai_i4
 double precision :: const, wi, wmax
 !-----------------------------------------------------------------------
@@ -52661,6 +53253,7 @@ real, intent(in) :: a(*)
 real, intent(inout) :: wk(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), iwk(*)
+!     beginning of local variable declarations
 integer :: isgn, iter, iv, ix, j, jump, kase
 real :: ainorm, anorm
 !-----------------------------------------------------------------------
@@ -52719,6 +53312,7 @@ double precision, intent(out) :: cond
 double precision, intent(inout) :: wk(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), iwk(*)
+!     beginning of local variable declarations
 integer :: isgn, iter, iv, ix, j, jump, kase
 double precision :: anorm, ainorm
 !-----------------------------------------------------------------------
@@ -52775,6 +53369,7 @@ integer, intent(in) :: n
 real, intent(inout) :: anorm
 real, intent(inout) :: v(n), x(n)
 integer, intent(inout) :: isgn(n)
+!     beginning of local variable declarations
 integer :: i, jlast, l
 real :: altsgn, anrm, t
 integer, parameter :: itmax = 5
@@ -52934,6 +53529,7 @@ integer, intent(inout) :: iter, j, jump, kase
 integer, intent(in) :: n
 double precision, intent(inout) :: anorm, v(n), x(n)
 integer, intent(inout) :: isgn(n)
+!     beginning of local variable declarations
 integer :: i, jlast, l
 double precision :: altsgn, an, anm1, anrm, t
 integer, parameter :: itmax = 5
@@ -53098,6 +53694,7 @@ complex, intent(in) :: a(*), b(n)
 complex, intent(inout) :: x(n), rtemp(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), itemp(*)
+!     beginning of local variable declarations
 integer :: k, l, iu, ju, u, y, p
 !-----------------------------------------------------------------------
 !                 Solution of complex sparse matrices
@@ -53188,6 +53785,7 @@ integer, intent(inout) :: ic(n), iu(*)
 integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
+!     beginning of local variable declarations
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk, nswc_ai_i4
 complex :: dk, lki, one, yk, zero
 real :: xpv, xpvmax
@@ -53412,6 +54010,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n)
+!     beginning of local variable declarations
 integer :: it, iu, jt, k, l, y, t, p
 !-----------------------------------------------------------------------
 !                 Solution of complex sparse matrices
@@ -53487,6 +54086,7 @@ integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
 complex, intent(in) :: b(n), d(n), t(*)
 complex, intent(inout) :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: i, j, jj, jmax, jmin, k, lj, lk
 complex :: sum
 !            Solve LY = b by forward substitution
@@ -53533,6 +54133,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n)
+!     beginning of local variable declarations
 integer :: it, iu, jt, k, l, y, t, p
 !-----------------------------------------------------------------------
 !                 Solution of complex sparse matrices
@@ -53608,6 +54209,7 @@ integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
 complex, intent(in) :: b(n), d(n), t(*)
 complex, intent(inout) :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: i, j, jj, jmax, jmin, k, lj, lk
 !            Solve YU = b by forward substitution
 do k = 1,n
@@ -53660,6 +54262,7 @@ integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
+!     beginning of local variable declarations
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm, nswc_ai_i4
 complex :: const
 real :: wi, wmax
@@ -53837,6 +54440,7 @@ integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(ka,n), wr(n), wi(n)
+!     beginning of local variable declarations
 integer :: igh, low
 interface
    pure subroutine balanc(nm,n,a,low,igh,scale)
@@ -53885,6 +54489,7 @@ integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(ka,n), wr(n), wi(n)
+!     beginning of local variable declarations
 integer :: igh, low
 interface
    pure subroutine balanc(nm,n,a,low,igh,scale)
@@ -53933,6 +54538,7 @@ integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(ka,n), wr(n), wi(n), zr(ka,n), zi(ka,n)
+!     beginning of local variable declarations
 integer :: igh, j, k, kp1, low
 real :: nswc_ai_r4
 interface
@@ -54023,6 +54629,7 @@ integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(ka,n), wr(n), wi(n), zr(ka,n), zi(ka,n)
+!     beginning of local variable declarations
 integer :: igh, j, k, kp1, low
 real :: nswc_ai_r4
 interface
@@ -54113,6 +54720,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
 real, intent(inout) :: a(nm,n), scale(n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, m, jj, iexc
 real :: c, f, g, r, s, b2, radix
 logical :: noconv
@@ -54271,6 +54879,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nz, igh, low
 real, intent(inout) :: z(nz,n)
 real, intent(in) :: scale(n)
+!     beginning of local variable declarations
 integer :: i, j, k, ii
 real :: s
 !-----------------------------------------------------------------------
@@ -54336,6 +54945,7 @@ integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 real, intent(inout) :: a(nm,n)
 integer, intent(inout) :: int(igh)
+!     beginning of local variable declarations
 integer :: i, j, m, la, kp1, mm1, mp1
 real :: x, y
 !     real abs
@@ -54418,6 +55028,7 @@ integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 real, intent(inout) :: a(nm,n)
 real, intent(inout) :: int(igh)
+!     beginning of local variable declarations
 integer :: i, j, m, la, kp1, mm1, mp1
 real :: x, y
 !     real abs
@@ -54499,6 +55110,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 real, intent(inout) :: a(nm,n), ort(igh)
+!     beginning of local variable declarations
 integer :: i, j, m, ii, jj, la, mp, kp1
 real :: f, g, h, scale
 !     real sqrt,abs
@@ -54590,6 +55202,7 @@ integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
 real, intent(inout) :: h(nm,n), wr(n), wi(n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, m, en, ll, mm, na, its, mp2, enm2
 real :: p, q, r, s, t, w, x, y, zz, norm, machep
 logical :: notlas
@@ -54803,6 +55416,7 @@ integer, intent(in) :: m, n
 integer, intent(in) :: nm, igh, low
 real, intent(in) :: scale(n)
 real, intent(inout) :: z(nm,m)
+!     beginning of local variable declarations
 integer :: i, j, k, ii
 real :: s
 !-----------------------------------------------------------------------
@@ -54863,6 +55477,7 @@ integer, intent(in) :: nm, igh, low
 real, intent(in) :: a(nm,igh)
 real, intent(inout) :: z(nm,n)
 integer, intent(in) :: int(igh)
+!     beginning of local variable declarations
 integer :: i, j, kl, mm, mp, mp1
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure ELMTRANS,
@@ -54924,6 +55539,7 @@ integer, intent(in) :: nm, igh, low
 real, intent(in) :: a(nm,igh)
 real, intent(inout) :: z(nm,n)
 real, intent(in) :: int(igh)
+!     beginning of local variable declarations
 integer :: i, j, kl, mm, mp, mp1
 !-----------------------------------------------------------------------
 !     This subroutine is a translation of the Algol procedure ELMTRANS,
@@ -54984,6 +55600,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm, igh, low
 real, intent(in) :: a(nm,igh)
 real, intent(inout) :: ort(igh), z(nm,n)
+!     beginning of local variable declarations
 integer :: i, j, kl, mm, mp, mp1
 real :: g
 !-----------------------------------------------------------------------
@@ -55053,6 +55670,7 @@ integer, intent(in) :: na, igh, low
 integer, intent(in) :: nz
 real, intent(in) :: a(na,igh)
 real, intent(inout) :: ort(igh), z(nz,n)
+!     beginning of local variable declarations
 integer :: i, j, kl, mm, mp, mp1
 real :: g
 !-----------------------------------------------------------------------
@@ -55126,6 +55744,7 @@ integer, intent(in) :: igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
 real, intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, m, en, ii, jj, ll, mm, na, nn, its, mp2, enm2
 real :: p, q, r, s, t, w, x, y, ra, sa, vi, vr, zz, norm, machep, nswc_ai_r4
 logical :: notlas
@@ -55524,6 +56143,7 @@ integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 double precision, intent(inout) :: a(ka,n), wr(n), wi(n)
+!     beginning of local variable declarations
 integer :: igh, low
 interface
    pure subroutine dbal(nm,n,a,low,igh,scale)
@@ -55573,6 +56193,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 double precision, intent(inout) :: a(ka,n), wr(n), wi(n), &
    & zr(ka,n), zi(ka,n)
+!     beginning of local variable declarations
 integer :: igh, j, k, kp1, low
 double precision :: nswc_ai_r8
 interface
@@ -55663,6 +56284,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
 double precision, intent(inout) :: a(nm,n), scale(n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, m, jj, iexc
 double precision :: c, f, g, r, s, b2, radix
 logical :: noconv
@@ -55821,6 +56443,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nz, igh, low
 double precision, intent(inout) :: z(nz,n)
 double precision, intent(in) :: scale(n)
+!     beginning of local variable declarations
 integer :: i, j, k, ii
 double precision :: s
 !-----------------------------------------------------------------------
@@ -55885,6 +56508,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 double precision, intent(inout) :: a(nm,n), ort(igh)
+!     beginning of local variable declarations
 integer :: i, j, m, ii, jj, la, mp, kp1
 double precision :: f, g, h, scale
 !     double precision dsqrt,dabs
@@ -55976,6 +56600,7 @@ integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
 double precision, intent(inout) :: h(nm,n), wr(n), wi(n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, m, en, ll, mm, na, its, mp2, enm2
 double precision :: p, q, r, s, t, w, x, y, zz, norm, machep
 logical :: notlas
@@ -56190,6 +56815,7 @@ integer, intent(in) :: m, n
 integer, intent(in) :: nm, igh, low
 double precision, intent(in) :: scale(n)
 double precision, intent(inout) :: z(nm,m)
+!     beginning of local variable declarations
 integer :: i, j, k, ii
 double precision :: s
 !-----------------------------------------------------------------------
@@ -56249,6 +56875,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm, igh, low
 double precision, intent(in) :: a(nm,igh)
 double precision, intent(inout) :: ort(igh), z(nm,n)
+!     beginning of local variable declarations
 integer :: i, j, kl, mm, mp, mp1
 double precision :: g
 !-----------------------------------------------------------------------
@@ -56318,6 +56945,7 @@ integer, intent(in) :: na, igh, low
 integer, intent(in) :: nz
 double precision, intent(in) :: a(na,igh)
 double precision, intent(inout) :: ort(igh), z(nz,n)
+!     beginning of local variable declarations
 integer :: i, j, kl, mm, mp, mp1
 double precision :: g
 !-----------------------------------------------------------------------
@@ -56391,6 +57019,7 @@ integer, intent(in) :: igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
 double precision, intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, m, en, ii, jj, ll, mm, na, nn, its, mp2, enm2
 double precision :: a, b, d, p, q, r, s, t, u, w, x, y, ra, sa, vi, vr, zz, norm, machep, nswc_ai_r8
 logical :: notlas
@@ -56789,6 +57418,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka
 integer :: n
 real, intent(inout) :: a(*), w(n), t(*)
+!     beginning of local variable declarations
 integer :: l
 !-----------------------------------------------------------------------
 !               Eigenvalues of symmetric real matrices
@@ -56808,6 +57438,7 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(*), w(n), t(n)
+!     beginning of local variable declarations
 integer :: l
 interface
    pure subroutine imtql1(n,d,e,ierr)
@@ -56920,6 +57551,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
 real, intent(inout) :: a(nm,n), d(n), e(n), e2(n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, ii, jp1
 real :: f, g, h, scale
 !     real sqrt,abs
@@ -57018,6 +57650,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nv
 real, intent(inout) :: a(nv), d(n), e(n), e2(n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, ii, iz, jk
 real :: f, g, h, hh, scale
 !     real sqrt,abs
@@ -57112,6 +57745,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e2(n)
+!     beginning of local variable declarations
 integer :: i, j, l, m, ii, l1, mml
 real :: b, c, f, g, h, p, r, s, machep
 interface
@@ -57234,6 +57868,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e(n)
+!     beginning of local variable declarations
 integer :: i, j, l, m, ii, mml
 real :: b, c, f, g, p, r, s, machep
 interface
@@ -57351,6 +57986,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 real, intent(in) :: a(nm,n)
 real, intent(inout) :: d(n), e(n), z(nm,n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, ii, jp1
 real :: f, g, h, hh, scale
 !     real sqrt,abs
@@ -57468,6 +58104,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e(n), z(nm,n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, m, ii, l1, mml
 real :: b, c, f, g, h, p, r, s, machep
 interface
@@ -57623,6 +58260,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e(n), z(nm,n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, m, ii, mml
 real :: b, c, f, g, p, r, s, machep
 interface
@@ -57771,6 +58409,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka
 integer :: n
 double precision, intent(inout) :: a(*), w(n), t(*)
+!     beginning of local variable declarations
 integer :: l
 !-----------------------------------------------------------------------
 !                Double precision computation of the
@@ -57826,6 +58465,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nm
 double precision, intent(inout) :: a(nm,n), d(n), e(n), e2(n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, ii, jp1
 double precision :: f, g, h, scale
 !     double precision dsqrt,dabs
@@ -57924,6 +58564,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(in) :: nv
 double precision, intent(inout) :: a(nv), d(n), e(n), e2(n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, ii, iz, jk
 double precision :: f, g, h, hh, scale
 !     double precision dsqrt,dabs
@@ -58018,6 +58659,7 @@ implicit none
 integer, intent(in) :: n
 integer, intent(out) :: ierr
 double precision, intent(inout) :: d(n), e2(n)
+!     beginning of local variable declarations
 integer :: i, j, l, m, ii, l1, mml
 double precision :: b, c, f, g, h, p, r, s, machep
 interface
@@ -58140,6 +58782,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 double precision, intent(in) :: a(nm,n)
 double precision, intent(inout) :: d(n), e(n), z(nm,n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, ii, jp1
 double precision :: f, g, h, hh, scale
 !     double precision dsqrt,dabs
@@ -58257,6 +58900,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(out) :: ierr
 double precision, intent(inout) :: d(n), e(n), z(nm,n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, m, ii, l1, mml
 double precision :: b, c, f, g, h, p, r, s, machep
 interface
@@ -58411,6 +59055,7 @@ integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 real, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n)
+!     beginning of local variable declarations
 integer :: igh, low
 interface
    pure subroutine cbal(nm,n,ar,ai,low,igh,scale)
@@ -58464,6 +59109,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 real, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n), zr(ka,n), &
    & zi(ka,n), temp(*)
+!     beginning of local variable declarations
 integer :: i1, i2, i3, igh, low
 interface
    pure subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi)
@@ -58542,6 +59188,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
 real, intent(inout) :: ar(nm,n), ai(nm,n), scale(n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, m, jj, iexc
 real :: c, f, g, r, s, b2, radix
 logical :: noconv
@@ -58712,6 +59359,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 real, intent(inout) :: ar(nm,n), ai(nm,n), ortr(igh), orti(igh)
+!     beginning of local variable declarations
 integer :: i, j, m, ii, jj, la, mp, kp1
 real :: f, g, h, fi, fr, scale
 !     real sqrt,cabs,abs
@@ -58826,6 +59474,7 @@ integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 integer, intent(out) :: ierr
 real, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n)
+!     beginning of local variable declarations
 integer :: i, j, l, en, ll, its, lp1, enm1
 real :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
 complex :: z3
@@ -59035,6 +59684,7 @@ integer, intent(in) :: m, n
 integer, intent(in) :: nm, igh, low
 real, intent(in) :: scale(n)
 real, intent(inout) :: zr(nm,m), zi(nm,m)
+!     beginning of local variable declarations
 integer :: i, j, k, ii
 real :: s
 !-----------------------------------------------------------------------
@@ -59105,6 +59755,7 @@ integer, intent(in) :: low
 integer, intent(out) :: ierr
 real, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n), zr(nm,n), &
    & zi(nm,n), ortr(igh), orti(igh)
+!     beginning of local variable declarations
 integer :: i, j, k, l, m, en, ii, jj, ll, nn, ip1, its, lp1, enm1, iend, nswc_ai_i4
 real :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
 complex :: z3
@@ -59464,6 +60115,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 double precision, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
    & wi(n)
+!     beginning of local variable declarations
 integer :: igh, low
 interface
    pure subroutine dcbal(nm,n,ar,ai,low,igh,scale)
@@ -59517,6 +60169,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
 double precision, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
    & wi(n), zr(ka,n), zi(ka,n), temp(*)
+!     beginning of local variable declarations
 integer :: i1, i2, i3, igh, low
 interface
    pure subroutine dcbabk(nm,n,low,igh,scale,m,zr,zi)
@@ -59597,6 +60250,7 @@ integer, intent(in) :: n
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
 double precision, intent(inout) :: ar(nm,n), ai(nm,n), scale(n)
+!     beginning of local variable declarations
 integer :: i, j, k, l, m, jj, iexc
 double precision :: c, f, g, r, s, b2, radix
 logical :: noconv
@@ -59767,6 +60421,7 @@ integer, intent(in) :: nm, igh
 integer, intent(in) :: low
 double precision, intent(inout) :: ar(nm,n), ai(nm,n), ortr(igh), &
    & orti(igh)
+!     beginning of local variable declarations
 integer :: i, j, m, ii, jj, la, mp, kp1
 double precision :: f, g, h, fi, fr, scale
 interface
@@ -59888,6 +60543,7 @@ integer, intent(in) :: low
 integer, intent(out) :: ierr
 double precision, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
    & wi(n)
+!     beginning of local variable declarations
 integer :: i, j, l, en, ll, its, lp1, enm1
 double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep, r2, w(2), z(2)
 interface
@@ -60104,6 +60760,7 @@ integer, intent(in) :: m, n
 integer, intent(in) :: nm, igh, low
 double precision, intent(in) :: scale(n)
 double precision, intent(inout) :: zr(nm,m), zi(nm,m)
+!     beginning of local variable declarations
 integer :: i, j, k, ii
 double precision :: s
 !-----------------------------------------------------------------------
@@ -60174,6 +60831,7 @@ integer, intent(in) :: low
 integer, intent(out) :: ierr
 double precision, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
    & wi(n), zr(nm,n), zi(nm,n), ortr(igh), orti(igh)
+!     beginning of local variable declarations
 integer :: i, j, k, l, m, en, ii, jj, ll, nn, ip1, its, lp1, enm1, iend, nswc_ai_i4
 double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep, r2, w(2), z(2)
 interface
@@ -60544,6 +61202,7 @@ integer, intent(in) :: kq, l, m, n
 real, intent(inout) :: error, q(kq,*), res(*)
 real, intent(in) :: toler
 real, intent(inout) :: wk(*), x(*)
+!     beginning of local variable declarations
 integer :: klm
 interface
    pure subroutine xl1(k,l,m,n,klmd,klm2d,nklmd,n2d,q,kode, &
@@ -60698,12 +61357,13 @@ integer, intent(in) :: klmd
 integer, intent(inout) :: kode
 integer, intent(in) :: klm2d
 integer, intent(in) :: nklmd
+dimension q(klm2d,n2d), x(n2d), res(klmd), cu(2,nklmd), &
+   & iu(2,nklmd), s(klmd)
+!     beginning of local variable declarations
 double precision :: sum
 real :: z, sn, zu, zv, cuv, xmax, xmin, pivot, tpivot, nswc_ai_r4
 integer :: i, j, ia, ii, in, js, kk, nk, n1, n2, jmn, jpn, klm, nkl, nk1, iimn, iout, klm1, klm2, nklm, nkl1, maxit, iphase, &
    & kforce, iineg
-dimension q(klm2d,n2d), x(n2d), res(klmd), &
-   & cu(2,nklmd), iu(2,nklmd), s(klmd)
 ! Initialization.
 maxit = iter
 n1 = n + 1
@@ -61012,10 +61672,11 @@ integer, intent(out) :: ierr
 integer, intent(inout) :: iwk
 integer, intent(in) :: ka, kb, m, n, nb
 real, intent(inout) :: a(ka,n), b(kb,nb), wk(n)
+dimension iwk(n)
+!     beginning of local variable declarations
 integer :: i, j, np1
 real :: rnorm
 logical :: exit
-dimension iwk(n)
 !     --------------
 ierr = 0
 if (1 < n .and. n <= m) go to 10
@@ -61045,10 +61706,11 @@ integer, intent(inout) :: iwk
 integer, intent(in) :: ka, kb, m, n, nb
 real :: a(ka,n)
 real, intent(inout) :: b(kb,nb), wk(*)
+dimension iwk(n)
+!     beginning of local variable declarations
 integer :: i, j, lq, lr, ls, np1
 real :: rnorm
 logical :: exit
-dimension iwk(n)
 !     -------------------
 !     dimension wk(mn + 2m + n)
 !     -------------------
@@ -61092,6 +61754,8 @@ integer, intent(inout) :: ip
 integer, intent(in) :: m, ms, n
 real, intent(inout) :: qr(ms,n), s(n)
 logical, intent(out) :: exit
+dimension ip(n)
+!     beginning of local variable declarations
 integer :: i, j, jp, k, kj, nn
 real :: ajj, sav, ss, y
 !***********************************************************************
@@ -61141,7 +61805,6 @@ real :: ajj, sav, ss, y
 !            transformations for linear least squares problems, ARL
 !            technical report ARL TR 74-0124(1974).
 !***********************************************************************
-dimension ip(n)
 exit = .true.
 nn = n
 if (n == m) nn = n - 1
@@ -61202,6 +61865,8 @@ integer :: ip
 integer, intent(in) :: m, ms, n
 real :: qr(ms,n), s(n)
 real, intent(inout) :: x(m)
+dimension ip(n)
+!     beginning of local variable declarations
 integer :: i, ij, j, jp, k, ni, nm, nn
 real :: sav, ss, y
 !***********************************************************************
@@ -61250,7 +61915,6 @@ real :: sav, ss, y
 !            transformations for linear least squares problems, ARL
 !            technical report ARL TR 74-0124(1974).
 !***********************************************************************
-dimension ip(n)
 nn = n
 if (n == m) nn = n - 1
 do j = 1, nn
@@ -61297,6 +61961,8 @@ real, intent(inout) :: r(m)
 real :: s(n)
 real, intent(inout) :: x(m)
 logical, intent(out) :: exit
+dimension ip(n)
+!     beginning of local variable declarations
 integer :: i, j, k, np1
 real :: eps, eps2, rat, ratio, rnrm2, xnrm2
 double precision :: dsum
@@ -61356,7 +62022,6 @@ end interface
 !        to high accuracy by double precision.  orsol is then used to
 !        solve (1).
 ! ----------------------------------------------------------------------
-dimension ip(n)
 !     ********** eps is a machine dependent parameter. Assign eps
 !                the value U where U is the smallest positive floating
 !                point number such that 1.0 + U .GT. 1.0.
@@ -61411,6 +62076,7 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n, nb
 double precision, intent(inout) :: a(ka,n), b(kb,nb), wk(n)
 integer, intent(inout) :: iwk(n)
+!     beginning of local variable declarations
 integer :: i, j, np1
 double precision :: rnorm
 logical :: exit
@@ -61464,6 +62130,7 @@ integer, intent(in) :: m, ms, n
 double precision, intent(inout) :: qr(ms,n), s(n)
 integer, intent(inout) :: ip(n)
 logical, intent(out) :: exit
+!     beginning of local variable declarations
 integer :: i, j, jp, k, kj, nn
 double precision :: ajj, sav, ss, y
 !***********************************************************************
@@ -61573,6 +62240,7 @@ integer, intent(in) :: m, ms, n
 double precision, intent(in) :: qr(ms,n), s(n)
 double precision, intent(inout) :: x(m)
 integer, intent(in) :: ip(n)
+!     beginning of local variable declarations
 integer :: i, ij, j, jp, k, ni, nm, nn
 double precision :: sav, ss, y
 !***********************************************************************
@@ -61668,6 +62336,7 @@ integer, intent(in) :: liw, lw, m, mda, mdb, n, nb
 real, intent(in) :: ae, re
 real, intent(inout) :: a(mda,n), b(mdb,*), rnorm(*), work(lw)
 integer, intent(inout) :: iwork(liw)
+!     beginning of local variable declarations
 integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 real :: eps, rerr
 interface
@@ -61880,6 +62549,7 @@ integer, intent(inout) :: ksure
 integer, intent(in) :: m, mda, mode, n, np
 real, intent(inout) :: a(mda,n), db(n), eb(n), h(n), ub(n), w(n)
 integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
 integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
    & kp1, kz, l, lm1, mm, nmk
 real :: bb, r2, rmin, sum, t, temp, tn, tt
@@ -62159,6 +62829,7 @@ real :: h(n)
 real, intent(inout) :: rnorm(nb)
 real :: w(n)
 integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
 integer :: i, ij, im1, j, jb, k, kp1, nmk
 real :: bb, tt
 real :: snrm2
@@ -62279,6 +62950,7 @@ integer, intent(inout) :: ksure
 integer, intent(in) :: m, mda, mode, n, np
 real, intent(inout) :: a(mda,n), db(m), eb(m), h(m), ub(m), w(m)
 integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
 integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
    & kp1, kz, l, lm1, mmk, nn
 real :: bb, r2, rmin, sum, t, temp, tn, tt
@@ -62558,6 +63230,7 @@ real :: h(m)
 real, intent(inout) :: rnorm(nb)
 real :: w(m)
 integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
 integer :: i, ij, ip1, j, jb, k, kp1, mmk
 real :: bb, tt
 real :: snrm2
@@ -62680,6 +63353,7 @@ double precision, intent(inout) :: a(mda,n), b(mdb,*)
 double precision, intent(in) :: re, ae
 double precision, intent(inout) :: rnorm(*), work(lw)
 integer, intent(inout) :: iwork(liw)
+!     beginning of local variable declarations
 integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 double precision :: eps, rerr
 interface
@@ -62967,6 +63641,7 @@ integer, intent(in) :: m, mda, mode, n, np
 double precision, intent(inout) :: a(mda,n), ub(n), db(n), h(n), &
    & w(n), eb(n)
 integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
 integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
    & kp1, kz, l, lm1, mm, nmk
 double precision :: bb, rmin, r2, sum, t, temp, tn, tt
@@ -63244,6 +63919,7 @@ integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
 double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
 double precision, intent(in) :: h(n), w(n)
 integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
 integer :: i, ij, im1, j, jb, k, kp1, nmk
 double precision :: bb, tt
 interface
@@ -63398,6 +64074,7 @@ integer, intent(in) :: m, mda, mode, n, np
 double precision, intent(inout) :: a(mda,n), ub(m), db(m), h(m), &
    & w(m), eb(m)
 integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
 integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
    & kp1, kz, l, lm1, mmk, nn
 double precision :: bb, rmin, r2, sum, t, temp, tn, tt
@@ -63675,6 +64352,7 @@ integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
 double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
 double precision, intent(in) :: h(m), w(m)
 integer, intent(inout) :: ic(n), ir(m)
+!     beginning of local variable declarations
 integer :: i, ij, ip1, j, jb, k, kp1, mmk
 double precision :: bb, tt
 interface
@@ -63826,6 +64504,7 @@ integer, intent(in) :: m, mda, mdb, n, nb
 real, intent(inout) :: a(mda,n), b(mdb,*), g(n), h(n), rnorm(*)
 real, intent(in) :: tau
 integer, intent(inout) :: ip(n)
+!     beginning of local variable declarations
 integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 real :: hmax, sm1, tmp, z
 double precision :: sm
@@ -64061,6 +64740,7 @@ real, intent(inout) :: a(mda,n), b(mdb,*), d(*), g(n), h(n), &
    & rnorm(*)
 real, intent(in) :: tau
 integer, intent(inout) :: ip(n)
+!     beginning of local variable declarations
 integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 real :: hmax, sm1, tmp, z
 double precision :: sm
@@ -64314,6 +64994,7 @@ pure subroutine h12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
 implicit none
 integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
 real, intent(inout) :: c(*), u(iue,m), up
+!     beginning of local variable declarations
 integer :: i, i2, i3, i4, incr, j
 real :: cl, d, sm1
 double precision :: sm, b
@@ -64402,6 +65083,7 @@ double precision, intent(inout) :: a(mda,n), b(mdb,*)
 double precision, intent(in) :: tau
 double precision, intent(inout) :: rnorm(*), h(n), g(n)
 integer, intent(inout) :: ip(n)
+!     beginning of local variable declarations
 integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 double precision :: hmax, sm, sm1, tmp, z
 double precision, parameter :: factor = 1.d-3
@@ -64639,6 +65321,7 @@ double precision, intent(inout) :: a(mda,n), b(mdb,*), d(*)
 double precision, intent(in) :: tau
 double precision, intent(inout) :: rnorm(*), h(n), g(n)
 integer, intent(inout) :: ip(n)
+!     beginning of local variable declarations
 integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 double precision :: hmax, sm, sm1, tmp, z
 double precision, parameter :: factor = 1.d-3
@@ -64893,6 +65576,7 @@ pure subroutine dh12(mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
 implicit none
 integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
 double precision, intent(inout) :: u(iue,m), up, c(*)
+!     beginning of local variable declarations
 integer :: i, i2, i3, i4, incr, j
 double precision :: b, cl, d, sm
 !-----------------------------------------------------------------------
@@ -64982,6 +65666,7 @@ real, intent(inout) :: w(mdw,*)
 real, intent(in) :: prgopt(*)
 real, intent(inout) :: x(*), ws(*)
 integer, intent(inout) :: ip(*)
+!     beginning of local variable declarations
 integer :: i, ii, imax, j, jj, jp1, k, key, kk, kranke, l, last, &
    & link, m, mapke1, mdeqc, mend, mep1, n1, n2, next, nlink, nopt, &
    & np1, ntimes
@@ -65481,6 +66166,7 @@ real, intent(inout) :: w(mdw,*)
 real, intent(in) :: prgopt(*)
 real, intent(inout) :: x(*), ws(*)
 integer, intent(inout) :: ip(*)
+!     beginning of local variable declarations
 integer :: i, ii, il, im1, ip1, j, k, key, key8, key9, krank, &
    & krm1, krp1, l, last, link, m, map1, mdlpdp, minman, n1, n2, n3, &
    & next, np1
@@ -65788,6 +66474,7 @@ integer, intent(in) :: n1, n2
 real, intent(inout) :: a(mda,*)
 real :: prgopt(*)
 real, intent(inout) :: wnorm, ws(*), x(*)
+!     beginning of local variable declarations
 integer :: i, iw, ix, j, l, modew, n, np1
 real :: rnorm, sc, ynorm
 real :: snrm2
@@ -65940,6 +66627,7 @@ real, intent(inout) :: w(mdw,*)
 real, intent(in) :: prgopt(*)
 real, intent(inout) :: x(n), work(*)
 integer, intent(inout) :: iwork(*)
+!     beginning of local variable declarations
 integer :: l1, l2, l3, l4, l5
 !     dimension w(mdw,n+1),prgopt(*),x(n),iwork(m+n),work(m+5*n)
 !     abstract
@@ -66151,6 +66839,7 @@ real, intent(inout) :: z(*), temp(*)
 real, intent(in) :: prgopt(*)
 real, intent(inout) :: d(*)
 integer, intent(inout) :: ipivot(*), itype(*)
+!     beginning of local variable declarations
 integer :: i, igo897, igo938, igo958, imax, isol, itemp, iter, &
    & itmax, iwmax, j, jcon, jj, jm1, jp, key, krank, krp1, l1, last, &
    & link, lp1, m, me, mep1, next, niv, niv1, nlink, nm1, nopt, np1, &
@@ -66719,6 +67408,7 @@ real, intent(inout) :: w(mdw,*), h(*), scale(*)
 real, intent(in) :: dope(*)
 integer, intent(inout) :: itype(*), ipivot(*), idope(*)
 logical, intent(inout) :: done
+!     beginning of local variable declarations
 integer :: i, i1, ic, igo990, igo993, igo996, ip1, ir, irp1, &
    & itemp, j, j1, jj, jm1, jp, k, kk, krank, krp1, l1, lb, lend, lp1, &
    & max, me, mend, mep1, niv, niv1, np1, nsoln
@@ -67086,6 +67776,7 @@ integer, intent(inout) :: ipivot(n)
 real, intent(in) :: a(mm,n), b(mb,l)
 real, intent(inout) :: c(*)
 real, intent(inout) :: qr(mmpnn,n), res(mr,l), tol, w(m), x(nn,l)
+!     beginning of local variable declarations
 integer :: i, iter, j, jm1, k, k0, k1, k10, k11, k12, k2, k3, k4, &
    & k5, k6, k7, k8, k9, ksum, m1p1, mp1, mpi, mpn, numit
 real :: eta, digitx
@@ -67535,6 +68226,7 @@ real, intent(in) :: eta
 real, intent(inout) :: qr(mmpnn,n)
 real, intent(in) :: tol
 logical, intent(out) :: sing
+!     beginning of local variable declarations
 integer :: ik, j, jj, k, km1, l, lmm, mh, mp1, mpn1, ms, mv, np, &
    & ns, nsp1
 real :: c, dm, ds, rsj, tol2
@@ -67738,6 +68430,7 @@ real, intent(inout) :: wres(*), x(*), y(*), y1(*), y2(*)
 real, intent(inout) :: digitx
 real, intent(in) :: eta
 logical, intent(inout) :: fail
+!     beginning of local variable declarations
 integer :: i, j, k, kz, l, mp1, mpn, n1p1, np, ns
 real :: c, dxnorm, eta2, rdr1, rdr2, rdx1, rdx2, rnr, rnx, xnorm
 double precision :: sum
@@ -67899,6 +68592,7 @@ real, intent(in) :: d(*)
 real, intent(inout) :: f(*)
 real, intent(in) :: qr(mmpnn,n1)
 real, intent(inout) :: y(*)
+!     beginning of local variable declarations
 integer :: j, l, lmm, mh, mpl, mpn1, mv, ns, nsm1
 real :: c
 double precision :: sum
@@ -67970,6 +68664,7 @@ integer, intent(in) :: ipivot(n)
 real, intent(inout) :: c(nn,n)
 real, intent(in) :: d(*)
 real, intent(inout) :: z(*)
+!     beginning of local variable declarations
 integer :: i, j, k, ka, l, n1p1
 double precision :: sum
 ! Subroutine covar uses results from the orthogonal decomposition
@@ -68052,6 +68747,7 @@ real, intent(inout) :: u(m), x(n)
 real, intent(in) :: atol, btol, conlim
 real, intent(inout) :: acond, rnorm, xnorm, w(*)
 integer, intent(inout) :: itn
+!     beginning of local variable declarations
 integer :: npi, i, nconv, nstop
 real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
    & ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
@@ -68361,6 +69057,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(inout) :: x(n)
 real, intent(out) :: beta
+!     beginning of local variable declarations
 real, parameter :: zero = 0.0
 real, parameter :: one = 1.0
 interface
@@ -68401,6 +69098,7 @@ real, intent(inout) :: u(m), x(n)
 real, intent(in) :: atol, btol, conlim
 real, intent(inout) :: acond, rnorm, xnorm, w(*)
 integer, intent(inout) :: itn
+!     beginning of local variable declarations
 integer :: npi, i, nconv, nstop
 real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
    & ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
@@ -68719,6 +69417,7 @@ real, intent(inout) :: u(m), x(n)
 real, intent(in) :: atol, btol, conlim
 real, intent(inout) :: acond, rnorm, xnorm, w(*)
 integer, intent(inout) :: itn
+!     beginning of local variable declarations
 integer :: npi, i, nconv, nstop
 real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
    & ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
@@ -69036,6 +69735,7 @@ real, intent(inout) :: x, w
 real, intent(in) :: aerr, rerr
 real, intent(inout) :: error
 external f
+!     beginning of local variable declarations
 real :: eps, atol, ftol, rtol, tol, a, b, e, fu, fv, u, v, nswc_ai_r4
 real, parameter :: eps0 = 5.e-3
 real, parameter :: c1 = .3819660112501052
@@ -69192,6 +69892,7 @@ real, intent(inout) :: fpls
 real, intent(in) :: rerr
 real, intent(inout) :: xpls(n), wrk(n,*)
 external fcn
+!     beginning of local variable declarations
 integer :: i, itncnt, itnlim, mo
 real :: eps, fscale, gradtl, stepmx, steptl
 interface
@@ -69274,6 +69975,7 @@ real, intent(in) :: steptl
 real, intent(inout) :: typsiz(n), wrk0(n), wrk1(n), wrk2(n), x(n), &
    & xpls(n)
 external fcn
+!     beginning of local variable declarations
 integer :: i, iagflg, icscmx, iretcd, j, jp1, nm1, ns, sptr
 real :: cbrnf, f, fstack(30), rnf, sqrnf, stmx
 logical :: mxtake, noupdt
@@ -69442,6 +70144,7 @@ real, intent(in) :: gradtl, rerr
 real, intent(inout) :: stepmx
 real, intent(in) :: x(n)
 real, intent(inout) :: typsiz(n)
+!     beginning of local variable declarations
 integer :: i
 real :: stpsiz
 !-----------------------------------------------------------------------
@@ -69518,6 +70221,7 @@ real, intent(in) :: xpls(n), gpls(n), x(n), typsiz(n)
 real, intent(inout) :: fstack(ns)
 integer, intent(inout) :: sptr
 logical, intent(in) :: mxtake
+!     beginning of local variable declarations
 integer :: i, jerr
 real :: d, grd, relstp, rgx, rsx
 !-----------------------------------------------------------------------
@@ -69611,6 +70315,7 @@ real, intent(inout) :: fx
 real, intent(in) :: r
 real, intent(inout) :: x(n)
 external fcn
+!     beginning of local variable declarations
 integer :: i
 real :: fminus, fplus, h, xi, xminus, xplus
 !-----------------------------------------------------------------------
@@ -69642,6 +70347,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: mo, n
 real, intent(in) :: x(n)
 real, intent(inout) :: typsiz(n)
+!     beginning of local variable declarations
 integer :: i
 real :: big, c, t, xmin
 interface
@@ -69680,6 +70386,7 @@ integer, intent(in) :: n, nr
 real, intent(in) :: a(nr,n)
 real, intent(inout) :: x(n)
 real, intent(in) :: b(n)
+!     beginning of local variable declarations
 integer :: i, ii, im1, ip1, j
 real :: sum
 !-----------------------------------------------------------------------
@@ -69732,6 +70439,7 @@ real, intent(in) :: r
 real :: typsiz(n)
 real, intent(inout) :: x(n)
 external fcn
+!     beginning of local variable declarations
 integer :: j
 real :: fplus, stepsz, xtmpj
 !-----------------------------------------------------------------------
@@ -69766,6 +70474,7 @@ real, intent(inout) :: x(n)
 real, intent(in) :: typsiz(n)
 real, intent(inout) :: g(n)
 external fcn
+!     beginning of local variable declarations
 integer :: i
 real :: fminus, fplus, stepi, xtempi
 !-----------------------------------------------------------------------
@@ -69808,6 +70517,7 @@ real, intent(inout) :: p(n), xpls(n)
 real, intent(in) :: typsiz(n)
 logical, intent(out) :: mxtake
 external fcn
+!     beginning of local variable declarations
 integer :: i
 real :: a, b, disc, pfpls, plmbda, rln, rmnlmb, scl, sln, slp, t1, &
    & t2, t3, tlmbda, tmp, w
@@ -69918,6 +70628,7 @@ real, intent(in) :: x(n), xpls(n), g(n), gpls(n)
 real, intent(inout) :: a(nr,n)
 real, intent(inout) :: s(n), y(n), w(n)
 logical, intent(inout) :: noupdt
+!     beginning of local variable declarations
 integer :: i, im1, j
 real :: alp, den1, den2, snorm2, sum, ynrm2
 interface
@@ -70048,6 +70759,7 @@ implicit none
 integer, intent(in) :: n, nr
 real, intent(inout) :: a(nr,n), u(n)
 real, intent(in) :: v(n)
+!     beginning of local variable declarations
 integer :: i, ii, j, k, km1
 real :: r
 interface
@@ -70107,6 +70819,7 @@ integer, intent(in) :: i, n, nr
 real, intent(in) :: a, b
 real, intent(inout) :: r
 real, intent(inout) :: h(nr,n)
+!     beginning of local variable declarations
 integer :: j
 real :: c, s, t, z
 !-----------------------------------------------------------------------
@@ -70164,6 +70877,7 @@ integer, intent(inout) :: iwa(n)
 real, intent(in) :: epsfcn, tol
 real, intent(inout) :: x(n), fvec(m), wa(lwa)
 external fcn
+!     beginning of local variable declarations
 integer :: maxfev, mode, mp5n, nfev, nprint
 real :: ftol, gtol, xtol
 real, parameter :: factor = 1.0e2
@@ -70275,6 +70989,7 @@ real, intent(in) :: ftol, xtol, gtol, epsfcn, factor
 real, intent(inout) :: x(n), fvec(m), diag(n), fjac(ldfjac,n), &
    & qtf(n), wa1(n), wa2(n), wa3(n), wa4(m)
 external fcn
+!     beginning of local variable declarations
 integer :: i, iflag, iter, j, l
 real :: actred, delta, dirder, eps, fnorm, fnorm1, gnorm, par, pnorm, prered, ratio, sum, temp, temp1, temp2, xnorm
 real :: enorm
@@ -70622,6 +71337,7 @@ pure real function enorm(n,x)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: x(n)
+!     beginning of local variable declarations
 integer :: i
 real :: agiant, floatn, s1, s2, s3, xabs, x1max, x3max
 real, parameter :: rdwarf = 3.834e-20
@@ -70710,6 +71426,7 @@ integer, intent(in) :: n, lr
 real, intent(in) :: delta
 real, intent(in) :: r(lr), diag(n), qtb(n)
 real, intent(inout) :: x(n), wa1(n), wa2(n)
+!     beginning of local variable declarations
 integer :: i, j, jj, jp1, k, l
 real :: alpha, bnorm, epsmch, gnorm, qnorm, sgnorm, sum, temp
 interface
@@ -70867,6 +71584,7 @@ real, intent(inout) :: fjac(ldfjac,n)
 real :: wa1(n)
 real, intent(inout) :: wa2(n)
 external fcn
+!     beginning of local variable declarations
 integer :: i, j, k, msum
 real :: eps, epsmch, h, temp
 real, parameter :: zero = 0.0e0
@@ -70995,6 +71713,7 @@ real, intent(in) :: fvec(m)
 real, intent(inout) :: fjac(ldfjac,n)
 real :: wa(m)
 external fcn
+!     beginning of local variable declarations
 integer :: i, j
 real :: eps, epsmch, h, temp
 real, parameter :: zero = 0.0e0
@@ -71085,6 +71804,7 @@ real, intent(inout) :: par
 real, intent(inout) :: r(ldr,n)
 real, intent(in) :: diag(n), qtb(n)
 real, intent(inout) :: x(n), sdiag(n), wa1(n), wa2(n)
+!     beginning of local variable declarations
 integer :: i, iter, j, jm1, jp1, k, l, nsing
 real :: dxnorm, dwarf, fp, gnorm, parc, parl, paru, sum, temp
 real, parameter :: p1 = 1.0e-1
@@ -71311,6 +72031,7 @@ pure subroutine qform(m,n,q,ldq,wa)
 implicit none
 integer, intent(in) :: m, n, ldq
 real, intent(inout) :: q(ldq,m), wa(m)
+!     beginning of local variable declarations
 integer :: i, j, jm1, k, l, minmn, np1
 real :: sum, temp
 real, parameter :: one = 1.0e0
@@ -71388,6 +72109,7 @@ integer, intent(in) :: m, n, lda, lipvt
 integer, intent(inout) :: ipvt(lipvt)
 logical, intent(in) :: pivot
 real, intent(inout) :: a(lda,n), rdiag(n), acnorm(n), wa(n)
+!     beginning of local variable declarations
 integer :: i, j, jp1, k, kmax, minmn
 real :: ajnorm, epsmch, sum, temp
 real, parameter :: one = 1.0e0
@@ -71532,6 +72254,7 @@ integer, intent(in) :: ipvt(n)
 real, intent(inout) :: r(ldr,n)
 real, intent(in) :: diag(n), qtb(n)
 real, intent(inout) :: x(n), sdiag(n), wa(n)
+!     beginning of local variable declarations
 integer :: i, j, jp1, k, kp1, l, nsing
 real :: cos, cotan, qtbpj, sin, sum, tan, temp
 real, parameter :: p5 = 5.0e-1
@@ -71681,6 +72404,7 @@ implicit none
 integer, intent(in) :: m, n, lda
 real, intent(inout) :: a(lda,n)
 real, intent(in) :: v(n), w(n)
+!     beginning of local variable declarations
 integer :: i, j, nmj, nm1
 real :: cos, sin, temp
 real, parameter :: one = 1.0e0
@@ -71754,6 +72478,7 @@ logical, intent(inout) :: sing
 real, intent(inout) :: s(ls)
 real, intent(in) :: u(m)
 real, intent(inout) :: v(n), w(m)
+!     beginning of local variable declarations
 integer :: i, j, jj, l, nmj, nm1
 real :: cos, cotan, giant, sin, tan, tau, temp
 real, parameter :: one = 1.0e0
@@ -71923,6 +72648,8 @@ real :: a(ka,n0), b0(m)
 real, intent(inout) :: bi(m,m)
 real :: c(n0)
 real, intent(inout) :: wk(*), x(*), z
+dimension ibasis(m)
+!     beginning of local variable declarations
 integer :: ip
 real :: eps0, rerr, rerrmn, rerrmx
 interface
@@ -71942,7 +72669,6 @@ end interface
 !     Initial version  DEC  1977
 !     LAST UPDATE      OCT  1990
 !------------------------
-dimension ibasis(m)
 !------------------------
 !     dimension x(n0+numle+numge)
 !     dimension wk(2*m),iwk(2*m+n0)
@@ -71975,6 +72701,7 @@ real, intent(in) :: a(ka,n0), b0(m), c(n0)
 real, intent(inout) :: bi(m,m), xb(m), y(m), r(*)
 integer, intent(inout) :: ibasis(m), basis(*)
 integer, intent(inout) :: index(m)
+!     beginning of local variable declarations
 integer :: i, ibeg, icount, iend, ierr, ii, il, imin, iout, ip, j, jcol, jj, jmin, jp, k, ki, kj, l, ll, lrow, m0, mcheck, ms, n, &
    & npos, nrow, ns, nstep, num, bflag, nswc_ai_i4
 real :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax, nswc_ai_r4
@@ -72776,6 +73503,8 @@ real :: b0(m)
 real, intent(inout) :: bi(m,m)
 real :: c(n0), ta(*)
 real, intent(inout) :: wk(*), x(*), z
+dimension ibasis(m)
+!     beginning of local variable declarations
 integer :: ip
 real :: eps0, rerr, rerrmn, rerrmx
 interface
@@ -72795,7 +73524,6 @@ end interface
 !     Initial version  DEC  1977
 !     LAST UPDATE      OCT  1990
 !------------------------
-dimension ibasis(m)
 !------------------------
 !     dimension x(n0+numle+numge)
 !     dimension wk(2*m),iwk(2*m+n0)
@@ -72830,6 +73558,7 @@ real, intent(inout) :: bi(m,m), xb(m), y(m), r(*)
 integer, intent(in) :: ita(*), jta(*)
 integer, intent(inout) :: ibasis(m), basis(*)
 integer, intent(inout) :: index(m)
+!     beginning of local variable declarations
 integer :: i, ibeg, icount, iend, ierr, ii, il, imin, iout, ip, j, jcol, jj, jmin, jp, k, ki, kj, l, ll, lmax, lmin, lrow, m0, &
    & mcheck, ms, n, npos, ns, nstep, num, bflag, nswc_ai_i4
 real :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax, nswc_ai_r4
@@ -73650,6 +74379,7 @@ integer, intent(in) :: iend
 integer, intent(inout) :: ierr, index(*), jp
 integer, intent(in) :: ka, n
 real, intent(inout) :: a(*), temp(n)
+!     beginning of local variable declarations
 integer :: i, ibeg, ij, ik, il, j, jcol, jj, k, kcol, kcount, kj, &
    & kj0, kk, kl, km1, kp1, l, lj, lj0, lk, lmin, max, mcol, ncol, nk, &
    & nm1, nmj, nmk, nn
@@ -73867,6 +74597,7 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
 integer, intent(inout) :: a(n,*), c(n), t, iwk(*)
+!     beginning of local variable declarations
 integer :: i1, i2, i3, i4, i5, i6
 interface
    pure subroutine assgn1(n,a,c,t,ch,lc,lr,lz,nz,rh,slc,slr,u,ierr)
@@ -73908,6 +74639,7 @@ integer, intent(in) :: n
 integer, intent(inout) :: a(n,*), c(n), ch(n), lc(n), lr(n), &
    & lz(n), nz(n), rh(*), slc(n), slr(n), u(*)
 integer, intent(inout) :: t
+!     beginning of local variable declarations
 integer :: i, j, k, kslc, kslr, l, lj, lm, m, maxnum, mm, nl, nm, np1, h, q, r, s, nswc_ai_i4
 interface
    pure elemental function ipmpar(i)
@@ -74173,6 +74905,7 @@ integer, intent(inout) :: p(n), w(n)
 integer, intent(in) :: k(m)
 integer, intent(inout) :: xstar(n), bck, vstar, iwk(num)
 real, intent(inout) :: wk(n)
+!     beginning of local variable declarations
 integer :: i, isumw, j, jj, jn, jnn, l, lx, lxi, maxw, minw, mn, n5, np1, npl, bb, bl, x, xl, b, ubb, f, pbl, q, v, bs, ps, ws, xs
 real :: ap, aw
 interface
@@ -74380,6 +75113,7 @@ integer, intent(inout) :: bb(m,n), bl(m,np1), x(m,n), xl(m,n)
 integer, intent(inout) :: b(np1), ubb(n), lx(n), lxi(n)
 integer, intent(inout) :: f(m), pbl(m), q(m), v(m)
 integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n), iwk(n5)
+!     beginning of local variable declarations
 integer :: i, i1, ibv, iflag, ii, ip, ip1, iuv, j, jbck, jj, k1, kub, lb, li, lj, lr, lri, lub, lubi, m1, n1, s, u, ub, vb
 interface
    pure subroutine parc(i,ii,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m &
@@ -74646,6 +75380,7 @@ integer, intent(in) :: m, n, n5, np1
 integer, intent(in) :: p(n), w(n), q(m), b(np1)
 integer, intent(inout) :: ub, iwk(n5)
 integer, intent(inout) :: lx(n), bs(n), ps(np1), ws(np1), xs(n)
+!     beginning of local variable declarations
 integer :: j, jj, ns, qs, sb
 interface
    pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
@@ -74710,6 +75445,7 @@ integer, intent(inout) :: bl(m,np1), xl(m,n), iwk(n5)
 integer, intent(in) :: p(n), w(n), q(m), b(np1)
 integer, intent(inout) :: pbl(m), v(m)
 integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n)
+!     beginning of local variable declarations
 integer :: ii, ikub, j, jb, jbs, jj, ns, pb, qs, sb, u
 interface
    pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
@@ -74820,6 +75556,7 @@ integer, intent(in) :: f(m), bb(m,n), q(m), b(np1)
 integer, intent(inout) :: ub
 integer, intent(in) :: vb
 integer, intent(in) :: lx(n), lxi(n)
+!     beginning of local variable declarations
 integer :: i1, iq, j, r, s
 ! Subroutine for parametric computation of the upper bounds.
 iflag = 0
@@ -74865,6 +75602,7 @@ implicit none
 integer, intent(in) :: kub, n, n5, np1, ns
 integer, intent(inout) :: qs, vs
 integer, intent(inout) :: ps(np1), ws(np1), xs(n), iwk(n5)
+!     beginning of local variable declarations
 integer :: i1, i2, i3, i4, i5
 interface
    pure subroutine sknp1(ns,qs,kub,vs,n,np1,ps,ws,xs,d,min,pbar &
@@ -74910,6 +75648,7 @@ integer, intent(inout) :: qs
 integer, intent(out) :: vs
 integer, intent(inout) :: ps(np1), ws(np1), xs(n)
 integer, intent(inout) :: d(n), min(n), pbar(n), wbar(n), zbar(n)
+!     beginning of local variable declarations
 integer :: ii, ii1, in, ip, j, j1, jj, kk, l, lim, lim1, ll, lold, mfirst, mink, ms, n1, nn, diff, pr, r, t, nswc_ai_i4
 real :: a, b, c
 ! Subroutine to solve the 0-1 single knapsack problem
@@ -75122,6 +75861,7 @@ real, intent(inout) :: c, error
 real, intent(in) :: rerr, t
 real, intent(inout) :: y
 external fun
+!     beginning of local variable declarations
 integer :: ier, ierc, num1
 real :: a
 interface
@@ -75235,6 +75975,7 @@ implicit none
 integer, intent(inout) :: ierr, num
 real, intent(inout) :: c
 external fun
+!     beginning of local variable declarations
 integer :: num1
 real :: eta, x0, xmin
 logical :: find
@@ -75291,6 +76032,7 @@ real, intent(in) :: eta
 real, intent(inout) :: x
 real, intent(in) :: xl
 external fun, cond
+!     beginning of local variable declarations
 integer :: i, ier, num1
 real :: dx, tol, x1, x2, xbar, xm
 logical :: cnd
@@ -75389,6 +76131,7 @@ implicit none
 integer, intent(inout) :: ierr, num
 real, intent(inout) :: c
 external fun
+!     beginning of local variable declarations
 integer :: i, num1
 real :: dx, eta, tol, x1, x2, xbar, xm
 logical :: cmplex, iend, right
@@ -75493,6 +76236,7 @@ integer, intent(inout) :: ierr, num
 real, intent(in) :: x
 logical, intent(inout) :: cond
 external fun
+!     beginning of local variable declarations
 integer :: ier, ier1, ier2, iwk(100), n, num1, num2
 real :: a, c, error1, error2, wk(400), y, z1, z2
 real :: acondg
@@ -75549,8 +76293,9 @@ real, intent(in) :: c
 real :: x
 real, intent(in) :: y
 external fun
-real :: a, b, t
 real :: acondf
+!     beginning of local variable declarations
+real :: a, b, t
 !-----------------------------------------------------------------------
 !        acondf is the function integrated along the x-axis in
 !        acond. y is a dummy variable.
@@ -75565,8 +76310,9 @@ implicit none
 real :: c, x
 real, intent(in) :: y
 external fun
-real :: a, b, s, t, u, v
 real :: acondg
+!     beginning of local variable declarations
+real :: a, b, s, t, u, v
 interface
    pure elemental subroutine crec(x,y,u,v)
       implicit none
@@ -75593,6 +76339,7 @@ integer, intent(inout) :: ierr, num
 real :: x
 logical, intent(out) :: cond
 external fun
+!     beginning of local variable declarations
 integer :: iwk(100), n
 real :: c, error, t, wk(400), y, y1, z
 real :: xcondy
@@ -75652,8 +76399,9 @@ implicit none
 real, intent(in) :: c
 real :: x, y
 external fun
-real :: a, b, s, t, u, v
 real :: xcondx
+!     beginning of local variable declarations
+real :: a, b, s, t, u, v
 interface
    pure elemental subroutine crec(x,y,u,v)
       implicit none
@@ -75676,8 +76424,9 @@ implicit none
 real, intent(in) :: c
 real :: x, y
 external fun
-real :: a, b, s, t, u, v
 real :: xcondy
+!     beginning of local variable declarations
+real :: a, b, s, t, u, v
 interface
    pure elemental subroutine crec(x,y,u,v)
       implicit none
@@ -75703,6 +76452,7 @@ real, intent(out) :: esterr, result
 real, intent(in) :: t
 integer, intent(out) :: ier
 integer, intent(out) :: num
+!     beginning of local variable declarations
 real :: a, aim, ak, are, arg, b, bb, e, eps, epsr1, f, fim, fre, &
    & pid16, r, s, si(32), tol
 complex :: rex(52), cres, res3la(3)
@@ -75884,6 +76634,7 @@ complex, intent(out) :: result
 complex, intent(inout) :: res3la(3)
 integer, intent(inout) :: n
 integer, intent(inout) :: nres
+!     beginning of local variable declarations
 real :: a1, a2, b1, b2, c1, c2, d1, d2, e1abs, epmach, epsinf, &
    & err1, err2, err3, error, oflow, res1, res2
 complex :: delta1, delta2, delta3, e0, e1, e2, e3, res, ss
@@ -76101,6 +76852,7 @@ real :: f
 real, intent(inout) :: work(lenw)
 integer, intent(inout) :: iwork(limit)
 external f, phi
+!     beginning of local variable declarations
 integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !                   Integration over infinite intervals
@@ -76283,6 +77035,8 @@ real, intent(inout) :: rlist(limit)
 real :: y
 real :: f
 external f, phi
+dimension iord(limit)
+!     beginning of local variable declarations
 integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, &
    & ktmin, maxerr, nres, nrmax, numrl2
 real :: a1, a2, abseps, area, area1, area12, area2, b1, b2, boun, &
@@ -76436,7 +77190,6 @@ end interface
 !              - Phi (user-provided function)
 !              - spmpar
 !-----------------------------------------------------------------------
-dimension iord(limit)
 !            The dimension of RLIST2 is determined by the value of
 !            LIMEXP in subroutine qelg.
 !            List of major variables
@@ -76705,6 +77458,7 @@ real, intent(in) :: uflow
 real :: y
 real :: f
 external f, phi
+!     beginning of local variable declarations
 integer :: j
 real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, fv1(7), fv2(7)
 real, parameter :: xgk(8) = [0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
@@ -76881,6 +77635,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: isn, ndim
 real, intent(inout) :: c(*)
 integer :: n(ndim)
+!     beginning of local variable declarations
 integer :: i, isign, nspan, ntot
 !-----------------------------------------------------------------------
 !     Let ntot denote the product of n(1),...,n(ndim). The complex
@@ -76918,6 +77673,7 @@ integer :: isn
 integer, intent(in) :: ndim
 real, intent(inout) :: a(*), b(*)
 integer :: n(ndim)
+!     beginning of local variable declarations
 integer :: i, nspan, ntot
 !     ------------
 if (abs(isn) /= 1) go to 40
@@ -76945,6 +77701,7 @@ subroutine sfft(a,b,ntot,n,nspan,isn,ierr)
 implicit none
 integer :: ierr, isn, n, nspan, ntot
 real :: a(*), b(*)
+!     beginning of local variable declarations
 integer :: i, inc, j, jc, jf, jj, k, k1, k2, k3, k4, kk, ks, kspan, kspnn, kt, l, m, max, maxf, maxn, maxp, nfac(15), nn, np(209), &
    & nt, num
 real :: aa, aj, ajm, ajp, ak, akm, akp, at(23), bb, bj, bjm, bjp, &
@@ -77558,6 +78315,7 @@ subroutine cosqi(n,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*)
+!     beginning of local variable declarations
 integer :: k
 real :: dt, fk
 real, parameter :: pih = 1.57079632679491
@@ -77607,6 +78365,7 @@ subroutine cosqf(n,x,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*), x(*)
+!     beginning of local variable declarations
 real :: tsqx
 integer :: nswc_ai_i4
 real, parameter :: sqrt2 = 1.4142135623731
@@ -77626,6 +78385,7 @@ implicit none
 integer :: n
 real :: w(*)
 real, intent(inout) :: x(*), xh(*)
+!     beginning of local variable declarations
 integer :: i, k, kc, modn, np2, ns2
 real :: xim1
 ns2 = (n + 1)/2
@@ -77688,6 +78448,7 @@ subroutine cosqb(n,x,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*), x(*)
+!     beginning of local variable declarations
 real :: x1
 integer :: nswc_ai_i4
 real, parameter :: tsqrt2 = 2.82842712474619
@@ -77709,6 +78470,7 @@ implicit none
 integer :: n
 real :: w(*)
 real, intent(inout) :: x(*), xh(*)
+!     beginning of local variable declarations
 integer :: i, k, kc, modn, np2, ns2
 real :: xim1
 ns2 = (n + 1)/2
@@ -77774,6 +78536,7 @@ subroutine sinqf(n,x,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*), x(*)
+!     beginning of local variable declarations
 integer :: k, kc, ns2
 real :: xhold
 if (n == 1) return
@@ -77827,6 +78590,7 @@ subroutine sinqb(n,x,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*), x(*)
+!     beginning of local variable declarations
 integer :: k, kc, ns2
 real :: xhold
 if (n > 1) go to 101
@@ -77872,6 +78636,7 @@ pure subroutine rffti1(n,wa,ifac)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: wa(*), ifac(*)
+!     beginning of local variable declarations
 integer :: i, ib, ido, ii, ip, ipm, is, j, k1, l1, l2, ld, nf, &
    & nfm1, nl, nq, nr, ntry
 real :: arg, argh, argld, fi, tpi
@@ -77982,6 +78747,7 @@ integer, intent(in) :: n
 real, intent(inout) :: c(*), ch(*)
 real :: wa(*)
 real, intent(in) :: ifac(*)
+!     beginning of local variable declarations
 integer :: i, idl1, ido, ip, iw, ix2, ix3, ix4, k1, l1, l2, na, nf
 nf = ifac(2)
 na = 0
@@ -78046,6 +78812,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,2,l1)
 real, intent(inout) :: ch(ido,l1,*)
 real :: wa1(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k, nswc_ai_i4
 real :: ti2, tr2
 do k = 1,l1
@@ -78095,6 +78862,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,3,l1)
 real, intent(inout) :: ch(ido,l1,*)
 real :: wa1(*), wa2(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k
 real :: ci2, ci3, cr2, cr3, di2, di3, dr2, dr3, ti2, tr2
 real, parameter :: taur = -.5
@@ -78161,6 +78929,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,4,l1)
 real, intent(inout) :: ch(ido,l1,*)
 real :: wa1(*), wa2(*), wa3(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k, nswc_ai_i4
 real :: ci2, ci3, ci4, cr2, cr3, cr4, ti1, ti2, ti3, ti4, tr1, tr2, tr3, tr4
 real, parameter :: sqrt2 = 1.414213562373095
@@ -78255,6 +79024,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,5,l1)
 real, intent(inout) :: ch(ido,l1,*)
 real :: wa1(*), wa2(*), wa3(*), wa4(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k
 real :: ci2, ci3, ci4, ci5, cr2, cr3, cr4, cr5, di2, di3, di4, di5, dr2, dr3, dr4, dr5, ti2, ti3, ti4, ti5, tr2, tr3, tr4, tr5
 real, parameter :: tr11 = .309016994374947
@@ -78367,6 +79137,7 @@ real, intent(inout) :: c1(ido,l1,ip), c2(idl1,ip)
 real :: cc(ido,ip,l1)
 real, intent(inout) :: ch(ido,l1,ip), ch2(idl1,ip)
 real :: wa(*)
+!     beginning of local variable declarations
 integer :: i, ic, idij, idp2, ik, ipp2, ipph, is, j, j2, jc, k, l, &
    & lc, nbd
 real :: ai1, ai2, ar1, ar1h, ar2, ar2h, arg, dc2, dcp, ds2, dsp
@@ -78578,6 +79349,7 @@ integer, intent(in) :: n
 real, intent(inout) :: c(*), ch(*)
 real :: wa(*)
 real, intent(in) :: ifac(*)
+!     beginning of local variable declarations
 integer :: i, idl1, ido, ip, iw, ix2, ix3, ix4, k1, kh, l1, l2, &
    & na, nf
 nf = ifac(2)
@@ -78643,6 +79415,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,l1,*)
 real, intent(inout) :: ch(ido,2,l1)
 real :: wa1(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k, nswc_ai_i4
 real :: ti2, tr2
 do k = 1,l1
@@ -78692,6 +79465,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,l1,*)
 real, intent(inout) :: ch(ido,3,l1)
 real :: wa1(*), wa2(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k
 real :: ci2, cr2, di2, di3, dr2, dr3, ti2, ti3, tr2, tr3
 real, parameter :: taur = -.5
@@ -78756,6 +79530,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,l1,*)
 real, intent(inout) :: ch(ido,4,l1)
 real :: wa1(*), wa2(*), wa3(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k, nswc_ai_i4
 real :: ci2, ci3, ci4, cr2, cr3, cr4, ti1, ti2, ti3, ti4, tr1, tr2, tr3, tr4
 real, parameter :: hsqt2 = .7071067811865475
@@ -78846,6 +79621,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,l1,*)
 real, intent(inout) :: ch(ido,5,l1)
 real :: wa1(*), wa2(*), wa3(*), wa4(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k
 real :: ci2, ci3, ci4, ci5, cr2, cr3, cr4, cr5, di2, di3, di4, di5, dr2, dr3, dr4, dr5, ti2, ti3, ti4, ti5, tr2, tr3, tr4, tr5
 real, parameter :: tr11 = .309016994374947
@@ -78953,6 +79729,7 @@ integer, intent(in) :: idl1, ido, ip, l1
 real, intent(inout) :: c1(ido,l1,ip), c2(idl1,ip), cc(ido,ip,l1), &
    & ch(ido,l1,ip), ch2(idl1,ip)
 real :: wa(*)
+!     beginning of local variable declarations
 integer :: i, ic, idij, idp2, ik, ipp2, ipph, is, j, j2, jc, k, l, &
    & lc, nbd
 real :: ai1, ai2, ar1, ar1h, ar2, ar2h, arg, dc2, dcp, ds2, dsp
@@ -79127,6 +79904,7 @@ double precision, intent(in) :: eps
 double precision, intent(inout) :: error
 double precision, intent(inout) :: p(*), q(*), w(*)
 external f, g, phi
+!     beginning of local variable declarations
 integer :: i1, i2, i3, i4, i5, lp1, lpm, mp1, n, np1
 !     ******************************************************************
 !     Rational Chebychev approximation of continuous functions
@@ -79167,6 +79945,7 @@ double precision, intent(out) :: error
 double precision, intent(inout) :: p(lp1), q(mp1), x(np1), &
    & xval(np1), c(np1,np1), d(np1), err(np1), h(np1)
 external f, g, phi
+!     beginning of local variable declarations
 integer :: i, ii, j, k, kount, lpi
 double precision :: b1, del, dn, dnp1, h1, olderr, sign, sum, templ, test, u, xi, xlb, xm1, y, y2, y3, z, zz, z1, z2, z3
 double precision, parameter :: pi = 3.14159265358979323846264338328d0
@@ -79426,6 +80205,7 @@ integer, intent(in) :: l, lp1, m, np1
 double precision, intent(in) :: t, ft, gt, phit
 double precision, intent(inout) :: del
 double precision, intent(in) :: d(np1)
+!     beginning of local variable declarations
 integer :: i, ii
 double precision :: p, q, r
 double precision, parameter :: zero = 0.d0
@@ -79473,6 +80253,7 @@ double precision :: anorm, brakpt(kbreak), dx, epsln, errest, &
    & vallft(kbreak), valrgt(kbreak), xlft, xrgt
 double precision :: f
 external f
+!     beginning of local variable declarations
 integer :: k, kdimen, ndimen
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
@@ -79547,6 +80328,7 @@ integer :: ierr, kdimen, kmax, ndimen
 double precision :: xknots(kdimen), coefs(kmax,ndimen)
 double precision :: f
 external f
+!     beginning of local variable declarations
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
@@ -79739,6 +80521,7 @@ subroutine adset(xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
 integer :: ierr, kdimen, kmax, ndimen
 double precision :: xknots(kdimen), coefs(kmax,ndimen)
+!     beginning of local variable declarations
 integer :: j, k, limsm
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
@@ -79859,6 +80642,7 @@ end subroutine adset
 subroutine adtake(ierr)
 implicit none
 integer :: ierr
+!     beginning of local variable declarations
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
@@ -79934,6 +80718,7 @@ subroutine adcomp(f)
 implicit none
 double precision :: f
 external f
+!     beginning of local variable declarations
 integer :: j
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
@@ -80034,6 +80819,7 @@ implicit none
 double precision :: aaa, bbb, fit, points(*), weight(*)
 double precision :: f
 external f, fit
+!     beginning of local variable declarations
 integer :: j
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
@@ -80100,6 +80886,7 @@ end function errint
 subroutine newton(nl, nr, ni)
 implicit none
 integer :: ni, nl, nr
+!     beginning of local variable declarations
 integer :: idif, ipt, ipt2, j, k, nddx, nl1, nl2, nr1, nr2, nrl, &
    & nrlj, nrlj1
 integer :: leftx, nintrp
@@ -80229,6 +81016,7 @@ end subroutine newton
 double precision function polydd(x)
 implicit none
 double precision :: x
+!     beginning of local variable declarations
 integer :: j, k
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
@@ -80262,6 +81050,7 @@ end function polydd
 
 subroutine adchk
 implicit none
+!     beginning of local variable declarations
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
@@ -80315,6 +81104,7 @@ subroutine adput(xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
 integer :: ierr, kdimen, kmax, ndimen
 double precision :: xknots(kdimen), coefs(kmax,ndimen)
+!     beginning of local variable declarations
 integer :: k
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
@@ -80388,6 +81178,7 @@ end subroutine adput
 subroutine adtran(d, powers)
 implicit none
 double precision :: d(20,*), powers(*)
+!     beginning of local variable declarations
 integer :: i, ii, j, k, khi, koef, l, ltop, ni, ni1, nl, nr, nri, &
    & nri1, nrl, nrli, nrlk
 integer :: leftx, nintrp
@@ -80512,6 +81303,7 @@ real, intent(in) :: tol
 complex :: f
 complex, intent(inout) :: rs(n)
 complex :: z
+!     beginning of local variable declarations
 integer :: i, ia, inr, iq, is, it, ix, j, jn, kl, km, kn, l, l1, l2, lf, ln, m, np, nr
 real :: ang, b, c(4), cm, cp, ct, cx, ep6, eps, eps0, fac, fact, &
    & fc(3), pi, r1, ra, re, sc(4), sf, sp, sr
@@ -80739,6 +81531,7 @@ integer, intent(in) :: ic, n
 double precision :: x, y
 double precision, intent(in) :: tol
 double precision, intent(inout) :: r, rs1(n), rs2(n), err(n)
+!     beginning of local variable declarations
 integer :: i, ia, inr, iq, is, it, ix, j, jn, kl, km, kn, l, l1, &
    & l2, lf, ln, m, mm1, np, nr
 double precision :: ang, b, cm, cp, ct, cx, eps, eps0, ep6, fac, fact, pi, ra, r1, s, sf, sp, sr, t, u, v, w, c(4), fc(3), sc(4), &
@@ -80999,10 +81792,10 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: a
 real :: x(n), y(n)
-integer :: i, il, ir, nm1
-real :: r
 real :: trp
-real :: nswc_ai_r4
+!     beginning of local variable declarations
+integer :: i, il, ir, nm1
+real :: r, nswc_ai_r4
 nm1 = n - 1
 if (a < x(2)) go to 50
 if (a >= x(nm1)) go to 40
@@ -81035,6 +81828,7 @@ integer, intent(in) :: m, n, ni
 real, intent(inout) :: t(m)
 real :: x(n), xi(ni), y(n)
 real, intent(inout) :: yi(ni)
+!     beginning of local variable declarations
 integer :: i, ii, il, ilm1, ilold, ipm, ir, istep, j, jmax, k, l, &
    & mm1, num
 real :: dl, dr, xx, nswc_ai_r4
@@ -81186,6 +81980,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n
 real, intent(inout) :: a(n), t(n)
 real :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, k
 real :: diff, f, r
 !     ******************************************************************
@@ -81238,6 +82033,7 @@ real, intent(in) :: alpha
 real, intent(in) :: x(*), a(n)
 real, intent(inout) :: c(n)
 double precision, intent(inout) :: t(n)
+!     beginning of local variable declarations
 integer :: i, j, k, nm1
 double precision :: xx, r
 if (n > 1) go to 10
@@ -81267,6 +82063,7 @@ integer, intent(in) :: nd, np
 real, intent(inout) :: rnorm
 real, intent(in) :: x(np), y(np)
 real, intent(inout) :: a(*), phi(2,*), phix(4,np)
+!     beginning of local variable declarations
 integer :: k, la, lb, ls, m, mp1, nd1
 real :: alpha, c, temp, xmax, xmin, za, zb, lambda
 double precision :: dalpha, dsum
@@ -81407,6 +82204,7 @@ integer, intent(in) :: nd, np
 real, intent(inout) :: rnorm
 real, intent(in) :: x(np), y(np), w(np)
 real, intent(inout) :: a(*), phi(2,*), phix(4,np)
+!     beginning of local variable declarations
 integer :: k, la, lb, ls, m, mp1, nd1, nw
 real :: alpha, c, temp, xmax, xmin, za, zb, lambda, nswc_ai_r4
 double precision :: dalpha, dsum
@@ -81563,6 +82361,7 @@ integer, intent(in) :: n
 real, intent(in) :: alpha, beta
 real, intent(in) :: x(n), y(n)
 real, intent(inout) :: a(n), b(n), c(n)
+!     beginning of local variable declarations
 integer :: i, j, m, nm1, nswc_ai_i4
 real :: del, h, r, t
 !-----------------------------------------------------------------------
@@ -81670,6 +82469,7 @@ integer, intent(in) :: isx, n
 real, intent(in) :: a1, an, b1, bn
 real, intent(in) :: x(n), y(n)
 real, intent(inout) :: yp(n), ypp(n), w(n,3)
+!     beginning of local variable declarations
 integer :: i, j, nm1, nm2
 real :: dnew, dold, h
 !     Written by Rondall E. Jones
@@ -81802,6 +82602,7 @@ integer, intent(in) :: l, m
 real, intent(in) :: x(m), y(m), wgt(m)
 real, intent(inout) :: break(l)
 real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
+!     beginning of local variable declarations
 integer :: j, k, la, lm1, lq, lw, n
 real :: temp(20)
 interface
@@ -81890,6 +82691,7 @@ real, intent(in) :: xcon(*), con(*)
 real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
 integer, intent(in) :: nder(*)
 integer, intent(inout) :: iwk(*)
+!     beginning of local variable declarations
 integer :: j, k, la, lm1, lw, n
 real :: r, temp(20)
 !-----------------------------------------------------------------------
@@ -81957,6 +82759,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
 real, intent(inout) :: yi(ni)
+!     beginning of local variable declarations
 integer :: i, il, ir, k
 real :: dx, xx, nswc_ai_r4
 !     Abstract
@@ -82043,6 +82846,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), yp(n), xi(ni)
 real, intent(inout) :: yi(ni)
+!     beginning of local variable declarations
 integer :: i, il, ir, k, nm1
 real :: a, b, c, d, dx, h, xx, nswc_ai_r4
 !     Abstract
@@ -82131,6 +82935,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
 real, intent(inout) :: yi(ni)
+!     beginning of local variable declarations
 integer :: i, il, ir, k, nm1
 real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
 !     Abstract
@@ -82222,6 +83027,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
 real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
+!     beginning of local variable declarations
 integer :: i, il, ir, k
 real :: bi, ci, dx, xx, nswc_ai_r4
 !     Abstract
@@ -82315,6 +83121,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), yp(n), xi(ni)
 real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
+!     beginning of local variable declarations
 integer :: i, il, ir, k, nm1
 real :: a, b, c, d, dx, h, xx, nswc_ai_r4
 !     Abstract
@@ -82409,6 +83216,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
 real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
+!     beginning of local variable declarations
 integer :: i, il, ir, k, nm1
 real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
 !     Abstract
@@ -82504,6 +83312,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: alpha, beta
 real, intent(in) :: x(n), y(n), a(n), b(n), c(n)
+!     beginning of local variable declarations
 integer :: i, k, kp1, l, lm1
 real :: a0, b0, d, d2, h, h2, r, s, sum
 interface
@@ -82592,6 +83401,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(in) :: x(n), y(n), yp(n)
+!     beginning of local variable declarations
 integer :: i, ip1, k, kp1, l, lm1, lp1
 real :: a0, b0, bi, ci, d, d2, h, h2, r, s, sum
 interface
@@ -82692,6 +83502,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(in) :: x(n), y(n), ypp(n)
+!     beginning of local variable declarations
 integer :: i, ip1, k, kp1, l, lm1, lp1
 real :: a0, b0, d, dma, dmb, dpa, dpb, h, r, s, sum
 interface
@@ -82774,6 +83585,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n
 real, intent(in) :: x(n), y(*)
 real, intent(inout) :: a(*), b(*), c(*), t(*)
+!     beginning of local variable declarations
 integer :: i, j, nm1, nm2, nm3
 real :: alpha, del, del0, deli, delta, e, h, hi, r, s, si, w
 !-----------------------------------------------------------------------
@@ -82880,6 +83692,7 @@ real, intent(in) :: x(m), y(m)
 real, intent(inout) :: break(l)
 real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
 integer, intent(inout) :: iwk(*)
+!     beginning of local variable declarations
 integer :: j, k, la, lm1, lw, n
 real :: r, temp(20), con(3), xcon(3)
 integer, parameter :: nder(3) = [3, 7, 11]
@@ -82958,6 +83771,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
 real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
 real, intent(inout) :: yi(m)
+!     beginning of local variable declarations
 integer :: i, il, ir, j, k
 real :: dx, h, t, t0, x1, xold, xx, nswc_ai_r4
 !-----------------------------------------------------------------------
@@ -83031,6 +83845,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
 real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
 real, intent(inout) :: yi(m), ypi(m), yppi(m)
+!     beginning of local variable declarations
 integer :: i, il, ir, j, k
 real :: bi2, ci3, dx, h, t, t0, x1, xold, xx, nswc_ai_r4
 !-----------------------------------------------------------------------
@@ -83111,6 +83926,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: kdx, kx, m, n
 real, intent(in) :: x(kx,n)
 real, intent(inout) :: t(m), dx(kdx,n), wk(*)
+!     beginning of local variable declarations
 integer :: ia, ib, ic, ie, mm1
 interface
    pure subroutine cslop1(m,n,x,kx,t,dx,kdx,a,b,c,e,ierr)
@@ -83161,6 +83977,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: kdx, kx, m, n
 real, intent(in) :: x(kx,n)
 real, intent(inout) :: t(m), dx(kdx,n), a(*), b(m), c(*), e(*)
+!     beginning of local variable declarations
 integer :: i, im1, j, l, mm1, mm2
 real :: alpha, del, del0, del1, deli, delm, eta, h, hm, p, r, si, &
    & sm, sum, tau
@@ -83306,6 +84123,7 @@ implicit none
 integer, intent(in) :: kdx, kx, kz, l, m, n
 real, intent(in) :: t(m), x(kx,n), dx(kdx,n), ti(l)
 real, intent(inout) :: z(kz, n)
+!     beginning of local variable declarations
 integer :: i, il, ir, j, k
 real :: a, b, c, d, dt, h, t0, told, w, nswc_ai_r4
 !-----------------------------------------------------------------------
@@ -83382,6 +84200,7 @@ integer, intent(in) :: kdx, kx, m, n
 real, intent(in) :: ti
 real, intent(in) :: t(m), x(kx,n), dx(kdx,n)
 real, intent(inout) :: z(n), dz(n), ddz(n)
+!     beginning of local variable declarations
 integer :: i, il, ir, j
 real :: a, b, c, d, dt, h, t0, w, nswc_ai_r4
 !-----------------------------------------------------------------------
@@ -83447,6 +84266,7 @@ integer, intent(out) :: ierr
 real, intent(in) :: x(n), y(n), slp1, slpn
 real, intent(inout) :: yp(n), temp(n)
 real, intent(in) :: sigma
+!     beginning of local variable declarations
 integer :: i, ibak, nm1, np1
 real :: c1, c2, c3, delx1, delx2, delxn, delxnm, diag, diag1, &
    & diag2, dx1, dx2, sdiag1, sdiag2, sigmap, slpp1, slppn
@@ -83588,10 +84408,11 @@ pure function curv2(t,n,x,y,yp,sigma)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: t, x(n), y(n), yp(n), sigma
+real :: curv2
+!     beginning of local variable declarations
 integer :: i, im1
 real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, &
    & sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sum
-real :: curv2
 interface
    pure function intrvl(x,t,m)
       implicit none
@@ -83669,10 +84490,11 @@ pure function curvd(t,n,x,y,yp,sigma)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: t, x(n), y(n), yp(n), sigma
+real :: curvd
+!     beginning of local variable declarations
 integer :: i, im1
 real :: coshm1, coshm2, del1, del2, dels, dummy, sigmap, sinhms, &
    & sum
-real :: curvd
 interface
    pure function intrvl(x,t,m)
       implicit none
@@ -83743,11 +84565,12 @@ pure function curvi(xl,xu,n,x,y,yp,sigma)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
+real :: curvi
+!     beginning of local variable declarations
 integer :: i, il, ilm1, ilp1, iu, ium1
 real :: c1, c2, cl1, cl2, cmm1, cmm2, cs, cu1, cu2, del1, del2, &
    & deli, dell1, dell2, dels, delu1, delu2, dummy, sigmap, ss, ssign, &
    & sum, t, t1, t2, xxl, xxu
-real :: curvi
 interface
    pure function intrvl(x,t,m)
       implicit none
@@ -83908,6 +84731,7 @@ integer, intent(out) :: ierr
 real, intent(in) :: x(n), y(n), slp1, slpn
 real, intent(inout) :: xp(n), yp(n), temp(n), s(n)
 real, intent(in) :: sigma
+!     beginning of local variable declarations
 integer :: i, ibak, im1, nm1, np1
 real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
    & diag1, diag2, diagin, dx1, dx2, dy1, dy2, sdiag1, sdiag2, sigmap, &
@@ -84084,6 +84908,7 @@ integer, intent(in) :: n
 real, intent(in) :: t
 real, intent(inout) :: xs, ys
 real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
+!     beginning of local variable declarations
 integer :: i, im1
 real :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
    & dummy, sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sumx, sumy, &
@@ -84184,6 +85009,7 @@ integer, intent(out) :: ierr
 real, intent(in) :: x(n), y(n)
 real, intent(inout) :: xp(n), yp(n), temp(*), s(n)
 real, intent(in) :: sigma
+!     beginning of local variable declarations
 integer :: i, ibak, im1, nm1, np1, npi, npibak
 real :: dels1, dels2, diag, diag1, diag2, diagin, dx1, dx2, dy1, &
    & dy2, sdiag1, sdiag2, sigmap, xpn, ypn
@@ -84334,6 +85160,7 @@ integer, intent(in) :: n
 real, intent(in) :: t
 real, intent(inout) :: xs, ys
 real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
+!     beginning of local variable declarations
 integer :: i, im1
 real :: c1, c2, ci, cim1, coshp1, coshp2, d, del1, del2, delp1, &
    & delp2, dels, dummy, si, sigmap, sinhm1, sinhm2, sinhms, sinhp1, &
@@ -84443,6 +85270,7 @@ real, intent(in) :: x(n), y(n), z(n), slp1x, slp1y, slp1z, slpnx, &
    & slpny, slpnz
 real, intent(inout) :: xp(n), yp(n), zp(n), temp(n), s(n)
 real, intent(in) :: sigma
+!     beginning of local variable declarations
 integer :: i, ibak, im1, nm1, np1
 real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
    & diag1, diag2, diagin, dx1, dx2, dy1, dy2, dz1, dz2, sdiag1, &
@@ -84643,6 +85471,7 @@ real, intent(in) :: t
 real, intent(inout) :: xs, ys, zs
 real, intent(in) :: x(n), y(n), z(n), xp(n), yp(n), zp(n), s(n)
 real, intent(in) :: sigma
+!     beginning of local variable declarations
 integer :: i, im1
 real :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
    & dummy, sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sumx, sumy, &
@@ -84744,6 +85573,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: del1, del2, sigma
 real, intent(inout) :: c1, c2, c3
+!     beginning of local variable declarations
 real :: coshm1, coshm2, del, delm, delp, denom, dummy, sinhmm, &
    & sinhmp
 interface
@@ -84811,6 +85641,7 @@ pure elemental subroutine terms(diag,sdiag,sigma,del)
 implicit none
 real, intent(inout) :: diag, sdiag
 real, intent(in) :: sigma, del
+!     beginning of local variable declarations
 real :: coshm, denom, sigdel, sinhm
 interface
    pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
@@ -84858,6 +85689,7 @@ pure integer function intrvl(x, t, m)
 implicit none
 integer, intent(in) :: m
 real, intent(in) :: x, t(m)
+!     beginning of local variable declarations
 integer :: i, il, ir
 real :: tm, nswc_ai_r4
 !-----------------------------------------------------------------------
@@ -84914,6 +85746,7 @@ real, intent(inout) :: w
 real, intent(in) :: x
 real, intent(in) :: t(*), bcoef(n)
 real, intent(inout) :: wk(k,3)
+!     beginning of local variable declarations
 integer :: i, imk, ipj, j, jc, jcmax, jcmin, jdrvp1, jj, km1, kmj, &
    & l, nmi, npk
 real :: dl, dr, fkmj
@@ -85066,6 +85899,7 @@ real, intent(out) :: w
 real, intent(in) :: x
 real, intent(in) :: t(*), bcoeff(n)
 real, intent(inout) :: wk(*)
+!     beginning of local variable declarations
 integer :: i, ipk, kp1, np1, npk
 real :: sum, tlast, tnew, xval
 interface
@@ -85118,6 +85952,7 @@ real, intent(out) :: w
 real, intent(in) :: x
 real, intent(in) :: t(*), bcoef(n)
 real, intent(inout) :: wk(k,3)
+!     beginning of local variable declarations
 integer :: i, imk, ipj, j, jc, jcmin, jj, km1, kmj, l, m
 real :: dl, dr, tipj
 interface
@@ -85210,6 +86045,7 @@ integer, intent(out) :: l
 integer, intent(in) :: n
 real, intent(in) :: t(*), a(n)
 real, intent(inout) :: break(*), c(k,*), wk(k,*)
+!     beginning of local variable declarations
 integer :: i, il, ilj, ilkj, j, jj, jp1, km1, kmj, kp1, left
 real :: diff, r, s, term, x
 !-----------------------------------------------------------------------
@@ -85295,6 +86131,7 @@ implicit none
 integer, intent(in) :: l, n, ni
 real :: a(l,n), x(n), xi(ni)
 real, intent(inout) :: yi(ni)
+!     beginning of local variable declarations
 integer :: i, il, ir, j, k, lm1, lmj
 real :: dx, s, xx, nswc_ai_r4
 !-----------------------------------------------------------------------
@@ -85378,6 +86215,7 @@ integer, intent(in) :: jhigh, k, left
 real, intent(in) :: x
 real, intent(in) :: t(*)
 real, intent(inout) :: blist(k)
+!     beginning of local variable declarations
 integer :: i, imj, l
 real :: s, term, ti, timj
 !-----------------------------------------------------------------------
@@ -85430,6 +86268,7 @@ integer, intent(in) :: idim, k, left, nderiv
 real, intent(in) :: x
 real, intent(in) :: t(*)
 real, intent(inout) :: dbiatx(idim,nderiv), a(k,k)
+!     beginning of local variable declarations
 integer :: i, ideriv, il, j, jj, jlow, jp1mid, kp1, kp1mm, l, &
    & ldummy, m, mhigh
 real :: factor, fkp1mm, sum
@@ -85565,6 +86404,7 @@ real, intent(inout) :: bcoef(n)
 real, intent(in) :: gtau(n)
 real, intent(inout) :: q(*)
 real, intent(in) :: t(*), tau(n)
+!     beginning of local variable declarations
 integer :: i, ilp1mx, j, jj, km1, kpkm2, left, lenq, np1
 real :: taui
 interface
@@ -85708,6 +86548,7 @@ implicit none
 integer, intent(out) :: iflag
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
 real, intent(inout) :: w(nroww,nrow)
+!     beginning of local variable declarations
 integer :: i, ipk, j, jbeg, jend, jmax, k, kmax, mdj, middle, midmk, mj, nrowm1, nswc_ai_i4
 real :: factor, pivot
 !  From  * a practical guide to splines *  by C. DE boor
@@ -85828,6 +86669,7 @@ implicit none
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
 real, intent(in) :: w(nroww,nrow)
 real, intent(inout) :: b(nrow)
+!     beginning of local variable declarations
 integer :: i, imj, ipj, j, jmax, middle, mmj, mpj, nrowm1
 !  From  * a practical guide to splines *  by C. DE boor
 !  companion routine to  banfac . It returns the solution  X  of the
@@ -85890,6 +86732,7 @@ integer, intent(in) :: k, n, ntau
 real, intent(in) :: tau(ntau), gtau(ntau), wgt(ntau)
 real, intent(in) :: t(*)
 real, intent(inout) :: a(n), wk(n), q(k,n)
+!     beginning of local variable declarations
 integer :: i, j, jj, l, left, leftmk, mm
 real :: dw
 interface
@@ -85987,6 +86830,7 @@ implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: n, nb
 real, intent(inout) :: w(nb,n), diag(n)
+!     beginning of local variable declarations
 integer :: i, imax, ipj, j, jmax, k, kpi
 real :: ratio, t
 !-----------------------------------------------------------------------
@@ -86088,6 +86932,7 @@ implicit none
 integer, intent(in) :: n, nb
 real, intent(in) :: w(nb,n)
 real, intent(inout) :: b(n)
+!     beginning of local variable declarations
 integer :: j, jmax, jpk, k, nbm1
 !-----------------------------------------------------------------------
 !     bchslv solves the linear system C*X = b for X when w contains
@@ -86144,6 +86989,7 @@ real, intent(in) :: xconst(*), yconst(*)
 real, intent(inout) :: coeff(n), w(*)
 integer, intent(in) :: nderiv(*)
 integer, intent(inout) :: iw(*)
+!     beginning of local variable declarations
 integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
 !-----------------------------------------------------------------------
 !      This subprogram fits a piece-wise polynomial curve
@@ -86337,6 +87183,7 @@ real, intent(inout) :: coeff(*)
 real, intent(inout) :: bf(nord,nord), g(mdg,*), w(mdw,*), work(*)
 integer, intent(in) :: nderiv(*)
 integer, intent(inout) :: iwork(*)
+!     beginning of local variable declarations
 integer :: i, idata, ideriv, ierr, ileft, intrvl, intw1, ip, ip1, &
    & ir, irow, itype, iw1, iw2, j, l, lw, m, mt, n, nb, neqcon, nincon, &
    & nordm1, nordp1, np1
@@ -86594,6 +87441,7 @@ implicit none
 integer, intent(inout) :: ip, ir
 integer, intent(in) :: jt, mdg, mt, nb
 real, intent(inout) :: g(mdg,*)
+!     beginning of local variable declarations
 integer :: i, ie, ig, ig1, ig2, j, jg, k, kh, l, lp1, mh, mu, nbp1
 real :: rho
 interface
@@ -86786,6 +87634,7 @@ integer, intent(in) :: ip, ir, mdg, mode, n, nb
 real :: g(mdg,*)
 real, intent(out) :: rnorm
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, i1, i2, ie, ii, irm1, ix, j, jg, l, np1
 real :: rsq, s
 !***Author  Lawson, C. L., (JPL)
@@ -86946,6 +87795,7 @@ real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz, my)
 real, intent(in) :: xbreak(nx), ybreak(ny)
 real, intent(inout) :: f(*)
 real, intent(inout) :: s(*), t(*), wk(num)
+!     beginning of local variable declarations
 integer :: i, imax, j, l, ld, m, n, nu
 interface
    pure subroutine bslsq2(x,wx,mx,y,wy,my,z,kz,tx,nx,kx,ty,ny, &
@@ -87092,6 +87942,7 @@ implicit none
 integer, intent(in) :: ka, kdz, kz, m, n
 real, intent(in) :: t(*), a(ka,n)
 real, intent(inout) :: z(kz,*), dz(kdz,*)
+!     beginning of local variable declarations
 integer :: i, il, ilj, ilkj, j, jj, jp1, k, kmj, l, left, mp1, mu
 real :: del, diff, r, s, term, x, c(4), wk(4,5)
 !-----------------------------------------------------------------------
@@ -87188,6 +88039,7 @@ real, intent(in) :: x(mx), y(my)
 real, intent(inout) :: z(kz,my)
 real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
    & f12(kf12,n)
+!     beginning of local variable declarations
 integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1, nswc_ai_i4
 real :: a, b, b1, b2, b3, bx, c, c1, c2, c3, cx, d, dfi, dfip1, ds, dt, dx, dy, fi, fip1, xx, yy, nswc_ai_r4
 interface
@@ -87381,6 +88233,7 @@ real, intent(in) :: x(mx), y(my)
 real, intent(inout) :: z(kz,my)
 real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
    & f12(kf12,n)
+!     beginning of local variable declarations
 integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1, nswc_ai_i4
 real :: a, a1, a2, a3, ax, c, c1, c2, c3, cx, d, dfi, dfip1, ds, dt, dx, dy, fi, fip1, xx, yy, nswc_ai_r4
 interface
@@ -87568,6 +88421,7 @@ integer, intent(out) :: ierr
 real, intent(in) :: x(m), y(n), z(iz,n), opt(*)
 real, intent(inout) :: zp(m,n,*), temp(*)
 real, intent(in) :: sigma
+!     beginning of local variable declarations
 integer :: i, ibak, ibakp1, im1, ip1, j, jbak, jbakp1, jm1, jp1, key, l, mm1, mp1, nm1, np1, npi, npibak, npm, npmpj, ind(8), &
    & loc(8), num(8), nswc_ai_i4
 real :: c1, c2, c3, del1, del2, deli, delx1, delx2, delxm, delxmm, &
@@ -87946,11 +88800,12 @@ integer, intent(in) :: m, n, iz
 real, intent(in) :: xx, yy, x(m), y(n)
 real :: z(iz,n), zp(m,n,*)
 real, intent(in) :: sigma
+real :: surf2
+!     beginning of local variable declarations
 integer :: i, im1, j, jm1
 real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, f1, &
    & f2, fp1, fp2, sigmap, sigmax, sigmay, sinhm1, sinhm2, sinhms, &
    & sinhp1, sinhp2, zi, zim1, zxxi, zxxim1
-real :: surf2
 integer :: intrvl
 interface
    pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
@@ -88086,6 +88941,7 @@ real, intent(inout) :: dz(idz,nd)
 real, intent(in) :: x(m), y(n), z(iz,n), zp(m,n,*)
 real, intent(inout) :: work(4,md)
 real, intent(in) :: sigma
+!     beginning of local variable declarations
 integer :: i, ii, im1, j, jj, jm1, lasti, lastj
 real :: c1, c2, c3, c4, coshp1, coshp2, del1, del2, delp1, delp2, &
    & dels, deltdx, deltdy, dummy, sigmax, sigmay, sinhm1, sinhm2, &
@@ -88253,6 +89109,7 @@ integer, intent(in) :: ka, kx, ky, kz, l, nx, ny
 real, intent(in) :: x(nx), y(ny), z(kz,ny)
 real, intent(in) :: tx(*), ty(*)
 real, intent(inout) :: a(ka,ny), wk(l)
+!     beginning of local variable declarations
 integer :: iw, m
 interface
    pure subroutine bstrp1(x,z,kz,m,n,t,k,a,ka,work,iflag)
@@ -88307,6 +89164,7 @@ integer, intent(out) :: iflag
 integer, intent(in) :: k, ka, kz, m, n
 real, intent(in) :: x(m), z(kz,n), t(*)
 real, intent(inout) :: a(ka,m), work(*)
+!     beginning of local variable declarations
 integer :: i, j, mp1
 interface
    pure subroutine bstrp(tau,gtau,t,n,k,bcoef,q,iflag)
@@ -88355,6 +89213,7 @@ integer, intent(in) :: ka, kx, ky, kz, l, mx, my, nx, ny
 real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz,my)
 real, intent(in) :: tx(*), ty(*)
 real, intent(inout) :: a(ka,ny), wk(l)
+!     beginning of local variable declarations
 integer :: ierr, iq, iw, m
 interface
    pure subroutine bslsq1(tau,wgt,ntau,z,kz,m,t,n,k,a,ka,wk,q, &
@@ -88422,6 +89281,7 @@ integer, intent(in) :: k, ka, kz, m, n, ntau
 real, intent(in) :: tau(ntau), wgt(ntau), z(kz,m)
 real, intent(in) :: t(*)
 real, intent(inout) :: a(ka,n), wk(n), q(k,n)
+!     beginning of local variable declarations
 integer :: i, j, jj, l, left, leftmk, mm
 real :: dw
 interface
@@ -88537,6 +89397,7 @@ implicit none
 integer, intent(in) :: kb, m, n, nb
 real, intent(in) :: w(nb,n)
 real, intent(inout) :: b(kb,n)
+!     beginning of local variable declarations
 integer :: i, j, jmax, jpk, k, nbm1
 real :: t
 !-----------------------------------------------------------------------
@@ -88610,6 +89471,7 @@ real, intent(out) :: f
 real, intent(in) :: x0, y0
 real, intent(in) :: a(ka,ny), tx(*), ty(*)
 real, intent(inout) :: wk(*)
+!     beginning of local variable declarations
 integer :: i, iw, j, l, m
 interface
    pure subroutine bval(t,bcoef,n,k,x,jderiv,w,wk)
@@ -88672,6 +89534,7 @@ integer, intent(in) :: n
 integer, intent(inout) :: iadj(*), iend(n)
 integer, intent(out) :: ier
 real :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: nn, k, km1, nl, nr, ind, indx, n0, itemp, ierr, km1d2, &
    & kmi, i, kmin
 real :: xl, yl, xr, yr, dxr, dyr, xk, yk, dxk, dyk, cprod, sprod
@@ -88879,6 +89742,7 @@ integer, intent(in) :: kk
 integer, intent(inout) :: iadj(*), iend(kk)
 integer, intent(out) :: ier
 real :: x(kk), y(kk)
+!     beginning of local variable declarations
 logical :: swptst
 integer :: tindx
 integer :: k, km1, i1, i2, i3, indkf, indkl, nabor1, io1, io2, &
@@ -88991,6 +89855,7 @@ pure subroutine bdyadd(kk,i1,i2, iadj,iend)
 implicit none
 integer, intent(in) :: kk, i1, i2
 integer, intent(inout) :: iadj(*), iend(kk)
+!     beginning of local variable declarations
 integer :: k, km1, nright, nleft, nf, nl, n1, n2, i, imin, imax, &
    & kend, next, indx
 interface
@@ -89105,6 +89970,7 @@ pure subroutine intadd(kk,i1,i2,i3, iadj,iend)
 implicit none
 integer, intent(in) :: kk, i1, i2, i3
 integer, intent(inout) :: iadj(*), iend(kk)
+!     beginning of local variable declarations
 integer :: k, km1, n(3), nft(3), ip1, ip2, ip3, indx, nf, nl, n1, &
    & n2, imin, imax, i, itemp
 interface
@@ -89241,6 +90107,7 @@ pure subroutine shiftd(nfrst,nlast,kk, iarr)
 implicit none
 integer, intent(in) :: nfrst, nlast, kk
 integer, intent(inout) :: iarr(*)
+!     beginning of local variable declarations
 integer :: k, nf, nl, nlp1, ns, nsl, i, ibak, indx, imax
 integer, parameter :: inc = 5
 !***********************************************************
@@ -89332,6 +90199,7 @@ pure subroutine swapd(nin1,nin2,nout1,nout2, iadj,iend)
 implicit none
 integer, intent(in) :: nin1, nin2, nout1, nout2
 integer, intent(inout) :: iadj(*), iend(*)
+!     beginning of local variable declarations
 integer :: in(2), io(2), ip1, ip2, j, k, nf, nl, i, imin, imax
 interface
    pure subroutine shiftd(nfrst,nlast,kk,iarr)
@@ -89507,6 +90375,7 @@ pure logical function swptst(in1,in2,io1,io2,x,y)
 implicit none
 integer, intent(in) :: in1, in2, io1, io2
 real, intent(in) :: x(*), y(*)
+!     beginning of local variable declarations
 real :: dx11, dx12, dx22, dx21, dy11, dy12, dy22, dy21, sin1, &
    & sin2, cos1, cos2, sin12
 !***********************************************************
@@ -89584,6 +90453,7 @@ end function swptst
 pure integer function tindx(nvertx,nabor,iadj,iend)
 implicit none
 integer, intent(in) :: nvertx, nabor, iadj(*), iend(*)
+!     beginning of local variable declarations
 integer :: nb, indx
 !***********************************************************
 !                                               Robert Renka
@@ -89621,6 +90491,7 @@ integer, intent(in) :: nst, iadj(*), iend(*)
 integer, intent(inout) :: i1, i2, i3
 real, intent(in) :: px, py
 real :: x(*), y(*)
+!     beginning of local variable declarations
 real :: x0, x1, x2, y0, y1, y2, xp, yp
 integer :: n0, n1, n2, n3, n4, indx, ind, nf, nl, next
 !***********************************************************
@@ -89854,6 +90725,7 @@ integer, intent(in) :: n
 real, intent(in) :: x(n), y(n), z(n)
 real, intent(inout) :: zxzy(2,n)
 integer, intent(in) :: iadj(*), iend(n)
+!     beginning of local variable declarations
 integer :: j, miter
 real :: eps
 interface
@@ -89895,6 +90767,7 @@ integer, intent(in) :: n, iadj(*), iend(n)
 integer, intent(inout) :: nit, ier
 real, intent(in) :: x(n), y(n), z(n), eps
 real, intent(inout) :: zxzy(2,n)
+!     beginning of local variable declarations
 integer :: nn, maxit, iter, k, indf, indl, indx, nb
 real :: tol, dgmax, xk, yk, zk, zxk, zyk, a11, a12, a22, r1, r2, &
    & delx, dely, delxs, delys, dsq, dcub, t, dzx, dzy
@@ -90073,6 +90946,7 @@ real, intent(in) :: x(n), y(n), z(n)
 real, intent(inout) :: zxzy(2,n)
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(n)
+!     beginning of local variable declarations
 integer :: j
 interface
    pure subroutine gradl1(n,k,x,y,z,iadj,iend,dx,dy,ier)
@@ -90112,6 +90986,7 @@ integer, intent(in) :: n, k, iadj(*)
 integer, intent(inout) :: iend(n), ier
 real, intent(in) :: x(n), y(n), z(n)
 real, intent(inout) :: dx, dy
+!     beginning of local variable declarations
 integer :: nn, kk, lmin, lmax, lm1, lnp, npts(30), ierr, np, i, j, im1, jp1, ip1, l
 real :: sum, ds, r, rs, avsq, av, xk, yk, zk, a(6,6), c, s, dmin
 integer, parameter :: lmn = 10
@@ -90408,6 +91283,7 @@ pure subroutine setrm(xk,yk,zk,xi,yi,zi,s1,s2,r, row)
 implicit none
 real, intent(in) :: xk, yk, zk, xi, yi, zi, s1, s2, r
 real, intent(inout) :: row(6)
+!     beginning of local variable declarations
 integer :: i
 real :: dx, dy, dxsq, dysq, d, w, w1, w2
 !***********************************************************
@@ -90478,6 +91354,7 @@ integer, intent(in) :: l
 integer, intent(inout) :: npts(l), ier
 real, intent(in) :: x(*), y(*)
 real, intent(inout) :: ds
+!     beginning of local variable declarations
 integer :: lm1, n1, i, ni, np, indf, indl, indx, nb
 real :: x1, y1, dnp, dnb
 !***********************************************************
@@ -90597,6 +91474,7 @@ real, intent(inout) :: zi(m)
 real, intent(in) :: zxzy(2,n)
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(n)
+!     beginning of local variable declarations
 integer :: ist, j
 !-----------------------------------------------------------------------
 !                    Evaluation of the surface
@@ -90627,6 +91505,7 @@ real, intent(in) :: xi(l), yi(m)
 real, intent(inout) :: zi(nrows,m)
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(n)
+!     beginning of local variable declarations
 integer :: i, ist, j
 !-----------------------------------------------------------------------
 !                Evaluation of the surface over a grid
@@ -90660,6 +91539,7 @@ real, intent(in) :: px, py
 real :: x(n), y(n)
 real, intent(in) :: z(n), zxzy(2,n)
 real, intent(out) :: pz
+!     beginning of local variable declarations
 integer :: nn, i1, i2, i3, ierr, n1, n2, indx
 real :: xp, yp, zx1, zy1, zx2, zy2, zx3, zy3, x1, y1, x2, y2, x3, &
    & y3, z1, z2, z3, dum, dp, u, v, xq, yq, r1, r2, a1, a2, b1, b2, c1, &
@@ -90916,6 +91796,7 @@ integer, intent(inout) :: ier
 real, intent(in) :: x, y, x1, x2, x3, y1, y2, y3, z1, z2, z3, zx1, &
    & zx2, zx3, zy1, zy2, zy3
 real, intent(inout) :: w, wx, wy
+!     beginning of local variable declarations
 integer :: i, ip1, ip2, ip3
 real :: u(3), v(3), sl(3), area, xp, yp, r(3), rx(3), ry(3), &
    & phi(3), phix(3), phiy(3), rmin, c1, c2, ro(3), rox(3), roy(3), &
@@ -91161,6 +92042,7 @@ integer, intent(inout) :: fitiwk(fiwkln)
 real, intent(inout) :: fitdwk(fdwkln), fitcds(ncrows,dimen)
 real, intent(inout) :: fitvls(nfpts), resids(nfpts)
 real, intent(in) :: wts(nfpts)
+!     beginning of local variable declarations
 integer :: indstt, p, dimp1, newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, alfl
 real :: scale
 !     ***************
@@ -91304,6 +92186,7 @@ integer, intent(inout) :: error, npolys, degree
 integer, intent(in) :: dimen, npts
 integer, intent(in) :: iwklen
 integer, intent(inout) :: iwork(iwklen)
+!     beginning of local variable declarations
 integer :: alfl, newstt, psiwid, kmxbas, startj, kjp1d2, index, nplyt4
 interface
    pure elemental subroutine basiz(degree,npts,dimen,npolys, &
@@ -91493,6 +92376,7 @@ integer, intent(inout) :: degree
 integer, intent(in) :: npts, dimen
 integer, intent(inout) :: npolys
 integer, intent(out) :: error
+!     beginning of local variable declarations
 integer :: top, bot, i, rowlen
 !     ***************
 !     Purpose
@@ -91572,6 +92456,7 @@ implicit none
 integer, intent(in) :: npolys, dimen, degree
 integer, intent(out) :: alflp1
 integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
+!     beginning of local variable declarations
 integer :: j, kj, curdeg, jprime, nwithk, i, curm1, ralen, dimm1, dimm2, dimp1
 !     ***************
 !     Purpose
@@ -91711,6 +92596,7 @@ real, intent(inout) :: psi(npts,psiwid), alpha(alfl), f(npts)
 real, intent(inout) :: coord(ncrows,dimen), maxabs(dimp1)
 real, intent(in) :: weight(npts)
 real, intent(inout) :: z(npts), sumsqs(npolys), c(npolys)
+!     beginning of local variable declarations
 integer :: k, p, sttdeg, onplys
 real :: runtot, rntot1
 !     ***************
@@ -91782,6 +92668,7 @@ real, intent(inout) :: psi(npts,psiwid)
 real, intent(inout) :: sumsqs(npolys), c(npolys)
 real, intent(in) :: f(npts), weight(npts)
 real, intent(inout) :: z(npts)
+!     beginning of local variable declarations
 integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1, m, start, jindex, jpindx, q, j3, j1, j1mj2, j0mj1, j1m1, starta, onpp1, &
    & index1, index2
 real :: arc, runtot, rntot1, rntot2
@@ -91950,6 +92837,7 @@ implicit none
 integer, intent(in) :: npts
 real, intent(out) :: maxabs
 real, intent(in) :: coord(npts)
+!     beginning of local variable declarations
 integer :: p
 real :: a
 !     ***************
@@ -91981,6 +92869,7 @@ implicit none
 integer, intent(in) :: npts
 real, intent(in) :: maxabs
 real, intent(inout) :: coord(npts)
+!     beginning of local variable declarations
 integer :: p
 !     ***************
 !     Purpose
@@ -92011,6 +92900,7 @@ integer, intent(in) :: fitiwk(fiwkln)
 real, intent(inout) :: fitdwk(fdwkln)
 real, intent(in) :: evlcds(nerows,dimen)
 real, intent(inout) :: evlvls(nepts), temp(dimen)
+!     beginning of local variable declarations
 integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt
 interface
    pure subroutine meval1(coord,ncrows,c,nepts,dimen,npolys,alpha, &
@@ -92166,6 +93056,7 @@ real, intent(in) :: c(npolys)
 real, intent(inout) :: f(nepts)
 real, intent(in) :: maxabs(dimp1)
 real, intent(inout) :: x(dimen)
+!     beginning of local variable declarations
 integer :: jm1, jprime, m, p, k, i, j, index
 real :: runtot, rntot1
 !     ***************
@@ -92242,6 +93133,7 @@ double precision, intent(inout) :: fitdwk(fdwkln), &
    & fitcds(ncrows,dimen)
 double precision, intent(inout) :: fitvls(nfpts), resids(nfpts)
 double precision, intent(in) :: wts(nfpts)
+!     beginning of local variable declarations
 integer :: indstt, p, dimp1, newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, alfl
 double precision :: scale
 !     ***************
@@ -92399,6 +93291,7 @@ double precision, intent(inout) :: coord(ncrows,dimen), &
 double precision, intent(in) :: weight(npts)
 double precision, intent(inout) :: z(npts), sumsqs(npolys), &
    & c(npolys)
+!     beginning of local variable declarations
 integer :: k, p, sttdeg, onplys
 double precision :: runtot, rntot1
 !     ***************
@@ -92470,6 +93363,7 @@ double precision, intent(inout) :: psi(npts,psiwid)
 double precision, intent(inout) :: sumsqs(npolys), c(npolys)
 double precision, intent(in) :: f(npts), weight(npts)
 double precision, intent(inout) :: z(npts)
+!     beginning of local variable declarations
 integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1, m, start, jindex, jpindx, q, j3, j1, j1mj2, j0mj1, j1m1, starta, onpp1, &
    & index1, index2
 double precision :: arc, runtot, rntot1, rntot2
@@ -92638,6 +93532,7 @@ implicit none
 integer, intent(in) :: npts
 double precision, intent(out) :: maxabs
 double precision, intent(in) :: coord(npts)
+!     beginning of local variable declarations
 integer :: p
 double precision :: a
 !     ***************
@@ -92669,6 +93564,7 @@ implicit none
 integer, intent(in) :: npts
 double precision, intent(in) :: maxabs
 double precision, intent(inout) :: coord(npts)
+!     beginning of local variable declarations
 integer :: p
 !     ***************
 !     Purpose
@@ -92699,6 +93595,7 @@ integer, intent(in) :: fitiwk(fiwkln)
 double precision, intent(inout) :: fitdwk(fdwkln)
 double precision, intent(in) :: evlcds(nerows,dimen)
 double precision, intent(inout) :: evlvls(nepts), temp(dimen)
+!     beginning of local variable declarations
 integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt
 interface
    pure subroutine dmevl1(coord,ncrows,c,nepts,dimen,npolys,alpha, &
@@ -92855,6 +93752,7 @@ double precision, intent(in) :: c(npolys)
 double precision, intent(inout) :: f(nepts)
 double precision, intent(in) :: maxabs(dimp1)
 double precision, intent(inout) :: x(dimen)
+!     beginning of local variable declarations
 integer :: jm1, jprime, m, p, k, i, j, index
 double precision :: runtot, rntot1
 !     ***************
@@ -92925,6 +93823,7 @@ real, intent(in) :: a, b, epsil
 real, intent(inout) :: relerr
 real :: f
 external f
+!     beginning of local variable declarations
 integer :: icheck, is, k, nf, npts
 real :: eps, err, result(8), stack(100), sub1, sub2, sub3, sum, &
    & tol, x
@@ -93050,6 +93949,7 @@ real, intent(in) :: a, b, epsil
 real, intent(inout) :: result(*)
 real :: f
 external f
+!     beginning of local variable declarations
 integer :: i, inew, iold, j
 real :: acum, diff, funct(127), fzero, sum, x
 real, parameter :: p(381) = [0.77459666924148337704e00, 0.55555555555555555556e00, 0.88888888888888888889e00, &
@@ -93247,6 +94147,7 @@ real, intent(out) :: result
 real, intent(inout) :: work(lenw)
 integer, intent(inout) :: iwork(limit)
 external f
+!     beginning of local variable declarations
 integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !                 Computation of a definite integral
@@ -93526,6 +94427,9 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+   & rlist(limit)
+!     beginning of local variable declarations
 real :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, errbnd, &
    & errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, uflow
 integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2
@@ -93537,8 +94441,6 @@ interface
       real :: spmpar
    end function spmpar
 end interface
-dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-   & rlist(limit)
 !            The dimension of rlist2 is determined by the value of
 !            LIMEXP in subroutine qelg (rlist2 should be of dimension
 !            (LIMEXP+2) at least).
@@ -93803,6 +94705,7 @@ real, intent(inout) :: resabs, resasc, result
 real, intent(in) :: uflow
 real :: f
 external f
+!     beginning of local variable declarations
 integer :: j, jtw, jtwm1
 real :: absc, centr, dhlgth, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tol, fv1(10), fv2(10)
 real, parameter :: xgk(11) = [0.9956571630258081e+00, 0.9739065285171717e+00, 0.9301574913557082e+00, &
@@ -93944,6 +94847,7 @@ real :: f
 real, intent(inout) :: work(lenw)
 integer, intent(inout) :: iwork(limit)
 external f
+!     beginning of local variable declarations
 integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !                   Integration over infinite intervals
@@ -94239,6 +95143,9 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+   & rlist(limit)
+!     beginning of local variable declarations
 real :: abseps, area, area1, area12, area2, a1, a2, boun, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, &
    & errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, uflow
 integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2
@@ -94250,8 +95157,6 @@ interface
       real :: spmpar
    end function spmpar
 end interface
-dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-   & rlist(limit)
 !            The dimension of rlist2 is determined by the value of
 !            LIMEXP in subroutine qelg.
 !            List of major variables
@@ -94518,6 +95423,7 @@ real, intent(inout) :: resabs, resasc, result
 real, intent(in) :: uflow
 real :: f
 external f
+!     beginning of local variable declarations
 integer :: j
 real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, fv1(7), fv2(7)
 real, parameter :: xgk(8) = [0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
@@ -94702,9 +95608,10 @@ real, intent(inout) :: ermax
 integer, intent(inout) :: iord
 integer, intent(in) :: last, limit
 integer, intent(inout) :: maxerr, nrmax
+dimension elist(last), iord(last)
+!     beginning of local variable declarations
 real :: errmax, errmin
 integer :: i, ibeg, ido, isucc, j, jbnd, jupbn, k
-dimension elist(last),iord(last)
 !           Check whether the list contains more than
 !           two error estimates.
 !***First executable statement  qpsrt
@@ -94774,6 +95681,7 @@ real, intent(out) :: abserr
 real, intent(in) :: epmach, oflow
 real, intent(out) :: result
 real, intent(inout) :: epstab(52), res3la(3)
+!     beginning of local variable declarations
 integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp, newelm, num
 real :: delta1, delta2, delta3, e0, e1, e1abs, e2, e3, epsinf, &
    & err1, err2, err3, error, res, ss, tol1, tol2, tol3
@@ -95056,8 +95964,9 @@ integer, intent(inout) :: iwork
 integer, intent(out) :: last
 integer, intent(in) :: leniw, lenw, limit
 external f
+dimension iwork(leniw), work(lenw)
+!     beginning of local variable declarations
 integer :: l1, l2, l3, l4, l5
-dimension iwork(leniw),work(lenw)
 !         Check validity of limit,leniw and lenw.
 ier = 6
 last = 0
@@ -95210,6 +96119,9 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(inout) :: lp(limit), ln(limit)
 external f
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+   & rlist(limit), valp(21,limit), valn(21,limit)
+!     beginning of local variable declarations
 real :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, errbnd, &
    & errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, uflow, vp1(21), &
    & vp2(21), vn1(21), vn2(21)
@@ -95222,8 +96134,6 @@ interface
       real :: spmpar
    end function spmpar
 end interface
-dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-   & rlist(limit), valp(21,limit), valn(21,limit)
 !            Machine dependent constants
 !            ---------------------------
 !          epmach is the largest relative spacing.
@@ -95457,6 +96367,7 @@ implicit none
 integer, intent(in) :: l
 real, intent(inout) :: a(l)
 real, intent(in) :: b(l)
+!     beginning of local variable declarations
 integer :: i
 !  TO COPY THE REAL VECTOR b OF LENGTH l   i N T O
 !          the real vector a of length l
@@ -95536,6 +96447,7 @@ real, intent(inout) :: vr(21), vs(21)
 integer, intent(in) :: key
 integer, intent(inout) :: lr, ls
 external f
+!     beginning of local variable declarations
 real :: t, resg, resk, errold
 integer :: k, k0, k1, k2, key1
 key1 = max(key ,  0)
@@ -95570,6 +96482,7 @@ real, intent(inout) :: fv1(21), fv2(21)
 integer, intent(in) :: ke, k1
 integer, intent(inout) :: l1, l2
 external f
+!     beginning of local variable declarations
 integer :: i, is, k, ks, j
 real :: ldl, y2, xx(41), aa, bb, c
 integer, parameter :: istart(4) = [0, 7, 17, 31]
@@ -95749,6 +96662,7 @@ real :: z(21)
 real, intent(in) :: xu, xl
 integer, intent(inout) :: lr, ls
 integer, intent(in) :: lz
+!     beginning of local variable declarations
 real :: dlen, centr
 dlen = (xu - xl)*0.5
 centr = xl + dlen
@@ -95817,6 +96731,8 @@ integer, intent(inout) :: iwork
 integer, intent(in) :: lenw, limit
 integer, intent(out) :: neval
 external f
+dimension iwork(limit), work(lenw)
+!     beginning of local variable declarations
 integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !           Double precision computation of a definite integral
@@ -95944,7 +96860,6 @@ integer :: l1, l2, l3
 !              - f (user-provided function)
 !              - dpmpar
 !-----------------------------------------------------------------------
-dimension iwork(limit), work(lenw)
 !         Check validity of limit and lenw.
 ier = 6
 neval = 0
@@ -96097,6 +97012,9 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+   & rlist(limit)
+!     beginning of local variable declarations
 double precision :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, &
    & erlast, errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, &
    & uflow
@@ -96109,8 +97027,6 @@ interface
       double precision :: dpmpar
    end function dpmpar
 end interface
-dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-   & rlist(limit)
 !            The dimension of rlist2 is determined by the value of
 !            LIMEXP in subroutine dqelg (rlist2 should be of dimension
 !            (LIMEXP+2) at least).
@@ -96421,6 +97337,7 @@ double precision, intent(in) :: uflow
 double precision, intent(inout) :: resasc
 integer, intent(out) :: isig
 external f
+!     beginning of local variable declarations
 double precision :: absc, centr, dhlgth, fc, fsum, fval1, fval2, fv1(10), fv2(10), hlgth, resg, resk, reskh, tol
 integer :: j, jtw, jtwm1
 double precision, parameter :: xgk(11) = [0.995657163025808080735527280689d+00, &
@@ -96525,6 +97442,8 @@ integer, intent(inout) :: iwork
 integer, intent(in) :: lenw, limit
 integer, intent(out) :: neval
 external f
+dimension iwork(limit), work(lenw)
+!     beginning of local variable declarations
 integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !         Double precision integration over infinite intervals
@@ -96659,7 +97578,6 @@ integer :: l1, l2, l3
 !              - f (user provided function)
 !              - dpmpar
 !-----------------------------------------------------------------------
-dimension iwork(limit),work(lenw)
 !         Check validity of limit and lenw.
 ier = 6
 neval = 0
@@ -96821,6 +97739,9 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+   & rlist(limit)
+!     beginning of local variable declarations
 double precision :: abseps, area, area1, area12, area2, a1, a2, boun, b1, b2, correc, defabs, defab1, defab2, dres, epmach, &
    & erlarg, erlast, errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), &
    & small, t, uflow
@@ -96833,8 +97754,6 @@ interface
       double precision :: dpmpar
    end function dpmpar
 end interface
-dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-   & rlist(limit)
 !            The dimension of rlist2 is determined by the value of
 !            LIMEXP in subroutine dqelg.
 !            List of major variables
@@ -97103,6 +98022,7 @@ double precision, intent(inout) :: resabs, resasc
 double precision, intent(inout) :: result
 double precision, intent(in) :: uflow
 external f
+!     beginning of local variable declarations
 integer :: j
 double precision :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, &
    & fv1(7), fv2(7)
@@ -97293,9 +98213,10 @@ double precision, intent(inout) :: ermax
 integer, intent(inout) :: iord
 integer, intent(in) :: last, limit
 integer, intent(inout) :: maxerr, nrmax
+dimension elist(last), iord(last)
+!     beginning of local variable declarations
 double precision :: errmax, errmin
 integer :: i, ibeg, ido, isucc, j, jbnd, jupbn, k
-dimension elist(last),iord(last)
 !           Check whether the list contains more than
 !           two error estimates.
 !***First executable statement dqpsrt
@@ -97405,6 +98326,7 @@ double precision, intent(out) :: result
 double precision, intent(inout) :: res3la(3)
 integer, intent(inout) :: n
 integer, intent(inout) :: nres
+!     beginning of local variable declarations
 double precision :: delta1, delta2, delta3, epsinf, error, err1, err2, err3, e0, e1, e1abs, e2, e3, res, ss, tol1, tol2, tol3
 integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp, newelm, num
 !---------------------
@@ -97649,8 +98571,9 @@ integer, intent(inout) :: iwork
 integer, intent(out) :: last
 integer, intent(in) :: leniw, lenw, limit
 external f
+dimension iwork(leniw), work(lenw)
+!     beginning of local variable declarations
 integer :: l1, l2, l3, l4, l5
-dimension iwork(leniw),work(lenw)
 !         Check validity of limit,leniw and lenw.
 ier = 6
 last = 0
@@ -97803,6 +98726,9 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(inout) :: lp(limit), ln(limit)
 external f
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+   & rlist(limit), valp(21,limit), valn(21,limit)
+!     beginning of local variable declarations
 double precision :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, &
    & erlast, errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, &
    & uflow, vp1(21), vp2(21), vn1(21), vn2(21)
@@ -97815,8 +98741,6 @@ interface
       double precision :: dpmpar
    end function dpmpar
 end interface
-dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-   & rlist(limit), valp(21,limit), valn(21,limit)
 !            Machine dependent constants
 !            ---------------------------
 !          epmach is the largest relative spacing.
@@ -98050,6 +98974,7 @@ implicit none
 integer, intent(in) :: l
 double precision, intent(inout) :: a(l)
 double precision, intent(in) :: b(l)
+!     beginning of local variable declarations
 integer :: i
 !  TO COPY THE DOUBLE PRECISION VECTOR b OF LENGTH l   i N T O
 !          the double precision vector a of length l
@@ -98129,6 +99054,7 @@ double precision, intent(inout) :: vr(21), vs(21)
 integer, intent(in) :: key
 integer, intent(inout) :: lr, ls
 external f
+!     beginning of local variable declarations
 double precision :: t, resg, resk, errold
 integer :: k, k0, k1, k2, key1
 key1 = max(key ,  0)
@@ -98163,6 +99089,7 @@ double precision, intent(inout) :: fv1(21), fv2(21)
 integer, intent(in) :: ke, k1
 integer, intent(inout) :: l1, l2
 external f
+!     beginning of local variable declarations
 integer :: i, is, k, ks, j
 double precision :: ldl, y2, xx(41), aa, bb, c
 integer, parameter :: istart(4) = [0, 7, 17, 31]
@@ -98342,6 +99269,7 @@ double precision :: z(21)
 double precision, intent(in) :: xu, xl
 integer, intent(inout) :: lr, ls
 integer, intent(in) :: lz
+!     beginning of local variable declarations
 double precision :: dlen, centr
 dlen = (xu - xl)*0.5d0
 centr = xl + dlen
@@ -98402,6 +99330,7 @@ real :: f
 external f
 integer :: idata(*), ier, mcalls, ncalls, nw
 real :: ans, eps, err, rdata(*), t(2,*), w(6,nw)
+!     beginning of local variable declarations
 integer :: i, j, jkp, k, l, maxc, maxk, mw
 real :: rnderr
 real :: alfa, anskp, area, errmax, h, q1, q2, r1, r2, vec(2,3), x(2)
@@ -98584,8 +99513,9 @@ end subroutine cubtri
 function rnderr(x, a, y, b)
 implicit none
 real :: a, b, x, y
-real :: s, t
 real :: rnderr
+!     beginning of local variable declarations
+real :: s, t
 !       This function computes the rounding error committed when the
 !       sum x+a is formed.  In the calling program, y must be the same
 !       as x and b must be the same as A.  they are declared as
@@ -98607,6 +99537,7 @@ real :: rdata(*)
 real, intent(in) :: vec(2,*)
 integer :: idata(*)
 external f
+!     beginning of local variable declarations
 integer :: i, j, k
 real :: x, y, area, origin(2), tvec(2,3)
 double precision :: a1, a2, s, sn
@@ -98726,6 +99657,7 @@ real :: a, b, ep, t(*), w(*), x(*)
 real :: rhfcn
 real :: kernel, norm
 external kernel, rhfcn
+!     beginning of local variable declarations
 integer :: i1, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i2, i20, i21, i3, i4, i5, i6, i7, i8, i9, m, n, nhalf, nsq, nup
 real :: cutoff, rootrt, unitrd
 integer :: mfinal, nfinal
@@ -98900,6 +99832,7 @@ real :: rhfcn
 real :: kernel, lufact(nup,nup), kmm(nup,nup), kmn(nup,nhalf), &
    & knm(nhalf,nup), imknn(nup,nup)
 external kernel, rhfcn
+!     beginning of local variable declarations
 integer :: i, ind, j, loop, m, mnew, n
 real :: aside2(5), averr, cond, denr1, denr2, eps, error, esterr, &
    & pastc, pastre, r1rat, rate, relerr, relmin, rt, temp, temp2, test, &
@@ -99215,6 +100148,7 @@ real :: rhfcn
 real :: kernel
 real, intent(inout) :: kmn(nup,nhalf)
 external kernel, rhfcn
+!     beginning of local variable declarations
 integer :: i, j
 !   Use the values of xn(i), i=1,...,n, to calculate the Nystrom
 !   INTERPOLATES xm(i), i=1,...,m.
@@ -99252,8 +100186,9 @@ pure elemental function rmin(n,m,cond,unitrd,averr)
 implicit none
 integer, intent(in) :: m, n
 real, intent(in) :: averr, cond, unitrd
-real :: float1, float2
 real :: rmin
+!     beginning of local variable declarations
+real :: float1, float2
 !   For a linear system   (I-KMM)*XM=RHFCN   of order m, this is the
 !   value of RELMIN used in iegs. The variable unitrd is defined in
 !   IEGAUS, and the variables cond and averr are defined in iegs
@@ -99270,6 +100205,7 @@ real function rnrm(x,y,n,iflag)
 implicit none
 integer, intent(in) :: iflag, n
 real :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: i
 !   iflag=0    Calculate the maximum norm of x.
 !   iflag=1    Calculate the maximum norm of x-y.
@@ -99293,8 +100229,9 @@ real, intent(out) :: averr
 real, intent(in) :: cond, elinsy
 real, intent(inout) :: pastc, pastre
 real, intent(in) :: relrsd
-real :: c
 real :: conew
+!     beginning of local variable declarations
+real :: c
 !   This is used in updating the value of the condition number
 !   IN iegs.
 averr = sqrt(elinsy*pastre)
@@ -99312,6 +100249,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(inout) :: tv(n), wv(n)
+!     beginning of local variable declarations
 integer :: i, i1, i2, k, l, loop, m, mt, npi, nplace
 real :: al, bl, fl, floop, h, r, s, scale
 real, parameter :: t(255) = [.577350269189626e0, .861136311594053e0, .339981043584856e0, .960289856497536e0, &
@@ -99443,6 +100381,7 @@ real :: rhfcn
 real :: kernel, kmm(nup,nup), kmn(nup,nhalf), knm(nhalf,nup), &
    & imknn(nup,nup), lufact(nup,nup)
 external kernel, rhfcn
+!     beginning of local variable declarations
 integer :: i, itloop, j
 real :: derror, savep, sum, temp
 integer :: mfinal, nfinal
@@ -99554,6 +100493,7 @@ real, intent(inout) :: knm(nhalf,nup)
 real :: imknn(nup,nup)
 real, intent(inout) :: lufact(nup,nup)
 external kernel, rhfcn
+!     beginning of local variable declarations
 integer :: i, ind, j
 real :: sum
 !   This routine calculates one iterate xm given the initial guess
@@ -99647,6 +100587,7 @@ implicit none
 integer :: ierr, m, n
 real :: a(m,n), d(m,n), b(n), x(n)
 integer :: option
+!     beginning of local variable declarations
 integer :: i, ip1, iswit, j, k, kp1, l, nm1, nmi
 real :: c, sum, t
 real :: error, relrsd
@@ -99814,6 +100755,7 @@ real, intent(inout) :: abserr, relerr, t
 real, intent(in) :: tout
 real, intent(inout) :: work(*), y(neqn)
 external f
+!     beginning of local variable declarations
 integer :: ip, iphi, iwt, iyp, iypout, iyy
 logical :: start, phase1, nornd
 integer, parameter :: ialpha = 1
@@ -99984,6 +100926,7 @@ real :: yp(neqn)
 real, intent(inout) :: ypout(neqn), yy(neqn)
 logical, intent(inout) :: start, phase1, nornd
 external f
+!     beginning of local variable declarations
 integer :: isn, kle4, l, nostep
 real :: absdel, abseps, del, eps, fouru, releps, tend, u
 logical :: stiff, crash
@@ -100133,6 +101076,7 @@ logical, intent(inout) :: start
 logical, intent(out) :: crash
 logical, intent(inout) :: phase1, nornd
 external f
+!     beginning of local variable declarations
 integer :: i, ifail, im1, ip1, iq, j, km1, km2, knew, kp1, kp2, l, limit1, limit2, nsm2, nsp1, nsp2, nswc_ai_i4
 real :: absh, erk, erkm1, erkm2, erkp1, err, fouru, hnew, p5eps, r, reali, realns, rho, round, sum, tau, temp1, temp2, temp3, &
    & temp4, temp5, temp6, twou, u, xold
@@ -100575,6 +101519,7 @@ real :: phi(neqn,16), psi(12)
 real, intent(in) :: x, xout
 real :: y(neqn)
 real, intent(inout) :: yout(neqn), ypout(neqn)
+!     beginning of local variable declarations
 integer :: i, j, jm1, ki, kip1, l, limit1
 real :: eta, g(13), gamma, hi, psijm1, rho(13), temp1, temp2, &
    & temp3, term, w(13)
@@ -100653,6 +101598,7 @@ real, intent(inout) :: relerr, t
 real, intent(in) :: tend, tout
 real, intent(inout) :: work(*), y(neqn), yp(neqn)
 external fcn
+!     beginning of local variable declarations
 integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
    & kwp, kx, ky1, ky2
 logical :: endpnt, blkout
@@ -100920,6 +101866,7 @@ real, intent(inout) :: w(neqn), wp(neqn), x, y(neqn), y1(neqn), &
 logical, intent(inout) :: endpnt
 logical, intent(inout) :: blkout
 external fcn
+!     beginning of local variable declarations
 integer :: k, mflag, n
 real :: a, ae, dt, dtsign, ee, eeoet, errtol, esttol, ez, hmin, hstop, rer, s, scale, sf, swap, tol, toler, toln, u, u26, ypk
 logical :: hfaild, interp
@@ -101426,6 +102373,7 @@ real :: y(neqn)
 real, intent(inout) :: yex(neqn)
 real :: yinc1(neqn), yinc2(neqn)
 real, intent(inout) :: ypex(neqn)
+!     beginning of local variable declarations
 integer :: n
 real :: a1, a2, a3, a4, hf, hf1, hf2, sig
 !     This version of extra is the third of the three changes
@@ -101613,6 +102561,7 @@ real, intent(inout) :: relerr
 real, intent(in) :: abserr
 real, intent(inout) :: work(*)
 external f
+!     beginning of local variable declarations
 integer :: k1, k2, k3, k4, k5, k6, k1m
 !     Compute indices for the splitting of the work array
 k1m = neqn + 1
@@ -101656,6 +102605,7 @@ real, intent(inout) :: f1(neqn)
 real :: f2(neqn), f3(neqn), f4(neqn)
 real, intent(inout) :: f5(neqn), savre, savae
 external f
+!     beginning of local variable declarations
 logical :: hfaild, output
 real :: a, ae, dt, ee, eeoet, esttol, et, hmin, rer, s, scale, tol, toln, u26, eps, ypk
 integer :: k, mflag
@@ -101917,6 +102867,7 @@ real, intent(inout) :: f1(neqn)
 real :: f2(neqn), f3(neqn), f4(neqn)
 real, intent(inout) :: f5(neqn), s(neqn)
 external f
+!     beginning of local variable declarations
 real :: ch
 integer :: k
 ch = h/4.0
@@ -101967,6 +102918,7 @@ real, intent(inout) :: t
 real, intent(in) :: tout
 real, intent(inout) :: work(*), y(neqn)
 external f
+!     beginning of local variable declarations
 integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !     Fehlberg fourth(fifth) order Runge-Kutta method with
 !     global error assessment
@@ -102159,6 +103111,7 @@ real, intent(in) :: tout
 real, intent(inout) :: y(neqn), yg(neqn), ygp(neqn)
 real :: yp(neqn)
 external f
+!     beginning of local variable declarations
 integer :: k, maxnfe, mflag
 real :: a, ae, dt, ee, eeoet, esttol, et, hh, hmin, remin, rer, s, &
    & scale, tol, toln, ts, u, u26, ypk
@@ -102453,6 +103406,7 @@ real :: rpar(*)
 integer, intent(inout) :: info(*)
 integer, intent(inout) :: iwork(liw)
 integer :: ipar(*)
+!     beginning of local variable declarations
 external zzzjac
 real :: rtol(1), atol(1)
 integer :: info1(15)
@@ -102486,6 +103440,7 @@ real :: rpar(*)
 integer, intent(inout) :: info(*)
 integer, intent(inout) :: iwork(liw)
 integer :: ipar(*)
+!     beginning of local variable declarations
 external zzzjac
 integer :: info1(15)
 !     --------------
@@ -102521,6 +103476,8 @@ implicit none
 integer :: idid, info(*), ipar(*), iwork, liw, lrw, neq
 real :: atol(*), rpar(*), rtol(*), rwork(lrw), t, tout, y(neq)
 external f, jac
+dimension iwork(liw)
+!     beginning of local variable declarations
 integer :: icomi, icomr, idelsn, iinout, ilrw, itstar, iypout, ml, &
    & mu
 integer :: iacor, iband, ibegin, ier, iewt, iinteg, ijac, init, &
@@ -103084,7 +104041,6 @@ logical :: intout
 !***REFERENCES
 !   Shampine L.F., Watts H.A., *DEPAC - Design of a user oriented
 !   package of ODE solvers*, SAND79-2374, Sandia Laboratories, 1979.
-dimension iwork(liw)
 common /debdf1/ told, rowns(210), &
    & el0, h, hmin, hmxi, hu, tn, uround, &
    & iquit, init, iyh, iewt, iacor, isavf, iwm, ksteps, &
@@ -103166,6 +104122,7 @@ implicit none
 !-----------------------------------------------------------------------
 integer :: isav(*)
 real :: rsav(*)
+!     beginning of local variable declarations
 integer :: i, ils
 real :: rls
 common /debdf1/ rls(218), ils(33)
@@ -103190,6 +104147,7 @@ implicit none
 !-----------------------------------------------------------------------
 integer :: isav(*)
 real :: rsav(*)
+!     beginning of local variable declarations
 integer :: i, ils
 real :: rls
 common /debdf1/ rls(218), ils(33)
@@ -103214,6 +104172,7 @@ real :: acor(neq), atol(*), delsgn, ewt(neq), rpar(*), rtol(*), &
    & yh1(*), ypout(neq)
 logical :: intout
 external f, jac
+!     beginning of local variable declarations
 integer :: intflg, k, l, ltol, max
 real :: absdel, big, del, dt, ha, tol
 integer :: iband, ibegin, ier, iinteg, ijac, init, iowns, iquit, &
@@ -103484,6 +104443,7 @@ real :: y(neq)
 real, intent(inout) :: yp(neq)
 real :: yprime(neq)
 external f
+!     beginning of local variable declarations
 integer :: j, k, lk
 real :: absdx, da, delf, dely, dfdub, dfdxb, dx, dy, fbnd, relper, &
    & srydpb, tolexp, tolmin, tolp, tolsum, ydpb
@@ -103758,6 +104718,7 @@ implicit none
 !-----------------------------------------------------------------------
 integer :: k, nyh, iflag
 real :: t, yh(nyh,*), dky(*)
+!     beginning of local variable declarations
 integer :: i, ic, ier, iownd, iowns, j, jb, jb2, jj, jj1, jp1, &
    & jstart, kflag, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
 real :: rownd, rowns, el0, h, hmin, hmxi, hu, tn, uround, c, r, s, &
@@ -103817,6 +104778,7 @@ real :: rpar(*)
 external f, jac
 integer :: neq, nyh, iwm(*)
 real :: y(*), yh(nyh,*), yh1(*), ewt(*), savf(*), acor(*), wm(*)
+!     beginning of local variable declarations
 integer :: ipnyh
 integer :: iod, ksteps
 integer :: i, i1, ialth, ier, iownd, iredo, iret, ipup, j, jb, &
@@ -104298,6 +105260,7 @@ implicit none
 !   cfod defines coefficients needed in the integrator package sfode
 integer, intent(in) :: meth
 real, intent(inout) :: elco(13, *), tesco(3, *)
+!     beginning of local variable declarations
 integer :: i, ib, nq, nqm1, nqp1
 real :: agamq, fnq, fnqm1, pc(12), pint, ragq, rqfac, rq1fac, &
    & tsign, xpin
@@ -104417,6 +105380,7 @@ real :: rpar(*)
 integer :: neq, nyh, iwm(*)
 external f, jac
 real :: y(*), yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*)
+!     beginning of local variable declarations
 integer :: i, i1, i2, ier, ii, iownd, iowns, j, j1, jj, jstart, &
    & kflag, l, lenp, maxord, mba, mband, meb1, meband, meth, miter, ml, &
    & ml3, mu, n, nfe, nje, nq, nqu, nst
@@ -104600,6 +105564,7 @@ implicit none
 !***Routines called  sgesl,sgbsl
 integer :: iwm(*)
 real :: wm(*), x(*), tem(*)
+!     beginning of local variable declarations
 integer :: i, ier, iownd, iowns, jstart, kflag, l, maxord, meband, &
    & meth, miter, ml, mu, n, nfe, nje, nq, nqu, nst
 real :: rownd, rowns, el0, h, hmin, hmxi, hu, tn, uround, di, hl0, &
@@ -104676,6 +105641,7 @@ integer, intent(in) :: lda, n, ml, mu
 integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
 real, intent(inout) :: abd(lda,*)
+!     beginning of local variable declarations
 real :: t
 integer :: i, i0, j, ju, jz, j0, j1, k, kp1, l, lm, m, mm, nm1
 interface
@@ -104838,6 +105804,7 @@ implicit none
 integer, intent(in) :: lda, n, ml, mu, ipvt(*), job
 real, intent(in) :: abd(lda,*)
 real, intent(inout) :: b(*)
+!     beginning of local variable declarations
 real :: t
 integer :: k, kb, l, la, lb, lm, m, nm1
 interface
@@ -104964,8 +105931,9 @@ function vnorm(v,ncomp)
 implicit none
 integer, intent(in) :: ncomp
 real :: v(ncomp)
-integer :: k
 real :: vnorm
+!     beginning of local variable declarations
+integer :: k
 !     Compute the maximum norm of the vector v(*) of length ncomp and
 !     RETURN THE RESULT AS vnorm
 vnorm = 0.
@@ -104984,6 +105952,7 @@ implicit none
 !-----------------------------------------------------------------------
 integer, intent(in) :: n
 real :: v(n), w(n)
+!     beginning of local variable declarations
 integer :: i
 real :: sum
 sum = 0.0e0
@@ -105001,6 +105970,7 @@ real, intent(inout) :: a(*)
 real, intent(in) :: h
 real, intent(inout) :: t
 external f
+!     beginning of local variable declarations
 integer :: k, m, m1, mk, nk, np1
 real :: ha, ta
 !     ******************************************************************
@@ -105057,6 +106027,7 @@ real :: h
 real, intent(inout) :: t
 real, intent(inout) :: y(n), dy(n), w(*)
 external f
+!     beginning of local variable declarations
 integer :: i, j, k, l, m, m1
 real :: ha, sum, b(8,7)
 real, parameter :: a(7) = [.3333333333333333, .5, .6666666666666666, .1666666666666666, 1., .8333333333333333, 1.]
@@ -105136,6 +106107,7 @@ real :: bval
 real, intent(inout) :: u(ku,np1), w(nw)
 integer, intent(in) :: edge(4)
 external cofx, cofy
+!     beginning of local variable declarations
 integer :: i, ia, ib, ic, id, ij, imax, imin, indx, indy, iw, j, &
    & jcol, jmax, jmin, l, m, mn, n
 real :: alpha, beta, del, gam, hx, hy, p, xi, xmin, yj, ymin, dum(1)
@@ -105312,6 +106284,7 @@ pure subroutine pdedge(edge, indx, indy, ierr)
 implicit none
 integer, intent(inout) :: ierr, indx, indy
 integer, intent(in) :: edge(4)
+!     beginning of local variable declarations
 integer :: nswc_ai_i4
 if (abs(edge(1)) > 1) go to 200
 if (abs(edge(2)) > 1) go to 200
@@ -105367,6 +106340,7 @@ real, intent(inout) :: grhs(mn,*), usol(idmn,*)
 real :: bda(*), bdb(*), bdc(*), bdd(*)
 real, intent(inout) :: w(*)
 external cofx, cofy
+!     beginning of local variable declarations
 integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
    & k, l, length, linput, ll, logb2n, loutpt
 ! DIMENSION OF           bda(n+1), bdb(n+1), bdc(m+1), bdd(m+1),
@@ -105792,6 +106766,7 @@ real :: a, alpha, am(*), an(*), b, bda(*), bdb(*), bdc(*), bdd(*), &
    & grhs(mn,*), pertrb, um(*), un(*), usol(idmn,*), w(*), xnu, zm(*), &
    & zn(*)
 external cofx, cofy
+!     beginning of local variable declarations
 integer :: i, i1, iord, j, mp, np
 real :: ai, ax1, axi, bi, bxi, ci, cxi, cxm, dj, dy1, dyj, ej, &
    & eyj, fj, fyj, fyn, prtrb, xi, yj
@@ -106068,6 +107043,7 @@ integer, intent(in) :: idmn
 integer, intent(out) :: ierror
 integer, intent(in) :: intl, iorder, m, mbdcnd, mn, n, nbdcnd
 real, intent(in) :: a, b, c, d
+!     beginning of local variable declarations
 integer :: i, j
 real :: ai, bi, ci, dj, dlx, dly, ej, fj, xi, yj
 !     This program checks the input parameters for errors
@@ -106120,6 +107096,7 @@ implicit none
 integer :: mbdcnd, nbdcnd
 real :: alpha, beta, gama, xnu
 logical :: singlr
+!     beginning of local variable declarations
 integer :: i, j
 real :: ai, bi, ci, dj, ej, fj, xi, yj
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
@@ -106162,6 +107139,7 @@ subroutine orthg(usol,idmn,zn,zm,pertrb)
 implicit none
 integer :: idmn
 real :: pertrb, usol(idmn,*), zm(*), zn(*)
+!     beginning of local variable declarations
 integer :: i, ifnl, ii, istr, j, jfnl, jj, jstr
 real :: ete, ute
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
@@ -106202,6 +107180,7 @@ subroutine minsol(usol,idmn,zn,zm,pertb)
 implicit none
 integer :: idmn
 real :: pertb, usol(idmn,*), zm(*), zn(*)
+!     beginning of local variable declarations
 integer :: i, ifnl, ii, istr, j, jfnl, jj, jstr
 real :: ete, pertrb, ute
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
@@ -106246,6 +107225,7 @@ implicit none
 integer, intent(in) :: n
 real :: a(n), b(n), c(n)
 real, intent(inout) :: d(n), u(n), z(n)
+!     beginning of local variable declarations
 integer :: j, k, nm1, nm2
 real :: an, bn, den, v
 !     This subroutine solves for a non-zero eigenvector corresponding
@@ -106284,6 +107264,7 @@ subroutine defer(cofx,cofy,usol,idmn,grhs,mn)
 implicit none
 integer :: idmn, mn
 real :: grhs(mn,*), usol(idmn,*)
+!     beginning of local variable declarations
 integer :: i, j
 real :: ai, bi, ci, dj, ej, fj, tx, ty, uxxx, uxxxx, uyyy, uyyyy, &
    & xi, yj
@@ -106340,6 +107321,7 @@ subroutine dxfn(u,idmn,i,j,uxxx,uxxxx)
 implicit none
 integer :: i, idmn, j
 real :: u(idmn,*), uxxx, uxxxx
+!     beginning of local variable declarations
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !     This program computes second order finite difference
@@ -106406,6 +107388,7 @@ subroutine dyfn(u,idmn,i,j,uyyy,uyyyy)
 implicit none
 integer :: i, idmn, j
 real :: u(idmn,*), uyyy, uyyyy
+!     beginning of local variable declarations
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !     This program computes second order finite difference
@@ -106474,6 +107457,7 @@ subroutine blktri(iflg,np,n,an,bn,cn,mp,m,am,bm,cm,idimy,y, &
 implicit none
 integer :: idimy, ierror, iflg, m, mp, n, np
 real :: am(*), an(*), bm(*), bn(*), cm(*), cn(*), w(*), y(idimy,*)
+!     beginning of local variable declarations
 integer :: iw1, iw2, iw3, iwah, iwbh, iwd, iwu, iww, nh, nl
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
@@ -106644,6 +107628,7 @@ implicit none
 integer :: idimy, m, n
 real :: am(*), an(*), b(*), bm(*), bn(*), cm(*), cn(*), w1(*), &
    & w2(*), w3(*), wd(*), wu(*), ww(*), y(idimy,*)
+!     beginning of local variable declarations
 integer :: i, i1, i2, i3, i4, idxa, idxc, if, ifd, im1, im2, im3, &
    & imi1, imi2, ip, ip1, ip2, ip3, ipi1, ipi2, ipi3, ir, irm1, iz, &
    & izr, j, kdo, l, ll, na, nc, nm1, nm2, nm3, np, np1, np2, np3, nz
@@ -106914,6 +107899,7 @@ end subroutine blktr1
 subroutine indxa(i,ir,idxa,na)
 implicit none
 integer :: i, idxa, ir, na
+!     beginning of local variable declarations
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
@@ -106929,6 +107915,7 @@ end subroutine indxa
 subroutine indxc(i,ir,idxc,nc)
 implicit none
 integer :: i, idxc, ir, nc
+!     beginning of local variable declarations
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
@@ -106944,6 +107931,7 @@ end subroutine indxc
 subroutine indxb(i,ir,idx,idp)
 implicit none
 integer :: i, idp, idx, ir
+!     beginning of local variable declarations
 integer :: id, ipl, izh
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
@@ -106985,6 +107973,7 @@ real :: u(*)
 real, intent(inout) :: w(*)
 real :: x(*)
 real, intent(inout) :: y(*)
+!     beginning of local variable declarations
 integer :: ia, ibr, id, j, k, m1, m2, mm
 real :: den, rt
 ! prod0 applies a sequence of matrix operations to the vector x and
@@ -107084,6 +108073,7 @@ real :: a(*), aa(*), b(*), bd(*), bm1(*), bm2(*), c(*)
 real, intent(inout) :: d(*), u(*), w(*)
 real :: x(*)
 real, intent(inout) :: y(*)
+!     beginning of local variable declarations
 integer :: ia, ibr, id, j, k, m1, m2, mm, mm2
 real :: am, bh, den, rt, v, ym
 ! prodp applies a sequence of matrix operations to the vector x and
@@ -107202,6 +108192,7 @@ real :: a(*), aa(*), b(*), bm1(*), bm2(*), c(*), x(*)
 real, intent(inout) :: yy(*)
 complex, intent(inout) :: y(*), d(*), w(*)
 complex :: bd(*)
+!     beginning of local variable declarations
 integer :: ia, id, iflg, j, k, m1, m2, mm
 real :: rt
 complex :: crt, den, y1, y2
@@ -107303,6 +108294,7 @@ real :: a(*), aa(*), b(*), bm1(*), bm2(*), c(*), x(*)
 real, intent(inout) :: yy(*)
 complex, intent(inout) :: y(*), d(*), u(*)
 complex :: bd(*)
+!     beginning of local variable declarations
 integer :: ia, id, iflg, j, k, m1, m2, mm, mm2
 real :: rt
 complex :: v, den, bh, ym, am, y1, y2, yh, crt
@@ -107423,6 +108415,7 @@ subroutine compb(n,ierror,an,bn,cn,b,ah,bh)
 implicit none
 integer :: ierror, n
 real :: ah(*), an(*), b(*), bh(*), bn(*), cn(*)
+!     beginning of local variable declarations
 integer :: i, i2, i4, ib, if, ifd, ipl, ir, j, j1, j2, jf, js, &
    & kdo, l, l1, l2, lh, ls, n2m2, nb, nmp
 real :: arg, bnorm, d1, d2, d3
@@ -107540,6 +108533,7 @@ subroutine tqlrt0(n,d,e2,ierr)
 implicit none
 integer :: n, ierr
 real :: d(n), e2(n)
+!     beginning of local variable declarations
 integer :: nhalf, ntop
 real :: dhold
 integer :: ik, k, ncmplx, nm, npp
@@ -107661,6 +108655,7 @@ implicit none
 integer :: ierror, n
 real :: a(*), bh(*), bp(*), c(*)
 complex :: cbp(*)
+!     beginning of local variable declarations
 integer :: i2, i3, icv, if, ig, is, it, iz, izm, izm2, j, modiz, &
    & nhalf, nt
 real :: db, psg, scnv, sgn, xl, xm, xr
@@ -107839,9 +108834,10 @@ implicit none
 integer, intent(in) :: iz
 real :: a(*), bh(*), c(*)
 real, intent(in) :: x
+real :: psgf
+!     beginning of local variable declarations
 integer :: j
 real :: dd, fsg, hsg
-real :: psgf
 fsg = 1.
 hsg = 1.
 do j = 1,iz
@@ -107861,10 +108857,11 @@ implicit none
 integer :: iz
 real :: a(*), bh(*), c(*), sgn, xll, xrr
 real :: f
+real :: bsrh
+!     beginning of local variable declarations
 real :: dx, x, xl, xr
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
-real :: bsrh
 real :: nswc_ai_r4
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
    & nm         ,ncmplx     ,ik
@@ -107890,9 +108887,10 @@ implicit none
 integer, intent(in) :: iz
 real :: a(*), bh(*), c(*)
 real, intent(in) :: x
+real :: ppsgf
+!     beginning of local variable declarations
 integer :: j
 real :: sum
-real :: ppsgf
 sum = 0.
 do j = 1,iz
    sum = sum - 1./(x - bh(j))**2
@@ -107905,9 +108903,10 @@ implicit none
 integer, intent(in) :: iz
 real :: a(*), bh(*), c(*)
 real, intent(in) :: x
+real :: ppspf
+!     beginning of local variable declarations
 integer :: j
 real :: sum
-real :: ppspf
 sum = 0.
 do j = 1,iz
    sum = sum + 1./(x - bh(j))
@@ -107921,6 +108920,7 @@ integer, intent(in) :: ibeg, iend
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 integer, intent(inout) :: l(n)
+!     beginning of local variable declarations
 integer :: i, k, leftlo, fhi, xalo, xhi
 double precision :: c, m, t
 integer, parameter :: a = 16807
@@ -108007,6 +109007,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: k, l, leftlo, fhi, xalo, xhi
 real :: t
 integer, parameter :: a = 16807
@@ -108069,6 +109070,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: k, l, leftlo, fhi, xalo, xhi
 double precision :: t
 integer, parameter :: a = 16807
@@ -108129,6 +109131,7 @@ pure elemental subroutine urng0(ix, u, v)
 implicit none
 integer, intent(inout) :: ix
 real, intent(inout) :: u, v
+!     beginning of local variable declarations
 integer :: k, leftlo, fhi, xalo, xhi
 real :: t
 integer, parameter :: a = 16807
@@ -108183,6 +109186,7 @@ pure elemental subroutine durng0(ix, u, v)
 implicit none
 integer, intent(inout) :: ix
 double precision, intent(inout) :: u, v
+!     beginning of local variable declarations
 integer :: k, leftlo, fhi, xalo, xhi
 double precision :: t
 integer, parameter :: a = 16807
@@ -108237,6 +109241,7 @@ pure elemental subroutine urng1(ix, u, v, d)
 implicit none
 integer, intent(inout) :: ix
 real, intent(inout) :: d, u, v
+!     beginning of local variable declarations
 integer :: j, k, leftlo, fhi, xalo, xhi
 real :: t
 integer, parameter :: a = 16807
@@ -108295,6 +109300,7 @@ pure elemental subroutine durng1(ix, u, v, d)
 implicit none
 integer, intent(inout) :: ix
 double precision, intent(inout) :: u, v, d
+!     beginning of local variable declarations
 integer :: j, k, leftlo, fhi, xalo, xhi
 double precision :: t
 integer, parameter :: a = 16807
@@ -108354,6 +109360,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: k, l, leftlo, fhi, xalo, xhi
 real :: t
 integer, parameter :: a = 16807
@@ -108414,6 +109421,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: k, l, leftlo, fhi, xalo, xhi
 double precision :: t
 integer, parameter :: a = 16807
@@ -108499,6 +109507,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, ky, n
 real, intent(inout) :: x(*), y(*)
+!     beginning of local variable declarations
 integer :: i, i1, i2, j, k, leftlo, fhi, xalo, xhi
 real :: r, u, v
 integer, parameter :: a = 16807
@@ -108597,6 +109606,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, ky, n
 double precision, intent(inout) :: x(*), y(*)
+!     beginning of local variable declarations
 integer :: i, i1, i2, j, k, leftlo, fhi, xalo, xhi
 double precision :: r, u, v
 integer, parameter :: a = 16807
@@ -108670,6 +109680,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: i, m
 real :: r, s, u, v, t(2)
 integer, parameter :: max = 2147483647
@@ -108724,6 +109735,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: i, m
 double precision :: r, s, u, v, t(2)
 integer, parameter :: max = 2147483647
@@ -108778,6 +109790,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: i, m
 real :: phi, r, temp(1)
 real, parameter :: pi2 = 6.2831853071796
@@ -108815,6 +109828,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(inout) :: a(n)
+!     beginning of local variable declarations
 integer :: i, m
 double precision :: phi, r, temp(1)
 double precision, parameter :: pi2 = 6.28318530717958647692528676656d0
@@ -108854,6 +109868,7 @@ integer, intent(in) :: kx, m, mo, n
 real, intent(inout) :: a(*)
 real, intent(in) :: fmu(m)
 real, intent(inout) :: x(kx,n)
+!     beginning of local variable declarations
 integer :: i, ii, j, k, l, l0, ldim
 real :: sum
 integer, parameter :: max = 2147483647
@@ -108979,6 +109994,7 @@ integer, intent(in) :: kx, m, mo, n
 real, intent(inout) :: a(m)
 real, intent(in) :: fmu(m)
 real, intent(inout) :: x(kx,n)
+!     beginning of local variable declarations
 integer :: i, j
 integer, parameter :: max = 2147483647
 interface
@@ -109075,6 +110091,7 @@ integer, intent(in) :: kx, m, mo, n
 double precision, intent(inout) :: a(*)
 double precision, intent(in) :: fmu(m)
 double precision, intent(inout) :: x(kx,n)
+!     beginning of local variable declarations
 integer :: i, ii, j, k, l, l0, ldim
 double precision :: sum
 integer, parameter :: max = 2147483647
@@ -109200,6 +110217,7 @@ integer, intent(in) :: kx, m, mo, n
 double precision, intent(inout) :: a(m)
 double precision, intent(in) :: fmu(m)
 double precision, intent(inout) :: x(kx,n)
+!     beginning of local variable declarations
 integer :: i, j
 integer, parameter :: max = 2147483647
 interface
@@ -109295,6 +110313,7 @@ integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
 real, intent(in) :: a
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i
 interface
    pure subroutine urng(ix,x,n,ierr)
@@ -109365,6 +110384,7 @@ integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
 double precision, intent(in) :: a
 double precision, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i
 interface
    pure subroutine durng(ix,x,n,ierr)
@@ -109435,6 +110455,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 real :: u, v, w
 integer, parameter :: max = 2147483647
@@ -109501,6 +110522,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(in) :: a
 double precision, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 double precision :: u, v, w
 integer, parameter :: max = 2147483647
@@ -109566,6 +110588,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 real :: u, v, x1, x2
 integer, parameter :: max = 2147483647
@@ -109654,6 +110677,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(in) :: a, b
 double precision, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 double precision :: u, v, x1, x2
 integer, parameter :: max = 2147483647
@@ -109742,6 +110766,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 real :: ahalf, bhalf, big, bound, c, t, u, v, x1, x2, xmax
 integer, parameter :: max = 2147483647
@@ -109846,6 +110871,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(in) :: a, b
 double precision, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 double precision :: ahalf, bhalf, big, bound, c, t, u, v, xmax, &
    & x1, x2
@@ -109951,6 +110977,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 real :: ahalf, d, s, u, v, w, z
 integer, parameter :: max = 2147483647
@@ -110051,6 +111078,7 @@ integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 double precision, intent(in) :: a
 double precision, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, ind
 double precision :: ahalf, d, s, u, v, w, z
 integer, parameter :: max = 2147483647
@@ -110151,6 +111179,7 @@ integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
 real, intent(in) :: alpha, fmu, sig
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i
 real :: c, sigi, t
 interface
@@ -110249,6 +111278,7 @@ integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
 double precision, intent(in) :: fmu, sig, alpha
 double precision, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i
 double precision :: c, sigi, t
 interface

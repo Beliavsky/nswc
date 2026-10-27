@@ -14,6 +14,7 @@ from generate_interfaces import compiler_environment
 from generate_module import module_source
 from module_kinds import transform as named_module_kinds
 from module_pi_constants import transform as shared_module_pi
+from declaration_sections import remove_empty_free_markers
 from modernize_obsolescent import compile_dump, transform as obsolescent
 from modernize_remaining_features import strict_standard
 from storage_modernization import (ALIASES, MANIFEST, common_views, equivalence_free,
@@ -164,7 +165,7 @@ def main():
     if after != (ROOT / 'nswc.f90').read_text(encoding='ascii') or equivalence_free(after) != after:
         raise ValueError('Equivalence-free generation is stale or not idempotent')
     report = {}
-    modern = shared_module_pi(named_module_kinds(module_state(module_source(after, modern_state=False, named_kinds=False), report)))
+    modern = remove_empty_free_markers(shared_module_pi(named_module_kinds(module_state(module_source(after, modern_state=False, named_kinds=False), report))))
     if report != manifest['module_state'] or modern != (ROOT / 'nswc_mod.f90').read_text(encoding='ascii'):
         raise ValueError('Private module state or review does not reproduce')
     if module_state(modern) != modern:

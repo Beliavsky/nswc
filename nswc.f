@@ -1,6 +1,7 @@
       INTEGER FUNCTION IPMPAR(I)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: I
+C     beginning of local variable declarations
       INTEGER :: IMACH(10)
 C-----------------------------------------------------------------------
 C     IPMPAR PROVIDES THE INTEGER MACHINE CONSTANTS FOR THE COMPUTER
@@ -360,6 +361,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(INOUT) :: RMACH(3)
       DOUBLE PRECISION, INTENT(INOUT) :: DMACH(3)
       INTEGER, INTENT(INOUT) :: IMACH(10)
+C     beginning of local variable declarations
       INTEGER :: M, MAXEXP, MINEXP, N0
       REAL :: EPS, XINT, XMAX, XMIN
       DOUBLE PRECISION :: DEPS, DINT, DMIN, DMAX
@@ -571,6 +573,7 @@ C-----------------------------------------------------------------------
       SUBROUTINE RADIX(IBETA)
       IMPLICIT NONE
       INTEGER :: IBETA
+C     beginning of local variable declarations
       REAL :: A, B, ONE, Y
       REAL :: D1, D2
 C-----------------------------------------------------------------------
@@ -595,6 +598,7 @@ C-----------------------------------------------------------------------
       IMPLICIT NONE
       INTEGER :: IBETA, M, MAXEXP, MINEXP, N
       REAL :: EPS, XINT, XMIN, XMAX
+C     beginning of local variable declarations
       INTEGER :: J, K, KM, L
       REAL :: B, B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z, ZERO
 C-----------------------------------------------------------------------
@@ -808,6 +812,7 @@ C-----------------------------------------------------------------------
       SUBROUTINE STORE2(A, B)
       IMPLICIT NONE
       REAL :: A, B
+C     beginning of local variable declarations
       REAL :: D1, D2
 C-----------------------------------------------------------------------
 C     STORAGE OF SINGLE PRECISION INFORMATION INTO MEMORY
@@ -822,6 +827,7 @@ C-----------------------------------------------------------------------
       IMPLICIT NONE
       INTEGER :: IBETA, M, MAXEXP, MINEXP, N
       DOUBLE PRECISION :: EPS, XINT, XMIN, XMAX
+C     beginning of local variable declarations
       INTEGER :: J, K, KM, L
       DOUBLE PRECISION :: B, B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z,
      &ZERO
@@ -1039,6 +1045,7 @@ C-----------------------------------------------------------------------
 C     STORAGE OF DOUBLE PRECISION INFORMATION INTO MEMORY
 C-----------------------------------------------------------------------
       DOUBLE PRECISION :: A, B
+C     beginning of local variable declarations
       DOUBLE PRECISION :: D1, D2
       COMMON /DPDATA/ D1, D2
       D1 = A
@@ -1048,6 +1055,7 @@ C-----------------------------------------------------------------------
       REAL FUNCTION SPMPAR(I)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: I
+C     beginning of local variable declarations
       INTEGER :: IBETA, M
       REAL :: B, BINV, BM1, ONE, W, Z
       INTEGER :: IPMPAR
@@ -1095,6 +1103,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION FUNCTION DPMPAR(I)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: I
+C     beginning of local variable declarations
       INTEGER :: IBETA, M
       INTEGER :: IPMPAR
       INTEGER :: EMIN, EMAX
@@ -1142,6 +1151,7 @@ C-----------------------------------------------------------------------
       REAL FUNCTION EPSLN(L)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L
+C     beginning of local variable declarations
       INTEGER :: M
       INTEGER :: IPMPAR
       INTEGER :: B
@@ -1168,6 +1178,7 @@ C--------------------------------------------------------------------
       DOUBLE PRECISION FUNCTION DEPSLN(L)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L
+C     beginning of local variable declarations
       INTEGER :: IPMPAR
       INTEGER :: B
       DOUBLE PRECISION :: DB, LNB, M
@@ -1194,6 +1205,7 @@ C--------------------------------------------------------------------
       REAL FUNCTION EXPARG(L)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L
+C     beginning of local variable declarations
       INTEGER :: M
       INTEGER :: IPMPAR
       INTEGER :: B
@@ -1227,6 +1239,7 @@ C--------------------------------------------------------------------
       DOUBLE PRECISION FUNCTION DXPARG(L)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L
+C     beginning of local variable declarations
       INTEGER :: M
       INTEGER :: IPMPAR
       INTEGER :: B
@@ -1262,6 +1275,7 @@ C--------------------------------------------------------------------
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: A(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       INTEGER :: K(10), S
 C-----------------------------------------------------------------------
@@ -1305,6 +1319,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       REAL :: S
       INTEGER :: K(10)
@@ -1349,6 +1364,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N), B(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       REAL :: S, T
       INTEGER :: K(10)
@@ -1397,6 +1413,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       REAL :: S
       INTEGER :: K(10)
@@ -1442,6 +1459,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N)
       INTEGER, INTENT(INOUT) :: M(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       REAL :: S
       INTEGER :: T
@@ -1491,6 +1509,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N), B(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       REAL :: S, T
       INTEGER :: K(10)
@@ -1539,6 +1558,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(INOUT) :: A(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       DOUBLE PRECISION :: S
       INTEGER :: K(10)
@@ -1584,6 +1604,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(INOUT) :: A(N)
       INTEGER, INTENT(INOUT) :: M(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       DOUBLE PRECISION :: S
       INTEGER :: T
@@ -1633,6 +1654,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(INOUT) :: A(N), B(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       DOUBLE PRECISION :: S, T
       INTEGER :: K(10)
@@ -1681,6 +1703,7 @@ C               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       REAL :: S
       INTEGER :: K(10)
@@ -1726,6 +1749,7 @@ C                 SO THAT ABS(A(J)) .LE. ABS(A(J+KI))
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(INOUT) :: A(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       DOUBLE PRECISION :: S
       INTEGER :: K(10)
@@ -1771,6 +1795,7 @@ C               SO THAT DABS(A(J)) .LE. DABS(A(J+KI))
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N, X(N)
       INTEGER, INTENT(INOUT) :: IND(N)
+C     beginning of local variable declarations
       INTEGER :: IU(21), IL(21)
       INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX, T
       REAL :: R
@@ -1925,6 +1950,7 @@ C   J-I .LT. 11.
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: IND(N)
       REAL, INTENT(IN) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: IU(21), IL(21)
       INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX
       REAL :: R, T
@@ -2079,6 +2105,7 @@ C   J-I .LT. 11.
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: IND(N)
       DOUBLE PRECISION, INTENT(IN) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: IU(21), IL(21)
       INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX
       REAL :: R
@@ -2233,6 +2260,7 @@ C   J-I .LT. 11.
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: A(N), IP(N)
+C     beginning of local variable declarations
       INTEGER :: NN, K, J, IPJ, TEMP
 C***********************************************************
 C                                               ROBERT RENKA
@@ -2286,6 +2314,7 @@ C ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: IP(N)
       REAL, INTENT(INOUT) :: A(N)
+C     beginning of local variable declarations
       INTEGER :: NN, K, J, IPJ
       REAL :: TEMP
 C***********************************************************
@@ -2340,6 +2369,7 @@ C ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: IP(N)
       DOUBLE PRECISION, INTENT(INOUT) :: A(N)
+C     beginning of local variable declarations
       INTEGER :: NN, K, J, IPJ
       DOUBLE PRECISION :: TEMP
 C***********************************************************
@@ -2392,6 +2422,7 @@ C ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
       REAL FUNCTION CBRT(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: R
 C-----------------------------------------------------------------------
 C                   CUBE ROOT OF A REAL NUMBER
@@ -2413,6 +2444,7 @@ C-----------------------------------------------------------------------
 C                   CUBE ROOT OF A REAL NUMBER
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       DOUBLE PRECISION :: R
       IF (X .LT. 0) THEN
          R = LOG(-X)/3.D0
@@ -2429,6 +2461,7 @@ C-----------------------------------------------------------------------
       IMPLICIT NONE
       REAL, INTENT(IN) :: X, Y
       REAL :: ARTNQ
+C     beginning of local variable declarations
       REAL :: NSWC_AI_R4
       NSWC_AI_R4 = X
       IF (NSWC_AI_R4 .LT. 0) GO TO 1
@@ -2458,6 +2491,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION FUNCTION DARTNQ(Y,X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X, Y
+C     beginning of local variable declarations
       DOUBLE PRECISION :: NSWC_AI_R8
       NSWC_AI_R8 = X
       IF (NSWC_AI_R8 .LT. 0) GO TO 1
@@ -2487,6 +2521,7 @@ C-----------------------------------------------------------------------
       REAL FUNCTION CPABS(X, Y)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X, Y
+C     beginning of local variable declarations
       REAL :: A
 C     --------------------------------------
 C     EVALUATION OF SQRT(X*X + Y*Y)
@@ -2505,6 +2540,7 @@ C     --------------------------------------
       DOUBLE PRECISION FUNCTION DCPABS(X, Y)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X, Y
+C     beginning of local variable declarations
       DOUBLE PRECISION :: A
 C     --------------------------------------
 C     EVALUATION OF SQRT(X*X + Y*Y)
@@ -2524,6 +2560,7 @@ C     --------------------------------------
       IMPLICIT NONE
       REAL, INTENT(INOUT) :: U, V
       REAL, INTENT(IN) :: X, Y
+C     beginning of local variable declarations
       REAL :: D, T
 C-----------------------------------------------------------------------
 C             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
@@ -2547,6 +2584,7 @@ C             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X, Y
       DOUBLE PRECISION, INTENT(INOUT) :: U, V
+C     beginning of local variable declarations
       DOUBLE PRECISION :: D, T
       IF (ABS(X) .GT. ABS(Y)) GO TO 10
          T = X/Y
@@ -2563,6 +2601,7 @@ C-----------------------------------------------------------------------
       COMPLEX FUNCTION CDIV(A, B)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: A, B
+C     beginning of local variable declarations
       REAL :: AI, AR, BI, BR, D, T, U, V
 C-----------------------------------------------------------------------
 C              COMPLEX DIVISION A/B WHERE B IS NONZERO
@@ -2592,6 +2631,7 @@ C     DOUBLE PRECISION COMPLEX DIVISION C = A/B AVOIDING OVERFLOW
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: AR, AI, BR, BI
       DOUBLE PRECISION, INTENT(INOUT) :: CR, CI
+C     beginning of local variable declarations
       DOUBLE PRECISION :: D, T, U, V
       DOUBLE PRECISION :: DPMPAR
       IF (ABS(BR) .LE. ABS(BI)) GO TO 10
@@ -2619,6 +2659,7 @@ C     DIVISION BY ZERO. C = INFINITY
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: Z(2)
       DOUBLE PRECISION, INTENT(INOUT) :: W(2)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: X, Y, R
       DOUBLE PRECISION :: DCPABS
       DOUBLE PRECISION :: NSWC_AI_R8
@@ -2673,6 +2714,7 @@ C ----------------------------------------------------------------------
       IMPLICIT NONE
       REAL, INTENT(INOUT) :: R, THETA
       REAL, INTENT(IN) :: X, Y
+C     beginning of local variable declarations
       REAL :: A
       IF (ABS(X).LE.ABS(Y)) GO TO 10
       A=Y/X
@@ -2694,6 +2736,7 @@ C ----------------------------------------------------------------------
       REAL, INTENT(OUT) :: X2
       REAL, INTENT(IN) :: Y1
       REAL, INTENT(OUT) :: Y2
+C     beginning of local variable declarations
       REAL :: COSA, SINA
       SINA=SIN(A)
       COSA=COS(A)
@@ -2704,6 +2747,7 @@ C ----------------------------------------------------------------------
       SUBROUTINE SROTG(SA,SB,SC,SS)
       IMPLICIT NONE
       REAL, INTENT(INOUT) :: SA, SB, SC, SS
+C     beginning of local variable declarations
       REAL :: R, U, V
 C     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
 C     CONSTRUCT THE GIVENS TRANSFORMATION
@@ -2770,6 +2814,7 @@ C     NORMALLY, THE SUBPROGRAM DROT(N,DX,INCX,DY,INCY,DC,DS) WILL
 C     NEXT BE CALLED TO APPLY THE TRANSFORMATION TO A 2 BY N MATRIX.
 C ------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(INOUT) :: DA, DB, DC, DS
+C     beginning of local variable declarations
       DOUBLE PRECISION :: U, V, R
       IF (ABS(DA) .LE. ABS(DB)) GO TO 10
 C *** HERE DABS(DA) .GT. DABS(DB) ***
@@ -2807,6 +2852,7 @@ C *** HERE DA = DB = 0.D0 ***
       IMPLICIT NONE
       REAL :: A(3,3)
       REAL, INTENT(INOUT) :: THETA(3)
+C     beginning of local variable declarations
       REAL :: PIHALF, R, T, U, V
       DATA PIHALF/1.5707963267949/
 C     --------------------
@@ -2878,6 +2924,7 @@ C (XK,YK,ZK) LIES ON THE X-AXIS
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: X(N), Y(N)
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: D, RX, RY
       REAL :: SNRM2
@@ -2909,6 +2956,7 @@ C                           ERROR RETURN
       REAL FUNCTION SIN0(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: A0, A1, A2, A3, A4, A5, A6, T
 C-----------------------------------------------------------------------
 C          COMPUTATION OF SIN(X*PI/2) FOR ABS(X) .LE. 0.5
@@ -2926,6 +2974,7 @@ C------------------------
       REAL FUNCTION COS0(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: A1, A2, A3, A4, A5, A6, T
 C-----------------------------------------------------------------------
 C          COMPUTATION OF COS(X*PI/2) FOR ABS(X) .LE. 0.5
@@ -2941,6 +2990,7 @@ C------------------------
       REAL FUNCTION SIN1(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: MAX, N
       REAL :: A, A0, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, T
       INTEGER :: IPMPAR
@@ -2986,6 +3036,7 @@ C                        TERMINATION
       REAL FUNCTION COS1(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: MAX, N
       REAL :: A, A0, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, T
       INTEGER :: IPMPAR
@@ -3031,6 +3082,7 @@ C                        TERMINATION
       DOUBLE PRECISION FUNCTION DSIN1(X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: MAX, N
       INTEGER :: IPMPAR
       DOUBLE PRECISION :: A, PI, T, W
@@ -3113,6 +3165,7 @@ C                        TERMINATION
       DOUBLE PRECISION FUNCTION DCOS1(X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: MAX, N
       INTEGER :: IPMPAR
       DOUBLE PRECISION :: A, PI, T, W
@@ -3197,6 +3250,7 @@ C                        TERMINATION
       INTEGER, INTENT(IN) :: ISW
       REAL, INTENT(INOUT) :: SINHM, COSHM
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: AX, CP1, CP2, CP3, CP4, CP5, CQ1, EXPX, SP1, SP2, SP3,
      &SP4, SP5, SQ1, XS, XX, ZP1, ZP2, ZP3, ZQ1, ZQ2, ZQ3, ZQ4
       REAL :: CUT(5)
@@ -3281,6 +3335,7 @@ C COSHMM APPROXIMATION
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MU
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: W
 C-----------------------------------------------------------------------
 C                    EVALUATION OF EXP(MU + X)
@@ -3304,6 +3359,7 @@ C-----------------------------------------------------------------------
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MU
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       DOUBLE PRECISION :: W
 C-----------------------------------------------------------------------
 C                    EVALUATION OF EXP(MU + X)
@@ -3326,6 +3382,7 @@ C-----------------------------------------------------------------------
       REAL FUNCTION REXP(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: E, P1, P2, Q1, Q2, Q3, Q4
 C-----------------------------------------------------------------------
 C            EVALUATION OF THE FUNCTION EXP(X) - 1
@@ -3354,6 +3411,7 @@ C-----------------------------------------------------------------------
 C            EVALUATION OF THE FUNCTION EXP(X) - 1
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       DOUBLE PRECISION :: E, W, Z
       DOUBLE PRECISION :: A0, A1, A2, A3, A4, B1, B2, B3, B4
       DOUBLE PRECISION :: C1, C2, C3, C4, C5
@@ -3404,6 +3462,7 @@ C        DIGIT.
       IMPLICIT NONE
       REAL, INTENT(INOUT) :: E, W
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: P1, P2, Q1, Q2, Q3, Q4
 C-----------------------------------------------------------------------
 C                  EVALUATION OF W = (EXP(X) - 1)/X
@@ -3441,6 +3500,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
       DOUBLE PRECISION, INTENT(INOUT) :: E
       DOUBLE PRECISION, INTENT(OUT) :: W
+C     beginning of local variable declarations
       DOUBLE PRECISION :: Z
       DOUBLE PRECISION :: A0, A1, A2, A3, A4, B1, B2, B3, B4
       DOUBLE PRECISION :: C1, C2, C3, C4, C5
@@ -3492,6 +3552,7 @@ C        DIGIT.
       REAL FUNCTION ALNREL(A)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A
+C     beginning of local variable declarations
       REAL :: P1, P2, P3, Q1, Q2, Q3, T, T2, W, X
 C-----------------------------------------------------------------------
 C            EVALUATION OF THE FUNCTION LN(1 + A)
@@ -3519,6 +3580,7 @@ C-----------------------------------------------------------------------
 C            EVALUATION OF THE FUNCTION LN(1 + A)
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A
+C     beginning of local variable declarations
       DOUBLE PRECISION :: T, T2, W, Z
       DOUBLE PRECISION :: P0, P1, P2, P3, Q1, Q2, Q3, Q4
       DOUBLE PRECISION :: C1, C2, C3, C4, C5
@@ -3563,6 +3625,7 @@ C        SIGNIFICANT DIGIT.
       REAL FUNCTION RLOG(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE FUNCTION X - 1 - LN(X)
@@ -3606,6 +3669,7 @@ C                  SERIES EXPANSION
       REAL FUNCTION RLOG1(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE FUNCTION X - LN(1 + X)
@@ -3652,6 +3716,7 @@ C-----------------------------------------------------------------------
 C             EVALUATION OF THE FUNCTION X - 1 - LN(X)
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       DOUBLE PRECISION :: A, B, R, T, U, UP2, W, W1, Z
       DOUBLE PRECISION :: P0, P1, P2, P3, Q1, Q2, Q3, Q4
       DOUBLE PRECISION :: C1, C2, C3, C4, C5
@@ -3718,6 +3783,7 @@ C-----------------------------------------------------------------------
 C             EVALUATION OF THE FUNCTION X - LN(1 + X)
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       DOUBLE PRECISION :: A, B, R, T, U, UP2, W, W1, Z
       DOUBLE PRECISION :: P0, P1, P2, P3, Q1, Q2, Q3, Q4
       DOUBLE PRECISION :: C1, C2, C3, C4, C5
@@ -3784,6 +3850,7 @@ C        THE 21-ST SIGNIFICANT DIGIT.
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: X0, Y0
       REAL, INTENT(IN) :: X(N), Y(N)
+C     beginning of local variable declarations
       INTEGER :: I, N0
       REAL :: ANGLE, EPS, PI, PI2, SUM, THETA, THETA1, THETAI, TOL, U, V
       REAL :: SPMPAR
@@ -3853,6 +3920,7 @@ C     (X0, Y0) IS ON THE BOUNDARY OF THE PATH
       INTEGER, INTENT(OUT) :: NUM
       REAL, INTENT(IN) :: A(2), B(2), X(N), Y(N)
       REAL, INTENT(INOUT) :: U(M), V(M)
+C     beginning of local variable declarations
       INTEGER :: I, IND, NM1
       REAL :: D, DIFF, DIFF1, EPS, H, HI, ONEM, ONEP, P, Q, S, T, TMAX,
      &TMIN, TOL, TOL0
@@ -3991,6 +4059,7 @@ C                          ERROR RETURN
       INTEGER, INTENT(INOUT) :: N
       REAL, INTENT(INOUT) :: X(M), Y(M)
       REAL, INTENT(INOUT) :: BX(*), BY(*), VX(*), VY(*)
+C     beginning of local variable declarations
       INTEGER :: I, II, ISAV, J, J0, K0, KP1, KSAV, L, LBEG, LMAX, LMIN,
      &LSAV, MM1, MP1, NN
       REAL :: DX, DX0, DY, DY0, EPS, H, ONEP, R, X1, XM, XMAX, XMIN,
@@ -4330,6 +4399,7 @@ C                     CASE WHEN YMIN = YMAX
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NB
       REAL, INTENT(IN) :: X(NB), Y(NB)
+C     beginning of local variable declarations
       INTEGER :: I, N, NM1
       REAL :: A
       INTEGER :: NSWC_AI_I4
@@ -4368,6 +4438,7 @@ C*****************************************************************
       INTEGER, INTENT(IN) :: NUM
       INTEGER, INTENT(IN) :: PR(*)
       INTEGER, INTENT(INOUT) :: AR(M), S(N), IWK(NUM)
+C     beginning of local variable declarations
       INTEGER :: I, II, NP1
       INTEGER :: S0, PC, AC, VR, VC, P, SUBR, RBUS, TOR
 C SUBROUTINE TO FIND ONE OR MORE HAMILTONIAN CIRCUITS IN A
@@ -4464,6 +4535,7 @@ C                   ERROR RETURN
       INTEGER, INTENT(IN) :: PR(NP1)
       INTEGER, INTENT(INOUT) :: PC(NP1), AR(M), AC(M), S(N), VR(N),
      &VC(N), P(N), SUBR(N), RBUS(N), TOR(N)
+C     beginning of local variable declarations
       INTEGER :: I, IEND, IFF, IPI, IT1, IT2, J, J1, J2, JA, JJ, JL,
      &JSUBR, K1, K2, L, L1, L2, LL, LL1, LL2, MAXE, MINU, MP1, NBO, NP
       REAL :: DENS, SCORE
@@ -4786,6 +4858,7 @@ C ERROR RETURN
       INTEGER, INTENT(INOUT) :: RBUS(N)
       INTEGER, INTENT(IN) :: AR(M), PR(NP1)
       INTEGER, INTENT(INOUT) :: S(N)
+C     beginning of local variable declarations
       INTEGER :: JA, K1, L, L1, L2
 C SUBROUTINE TO FIND THE STARTING VERTEX  I1  AND THE ENDING
 C VERTEX  I2  OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING
@@ -4846,6 +4919,7 @@ C A HAMILTONIAN CIRCUIT EXISTS. STORE IT IN  S .
       INTEGER, INTENT(INOUT) :: A1(M), A2(M)
       INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
       INTEGER, INTENT(INOUT) :: V1(N), V2(N)
+C     beginning of local variable declarations
       INTEGER :: IA, J, J1, J2, L, L1, L2
 C FORWARD STEP UPDATING
       J1 = P1(I1) + 1
@@ -4872,6 +4946,7 @@ C FORWARD STEP UPDATING
       INTEGER, INTENT(INOUT) :: A1(M), A2(M)
       INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
       INTEGER, INTENT(INOUT) :: V1(N), V2(N)
+C     beginning of local variable declarations
       INTEGER :: IA, L, L1, L2, LL, LL1, LL2
 C BACKTRACKING STEP UPDATING
       L1 = P1(II) + 1
@@ -4900,6 +4975,7 @@ C BACKTRACKING STEP UPDATING
       INTEGER, INTENT(INOUT) :: A1(M), A2(M)
       INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
       INTEGER, INTENT(INOUT) :: V1(N), V2(N)
+C     beginning of local variable declarations
       INTEGER :: IARC, J1, J2, JJ, M1, M2, MM
 C UPDATING FOR IMPLIED ARC
       M1 = P1(IB) + 1
@@ -4937,6 +5013,7 @@ C UPDATING FOR IMPLIED ARC
       INTEGER, INTENT(INOUT) :: AR(M), AC(M)
       INTEGER, INTENT(IN) :: PR(NP1), PC(NP1)
       INTEGER, INTENT(INOUT) :: VR(N), VC(N)
+C     beginning of local variable declarations
       INTEGER :: J1, J2, L1, L2
 C SUBROUTINE TO REMOVE ARC  (IA,IB)  FROM THE GRAPH.
 C MEANING OF THE OUTPUT PARAMETERS  JJ  AND  LL ...
@@ -4978,6 +5055,7 @@ C ARC  (IA,IB)  CANNOT BE REMOVED FROM THE GRAPH.
       INTEGER, INTENT(IN) :: MO
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: C, C2, DM, PM, QM, R, SN, SS, X, Y
       REAL :: CD(18), CE(18), EF(2), QF(2), SM(2), SZ(2), TM(2), TS(2)
@@ -5117,6 +5195,7 @@ C                       TERMINATION
       INTEGER, INTENT(IN) :: MO
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: C, C2, DM, PM, QM, R, SN, SS, X, Y
       REAL :: EXPARG
@@ -5273,6 +5352,7 @@ C               MODIFIED ASYMPTOTIC EXPANSION
       REAL FUNCTION ERF(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: AX, BOT, C, T, TOP, X2
       REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
 C-----------------------------------------------------------------------
@@ -5332,6 +5412,7 @@ C-------------------------
       REAL FUNCTION ERFC(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: AX, BOT, C, E, T, TOP
       REAL :: EXPARG
       REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
@@ -5406,6 +5487,7 @@ C             LIMIT VALUE FOR LARGE POSITIVE X
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IND
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: EXPARG
       REAL :: AX, BOT, C, E, T, TOP
       REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
@@ -5489,6 +5571,7 @@ C                       WHEN IND = 0
       INTEGER, INTENT(IN) :: MO
       DOUBLE PRECISION, INTENT(IN) :: Z(2)
       DOUBLE PRECISION, INTENT(INOUT) :: W(2)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: M, N, N2, N4, NP1
       DOUBLE PRECISION :: C, C2, D, D2, E, EPS, R, SN, TOL, X, Y
       DOUBLE PRECISION :: A0(2), AN(2), B0(2), BN(2)
@@ -5736,6 +5819,7 @@ C               MODIFIED ASYMPTOTIC EXPANSION
       INTEGER, INTENT(IN) :: MO
       DOUBLE PRECISION, INTENT(IN) :: Z(2)
       DOUBLE PRECISION, INTENT(INOUT) :: W(2)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: M, N, N2, N4, NP1
       DOUBLE PRECISION :: C, C2, D, D2, E, EPS, R, SN, TOL, X, Y
       DOUBLE PRECISION :: A0(2), AN(2), B0(2), BN(2)
@@ -5986,6 +6070,7 @@ C               MODIFIED ASYMPTOTIC EXPANSION
       INTEGER, INTENT(IN) :: MO
       DOUBLE PRECISION, INTENT(IN) :: Z(2)
       DOUBLE PRECISION, INTENT(INOUT) :: W(2)
+C     beginning of local variable declarations
       INTEGER :: J, N
       DOUBLE PRECISION :: A(63), C, E, EPS, H(2), T(2), TOL, X, Y
       DOUBLE PRECISION :: ANORM, DPMPAR
@@ -6117,6 +6202,7 @@ C                     COMPUTE EXP(Z*Z)*ERFC(Z)
       DOUBLE PRECISION FUNCTION DERF(X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: I, K
       DOUBLE PRECISION :: AX, T
       DOUBLE PRECISION :: W
@@ -6171,6 +6257,7 @@ C                 LIMIT VALUE FOR LARGE X
       DOUBLE PRECISION FUNCTION DERFC(X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: I, K
       DOUBLE PRECISION :: AX, T, W
       DOUBLE PRECISION :: A(21)
@@ -6231,6 +6318,7 @@ C                       X .GT. 1
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IND
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: I, K
       DOUBLE PRECISION :: AX, T, W
       DOUBLE PRECISION :: A(21)
@@ -6309,6 +6397,7 @@ C        DAHLGREN, VIRGINIA
 C        APRIL 1992
 C-------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       DOUBLE PRECISION :: T, U, V, Z, RPINV
       DOUBLE PRECISION :: P0, P1, P2, P3, P4, P5, P6, P7, Q1, Q2, Q3,
      &Q4, Q5, Q6, Q7
@@ -6450,6 +6539,7 @@ C                        X .GE. 50
       REAL FUNCTION ERFI(P, Q)
       IMPLICIT NONE
       REAL, INTENT(IN) :: P, Q
+C     beginning of local variable declarations
       REAL :: C, C1, C2, EPS, S, T, V, V1
       REAL :: SPMPAR
       REAL :: A(6), B(6), A1(7), B1(7), A2(9), B2(8), A3(9), B3(6)
@@ -6556,7 +6646,13 @@ C                         ERROR RETURN
 
       DOUBLE PRECISION FUNCTION DERFI(P, Q)
       IMPLICIT NONE
-      INTRINSIC :: ERF
+      DOUBLE PRECISION, INTENT(IN) :: P, Q
+C     beginning of local variable declarations
+      INTRINSIC ERF
+      DOUBLE PRECISION :: C, C1, C2, R, EPS, F, LNQ, S, T, X
+      DOUBLE PRECISION :: A(7), A1(7), A2(7), A3(11), A4(9), B(7),
+     &B1(6), B2(6), B3(10), B4(9)
+      DOUBLE PRECISION :: DPMPAR, DERFC1
 C-----------------------------------------------------------------------
 C                  DOUBLE PRECISION COMPUTATION OF
 C                    THE INVERSE ERROR FUNCTION
@@ -6568,11 +6664,6 @@ C-----------------------------------------------------------------------
 C     REFERENCE. MATHEMATICS OF COMPUTATION,OCT.1976,PP.827-830.
 C                  J.M.BLAIR,C.A.EDWARDS,J.H.JOHNSON
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: P, Q
-      DOUBLE PRECISION :: C, C1, C2, R, EPS, F, LNQ, S, T, X
-      DOUBLE PRECISION :: A(7), A1(7), A2(7), A3(11), A4(9), B(7),
-     &B1(6), B2(6), B3(10), B4(9)
-      DOUBLE PRECISION :: DPMPAR, DERFC1
 C-----------------------------------------------------------------------
 C     C2 = LN(1.E-100)
 C     R  = SQRT(PI)/2
@@ -6701,6 +6792,7 @@ C                         ERROR RETURN
       REAL FUNCTION AERF(X, H)
       IMPLICIT NONE
       REAL, INTENT(IN) :: H, X
+C     beginning of local variable declarations
       INTEGER :: J, N, N1
       REAL :: A2, AH, AX, C, DN2, E, EPS, H2, H3, HF, HG, P, S, ST, T,
      &U, V, X2, XMH, XPH, Z
@@ -6816,8 +6908,9 @@ C     THE VALUE IS  2.0*EXP(-X*X)*ERF(H)
 
       DOUBLE PRECISION FUNCTION DAERF(X, H)
       IMPLICIT NONE
-      INTRINSIC :: ERF, ERFC
       DOUBLE PRECISION, INTENT(IN) :: X, H
+C     beginning of local variable declarations
+      INTRINSIC ERF, ERFC
       INTEGER :: J
       DOUBLE PRECISION :: AH, AX, A2, C, DN2, E, EPS, HF, HG, H2, H3, N,
      &N1, P, S, ST, T, U, V, XMH, XPH, X2, Z
@@ -6935,8 +7028,9 @@ C     THE VALUE IS  2.0*EXP(-X*X)*ERF(H)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IND
       REAL, INTENT(IN) :: X
-      REAL :: A, C, T
       REAL :: PNDF
+C     beginning of local variable declarations
+      REAL :: A, C, T
       REAL :: ERFC1
 C     ---------------
 C     A = 1/SQRT(2)
@@ -6963,6 +7057,7 @@ C     ---------------
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(IN) :: D, P, Q
       REAL, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       REAL :: EPS, RT2, T, U, V
       REAL :: ERFI
       REAL :: SPMPAR
@@ -7007,6 +7102,7 @@ C                         ERROR RETURN
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(IN) :: P, Q, D
       DOUBLE PRECISION, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       DOUBLE PRECISION :: EPS, RT2, U, V, T
       DOUBLE PRECISION :: DPMPAR, DERFI
 C-----------------------------------------------------------------------
@@ -7049,6 +7145,7 @@ C                         ERROR RETURN
       REAL FUNCTION DAW(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: P1(9), Q1(9), P2(8), Q2(7), P3(8), Q3(7), P4(7), Q4(6),
      &FRAC, SUMP, SUMQ, W2
@@ -7165,6 +7262,7 @@ C     ---------- RETURN FOR SMALL X ----------
       DOUBLE PRECISION FUNCTION DPDAW(X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: I, K
       DOUBLE PRECISION :: A(20), B(45), AX, EPS, T, W
       DOUBLE PRECISION :: DCSEVL, DPDAW0
@@ -7269,6 +7367,7 @@ C                EVALUATION OF X*DAW(X) FOR X .GE. 4
 C                WHERE DAW(X) IS THE DAWSON INTEGRAL
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       DOUBLE PRECISION :: T, U, V, W
       DOUBLE PRECISION :: A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
      &A11, A12, A13, A14, A15, A16, A17, A18, B1, B2, B3, B4
@@ -7451,6 +7550,7 @@ C                          X .GE. 12
       INTEGER, INTENT(IN) :: MO
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: C, C0, DM, PM, QM, R, SS, X, Y
       REAL :: EXPARG
@@ -7605,6 +7705,7 @@ C               MODIFIED ASYMPTOTIC EXPANSION
       IMPLICIT NONE
       REAL, INTENT(INOUT) :: C, S
       REAL, INTENT(IN) :: T
+C     beginning of local variable declarations
       INTEGER :: I, L, M, MAX
       REAL :: CY, F, FD, FN, G, GD, GN, PI, PIX, PIXX, R, SY, X, XX, Y
       REAL :: SIN1
@@ -7818,6 +7919,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: MO
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: C, CY, D, E, EPS, EULER, PI, QM, R, SS, SY, TOL, U, X, Y
       REAL :: ANORM
@@ -7987,6 +8089,7 @@ C                         TERMINATION
       REAL, INTENT(INOUT) :: RESULT
       INTEGER, INTENT(IN) :: INT
       INTEGER, INTENT(OUT) :: IERR
+C     beginning of local variable declarations
       INTEGER :: M
       REAL :: CSEVL
       REAL :: ALNREL
@@ -8310,6 +8413,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION FUNCTION DE1E(X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: M
       DOUBLE PRECISION :: C, EPS, T, W
       DOUBLE PRECISION :: A(50), B(60), D(41), E(29), R(25), P(50),
@@ -8752,6 +8856,7 @@ C                   ASYMPTOTIC EXPANSION
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: EPS
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: N
       DOUBLE PRECISION :: A(40), C
       DOUBLE PRECISION :: H, T
@@ -8838,10 +8943,11 @@ C-------------------------
       FUNCTION SI(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+      REAL :: SI
+C     beginning of local variable declarations
       INTEGER :: I, J, M1, M2, N1, N2
       REAL :: AIC, AMAX, AX, B1, B2, BB(16), BX, CC(46), PIO2, RC, TEMP,
      &TX
-      REAL :: SI
       REAL :: SPMPAR
 C     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER,1975.
 C     MODIFIED BY A.H. MORRIS
@@ -8946,10 +9052,11 @@ C            THAT PIO2 - (1 + 1/X)/X = PIO2 FOR X .GT. AMAX.
       FUNCTION CIN(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+      REAL :: CIN
+C     beginning of local variable declarations
       INTEGER :: I, J, M1, M2, N1, N2
       REAL :: AIC, AMAX, AX, B1, B2, BB(16), BX, CC(46), ECON, RC, TEMP,
      &TX
-      REAL :: CIN
       REAL :: SPMPAR
 C     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER, 1975.
 C     MODIFIED BY A.H. MORRIS
@@ -9055,6 +9162,7 @@ C            FOR X .GT. AMAX.
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: CONST, EULER, PM, QM, R, SS, X, Y, ZETA2
       REAL :: TS(2), SR(2), SM(2), TM(2), QF(2), ZL(2)
@@ -9279,6 +9387,7 @@ C-----------------------------------------------------------------------
       COMPLEX FUNCTION CLI(Z)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: Z
+C     beginning of local variable declarations
       INTEGER :: N
       REAL :: CPABS
       REAL :: QB(25), QF(2), DL(2), DS, ZD(2), ZL(2)
@@ -9388,6 +9497,7 @@ C                  EVALUATION AT Z = -1
       REAL FUNCTION ALI(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: I, L
       REAL :: CONST, T, W
       REAL :: A(5), B(6), C(10), D(2), E(18), P(4), Q(8), R(7), S(6)
@@ -9528,6 +9638,7 @@ C                     -26.63 .LE. X .LE. -14
       INTEGER, INTENT(IN) :: MO
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: J, K, L, M, MAX, N, NM1
       REAL :: A, A1, A2, ALPI, C, CN, CUT, D, E2T, EPS, ET, H1, H2,
      &HL2P, PI, PI2, S, S1, S2, SN, T, T1, T2, U, U1, U2, V1, V2, W1,
@@ -9732,6 +9843,7 @@ C-----------------------------------------------------------------------
       COMPLEX FUNCTION CGAM0(Z)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: Z
+C     beginning of local variable declarations
       INTEGER :: I, K, N
       REAL :: X, Y
       COMPLEX :: W
@@ -9770,6 +9882,7 @@ C-----------------------
       REAL FUNCTION GAMMA(A)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A
+C     beginning of local variable declarations
       INTEGER :: I, J, M, N
       REAL :: BOT, PI, R1, R2, R3, R4, R5, S, T, TOP, W, X
       REAL :: EXPARG
@@ -9889,6 +10002,7 @@ C     FINAL ASSEMBLY
       DOUBLE PRECISION FUNCTION GLOG(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: N
       REAL :: C1, C2, C3, T, T2
       DOUBLE PRECISION :: Z, W(163)
@@ -10001,6 +10115,7 @@ C     -------------------
       REAL FUNCTION GAM1(A)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A
+C     beginning of local variable declarations
       REAL :: BOT, D, S1, S2, T, TOP, W
       REAL :: P(7), Q(5), R(9)
       REAL :: NSWC_AI_R4
@@ -10056,6 +10171,7 @@ C------------------------
       REAL FUNCTION GAMLN(A)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A
+C     beginning of local variable declarations
       REAL :: GAMLN1
       INTEGER :: I, N
       REAL :: C0, C1, C2, C3, C4, C5, D, T, W
@@ -10099,6 +10215,7 @@ C-----------------------------------------------------------------------
       REAL FUNCTION GAMLN1(A)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A
+C     beginning of local variable declarations
       REAL :: P0, P1, P2, P3, P4, P5, P6, Q1, Q2, Q3, Q4, Q5, Q6, R0,
      &R1, R2, R3, R4, R5, S1, S2, S3, S4, S5, W, X
 C-----------------------------------------------------------------------
@@ -10135,6 +10252,7 @@ C----------------------
       INTEGER, INTENT(IN) :: MO
       DOUBLE PRECISION, INTENT(IN) :: Z(2)
       DOUBLE PRECISION, INTENT(INOUT) :: W(2)
+C     beginning of local variable declarations
       INTEGER :: J, K, MAX, N, NM1
       INTEGER :: IPMPAR
       DOUBLE PRECISION :: C0(30), DLPI, HL2P, PI, PI2
@@ -10373,6 +10491,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION FUNCTION DGAMMA(A)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: A
+C     beginning of local variable declarations
       INTEGER :: J, N
       DOUBLE PRECISION :: D, PI, S, T, X, W
       DOUBLE PRECISION :: DPMPAR, DSIN1, DGAM1, DPDEL, DXPARG
@@ -10461,6 +10580,7 @@ C     FINAL ASSEMBLY
       DOUBLE PRECISION FUNCTION DPDEL(X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: I, K
       DOUBLE PRECISION :: A(15), T, W
 C-----------------------------------------------------------------------
@@ -10563,6 +10683,7 @@ C     C = A(1) - 1 IS ALSO FREQUENTLY NEEDED. C HAS THE VALUE ...
 C     DATA C /-.4227843350984671393934879099175975689578D+00/
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       DOUBLE PRECISION :: D, T, W, Z
       DOUBLE PRECISION :: A0, A1, B1, B2, B3, B4, B5, B6, B7, B8
       DOUBLE PRECISION :: P0, P1, P2, P3, P4, P5, P6, Q1, Q2, Q3, Q4
@@ -10655,6 +10776,7 @@ C------------
       DOUBLE PRECISION FUNCTION DGAMLN(A)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: A
+C     beginning of local variable declarations
       INTEGER :: I, N
       DOUBLE PRECISION :: D, X, W
       DOUBLE PRECISION :: DGMLN1, DPDEL
@@ -10698,6 +10820,7 @@ C-----------------------------------------------------------------------
 C     EVALUATION OF LN(GAMMA(1 + X)) FOR -0.5 .LE. X .LE. 1.5
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       DOUBLE PRECISION :: W
       DOUBLE PRECISION :: DGAM1, DLNREL
 C-----------------------
@@ -10709,6 +10832,7 @@ C-----------------------
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: J, K, L, M, MAX
       REAL :: A, A1, A2, C1, C2, CN, EPS, ET, H1, H2, PI, PI2, S, S1,
      &S2, SN, T, U, W1, W2, X, Y, Y2
@@ -10830,6 +10954,7 @@ C-----------------------------------------------------------------------
       REAL FUNCTION PSI(XX)
       IMPLICIT NONE
       REAL, INTENT(IN) :: XX
+C     beginning of local variable declarations
       INTEGER :: IPMPAR
       REAL :: SPMPAR
       INTEGER :: I, M, N, NQ
@@ -10989,6 +11114,7 @@ C---------------------------------------------------------------------
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: Z(2)
       DOUBLE PRECISION, INTENT(INOUT) :: W(2)
+C     beginning of local variable declarations
       INTEGER :: J, K, M, MAX
       INTEGER :: IPMPAR
       DOUBLE PRECISION :: C0(30), PI, PI2
@@ -11147,6 +11273,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION FUNCTION DPSI(A)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: A
+C     beginning of local variable declarations
       INTEGER :: IPMPAR
       INTEGER :: J, K, L, MAX, N
       DOUBLE PRECISION :: C(42), EPS, P(15), PI, S, T, X, X0, XMAX, W
@@ -11319,6 +11446,7 @@ C     FINAL ASSEMBLY
       DOUBLE PRECISION FUNCTION DPSI0(X)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: I, L, N, NM1
       DOUBLE PRECISION :: A(20), H
       DOUBLE PRECISION :: W
@@ -11385,6 +11513,7 @@ C-------------------------
       INTEGER, INTENT(IN) :: M, N
       REAL, INTENT(IN) :: X
       REAL, INTENT(INOUT) :: ANS(M)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, MX, NMAX, NN, NP, NX
       REAL :: ALPHA, ARG, BETA, C, DEN, ELIM, EPS, FLN, FN, FNP, FNS,
      &FX, ND, RXSQ, S, T, TA, TK, TOL, TOLS, TSS, TST, TT, T1, T2, WDTOL
@@ -11665,6 +11794,7 @@ C                            INCREASE THE DIMENSION OF TRMR(NMAX)
       REAL FUNCTION BETALN(A0, B0)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A0, B0
+C     beginning of local variable declarations
       INTEGER :: I, N
       REAL :: A, B, C, E, H, U, V, W, Z
       REAL :: ALGDIV, ALNREL, BCORR, GAMLN, GSUMLN
@@ -11746,6 +11876,7 @@ C-----------------------------------------------------------------------
       REAL FUNCTION GSUMLN(A, B)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B
+C     beginning of local variable declarations
       REAL :: X
       REAL :: ALNREL, GAMLN1
 C-----------------------------------------------------------------------
@@ -11765,6 +11896,7 @@ C-----------------------------------------------------------------------
       REAL FUNCTION BCORR(A0, B0)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A0, B0
+C     beginning of local variable declarations
       REAL :: A, B, C, C0, C1, C2, C3, C4, C5, H, S11, S3, S5, S7, S9,
      &T, W, X, X2
 C-----------------------------------------------------------------------
@@ -11800,6 +11932,7 @@ C                   COMPUTE  DEL(A) + W
       REAL FUNCTION ALGDIV(A, B)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B
+C     beginning of local variable declarations
       REAL :: ALNREL
       REAL :: C, C0, C1, C2, C3, C4, C5, D, H, S11, S3, S5, S7, S9, T,
      &U, V, W, X, X2
@@ -11846,6 +11979,7 @@ C                    COMBINE THE RESULTS
       DOUBLE PRECISION FUNCTION DBETLN(A0, B0)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: A0, B0
+C     beginning of local variable declarations
       INTEGER :: I, N
       DOUBLE PRECISION :: A, B, C, E, H, SN, U, V, W, Z
       DOUBLE PRECISION :: DBCORR, DGAMLN, DGSMLN, DLGDIV, DLNREL
@@ -11933,6 +12067,7 @@ C          EVALUATION OF THE FUNCTION LN(GAMMA(A + B))
 C          FOR 1 .LE. A .LE. 2  AND  1 .LE. B .LE. 2
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A, B
+C     beginning of local variable declarations
       DOUBLE PRECISION :: X
       DOUBLE PRECISION :: DGMLN1, DLNREL
       X = (A - 1.D0) + (B - 1.D0)
@@ -11948,6 +12083,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION FUNCTION DBCORR(A0, B0)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: A0, B0
+C     beginning of local variable declarations
       INTEGER :: J, K
       DOUBLE PRECISION :: A, B, C, E(15), H, S(15), T, W, X, X2, Z
 C-----------------------------------------------------------------------
@@ -12009,6 +12145,7 @@ C                    COMPUTE  DEL(A) + W
       DOUBLE PRECISION FUNCTION DLGDIV(A, B)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: A, B
+C     beginning of local variable declarations
       INTEGER :: J, K
       DOUBLE PRECISION :: C, D, E(15), H, S(15), T, U, V, W, X, X2
       DOUBLE PRECISION :: DLNREL
@@ -12078,6 +12215,7 @@ C                    COMBINE THE RESULTS
       REAL, INTENT(IN) :: A
       REAL, INTENT(INOUT) :: ANS, QANS
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: I, IOP, M, MAX, N
       REAL :: A2N, A2NM1, ACC, ALOG10, AMN, APN, B2N, B2NM1, C, C0, C1,
      &C2, C3, C4, C5, C6, C7, C8, D00, D10, D20, D30, D40, D50, D60,
@@ -12455,6 +12593,7 @@ C                     ERROR RETURN
       REAL FUNCTION RCOMP(A, X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, X
+C     beginning of local variable declarations
       REAL :: RT2PIN, T, T1, U
       REAL :: EXPARG
       REAL :: RLOG
@@ -12490,6 +12629,7 @@ C-----------------------------------------------------------------------
 C              EVALUATION OF EXP(-X)*X**A/GAMMA(A)
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A, X
+C     beginning of local variable declarations
       DOUBLE PRECISION :: C, T, W
       DOUBLE PRECISION :: DGAMMA, DGAM1, DPDEL, DRLOG, DXPARG
 C--------------------------
@@ -12519,6 +12659,7 @@ C--------------------------
       REAL, INTENT(IN) :: A, P, Q
       REAL, INTENT(OUT) :: X
       REAL, INTENT(IN) :: X0
+C     beginning of local variable declarations
       INTEGER :: IER, IOP
       REAL :: AM1, AMAX, AMIN, AP1, AP2, AP3, APN, B, C, C1, C2, C3, C4,
      &C5, D, E, E2, EPS, G, H, PN, QG, QN, R, RTA, S, S2, SUM, T, TOL,
@@ -12808,10 +12949,11 @@ C                       ERROR RETURN
 
       SUBROUTINE DGRAT(A, X, ANS, QANS, IERR)
       IMPLICIT NONE
-      INTRINSIC :: ERF
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(IN) :: A, X
       DOUBLE PRECISION, INTENT(INOUT) :: ANS, QANS
+C     beginning of local variable declarations
+      INTRINSIC ERF
       INTEGER :: I, M, MAX, N
       DOUBLE PRECISION :: AMN, ALOG10, APN, A2N, A2NM1, BIG, B2N, B2NM1,
      &C, E, G, H, J, L, R, RTA, RTPI, RTX, S, SUM, T, TOL, TWOA, U, X0,
@@ -13036,6 +13178,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(INOUT) :: Z
       DOUBLE PRECISION, INTENT(IN) :: RTA
       DOUBLE PRECISION, INTENT(INOUT) :: ANS, QANS
+C     beginning of local variable declarations
       DOUBLE PRECISION :: A0(7), A1(7), A2(7), A3(7), A4(7), A5(7),
      &A6(4), A7(5), A8(5), A9(5), A10(4), A11(4), A12(4), A13(3),
      &A14(3), A15(2), A16(2), A17(1), A18(1)
@@ -13344,6 +13487,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(INOUT) :: Z
       DOUBLE PRECISION, INTENT(IN) :: RTA
       DOUBLE PRECISION, INTENT(INOUT) :: ANS, QANS
+C     beginning of local variable declarations
       DOUBLE PRECISION :: E, RT2PIN, T, U, W
       DOUBLE PRECISION :: C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10
       DOUBLE PRECISION :: A0(5), A1(4), A2(4), A3(4), A4(3), A5(2),
@@ -13465,6 +13609,7 @@ C------------------------
       DOUBLE PRECISION, INTENT(IN) :: A
       DOUBLE PRECISION, INTENT(OUT) :: X
       DOUBLE PRECISION, INTENT(IN) :: P, Q
+C     beginning of local variable declarations
       INTEGER :: IER, IND
       REAL :: P0, Q0, X0
       DOUBLE PRECISION :: AM1, APN, AP1, AP2, AP3, B, C, C1, C2, C3, C4,
@@ -13745,6 +13890,7 @@ C                       ERROR RETURN
       REAL, INTENT(IN) :: A, B
       REAL, INTENT(OUT) :: W, W1
       REAL, INTENT(IN) :: X, Y
+C     beginning of local variable declarations
       REAL :: APSER, BASYM, BFRAC, BPSER, BUP, FPSER, SPMPAR
       INTEGER :: IERR1, IND, N
       REAL :: A0, B0, EPS, T, X0, Y0, Z
@@ -13921,6 +14067,7 @@ C                       ERROR RETURN
       REAL FUNCTION FPSER(A, B, X, EPS)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B, EPS, X
+C     beginning of local variable declarations
       REAL :: AN, C, S, T, TOL
       REAL :: EXPARG
 C-----------------------------------------------------------------------
@@ -13952,6 +14099,7 @@ C                NOTE THAT 1/B(A,B) = B
       REAL FUNCTION APSER(A, B, X, EPS)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B, EPS, X
+C     beginning of local variable declarations
       REAL :: AJ, BX, C, G, S, T, TOL
       REAL :: PSI
       REAL :: J
@@ -13983,6 +14131,7 @@ C--------------------
       REAL FUNCTION BPSER(A, B, X, EPS)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B, EPS, X
+C     beginning of local variable declarations
       INTEGER :: I, M
       REAL :: A0, APB, B0, C, SUM, T, TOL, U, W, Z
       REAL :: ALGDIV, BETALN, GAM1, GAMLN1
@@ -14060,6 +14209,7 @@ C-----------------------------------------------------------------------
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A, B, EPS, X, Y
+C     beginning of local variable declarations
       INTEGER :: I, K, KP1, MU, NM1
       REAL :: AP1, APB, D, R, T, W
       REAL :: BRCMP1, EXPARG
@@ -14119,6 +14269,7 @@ C               TERMINATE THE PROCEDURE
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B, EPS, X, Y
       REAL, INTENT(IN) :: LAMBDA
+C     beginning of local variable declarations
       REAL :: ALPHA, AN, ANP1, BETA, BN, BNP1, C, C0, C1, E, P, R, R0,
      &S, T, W, YP1
       REAL :: BRCOMP
@@ -14175,6 +14326,7 @@ C                 TERMINATION
       REAL FUNCTION BRCOMP(A, B, X, Y)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B, X, Y
+C     beginning of local variable declarations
       INTEGER :: I, N
       REAL :: A0, APB, B0, C, CONST, E, H, T, U, V, X0, Y0, Z
       REAL :: ALGDIV, ALNREL, BCORR, BETALN, GAM1, GAMLN1, RLOG1
@@ -14278,6 +14430,7 @@ C-----------------------------------------------------------------------
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MU
       REAL, INTENT(IN) :: A, B, X, Y
+C     beginning of local variable declarations
       INTEGER :: I, N
       REAL :: A0, APB, B0, C, CONST, E, H, T, U, V, X0, Y0, Z
       REAL :: ALGDIV, ALNREL, BCORR, BETALN, ESUM, GAM1, GAMLN1, RLOG1
@@ -14381,6 +14534,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: A, B, EPS
       REAL, INTENT(INOUT) :: W
       REAL, INTENT(IN) :: X, Y
+C     beginning of local variable declarations
       INTEGER :: I, N, NM1
       REAL :: BM1, BP2N, CN, COEF, DJ, P, Q, R, S, SUM, T, T2, U, V, Z
       REAL :: ALGDIV, ALNREL, GAM1
@@ -14450,6 +14604,7 @@ C               THE EXPANSION CANNOT BE COMPUTED
       REAL, INTENT(IN) :: A, EPS
       REAL, INTENT(INOUT) :: P, Q
       REAL, INTENT(IN) :: R, X
+C     beginning of local variable declarations
       REAL :: A2N, A2NM1, AM0, AN, AN0, B2N, B2NM1, C, CMA, G, H, SUM,
      &T, TOL, W, Z
       REAL :: ERFC1, GAM1, REXP
@@ -14532,6 +14687,7 @@ C                SPECIAL CASES
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B, EPS
       REAL, INTENT(IN) :: LAMBDA
+C     beginning of local variable declarations
       INTEGER :: I, IM1, IMJ, J, M, MM1, MMJ, N, NP1, NUM
       REAL :: BSUM, DSUM, E0, E1, F, H, H2, HN, R, R0, R1, S, SUM, T,
      &T0, T1, U, W, W0, Z, Z0, Z2, ZN, ZNM1
@@ -14632,6 +14788,7 @@ C------------------------
       REAL, INTENT(IN) :: A0, B0, EPS
       REAL, INTENT(OUT) :: P
       REAL, INTENT(IN) :: X0
+C     beginning of local variable declarations
       INTEGER :: IND, L, MAX
       REAL :: A, AFRAC, AM1, AN, B, BFRAC, C, GAMRAT, P0, PIHALF, RPINV,
      &RTY, SUM, T, TEMP, TOL, X, Y
@@ -14854,6 +15011,7 @@ C                           ERROR RETURN
       REAL FUNCTION LOGAM(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: N
       REAL :: D, T, Z
       REAL :: W(200)
@@ -14979,6 +15137,7 @@ C     ------------------------------------------------------------------
       COMPLEX :: Z
       COMPLEX, INTENT(IN) :: CNU
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: I, K, M, N
       REAL :: A, CN1, CN2, E, FN, PI, PN, QM, QN, QNP1, R, R2, RN2, SN,
      &T1, T2, U, V, X, Y
@@ -15145,6 +15304,7 @@ C          FINAL ASSEMBLY
       COMPLEX, INTENT(IN) :: CNU
       COMPLEX, INTENT(INOUT) :: W
       COMPLEX :: Z
+C     beginning of local variable declarations
       INTEGER :: I, IMIN, K, KM1, KM2
       REAL :: A, A0, EPS, RNU
       REAL :: ANORM
@@ -15233,6 +15393,7 @@ C     ADD THE REMAINING TERMS
       REAL, INTENT(IN) :: FN
       COMPLEX, INTENT(IN) :: CZ, CNU
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: IND, K, L, M
       REAL :: ALPHA, AM, AQ, AR, BND, C, PHI, PI, PI2, SGN, THETA, U, V,
      &X, Y
@@ -15442,6 +15603,7 @@ C          FINAL ASSEMBLY
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: CZ, CNU
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: I, IND
       REAL :: C, EPS, PIHALF, R, RNU, TOL, U, V, X, Y
       REAL :: SIN1
@@ -15532,6 +15694,7 @@ C     COMPUTATION OF EXP(I*PI*NU)
       INTEGER, INTENT(IN) :: IN
       COMPLEX, INTENT(IN) :: A
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: I, M, N
       REAL :: AN, AQ(2), AZ(2), CD(30), CE(30), FJ(2), PM, PN, QF(2),
      &QM, QN, QZ(2), RM(4), RZ(2), SM(4), SN, SS, SZ(2), TM(2), TS(2),
@@ -15895,6 +16058,7 @@ C         UNDERFLOW  - A NON-FATAL ERROR (NZ.GT.0)
       REAL, INTENT(IN) :: ALPHA
       REAL :: X
       REAL, INTENT(INOUT) :: Y(N)
+C     beginning of local variable declarations
       EXTERNAL JAIRY
       INTEGER :: I, IALP, IDALP, IFLW, IN, INLIM, IS, I1, I2, K, KK, KM,
      &KT
@@ -16329,6 +16493,7 @@ C         SUPPLIED BY THE EXTERNAL FUNTION YAIRY.
       INTEGER :: IFLW, IN
       REAL :: ELIM, FLGJY, FNU, TOL, WK(*), X, Y(*)
       EXTERNAL FUNJY
+C     beginning of local variable declarations
       INTEGER :: I, J, JN, JR, JU, K, KB, KLAST, KMAX(5), KP1, KS, KSP1,
      &KSTEMP, L, LR, LRP1
       REAL :: ABW2, AKM, ALFA(26,4), ALFA1(26,2), ALFA2(26,2), AP,
@@ -16707,6 +16872,7 @@ C     COMPUTE TWO U POLYNOMIALS FOR NEXT A(ZETA) AND B(ZETA)
       REAL, INTENT(IN) :: C
       REAL, INTENT(INOUT) :: DAI
       REAL, INTENT(IN) :: RX, X
+C     beginning of local variable declarations
       INTEGER :: I, J, M1, M1D, M2, M2D, M3, M3D, M4, M4D, N1, N1D, N2,
      &N2D, N3, N3D, N4, N4D
       REAL :: A(15), AJN(19), AJP(19), AK1(14), AK2(23), AK3(14), B(15),
@@ -17026,6 +17192,7 @@ C     -------------------
       INTEGER, INTENT(IN) :: IN
       COMPLEX, INTENT(IN) :: A
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: I, LA, LR, LY, M, N
       REAL :: AN, AQ(2), AZ(2), CD(30), CE(30), PM, PN, QF(2), QM, QN,
      &QZ(2), RM, RN, RZ(2), SL(2), SM(4), SN, SQ(2), SR(2), SS, SZ(2),
@@ -17370,6 +17537,7 @@ C     -------------------
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: Z, CNU
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       REAL :: PIHALF, T, X, Y
       REAL :: SIN1
       REAL :: COS1
@@ -17404,6 +17572,7 @@ C------------------------------------------------------------
       INTEGER, INTENT(IN) :: IN, MO
       COMPLEX, INTENT(IN) :: A
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: I, M, N
       REAL :: AN, AQ(2), AZ(2), CD(30), CE(30), FI(2), PM, PN, QF(2),
      &QM, QN, QZ(2), RM(4), RZ(2), SM(4), SN, SS, SZ(2), TM(2), TS(2),
@@ -17801,6 +17970,7 @@ C         UNDERFLOW - A NON-FATAL ERROR(NZ.GT.0)
       REAL, INTENT(IN) :: ALPHA
       REAL, INTENT(IN) :: X
       REAL, INTENT(INOUT) :: Y(N)
+C     beginning of local variable declarations
       INTEGER :: I, IALP, IN, INLIM, IS, I1, I2, K, KK, KM
       INTEGER :: KT
       INTEGER :: NN, NS
@@ -18219,6 +18389,7 @@ C         ACCOMPLISHED BY MEANS OF THE FLAG FLGIK = 1 OR -1.
       REAL, INTENT(IN) :: TOL
       REAL, INTENT(IN) :: X
       REAL, INTENT(INOUT) :: Y(*)
+C     beginning of local variable declarations
       INTEGER :: J, JN, K, KK
       INTEGER :: L
       REAL :: AK, AP
@@ -18315,6 +18486,7 @@ C     ---------------------
       COMPLEX :: Z
       COMPLEX, INTENT(IN) :: CNU
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       REAL :: A, B, C, E, RN, RZ, S, TAU, X, Y
       REAL :: CPABS
       COMPLEX :: NU
@@ -18414,6 +18586,7 @@ C     POWER SERIES AND MILLER ALGORITHM
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: Z, CNU
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       REAL :: A, B, PI, PIHALF, U1, U2
       REAL :: SIN1
       REAL :: COS1
@@ -18440,6 +18613,7 @@ C------------------------------------------------------------
       COMPLEX :: Z
       COMPLEX, INTENT(IN) :: CNU
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: C, EPS, U, V
       REAL :: ANORM
@@ -18485,6 +18659,7 @@ C--------------------------
       REAL, INTENT(IN) :: RZ
       COMPLEX, INTENT(IN) :: Z, CNU
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: I, IND, M, N, N1
       REAL :: A, AI, B, C, CPI, PI, T, X, Y, ZNORM, ZR1, ZR2
       REAL :: NU
@@ -18589,6 +18764,7 @@ C            ANALYTIC CONTINUATION
       COMPLEX, INTENT(IN) :: Z, ZR
       COMPLEX :: NU
       COMPLEX, INTENT(INOUT) :: W1, W2
+C     beginning of local variable declarations
       INTEGER :: K
       REAL :: AK, EPS, EPS0, PHI, PI, S, TOL, U, X, Y
       REAL :: ANORM
@@ -18693,6 +18869,7 @@ C                 SUMMATION OF SERIES
       REAL, INTENT(IN) :: R
       COMPLEX, INTENT(IN) :: Z, ZR, NU
       COMPLEX, INTENT(INOUT) :: W, W0
+C     beginning of local variable declarations
       INTEGER :: I, M, NUM
       REAL :: A, B, C, C1, C2, E, EPS, EPS0, F, RNU, T, TH, X, Y
       REAL :: COS1
@@ -18789,6 +18966,7 @@ C     FINAL ASSEMBLY
       REAL, INTENT(IN) :: R
       COMPLEX :: Z
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: I, IND, M, N, N1
       REAL :: A, AI, CPI, PI, RZ, T, X, Y, ZNORM, ZR1, ZR2
       REAL :: CPABS
@@ -18895,6 +19073,7 @@ C            ANALYTIC CONTINUATION
       COMPLEX :: Z
       COMPLEX, INTENT(INOUT) :: W
       REAL, INTENT(IN) :: NU
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: A, C, EPS, U, V
       REAL :: ANORM
@@ -18941,6 +19120,7 @@ C--------------------------
       COMPLEX, INTENT(IN) :: Z, ZR
       COMPLEX, INTENT(INOUT) :: W1, W2
       REAL, INTENT(IN) :: NU
+C     beginning of local variable declarations
       INTEGER :: K
       REAL :: A, AK, EPS, EPS0, G1, G2, GM1, GM2, PHI, PI, T, TOL, X, Y
       REAL :: ANORM
@@ -19038,6 +19218,7 @@ C                 SUMMATION OF SERIES
       COMPLEX, INTENT(IN) :: Z, ZR
       COMPLEX, INTENT(INOUT) :: K1, K2
       REAL, INTENT(IN) :: NU
+C     beginning of local variable declarations
       INTEGER :: I, M
       REAL :: A, AL, B, C, C1, E, EPS, EPS0, TH, X, Y
       REAL :: COS1
@@ -19118,6 +19299,7 @@ C     FINAL ASSEMBLY
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: NU
+C     beginning of local variable declarations
       INTEGER :: K
       REAL :: C, S
       REAL :: SIN0
@@ -19147,6 +19329,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: IN, MO
       COMPLEX, INTENT(IN) :: A
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       INTEGER :: I, LA, LK, LR, M, N
       REAL :: AN, AQ(2), AZ(2), CD(30), CE(30), PM, PN, QF(2), QM, QN,
      &RM, RN, RZ(2), SL(2), SM(2), SN, SQ(2), SR(2), SS, SZ(2), TM(2),
@@ -19418,6 +19601,7 @@ C     -------------------
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: AI
       COMPLEX, INTENT(INOUT) :: AIP
+C     beginning of local variable declarations
       REAL :: A, B, R
       REAL :: CPABS
       COMPLEX :: BI
@@ -19447,6 +19631,7 @@ C     ASYMPTOTIC EXPANSION
       INTEGER, INTENT(IN) :: IND
       COMPLEX, INTENT(INOUT) :: AI, AIP, BI, BIP
       COMPLEX, INTENT(IN) :: Z
+C     beginning of local variable declarations
       INTEGER :: I, N
       REAL :: C1, C2, SQT3, X, Y
       COMPLEX :: Z1, Z2, Z3, ZZ, F, F1, G, G1, E, E1
@@ -19530,6 +19715,7 @@ C     FINAL ASSEMBLY
       INTEGER, INTENT(IN) :: IND
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: AI, AIP
+C     beginning of local variable declarations
       REAL :: A, B, C1, R
       REAL :: CPABS
       COMPLEX :: Z1, Z2, Z3, ZM, W1, W2, W1M, W2M, E
@@ -19576,6 +19762,7 @@ C           ----  ABS(B) .LT. -5.0*A  ----
       INTEGER, INTENT(IN) :: IND
       COMPLEX, INTENT(INOUT) :: AI, AIP
       COMPLEX, INTENT(IN) :: Z
+C     beginning of local variable declarations
       INTEGER :: I, K, M, M2
       REAL :: C1, C2, EPS, R, T, U, U1, V, V1, XM, XNEG, XPOS
       REAL :: EXPARG
@@ -19742,6 +19929,7 @@ C         RETURN WITH ZERO VALUES IF SCALING IS NEEDED
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: BI
       COMPLEX, INTENT(INOUT) :: BIP
+C     beginning of local variable declarations
       REAL :: A, B, R
       REAL :: CPABS
       COMPLEX :: AI
@@ -19772,6 +19960,7 @@ C     ASYMPTOTIC EXPANSION
       INTEGER, INTENT(IN) :: IND
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: BI, BIP
+C     beginning of local variable declarations
       REAL :: A, C1, R, SQT3, X, Y
       REAL :: CPABS
       COMPLEX :: Z1, Z2, ZM, W1, W2, W1M, W2M, E, E1
@@ -19828,6 +20017,7 @@ C               ----  REAL(Z) .LT. 0  ----
       INTEGER, INTENT(IN) :: IND
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: BI, BIP
+C     beginning of local variable declarations
       INTEGER :: I, K, M, M2
       REAL :: C(30), C1, C2, C3, CE, CF, D(30), EPS, R, S, SQT3, T, U,
      &U1, V, V1, X, XNEG, XPOS, Y
@@ -20067,6 +20257,7 @@ C     -1/3 AND -2/3, RESPECTIVELY.
 C-------------------------------------------------------------
       COMPLEX :: Z
       COMPLEX, INTENT(INOUT) :: I1, I2, I1M, I2M
+C     beginning of local variable declarations
       COMPLEX :: CZ, EX13, EX13C, EX23, EX23C
 C     EX13 = EXP(I*PI/3)
 C     EX13C = EXP(-I*PI/3)
@@ -20099,6 +20290,7 @@ C     FINAL ASSEMBLY
       IMPLICIT NONE
       COMPLEX :: Z
       COMPLEX, INTENT(INOUT) :: I1, I2, I1M, I2M
+C     beginning of local variable declarations
       INTEGER :: I, N, N1
       REAL :: A, AN, B, C1, C2, CFA, CFB, CN1, CN2, GM1, GM2
       COMPLEX :: IA1, IA2, IA3, IB1, IB2, IB3
@@ -20163,6 +20355,7 @@ C     BACKWARD RECURRENCE
       REAL, INTENT(IN) :: CN
       COMPLEX :: Z
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       REAL :: D, EPS
       REAL :: ANORM
       REAL :: SPMPAR
@@ -20207,6 +20400,7 @@ C     RESPECTIVELY.
 C--------------------------------------------------------------
       COMPLEX :: Z
       COMPLEX, INTENT(INOUT) :: I1, I2, I1M, I2M
+C     beginning of local variable declarations
       COMPLEX :: CZ, EX13, EX13C, EX23, EX23C
 C     EX13 = EXP(I*PI/3)
 C     EX13C = EXP(-I*PI/3)
@@ -20239,6 +20433,7 @@ C     FINAL ASSEMBLY
       IMPLICIT NONE
       COMPLEX :: Z
       COMPLEX, INTENT(INOUT) :: I1, I2, I1M, I2M
+C     beginning of local variable declarations
       INTEGER :: I, N, N1
       REAL :: A, AN, B, C1, C2, CFA, CFB, CN1, CN2, GM1, GM2
       COMPLEX :: IA1, IA2, IA3, IB1, IB2, IB3
@@ -20303,6 +20498,7 @@ C     BACKWARD RECURRENCE
       REAL, INTENT(IN) :: CN
       COMPLEX :: Z
       COMPLEX, INTENT(INOUT) :: W
+C     beginning of local variable declarations
       REAL :: D, EPS
       REAL :: ANORM
       REAL :: SPMPAR
@@ -20340,6 +20536,7 @@ C     SUMMATION OF MACLAURIN EXPANSION
       INTEGER, INTENT(IN) :: IND
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: K1, K2
+C     beginning of local variable declarations
       INTEGER :: IND1
       REAL :: A, B, PI
       COMPLEX :: I1, I2, I1M, I2M, CZ, EX13C, EX23C, J, E
@@ -20384,6 +20581,7 @@ C            ----  ABS(B) .LT. -0.5*A  ----
       INTEGER, INTENT(IN) :: IND
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: K1, K2
+C     beginning of local variable declarations
       INTEGER :: I, L, M
       REAL :: A, AI, AL, B, C, C1, EPS, R, TH, X1, X2
       REAL :: SPMPAR
@@ -20435,6 +20633,7 @@ C     FINAL ASSEMBLY
       REAL FUNCTION AI(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: N, N2
       REAL :: AD0, AD1, AD2, AD3, AN0, AN1, AN2, AN3, AN4, AN5, AN6,
      &AN7, AN8, AN9, BD0, BD1, BD2, BD3, BD4, BD5, BN0, BN1, BN2, BN3,
@@ -20531,6 +20730,7 @@ C-----------------------------------------------------------------------
       REAL FUNCTION AIE(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: AD0, AD1, AD2, AD3, AN0, AN1, AN2, AN3, AN4, AN5, AN6,
      &AN7, AN8, AN9, BD0, BD1, BD2, BD3, BD4, BD5, BN0, BN1, BN2, BN3,
      &BN4, BN5, BN6, BN7, PD0, PD1, PD2, PD3, PD4, PD5, PHI, PN0, PN1,
@@ -20624,6 +20824,7 @@ C-----------------------------------------------------------------------
       REAL FUNCTION BI(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: N, N2
       REAL :: AD0, AD1, AD2, AD3, AN0, AN1, AN10, AN2, AN3, AN4, AN5,
      &AN6, AN7, AN8, AN9, BD0, BD1, BD2, BD3, BN0, BN1, BN10, BN2, BN3,
@@ -20758,6 +20959,7 @@ C-----------------------------------------------------------------------
       REAL FUNCTION BIE(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: AD0, AD1, AD2, AD3, AN0, AN1, AN10, AN2, AN3, AN4, AN5,
      &AN6, AN7, AN8, AN9, BD0, BD1, BD2, BD3, BN0, BN1, BN10, BN2, BN3,
      &BN4, BN5, BN6, BN7, BN8, BN9, PD0, PD1, PD2, PD3, PD4, PD5, PD6,
@@ -20888,6 +21090,7 @@ C-----------------------------------------------------------------------
       IMPLICIT NONE
       REAL, INTENT(INOUT) :: PHI, R
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: AD0, AD1, AD2, AD3, AD4, AD5, AN0, AN1, AN2, AN3, AN4,
      &AN5, AN6, BD0, BD1, BD2, BD3, BD4, BD5, BD6, BN0, BN1, BN2, BN3,
      &BN4, BN5, BN6, CD0, CD1, CD2, CD3, CD4, CD5, CD6, CN0, CN1, CN2,
@@ -20983,6 +21186,7 @@ C-----------------------------------------------------------------------
       COMPLEX FUNCTION CK(K,L)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: K, L
+C     beginning of local variable declarations
       INTEGER :: I, IND
       REAL :: C1, C2, EPS, PHI, R, T, TOL, U, V, X, XX, Y
       REAL :: SPMPAR
@@ -21185,6 +21389,7 @@ C     REFLECTS Z WITH RESPECT TO THE ORIGIN IF REAL(Z)
 C     .LT. 0.0 OR IF Z IS ON THE NEGATIVE IMAGINARY AXIS.
 C---------------------------------------------------------
       COMPLEX, INTENT(IN) :: Z
+C     beginning of local variable declarations
       REAL :: NSWC_AI_R4
 C     ----------
       NSWC_AI_R4 = REAL(Z)
@@ -21200,6 +21405,7 @@ C     ----------
       COMPLEX FUNCTION KM(K2)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: K2
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: C, EPS, HPI, RI, TOL
       REAL :: SPMPAR
@@ -21231,6 +21437,7 @@ C ---------------
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: L
       COMPLEX, INTENT(INOUT) :: FK, FL
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: BN, C, EPS, HPI, RI, TOL, U, X, Y
       REAL :: SPMPAR
@@ -21293,6 +21500,7 @@ C                        FINAL ASSEMBLY
       INTEGER, INTENT(INOUT) :: IERR
       COMPLEX, INTENT(IN) :: K, L
       COMPLEX, INTENT(INOUT) :: CE, CK
+C     beginning of local variable declarations
       INTEGER :: I, IND
       REAL :: C, C1, C2, EPS, PHI, R, T, TOL, U, V, X, XX, Y
       REAL :: ALNREL
@@ -21535,6 +21743,7 @@ C     ERROR RETURN
       COMPLEX FUNCTION ATN(Z)
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: Z
+C     beginning of local variable declarations
       REAL :: ATN1, ATN2, D, DA, DB, T, X, Y
       REAL :: ALNREL
       DOUBLE PRECISION :: DX, DY
@@ -21559,6 +21768,7 @@ C---------------------------------------------------
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: K2
       COMPLEX, INTENT(INOUT) :: FK, EK
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: C, EPS, HPI, RI, TOL
       REAL :: SPMPAR
@@ -21594,6 +21804,7 @@ C ---------------
       IMPLICIT NONE
       COMPLEX, INTENT(IN) :: L
       COMPLEX, INTENT(INOUT) :: FK, FL, EK, EL, GK, GL
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: BN, C, DN, EPS, FN, GN, HPI, RI, TOL, U, X, Y
       REAL :: SPMPAR
@@ -21683,6 +21894,7 @@ C              FINAL ASSEMBLY
       REAL, INTENT(INOUT) :: E, F
       REAL, INTENT(IN) :: PHI
       REAL, INTENT(IN) :: K, L
+C     beginning of local variable declarations
       REAL :: AN, CN, D1, D2, D3, D4, DN, HN, P, PN, PX, QN, QX, R, R0,
      &R2, RI, RJ, RK, RM, RN, S0, S1, S2, S3, S4, SI, SJ, SK, SN, SS,
      &T1, T2, TD, TH1, TR, TS, W
@@ -21810,6 +22022,7 @@ C     ERROR RETURN
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(IN) :: PHI, CPHI, K, L
       DOUBLE PRECISION, INTENT(INOUT) :: F, E
+C     beginning of local variable declarations
       DOUBLE PRECISION :: AN, CN, DN, D1, D2, D3, D4, HN, K2, L2, LN4,
      &P, PN, PX, QN, QX, R, RI, RJ, RK, RM, RN, R0, R2, SI, SJ, SK, SN,
      &SS, S0, S1, S2, S3, S4, TD, TH1, TR, TS, T1, T2, W
@@ -21936,6 +22149,7 @@ C     ERROR RETURN
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(IN) :: PHI, CPHI, K2, L2, N, M
       REAL, INTENT(INOUT) :: P
+C     beginning of local variable declarations
       REAL :: A, B, C, EPS, PIHALF, R, RF, S, S2, TOL
       REAL :: SPMPAR
 C-----------------------------------------------------------------------
@@ -21990,6 +22204,7 @@ C     ERROR RETURN
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(IN) :: PHI, CPHI, K2, L2, N, M
       DOUBLE PRECISION, INTENT(INOUT) :: P
+C     beginning of local variable declarations
       DOUBLE PRECISION :: A, B, C, EPS, PIHALF, R, RF, S, S2, TOL
       DOUBLE PRECISION :: DPMPAR
 C-----------------------------------------------------------------------
@@ -22063,6 +22278,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: X
       REAL, INTENT(IN) :: Y
       REAL, INTENT(IN) :: Z
+C     beginning of local variable declarations
       REAL :: C1, C2, C3, E2, E3, EPSLON, ERRTOL, LAMDA
       REAL :: LOLIM, MU, S, UPLIM
       REAL :: XN, XNDEV, XNROOT
@@ -22157,6 +22373,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
       DOUBLE PRECISION, INTENT(IN) :: Y
       DOUBLE PRECISION, INTENT(IN) :: Z
+C     beginning of local variable declarations
       DOUBLE PRECISION :: C1, C2, C3, E2, E3, EPSLON, ERRTOL, LAMDA
       DOUBLE PRECISION :: LOLIM, MU, S, UPLIM
       DOUBLE PRECISION :: XN, XNDEV, XNROOT
@@ -22251,6 +22468,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: X
       REAL, INTENT(IN) :: Y
       REAL, INTENT(IN) :: Z
+C     beginning of local variable declarations
       REAL :: C1, C2, C3, C4, EA, EB, EC, ED, EF, EPSLON, ERRTOL, LAMDA
       REAL :: LOLIM, MU, POWER4, SIGMA, S1, S2, UPLIM
       REAL :: XN, XNDEV
@@ -22357,6 +22575,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
       DOUBLE PRECISION, INTENT(IN) :: Y
       DOUBLE PRECISION, INTENT(IN) :: Z
+C     beginning of local variable declarations
       DOUBLE PRECISION :: C1, C2, C3, C4, EA, EB, EC, ED, EF, EPSLON,
      &ERRTOL, LAMDA
       DOUBLE PRECISION :: LOLIM, MU, POWER4, SIGMA, S1, S2, UPLIM
@@ -22466,6 +22685,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: X
       REAL, INTENT(IN) :: Y
       REAL, INTENT(IN) :: Z
+C     beginning of local variable declarations
       REAL :: RC, ALFA, BETA, C1, C2, C3, C4, EA, EB, EC, E2, E3
       REAL :: EPSLON, ERRTOL, ETOLRC, LAMDA, LOLIM, MU
       REAL :: PN, PNDEV
@@ -22590,6 +22810,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
       DOUBLE PRECISION, INTENT(IN) :: Y
       DOUBLE PRECISION, INTENT(IN) :: Z
+C     beginning of local variable declarations
       DOUBLE PRECISION :: RC, ALFA, BETA, C1, C2, C3, C4, EA, EB, EC,
      &E2, E3
       DOUBLE PRECISION :: EPSLON, ERRTOL, ETOLRC, LAMDA, LOLIM, MU
@@ -22713,6 +22934,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: ERRTOL
       REAL, INTENT(IN) :: X
       REAL, INTENT(IN) :: Y
+C     beginning of local variable declarations
       REAL :: C1, C2
       REAL :: LAMDA, LOLIM
       REAL :: MU, S, SN, UPLIM
@@ -22800,6 +23022,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: ERRTOL
       DOUBLE PRECISION, INTENT(IN) :: X
       DOUBLE PRECISION, INTENT(IN) :: Y
+C     beginning of local variable declarations
       DOUBLE PRECISION :: C1, C2
       DOUBLE PRECISION :: LAMDA, LOLIM
       DOUBLE PRECISION :: MU, S, SN, UPLIM
@@ -22863,6 +23086,7 @@ C                      ERROR RETURN
       REAL, INTENT(INOUT) :: C, D, S
       REAL, INTENT(IN) :: U
       REAL, INTENT(IN) :: K, L
+C     beginning of local variable declarations
       INTEGER :: MAX, N
       REAL :: E, EPS, F, F2, PIHALF, R, SG, TOL, U1, U2, Z
       INTEGER :: IPMPAR
@@ -22938,6 +23162,7 @@ C                      ERROR RETURN
       REAL, INTENT(INOUT) :: S
       REAL, INTENT(IN) :: U
       REAL, INTENT(IN) :: K, L
+C     beginning of local variable declarations
       INTEGER :: IERR
       REAL :: C1, D1, E1, F1, PIHALF, S1, V
 C     --------------------------------------------------------
@@ -22982,6 +23207,7 @@ C     COMPUTATION FOR K = 0.0
       REAL, INTENT(OUT) :: C, D, S
       REAL, INTENT(IN) :: U
       REAL, INTENT(IN) :: K
+C     beginning of local variable declarations
       REAL :: C1, C2, C3, C4, U2
       REAL :: K2
 C     -------------------------------------------------
@@ -23008,6 +23234,7 @@ C     -------------------------------------------------
       REAL, INTENT(INOUT) :: S
       REAL, INTENT(IN) :: U
       REAL, INTENT(IN) :: K, L
+C     beginning of local variable declarations
       REAL :: A, AI, COEF, EPS, PIHALF, Q1, Q2, QD, QH, QN, SUM, TEMP,
      &TOL, V, W, X
       REAL :: SPMPAR
@@ -23066,6 +23293,7 @@ C     ASSEMBLY FOR U .GT. V
       REAL, INTENT(INOUT) :: S
       REAL, INTENT(IN) :: U
       REAL, INTENT(IN) :: K, L
+C     beginning of local variable declarations
       REAL :: A, CH, COEF, E1, E1N, E2, E2N, EPS, PI, PIHALF, Q1, Q1N,
      &Q2, Q2N, SH, SUM, TEMP, TOL, V, W, X, X2, XN
       REAL :: SPMPAR
@@ -23137,6 +23365,7 @@ C     ASSEMBLY FOR U .GT. V
       COMPLEX, INTENT(IN) :: U
       COMPLEX, INTENT(INOUT) :: S, C, D
       REAL, INTENT(IN) :: K, L
+C     beginning of local variable declarations
       REAL :: C1, C2, CK, CL, COEF, D1, D2, DK, DL, R, S1, S2, SK, SL,
      &T, T1, T2, TD1, TD2, U1, U2
       REAL :: K2
@@ -23216,6 +23445,7 @@ C     FOR COMPLEX ARGUMENT WITH UNIT PERIOD PARALLELOGRAM
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: W
       INTEGER, INTENT(INOUT) :: IERR
+C     beginning of local variable declarations
       COMPLEX :: Z1, Z4, Z6
       REAL :: ZR, ZI
       INTEGER :: M, N
@@ -23254,6 +23484,7 @@ C     WITH UNIT PERIOD PARALLELOGRAM
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: W
       INTEGER, INTENT(INOUT) :: IERR
+C     beginning of local variable declarations
       COMPLEX :: Z1, Z3, Z6
       REAL :: ZR, ZI
       INTEGER :: M, N
@@ -23292,6 +23523,7 @@ C     FOR COMPLEX ARGUMENT WITH UNIT PERIOD PARALLELOGRAM
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: W
       INTEGER, INTENT(INOUT) :: IERR
+C     beginning of local variable declarations
       COMPLEX :: Z1, Z4, Z6
       REAL :: ZR, ZI
       INTEGER :: M, N
@@ -23332,6 +23564,7 @@ C     WITH UNIT PERIOD PARALLELOGRAM
       COMPLEX, INTENT(IN) :: Z
       COMPLEX, INTENT(INOUT) :: W
       INTEGER, INTENT(INOUT) :: IERR
+C     beginning of local variable declarations
       COMPLEX :: Z1, Z3, Z4
       REAL :: ZR, ZI
       INTEGER :: M, N
@@ -23373,6 +23606,7 @@ C     EVALUATION OF DP(Z1)
       INTEGER, INTENT(INOUT) :: KO
       INTEGER, INTENT(IN) :: N0
       REAL, INTENT(INOUT) :: A, P, X(*), Y(*)
+C     beginning of local variable declarations
       INTEGER :: K, M, N
       REAL :: A3D8(3), AJ0, AJ1, ALNPI, APH1(3), APH2(3), APH4(3), B,
      &BGD1, BGD2, C, CAPE, CAPH, CAPV, CEE, CIRCM, CST(3), D1SQ, D2SQ,
@@ -23631,6 +23865,7 @@ C                  ERROR RETURN
       REAL, INTENT(IN) :: D
       REAL, INTENT(OUT) :: P
       REAL, INTENT(IN) :: R
+C     beginning of local variable declarations
       INTEGER :: I, N
       REAL :: A, A1, AN, ANM1, BK2, C0, C1, C2, C3, CONST, D2, DELTA, E,
      &EPS, EPS0, EXPT, F, S, S0, S1, S2, SUM, T, T0, T2, TD, TN, TR, W,
@@ -23863,6 +24098,7 @@ C       TERMINATION
       REAL, INTENT(INOUT) :: E
       REAL, INTENT(IN) :: X
       REAL, INTENT(INOUT) :: Y
+C     beginning of local variable declarations
       REAL :: AX, BOT, C, EPS, T, TOP
       REAL :: A(4), B(4), P(8), Q(8), R(5), S(5)
       DOUBLE PRECISION :: W
@@ -23948,6 +24184,7 @@ C                       WHEN IND = 0
       REAL FUNCTION ERFCR(X)
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
+C     beginning of local variable declarations
       REAL :: BOT, T, TOP
       REAL :: R(5), S(4)
 C-----------------------------------------------------------------------
@@ -23972,6 +24209,7 @@ C------------------------
       REAL, INTENT(OUT) :: P
       REAL, INTENT(IN) :: R0, SX, SY
       REAL, INTENT(IN) :: K
+C     beginning of local variable declarations
       INTEGER :: I, II, IY, IZ, IZ3, J, J8, N1, NT
       REAL :: A, A1, A2, A3, A4, C, C8, D, D1, D2, DM, E3, E4, EPS, F,
      &G2, G3, H1, H2, H3, H5, H6, H8, Q, Q1, R, R8, RPI, RT2, S0, S1,
@@ -24419,6 +24657,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, M, N
       REAL, INTENT(IN) :: A(*)
       REAL, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       INTEGER :: J, JMAX, LA, LB, MP1
 C     ------------------------------------------------------------------
 C     COPYING REAL POLYNOMIALS
@@ -24444,6 +24683,7 @@ C     ------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       INTEGER :: J, JMAX, LA, LB, MP1
 C     ------------------------------------------------------------------
 C     COPYING DOUBLE PRECISION POLYNOMIALS
@@ -24469,6 +24709,7 @@ C     ------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       REAL, INTENT(IN) :: A(*), B(*)
       REAL, INTENT(INOUT) :: C(*)
+C     beginning of local variable declarations
       INTEGER :: I, LA, LB, LC
 C     ------------------------------------------------------------------
 C     ADDITION OF REAL POLYNOMIALS
@@ -24491,6 +24732,7 @@ C     ------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
       DOUBLE PRECISION, INTENT(INOUT) :: C(*)
+C     beginning of local variable declarations
       INTEGER :: I, LA, LB, LC
 C     ------------------------------------------------------------------
 C     ADDITION OF DOUBLE PRECISION POLYNOMIALS
@@ -24513,6 +24755,7 @@ C     ------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       REAL, INTENT(IN) :: A(*), B(*)
       REAL, INTENT(INOUT) :: C(*)
+C     beginning of local variable declarations
       INTEGER :: I, LA, LB, LC
 C     ------------------------------------------------------------------
 C     SUBTRACTION OF REAL POLYNOMIALS
@@ -24535,6 +24778,7 @@ C     ------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
       DOUBLE PRECISION, INTENT(INOUT) :: C(*)
+C     beginning of local variable declarations
       INTEGER :: I, LA, LB, LC
 C     ------------------------------------------------------------------
 C     SUBTRACTION OF DOUBLE PRECISION POLYNOMIALS
@@ -24557,6 +24801,7 @@ C     ------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       REAL, INTENT(IN) :: A(*), B(*)
       REAL, INTENT(INOUT) :: C(*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, J, JMAX, JMIN, LA, LB, LC
       DOUBLE PRECISION :: DSUM
 C     ------------------------------------------------------------------
@@ -24596,6 +24841,7 @@ C     ------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
       DOUBLE PRECISION, INTENT(INOUT) :: C(*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, J, JMAX, JMIN, LA, LB, LC
       DOUBLE PRECISION :: SUM
 C     ------------------------------------------------------------------
@@ -24636,6 +24882,7 @@ C     ------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       REAL, INTENT(IN) :: A(*), B(*)
       REAL, INTENT(INOUT) :: C(*)
+C     beginning of local variable declarations
       INTEGER :: I, IB, IC, IMAX, J, LA, LC
       REAL :: B0
       DOUBLE PRECISION :: DSUM
@@ -24687,6 +24934,7 @@ C                ERROR RETURN
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
       DOUBLE PRECISION, INTENT(INOUT) :: C(*)
+C     beginning of local variable declarations
       INTEGER :: I, IB, IC, IMAX, J, LA, LC
       DOUBLE PRECISION :: B0, SUM
 C     ------------------------------------------------------------------
@@ -24738,6 +24986,7 @@ C                ERROR RETURN
       REAL, INTENT(IN) :: R
       REAL, INTENT(IN) :: A(*)
       REAL, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       INTEGER :: I, IA, IB, IMAX, J, LB
       REAL :: A0
       REAL :: JM1
@@ -24789,6 +25038,7 @@ C                ERROR RETURN
       DOUBLE PRECISION, INTENT(IN) :: A(*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
       DOUBLE PRECISION, INTENT(IN) :: R
+C     beginning of local variable declarations
       INTEGER :: I, IA, IB, IMAX, J, LB
       DOUBLE PRECISION :: A0, COEFF, JM1, RP1, SUM
 C     ------------------------------------------------------------------
@@ -24836,6 +25086,7 @@ C                ERROR RETURN
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A(N)
       REAL, INTENT(INOUT) :: D(N), Q(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, K, L, L0, LL, M
       REAL :: S, SUM, T, U
 C-----------------------------------------------------------------------
@@ -24892,6 +25143,7 @@ C              COMPUTE THE COEFFICIENTS OF THE INVERSE
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(IN) :: A(N)
       DOUBLE PRECISION, INTENT(INOUT) :: D(N), Q(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, K, L, L0, LL, M
       DOUBLE PRECISION :: S, SUM, T, U
 C-----------------------------------------------------------------------
@@ -24949,6 +25201,7 @@ C              COMPUTE THE COEFFICIENTS OF THE INVERSE
       REAL :: AC(*)
       REAL, INTENT(IN) :: AU
       REAL, INTENT(OUT) :: FV
+C     beginning of local variable declarations
       INTEGER :: K, L
       REAL :: QL
 C     ******************************************************************
@@ -25004,6 +25257,7 @@ C     MO = +2 FOR SECOND DERIVATIVE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: X
       REAL, INTENT(IN) :: A(N)
+C     beginning of local variable declarations
       INTEGER :: I, K
       REAL :: S0, S1, S2, X2
 C-----------------------------------------------------------------------
@@ -25029,6 +25283,7 @@ C-----------------------------------------------------------------------
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(IN) :: A(N), X
+C     beginning of local variable declarations
       INTEGER :: I, K
       DOUBLE PRECISION :: X2, S0, S1, S2
 C-----------------------------------------------------------------------
@@ -25055,6 +25310,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: NA
       REAL, INTENT(INOUT) :: AN(*)
       REAL :: AU(*)
+C     beginning of local variable declarations
       INTEGER :: K, M
       REAL :: DM, TM
 C     ******************************************************************
@@ -25082,6 +25338,7 @@ C     AN = NORMALIZATION FACTORS (N-ARRAY)
       REAL, INTENT(INOUT) :: DF(*), FF(*)
       REAL, INTENT(IN) :: QU
       REAL, INTENT(INOUT) :: SF(*)
+C     beginning of local variable declarations
       INTEGER :: K, L
       REAL :: DM, RM, SM, TM
       LOGICAL :: LN
@@ -25197,6 +25454,7 @@ C     CALL LGRNGV (2, NA, QU, AU, AN, FF, DF, SF) FOR SECOND DERIVATIVES
       INTEGER, INTENT(IN) :: NA
       REAL, INTENT(INOUT) :: AC(*)
       REAL :: AU(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L
       REAL :: SM, TD, TM
 C     ******************************************************************
@@ -25249,6 +25507,7 @@ C     AC = POLYNOMIAL COEFFICIENTS (NX(N+1) ARRAY)
       INTEGER, INTENT(IN) :: MA, NA
       REAL, INTENT(INOUT) :: AA(*), AR(*)
       REAL :: AU(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L, M
       REAL :: RM, RN, SM, SN
 C     ******************************************************************
@@ -25331,6 +25590,7 @@ C     AR = RECURRENCE COEFFICIENTS (2*M-2 ARRAY)
       REAL :: AR(*)
       REAL, INTENT(IN) :: AU
       REAL, INTENT(INOUT) :: DF(*), FF(*), SF(*)
+C     beginning of local variable declarations
       INTEGER :: K, L
       REAL :: RN, SN
 C     ******************************************************************
@@ -25386,6 +25646,7 @@ C     CALL ORTHOV (2, NA, AU, AR, NF, FF, DF, SF) FOR SECOND DERIVATIVES
       INTEGER, INTENT(IN) :: NA, NC
       REAL, INTENT(INOUT) :: AC(*)
       REAL :: AR(*)
+C     beginning of local variable declarations
       INTEGER :: J, K, L, M, N
       REAL :: RN, SN, TM
 C     ******************************************************************
@@ -25446,6 +25707,7 @@ C-----------------------------------------------------------------------
       REAL :: F
       REAL, INTENT(IN) :: AX, BX, AERR, RERR
       EXTERNAL F
+C     beginning of local variable declarations
       REAL :: A, B, C, D, E, EPS, FA, FB, FC, TOL, XM, P, Q, R, S, ATOL,
      &RTOL
       REAL :: SPMPAR
@@ -25538,6 +25800,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION :: F
       DOUBLE PRECISION, INTENT(IN) :: AX, BX, AERR, RERR
       EXTERNAL F
+C     beginning of local variable declarations
       DOUBLE PRECISION :: A, B, C, D, E, EPS, FA, FB, FC, TOL, XM, P, Q,
      &R, S, ATOL, RTOL
       DOUBLE PRECISION :: DPMPAR
@@ -25615,6 +25878,7 @@ C DONE
       REAL, INTENT(IN) :: EPSFCN, TOL
       REAL, INTENT(INOUT) :: X(N), FVEC(N), WA(LWA)
       EXTERNAL FCN
+C     beginning of local variable declarations
       INTEGER :: INDEX, J, LR, MAXFEV, ML, MODE, MU, NFEV, NPRINT
       REAL :: FACTOR, ONE, XTOL, ZERO
 C     **********
@@ -25721,6 +25985,7 @@ C     LAST CARD OF SUBROUTINE HBRD.
      &R(LR), QTF(N), WA1(N), WA2(N), WA3(N)
       REAL :: WA4(N)
       EXTERNAL FCN
+C     beginning of local variable declarations
       INTEGER :: I, IFLAG, ITER, J, JM1, L, MSUM, NCFAIL, NCSUC, NSLOW1,
      &NSLOW2
       INTEGER :: IWA(1)
@@ -26063,6 +26328,7 @@ C     LAST CARD OF SUBROUTINE HYBRD.
       IMPLICIT NONE
       REAL, INTENT(IN) :: A(3)
       COMPLEX, INTENT(INOUT) :: Z(2)
+C     beginning of local variable declarations
       REAL :: D, EPS, R, W, X, Y
       REAL :: SPMPAR
 C-----------------------------------------------------------------------
@@ -26116,6 +26382,7 @@ C     A(3) IS NONZERO.
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A(3)
       DOUBLE PRECISION, INTENT(INOUT) :: ZR(2), ZI(2)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: D, EPS, R, W
       DOUBLE PRECISION :: DPMPAR
 C-----------------------------------------------------------------------
@@ -26162,6 +26429,7 @@ C                 CASE WHEN A(1) = 0
       IMPLICIT NONE
       REAL, INTENT(IN) :: A(4)
       COMPLEX, INTENT(INOUT) :: Z(3)
+C     beginning of local variable declarations
       REAL :: ARG, C, CF, D, EPS, P, P1, Q, Q1, R, R1, RA, RB, RQ, RT,
      &RT3, S, SF, SQ, SUM, T, T1, TOL, W, W1, W2, X, X1, X2, X3, Y, Y1,
      &Y2, Y3
@@ -26344,6 +26612,7 @@ C        DAHLGREN, VIRGINIA
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A(4)
       DOUBLE PRECISION, INTENT(INOUT) :: ZR(3), ZI(3)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: AQ(3), ARG, C, CF, D, EPS, P, P1, Q, Q1, R,
      &RA, RB, RQ, RT, RT3, R1, S, SF, SQ, SUM, T, TOL, T1, W, W1, W2, X,
      &X1, X2, X3, Y, Y1, Y2, Y3
@@ -26525,6 +26794,7 @@ C                   CASE WHEN D = 0
       IMPLICIT NONE
       REAL, INTENT(IN) :: A(5)
       COMPLEX, INTENT(INOUT) :: Z(4)
+C     beginning of local variable declarations
       REAL :: B, B2, C, D, E, H, P, Q, R, T, U, V, V1, V2, X, X1, X2,
      &X3, Y
       REAL :: TEMP(4)
@@ -26671,6 +26941,7 @@ C        DAHLGREN, VIRGINIA
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A(5)
       DOUBLE PRECISION, INTENT(INOUT) :: ZR(4), ZI(4)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: B, B2, C, D, E, H, P, Q, R, T, TEMP(4), U, V,
      &V1, V2, W(2), X, X1, X2, X3
       DOUBLE PRECISION :: NSWC_AI_R8
@@ -26810,6 +27081,7 @@ C                         CASE WHEN A(1) = 0
       DOUBLE PRECISION, INTENT(INOUT) :: ZEROR(IDEG), ZEROI(IDEG),
      &DWK(*)
       REAL, INTENT(INOUT) :: WK(*)
+C     beginning of local variable declarations
       INTEGER :: IDP1
       INTEGER :: P, QP, K, QK, SVK, TMP
 C     THIS SUBROUTINE FINDS THE ZEROS OF A REAL POLYNOMIAL.
@@ -26857,6 +27129,7 @@ C     ERROR RETURN
       DOUBLE PRECISION :: OP(IDP1), ZEROR(IDEG), ZEROI(IDEG), P(IDP1),
      &QP(IDP1), K(IDP1), QK(IDP1), SVK(IDP1), TEMP(IDP1)
       REAL :: PT(IDP1)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, L, N, NM1, NN, NZ
       DOUBLE PRECISION :: AA, BB, CC, FACTOR, T
       REAL :: LO, MAX, MIN, XX, YY, COSR, SINR, X, XXX, SC, BND, XM, FF,
@@ -27073,6 +27346,7 @@ C     STORE THE ZEROS OBTAINED AND DEFLATE THE POLYNOMIAL.
       INTEGER :: NN
       DOUBLE PRECISION :: P(NN), QP(NN), K(NN), QK(NN), SVK(NN)
       INTEGER :: L2, NZ
+C     beginning of local variable declarations
       INTEGER :: N
       DOUBLE PRECISION :: SVU, SVV, UI, VI, S
       REAL :: BETAS, BETAV, OSS, OVV, SS, VV, TS, TV, OTS, OTV, TVV, TSS
@@ -27188,6 +27462,7 @@ C     SECOND STAGE
       INTEGER :: NN
       DOUBLE PRECISION :: UU, VV, P(NN), QP(NN), K(NN), QK(NN)
       INTEGER :: NZ
+C     beginning of local variable declarations
       INTEGER :: N
       DOUBLE PRECISION :: UI, VI
       REAL :: MP, OMP, EE, RELSTP, T, ZM
@@ -27272,6 +27547,7 @@ C     IF VI IS ZERO THE ITERATION IS NOT CONVERGING
       IMPLICIT NONE
       INTEGER :: IFLAG, NN, NZ
       DOUBLE PRECISION :: SSS, P(NN), QP(NN), K(NN), QK(NN)
+C     beginning of local variable declarations
       INTEGER :: I, J, N
       DOUBLE PRECISION :: PV, KV, T, S
       REAL :: MS, MP, OMP, EE
@@ -27362,6 +27638,7 @@ C     USE UNSCALED FORM
       INTEGER :: N
       INTEGER :: TYPE
       DOUBLE PRECISION :: K(N), QK(N)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: TOL
       REAL :: ETA, ARE, MRE
       DOUBLE PRECISION :: SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
@@ -27408,6 +27685,7 @@ C     TYPE=1 INDICATES THAT ALL FORMULAS ARE DIVIDED BY C
       INTEGER :: N
       INTEGER :: TYPE
       DOUBLE PRECISION :: QP(N), K(N), QK(N)
+C     beginning of local variable declarations
       INTEGER :: I
       DOUBLE PRECISION :: TEMP
       REAL :: ETA, ARE, MRE
@@ -27451,6 +27729,7 @@ C     USE UNSCALED FORM OF THE RECURRENCE IF TYPE IS 3
       INTEGER :: NN
       INTEGER :: TYPE
       DOUBLE PRECISION :: UU, VV, P(NN), K(NN)
+C     beginning of local variable declarations
       INTEGER :: N
       DOUBLE PRECISION :: A4, A5, B1, B2, C1, C2, C3, C4, TEMP
       REAL :: ETA, ARE, MRE
@@ -27493,6 +27772,7 @@ C     IF TYPE=3 THE QUADRATIC IS ZEROED
       DOUBLE PRECISION, INTENT(INOUT) :: Q(NN)
       DOUBLE PRECISION, INTENT(IN) :: U, V
       DOUBLE PRECISION, INTENT(OUT) :: A, B
+C     beginning of local variable declarations
       INTEGER :: I
       DOUBLE PRECISION :: C
 C     DIVIDES P BY THE QUADRATIC  1,U,V  PLACING THE
@@ -27519,6 +27799,7 @@ C     THE SMALLER REAL ZERO IS FOUND DIRECTLY FROM THE
 C     PRODUCT OF THE ZEROS C/A.
       DOUBLE PRECISION, INTENT(IN) :: A, B1, C
       DOUBLE PRECISION, INTENT(INOUT) :: SR, SI, LR, LI
+C     beginning of local variable declarations
       DOUBLE PRECISION :: B, D, E
       IF (A .NE. 0.D0) GO TO 20
          SR = 0.D0
@@ -27561,6 +27842,7 @@ C     COMPLEX CONJUGATE ZEROS
       INTEGER :: IDEG
       DOUBLE PRECISION, INTENT(IN) :: OPR(*), OPI(*)
       DOUBLE PRECISION, INTENT(INOUT) :: ZEROR(IDEG), ZEROI(IDEG), WK(*)
+C     beginning of local variable declarations
       INTEGER :: IDP1
       INTEGER :: PR, PI, QPR, QPI, HR, HI, QHR, QHI, SHR, SHI
 C     THIS SUBROUTINE FINDS THE ZEROS OF A COMPLEX POLYNOMIAL.
@@ -27616,6 +27898,7 @@ C     ERROR RETURN
       DOUBLE PRECISION, INTENT(INOUT) :: ZEROR(IDEG), ZEROI(IDEG),
      &PR(IDP1), PI(IDP1), QPR(IDP1), QPI(IDP1), HR(IDP1), HI(IDP1),
      &QHR(IDP1), QHI(IDP1), SHR(IDP1), SHI(IDP1)
+C     beginning of local variable declarations
       INTEGER :: I, NN
       INTEGER :: IPMPAR
       DOUBLE PRECISION :: SR, SI, TR, TI, PVR, PVI, ARE, MRE, ETA, INFIN
@@ -27726,6 +28009,7 @@ C     THE POLYNOMIAL.
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NN
       DOUBLE PRECISION, INTENT(IN) :: PT(NN), ETA, INFIN, SMALNO, BASE
+C     beginning of local variable declarations
       INTEGER :: I, L
       DOUBLE PRECISION :: HI, LO, MAX, MIN, X, SC
 C     RETURNS A SCALE FACTOR TO MULTIPLY THE COEFFICIENTS OF THE
@@ -27762,6 +28046,7 @@ C     SCALE ONLY IF THERE ARE VERY LARGE OR VERY SMALL COEFFICIENTS.
       INTEGER, INTENT(IN) :: NN
       DOUBLE PRECISION, INTENT(INOUT) :: Q(NN), PT(NN)
       DOUBLE PRECISION, INTENT(INOUT) :: BND
+C     beginning of local variable declarations
       INTEGER :: I, N
       DOUBLE PRECISION :: X, XM, F, DX, DF
 C     CAUCHY COMPUTES A LOWER BOUND BND ON THE MODULI OF THE ZEROS
@@ -27807,6 +28092,7 @@ C     DO NEWTON ITERATION UNTIL X CONVERGES TO TWO DECIMAL PLACES.
       DOUBLE PRECISION, INTENT(INOUT) :: TR, TI
       DOUBLE PRECISION, INTENT(IN) :: ETA, PR(NN), PI(NN)
       DOUBLE PRECISION, INTENT(INOUT) :: HR(NN), HI(NN)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, N, NM1
       DOUBLE PRECISION :: DN, T1, T2, XNI, DCPABS
 C     COMPUTES THE DERIVATIVE POLYNOMIAL AS THE INITIAL H
@@ -27857,6 +28143,7 @@ C     IF THE CONSTANT TERM IS ESSENTIALLY ZERO, SHIFT H COEFFICIENTS.
      &HI(NN), QHR(NN), QHI(NN), SHR(NN), SHI(NN)
       DOUBLE PRECISION, INTENT(INOUT) :: ZR, ZI
       LOGICAL, INTENT(INOUT) :: CONV
+C     beginning of local variable declarations
       INTEGER :: I, J, N
       DOUBLE PRECISION :: OTR, OTI, SVSR, SVSI, DCPABS
       LOGICAL :: TEST, PASD, BOOL
@@ -27935,6 +28222,7 @@ C     ATTEMPT AN ITERATION WITH FINAL H POLYNOMIAL FROM SECOND STAGE.
      &HI(NN), QHR(NN), QHI(NN)
       DOUBLE PRECISION, INTENT(INOUT) :: ZR, ZI
       LOGICAL, INTENT(OUT) :: CONV
+C     beginning of local variable declarations
       INTEGER :: I, J, N
       DOUBLE PRECISION :: MP, MS, OMP, RELSTP, R1, R2, TP, ERREV, DCPABS
       LOGICAL :: B, BOOL
@@ -28005,6 +28293,7 @@ C     CALCULATE THE NEXT ITERATE.
       DOUBLE PRECISION, INTENT(INOUT) :: TR, TI
       DOUBLE PRECISION, INTENT(IN) :: PVR, PVI, ARE, HR(N), HI(N)
       DOUBLE PRECISION, INTENT(INOUT) :: QHR(N), QHI(N)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: HVR, HVI, DCPABS
 C     THIS SUBROUTINE COMPUTES T = -P(S)/H(S)
 C     BOOL - LOGICAL VARIABLE, WHICH IS SET TO .TRUE. IF H(S) IS
@@ -28026,6 +28315,7 @@ C     EVALUATE H(S)
       DOUBLE PRECISION, INTENT(IN) :: TR, TI
       DOUBLE PRECISION, INTENT(INOUT) :: HR(N), HI(N)
       DOUBLE PRECISION, INTENT(IN) :: QPR(N), QPI(N), QHR(N), QHI(N)
+C     beginning of local variable declarations
       INTEGER :: J
       DOUBLE PRECISION :: T1, T2
 C     CALCULATES THE NEXT SHIFTED H POLYNOMIAL.
@@ -28056,6 +28346,7 @@ C     IF H(S) IS ZERO THEN REPLACE H WITH QH.
       DOUBLE PRECISION, INTENT(INOUT) :: QR(N), QI(N)
       DOUBLE PRECISION, INTENT(IN) :: SR, SI
       DOUBLE PRECISION, INTENT(OUT) :: PVR, PVI
+C     beginning of local variable declarations
       INTEGER :: I
       DOUBLE PRECISION :: T
 C     EVALUATES A POLYNOMIAL P AT S BY THE HORNER RECURRENCE ALGO.,
@@ -28077,6 +28368,7 @@ C     PLACING THE PARTIAL SUMS IN Q AND THE COMPUTED VALUE IN PV.
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NN
       DOUBLE PRECISION, INTENT(IN) :: QR(NN), QI(NN), MS, MP, ARE, MRE
+C     beginning of local variable declarations
       INTEGER :: I
       DOUBLE PRECISION :: E, DCPABS
 C     BOUNDS THE ERROR IN EVALUATING THE POLYNOMIAL BY THE HORNER
@@ -28100,6 +28392,7 @@ C     ARE,MRE - ERROR BOUNDS ON COMPLEX ADDITION AND MULTIPLICATION
       INTEGER, INTENT(INOUT) :: KLUST(N)
       REAL, INTENT(IN) :: C(*)
       REAL, INTENT(INOUT) :: ABSERR(N), RELERR(N)
+C     beginning of local variable declarations
       INTEGER :: J, JP1, K, L, M, NM1, NP1
       REAL :: B, CERT, DIST, EPS, OLDERR, P, POWER, R, RAT, WNRM, WRAD
       REAL :: SPMPAR
@@ -28240,6 +28533,7 @@ C             ERROR RETURN
       COMPLEX, INTENT(IN) :: C(*), W(N)
       INTEGER, INTENT(INOUT) :: KLUST(N)
       REAL, INTENT(INOUT) :: ABSERR(N), RELERR(N)
+C     beginning of local variable declarations
       INTEGER :: J, JP1, K, L, M, NM1, NP1
       REAL :: B, CERT, DIST, EPS, OLDERR, P, POWER, R, RAT, WNRM, WRAD
       REAL :: SPMPAR
@@ -28382,6 +28676,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       REAL, INTENT(INOUT) :: SY(*)
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       INTEGER :: I
       INTEGER :: IX, IY, M, MP1
       IF(N.LE.0)RETURN
@@ -28427,6 +28722,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       DOUBLE PRECISION, INTENT(INOUT) :: DY(*)
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       INTEGER :: I
       INTEGER :: IX, IY, M, MP1
       IF(N.LE.0)RETURN
@@ -28471,6 +28767,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       COMPLEX, INTENT(INOUT) :: CY(*)
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       INTEGER :: I
       INTEGER :: IX, IY
       IF(N.LE.0)RETURN
@@ -28497,6 +28794,7 @@ C        CODE FOR BOTH INCREMENTS EQUAL TO 1
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, INCY, N
       INTEGER, INTENT(INOUT) :: IX(*), IY(*)
+C     beginning of local variable declarations
       INTEGER :: I, IIX, IIY, M, MP1, NS
       INTEGER :: ITEMP1, ITEMP2, ITEMP3
       INTEGER :: NSWC_AI_I4
@@ -28576,6 +28874,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       REAL, INTENT(INOUT) :: SX(*), SY(*)
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       REAL :: STEMP
       INTEGER :: I
       INTEGER :: IX, IY, M, MP1
@@ -28627,6 +28926,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       DOUBLE PRECISION, INTENT(INOUT) :: DX(*), DY(*)
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       DOUBLE PRECISION :: DTEMP
       INTEGER :: I
       INTEGER :: IX, IY, M, MP1
@@ -28677,6 +28977,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       COMPLEX, INTENT(INOUT) :: CX(*), CY(*)
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       COMPLEX :: CTEMP
       INTEGER :: I
       INTEGER :: IX, IY
@@ -28712,6 +29013,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       REAL, INTENT(IN) :: C, S
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       REAL :: STEMP
       INTEGER :: I
       INTEGER :: IX, IY
@@ -28747,6 +29049,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       DOUBLE PRECISION, INTENT(IN) :: C, S
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       DOUBLE PRECISION :: DTEMP
       INTEGER :: I
       INTEGER :: IX, IY
@@ -28783,6 +29086,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       REAL, INTENT(IN) :: C, S
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       COMPLEX :: CTEMP
       INTEGER :: I
       INTEGER :: IX, IY
@@ -28814,6 +29118,7 @@ C       CODE FOR BOTH INCREMENTS EQUAL TO 1
       IMPLICIT NONE
       REAL, INTENT(INOUT) :: SD1, SD2, SPARAM(5), SX1
       REAL, INTENT(IN) :: SY1
+C     beginning of local variable declarations
       REAL :: GAM, GAMSQ, ONE, RGAMSQ, SFLAG, SH11, SH12, SH21, SH22,
      &SP1, SP2, SQ1, SQ2, STEMP, SU, TWO, ZERO
       REAL :: NSWC_AI_R4
@@ -28945,6 +29250,7 @@ C     PROCEDURE..SCALE-CHECK
       INTEGER, INTENT(IN) :: INCX, INCY, N
       REAL :: SPARAM(5)
       REAL, INTENT(INOUT) :: SX(*), SY(*)
+C     beginning of local variable declarations
       INTEGER :: I, KX, KY, NSTEPS
       REAL :: SFLAG, SH11, SH12, SH21, SH22, TWO, W, Z, ZERO
       REAL :: NSWC_AI_R4
@@ -29070,6 +29376,7 @@ C     OF DD1 AND DD2.  ALL ACTUAL SCALING OF DATA IS DONE USING GAM.
       DOUBLE PRECISION, INTENT(IN) :: DY1
       DOUBLE PRECISION, INTENT(INOUT) :: DD1
       DOUBLE PRECISION, INTENT(INOUT) :: DX1
+C     beginning of local variable declarations
       DOUBLE PRECISION :: GAM, ONE, RGAMSQ
       DOUBLE PRECISION :: DH11, DH21
       DOUBLE PRECISION :: DP2, DQ2, DU
@@ -29191,6 +29498,7 @@ C     PROCEDURE..SCALE-CHECK
       DOUBLE PRECISION, INTENT(INOUT) :: DX(*)
       DOUBLE PRECISION :: DPARAM(5)
       DOUBLE PRECISION, INTENT(INOUT) :: DY(*)
+C     beginning of local variable declarations
       INTEGER :: I, KX, KY, NSTEPS
       DOUBLE PRECISION :: DFLAG, DH12, DH22
       DOUBLE PRECISION :: TWO, Z, DH11, DH21
@@ -29304,6 +29612,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       REAL, INTENT(IN) :: SX(*), SY(*)
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       REAL :: STEMP
       INTEGER :: I
       INTEGER :: IX, IY, M, MP1
@@ -29348,6 +29657,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       DOUBLE PRECISION, INTENT(IN) :: DX(*), DY(*)
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       DOUBLE PRECISION :: DTEMP
       INTEGER :: I
       INTEGER :: IX, IY, M, MP1
@@ -29392,6 +29702,7 @@ C     JACK DONGARRA, LINPACK,  3/11/78.
       COMPLEX, INTENT(IN) :: CX(*), CY(*)
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       COMPLEX :: CTEMP
       INTEGER :: I
       INTEGER :: IX, IY
@@ -29426,6 +29737,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       COMPLEX, INTENT(IN) :: CX(*), CY(*)
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       COMPLEX :: CTEMP
       INTEGER :: I
       INTEGER :: IX, IY
@@ -29462,6 +29774,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       REAL, INTENT(INOUT) :: SX(*)
       INTEGER, INTENT(IN) :: INCX
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       INTEGER :: I
       INTEGER :: M, MP1
       INTEGER :: NINCX
@@ -29500,6 +29813,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       DOUBLE PRECISION, INTENT(INOUT) :: DX(*)
       INTEGER, INTENT(IN) :: INCX
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       INTEGER :: I
       INTEGER :: M, MP1
       INTEGER :: NINCX
@@ -29536,6 +29850,7 @@ C     JACK DONGARRA, LINPACK,  3/11/78.
       COMPLEX, INTENT(IN) :: CA
       COMPLEX, INTENT(INOUT) :: CX(*)
       INTEGER, INTENT(IN) :: INCX, N
+C     beginning of local variable declarations
       INTEGER :: I
       INTEGER :: NINCX
       IF(N.LE.0)RETURN
@@ -29559,6 +29874,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       COMPLEX, INTENT(INOUT) :: CX(*)
       REAL, INTENT(IN) :: SA
       INTEGER, INTENT(IN) :: INCX, N
+C     beginning of local variable declarations
       INTEGER :: I
       INTEGER :: NINCX
       IF(N.LE.0)RETURN
@@ -29585,6 +29901,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       REAL, INTENT(IN) :: SA
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       INTEGER :: I
       INTEGER :: IX, IY, M, MP1
       IF(N.LE.0)RETURN
@@ -29629,6 +29946,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       DOUBLE PRECISION, INTENT(IN) :: DA
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       INTEGER :: I
       INTEGER :: IX, IY, M, MP1
       IF(N.LE.0)RETURN
@@ -29672,6 +29990,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       COMPLEX, INTENT(IN) :: CA
       INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       INTEGER :: I
       INTEGER :: IX, IY
       IF(N.LE.0)RETURN
@@ -29703,6 +30022,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       REAL, INTENT(IN) :: SX(*)
       INTEGER, INTENT(IN) :: INCX
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       REAL :: STEMP
       INTEGER :: I
       INTEGER :: M, MP1
@@ -29741,6 +30061,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       DOUBLE PRECISION, INTENT(IN) :: DX(*)
       INTEGER, INTENT(IN) :: INCX
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       DOUBLE PRECISION :: DTEMP
       INTEGER :: I
       INTEGER :: M, MP1
@@ -29779,6 +30100,7 @@ C     RETURNS A SINGLE PRECISION RESULT.
 C     JACK DONGARRA, LINPACK, 3/11/78.
       COMPLEX, INTENT(IN) :: CX(*)
       INTEGER, INTENT(IN) :: INCX, N
+C     beginning of local variable declarations
       REAL :: STEMP
       INTEGER :: I
       INTEGER :: NINCX
@@ -29804,6 +30126,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, N
       REAL, INTENT(IN) :: SX(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, NN
       INTEGER :: NEXT
       REAL :: CUTLO, CUTHI, HITEST, SUM, XMAX, ZERO, ONE
@@ -29910,6 +30233,7 @@ C              COMPUTE SQUARE ROOT AND ADJUST FOR SCALING.
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, N
       DOUBLE PRECISION, INTENT(IN) :: DX(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, NN
       INTEGER :: NEXT
       DOUBLE PRECISION :: CUTLO, CUTHI, HITEST, SUM, XMAX, ZERO, ONE
@@ -30016,6 +30340,7 @@ C              COMPUTE SQUARE ROOT AND ADJUST FOR SCALING.
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, N
       COMPLEX, INTENT(IN) :: CX(*)
+C     beginning of local variable declarations
       INTEGER :: I, NN
       LOGICAL :: IMAG, SCALE
       INTEGER :: NEXT
@@ -30144,6 +30469,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       REAL, INTENT(IN) :: SX(*)
       INTEGER, INTENT(IN) :: INCX
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       REAL :: SMAX
       INTEGER :: I
       INTEGER :: IX
@@ -30180,6 +30506,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       DOUBLE PRECISION, INTENT(IN) :: DX(*)
       INTEGER, INTENT(IN) :: INCX
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       DOUBLE PRECISION :: DMAX
       INTEGER :: I
       INTEGER :: IX
@@ -30216,6 +30543,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       COMPLEX :: CX(*)
       INTEGER, INTENT(IN) :: INCX
       INTEGER, INTENT(IN) :: N
+C     beginning of local variable declarations
       REAL :: SMAX
       INTEGER :: I
       INTEGER :: IX
@@ -30253,6 +30581,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, N
       REAL, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, L
       L = 0
       DO J = 1,N
@@ -30268,6 +30597,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, L
       L = 0
       DO J = 1,N
@@ -30283,6 +30613,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, N
       REAL, INTENT(INOUT) :: A(KA,N)
       REAL, INTENT(IN) :: B(*)
+C     beginning of local variable declarations
       INTEGER :: I, II, IM1, J, JJ, L
       A(1,1) = B(1)
       IF (N .LT. 2) RETURN
@@ -30310,6 +30641,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, N
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N)
       DOUBLE PRECISION, INTENT(IN) :: B(*)
+C     beginning of local variable declarations
       INTEGER :: I, II, IM1, J, JJ, L
       A(1,1) = B(1)
       IF (N .LT. 2) RETURN
@@ -30337,6 +30669,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, KB, M, N
       REAL, INTENT(IN) :: A(KA,N)
       DOUBLE PRECISION, INTENT(INOUT) :: B(KB,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       DO J = 1,N
          DO I = 1,M
@@ -30350,6 +30683,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, KB, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       DO J = 1,N
          DO I = 1,M
@@ -30363,6 +30697,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, KB, M, N
       REAL, INTENT(IN) :: A(KA,N)
       COMPLEX, INTENT(INOUT) :: B(KB,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       DO J = 1,N
          DO I = 1,M
@@ -30376,6 +30711,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, KB, M, N
       COMPLEX, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       DO J = 1,N
          DO I = 1,M
@@ -30389,6 +30725,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, KB, M, N
       COMPLEX, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       DO J = 1,N
          DO I = 1,M
@@ -30402,6 +30739,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, KB, M, N
       REAL, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       DO J = 1,N
          DO I = 1,M
@@ -30415,6 +30753,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A(*)
       REAL, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       INTEGER :: K, L
       L = (N*(N + 1))/2
       DO K = 1,L
@@ -30427,6 +30766,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, KB, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
       DOUBLE PRECISION, INTENT(INOUT) :: B(KB,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       DO J = 1,N
          DO I = 1,M
@@ -30440,6 +30780,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, KB, M, N
       COMPLEX, INTENT(IN) :: A(KA,N)
       COMPLEX, INTENT(INOUT) :: B(KB,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       DO J = 1,N
          DO I = 1,M
@@ -30453,6 +30794,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, KB, M, N
       COMPLEX, INTENT(IN) :: A(KA,N)
       COMPLEX, INTENT(INOUT) :: B(KB,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       DO J = 1,N
          DO I = 1,M
@@ -30466,6 +30808,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, KB, M, N
       REAL, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,M)
+C     beginning of local variable declarations
       INTEGER :: I, J
       DO J = 1,N
          DO I = 1,M
@@ -30479,6 +30822,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, KB, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
       DOUBLE PRECISION, INTENT(INOUT) :: B(KB,M)
+C     beginning of local variable declarations
       INTEGER :: I, J
       DO J = 1,N
          DO I = 1,M
@@ -30492,6 +30836,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: KA, KB, M, N
       COMPLEX, INTENT(IN) :: A(KA,N)
       COMPLEX, INTENT(INOUT) :: B(KB,M)
+C     beginning of local variable declarations
       INTEGER :: I, J
       DO J = 1,N
          DO I = 1,M
@@ -30507,6 +30852,7 @@ C        CODE FOR INCREMENT EQUAL TO 1
       INTEGER, INTENT(IN) :: NWORK
       REAL, INTENT(INOUT) :: A(*)
       INTEGER, INTENT(INOUT) :: MOVED(NWORK)
+C     beginning of local variable declarations
       INTEGER :: I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID,
      &ISTART, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT,
      &NPOWER
@@ -30624,6 +30970,7 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
       INTEGER, INTENT(IN) :: NWORK
       DOUBLE PRECISION, INTENT(INOUT) :: A(*)
       INTEGER, INTENT(INOUT) :: MOVED(NWORK)
+C     beginning of local variable declarations
       INTEGER :: I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID,
      &ISTART, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT,
      &NPOWER
@@ -30741,6 +31088,7 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
       INTEGER, INTENT(IN) :: NWORK
       COMPLEX, INTENT(INOUT) :: A(*)
       INTEGER, INTENT(INOUT) :: MOVED(NWORK)
+C     beginning of local variable declarations
       INTEGER :: I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID,
      &ISTART, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT,
      &NPOWER
@@ -30856,6 +31204,7 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
       INTEGER, INTENT(INOUT) :: IFACT(*), IPOWER(*)
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: NEXP(*), NPOWER
+C     beginning of local variable declarations
       INTEGER :: IDIV, IFCUR, IP, IQUOT, NPART
 C FACTOR N INTO ITS PRIME POWERS, NPOWER IN NUMBER.
 C E.G., FOR N=1960=2**3 *5 *7**2, NPOWER=3, IFACT=2,5,7,
@@ -30906,6 +31255,7 @@ C IPOWER=8,5,49, AND NEXP=3,1,2.
       INTEGER, INTENT(IN) :: KA, KB, M, N
       COMPLEX, INTENT(IN) :: A(KA,N)
       COMPLEX, INTENT(INOUT) :: B(KB,M)
+C     beginning of local variable declarations
       INTEGER :: I, J
       DO J = 1,N
          DO I = 1,M
@@ -30926,6 +31276,7 @@ C     ON RETURN,
 C     A  CONTAINS ITS CONJUGATE TRANSPOSE.
       INTEGER, INTENT(IN) :: N, NM
       COMPLEX, INTENT(INOUT) :: A(NM,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       COMPLEX :: TEMP
       DO I = 1,N
@@ -30942,6 +31293,7 @@ C     A  CONTAINS ITS CONJUGATE TRANSPOSE.
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
       REAL, INTENT(IN) :: A(KA,N), B(KB,N)
       REAL, INTENT(INOUT) :: C(KC,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
 C-----------------------------------------------------------------------
 C                      ADDITION OF REAL MATRICES
@@ -30958,6 +31310,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,N)
       DOUBLE PRECISION, INTENT(INOUT) :: C(KC,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
 C-----------------------------------------------------------------------
 C                ADDITION OF DOUBLE PRECISION MATRICES
@@ -30974,6 +31327,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
       COMPLEX, INTENT(IN) :: A(KA,N), B(KB,N)
       COMPLEX, INTENT(INOUT) :: C(KC,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
 C-----------------------------------------------------------------------
 C                   ADDITION OF COMPLEX MATRICES
@@ -30990,6 +31344,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A(*), B(*)
       REAL, INTENT(INOUT) :: C(*)
+C     beginning of local variable declarations
       INTEGER :: K, M
       M=(N*(N+1))/2
       DO K=1,M
@@ -31002,6 +31357,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
       REAL, INTENT(IN) :: A(KA,N), B(KB,N)
       REAL, INTENT(INOUT) :: C(KC,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
 C-----------------------------------------------------------------------
 C                     SUBTRACTION OF REAL MATRICES
@@ -31018,6 +31374,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,N)
       DOUBLE PRECISION, INTENT(INOUT) :: C(KC,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
 C-----------------------------------------------------------------------
 C              SUBTRACTION OF DOUBLE PRECISION MATRICES
@@ -31034,6 +31391,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
       COMPLEX, INTENT(IN) :: A(KA,N), B(KB,N)
       COMPLEX, INTENT(INOUT) :: C(KC,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
 C-----------------------------------------------------------------------
 C                  SUBTRACTION OF COMPLEX MATRICES
@@ -31050,6 +31408,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A(*), B(*)
       REAL, INTENT(INOUT) :: C(*)
+C     beginning of local variable declarations
       INTEGER :: K, M
       M=(N*(N+1))/2
       DO K=1,M
@@ -31062,6 +31421,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       REAL, INTENT(IN) :: A(KA,N), B(KB,L)
       REAL, INTENT(INOUT) :: C(KC,L)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       DOUBLE PRECISION :: W
 C-----------------------------------------------------------------------
@@ -31083,6 +31443,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,L)
       DOUBLE PRECISION, INTENT(INOUT) :: C(KC,L)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       DOUBLE PRECISION :: W
 C-----------------------------------------------------------------------
@@ -31104,6 +31465,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       COMPLEX, INTENT(IN) :: A(KA,N), B(KB,L)
       COMPLEX, INTENT(INOUT) :: C(KC,L)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       COMPLEX :: W
 C-----------------------------------------------------------------------
@@ -31124,6 +31486,7 @@ C-----------------------------------------------------------------------
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       REAL, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L), ROW(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       REAL :: SAVE
       DOUBLE PRECISION :: W
@@ -31182,6 +31545,7 @@ C     MUST BE GREATER THAN OR EQUAL TO M. IT IS ASSUMED THAT KC=KB.
       IMPLICIT NONE
       REAL, INTENT(IN) :: X(*)
       REAL, INTENT(INOUT) :: Y(*)
+C     beginning of local variable declarations
       REAL :: XOLD, YOLD
 C-----------------------------------------------------------------------
 C     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
@@ -31218,6 +31582,7 @@ C     X AND Y BEGIN IN DIFFERENT LOCATIONS
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L),
      &ROW(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       DOUBLE PRECISION :: W
       LOGICAL :: DLOC
@@ -31283,6 +31648,7 @@ C     PROPERLY.
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X(*)
       DOUBLE PRECISION, INTENT(INOUT) :: Y(*)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: XOLD, YOLD
       XOLD = X(1)
       YOLD = Y(1)
@@ -31310,6 +31676,7 @@ C     X AND Y BEGIN IN DIFFERENT LOCATIONS
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       COMPLEX, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L), ROW(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       COMPLEX :: W
       LOGICAL :: CLOC
@@ -31375,6 +31742,7 @@ C     PROPERLY.
 C-----------------------------------------------------------------------
       COMPLEX, INTENT(IN) :: X(*)
       COMPLEX, INTENT(INOUT) :: Y(*)
+C     beginning of local variable declarations
       COMPLEX :: XOLD, YOLD
       XOLD = X(1)
       YOLD = Y(1)
@@ -31394,6 +31762,7 @@ C     X AND Y BEGIN IN DIFFERENT LOCATIONS
       COMPLEX, INTENT(IN) :: X(*)
       COMPLEX, INTENT(INOUT) :: Y(*)
       COMPLEX, INTENT(IN) :: YOLD
+C     beginning of local variable declarations
       COMPLEX :: ZERO, ONE
       DATA ZERO/(0.0,0.0)/, ONE/(1.0,0.0)/
       Y(1) = ZERO
@@ -31405,6 +31774,7 @@ C     X AND Y BEGIN IN DIFFERENT LOCATIONS
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A(*), X(N)
       REAL, INTENT(INOUT) :: Y(N)
+C     beginning of local variable declarations
       INTEGER :: I, K, KM1, L
       REAL :: XK, YK
       Y(1) = A(1)*X(1)
@@ -31429,6 +31799,7 @@ C     X AND Y BEGIN IN DIFFERENT LOCATIONS
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(IN) :: A(*), X(N)
       DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
+C     beginning of local variable declarations
       INTEGER :: I, K, KM1, L
       DOUBLE PRECISION :: XK, YK
       Y(1) = A(1)*X(1)
@@ -31453,6 +31824,7 @@ C     X AND Y BEGIN IN DIFFERENT LOCATIONS
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
       REAL, INTENT(IN) :: A(KA,N), B(KB,L)
       REAL, INTENT(INOUT) :: C(KC,L)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       DOUBLE PRECISION :: S
       DO J=1,L
@@ -31471,6 +31843,7 @@ C     X AND Y BEGIN IN DIFFERENT LOCATIONS
       INTEGER, INTENT(IN) :: KA, M, N
       REAL, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       INTEGER :: I, II, J, K
       DOUBLE PRECISION :: S
       II=1
@@ -31491,6 +31864,7 @@ C     X AND Y BEGIN IN DIFFERENT LOCATIONS
       INTEGER, INTENT(IN) :: K, KA, KB, KC, L, M, N
       REAL, INTENT(IN) :: A(KA,N), B(KB,L)
       REAL, INTENT(INOUT) :: C(KC,*)
+C     beginning of local variable declarations
       INTEGER :: I, II, J, JJ
       INTEGER :: R, S
 C     ******************************************************************
@@ -31517,6 +31891,7 @@ C        COMPUTE THE J-TH COLUMN OF C
       INTEGER, INTENT(IN) :: K, KA, KB, KC, L, M, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,L)
       DOUBLE PRECISION, INTENT(INOUT) :: C(KC,*)
+C     beginning of local variable declarations
       INTEGER :: I, II, J, JJ
       INTEGER :: R, S
 C     ******************************************************************
@@ -31543,6 +31918,7 @@ C        COMPUTE THE J-TH COLUMN OF C
       INTEGER, INTENT(IN) :: K, KA, KB, KC, L, M, N
       COMPLEX, INTENT(IN) :: A(KA,N), B(KB,L)
       COMPLEX, INTENT(INOUT) :: C(KC,*)
+C     beginning of local variable declarations
       INTEGER :: I, II, J, JJ
       INTEGER :: R, S
 C     ******************************************************************
@@ -31571,6 +31947,7 @@ C        COMPUTE THE J-TH COLUMN OF C
       REAL, INTENT(IN) :: AE, RE
       REAL, INTENT(INOUT) :: A(MDA,N), WORK(*)
       INTEGER, INTENT(INOUT) :: IWORK(*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, M0, M1, M2, M3, M4, M5
       REAL :: EPS, RERR
       REAL :: SPMPAR
@@ -31614,6 +31991,7 @@ C     FACTOR THE MATRIX A
       DOUBLE PRECISION, INTENT(IN) :: RE, AE
       DOUBLE PRECISION, INTENT(INOUT) :: WORK(*)
       INTEGER, INTENT(INOUT) :: IWORK(*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, M0, M1, M2, M3, M4, M5
       DOUBLE PRECISION :: EPS, RERR
       DOUBLE PRECISION :: DPMPAR
@@ -31655,6 +32033,7 @@ C     FACTOR THE MATRIX A
       INTEGER, INTENT(INOUT) :: INDEX(*)
       INTEGER, INTENT(IN) :: KA, KB, M, MO, N
       REAL, INTENT(INOUT) :: A(KA,N), B(*), D, TEMP(*)
+C     beginning of local variable declarations
       INTEGER :: I, IM1, J, JP1, K, KJ, KM1, KP1, L, LJ, MAXB, NJ, NM1,
      &NMJ, NMK
       REAL :: P, T
@@ -31836,6 +32215,7 @@ C                      CASE WHEN N = 1
       INTEGER, INTENT(INOUT) :: IERR, INDEX(*)
       INTEGER, INTENT(IN) :: KA, KB, M, MO, N
       REAL, INTENT(INOUT) :: A(KA,N), B(*), TEMP(*)
+C     beginning of local variable declarations
       INTEGER :: I, IM1, J, JP1, K, KJ, KM1, KP1, L, LJ, MAXB, NJ, NM1,
      &NMJ, NMK
       REAL :: D, P, T
@@ -32050,9 +32430,10 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IP
       INTEGER, INTENT(IN) :: N, NDIM
       REAL, INTENT(INOUT) :: A(NDIM,N)
+      DIMENSION IP(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, KP1, M, NM1
       REAL :: T
-      DIMENSION IP(N)
       IER = 0
       IP(N) = 1
       IF (N .EQ. 1) GO TO 70
@@ -32114,9 +32495,10 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: N, NDIM
       REAL :: A(NDIM, N)
       REAL, INTENT(INOUT) :: B(N)
+      DIMENSION IP(N)
+C     beginning of local variable declarations
       INTEGER :: I, K, KB, KM1, KP1, M, NM1
       REAL :: T
-      DIMENSION IP(N)
       IF (N .EQ. 1) GO TO 50
       NM1 = N - 1
 C  APPLY ROW PERMUTATIONS AND MULTIPLIERS TO B. ------------------------
@@ -32149,6 +32531,7 @@ C  BACK SOLVE. ---------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, M, N
       REAL, INTENT(INOUT) :: D
       REAL, INTENT(INOUT) :: A(KA,N), B(*)
+C     beginning of local variable declarations
       INTEGER :: J, JL, K, KL, L, MAXB
       REAL :: PIVOT, T
 C-----------------------------------------------------------------------
@@ -32196,6 +32579,7 @@ C     REDUCE THE NON-PIVOT ROWS
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, N
       REAL, INTENT(INOUT) :: A(KA,N), B(KB,M)
+C     beginning of local variable declarations
       INTEGER :: I, IP1, J, JP1, K, L, NM1
       REAL :: P, SUM, T
 C     ------------------------------------------------------------------
@@ -32281,6 +32665,7 @@ C     ERROR RETURN
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, N
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(KB,M)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, KM1, KP1, L, NM1
       DOUBLE PRECISION :: P, T
 C     ------------------------------------------------------------------
@@ -32369,6 +32754,7 @@ C     ERROR RETURN
       REAL, INTENT(INOUT) :: DET(2), RCOND
       REAL, INTENT(INOUT) :: WK(N)
       INTEGER, INTENT(INOUT) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: J, JOB
       REAL :: T
       INTEGER :: ONEJ
@@ -32403,6 +32789,7 @@ C                  THE PROBLEM CANNOT BE SOLVED
       INTEGER, INTENT(IN) :: KA, KB, M, MO, N
       REAL, INTENT(INOUT) :: A(KA,N), B(*), WK(*)
       INTEGER, INTENT(INOUT) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: J
       REAL :: DET(2)
       INTEGER :: ONEJ
@@ -32436,11 +32823,12 @@ C                          ERROR RETURN
       INTEGER, INTENT(IN) :: KA, MO, N
       REAL :: A(KA,N), B(N)
       REAL, INTENT(INOUT) :: WK(*), X(N)
+      DIMENSION IWK(N)
+C     beginning of local variable declarations
       INTEGER :: I, IR
 C     ******************************************************************
 C     SOLUTION OF REAL LINEAR EQUATIONS WITH ITERATIVE IMPROVEMENT
 C     ******************************************************************
-      DIMENSION IWK(N)
 C     -------------------
 C     DIMENSION WK(N*N + N)
 C     -------------------
@@ -32467,6 +32855,8 @@ C            SOLVE THE SYSTEM OF EQUATIONS AX = B
       INTEGER, INTENT(IN) :: KA, KQ, N
       REAL :: A(KA,N), B(N), Q(KQ,N)
       REAL, INTENT(INOUT) :: R(N), X(N)
+      DIMENSION IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       REAL :: EPS, EPS2, RAT, RATIO, RNRM, XNRM
       REAL :: SPMPAR
@@ -32499,7 +32889,6 @@ C       WITH AN INITIAL GIVEN X. THE RESIDUAL VECTOR B - AX IS
 C       COMPUTED TO HIGH ACCURACY USING DOUBLE PRECISION. SGESL
 C       IS THEN USED TO SOLVE (1).
 C ----------------------------------------------------------------------
-      DIMENSION IPVT(N)
 C     ********** EPS IS A MACHINE DEPENDENT PARAMETER. ASSIGN EPS
 C                THE VALUE U WHERE U IS THE SMALLEST FLOATING POINT
 C                NUMBER SUCH THAT 1.0 + U .GT. 1.0.
@@ -32548,6 +32937,7 @@ C                FORM A NEW APPROXIMATE SOLUTION
       INTEGER, INTENT(INOUT) :: IPVT(*)
       REAL, INTENT(INOUT) :: A(LDA,*), Z(*)
       REAL, INTENT(INOUT) :: RCOND
+C     beginning of local variable declarations
       REAL :: SDOT, EK, T, WK, WKM
       REAL :: ANORM, S, SASUM, SM, YNORM
       INTEGER :: INFO, J, K, KB, KP1, L
@@ -32711,6 +33101,7 @@ C     MAKE ZNORM = 1.0
       INTEGER, INTENT(INOUT) :: IPVT(*)
       INTEGER, INTENT(OUT) :: INFO
       REAL, INTENT(INOUT) :: A(LDA,*)
+C     beginning of local variable declarations
       REAL :: T
       INTEGER :: ISAMAX, J, K, KP1, L, NM1
 C     SGEFA FACTORS A REAL MATRIX BY GAUSSIAN ELIMINATION.
@@ -32788,6 +33179,7 @@ C           ROW ELIMINATION WITH COLUMN INDEXING
       INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
       REAL, INTENT(IN) :: A(LDA,*)
       REAL, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       REAL :: SDOT, T
       INTEGER :: K, KB, L, NM1
 C     SGESL SOLVES THE REAL SYSTEM
@@ -32879,6 +33271,7 @@ C        NOW SOLVE TRANS(L)*X = Y
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
       REAL, INTENT(INOUT) :: A(LDA,*), DET(2), WORK(*)
+C     beginning of local variable declarations
       REAL :: T
       REAL :: TEN
       INTEGER :: I, J, K, KB, KP1, L, NM1
@@ -32986,6 +33379,7 @@ C        FORM INVERSE(U)*INVERSE(L)
       DOUBLE PRECISION, INTENT(INOUT) :: DET(2), RCOND
       DOUBLE PRECISION, INTENT(INOUT) :: WK(N)
       INTEGER, INTENT(INOUT) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: J, JOB
       DOUBLE PRECISION :: T
       INTEGER :: ONEJ
@@ -33020,6 +33414,7 @@ C                  THE PROBLEM CANNOT BE SOLVED
       INTEGER, INTENT(IN) :: KA, KB, M, MO, N
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(*), WK(*)
       INTEGER, INTENT(INOUT) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: J
       DOUBLE PRECISION :: DET(2)
       INTEGER :: ONEJ
@@ -33053,6 +33448,7 @@ C                          ERROR RETURN
       INTEGER, INTENT(INOUT) :: IPVT(*)
       DOUBLE PRECISION, INTENT(INOUT) :: A(LDA,*), Z(*)
       DOUBLE PRECISION, INTENT(INOUT) :: RCOND
+C     beginning of local variable declarations
       DOUBLE PRECISION :: DDOT, EK, T, WK, WKM
       DOUBLE PRECISION :: ANORM, S, DASUM, SM, YNORM
       INTEGER :: INFO, J, K, KB, KP1, L
@@ -33216,6 +33612,7 @@ C     MAKE ZNORM = 1.0
       INTEGER, INTENT(INOUT) :: IPVT(*)
       INTEGER, INTENT(OUT) :: INFO
       DOUBLE PRECISION, INTENT(INOUT) :: A(LDA,*)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: T
       INTEGER :: IDAMAX, J, K, KP1, L, NM1
 C     DGEFA FACTORS A DOUBLE PRECISION MATRIX BY GAUSSIAN ELIMINATION.
@@ -33293,6 +33690,7 @@ C           ROW ELIMINATION WITH COLUMN INDEXING
       INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
       DOUBLE PRECISION, INTENT(IN) :: A(LDA,*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: DDOT, T
       INTEGER :: K, KB, L, NM1
 C     DGESL SOLVES THE DOUBLE PRECISION SYSTEM
@@ -33384,6 +33782,7 @@ C        NOW SOLVE TRANS(L)*X = Y
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
       DOUBLE PRECISION, INTENT(INOUT) :: A(LDA,*), DET(2), WORK(*)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: T
       DOUBLE PRECISION :: TEN
       INTEGER :: I, J, K, KB, KP1, L, NM1
@@ -33599,6 +33998,7 @@ C**********************************************************************
       INTEGER, INTENT(IN) :: N, NMBLKS
       REAL, INTENT(INOUT) :: ARRAY(*)
       INTEGER, INTENT(INOUT) :: PIVOT(*)
+C     beginning of local variable declarations
       INTEGER :: INDEX1, INDEX2, INDEX3, INDPIV, ISUM1, ISUM2, K,
      &NCLBLK, NCLPIV, NOVRLP, NRWBK2, NRWBLK, NRWPIV
       REAL :: PIVMAX, ZERO
@@ -33807,6 +34207,7 @@ C             CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       INTEGER, INTENT(INOUT) :: PIVOT(NRWBLK)
       REAL, INTENT(INOUT) :: BLOCK(NRWBLK,NCLBLK)
       REAL, INTENT(INOUT) :: PIVMAX
+C     beginning of local variable declarations
       INTEGER :: I1, J, J1, JPLUS1, L1, MAX
       REAL :: ROWMAX
       REAL :: TEMPIV, ROWPIV, SWAP
@@ -33901,6 +34302,7 @@ C       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
      &BOTBLK(NRWBOT,NOVRLP)
       REAL, INTENT(INOUT) :: PIVMAX
       INTEGER, INTENT(INOUT) :: PIVOT(NRWTOP)
+C     beginning of local variable declarations
       INTEGER :: I, I1, I2, IPLUS1, J, J1, JPLUS1, L1, MAX
       REAL :: COLMAX
       REAL :: COLMLT
@@ -34000,6 +34402,7 @@ C       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       REAL :: ARRAY(*)
       REAL, INTENT(INOUT) :: B(*), X(*)
       INTEGER, INTENT(IN) :: PIVOT(*)
+C     beginning of local variable declarations
       INTEGER :: INDEXA, INDPIV, K, LL, NCLBLK, NCLPIV, NOVRLP, NRWBLK,
      &NRWPIV
 C***************************************************************
@@ -34173,6 +34576,7 @@ C       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       INTEGER, INTENT(IN) :: NCLPIV, NOVRLP, NRWBLK
       REAL :: BLOCK(NRWBLK,NOVRLP)
       REAL, INTENT(INOUT) :: B(*), X(*)
+C     beginning of local variable declarations
       INTEGER :: I, IPLUSL, J, JPLUSL, L, LONG
       REAL :: XJ
 C***************************************************************
@@ -34199,6 +34603,7 @@ C***************************************************************
       REAL :: BLOCK(NRWBLK,NCLPIV)
       REAL, INTENT(INOUT) :: B(*)
       REAL :: X(*)
+C     beginning of local variable declarations
       INTEGER :: J, L, NCLPVL
       REAL :: XJ
 C***************************************************************
@@ -34220,6 +34625,7 @@ C***************************************************************
       REAL :: BLOCK(NRWBLK,NRWPIV)
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: PIVOT(NRWPIV)
+C     beginning of local variable declarations
       INTEGER :: I, IPLUS1, L
       REAL :: BI, SWAP
       INTEGER :: PIVOTI
@@ -34248,6 +34654,7 @@ C***************************************************************
       INTEGER, INTENT(IN) :: NCLBLK, NRWBLK, NRWPIV
       REAL :: BLOCK(NRWBLK,NCLBLK)
       REAL, INTENT(INOUT) :: B(*), X(*)
+C     beginning of local variable declarations
       INTEGER :: J, JMIN1, L, NJ
       REAL :: XJ
 C***************************************************************
@@ -34272,6 +34679,7 @@ C***************************************************************
       REAL :: BLOCK(NRWBLK,NCLBLK)
       REAL, INTENT(INOUT) :: B(*)
       REAL :: X(*)
+C     beginning of local variable declarations
       INTEGER :: J, L, NRWPV1
       REAL :: XJ
 C***************************************************************
@@ -34293,6 +34701,7 @@ C***************************************************************
       REAL :: BLOCK(NRWBLK,NOVRLP)
       REAL, INTENT(INOUT) :: X(*)
       INTEGER, INTENT(IN) :: PIVOT(NRWBLK)
+C     beginning of local variable declarations
       INTEGER :: I, J, J1, JPLUS1, NJ
       REAL :: DOTPRD, SWAP
       INTEGER :: PIVOTJ
@@ -34341,6 +34750,7 @@ C     SOLVE THE SYSTEM OF EQUATIONS
       INTEGER :: N
       INTEGER, INTENT(INOUT) :: IP(M,N), IER
       REAL, INTENT(INOUT) :: A(M,M,N), B(M,M,N), C(M,M,N)
+C     beginning of local variable declarations
       INTEGER :: NM1, NM2, KM1, I, J, K, L
       REAL :: DP
 C-----------------------------------------------------------------------
@@ -34458,6 +34868,7 @@ C-----------------------  END OF SUBROUTINE DECBT  ---------------------
       REAL :: A(M,M,N)
       REAL, INTENT(IN) :: B(M,M,N), C(M,M,N)
       REAL, INTENT(INOUT) :: Y(M,N)
+C     beginning of local variable declarations
       INTEGER :: KB, KP1
       INTEGER :: NM1, NM2, KM1, I, J, K
       REAL :: DP
@@ -34532,6 +34943,7 @@ C-----------------------  END OF SUBROUTINE SOLBT  ---------------------
       REAL, INTENT(INOUT) :: DET(2), RCOND
       REAL, INTENT(INOUT) :: WK(N)
       INTEGER, INTENT(INOUT) :: INERT(3), IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: J, JOB
       REAL :: T
       INTEGER :: ONEJ
@@ -34564,6 +34976,7 @@ C                  THE PROBLEM CANNOT BE SOLVED
       INTEGER, INTENT(INOUT) :: KPVT(*)
       REAL, INTENT(INOUT) :: AP(*), Z(*)
       REAL, INTENT(INOUT) :: RCOND
+C     beginning of local variable declarations
       REAL :: AK, AKM1, BK, BKM1, SDOT, DENOM, EK, T
       REAL :: ANORM, S, SASUM, YNORM
       INTEGER :: I, IJ, IK, IKM1, IKP1, INFO, J, JM1, J1
@@ -34817,6 +35230,7 @@ C     MAKE ZNORM = 1.0
       INTEGER, INTENT(INOUT) :: KPVT(*)
       INTEGER, INTENT(OUT) :: INFO
       REAL, INTENT(INOUT) :: AP(*)
+C     beginning of local variable declarations
       REAL :: AK, AKM1, BK, BKM1, DENOM, MULK, MULKM1, T
       REAL :: ABSAKK, ALPHA, COLMAX, ROWMAX
       INTEGER :: ISAMAX, IJ, IJJ, IK, IKM1, IM, IMAX, IMAXP1, IMIM, IMJ,
@@ -35036,6 +35450,7 @@ C           SET THE PIVOT ARRAY.
       INTEGER, INTENT(IN) :: N, KPVT(*)
       REAL, INTENT(IN) :: AP(*)
       REAL, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       REAL :: AK, AKM1, BK, BKM1, SDOT, DENOM, TEMP
       INTEGER :: IK, IKM1, IKP1, K, KK, KM1K, KM1KM1, KP
 C     SSISL SOLVES THE REAL SYMMETRIC SYSTEM
@@ -35172,6 +35587,7 @@ C                 INTERCHANGE.
       REAL, INTENT(INOUT) :: DET(2)
       INTEGER, INTENT(IN) :: KPVT(*)
       INTEGER, INTENT(INOUT) :: INERT(3)
+C     beginning of local variable declarations
       REAL :: AKKP1, SDOT, TEMP
       REAL :: TEN, D, T, AK, AKP1
       INTEGER :: IJ, IK, IKP1, IKS, J, JB, JK, JKP1
@@ -35378,6 +35794,7 @@ C           SWAP
       DOUBLE PRECISION, INTENT(INOUT) :: DET(2), RCOND
       DOUBLE PRECISION, INTENT(INOUT) :: WK(N)
       INTEGER, INTENT(INOUT) :: INERT(3), IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: J, JOB
       DOUBLE PRECISION :: T
       INTEGER :: ONEJ
@@ -35410,6 +35827,7 @@ C                  THE PROBLEM CANNOT BE SOLVED
       INTEGER, INTENT(INOUT) :: KPVT(*)
       DOUBLE PRECISION, INTENT(INOUT) :: AP(*), Z(*)
       DOUBLE PRECISION, INTENT(INOUT) :: RCOND
+C     beginning of local variable declarations
       DOUBLE PRECISION :: AK, AKM1, BK, BKM1, DDOT, DENOM, EK, T
       DOUBLE PRECISION :: ANORM, S, DASUM, YNORM
       INTEGER :: I, IJ, IK, IKM1, IKP1, INFO, J, JM1, J1
@@ -35663,6 +36081,7 @@ C     MAKE ZNORM = 1.0
       INTEGER, INTENT(INOUT) :: KPVT(*)
       INTEGER, INTENT(OUT) :: INFO
       DOUBLE PRECISION, INTENT(INOUT) :: AP(*)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: AK, AKM1, BK, BKM1, DENOM, MULK, MULKM1, T
       DOUBLE PRECISION :: ABSAKK, ALPHA, COLMAX, ROWMAX
       INTEGER :: IDAMAX, IJ, IJJ, IK, IKM1, IM, IMAX, IMAXP1, IMIM, IMJ,
@@ -35882,6 +36301,7 @@ C           SET THE PIVOT ARRAY.
       INTEGER, INTENT(IN) :: N, KPVT(*)
       DOUBLE PRECISION, INTENT(IN) :: AP(*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: AK, AKM1, BK, BKM1, DDOT, DENOM, TEMP
       INTEGER :: IK, IKM1, IKP1, K, KK, KM1K, KM1KM1, KP
 C     DSISL SOLVES THE DOUBLE PRECISION SYMMETRIC SYSTEM
@@ -36018,6 +36438,7 @@ C                 INTERCHANGE.
       DOUBLE PRECISION, INTENT(INOUT) :: DET(2)
       INTEGER, INTENT(IN) :: KPVT(*)
       INTEGER, INTENT(INOUT) :: INERT(3)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: AKKP1, DDOT, TEMP
       DOUBLE PRECISION :: TEN, D, T, AK, AKP1
       INTEGER :: IJ, IK, IKP1, IKS, J, JB, JK, JKP1
@@ -36221,6 +36642,7 @@ C           SWAP
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KB, M, MO, N
       REAL, INTENT(INOUT) :: A(*), B(*)
+C     beginning of local variable declarations
       INTEGER :: J
       REAL :: D(2)
       INTEGER :: ONEJ
@@ -36245,6 +36667,7 @@ C         COMPUTATION OF THE INVERSE OF A
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: INFO
       REAL, INTENT(INOUT) :: AP(*)
+C     beginning of local variable declarations
       REAL :: SDOT, T
       REAL :: S
       INTEGER :: J, JJ, JM1, K, KJ, KK
@@ -36317,6 +36740,7 @@ C     ......EXIT
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: AP(*)
       REAL, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       REAL :: SDOT, T
       INTEGER :: K, KB, KK
 C     SPPSL SOLVES THE REAL SYMMETRIC POSITIVE DEFINITE SYSTEM
@@ -36369,6 +36793,7 @@ C     INTERNAL VARIABLES
       INTEGER, INTENT(IN) :: N, JOB
       REAL, INTENT(INOUT) :: AP(*)
       REAL, INTENT(INOUT) :: DET(2)
+C     beginning of local variable declarations
       REAL :: T
       REAL :: S
       INTEGER :: I, II, J, JJ, JM1, J1, K, KJ, KK, KP1, K1
@@ -36475,6 +36900,7 @@ C        FORM  INVERSE(R) * TRANS(INVERSE(R))
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KB, M, MO, N
       DOUBLE PRECISION, INTENT(INOUT) :: A(*), B(*)
+C     beginning of local variable declarations
       INTEGER :: J
       DOUBLE PRECISION :: D(2)
       INTEGER :: ONEJ
@@ -36499,6 +36925,7 @@ C         COMPUTATION OF THE INVERSE OF A
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: INFO
       DOUBLE PRECISION, INTENT(INOUT) :: AP(*)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: DDOT, T
       DOUBLE PRECISION :: S
       INTEGER :: J, JJ, JM1, K, KJ, KK
@@ -36571,6 +36998,7 @@ C     ......EXIT
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(IN) :: AP(*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: DDOT, T
       INTEGER :: K, KB, KK
 C     DPPSL SOLVES THE DOUBLE PRECISION SYMMETRIC POSITIVE DEFINITE
@@ -36623,6 +37051,7 @@ C     INTERNAL VARIABLES
       INTEGER, INTENT(IN) :: N, JOB
       DOUBLE PRECISION, INTENT(INOUT) :: AP(*)
       DOUBLE PRECISION, INTENT(INOUT) :: DET(2)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: T
       DOUBLE PRECISION :: S
       INTEGER :: I, II, J, JJ, JM1, J1, K, KJ, KK, KP1, K1
@@ -36730,6 +37159,7 @@ C        FORM  INVERSE(R) * TRANS(INVERSE(R))
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A(*), B(N)
       REAL, INTENT(INOUT) :: X(N), G(N), H(N)
+C     beginning of local variable declarations
       INTEGER :: J, K, L, M, MAX, MP1, NML, NPL
       REAL :: C, C1, C2, GD, GJ, GK, GN, HJ, HK, HN, XD, XN
 C-----------------------------------------------------------------------
@@ -36810,6 +37240,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
       DOUBLE PRECISION, INTENT(INOUT) :: X(N), G(N), H(N)
+C     beginning of local variable declarations
       INTEGER :: J, K, L, M, MAX, MP1, NML, NPL
       DOUBLE PRECISION :: C, C1, C2, GD, GJ, GK, GN, HJ, HK, HN, XD, XN
 C-----------------------------------------------------------------------
@@ -36892,6 +37323,7 @@ C     ERROR RETURN
       COMPLEX, INTENT(INOUT) :: A(KA,N), B(*), DET(2), WK(N)
       REAL, INTENT(INOUT) :: RCOND
       INTEGER, INTENT(INOUT) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: J, JOB
       REAL :: T
       INTEGER :: ONEJ
@@ -36927,6 +37359,7 @@ C                  THE PROBLEM CANNOT BE SOLVED
       INTEGER :: N
       COMPLEX, INTENT(INOUT) :: A(KA,N), B(*), WK(*)
       INTEGER, INTENT(INOUT) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: J
       COMPLEX :: D(2)
       INTEGER :: ONEJ
@@ -36962,6 +37395,7 @@ C                          ERROR RETURN
       COMPLEX, INTENT(IN) :: A(KA,N), B(N)
       COMPLEX, INTENT(INOUT) :: X(N), WK(*)
       INTEGER, INTENT(INOUT) :: IWK(N)
+C     beginning of local variable declarations
       INTEGER :: I, IR
 C     ******************************************************************
 C     SOLUTION OF COMPLEX LINEAR EQUATIONS WITH ITERATIVE IMPROVEMENT
@@ -36992,6 +37426,7 @@ C            SOLVE THE SYSTEM OF EQUATIONS AX = B
       COMPLEX, INTENT(IN) :: A(KA,N), Q(KQ,N), B(N)
       COMPLEX, INTENT(INOUT) :: X(N), R(N)
       INTEGER, INTENT(IN) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       REAL :: EPS, EPS2, RAT, RATIO, RNRM, XNRM
       REAL :: SPMPAR
@@ -37072,6 +37507,7 @@ C                FORM A NEW APPROXIMATE SOLUTION
       INTEGER, INTENT(INOUT) :: IPVT(*)
       COMPLEX, INTENT(INOUT) :: A(LDA,*), Z(*)
       REAL, INTENT(INOUT) :: RCOND
+C     beginning of local variable declarations
       COMPLEX :: CDOTC, EK, T, WK, WKM
       REAL :: ANORM, S, SCASUM, SM, YNORM
       INTEGER :: INFO, J, K, KB, KP1, L
@@ -37239,6 +37675,7 @@ C     MAKE ZNORM = 1.0
       INTEGER :: N
       INTEGER, INTENT(INOUT) :: IPVT(*), INFO
       COMPLEX, INTENT(INOUT) :: A(LDA,*)
+C     beginning of local variable declarations
       COMPLEX :: T
       INTEGER :: ICAMAX, J, K, KP1, L, NM1
       COMPLEX :: ZDUM
@@ -37320,6 +37757,7 @@ C           ROW ELIMINATION WITH COLUMN INDEXING
       INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
       COMPLEX, INTENT(IN) :: A(LDA,*)
       COMPLEX, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       COMPLEX :: CDOTC, T
       INTEGER :: K, KB, L, NM1
 C     CGESL SOLVES THE COMPLEX SYSTEM
@@ -37412,6 +37850,7 @@ C        NOW SOLVE CTRANS(L)*X = Y
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
       COMPLEX, INTENT(INOUT) :: A(LDA,*), DET(2), WORK(*)
+C     beginning of local variable declarations
       COMPLEX :: T
       REAL :: TEN
       INTEGER :: I, J, K, KB, KP1, L, NM1
@@ -37548,6 +37987,7 @@ C                          ERROR RETURN
       INTEGER, INTENT(IN) :: KA, N
       DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N)
       INTEGER, INTENT(INOUT) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, KP1, L, NM1
       DOUBLE PRECISION :: P, PR, PI, T, TR, TI
 C-----------------------------------------------------------------------
@@ -37634,6 +38074,7 @@ C                    K-TH PIVOT ELEMENT IS 0
       DOUBLE PRECISION, INTENT(IN) :: AR(KA,N), AI(KA,N)
       DOUBLE PRECISION, INTENT(INOUT) :: BR(KB,M), BI(KB,M)
       INTEGER, INTENT(IN) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, KM1, KP1, L, NM1
       DOUBLE PRECISION :: PR, PI, TR, TI
 C-----------------------------------------------------------------------
@@ -37710,6 +38151,7 @@ C               FOR THE LAST N - 1 VARIABLES
       INTEGER :: N
       DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N), TEMP(2,N)
       INTEGER, INTENT(IN) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: I, IP1, J, JB, K, KP1, L, NM1, NMI, NMK, NP1
       DOUBLE PRECISION :: SR, SI, TR, TI
 C-----------------------------------------------------------------------
@@ -37788,6 +38230,7 @@ C                COMPUTE  INVERSE(U)*INVERSE(L)
       INTEGER, INTENT(INOUT) :: INFO
       REAL, INTENT(INOUT) :: X(LDX,*), S(*), E(*), U(LDU,*), V(LDV,*),
      &WORK(*)
+C     beginning of local variable declarations
       INTEGER :: I, ITER, J, JOBU, K, KASE, KK, L, LL, LLS, LM1, LP1,
      &LS, LU, M, MAXIT, MM, MM1, MP1, NCT, NCTP1, NCU, NRT, NRTP1
       REAL :: SDOT, T
@@ -38192,6 +38635,7 @@ C           ...EXIT
       INTEGER, INTENT(INOUT) :: INFO
       DOUBLE PRECISION, INTENT(INOUT) :: X(LDX,*), S(*), E(*), U(LDU,*),
      &V(LDV,*), WORK(*)
+C     beginning of local variable declarations
       INTEGER :: I, ITER, J, JOBU, K, KASE, KK, L, LL, LLS, LM1, LP1,
      &LS, LU, M, MAXIT, MM, MM1, MP1, NCT, NCTP1, NCU, NRT, NRTP1
       DOUBLE PRECISION :: DDOT, T
@@ -38596,6 +39040,7 @@ C           ...EXIT
       INTEGER, INTENT(INOUT) :: INFO
       COMPLEX, INTENT(INOUT) :: X(LDX,*), S(*), E(*), U(LDU,*),
      &V(LDV,*), WORK(*)
+C     beginning of local variable declarations
       INTEGER :: I, ITER, J, JOBU, K, KASE, KK, L, LL, LLS, LM1, LP1,
      &LS, LU, M, MAXIT, MM, MM1, MP1, NCT, NCTP1, NCU, NRT, NRTP1
       COMPLEX :: CDOTC, T, R
@@ -39024,9 +39469,10 @@ C           ...EXIT
       INTEGER, INTENT(IN) :: KA, N
       REAL, INTENT(INOUT) :: A(KA,N)
       REAL, INTENT(IN) :: X
+      REAL :: DET
+C     beginning of local variable declarations
       INTEGER :: I, J, K, KP1, L, NM1
       REAL :: C, PIVOT, S
-      REAL :: DET
 C     -------------------
 C     EVALUATION OF THE DETERMINANT OF A-XI WHERE A IS AN NXN MATRIX,
 C     X IS A SCALAR, AND I IS THE NXN IDENTITY MATRIX.
@@ -39086,6 +39532,7 @@ C         FINAL DETERMINANT CALCULATION
       INTEGER, INTENT(IN) :: KA, N
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N)
       DOUBLE PRECISION, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: I, J, K, KP1, L, NM1
       DOUBLE PRECISION :: PIVOT, S, C
 C     -------------------
@@ -39147,6 +39594,7 @@ C         FINAL DETERMINANT CALCULATION
       INTEGER, INTENT(IN) :: KA, N
       COMPLEX, INTENT(INOUT) :: A(KA,N)
       COMPLEX, INTENT(IN) :: X
+C     beginning of local variable declarations
       INTEGER :: I, J, K, KP1, L, NM1
       COMPLEX :: PIVOT, T, ZERO
       REAL :: S, C
@@ -39213,6 +39661,7 @@ C         FINAL DETERMINANT CALCULATION
       INTEGER :: N
       INTEGER, INTENT(IN) :: NA, NB, NC
       REAL, INTENT(INOUT) :: A(NA,M), B(NB,N), C(NC,N), WK(*)
+C     beginning of local variable declarations
       INTEGER :: IU, IV, IW
 C ----------------------------------------------------------------------
 C     ABSLV SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
@@ -39287,6 +39736,7 @@ C ----------------------------------------------------------------------
       REAL, INTENT(INOUT) :: A(NA,M), B(NB,N), C(NC,N)
       REAL, INTENT(INOUT) :: U(NU,M), V(NV,N)
       REAL, INTENT(INOUT) :: WK(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       REAL :: TEMP
 C ----------------------------------------------------------------------
@@ -39387,6 +39837,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: LOW
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: H(NH,N), WR(N), WI(N), Z(NZ,N)
+C     beginning of local variable declarations
       INTEGER :: IP1
       INTEGER :: I, J, K, L, M
       INTEGER :: EN, LL, MM, NA
@@ -39649,6 +40100,7 @@ C     ------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(IN) :: A(NA,M), B(NB,N)
       REAL, INTENT(INOUT) :: C(NC,N)
+C     beginning of local variable declarations
       REAL :: SUM, P(4), T(4,4)
       INTEGER :: DK, DL, I, IB, J, JA, K, KM1, KK, L, LM1, LL
       L = 1
@@ -39757,6 +40209,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: NA, NB, NC
       DOUBLE PRECISION, INTENT(INOUT) :: A(NA,M), B(NB,N), C(NC,N),
      &WK(*)
+C     beginning of local variable declarations
       INTEGER :: IU, IV, IW
 C ----------------------------------------------------------------------
 C     DABSLV SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
@@ -39831,6 +40284,7 @@ C ----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(INOUT) :: A(NA,M), B(NB,N), C(NC,N)
       DOUBLE PRECISION, INTENT(INOUT) :: U(NU,M), V(NV,N)
       DOUBLE PRECISION, INTENT(INOUT) :: WK(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       DOUBLE PRECISION :: TEMP
 C ----------------------------------------------------------------------
@@ -39931,6 +40385,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: LOW
       INTEGER, INTENT(OUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: H(NH,N), WR(N), WI(N), Z(NZ,N)
+C     beginning of local variable declarations
       INTEGER :: IP1
       INTEGER :: I, J, K, L, M
       INTEGER :: EN, LL, MM, NA
@@ -40193,6 +40648,7 @@ C     ------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(IN) :: A(NA,M), B(NB,N)
       DOUBLE PRECISION, INTENT(INOUT) :: C(NC,N)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: SUM, P(4), T(4,4)
       INTEGER :: DK, DL, I, IB, J, JA, K, KM1, KK, L, LM1, LL
       L = 1
@@ -40299,6 +40755,7 @@ C     ERROR RETURN
       INTEGER :: N
       INTEGER, INTENT(IN) :: NA, NC
       REAL, INTENT(INOUT) :: A(NA,N), C(NC,N), WK(*)
+C     beginning of local variable declarations
       INTEGER :: IW
 C ----------------------------------------------------------------------
 C     TASLV SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
@@ -40355,6 +40812,7 @@ C ----------------------------------------------------------------------
       INTEGER :: N
       INTEGER, INTENT(IN) :: NA, NC, NU
       REAL, INTENT(INOUT) :: A(NA,N), U(NU,N), C(NC,N), WK(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
 C ----------------------------------------------------------------------
 C     TASLV1 SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
@@ -40451,6 +40909,7 @@ C ----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(IN) :: A(NA,N)
       REAL, INTENT(INOUT) :: C(NC,N)
+C     beginning of local variable declarations
       REAL :: SUM, P(4), T(4,4)
       INTEGER :: DK, DL, I, IA, J, K, KK, KM1, L, LL, LDL
       L = 1
@@ -40578,6 +41037,7 @@ C     ERROR RETURN
       INTEGER :: N
       INTEGER, INTENT(IN) :: NA, NC
       DOUBLE PRECISION, INTENT(INOUT) :: A(NA,N), C(NC,N), WK(*)
+C     beginning of local variable declarations
       INTEGER :: IW
 C ----------------------------------------------------------------------
 C     DTASLV SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
@@ -40635,6 +41095,7 @@ C ----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: NA, NC, NU
       DOUBLE PRECISION, INTENT(INOUT) :: A(NA,N), U(NU,N), C(NC,N),
      &WK(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
 C ----------------------------------------------------------------------
 C     DTASV1 SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
@@ -40731,6 +41192,7 @@ C ----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(IN) :: A(NA,N)
       DOUBLE PRECISION, INTENT(INOUT) :: C(NC,N)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: SUM, P(4), T(4,4)
       INTEGER :: DK, DL, I, IA, J, K, KK, KM1, L, LL, LDL
       L = 1
@@ -40911,6 +41373,7 @@ C                     NW.GE.(7*N*N + N) MUST HOLD.
       COMPLEX, INTENT(INOUT) :: WORK(NW)
       COMPLEX, INTENT(INOUT) :: A(NM,N), B(NM,N), C(NM,N), S(NM,N)
       REAL, INTENT(IN) :: TOL
+C     beginning of local variable declarations
       INTEGER :: I1, I2, I3, I4, I5, I6, I7
       I1 = N*N + 1
       I2 = N*N + I1
@@ -40967,6 +41430,7 @@ C            OF AS**2+BS+C.
       COMPLEX, INTENT(INOUT) :: V(NM,N), Z(NM,N), R(NM,N), XOLD(NM,N),
      &EYE(NM,N), TEMP(N)
       REAL, INTENT(IN) :: TOL
+C     beginning of local variable declarations
       INTEGER :: ITS, MATS, I, J, K
       REAL :: ANORM, ANI, BNORM, BNI, CNORM, CNI, XNORM, XNI
       REAL :: FXNORM, FXNI, GNORM, TNORM, T
@@ -41186,6 +41650,7 @@ C     F, G AND H ARE UPDATED, IF DESIRED.
       COMPLEX, INTENT(INOUT) :: G(NM,N)
       COMPLEX, INTENT(INOUT) :: H(NM,N)
       INTEGER, INTENT(IN) :: MATS
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L
       INTEGER :: LB, L1
       INTEGER :: NK1, NM1, NM2
@@ -41386,6 +41851,7 @@ C          TO ZERO AFTER 50 ITERATIONS.
       COMPLEX, INTENT(INOUT) :: F(NM,N)
       REAL, INTENT(IN) :: EPS1
       INTEGER, INTENT(IN) :: MATS
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L
       INTEGER :: EN, JJ, K1, K2, LD, LL, L1, NA
       INTEGER :: ISH, ITS, KM1, LM1
@@ -41612,6 +42078,7 @@ C          IERR.EQ.1 IF THE TRIANGULAR SYSTEM IS INCONSISTENT.
       COMPLEX, INTENT(IN) :: U(NM,N), V(NM,N), L(NM,N)
       COMPLEX, INTENT(INOUT) :: F(NM,N)
       COMPLEX, INTENT(INOUT) :: TEMP(N)
+C     beginning of local variable declarations
       INTEGER :: I
       INTEGER :: J, JP1, K, KK, KM1, M
       INTEGER :: NM1
@@ -41679,6 +42146,7 @@ C        ********** PREPARE F' WHICH IS (K-1) BY N. **********
       INTEGER, INTENT(IN) :: KA, KZ
       INTEGER :: N
       REAL, INTENT(INOUT) :: A(KA,N), Z(KZ,N), WK(N,*)
+C     beginning of local variable declarations
       INTEGER :: I, IGH, J, K, KP1, L, LL, LOW, M, NP1, NP6
       REAL :: ANORM, ANORM1, FACTOR, P, Q, S, S1
       REAL :: C(8)
@@ -41820,6 +42288,7 @@ C                     ERROR RETURN
       INTEGER, INTENT(IN) :: KA, KZ
       INTEGER :: N
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), Z(KZ,N), WK(N,*)
+C     beginning of local variable declarations
       INTEGER :: I, IGH, J, K, KP1, L, LL, LOW, M, NP1, NP10
       DOUBLE PRECISION :: ANORM, ANORM1, C(12), FACTOR, P, Q, S, S1
 C ----------------------------------------------------------------------
@@ -41970,6 +42439,7 @@ C                     ERROR RETURN
       REAL, INTENT(INOUT) :: C(N), D(*)
       INTEGER, INTENT(INOUT) :: IP(*)
       EXTERNAL ROWK
+C     beginning of local variable declarations
       INTEGER :: I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST,
      &LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
       REAL :: BK, C1, CJ, CK, DKJ, ZERO
@@ -42110,6 +42580,7 @@ C     THE SYSTEM IS SINGULAR
       DOUBLE PRECISION, INTENT(INOUT) :: C(N), D(*)
       INTEGER, INTENT(INOUT) :: IP(*)
       EXTERNAL ROWK
+C     beginning of local variable declarations
       INTEGER :: I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST,
      &LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
       DOUBLE PRECISION :: BK, CJ, CK, C1, DKJ, ZERO
@@ -42250,6 +42721,7 @@ C     THE SYSTEM IS SINGULAR
       COMPLEX, INTENT(INOUT) :: C(N), D(*)
       INTEGER, INTENT(INOUT) :: IP(*)
       EXTERNAL ROWK
+C     beginning of local variable declarations
       INTEGER :: I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST,
      &LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
       REAL :: S, SI
@@ -42398,6 +42870,7 @@ C     THE SYSTEM IS SINGULAR
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       REAL, INTENT(INOUT) :: A(KA,N)
       REAL, INTENT(IN) :: B(KB,*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C           CONVERSION OF REAL MATRICES FROM BANDED TO
@@ -42462,6 +42935,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX ROWS
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C        CONVERSION OF REAL MATRICES FROM STANDARD TO BANDED
@@ -42529,6 +43003,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX ROWS
       INTEGER, INTENT(IN) :: N, NB
       REAL, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,NB)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 C-----------------------------------------------------------------------
 C           CONVERSION OF REAL MATRICES FROM STANDARD
@@ -42576,6 +43051,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N)
       DOUBLE PRECISION, INTENT(IN) :: B(KB,*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C        CONVERSION OF DOUBLE PRECISION MATRICES FROM BANDED
@@ -42640,6 +43116,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX ROWS
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
       DOUBLE PRECISION, INTENT(INOUT) :: B(KB,*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C        CONVERSION OF DOUBLE PRECISION MATRICES FROM STANDARD
@@ -42707,6 +43184,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX ROWS
       INTEGER, INTENT(IN) :: N, NB
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
       DOUBLE PRECISION, INTENT(INOUT) :: B(KB,NB)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 C-----------------------------------------------------------------------
 C        CONVERSION OF DOUBLE PRECISION MATRICES FROM STANDARD
@@ -42754,6 +43232,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       COMPLEX, INTENT(INOUT) :: A(KA,N)
       COMPLEX, INTENT(IN) :: B(KB,*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C          CONVERSION OF COMPLEX MATRICES FROM BANDED TO
@@ -42818,6 +43297,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX ROWS
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       COMPLEX, INTENT(IN) :: A(KA,N)
       COMPLEX, INTENT(INOUT) :: B(KB,*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C        CONVERSION OF COMPLEX MATRICES FROM STANDARD TO BANDED
@@ -42885,6 +43365,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX ROWS
       INTEGER, INTENT(IN) :: N, NB
       COMPLEX, INTENT(IN) :: A(KA,N)
       COMPLEX, INTENT(INOUT) :: B(KB,NB)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 C-----------------------------------------------------------------------
 C           CONVERSION OF COMPLEX MATRICES FROM STANDARD
@@ -42934,6 +43415,7 @@ C     ERROR RETURN
       REAL, INTENT(IN) :: A(KA,*)
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1
 C-----------------------------------------------------------------------
 C                CONVERSION OF REAL MATRICES FROM BANDED
@@ -42991,6 +43473,7 @@ C     ERROR RETURN
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1
 C-----------------------------------------------------------------------
 C          CONVERSION OF DOUBLE PRECISION MATRICES FROM BANDED
@@ -43048,6 +43531,7 @@ C     ERROR RETURN
       COMPLEX, INTENT(IN) :: A(KA,*)
       COMPLEX, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1
 C-----------------------------------------------------------------------
 C              CONVERSION OF COMPLEX MATRICES FROM BANDED
@@ -43107,6 +43591,7 @@ C     ERROR RETURN
       REAL, INTENT(IN) :: A(*)
       REAL, INTENT(INOUT) :: B(KB,NB)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J0, K, KMAX, L, LMAX, LMIN
 C-----------------------------------------------------------------------
 C                CONVERSION OF REAL MATRICES FROM SPARSE
@@ -43166,6 +43651,7 @@ C     ERROR RETURN
       DOUBLE PRECISION, INTENT(IN) :: A(*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(KB,NB)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J0, K, KMAX, L, LMAX, LMIN
 C-----------------------------------------------------------------------
 C          CONVERSION OF DOUBLE PRECISION MATRICES FROM SPARSE
@@ -43225,6 +43711,7 @@ C     ERROR RETURN
       COMPLEX, INTENT(IN) :: A(*)
       COMPLEX, INTENT(INOUT) :: B(KB,NB)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J0, K, KMAX, L, LMAX, LMIN
 C-----------------------------------------------------------------------
 C              CONVERSION OF COMPLEX MATRICES FROM SPARSE
@@ -43280,6 +43767,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(KB,*)
+C     beginning of local variable declarations
       INTEGER :: I, J, NUM
 C-----------------------------------------------------------------------
 C        CONVERSION OF BANDED MATRICES FROM SINGLE TO DOUBLE
@@ -43298,6 +43786,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
       REAL, INTENT(INOUT) :: B(KB,*)
+C     beginning of local variable declarations
       INTEGER :: I, J, NUM
 C-----------------------------------------------------------------------
 C        CONVERSION OF BANDED MATRICES FROM DOUBLE TO SINGLE
@@ -43319,6 +43808,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: NU
       COMPLEX, INTENT(IN) :: A(KA,*)
       REAL, INTENT(INOUT) :: B(KB,L)
+C     beginning of local variable declarations
       INTEGER :: I, IMIN, J, K, NUM
 C-----------------------------------------------------------------------
 C              REAL PART OF A BANDED COMPLEX MATRIX
@@ -43368,6 +43858,7 @@ C     ERROR RETURN
       INTEGER, INTENT(INOUT) :: NU
       COMPLEX, INTENT(IN) :: A(KA,*)
       REAL, INTENT(INOUT) :: B(KB,L)
+C     beginning of local variable declarations
       INTEGER :: I, IMIN, J, K, NUM
 C-----------------------------------------------------------------------
 C            IMAGINARY PART OF A BANDED COMPLEX MATRIX
@@ -43417,6 +43908,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: ML, MU, N, NL, NU
       REAL, INTENT(IN) :: A(KA,*), B(KB,*)
       COMPLEX, INTENT(INOUT) :: C(KC,L)
+C     beginning of local variable declarations
       INTEGER :: I, J, JA, JB, JC, JMAX, K, NUM
 C-----------------------------------------------------------------------
 C        COMPUTE A + BI FOR THE BANDED REAL MATRICES A AND B
@@ -43488,6 +43980,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,*)
       REAL, INTENT(INOUT) :: B(KB,*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 C-----------------------------------------------------------------------
 C                TRANSPOSITION OF REAL BANDED MATRICES
@@ -43538,6 +44031,7 @@ C     DEFINE THE REMAINING COLUMNS OF B
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(KB,*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 C-----------------------------------------------------------------------
 C          TRANSPOSITION OF DOUBLE PRECISION BANDED MATRICES
@@ -43588,6 +44082,7 @@ C     DEFINE THE REMAINING COLUMNS OF B
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
       COMPLEX, INTENT(IN) :: A(KA,*)
       COMPLEX, INTENT(INOUT) :: B(KB,*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 C-----------------------------------------------------------------------
 C              TRANSPOSITION OF COMPLEX BANDED MATRICES
@@ -43641,6 +44136,7 @@ C     DEFINE THE REMAINING COLUMNS OF B
       INTEGER, INTENT(IN) :: ML, MU, N, NL, NU
       REAL, INTENT(IN) :: A(KA,*), B(KB,*)
       REAL, INTENT(INOUT) :: C(KC,L)
+C     beginning of local variable declarations
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
       INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
@@ -43778,6 +44274,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: ML, MU, N, NL, NU
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*), B(KB,*)
       DOUBLE PRECISION, INTENT(INOUT) :: C(KC,L)
+C     beginning of local variable declarations
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
       INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
@@ -43915,6 +44412,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: ML, MU, N, NL, NU
       COMPLEX, INTENT(IN) :: A(KA,*), B(KB,*)
       COMPLEX, INTENT(INOUT) :: C(KC,L)
+C     beginning of local variable declarations
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
       INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
@@ -44052,6 +44550,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: ML, MU, N, NL, NU
       REAL, INTENT(IN) :: A(KA,*), B(KB,*)
       REAL, INTENT(INOUT) :: C(KC,L)
+C     beginning of local variable declarations
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
       INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
@@ -44189,6 +44688,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: ML, MU, N, NL, NU
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*), B(KB,*)
       DOUBLE PRECISION, INTENT(INOUT) :: C(KC,L)
+C     beginning of local variable declarations
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
       INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
@@ -44326,6 +44826,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: ML, MU, N, NL, NU
       COMPLEX, INTENT(IN) :: A(KA,*), B(KB,*)
       COMPLEX, INTENT(INOUT) :: C(KC,L)
+C     beginning of local variable declarations
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
       INTEGER :: NSWC_AI_I4
 C-----------------------------------------------------------------------
@@ -44464,6 +44965,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: ML, MU, N, NC, NL, NU
       REAL, INTENT(IN) :: A(KA,*), B(KB,*)
       REAL, INTENT(INOUT) :: C(KC,NC)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN,
      &LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
       REAL :: SUM
@@ -44602,6 +45104,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: ML, MU, N, NC, NL, NU
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*), B(KB,*)
       DOUBLE PRECISION, INTENT(INOUT) :: C(KC,NC)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN,
      &LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
       DOUBLE PRECISION :: SUM
@@ -44740,6 +45243,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: ML, MU, N, NC, NL, NU
       COMPLEX, INTENT(IN) :: A(KA,*), B(KB,*)
       COMPLEX, INTENT(INOUT) :: C(KC,NC)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN,
      &LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
       COMPLEX :: SUM
@@ -44874,6 +45378,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,*), X(N)
       REAL, INTENT(INOUT) :: Y(M)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
       REAL :: SUM
 C-----------------------------------------------------------------------
@@ -44920,6 +45425,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX COMPONENTS
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,*), X(N)
       REAL, INTENT(INOUT) :: Y(M)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
       REAL :: SUM
 C-----------------------------------------------------------------------
@@ -44961,6 +45467,7 @@ C     COMPUTE THE REMAINING COMPONENTS
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(N)
       DOUBLE PRECISION, INTENT(INOUT) :: Y(M)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
       DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
@@ -45008,6 +45515,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX COMPONENTS
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(N)
       DOUBLE PRECISION, INTENT(INOUT) :: Y(M)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
       DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
@@ -45049,6 +45557,7 @@ C     COMPUTE THE REMAINING COMPONENTS
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       COMPLEX, INTENT(IN) :: A(KA,*), X(N)
       COMPLEX, INTENT(INOUT) :: Y(M)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
       COMPLEX :: SUM
 C-----------------------------------------------------------------------
@@ -45095,6 +45604,7 @@ C     STORE ZEROS IN THE FINAL M-IMAX COMPONENTS
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       COMPLEX, INTENT(IN) :: A(KA,*), X(N)
       COMPLEX, INTENT(INOUT) :: Y(M)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
       COMPLEX :: SUM
 C-----------------------------------------------------------------------
@@ -45136,6 +45646,7 @@ C     COMPUTE THE REMAINING COMPONENTS
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,*), X(M)
       REAL, INTENT(INOUT) :: Y(N)
+C     beginning of local variable declarations
       INTEGER :: J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
       REAL :: SUM
 C-----------------------------------------------------------------------
@@ -45181,6 +45692,7 @@ C     STORE ZEROS IN THE FINAL N-JMAX COMPONENTS
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,*), X(M)
       REAL, INTENT(INOUT) :: Y(N)
+C     beginning of local variable declarations
       INTEGER :: J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
       REAL :: SUM
 C-----------------------------------------------------------------------
@@ -45221,6 +45733,7 @@ C     COMPUTE THE REMAINING COMPONENTS
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(M)
       DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
+C     beginning of local variable declarations
       INTEGER :: J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
       DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
@@ -45267,6 +45780,7 @@ C     STORE ZEROS IN THE FINAL N-JMAX COMPONENTS
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(M)
       DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
+C     beginning of local variable declarations
       INTEGER :: J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
       DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
@@ -45307,6 +45821,7 @@ C     COMPUTE THE REMAINING COMPONENTS
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       COMPLEX, INTENT(IN) :: A(KA,*), X(M)
       COMPLEX, INTENT(INOUT) :: Y(N)
+C     beginning of local variable declarations
       INTEGER :: J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
       COMPLEX :: SUM
 C-----------------------------------------------------------------------
@@ -45352,6 +45867,7 @@ C     STORE ZEROS IN THE FINAL N-JMAX COMPONENTS
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       COMPLEX, INTENT(IN) :: A(KA,*), X(M)
       COMPLEX, INTENT(INOUT) :: Y(N)
+C     beginning of local variable declarations
       INTEGER :: J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
       COMPLEX :: SUM
 C-----------------------------------------------------------------------
@@ -45391,6 +45907,7 @@ C     COMPUTE THE REMAINING COMPONENTS
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       REAL, INTENT(IN) :: A(KA,*)
+C     beginning of local variable declarations
       INTEGER :: I, J, NUM
       REAL :: SUM
 C-----------------------------------------------------------------------
@@ -45412,6 +45929,7 @@ C-----------------------------------------------------------------------
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       REAL, INTENT(IN) :: A(*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, INCR, J, JMAX, JMIN, NUM
       REAL :: SASUM
 C-----------------------------------------------------------------------
@@ -45459,6 +45977,7 @@ C     PROCEED ALONG THE LAST ROW OF A
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
+C     beginning of local variable declarations
       INTEGER :: I, J, NUM
       DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
@@ -45480,6 +45999,7 @@ C-----------------------------------------------------------------------
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
       DOUBLE PRECISION, INTENT(IN) :: A(*)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IMIN, INCR, J, JMAX, JMIN, NUM
       DOUBLE PRECISION :: DASUM
 C-----------------------------------------------------------------------
@@ -45646,6 +46166,7 @@ C     ERROR RETURN
       INTEGER, INTENT(OUT) :: INFO
       REAL, INTENT(INOUT) :: A(LDA,*)
       INTEGER, INTENT(INOUT) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB,
      &ML1, MP, N1
       INTEGER :: ISAMAX
@@ -45782,6 +46303,7 @@ C     CASE WHEN ML = 0
       REAL, INTENT(IN) :: A(LDA,*)
       REAL, INTENT(INOUT) :: B(N)
       INTEGER, INTENT(IN) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: ML1, ML2
       REAL :: SDOT, T
       INTEGER :: K, KB, KLM, L, LB, LDB, LM, M, MLM, NM1
@@ -46009,6 +46531,7 @@ C     ERROR RETURN
       INTEGER, INTENT(OUT) :: INFO
       DOUBLE PRECISION, INTENT(INOUT) :: A(LDA,*)
       INTEGER, INTENT(INOUT) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB,
      &ML1, MP, N1
       INTEGER :: IDAMAX
@@ -46145,6 +46668,7 @@ C     CASE WHEN ML = 0
       DOUBLE PRECISION, INTENT(IN) :: A(LDA,*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(N)
       INTEGER, INTENT(IN) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: ML1, ML2
       DOUBLE PRECISION :: DDOT, T
       INTEGER :: K, KB, KLM, L, LB, LDB, LM, M, MLM, NM1
@@ -46257,6 +46781,7 @@ C     CASE WHEN ML = 0 AND MU = 0
       REAL, INTENT(OUT) :: COND
       REAL, INTENT(INOUT) :: A(KA,*), WK(*)
       INTEGER, INTENT(INOUT) :: IWK(*)
+C     beginning of local variable declarations
       INTEGER :: ISGN, ITER, IV, IX, J, JUMP, KASE
       REAL :: AINORM, ANORM
       REAL :: B1NRM
@@ -46316,6 +46841,7 @@ C     ERROR RETURN
       DOUBLE PRECISION, INTENT(OUT) :: COND
       DOUBLE PRECISION, INTENT(INOUT) :: WK(*)
       INTEGER, INTENT(INOUT) :: IWK(*)
+C     beginning of local variable declarations
       INTEGER :: ISGN, ITER, IV, IX, J, JUMP, KASE
       DOUBLE PRECISION :: ANORM, AINORM
       DOUBLE PRECISION :: DB1NRM
@@ -46491,6 +47017,7 @@ C     ERROR RETURN
       INTEGER, INTENT(OUT) :: INFO
       COMPLEX, INTENT(INOUT) :: A(LDA,*)
       INTEGER, INTENT(INOUT) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB,
      &ML1, MP, N1
       INTEGER :: ICAMAX
@@ -46627,6 +47154,7 @@ C     CASE WHEN ML = 0
       COMPLEX, INTENT(IN) :: A(LDA,*)
       COMPLEX, INTENT(INOUT) :: B(N)
       INTEGER, INTENT(IN) :: IPVT(N)
+C     beginning of local variable declarations
       INTEGER :: ML1, ML2
       COMPLEX :: CDOTU, T
       INTEGER :: K, KB, KLM, L, LB, LDB, LM, M, MLM, NM1
@@ -46739,6 +47267,7 @@ C     CASE WHEN ML = 0 AND MU = 0
       REAL, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, J
 C                 STORE THE I-TH ROW
       IP = 1
@@ -46768,6 +47297,7 @@ C                   ERROR RETURN
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, J
 C                 STORE THE I-TH ROW
       IP = 1
@@ -46797,6 +47327,7 @@ C                   ERROR RETURN
       COMPLEX, INTENT(IN) :: A(KA,N)
       COMPLEX, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, J
       COMPLEX :: ZERO
       DATA ZERO /(0.0,0.0)/
@@ -46827,6 +47358,7 @@ C                   ERROR RETURN
       REAL, INTENT(IN) :: A(*)
       REAL, INTENT(INOUT) :: B(KB,N)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, IPMAX, IPMIN, J
       DO I = 1,M
 C                 CLEAR THE I-TH ROW
@@ -46851,6 +47383,7 @@ C                 STORE THE I-TH ROW
       DOUBLE PRECISION, INTENT(IN) :: A(*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(KB,N)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, IPMAX, IPMIN, J
       DO I = 1,M
 C                 CLEAR THE I-TH ROW
@@ -46875,6 +47408,7 @@ C                 STORE THE I-TH ROW
       COMPLEX, INTENT(IN) :: A(*)
       COMPLEX, INTENT(INOUT) :: B(KB,N)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, IPMAX, IPMIN, J
       DO I = 1,M
 C                 CLEAR THE I-TH ROW
@@ -46900,6 +47434,7 @@ C                 STORE THE I-TH ROW
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IBEG, IEND, IP, L
       L = 1
       DO I = 1,M
@@ -46926,6 +47461,7 @@ C                 STORE THE I-TH ROW
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IBEG, IEND, IP, L
       L = 1
       DO I = 1,M
@@ -46952,6 +47488,7 @@ C                 STORE THE I-TH ROW
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IBEG, IEND, IP, L
       REAL :: T
 C-----------------------------------------------------------------------
@@ -46983,6 +47520,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IBEG, IEND, IP, L
       REAL :: T
 C-----------------------------------------------------------------------
@@ -47016,6 +47554,7 @@ C-----------------------------------------------------------------------
       COMPLEX, INTENT(INOUT) :: C(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
       INTEGER, INTENT(INOUT) :: IC(*), JC(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
       COMPLEX :: T
 C-----------------------------------------------------------------------
@@ -47077,6 +47616,7 @@ C                        ERROR RETURN
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IBEG, IEND, IP, L
 C-----------------------------------------------------------------------
 C                  COPYING A SPARSE REAL MATRIX
@@ -47106,6 +47646,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IBEG, IEND, IP, L
 C-----------------------------------------------------------------------
 C              COPYING A SPARSE DOUBLE PRECISION MATRIX
@@ -47135,6 +47676,7 @@ C-----------------------------------------------------------------------
       COMPLEX, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IBEG, IEND, IP, L
       COMPLEX :: ZERO
 C-----------------------------------------------------------------------
@@ -47166,6 +47708,7 @@ C-----------------------------------------------------------------------
       COMPLEX, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IBEG, IEND, IP, L, MP1
 C-----------------------------------------------------------------------
 C     COMPUTATION OF THE CONJUGATE OF A SPARSE COMPLEX MATRIX
@@ -47193,6 +47736,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
 C                 TRANSPOSING A SPARSE REAL MATRIX
@@ -47250,6 +47794,7 @@ C                    TRANSPOSE A ZERO MATRIX A
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
 C                 TRANSPOSING A SPARSE REAL MATRIX
@@ -47308,6 +47853,7 @@ C                    TRANSPOSE A ZERO MATRIX A
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
 C           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
@@ -47365,6 +47911,7 @@ C                    TRANSPOSE A ZERO MATRIX A
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
 C           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
@@ -47423,6 +47970,7 @@ C                    TRANSPOSE A ZERO MATRIX A
       COMPLEX, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
 C               TRANSPOSING A SPARSE COMPLEX MATRIX
@@ -47480,6 +48028,7 @@ C                    TRANSPOSE A ZERO MATRIX A
       COMPLEX, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+C     beginning of local variable declarations
       INTEGER :: I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
 C               TRANSPOSING A SPARSE COMPLEX MATRIX
@@ -47539,6 +48088,7 @@ C                    TRANSPOSE A ZERO MATRIX A
       REAL, INTENT(INOUT) :: C(*), WK(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
       INTEGER, INTENT(INOUT) :: IC(*), JC(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
       REAL :: T
 C-----------------------------------------------------------------------
@@ -47601,6 +48151,7 @@ C                        ERROR RETURN
       DOUBLE PRECISION, INTENT(INOUT) :: C(*), WK(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
       INTEGER, INTENT(INOUT) :: IC(*), JC(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
       DOUBLE PRECISION :: T
 C-----------------------------------------------------------------------
@@ -47663,6 +48214,7 @@ C                        ERROR RETURN
       COMPLEX, INTENT(INOUT) :: C(*), WK(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
       INTEGER, INTENT(INOUT) :: IC(*), JC(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
       COMPLEX :: T
 C-----------------------------------------------------------------------
@@ -47725,6 +48277,7 @@ C                        ERROR RETURN
       REAL, INTENT(INOUT) :: C(*), WK(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
       INTEGER, INTENT(INOUT) :: IC(*), JC(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
       REAL :: T
 C-----------------------------------------------------------------------
@@ -47787,6 +48340,7 @@ C                        ERROR RETURN
       DOUBLE PRECISION, INTENT(INOUT) :: C(*), WK(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
       INTEGER, INTENT(INOUT) :: IC(*), JC(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
       DOUBLE PRECISION :: T
 C-----------------------------------------------------------------------
@@ -47849,6 +48403,7 @@ C                        ERROR RETURN
       COMPLEX, INTENT(INOUT) :: C(*), WK(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
       INTEGER, INTENT(INOUT) :: IC(*), JC(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
       COMPLEX :: T
 C-----------------------------------------------------------------------
@@ -47911,6 +48466,7 @@ C                        ERROR RETURN
       REAL, INTENT(INOUT) :: C(*), WK(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
       INTEGER, INTENT(INOUT) :: IC(*), JC(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
       REAL :: T
 C-----------------------------------------------------------------------
@@ -47966,6 +48522,7 @@ C                           ERROR RETURN
       DOUBLE PRECISION, INTENT(INOUT) :: C(*), WK(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
       INTEGER, INTENT(INOUT) :: IC(*), JC(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
       DOUBLE PRECISION :: T
 C-----------------------------------------------------------------------
@@ -48021,6 +48578,7 @@ C                           ERROR RETURN
       COMPLEX, INTENT(INOUT) :: C(*), WK(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
       INTEGER, INTENT(INOUT) :: IC(*), JC(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
       COMPLEX :: T
 C-----------------------------------------------------------------------
@@ -48074,6 +48632,7 @@ C                           ERROR RETURN
       REAL, INTENT(IN) :: A(*), X(N)
       REAL, INTENT(INOUT) :: Y(M)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, L, LMAX, LMIN
       REAL :: SUM
 C-----------------------------------------------------------------------
@@ -48098,6 +48657,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: A(*), X(N)
       REAL, INTENT(INOUT) :: Y(M)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, L, LMAX, LMIN
       REAL :: SUM
 C-----------------------------------------------------------------------
@@ -48122,6 +48682,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: A(*), X(M)
       REAL, INTENT(INOUT) :: Y(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, L, LMAX, LMIN
       REAL :: T
 C-----------------------------------------------------------------------
@@ -48149,6 +48710,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: A(*), X(M)
       REAL, INTENT(INOUT) :: Y(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, L, LMAX, LMIN
       REAL :: T
 C-----------------------------------------------------------------------
@@ -48173,6 +48735,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A(*), X(N)
       DOUBLE PRECISION, INTENT(INOUT) :: Y(M)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, L, LMAX, LMIN
       DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
@@ -48197,6 +48760,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A(*), X(N)
       DOUBLE PRECISION, INTENT(INOUT) :: Y(M)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, L, LMAX, LMIN
       DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
@@ -48221,6 +48785,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A(*), X(M)
       DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, L, LMAX, LMIN
       DOUBLE PRECISION :: T
 C-----------------------------------------------------------------------
@@ -48248,6 +48813,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A(*), X(M)
       DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, L, LMAX, LMIN
       DOUBLE PRECISION :: T
 C-----------------------------------------------------------------------
@@ -48272,6 +48838,7 @@ C-----------------------------------------------------------------------
       COMPLEX, INTENT(IN) :: A(*), X(N)
       COMPLEX, INTENT(INOUT) :: Y(M)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, L, LMAX, LMIN
       COMPLEX :: SUM
 C-----------------------------------------------------------------------
@@ -48296,6 +48863,7 @@ C-----------------------------------------------------------------------
       COMPLEX, INTENT(IN) :: A(*), X(N)
       COMPLEX, INTENT(INOUT) :: Y(M)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, L, LMAX, LMIN
       COMPLEX :: SUM
 C-----------------------------------------------------------------------
@@ -48320,6 +48888,7 @@ C-----------------------------------------------------------------------
       COMPLEX, INTENT(IN) :: A(*), X(M)
       COMPLEX, INTENT(INOUT) :: Y(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, L, LMAX, LMIN
       COMPLEX :: T
 C-----------------------------------------------------------------------
@@ -48347,6 +48916,7 @@ C-----------------------------------------------------------------------
       COMPLEX, INTENT(IN) :: A(*), X(M)
       COMPLEX, INTENT(INOUT) :: Y(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, L, LMAX, LMIN
       COMPLEX :: T
 C-----------------------------------------------------------------------
@@ -48370,6 +48940,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: M, N
       REAL, INTENT(IN) :: A(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, IPMAX, IPMIN
       REAL :: SUM
 C-----------------------------------------------------------------------
@@ -48397,6 +48968,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: A(*)
       REAL, INTENT(INOUT) :: WK(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: IP, IPMAX, IPMIN, J
 C-----------------------------------------------------------------------
 C        COMPUTATION OF THE L1 NORM OF A REAL SPARSE MATRIX A
@@ -48423,6 +48995,7 @@ C     COMPUTE THE L1 NORM OF A
       INTEGER, INTENT(IN) :: M, N
       DOUBLE PRECISION, INTENT(IN) :: A(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: I, IP, IPMAX, IPMIN
       DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
@@ -48450,6 +49023,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(OUT) :: ANORM
       DOUBLE PRECISION, INTENT(INOUT) :: WK(N)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+C     beginning of local variable declarations
       INTEGER :: IP, IPMAX, IPMIN, J
 C-----------------------------------------------------------------------
 C               COMPUTATION OF THE L1 NORM OF A SPARSE
@@ -48477,6 +49051,7 @@ C     COMPUTE THE L1 NORM OF A
       INTEGER, INTENT(IN) :: M, N
       INTEGER, INTENT(IN) :: IA(*)
       INTEGER, INTENT(INOUT) :: R(M), IWK(*)
+C     beginning of local variable declarations
       INTEGER :: I, II, K, L, NP1, NUM
 C-----------------------------------------------------------------------
 C        SPORD ORDERS THE ROWS OF AN MXN SPARSE MATRIX A,IA,JA
@@ -48517,6 +49092,7 @@ C----------------------
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: R(N), C(N), IB(N)
       INTEGER, INTENT(INOUT) :: IWK(*)
+C     beginning of local variable declarations
       INTEGER :: I, LENGTH, LI, NP1, NPI
 C-----------------------------------------------------------------------
 C        REORDERING A SPARSE MATRIX INTO BLOCK TRIANGULAR FORM
@@ -48584,6 +49160,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: NUMNZ
       INTEGER, INTENT(IN) :: IP(N), ICN(LICN), LENR(N)
       INTEGER, INTENT(INOUT) :: IPERM(N), PR(N), CV(N), ARP(N), OUT(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IN1, IN2, IOUTK, J, J1, JORD, K, KK
 C-----------------------------------------------------------------------
 C     DIVISION OF WORK ARRAY IS NOW DESCRIBED.
@@ -48724,6 +49301,7 @@ C IW  WORK ARRAY OF LENGTH 3*N.
       INTEGER, INTENT(IN) :: IP(N)
       INTEGER, INTENT(IN) :: ICN(LICN), LENR(N)
       INTEGER, INTENT(INOUT) :: ARP(N), IB(N), LOWL(N), NUMB(N), PREV(N)
+C     beginning of local variable declarations
       INTEGER :: I, I1, I2, ICNT, II, ISN, IST, IST1, IV, IW, J, K,
      &LCNT, NNM1
       INTEGER :: STP, DUMMY
@@ -48837,6 +49415,7 @@ C PUT PERMUTATION IN THE REQUIRED FORM.
       REAL, INTENT(INOUT) :: X(N), RTEMP(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
       INTEGER, INTENT(INOUT) :: C(N), ITEMP(*)
+C     beginning of local variable declarations
       INTEGER :: K, L
       INTEGER :: IU, JU, U, Y, P
 C-----------------------------------------------------------------------
@@ -48928,6 +49507,7 @@ C  CALL NSPIV1 TO PERFORM COMPUTATIONS
       INTEGER, INTENT(IN) :: JA(*)
       INTEGER, INTENT(INOUT) :: JU(MAX), P(*)
       INTEGER, INTENT(IN) :: R(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL,
      &NZCNT
       REAL :: DK, LKI, XPV, XPVMAX, YK
@@ -49152,6 +49732,7 @@ C  STORAGE FOR U EXCEEDED ON ROW K
       INTEGER, INTENT(INOUT) :: IWK(*)
       INTEGER, INTENT(IN) :: R(N)
       INTEGER, INTENT(INOUT) :: C(N)
+C     beginning of local variable declarations
       INTEGER :: IT, IU, JT, K, L
       INTEGER :: Y, T, P
 C-----------------------------------------------------------------------
@@ -49227,6 +49808,7 @@ C     SOLVE THE SYSTEM OF EQUATIONS
       INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
       REAL, INTENT(IN) :: B(N), D(N), T(*)
       REAL, INTENT(INOUT) :: X(N), Y(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
       REAL :: SUM
 C            SOLVE LY = B BY FORWARD SUBSTITUTION
@@ -49273,6 +49855,7 @@ C             AND REORDER X TO CORRESPOND WITH A
       INTEGER, INTENT(INOUT) :: IWK(*)
       INTEGER, INTENT(IN) :: R(N)
       INTEGER, INTENT(INOUT) :: C(N)
+C     beginning of local variable declarations
       INTEGER :: IT, IU, JT, K, L
       INTEGER :: Y, T, P
 C-----------------------------------------------------------------------
@@ -49348,6 +49931,7 @@ C     SOLVE THE SYSTEM OF EQUATIONS
       INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
       REAL, INTENT(IN) :: B(N), D(N), T(*)
       REAL, INTENT(INOUT) :: X(N), Y(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
 C            SOLVE YU = B BY FORWARD SUBSTITUTION
       DO K = 1,N
@@ -49400,6 +49984,7 @@ C            SOLVE XL = Y BY BACKWARD SUBSTITUTION
       INTEGER, INTENT(INOUT) :: C(N), IC(N)
       INTEGER, INTENT(INOUT) :: IT(*), JT(MAX), IU(N)
       INTEGER, INTENT(INOUT) :: P(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI,
      &MAXIL
       INTEGER :: PM
@@ -49578,6 +50163,7 @@ C     STORAGE FOR L AND U EXCEEDED ON ROW R(K)
       DOUBLE PRECISION, INTENT(INOUT) :: X(N), RTEMP(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
       INTEGER, INTENT(INOUT) :: C(N), ITEMP(*)
+C     beginning of local variable declarations
       INTEGER :: K, L
       INTEGER :: IU, JU, U, Y, P
 C-----------------------------------------------------------------------
@@ -49672,6 +50258,7 @@ C  CALL DNSPIV TO PERFORM COMPUTATIONS
       INTEGER, INTENT(IN) :: JA(*)
       INTEGER, INTENT(INOUT) :: JU(MAX), P(*)
       INTEGER, INTENT(IN) :: R(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL,
      &NZCNT
       DOUBLE PRECISION :: DK, LKI, XPV, XPVMAX, YK
@@ -49896,6 +50483,7 @@ C  STORAGE FOR U EXCEEDED ON ROW K
       INTEGER, INTENT(INOUT) :: IWK(*)
       INTEGER, INTENT(IN) :: R(N)
       INTEGER, INTENT(INOUT) :: C(N)
+C     beginning of local variable declarations
       INTEGER :: IT, IU, JT, K, L
       INTEGER :: Y, T, P
 C-----------------------------------------------------------------------
@@ -49972,6 +50560,7 @@ C     SOLVE THE SYSTEM OF EQUATIONS
       INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
       DOUBLE PRECISION, INTENT(IN) :: B(N), D(N), T(*)
       DOUBLE PRECISION, INTENT(INOUT) :: X(N), Y(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
       DOUBLE PRECISION :: SUM
 C            SOLVE LY = B BY FORWARD SUBSTITUTION
@@ -50018,6 +50607,7 @@ C             AND REORDER X TO CORRESPOND WITH A
       INTEGER, INTENT(INOUT) :: IWK(*)
       INTEGER, INTENT(IN) :: R(N)
       INTEGER, INTENT(INOUT) :: C(N)
+C     beginning of local variable declarations
       INTEGER :: IT, IU, JT, K, L
       INTEGER :: Y, T, P
 C-----------------------------------------------------------------------
@@ -50094,6 +50684,7 @@ C     SOLVE THE SYSTEM OF EQUATIONS
       INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
       DOUBLE PRECISION, INTENT(IN) :: B(N), D(N), T(*)
       DOUBLE PRECISION, INTENT(INOUT) :: X(N), Y(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
 C            SOLVE YU = B BY FORWARD SUBSTITUTION
       DO K = 1,N
@@ -50146,6 +50737,7 @@ C            SOLVE XL = Y BY BACKWARD SUBSTITUTION
       INTEGER, INTENT(INOUT) :: C(N), IC(N)
       INTEGER, INTENT(INOUT) :: IT(*), JT(MAX), IU(N)
       INTEGER, INTENT(INOUT) :: P(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI,
      &MAXIL
       INTEGER :: PM
@@ -50326,6 +50918,7 @@ C     STORAGE FOR L AND U EXCEEDED ON ROW R(K)
       REAL, INTENT(INOUT) :: WK(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
       INTEGER, INTENT(INOUT) :: C(N), IWK(*)
+C     beginning of local variable declarations
       INTEGER :: ISGN, ITER, IV, IX, J, JUMP, KASE
       REAL :: AINORM, ANORM
 C-----------------------------------------------------------------------
@@ -50384,6 +50977,7 @@ C     SINGULAR CASE
       DOUBLE PRECISION, INTENT(INOUT) :: WK(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
       INTEGER, INTENT(INOUT) :: C(N), IWK(*)
+C     beginning of local variable declarations
       INTEGER :: ISGN, ITER, IV, IX, J, JUMP, KASE
       DOUBLE PRECISION :: ANORM, AINORM
 C-----------------------------------------------------------------------
@@ -50440,6 +51034,7 @@ C     SINGULAR CASE
       REAL, INTENT(INOUT) :: ANORM
       REAL, INTENT(INOUT) :: V(N), X(N)
       INTEGER, INTENT(INOUT) :: ISGN(N)
+C     beginning of local variable declarations
       INTEGER :: I, ITMAX, JLAST, L
       REAL :: ALTSGN, ANRM, T
       INTEGER :: ISAMAX
@@ -50566,6 +51161,7 @@ C     X HAS BEEN OVERWRITTEN BY A*X.
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(INOUT) :: ANORM, V(N), X(N)
       INTEGER, INTENT(INOUT) :: ISGN(N)
+C     beginning of local variable declarations
       INTEGER :: I, ITMAX, JLAST, L
       INTEGER :: IDAMAX
       DOUBLE PRECISION :: ALTSGN, AN, ANM1, ANRM, T
@@ -50697,6 +51293,7 @@ C     X HAS BEEN OVERWRITTEN BY A*X.
       COMPLEX, INTENT(INOUT) :: X(N), RTEMP(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
       INTEGER, INTENT(INOUT) :: C(N), ITEMP(*)
+C     beginning of local variable declarations
       INTEGER :: K, L
       INTEGER :: IU, JU, U, Y, P
 C-----------------------------------------------------------------------
@@ -50788,6 +51385,7 @@ C  CALL CNSPIV TO PERFORM COMPUTATIONS
       INTEGER, INTENT(IN) :: JA(*)
       INTEGER, INTENT(INOUT) :: JU(MAX), P(*)
       INTEGER, INTENT(IN) :: R(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL,
      &NZCNT
       COMPLEX :: DK, LKI, ONE, YK, ZERO
@@ -51015,6 +51613,7 @@ C  STORAGE FOR U EXCEEDED ON ROW K
       INTEGER, INTENT(INOUT) :: IWK(*)
       INTEGER, INTENT(IN) :: R(N)
       INTEGER, INTENT(INOUT) :: C(N)
+C     beginning of local variable declarations
       INTEGER :: IT, IU, JT, K, L
       INTEGER :: Y, T, P
 C-----------------------------------------------------------------------
@@ -51091,6 +51690,7 @@ C     SOLVE THE SYSTEM OF EQUATIONS
       INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
       COMPLEX, INTENT(IN) :: B(N), D(N), T(*)
       COMPLEX, INTENT(INOUT) :: X(N), Y(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
       COMPLEX :: SUM
 C            SOLVE LY = B BY FORWARD SUBSTITUTION
@@ -51137,6 +51737,7 @@ C             AND REORDER X TO CORRESPOND WITH A
       INTEGER, INTENT(INOUT) :: IWK(*)
       INTEGER, INTENT(IN) :: R(N)
       INTEGER, INTENT(INOUT) :: C(N)
+C     beginning of local variable declarations
       INTEGER :: IT, IU, JT, K, L
       INTEGER :: Y, T, P
 C-----------------------------------------------------------------------
@@ -51213,6 +51814,7 @@ C     SOLVE THE SYSTEM OF EQUATIONS
       INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
       COMPLEX, INTENT(IN) :: B(N), D(N), T(*)
       COMPLEX, INTENT(INOUT) :: X(N), Y(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
 C            SOLVE YU = B BY FORWARD SUBSTITUTION
       DO K = 1,N
@@ -51265,6 +51867,7 @@ C            SOLVE XL = Y BY BACKWARD SUBSTITUTION
       INTEGER, INTENT(INOUT) :: C(N), IC(N)
       INTEGER, INTENT(INOUT) :: IT(*), JT(MAX), IU(N)
       INTEGER, INTENT(INOUT) :: P(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI,
      &MAXIL
       INTEGER :: PM
@@ -51445,6 +52048,7 @@ C     STORAGE FOR L AND U EXCEEDED ON ROW R(K)
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
       REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N)
+C     beginning of local variable declarations
       INTEGER :: IGH, LOW
 C-----------------------------------------------------------------------
 C                    EIGENVALUES OF REAL MATRICES
@@ -51462,6 +52066,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
       REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N)
+C     beginning of local variable declarations
       INTEGER :: IGH, LOW
 C-----------------------------------------------------------------------
 C                    EIGENVALUES OF REAL MATRICES
@@ -51479,6 +52084,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
       REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N), ZR(KA,N), ZI(KA,N)
+C     beginning of local variable declarations
       INTEGER :: IGH, J, K, KP1, LOW
       REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
@@ -51517,6 +52123,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
       REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N), ZR(KA,N), ZI(KA,N)
+C     beginning of local variable declarations
       INTEGER :: IGH, J, K, KP1, LOW
       REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
@@ -51555,6 +52162,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: NM
       INTEGER, INTENT(INOUT) :: IGH, LOW
       REAL, INTENT(INOUT) :: A(NM,N), SCALE(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L, M
       INTEGER :: JJ
       INTEGER :: IEXC
@@ -51704,6 +52312,7 @@ C     ********** NOW BALANCE **********
       INTEGER, INTENT(IN) :: NZ, IGH, LOW
       REAL, INTENT(INOUT) :: Z(NZ,N)
       REAL, INTENT(IN) :: SCALE(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       INTEGER :: II
       REAL :: S
@@ -51770,6 +52379,7 @@ C               IGH+1 STEP 1 UNTIL N DO -- **********
       INTEGER, INTENT(IN) :: LOW
       REAL, INTENT(INOUT) :: A(NM,N)
       INTEGER, INTENT(INOUT) :: INT(IGH)
+C     beginning of local variable declarations
       INTEGER :: I, J, M
       INTEGER :: LA
       INTEGER :: KP1
@@ -51855,6 +52465,7 @@ C    ********** END INTERCHANGE **********
       INTEGER, INTENT(IN) :: LOW
       REAL, INTENT(INOUT) :: A(NM,N)
       REAL, INTENT(INOUT) :: INT(IGH)
+C     beginning of local variable declarations
       INTEGER :: I, J, M
       INTEGER :: LA
       INTEGER :: KP1
@@ -51939,6 +52550,7 @@ C    ********** END INTERCHANGE **********
       INTEGER, INTENT(IN) :: NM, IGH
       INTEGER, INTENT(IN) :: LOW
       REAL, INTENT(INOUT) :: A(NM,N), ORT(IGH)
+C     beginning of local variable declarations
       INTEGER :: I, J, M
       INTEGER :: II, JJ, LA, MP
       INTEGER :: KP1
@@ -52032,6 +52644,7 @@ C     ********** FOR J=IGH STEP -1 UNTIL M DO -- **********
       INTEGER, INTENT(IN) :: LOW
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: H(NM,N), WR(N), WI(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L, M
       INTEGER :: EN, LL, MM, NA
       INTEGER :: ITS
@@ -52241,6 +52854,7 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
       INTEGER, INTENT(IN) :: NM, IGH, LOW
       REAL, INTENT(IN) :: SCALE(N)
       REAL, INTENT(INOUT) :: Z(NM,M)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       INTEGER :: II
       REAL :: S
@@ -52302,6 +52916,7 @@ C               IGH+1 STEP 1 UNTIL N DO -- **********
       REAL, INTENT(IN) :: A(NM,IGH)
       REAL, INTENT(INOUT) :: Z(NM,N)
       INTEGER, INTENT(IN) :: INT(IGH)
+C     beginning of local variable declarations
       INTEGER :: I, J
       INTEGER :: KL, MM, MP
       INTEGER :: MP1
@@ -52365,6 +52980,7 @@ C     ********** FOR MP=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
       REAL, INTENT(IN) :: A(NM,IGH)
       REAL, INTENT(INOUT) :: Z(NM,N)
       REAL, INTENT(IN) :: INT(IGH)
+C     beginning of local variable declarations
       INTEGER :: I, J
       INTEGER :: KL, MM, MP
       INTEGER :: MP1
@@ -52427,6 +53043,7 @@ C     ********** FOR MP=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
       INTEGER, INTENT(IN) :: NM, IGH, LOW
       REAL, INTENT(IN) :: A(NM,IGH)
       REAL, INTENT(INOUT) :: ORT(IGH), Z(NM,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       INTEGER :: KL, MM, MP
       INTEGER :: MP1
@@ -52498,6 +53115,7 @@ C                DOUBLE DIVISION AVOIDS POSSIBLE UNDERFLOW **********
       INTEGER, INTENT(IN) :: NZ
       REAL, INTENT(IN) :: A(NA,IGH)
       REAL, INTENT(INOUT) :: ORT(IGH), Z(NZ,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       INTEGER :: KL, MM, MP
       INTEGER :: MP1
@@ -52573,6 +53191,7 @@ C                DOUBLE DIVISION AVOIDS POSSIBLE UNDERFLOW **********
       INTEGER, INTENT(IN) :: LOW
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: H(NM,N), WR(N), WI(N), Z(NM,N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L, M
       INTEGER :: EN, II, JJ, LL, MM, NA
       INTEGER :: NN
@@ -52970,6 +53589,7 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), WR(N), WI(N)
+C     beginning of local variable declarations
       INTEGER :: IGH, LOW
 C-----------------------------------------------------------------------
 C                EIGENVALUES OF DOUBLE PRECISION MATRICES
@@ -52988,6 +53608,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, N
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), WR(N), WI(N),
      &ZR(KA,N), ZI(KA,N)
+C     beginning of local variable declarations
       INTEGER :: IGH, J, K, KP1, LOW
       DOUBLE PRECISION :: NSWC_AI_R8
 C-----------------------------------------------------------------------
@@ -53026,6 +53647,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: NM
       INTEGER, INTENT(INOUT) :: IGH, LOW
       DOUBLE PRECISION, INTENT(INOUT) :: A(NM,N), SCALE(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L, M
       INTEGER :: JJ
       INTEGER :: IEXC
@@ -53175,6 +53797,7 @@ C     ********** NOW BALANCE **********
       INTEGER, INTENT(IN) :: NZ, IGH, LOW
       DOUBLE PRECISION, INTENT(INOUT) :: Z(NZ,N)
       DOUBLE PRECISION, INTENT(IN) :: SCALE(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       INTEGER :: II
       DOUBLE PRECISION :: S
@@ -53240,6 +53863,7 @@ C               IGH+1 STEP 1 UNTIL N DO -- **********
       INTEGER, INTENT(IN) :: NM, IGH
       INTEGER, INTENT(IN) :: LOW
       DOUBLE PRECISION, INTENT(INOUT) :: A(NM,N), ORT(IGH)
+C     beginning of local variable declarations
       INTEGER :: I, J, M
       INTEGER :: II, JJ, LA, MP
       INTEGER :: KP1
@@ -53333,6 +53957,7 @@ C     ********** FOR J=IGH STEP -1 UNTIL M DO -- **********
       INTEGER, INTENT(IN) :: LOW
       INTEGER, INTENT(OUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: H(NM,N), WR(N), WI(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L, M
       INTEGER :: EN, LL, MM, NA
       INTEGER :: ITS
@@ -53544,6 +54169,7 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
       INTEGER, INTENT(IN) :: NM, IGH, LOW
       DOUBLE PRECISION, INTENT(IN) :: SCALE(N)
       DOUBLE PRECISION, INTENT(INOUT) :: Z(NM,M)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       INTEGER :: II
       DOUBLE PRECISION :: S
@@ -53604,6 +54230,7 @@ C               IGH+1 STEP 1 UNTIL N DO -- **********
       INTEGER, INTENT(IN) :: NM, IGH, LOW
       DOUBLE PRECISION, INTENT(IN) :: A(NM,IGH)
       DOUBLE PRECISION, INTENT(INOUT) :: ORT(IGH), Z(NM,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       INTEGER :: KL, MM, MP
       INTEGER :: MP1
@@ -53675,6 +54302,7 @@ C                DOUBLE DIVISION AVOIDS POSSIBLE UNDERFLOW **********
       INTEGER, INTENT(IN) :: NZ
       DOUBLE PRECISION, INTENT(IN) :: A(NA,IGH)
       DOUBLE PRECISION, INTENT(INOUT) :: ORT(IGH), Z(NZ,N)
+C     beginning of local variable declarations
       INTEGER :: I, J
       INTEGER :: KL, MM, MP
       INTEGER :: MP1
@@ -53750,6 +54378,7 @@ C                DOUBLE DIVISION AVOIDS POSSIBLE UNDERFLOW **********
       INTEGER, INTENT(IN) :: LOW
       INTEGER, INTENT(OUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: H(NM,N), WR(N), WI(N), Z(NM,N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L, M
       INTEGER :: EN, II, JJ, LL, MM, NA
       INTEGER :: NN
@@ -54148,6 +54777,7 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
       INTEGER, INTENT(IN) :: KA
       INTEGER :: N
       REAL, INTENT(INOUT) :: A(*), W(N), T(*)
+C     beginning of local variable declarations
       INTEGER :: L
 C-----------------------------------------------------------------------
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
@@ -54167,6 +54797,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
       REAL, INTENT(INOUT) :: A(*), W(N), T(N)
+C     beginning of local variable declarations
       INTEGER :: L
 C-----------------------------------------------------------------------
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
@@ -54212,6 +54843,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: NM
       REAL, INTENT(INOUT) :: A(NM,N), D(N), E(N), E2(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L
       INTEGER :: II
       INTEGER :: JP1
@@ -54312,6 +54944,7 @@ C     ********** LAST CARD OF TRED1 **********
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: NV
       REAL, INTENT(INOUT) :: A(NV), D(N), E(N), E2(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L
       INTEGER :: II, IZ, JK
       REAL :: F, G, H, HH, SCALE
@@ -54407,6 +55040,7 @@ C     ********** LAST CARD OF TRED3 **********
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: D(N), E2(N)
+C     beginning of local variable declarations
       REAL :: SPMPAR
       INTEGER :: I, J, L, M
       INTEGER :: II, L1, MML
@@ -54524,6 +55158,7 @@ C     ********** LAST CARD OF TQLRAT **********
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: D(N), E(N)
+C     beginning of local variable declarations
       REAL :: SPMPAR
       INTEGER :: I, J, L, M
       INTEGER :: II, MML
@@ -54636,6 +55271,7 @@ C     ********** LAST CARD OF IMTQL1 **********
       INTEGER, INTENT(IN) :: NM
       REAL, INTENT(IN) :: A(NM,N)
       REAL, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L
       INTEGER :: II
       INTEGER :: JP1
@@ -54755,6 +55391,7 @@ C     ********** LAST CARD OF TRED2 **********
       INTEGER, INTENT(IN) :: NM
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
+C     beginning of local variable declarations
       REAL :: SPMPAR
       INTEGER :: I, J, K, L, M
       INTEGER :: II, L1
@@ -54906,6 +55543,7 @@ C     ********** LAST CARD OF TQL2 **********
       INTEGER, INTENT(IN) :: NM
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
+C     beginning of local variable declarations
       REAL :: SPMPAR
       INTEGER :: I, J, K, L, M
       INTEGER :: II
@@ -55050,6 +55688,7 @@ C     ********** LAST CARD OF IMTQL2 **********
       INTEGER, INTENT(IN) :: KA
       INTEGER :: N
       DOUBLE PRECISION, INTENT(INOUT) :: A(*), W(N), T(*)
+C     beginning of local variable declarations
       INTEGER :: L
 C-----------------------------------------------------------------------
 C                DOUBLE PRECISION COMPUTATION OF THE
@@ -55085,6 +55724,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: NM
       DOUBLE PRECISION, INTENT(INOUT) :: A(NM,N), D(N), E(N), E2(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L
       INTEGER :: II
       INTEGER :: JP1
@@ -55185,6 +55825,7 @@ C     ********** LAST CARD OF DTRED1 **********
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: NV
       DOUBLE PRECISION, INTENT(INOUT) :: A(NV), D(N), E(N), E2(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L
       INTEGER :: II, IZ, JK
       DOUBLE PRECISION :: F, G, H, HH, SCALE
@@ -55280,6 +55921,7 @@ C     ********** LAST CARD OF DTRED3 **********
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(OUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: D(N), E2(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, L, M
       INTEGER :: II, L1, MML
       DOUBLE PRECISION :: B, C, F, G, H, P, R, S, MACHEP
@@ -55397,6 +56039,7 @@ C     ********** LAST CARD OF DTQL **********
       INTEGER, INTENT(IN) :: NM
       DOUBLE PRECISION, INTENT(IN) :: A(NM,N)
       DOUBLE PRECISION, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L
       INTEGER :: II
       INTEGER :: JP1
@@ -55516,6 +56159,7 @@ C     ********** LAST CARD OF DTRED2 **********
       INTEGER, INTENT(IN) :: NM
       INTEGER, INTENT(OUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L, M
       INTEGER :: II, L1
       INTEGER :: MML
@@ -55666,6 +56310,7 @@ C     ********** LAST CARD OF DTQL2 **********
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
       REAL, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N), WI(N)
+C     beginning of local variable declarations
       INTEGER :: IGH, LOW
 C-----------------------------------------------------------------------
 C                EIGENVALUES OF COMPLEX MATRICES
@@ -55684,6 +56329,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, N
       REAL, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N), WI(N), ZR(KA,N),
      &ZI(KA,N), TEMP(*)
+C     beginning of local variable declarations
       INTEGER :: I1, I2, I3, IGH, LOW
 C-----------------------------------------------------------------------
 C          EIGENVALUES AND EIGENVECTORS OF COMPLEX MATRICES
@@ -55711,6 +56357,7 @@ C----------------------
       INTEGER, INTENT(IN) :: NM
       INTEGER, INTENT(INOUT) :: IGH, LOW
       REAL, INTENT(INOUT) :: AR(NM,N), AI(NM,N), SCALE(N)
+C     beginning of local variable declarations
       INTEGER :: IPMPAR
       INTEGER :: I, J, K, L, M
       INTEGER :: JJ
@@ -55872,6 +56519,7 @@ C     ********** LAST CARD OF CBAL **********
       INTEGER, INTENT(IN) :: NM, IGH
       INTEGER, INTENT(IN) :: LOW
       REAL, INTENT(INOUT) :: AR(NM,N), AI(NM,N), ORTR(IGH), ORTI(IGH)
+C     beginning of local variable declarations
       INTEGER :: I, J, M
       INTEGER :: II, JJ, LA, MP
       INTEGER :: KP1
@@ -55988,6 +56636,7 @@ C     ********** LAST CARD OF CORTH **********
       INTEGER, INTENT(IN) :: LOW
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: HR(NM,N), HI(NM,N), WR(N), WI(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, L
       INTEGER :: EN, LL
       INTEGER :: ITS
@@ -56194,6 +56843,7 @@ C     ********** LAST CARD OF COMQR **********
       INTEGER, INTENT(IN) :: NM, IGH, LOW
       REAL, INTENT(IN) :: SCALE(N)
       REAL, INTENT(INOUT) :: ZR(NM,M), ZI(NM,M)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       INTEGER :: II
       REAL :: S
@@ -56265,6 +56915,7 @@ C     ********** LAST CARD OF CBABK2 **********
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: HR(NM,N), HI(NM,N), WR(N), WI(N), ZR(NM,N),
      &ZI(NM,N), ORTR(IGH), ORTI(IGH)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L, M
       INTEGER :: EN, II, JJ, LL
       INTEGER :: NN
@@ -56623,6 +57274,7 @@ C     ********** LAST CARD OF COMQR2 **********
       INTEGER, INTENT(IN) :: KA, N
       DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N),
      &WI(N)
+C     beginning of local variable declarations
       INTEGER :: IGH, LOW
 C-----------------------------------------------------------------------
 C            EIGENVALUES OF DOUBLE PRECISION COMPLEX MATRICES
@@ -56641,6 +57293,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: KA, N
       DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N),
      &WI(N), ZR(KA,N), ZI(KA,N), TEMP(*)
+C     beginning of local variable declarations
       INTEGER :: I1, I2, I3, IGH, LOW
 C-----------------------------------------------------------------------
 C                     EIGENVALUES AND EIGENVECTORS
@@ -56670,6 +57323,7 @@ C----------------------
       INTEGER, INTENT(IN) :: NM
       INTEGER, INTENT(INOUT) :: IGH, LOW
       DOUBLE PRECISION, INTENT(INOUT) :: AR(NM,N), AI(NM,N), SCALE(N)
+C     beginning of local variable declarations
       INTEGER :: IPMPAR
       INTEGER :: I, J, K, L, M
       INTEGER :: JJ
@@ -56831,6 +57485,7 @@ C     ********** LAST CARD OF DCBAL **********
       INTEGER, INTENT(IN) :: LOW
       DOUBLE PRECISION, INTENT(INOUT) :: AR(NM,N), AI(NM,N), ORTR(IGH),
      &ORTI(IGH)
+C     beginning of local variable declarations
       INTEGER :: I, J, M
       INTEGER :: II, JJ, LA, MP
       INTEGER :: KP1
@@ -56947,6 +57602,7 @@ C     ********** LAST CARD OF DCORTH **********
       INTEGER, INTENT(OUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: HR(NM,N), HI(NM,N), WR(N),
      &WI(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, L
       INTEGER :: EN, LL
       INTEGER :: ITS
@@ -57151,6 +57807,7 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
       INTEGER, INTENT(IN) :: NM, IGH, LOW
       DOUBLE PRECISION, INTENT(IN) :: SCALE(N)
       DOUBLE PRECISION, INTENT(INOUT) :: ZR(NM,M), ZI(NM,M)
+C     beginning of local variable declarations
       INTEGER :: I, J, K
       INTEGER :: II
       DOUBLE PRECISION :: S
@@ -57222,6 +57879,7 @@ C     ********** LAST CARD OF DCBABK **********
       INTEGER, INTENT(OUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: HR(NM,N), HI(NM,N), WR(N),
      &WI(N), ZR(NM,N), ZI(NM,N), ORTR(IGH), ORTI(IGH)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L, M
       INTEGER :: EN, II, JJ, LL
       INTEGER :: NN
@@ -57582,6 +58240,7 @@ C     ********** LAST CARD OF DCMQR2 **********
       REAL, INTENT(INOUT) :: ERROR, Q(KQ,*), RES(*)
       REAL, INTENT(IN) :: TOLER
       REAL, INTENT(INOUT) :: WK(*), X(*)
+C     beginning of local variable declarations
       INTEGER :: KLM
 C     -------------------
       KLM = K + L + M
@@ -57712,6 +58371,9 @@ C INSTRUCTIONS ON THE IMPLEMENTATION OF THIS MODIFICATION.
       INTEGER, INTENT(INOUT) :: KODE
       INTEGER, INTENT(IN) :: KLM2D
       INTEGER, INTENT(IN) :: NKLMD
+      DIMENSION Q(KLM2D,N2D), X(N2D), RES(KLMD), CU(2,NKLMD),
+     &IU(2,NKLMD), S(KLMD)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: SUM
       REAL :: Z
       REAL :: SN, ZU, ZV, CUV
@@ -57727,8 +58389,6 @@ C INSTRUCTIONS ON THE IMPLEMENTATION OF THIS MODIFICATION.
       INTEGER :: MAXIT
       INTEGER :: IPHASE, KFORCE, IINEG
       REAL :: NSWC_AI_R4
-      DIMENSION Q(KLM2D,N2D), X(N2D), RES(KLMD),
-     * CU(2,NKLMD), IU(2,NKLMD), S(KLMD)
 C INITIALIZATION.
       MAXIT = ITER
       N1 = N + 1
@@ -58037,10 +58697,11 @@ C PREPARE OUTPUT.
       INTEGER, INTENT(INOUT) :: IWK
       INTEGER, INTENT(IN) :: KA, KB, M, N, NB
       REAL, INTENT(INOUT) :: A(KA,N), B(KB,NB), WK(N)
+      DIMENSION IWK(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, NP1
       REAL :: RNORM
       LOGICAL :: EXIT
-      DIMENSION IWK(N)
 C     --------------
       IERR = 0
       IF (1 .LT. N .AND. N .LE. M) GO TO 10
@@ -58070,10 +58731,11 @@ C     --------------
       INTEGER, INTENT(IN) :: KA, KB, M, N, NB
       REAL :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,NB), WK(*)
+      DIMENSION IWK(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, LQ, LR, LS, NP1
       REAL :: RNORM
       LOGICAL :: EXIT
-      DIMENSION IWK(N)
 C     -------------------
 C     DIMENSION WK(MN + 2M + N)
 C     -------------------
@@ -58117,6 +58779,8 @@ C     -------------------
       INTEGER, INTENT(IN) :: M, MS, N
       REAL, INTENT(INOUT) :: QR(MS,N), S(N)
       LOGICAL, INTENT(OUT) :: EXIT
+      DIMENSION IP(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JP, K, KJ, NN
       REAL :: AJJ, SAV, SS, Y
 C***********************************************************************
@@ -58166,7 +58830,6 @@ C        (2) N.K. TSAO AND P.J. NIKOLAI, PROCEDURES USING ORTHOGONAL
 C            TRANSFORMATIONS FOR LINEAR LEAST SQUARES PROBLEMS, ARL
 C            TECHNICAL REPORT ARL TR 74-0124(1974).
 C***********************************************************************
-      DIMENSION IP(N)
       EXIT = .TRUE.
       NN = N
       IF (N .EQ. M) NN = N - 1
@@ -58227,6 +58890,8 @@ C                                       ORTHOGONAL MATRIX.
       INTEGER, INTENT(IN) :: M, MS, N
       REAL :: QR(MS,N), S(N)
       REAL, INTENT(INOUT) :: X(M)
+      DIMENSION IP(N)
+C     beginning of local variable declarations
       INTEGER :: I, IJ, J, JP, K, NI, NM, NN
       REAL :: SAV, SS, Y
 C***********************************************************************
@@ -58275,7 +58940,6 @@ C        (2) N.K. TSAO AND P.J. NIKOLAI, PROCEDURES USING ORTHOGONAL
 C            TRANSFORMATIONS FOR LINEAR LEAST SQUARES PROBLEMS, ARL
 C            TECHNICAL REPORT ARL TR 74-0124(1974).
 C***********************************************************************
-      DIMENSION IP(N)
       NN = N
       IF (N .EQ. M) NN = N - 1
       DO J = 1, NN
@@ -58322,6 +58986,8 @@ C                                       LEAST SQUARES SOLUTION.
       REAL :: S(N)
       REAL, INTENT(INOUT) :: X(M)
       LOGICAL, INTENT(OUT) :: EXIT
+      DIMENSION IP(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, NP1
       REAL :: EPS, EPS2, FOUR, FOURTH, ONE, RAT, RATIO, RNRM2, XNRM2,
      &ZERO
@@ -58372,7 +59038,6 @@ C        WITH A GIVEN INITIAL X.  THE RESIDUAL VECTOR B - AX IS COMPUTED
 C        TO HIGH ACCURACY BY DOUBLE PRECISION.  ORSOL IS THEN USED TO
 C        SOLVE (1).
 C ----------------------------------------------------------------------
-      DIMENSION IP(N)
       DATA ZERO/0.0/, ONE/1.0/, FOUR/4.0/, FOURTH/0.25/
 C     ********** EPS IS A MACHINE DEPENDENT PARAMETER. ASSIGN EPS
 C                THE VALUE U WHERE U IS THE SMALLEST POSITIVE FLOATING
@@ -58428,6 +59093,7 @@ C                                       FORM NEW APPROXIMATE SOLUTION.
       INTEGER, INTENT(IN) :: KA, KB, M, N, NB
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(KB,NB), WK(N)
       INTEGER, INTENT(INOUT) :: IWK(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, NP1
       DOUBLE PRECISION :: RNORM
       LOGICAL :: EXIT
@@ -58459,6 +59125,7 @@ C     --------------
       DOUBLE PRECISION, INTENT(INOUT) :: QR(MS,N), S(N)
       INTEGER, INTENT(INOUT) :: IP(N)
       LOGICAL, INTENT(OUT) :: EXIT
+C     beginning of local variable declarations
       INTEGER :: I, J, JP, K, KJ, NN
       DOUBLE PRECISION :: AJJ, SAV, SS, Y
 C***********************************************************************
@@ -58568,6 +59235,7 @@ C                                       ORTHOGONAL MATRIX.
       DOUBLE PRECISION, INTENT(IN) :: QR(MS,N), S(N)
       DOUBLE PRECISION, INTENT(INOUT) :: X(M)
       INTEGER, INTENT(IN) :: IP(N)
+C     beginning of local variable declarations
       INTEGER :: I, IJ, J, JP, K, NI, NM, NN
       DOUBLE PRECISION :: SAV, SS, Y
 C***********************************************************************
@@ -58663,6 +59331,7 @@ C                                       LEAST SQUARES SOLUTION.
       REAL, INTENT(IN) :: AE, RE
       REAL, INTENT(INOUT) :: A(MDA,N), B(MDB,*), RNORM(*), WORK(LW)
       INTEGER, INTENT(INOUT) :: IWORK(LIW)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, INFO, M0, M1, M2, M3, M4, M5, MODE, N0, NP
       REAL :: EPS, RERR
       REAL :: SPMPAR
@@ -58869,6 +59538,7 @@ C     RETURN
       INTEGER, INTENT(IN) :: M, MDA, MODE, N, NP
       REAL, INTENT(INOUT) :: A(MDA,N), DB(N), EB(N), H(N), UB(N), W(N)
       INTEGER, INTENT(INOUT) :: IC(N), IR(M)
+C     beginning of local variable declarations
       INTEGER :: I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI,
      &KP1, KZ, L, LM1, MM, NMK
       REAL :: BB, R2, RMIN, SUM, T, TEMP, TN, TT
@@ -59094,6 +59764,7 @@ C     FIRST NP COLUMNS ARE LINEARLY DEPENDENT
       REAL, INTENT(INOUT) :: RNORM(NB)
       REAL :: W(N)
       INTEGER, INTENT(INOUT) :: IC(N), IR(M)
+C     beginning of local variable declarations
       INTEGER :: I, IJ, IM1, J, JB, K, KP1, NMK
       REAL :: BB, TT
       REAL :: SNRM2
@@ -59214,6 +59885,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
       INTEGER, INTENT(IN) :: M, MDA, MODE, N, NP
       REAL, INTENT(INOUT) :: A(MDA,N), DB(M), EB(M), H(M), UB(M), W(M)
       INTEGER, INTENT(INOUT) :: IC(N), IR(M)
+C     beginning of local variable declarations
       INTEGER :: I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI,
      &KP1, KZ, L, LM1, MMK, NN
       REAL :: BB, R2, RMIN, SUM, T, TEMP, TN, TT
@@ -59439,6 +60111,7 @@ C     FIRST NP ROWS ARE LINEARLY DEPENDENT
       REAL, INTENT(INOUT) :: RNORM(NB)
       REAL :: W(M)
       INTEGER, INTENT(INOUT) :: IC(N), IR(M)
+C     beginning of local variable declarations
       INTEGER :: I, IJ, IP1, J, JB, K, KP1, MMK
       REAL :: BB, TT
       REAL :: SNRM2
@@ -59561,6 +60234,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
       DOUBLE PRECISION, INTENT(IN) :: RE, AE
       DOUBLE PRECISION, INTENT(INOUT) :: RNORM(*), WORK(LW)
       INTEGER, INTENT(INOUT) :: IWORK(LIW)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, INFO, M0, M1, M2, M3, M4, M5, MODE, N0, NP
       DOUBLE PRECISION :: EPS, RERR
       DOUBLE PRECISION :: DPMPAR
@@ -59768,6 +60442,7 @@ C     RETURN
       DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), UB(N), DB(N), H(N),
      &W(N), EB(N)
       INTEGER, INTENT(INOUT) :: IC(N), IR(M)
+C     beginning of local variable declarations
       INTEGER :: I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI,
      &KP1, KZ, L, LM1, MM, NMK
       INTEGER :: IDAMAX
@@ -59990,6 +60665,7 @@ C     FIRST NP COLUMNS ARE LINEARLY DEPENDENT
       DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,NB), RNORM(NB)
       DOUBLE PRECISION, INTENT(IN) :: H(N), W(N)
       INTEGER, INTENT(INOUT) :: IC(N), IR(M)
+C     beginning of local variable declarations
       INTEGER :: I, IJ, IM1, J, JB, K, KP1, NMK
       DOUBLE PRECISION :: BB, TT
       DOUBLE PRECISION :: DDOT, DNRM2
@@ -60110,6 +60786,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
       DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), UB(M), DB(M), H(M),
      &W(M), EB(M)
       INTEGER, INTENT(INOUT) :: IC(N), IR(M)
+C     beginning of local variable declarations
       INTEGER :: I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI,
      &KP1, KZ, L, LM1, MMK, NN
       INTEGER :: IDAMAX
@@ -60332,6 +61009,7 @@ C     FIRST NP ROWS ARE LINEARLY DEPENDENT
       DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,NB), RNORM(NB)
       DOUBLE PRECISION, INTENT(IN) :: H(M), W(M)
       INTEGER, INTENT(INOUT) :: IC(N), IR(M)
+C     beginning of local variable declarations
       INTEGER :: I, IJ, IP1, J, JB, K, KP1, MMK
       DOUBLE PRECISION :: BB, TT
       DOUBLE PRECISION :: DDOT, DNRM2
@@ -60449,6 +61127,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
       REAL, INTENT(INOUT) :: A(MDA,N), B(MDB,*), G(N), H(N), RNORM(*)
       REAL, INTENT(IN) :: TAU
       INTEGER, INTENT(INOUT) :: IP(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
       REAL :: FACTOR, HMAX, SM1, TMP, Z
       DOUBLE PRECISION :: SM
@@ -60668,6 +61347,7 @@ C     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
      &RNORM(*)
       REAL, INTENT(IN) :: TAU
       INTEGER, INTENT(INOUT) :: IP(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
       REAL :: FACTOR, HMAX, SM1, TMP, Z
       DOUBLE PRECISION :: SM
@@ -60905,6 +61585,7 @@ C     ERROR RETURN
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
       REAL, INTENT(INOUT) :: C(*), U(IUE,M), UP
+C     beginning of local variable declarations
       INTEGER :: I, I2, I3, I4, INCR, J
       REAL :: CL, D, SM1
       DOUBLE PRECISION :: SM, B
@@ -60993,6 +61674,7 @@ C                       B  MUST BE NONPOSITIVE HERE.  IF B = 0., RETURN.
       DOUBLE PRECISION, INTENT(IN) :: TAU
       DOUBLE PRECISION, INTENT(INOUT) :: RNORM(*), H(N), G(N)
       INTEGER, INTENT(INOUT) :: IP(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
       DOUBLE PRECISION :: FACTOR, HMAX, SM, SM1, TMP, Z
 C-----------------------------------------------------------------------
@@ -61213,6 +61895,7 @@ C     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
       DOUBLE PRECISION, INTENT(IN) :: TAU
       DOUBLE PRECISION, INTENT(INOUT) :: RNORM(*), H(N), G(N)
       INTEGER, INTENT(INOUT) :: IP(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
       DOUBLE PRECISION :: FACTOR, HMAX, SM, SM1, TMP, Z
 C-----------------------------------------------------------------------
@@ -61450,6 +62133,7 @@ C     ERROR RETURN
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
       DOUBLE PRECISION, INTENT(INOUT) :: U(IUE,M), UP, C(*)
+C     beginning of local variable declarations
       INTEGER :: I, I2, I3, I4, INCR, J
       DOUBLE PRECISION :: B, CL, D, SM
 C-----------------------------------------------------------------------
@@ -61539,6 +62223,7 @@ C                       B  MUST BE NONPOSITIVE HERE.  IF B = 0., RETURN.
       REAL, INTENT(IN) :: PRGOPT(*)
       REAL, INTENT(INOUT) :: X(*), WS(*)
       INTEGER, INTENT(INOUT) :: IP(*)
+C     beginning of local variable declarations
       INTEGER :: I, II, IMAX, J, JJ, JP1, K, KEY, KK, KRANKE, L, LAST,
      &LINK, M, MAPKE1, MDEQC, MEND, MEP1, N1, N2, NEXT, NLINK, NOPT,
      &NP1, NTIMES
@@ -62031,6 +62716,7 @@ C     DEFINE BOUND FOR POSITIVE VALUES OF LINK.
       REAL, INTENT(IN) :: PRGOPT(*)
       REAL, INTENT(INOUT) :: X(*), WS(*)
       INTEGER, INTENT(INOUT) :: IP(*)
+C     beginning of local variable declarations
       INTEGER :: I, II, IL, IM1, IP1, J, K, KEY, KEY8, KEY9, KRANK,
      &KRM1, KRP1, L, LAST, LINK, M, MAP1, MDLPDP, MINMAN, N1, N2, N3,
      &NEXT, NP1
@@ -62331,6 +63017,7 @@ C     PREPARE THE OPTION VECTOR FOR WNNLS
       REAL, INTENT(INOUT) :: A(MDA,*)
       REAL :: PRGOPT(*)
       REAL, INTENT(INOUT) :: WNORM, WS(*), X(*)
+C     beginning of local variable declarations
       INTEGER :: I, IW, IX, J, L, MODEW, N, NP1
       REAL :: FAC, ONE, RNORM, SC, YNORM, ZERO
       REAL :: SNRM2
@@ -62481,6 +63168,7 @@ C     ACCOUNT FOR SCALING OF RT.-SIDE VECTOR IN SOLUTION.
       REAL, INTENT(IN) :: PRGOPT(*)
       REAL, INTENT(INOUT) :: X(N), WORK(*)
       INTEGER, INTENT(INOUT) :: IWORK(*)
+C     beginning of local variable declarations
       INTEGER :: L1, L2, L3, L4, L5
 C     DIMENSION W(MDW,N+1),PRGOPT(*),X(N),IWORK(M+N),WORK(M+5*N)
 C     ABSTRACT
@@ -62692,6 +63380,7 @@ C     REQUIRED BY THE MAIN SUBROUTINE WNLSM( ).
       REAL, INTENT(IN) :: PRGOPT(*)
       REAL, INTENT(INOUT) :: D(*)
       INTEGER, INTENT(INOUT) :: IPIVOT(*), ITYPE(*)
+C     beginning of local variable declarations
       INTEGER :: I, IGO897, IGO938, IGO958, IMAX, ISOL, ITEMP, ITER,
      &ITMAX, IWMAX, J, JCON, JJ, JM1, JP, KEY, KRANK, KRP1, L1, LAST,
      &LINK, LP1, M, ME, MEP1, NEXT, NIV, NIV1, NLINK, NM1, NOPT, NP1,
@@ -63254,6 +63943,7 @@ C     COPY RT. HAND SIDE INTO TEMP VECTOR TO USE OVERWRITING METHOD.
       REAL, INTENT(IN) :: DOPE(*)
       INTEGER, INTENT(INOUT) :: ITYPE(*), IPIVOT(*), IDOPE(*)
       LOGICAL, INTENT(INOUT) :: DONE
+C     beginning of local variable declarations
       INTEGER :: I, I1, IC, IGO990, IGO993, IGO996, IP1, IR, IRP1,
      &ITEMP, J, J1, JJ, JM1, JP, K, KK, KRANK, KRP1, L1, LB, LEND, LP1,
      &MAX, ME, MEND, MEP1, NIV, NIV1, NP1, NSOLN
@@ -63622,6 +64312,7 @@ C     INTERCHANGES.
       REAL, INTENT(IN) :: A(MM,N), B(MB,L)
       REAL, INTENT(INOUT) :: C(*)
       REAL, INTENT(INOUT) :: QR(MMPNN,N), RES(MR,L), TOL, W(M), X(NN,L)
+C     beginning of local variable declarations
       INTEGER :: I, ITER, J, JM1, K, K0, K1, K10, K11, K12, K2, K3, K4,
      &K5, K6, K7, K8, K9, KSUM, M1P1, MP1, MPI, MPN, NUMIT
       REAL :: SPMPAR
@@ -64013,6 +64704,7 @@ C ORTHOGONAL DECOMPOSITION.
       REAL, INTENT(INOUT) :: QR(MMPNN,N)
       REAL, INTENT(IN) :: TOL
       LOGICAL, INTENT(OUT) :: SING
+C     beginning of local variable declarations
       INTEGER :: IK, J, JJ, K, KM1, L, LMM, MH, MP1, MPN1, MS, MV, NP,
      &NS, NSP1
       REAL :: C
@@ -64219,6 +64911,7 @@ C *********************************************************************
       REAL, INTENT(INOUT) :: DIGITX
       REAL, INTENT(IN) :: ETA
       LOGICAL, INTENT(INOUT) :: FAIL
+C     beginning of local variable declarations
       INTEGER :: I, J, K, KZ, L, MP1, MPN, N1P1, NP, NS
       REAL :: C
       REAL :: DXNORM
@@ -64369,6 +65062,7 @@ C END K-TH ITERATION STEP.
       REAL, INTENT(INOUT) :: F(*)
       REAL, INTENT(IN) :: QR(MMPNN,N1)
       REAL, INTENT(INOUT) :: Y(*)
+C     beginning of local variable declarations
       INTEGER :: J, L, LMM, MH, MPL, MPN1, MV, NS, NSM1
       REAL :: C
       DOUBLE PRECISION :: SUM
@@ -64440,6 +65134,7 @@ C THIS SUBROUTINE CALCULATES NEW VALUES OF F.
       REAL, INTENT(INOUT) :: C(NN,N)
       REAL, INTENT(IN) :: D(*)
       REAL, INTENT(INOUT) :: Z(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, KA, L, N1P1
       DOUBLE PRECISION :: SUM
 C SUBROUTINE COVAR USES RESULTS FROM THE ORTHOGONAL DECOMPOSITION
@@ -64522,6 +65217,7 @@ C PERMUTE THE COLUMNS AND ROWS OF MATRIX C TO ACCOUNT FOR PIVOTING.
       REAL, INTENT(IN) :: ATOL, BTOL, CONLIM
       REAL, INTENT(INOUT) :: ACOND, RNORM, XNORM, W(*)
       INTEGER, INTENT(INOUT) :: ITN
+C     beginning of local variable declarations
       INTEGER :: NPI
       INTEGER :: I
       INTEGER :: NCONV, NSTOP
@@ -64833,6 +65529,7 @@ C     ------------------------------------------------------------------
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: X(N)
       REAL, INTENT(OUT) :: BETA
+C     beginning of local variable declarations
       REAL :: ONE, SNRM2, ZERO
 C     NORMLZ COMPUTES THE EUCLIDEAN NORM OF X AND RETURNS THE
 C     VALUE IN BETA. IF X IS NONZERO, THEN X IS RESCALED SO
@@ -64857,6 +65554,7 @@ C     BLAS       SNRM2,SSCAL
       REAL, INTENT(IN) :: ATOL, BTOL, CONLIM
       REAL, INTENT(INOUT) :: ACOND, RNORM, XNORM, W(*)
       INTEGER, INTENT(INOUT) :: ITN
+C     beginning of local variable declarations
       INTEGER :: NPI
       INTEGER :: I
       INTEGER :: NCONV, NSTOP
@@ -65177,6 +65875,7 @@ C     ------------------------------------------------------------------
       REAL, INTENT(IN) :: ATOL, BTOL, CONLIM
       REAL, INTENT(INOUT) :: ACOND, RNORM, XNORM, W(*)
       INTEGER, INTENT(INOUT) :: ITN
+C     beginning of local variable declarations
       INTEGER :: NPI
       INTEGER :: I
       INTEGER :: NCONV, NSTOP
@@ -65496,6 +66195,7 @@ C     ------------------------------------------------------------------
       REAL, INTENT(IN) :: AERR, RERR
       REAL, INTENT(INOUT) :: ERROR
       EXTERNAL F
+C     beginning of local variable declarations
       REAL :: EPS, EPS0, ATOL, FTOL, RTOL, TOL
       REAL :: A, B, C1, C2, E, FU, FV, U, V
       REAL :: SPMPAR
@@ -65648,6 +66348,7 @@ C                    REPORT THE RESULTS
       REAL, INTENT(IN) :: RERR
       REAL, INTENT(INOUT) :: XPLS(N), WRK(N,*)
       EXTERNAL FCN
+C     beginning of local variable declarations
       INTEGER :: I, ITNCNT, ITNLIM, MO
       REAL :: EPS, FSCALE, GRADTL, STEPMX, STEPTL
       REAL :: SPMPAR
@@ -65724,6 +66425,7 @@ C     OPTIMIZE FCN
       REAL, INTENT(INOUT) :: TYPSIZ(N), WRK0(N), WRK1(N), WRK2(N), X(N),
      &XPLS(N)
       EXTERNAL FCN
+C     beginning of local variable declarations
       INTEGER :: I, IAGFLG, ICSCMX, IRETCD, J, JP1, NM1, NS
       REAL :: CBRNF, F, FSTACK(30), RNF, SQRNF, STMX
       REAL :: SPMPAR
@@ -65887,6 +66589,7 @@ C     RESET XPLS,FPLS,GPLS  IF PREVIOUS ITERATE SOLUTION
       REAL, INTENT(INOUT) :: STEPMX
       REAL, INTENT(IN) :: X(N)
       REAL, INTENT(INOUT) :: TYPSIZ(N)
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: STPSIZ
 C-----------------------------------------------------------------------
@@ -65963,6 +66666,7 @@ C     ERROR EXITS
       REAL, INTENT(INOUT) :: FSTACK(NS)
       INTEGER, INTENT(INOUT) :: SPTR
       LOGICAL, INTENT(IN) :: MXTAKE
+C     beginning of local variable declarations
       INTEGER :: I, JERR
       REAL :: D, GRD, RELSTP, RGX, RSX
 C-----------------------------------------------------------------------
@@ -66056,6 +66760,7 @@ C     TERMINATE
       REAL, INTENT(IN) :: R
       REAL, INTENT(INOUT) :: X(N)
       EXTERNAL FCN
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: FMINUS, FPLUS, H, XI, XMINUS, XPLUS
 C-----------------------------------------------------------------------
@@ -66087,6 +66792,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: MO, N
       REAL, INTENT(IN) :: X(N)
       REAL, INTENT(INOUT) :: TYPSIZ(N)
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: BIG, C, T, XMIN
       REAL :: SPMPAR
@@ -66119,6 +66825,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: A(NR,N)
       REAL, INTENT(INOUT) :: X(N)
       REAL, INTENT(IN) :: B(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, IM1, IP1, J
       REAL :: SUM
 C-----------------------------------------------------------------------
@@ -66171,6 +66878,7 @@ C                   BACK SOLVE, RESULT IN X
       REAL :: TYPSIZ(N)
       REAL, INTENT(INOUT) :: X(N)
       EXTERNAL FCN
+C     beginning of local variable declarations
       INTEGER :: J
       REAL :: FPLUS, STEPSZ, XTMPJ
 C-----------------------------------------------------------------------
@@ -66205,6 +66913,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: TYPSIZ(N)
       REAL, INTENT(INOUT) :: G(N)
       EXTERNAL FCN
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: FMINUS, FPLUS, STEPI, XTEMPI
 C-----------------------------------------------------------------------
@@ -66247,6 +66956,7 @@ C     I-TH UNIT VECTOR, AND EVALUATE I-TH  COMPONENT OF GRADIENT.
       REAL, INTENT(IN) :: TYPSIZ(N)
       LOGICAL, INTENT(OUT) :: MXTAKE
       EXTERNAL FCN
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: A, B, DISC, PFPLS, PLMBDA, RLN, RMNLMB, SCL, SLN, SLP, T1,
      &T2, T3, TLMBDA, TMP, W
@@ -66357,6 +67067,7 @@ C     NO SATISFACTORY XPLS FOUND SUFFICIENTLY DISTINCT FROM X
       REAL, INTENT(INOUT) :: A(NR,N)
       REAL, INTENT(INOUT) :: S(N), Y(N), W(N)
       LOGICAL, INTENT(INOUT) :: NOUPDT
+C     beginning of local variable declarations
       INTEGER :: I, IM1, J
       REAL :: ALP, DEN1, DEN2, SNORM2, SUM, YNRM2
       REAL :: SNRM2
@@ -66463,6 +67174,7 @@ C     TRIANGULAR PART.
       INTEGER, INTENT(IN) :: N, NR
       REAL, INTENT(INOUT) :: A(NR,N), U(N)
       REAL, INTENT(IN) :: V(N)
+C     beginning of local variable declarations
       INTEGER :: I, II, J, K, KM1
       REAL :: R
 C-----------------------------------------------------------------------
@@ -66510,6 +67222,7 @@ C                   TO UPPER TRIANGULAR R*
       REAL, INTENT(IN) :: A, B
       REAL, INTENT(INOUT) :: R
       REAL, INTENT(INOUT) :: H(NR,N)
+C     beginning of local variable declarations
       INTEGER :: J
       REAL :: C, S, T, Z
 C-----------------------------------------------------------------------
@@ -66567,6 +67280,7 @@ C                     CASE WHEN A = 0
       REAL, INTENT(IN) :: EPSFCN, TOL
       REAL, INTENT(INOUT) :: X(N), FVEC(M), WA(LWA)
       EXTERNAL FCN
+C     beginning of local variable declarations
       INTEGER :: MAXFEV, MODE, MP5N, NFEV, NPRINT
       REAL :: FACTOR, FTOL, GTOL, XTOL
 C     **********
@@ -66678,6 +67392,7 @@ C     CALL LMDIF.
       REAL, INTENT(INOUT) :: X(N), FVEC(M), DIAG(N), FJAC(LDFJAC,N),
      &QTF(N), WA1(N), WA2(N), WA3(N), WA4(M)
       EXTERNAL FCN
+C     beginning of local variable declarations
       INTEGER :: I, IFLAG, ITER, J, L
       REAL :: ACTRED, DELTA, DIRDER, EPS, FNORM, FNORM1, GNORM, PAR,
      &PNORM, PRERED, P1, P5, P25, P75, P0001, RATIO, SUM, TEMP, TEMP1,
@@ -67017,6 +67732,7 @@ C     TERMINATION, EITHER NORMAL OR USER IMPOSED.
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: AGIANT, FLOATN, RDWARF, RGIANT, S1, S2, S3, XABS, X1MAX,
      &X3MAX
@@ -67105,6 +67821,7 @@ C     CALCULATION OF NORM.
       REAL, INTENT(IN) :: DELTA
       REAL, INTENT(IN) :: R(LR), DIAG(N), QTB(N)
       REAL, INTENT(INOUT) :: X(N), WA1(N), WA2(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, JP1, K, L
       REAL :: ALPHA, BNORM, EPSMCH, GNORM, QNORM, SGNORM, SUM, TEMP
       REAL :: SPMPAR, ENORM
@@ -67250,6 +67967,7 @@ C     DIRECTION AND THE SCALED GRADIENT DIRECTION.
       REAL :: WA1(N)
       REAL, INTENT(INOUT) :: WA2(N)
       EXTERNAL FCN
+C     beginning of local variable declarations
       INTEGER :: I, J, K, MSUM
       REAL :: EPS, EPSMCH, H, TEMP, ZERO
       REAL :: SPMPAR
@@ -67372,6 +68090,7 @@ C     LAST CARD OF SUBROUTINE FDJAC1.
       REAL, INTENT(INOUT) :: FJAC(LDFJAC,N)
       REAL :: WA(M)
       EXTERNAL FCN
+C     beginning of local variable declarations
       INTEGER :: I, J
       REAL :: EPS, EPSMCH, H, TEMP, ZERO
       REAL :: SPMPAR
@@ -67456,6 +68175,7 @@ C     LAST CARD OF SUBROUTINE FDJAC2.
       REAL, INTENT(INOUT) :: R(LDR,N)
       REAL, INTENT(IN) :: DIAG(N), QTB(N)
       REAL, INTENT(INOUT) :: X(N), SDIAG(N), WA1(N), WA2(N)
+C     beginning of local variable declarations
       INTEGER :: I, ITER, J, JM1, JP1, K, L, NSING
       REAL :: DXNORM, DWARF, FP, GNORM, PARC, PARL, PARU, P1, P001, SUM,
      &TEMP, ZERO
@@ -67657,6 +68377,7 @@ C     LAST CARD OF SUBROUTINE LMPAR.
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N, LDQ
       REAL, INTENT(INOUT) :: Q(LDQ,M), WA(M)
+C     beginning of local variable declarations
       INTEGER :: I, J, JM1, K, L, MINMN, NP1
       REAL :: ONE, SUM, TEMP, ZERO
 C     **********
@@ -67733,6 +68454,7 @@ C     LAST CARD OF SUBROUTINE QFORM.
       INTEGER, INTENT(INOUT) :: IPVT(LIPVT)
       LOGICAL, INTENT(IN) :: PIVOT
       REAL, INTENT(INOUT) :: A(LDA,N), RDIAG(N), ACNORM(N), WA(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JP1, K, KMAX, MINMN
       REAL :: AJNORM, EPSMCH, ONE, P05, SUM, TEMP, ZERO
       REAL :: SPMPAR, ENORM
@@ -67863,6 +68585,7 @@ C     LAST CARD OF SUBROUTINE QRFAC.
       REAL, INTENT(INOUT) :: R(LDR,N)
       REAL, INTENT(IN) :: DIAG(N), QTB(N)
       REAL, INTENT(INOUT) :: X(N), SDIAG(N), WA(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JP1, K, KP1, L, NSING
       REAL :: COS, COTAN, P5, P25, QTBPJ, SIN, SUM, TAN, TEMP, ZERO
 C     **********
@@ -68010,6 +68733,7 @@ C     LAST CARD OF SUBROUTINE QRSOLV.
       INTEGER, INTENT(IN) :: M, N, LDA
       REAL, INTENT(INOUT) :: A(LDA,N)
       REAL, INTENT(IN) :: V(N), W(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, NMJ, NM1
       REAL :: COS, ONE, SIN, TEMP
 C     **********
@@ -68083,6 +68807,7 @@ C     LAST CARD OF SUBROUTINE R1MPYQ.
       REAL, INTENT(INOUT) :: S(LS)
       REAL, INTENT(IN) :: U(M)
       REAL, INTENT(INOUT) :: V(N), W(M)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, L, NMJ, NM1
       REAL :: COS, COTAN, GIANT, ONE, P5, P25, SIN, TAN, TAU, TEMP, ZERO
       REAL :: SPMPAR
@@ -68243,6 +68968,8 @@ C     LAST CARD OF SUBROUTINE R1UPDT.
       REAL, INTENT(INOUT) :: BI(M,M)
       REAL :: C(N0)
       REAL, INTENT(INOUT) :: WK(*), X(*), Z
+      DIMENSION IBASIS(M)
+C     beginning of local variable declarations
       INTEGER :: IP
       REAL :: EPS0, RERR, RERRMN, RERRMX
       REAL :: SPMPAR
@@ -68256,7 +68983,6 @@ C------------------------
 C     INITIAL VERSION  DEC  1977
 C     LAST UPDATE      OCT  1990
 C------------------------
-      DIMENSION IBASIS(M)
 C------------------------
 C     DIMENSION X(N0+NUMLE+NUMGE)
 C     DIMENSION WK(2*M),IWK(2*M+N0)
@@ -68289,6 +69015,7 @@ C------------------------
       REAL, INTENT(INOUT) :: BI(M,M), XB(M), Y(M), R(*)
       INTEGER, INTENT(INOUT) :: IBASIS(M), BASIS(*)
       INTEGER, INTENT(INOUT) :: INDEX(M)
+C     beginning of local variable declarations
       INTEGER :: I, IBEG, ICOUNT, IEND, IERR, II, IL, IMIN, IOUT, IP, J,
      &JCOL, JJ, JMIN, JP, K, KI, KJ, L, LL, LROW, M0, MCHECK, MS, N,
      &NPOS, NROW, NS, NSTEP, NUM
@@ -69078,6 +69805,8 @@ C              COMPUTE Z  (NSTEP = 3)
       REAL, INTENT(INOUT) :: BI(M,M)
       REAL :: C(N0), TA(*)
       REAL, INTENT(INOUT) :: WK(*), X(*), Z
+      DIMENSION IBASIS(M)
+C     beginning of local variable declarations
       INTEGER :: IP
       REAL :: EPS0, RERR, RERRMN, RERRMX
       REAL :: SPMPAR
@@ -69091,7 +69820,6 @@ C------------------------
 C     INITIAL VERSION  DEC  1977
 C     LAST UPDATE      OCT  1990
 C------------------------
-      DIMENSION IBASIS(M)
 C------------------------
 C     DIMENSION X(N0+NUMLE+NUMGE)
 C     DIMENSION WK(2*M),IWK(2*M+N0)
@@ -69126,6 +69854,7 @@ C------------------------
       INTEGER, INTENT(IN) :: ITA(*), JTA(*)
       INTEGER, INTENT(INOUT) :: IBASIS(M), BASIS(*)
       INTEGER, INTENT(INOUT) :: INDEX(M)
+C     beginning of local variable declarations
       INTEGER :: I, IBEG, ICOUNT, IEND, IERR, II, IL, IMIN, IOUT, IP, J,
      &JCOL, JJ, JMIN, JP, K, KI, KJ, L, LL, LMAX, LMIN, LROW, M0,
      &MCHECK, MS, N, NPOS, NS, NSTEP, NUM
@@ -69934,6 +70663,7 @@ C              COMPUTE Z  (NSTEP = 3)
       INTEGER, INTENT(INOUT) :: IERR, INDEX(*), JP
       INTEGER, INTENT(IN) :: KA, N
       REAL, INTENT(INOUT) :: A(*), TEMP(N)
+C     beginning of local variable declarations
       INTEGER :: I, IBEG, IJ, IK, IL, J, JCOL, JJ, K, KCOL, KCOUNT, KJ,
      &KJ0, KK, KL, KM1, KP1, L, LJ, LJ0, LK, LMIN, MAX, MCOL, NCOL, NK,
      &NM1, NMJ, NMK, NN
@@ -70152,6 +70882,7 @@ C                    ERROR RETURN
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: A(N,*), C(N), T, IWK(*)
+C     beginning of local variable declarations
       INTEGER :: I1, I2, I3, I4, I5, I6
 C     -------------------
 C     SOLUTION OF THE ASSIGNMENT PROBLEM
@@ -70174,6 +70905,7 @@ C     -------------------
       INTEGER, INTENT(INOUT) :: A(N,*), C(N), CH(N), LC(N), LR(N),
      &LZ(N), NZ(N), RH(*), SLC(N), SLR(N), U(*)
       INTEGER, INTENT(INOUT) :: T
+C     beginning of local variable declarations
       INTEGER :: I, J, K, KSLC, KSLR, L, LJ, LM, M, MAXNUM, MM, NL, NM,
      &NP1
       INTEGER :: IPMPAR
@@ -70436,6 +71168,7 @@ C ERROR RETURN - INTEGER OVERFLOW OCCURS
       INTEGER, INTENT(IN) :: K(M)
       INTEGER, INTENT(INOUT) :: XSTAR(N), BCK, VSTAR, IWK(NUM)
       REAL, INTENT(INOUT) :: WK(N)
+C     beginning of local variable declarations
       INTEGER :: I, ISUMW, J, JJ, JN, JNN, L, LX, LXI, MAXW, MINW, MN,
      &N5, NP1, NPL
       REAL :: AP, AW
@@ -70609,6 +71342,7 @@ C                        ERROR RETURN
       INTEGER, INTENT(INOUT) :: B(NP1), UBB(N), LX(N), LXI(N)
       INTEGER, INTENT(INOUT) :: F(M), PBL(M), Q(M), V(M)
       INTEGER, INTENT(INOUT) :: BS(N), PS(NP1), WS(NP1), XS(N), IWK(N5)
+C     beginning of local variable declarations
       INTEGER :: I, I1, IBV, IFLAG, II, IP, IP1, IUV, J, JBCK, JJ, K1,
      &KUB, LB, LI, LJ, LR, LRI, LUB, LUBI, M1, N1
       INTEGER :: S, U, UB, VB
@@ -70790,6 +71524,7 @@ C PARTICULAR CASE (0-1 SINGLE KNAPSACK PROBLEM)
       INTEGER, INTENT(IN) :: P(N), W(N), Q(M), B(NP1)
       INTEGER, INTENT(INOUT) :: UB, IWK(N5)
       INTEGER, INTENT(INOUT) :: LX(N), BS(N), PS(NP1), WS(NP1), XS(N)
+C     beginning of local variable declarations
       INTEGER :: J, JJ, NS
       INTEGER :: QS, SB
 C SUBROUTINE TO COMPUTE AN UPPER BOUND  UB  ON THE BEST
@@ -70839,6 +71574,7 @@ C SOLUTION.
       INTEGER, INTENT(IN) :: P(N), W(N), Q(M), B(NP1)
       INTEGER, INTENT(INOUT) :: PBL(M), V(M)
       INTEGER, INTENT(INOUT) :: BS(N), PS(NP1), WS(NP1), XS(N)
+C     beginning of local variable declarations
       INTEGER :: II, IKUB, J, JB, JBS, JJ, NS
       INTEGER :: PB, QS, SB, U
 C SUBROUTINE TO COMPUTE A FEASIBLE SOLUTION TO THE CURRENT
@@ -70934,6 +71670,7 @@ C STEP 3
       INTEGER, INTENT(INOUT) :: UB
       INTEGER, INTENT(IN) :: VB
       INTEGER, INTENT(IN) :: LX(N), LXI(N)
+C     beginning of local variable declarations
       INTEGER :: I1, IQ, J
       INTEGER :: R, S
 C SUBROUTINE FOR PARAMETRIC COMPUTATION OF THE UPPER BOUNDS.
@@ -70980,6 +71717,7 @@ C SUBROUTINE FOR PARAMETRIC COMPUTATION OF THE UPPER BOUNDS.
       INTEGER, INTENT(IN) :: KUB, N, N5, NP1, NS
       INTEGER, INTENT(INOUT) :: QS, VS
       INTEGER, INTENT(INOUT) :: PS(NP1), WS(NP1), XS(N), IWK(N5)
+C     beginning of local variable declarations
       INTEGER :: I1, I2, I3, I4, I5
 C SUBROUTINE TO SOLVE THE 0-1 SINGLE KNAPSACK PROBLEM
 C MAXIMIZE    VS = PS(1)*XS(1) + ... + PS(NS)*XS(NS)
@@ -71005,6 +71743,7 @@ C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
       INTEGER, INTENT(OUT) :: VS
       INTEGER, INTENT(INOUT) :: PS(NP1), WS(NP1), XS(N)
       INTEGER, INTENT(INOUT) :: D(N), MIN(N), PBAR(N), WBAR(N), ZBAR(N)
+C     beginning of local variable declarations
       INTEGER :: II, II1, IN, IP, J, J1, JJ, KK, L, LIM, LIM1, LL, LOLD,
      &MFIRST, MINK, MS, N1, NN
       REAL :: A, B, C
@@ -71220,6 +71959,7 @@ C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
       REAL, INTENT(IN) :: RERR, T
       REAL, INTENT(INOUT) :: Y
       EXTERNAL FUN
+C     beginning of local variable declarations
       INTEGER :: IER, IERC, NUM1
       REAL :: A
       REAL :: EXPARG
@@ -71327,6 +72067,7 @@ C     REPORT THE STATUS OF THE RESULTS.
       INTEGER, INTENT(INOUT) :: IERR, NUM
       REAL, INTENT(INOUT) :: C
       EXTERNAL FUN
+C     beginning of local variable declarations
       INTEGER :: NUM1
       REAL :: ETA, X0, XMIN
       LOGICAL :: FIND
@@ -71383,6 +72124,7 @@ C     TERMINATION
       REAL, INTENT(INOUT) :: X
       REAL, INTENT(IN) :: XL
       EXTERNAL FUN, COND
+C     beginning of local variable declarations
       INTEGER :: I, IER, NUM1
       REAL :: DX, TOL, X1, X2, XBAR, XM
       LOGICAL :: CND
@@ -71481,6 +72223,7 @@ C     (-1.0E4, 1.OE4).
       INTEGER, INTENT(INOUT) :: IERR, NUM
       REAL, INTENT(INOUT) :: C
       EXTERNAL FUN
+C     beginning of local variable declarations
       INTEGER :: I, NUM1
       REAL :: DX, ETA, TOL, X1, X2, XBAR, XM
       LOGICAL :: CMPLEX, IEND, RIGHT
@@ -71585,6 +72328,7 @@ C     ERROR RETURN WHEN X CANNOT BE FOUND IN (-1.E4, 1.E4)
       REAL, INTENT(IN) :: X
       LOGICAL, INTENT(INOUT) :: COND
       EXTERNAL FUN
+C     beginning of local variable declarations
       INTEGER :: IER, IER1, IER2, IWK(100), L, M, N, NUM1, NUM2
       REAL :: A, AERR, C, ERROR1, ERROR2, RERR, TOL, WK(400), Y, Z1, Z2
       REAL :: ACONDG
@@ -71638,8 +72382,9 @@ C     SET IERR AND RETURN
       REAL :: X
       REAL, INTENT(IN) :: Y
       EXTERNAL FUN
-      REAL :: A, B, T
       REAL :: ACONDF
+C     beginning of local variable declarations
+      REAL :: A, B, T
 C-----------------------------------------------------------------------
 C        ACONDF IS THE FUNCTION INTEGRATED ALONG THE X-AXIS IN
 C        ACOND. Y IS A DUMMY VARIABLE.
@@ -71654,8 +72399,9 @@ C-----------------------------------------------------------------------
       REAL :: C, X
       REAL, INTENT(IN) :: Y
       EXTERNAL FUN
-      REAL :: A, B, S, T, U, V
       REAL :: ACONDG
+C     beginning of local variable declarations
+      REAL :: A, B, S, T, U, V
 C-----------------------------------------------------------------------
 C        ACONDG IS THE FUNCTION INTEGRATED ALONG THE LINE X = C
 C        IN ACOND. Y IS A DUMMY VARIABLE.
@@ -71673,6 +72419,7 @@ C-----------------------------------------------------------------------
       REAL :: X
       LOGICAL, INTENT(OUT) :: COND
       EXTERNAL FUN
+C     beginning of local variable declarations
       INTEGER :: IWK(100), L, M, N
       REAL :: AERR, C, EPSR, ERROR, RERR, T, TOL, WK(400), Y, Y1, Z
       REAL :: XCONDY
@@ -71729,8 +72476,9 @@ C     ERROR RETURN
       REAL, INTENT(IN) :: C
       REAL :: X, Y
       EXTERNAL FUN
-      REAL :: A, B, S, T, U, V
       REAL :: XCONDX
+C     beginning of local variable declarations
+      REAL :: A, B, S, T, U, V
 C     REAL PART OF THE INTEGRAND IN XCOND
       CALL FUN(X, Y, A, B)
       CALL CREC(X + C, Y, S, T)
@@ -71744,8 +72492,9 @@ C     REAL PART OF THE INTEGRAND IN XCOND
       REAL, INTENT(IN) :: C
       REAL :: X, Y
       EXTERNAL FUN
-      REAL :: A, B, S, T, U, V
       REAL :: XCONDY
+C     beginning of local variable declarations
+      REAL :: A, B, S, T, U, V
 C     IMAGINARY PART OF INTEGRAND IN XCOND
       CALL FUN(X, Y, A, B)
       CALL CREC(X + C, Y, S, T)
@@ -71762,6 +72511,7 @@ C     IMAGINARY PART OF INTEGRAND IN XCOND
       REAL, INTENT(IN) :: T
       INTEGER, INTENT(OUT) :: IER
       INTEGER, INTENT(OUT) :: NUM
+C     beginning of local variable declarations
       INTEGER :: MAX
       REAL :: A, AIM, AK, ARE, ARG, B, BB, E, EPS, EPSR1, F, FIM, FRE,
      &PID16, R, S, SI(32), TOL
@@ -71939,6 +72689,7 @@ C   SUMMATION IS EQUAL TO MAX
       COMPLEX, INTENT(INOUT) :: RES3LA(3)
       INTEGER, INTENT(INOUT) :: N
       INTEGER, INTENT(INOUT) :: NRES
+C     beginning of local variable declarations
       REAL :: A1, A2, B1, B2, C1, C2, D1, D2, E1ABS, EPMACH, EPSINF,
      &ERR1, ERR2, ERR3, ERROR, OFLOW, RES1, RES2
       REAL :: SPMPAR
@@ -72145,6 +72896,7 @@ C           COMPUTE ERROR ESTIMATE
       REAL, INTENT(INOUT) :: WORK(LENW)
       INTEGER, INTENT(INOUT) :: IWORK(LIMIT)
       EXTERNAL F, PHI
+C     beginning of local variable declarations
       INTEGER :: L1, L2, L3
 C-----------------------------------------------------------------------
 C                   INTEGRATION OVER INFINITE INTERVALS
@@ -72327,6 +73079,8 @@ C         PREPARE CALL FOR QAGIE1.
       REAL :: Y
       REAL :: F
       EXTERNAL F, PHI
+      DIMENSION IORD(LIMIT)
+C     beginning of local variable declarations
       INTEGER :: ID, IERRO, IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN,
      &KTMIN, MAXERR, NRES, NRMAX, NUMRL2
       REAL :: A1, A2, ABSEPS, AREA, AREA1, AREA12, AREA2, B1, B2, BOUN,
@@ -72474,7 +73228,6 @@ C              - F (USER-PROVIDED FUNCTION)
 C              - PHI (USER-PROVIDED FUNCTION)
 C              - SPMPAR
 C-----------------------------------------------------------------------
-      DIMENSION IORD(LIMIT)
 C            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
 C            LIMEXP IN SUBROUTINE QELG.
 C            LIST OF MAJOR VARIABLES
@@ -72743,6 +73496,7 @@ C           COMPUTE GLOBAL INTEGRAL SUM.
       REAL :: Y
       REAL :: F
       EXTERNAL F, PHI
+C     beginning of local variable declarations
       INTEGER :: J
       REAL :: ABSC, ABSC1, ABSC2, CENTR, DINF, FC, FSUM, FVAL1, FVAL2,
      &HLGTH, RESG, RESK, RESKH, TABSC1, TABSC2, TOL
@@ -72932,6 +73686,7 @@ C     ------------
       INTEGER, INTENT(IN) :: ISN, NDIM
       REAL, INTENT(INOUT) :: C(*)
       INTEGER :: N(NDIM)
+C     beginning of local variable declarations
       INTEGER :: I, ISIGN, NSPAN, NTOT
 C-----------------------------------------------------------------------
 C     LET NTOT DENOTE THE PRODUCT OF N(1),...,N(NDIM). THE COMPLEX
@@ -72969,6 +73724,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: NDIM
       REAL, INTENT(INOUT) :: A(*), B(*)
       INTEGER :: N(NDIM)
+C     beginning of local variable declarations
       INTEGER :: I, NSPAN, NTOT
 C     ------------
       IF (ABS(ISN) .NE. 1) GO TO 40
@@ -72996,6 +73752,7 @@ C     ------------
       IMPLICIT NONE
       INTEGER :: IERR, ISN, N, NSPAN, NTOT
       REAL :: A(*), B(*)
+C     beginning of local variable declarations
       INTEGER :: I, II, INC, J, JC, JF, JJ, K, K1, K2, K3, K4, KK, KS,
      &KSPAN, KSPNN, KT, L, M, MAX, MAXF, MAXN, MAXP, NFAC(15), NN,
      &NP(209), NT, NUM
@@ -73611,6 +74368,7 @@ C             WSAVE MUST NOT BE CHANGED BETWEEN CALLS OF COSQF OR COSQB.
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: WSAVE(*)
+C     beginning of local variable declarations
       INTEGER :: K
       REAL :: DT, FK, PIH
       DATA PIH /1.57079632679491/
@@ -73660,6 +74418,7 @@ C             BE DESTROYED BETWEEN CALLS OF COSQF OR COSQB.
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: WSAVE(*), X(*)
+C     beginning of local variable declarations
       REAL :: SQRT2, TSQX
       INTEGER :: NSWC_AI_I4
       DATA SQRT2 /1.4142135623731/
@@ -73679,6 +74438,7 @@ C             BE DESTROYED BETWEEN CALLS OF COSQF OR COSQB.
       INTEGER :: N
       REAL :: W(*)
       REAL, INTENT(INOUT) :: X(*), XH(*)
+C     beginning of local variable declarations
       INTEGER :: I, K, KC, MODN, NP2, NS2
       REAL :: XIM1
       NS2 = (N+1)/2
@@ -73741,6 +74501,7 @@ C             BE DESTROYED BETWEEN CALLS OF COSQB OR COSQF.
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: WSAVE(*), X(*)
+C     beginning of local variable declarations
       REAL :: TSQRT2, X1
       INTEGER :: NSWC_AI_I4
       DATA TSQRT2 /2.82842712474619/
@@ -73762,6 +74523,7 @@ C             BE DESTROYED BETWEEN CALLS OF COSQB OR COSQF.
       INTEGER :: N
       REAL :: W(*)
       REAL, INTENT(INOUT) :: X(*), XH(*)
+C     beginning of local variable declarations
       INTEGER :: I, K, KC, MODN, NP2, NS2
       REAL :: XIM1
       NS2 = (N+1)/2
@@ -73827,6 +74589,7 @@ C             BE DESTROYED BETWEEN CALLS OF SINQF OR SINQB.
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: WSAVE(*), X(*)
+C     beginning of local variable declarations
       INTEGER :: K, KC, NS2
       REAL :: XHOLD
       IF (N .EQ. 1) RETURN
@@ -73880,6 +74643,7 @@ C             BE DESTROYED BETWEEN CALLS OF SINQB OR SINQF.
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: WSAVE(*), X(*)
+C     beginning of local variable declarations
       INTEGER :: K, KC, NS2
       REAL :: XHOLD
       IF (N .GT. 1) GO TO 101
@@ -73925,6 +74689,7 @@ C             WSAVE MUST NOT BE CHANGED BETWEEN CALLS OF RFFTF OR RFFTB.
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: WA(*), IFAC(*)
+C     beginning of local variable declarations
       INTEGER :: I, IB, IDO, II, IP, IPM, IS, J, K1, L1, L2, LD, NF,
      &NFM1, NL, NQ, NR, NTRY
       REAL :: ARG, ARGH, ARGLD, FI, TPI
@@ -74036,6 +74801,7 @@ C             CALLS OF RFFTB OR RFFTF.
       REAL, INTENT(INOUT) :: C(*), CH(*)
       REAL :: WA(*)
       REAL, INTENT(IN) :: IFAC(*)
+C     beginning of local variable declarations
       INTEGER :: I, IDL1, IDO, IP, IW, IX2, IX3, IX4, K1, L1, L2, NA, NF
       NF = IFAC(2)
       NA = 0
@@ -74100,6 +74866,7 @@ C             CALLS OF RFFTB OR RFFTF.
       REAL :: CC(IDO,2,L1)
       REAL, INTENT(INOUT) :: CH(IDO,L1,*)
       REAL :: WA1(*)
+C     beginning of local variable declarations
       INTEGER :: I, IC, IDP2, K
       REAL :: TI2, TR2
       INTEGER :: NSWC_AI_I4
@@ -74150,6 +74917,7 @@ C             CALLS OF RFFTB OR RFFTF.
       REAL :: CC(IDO,3,L1)
       REAL, INTENT(INOUT) :: CH(IDO,L1,*)
       REAL :: WA1(*), WA2(*)
+C     beginning of local variable declarations
       INTEGER :: I, IC, IDP2, K
       REAL :: CI2, CI3, CR2, CR3, DI2, DI3, DR2, DR3, TAUI, TAUR, TI2,
      &TR2
@@ -74216,6 +74984,7 @@ C             CALLS OF RFFTB OR RFFTF.
       REAL :: CC(IDO,4,L1)
       REAL, INTENT(INOUT) :: CH(IDO,L1,*)
       REAL :: WA1(*), WA2(*), WA3(*)
+C     beginning of local variable declarations
       INTEGER :: I, IC, IDP2, K
       REAL :: CI2, CI3, CI4, CR2, CR3, CR4, SQRT2, TI1, TI2, TI3, TI4,
      &TR1, TR2, TR3, TR4
@@ -74312,6 +75081,7 @@ C             CALLS OF RFFTB OR RFFTF.
       REAL :: CC(IDO,5,L1)
       REAL, INTENT(INOUT) :: CH(IDO,L1,*)
       REAL :: WA1(*), WA2(*), WA3(*), WA4(*)
+C     beginning of local variable declarations
       INTEGER :: I, IC, IDP2, K
       REAL :: CI2, CI3, CI4, CI5, CR2, CR3, CR4, CR5, DI2, DI3, DI4,
      &DI5, DR2, DR3, DR4, DR5, TI11, TI12, TI2, TI3, TI4, TI5, TR11,
@@ -74424,6 +75194,7 @@ C             CALLS OF RFFTB OR RFFTF.
       REAL :: CC(IDO,IP,L1)
       REAL, INTENT(INOUT) :: CH(IDO,L1,IP), CH2(IDL1,IP)
       REAL :: WA(*)
+C     beginning of local variable declarations
       INTEGER :: I, IC, IDIJ, IDP2, IK, IPP2, IPPH, IS, J, J2, JC, K, L,
      &LC, NBD
       REAL :: AI1, AI2, AR1, AR1H, AR2, AR2H, ARG, DC2, DCP, DS2, DSP,
@@ -74636,6 +75407,7 @@ C             CALLS OF RFFTF OR RFFTB.
       REAL, INTENT(INOUT) :: C(*), CH(*)
       REAL :: WA(*)
       REAL, INTENT(IN) :: IFAC(*)
+C     beginning of local variable declarations
       INTEGER :: I, IDL1, IDO, IP, IW, IX2, IX3, IX4, K1, KH, L1, L2,
      &NA, NF
       NF = IFAC(2)
@@ -74701,6 +75473,7 @@ C             CALLS OF RFFTF OR RFFTB.
       REAL :: CC(IDO,L1,*)
       REAL, INTENT(INOUT) :: CH(IDO,2,L1)
       REAL :: WA1(*)
+C     beginning of local variable declarations
       INTEGER :: I, IC, IDP2, K
       REAL :: TI2, TR2
       INTEGER :: NSWC_AI_I4
@@ -74751,6 +75524,7 @@ C             CALLS OF RFFTF OR RFFTB.
       REAL :: CC(IDO,L1,*)
       REAL, INTENT(INOUT) :: CH(IDO,3,L1)
       REAL :: WA1(*), WA2(*)
+C     beginning of local variable declarations
       INTEGER :: I, IC, IDP2, K
       REAL :: CI2, CR2, DI2, DI3, DR2, DR3, TAUI, TAUR, TI2, TI3, TR2,
      &TR3
@@ -74815,6 +75589,7 @@ C             CALLS OF RFFTF OR RFFTB.
       REAL :: CC(IDO,L1,*)
       REAL, INTENT(INOUT) :: CH(IDO,4,L1)
       REAL :: WA1(*), WA2(*), WA3(*)
+C     beginning of local variable declarations
       INTEGER :: I, IC, IDP2, K
       REAL :: CI2, CI3, CI4, CR2, CR3, CR4, HSQT2, TI1, TI2, TI3, TI4,
      &TR1, TR2, TR3, TR4
@@ -74907,6 +75682,7 @@ C             CALLS OF RFFTF OR RFFTB.
       REAL :: CC(IDO,L1,*)
       REAL, INTENT(INOUT) :: CH(IDO,5,L1)
       REAL :: WA1(*), WA2(*), WA3(*), WA4(*)
+C     beginning of local variable declarations
       INTEGER :: I, IC, IDP2, K
       REAL :: CI2, CI3, CI4, CI5, CR2, CR3, CR4, CR5, DI2, DI3, DI4,
      &DI5, DR2, DR3, DR4, DR5, TI11, TI12, TI2, TI3, TI4, TI5, TR11,
@@ -75014,6 +75790,7 @@ C             CALLS OF RFFTF OR RFFTB.
       REAL, INTENT(INOUT) :: C1(IDO,L1,IP), C2(IDL1,IP), CC(IDO,IP,L1),
      &CH(IDO,L1,IP), CH2(IDL1,IP)
       REAL :: WA(*)
+C     beginning of local variable declarations
       INTEGER :: I, IC, IDIJ, IDP2, IK, IPP2, IPPH, IS, J, J2, JC, K, L,
      &LC, NBD
       REAL :: AI1, AI2, AR1, AR1H, AR2, AR2H, ARG, DC2, DCP, DS2, DSP,
@@ -75189,6 +75966,7 @@ C             CALLS OF RFFTF OR RFFTB.
       DOUBLE PRECISION, INTENT(INOUT) :: ERROR
       DOUBLE PRECISION, INTENT(INOUT) :: P(*), Q(*), W(*)
       EXTERNAL F, G, PHI
+C     beginning of local variable declarations
       INTEGER :: I1, I2, I3, I4, I5, LP1, LPM, MP1, N, NP1
 C     ******************************************************************
 C     RATIONAL CHEBYCHEV APPROXIMATION OF CONTINUOUS FUNCTIONS
@@ -75229,6 +76007,7 @@ C     ------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(INOUT) :: P(LP1), Q(MP1), X(NP1),
      &XVAL(NP1), C(NP1,NP1), D(NP1), ERR(NP1), H(NP1)
       EXTERNAL F, G, PHI
+C     beginning of local variable declarations
       INTEGER :: I, II, J, K, KOUNT, LPI
       DOUBLE PRECISION :: B1, C0, DEL, DN, DNP1, EPS0, HALF, H1, OLDERR,
      &ONE, PI, SIGN, SUM, TAU, TEMPL, TEN, TEST, U, XI, XLB, XM1, Y, Y2,
@@ -75485,6 +76264,7 @@ C     THE ROUTINE HAS COMPLETELY FAILED - THE RESULTS SHOULD BE IGNORED
       DOUBLE PRECISION, INTENT(IN) :: T, FT, GT, PHIT
       DOUBLE PRECISION, INTENT(INOUT) :: DEL
       DOUBLE PRECISION, INTENT(IN) :: D(NP1)
+C     beginning of local variable declarations
       INTEGER :: I, II
       DOUBLE PRECISION :: P, Q, R, ZERO, ONE
 C     ------------------------------------------------------------------
@@ -75531,6 +76311,7 @@ C     THE ROUTINE HAS COMPLETELY FAILED - THE RESULTS SHOULD BE IGNORED
      &VALLFT(KBREAK), VALRGT(KBREAK), XLFT, XRGT
       DOUBLE PRECISION :: F
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: K, KDIMEN, NDIMEN
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
@@ -75605,6 +76386,7 @@ C     BRIGHT     VALRGT
       DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
       DOUBLE PRECISION :: F
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
       INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK,
@@ -75797,6 +76579,7 @@ C                CHECK ON THE NUMBER OF KNOTS GENERATED
       IMPLICIT NONE
       INTEGER :: IERR, KDIMEN, KMAX, NDIMEN
       DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
+C     beginning of local variable declarations
       INTEGER :: J, K, KBOTH, KLEFT, KRIGHT, LIMSM
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
@@ -75906,6 +76689,7 @@ C         BAD VALUE IN DERIVATIVE BREAKS
       SUBROUTINE ADTAKE(IERR)
       IMPLICIT NONE
       INTEGER :: IERR
+C     beginning of local variable declarations
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
       INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK,
@@ -75981,6 +76765,7 @@ C        TOO SMALL AN INTERVAL.
       IMPLICIT NONE
       DOUBLE PRECISION :: F
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: J
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
@@ -76083,6 +76868,7 @@ C         ADD 50 PERCENT FUDGE FACTOR
       DOUBLE PRECISION :: AAA, BBB, FIT, POINTS(*), WEIGHT(*)
       DOUBLE PRECISION :: F
       EXTERNAL F, FIT
+C     beginning of local variable declarations
       INTEGER :: J
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
@@ -76149,6 +76935,7 @@ C              LOOP THROUGH THE REMAINING POINTS
       SUBROUTINE NEWTON(NL, NR, NI)
       IMPLICIT NONE
       INTEGER :: NI, NL, NR
+C     beginning of local variable declarations
       INTEGER :: IDIF, IPT, IPT2, J, K, NDDX, NL1, NL2, NR1, NR2, NRL,
      &NRLJ, NRLJ1
       INTEGER :: LEFTX, NINTRP
@@ -76278,6 +77065,7 @@ C         LOOP THROUGH THE DIFFERENCES (IDIF INDEX)
       DOUBLE PRECISION FUNCTION POLYDD(X)
       IMPLICIT NONE
       DOUBLE PRECISION :: X
+C     beginning of local variable declarations
       INTEGER :: J, K
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
@@ -76311,6 +77099,7 @@ C     BY THE DIVIDED DIFFERENCES DDTEMP ON THE POINT SET XDD.
 
       SUBROUTINE ADCHK
       IMPLICIT NONE
+C     beginning of local variable declarations
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
       INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK,
@@ -76363,6 +77152,7 @@ C             CHECK FOR DISCARD OF INTERVAL
       IMPLICIT NONE
       INTEGER :: IERR, KDIMEN, KMAX, NDIMEN
       DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
+C     beginning of local variable declarations
       INTEGER :: K
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
@@ -76434,6 +77224,7 @@ C            PUT THE NEW KNOTS IN XKNOTS
       SUBROUTINE ADTRAN(D, POWERS)
       IMPLICIT NONE
       DOUBLE PRECISION :: D(20,*), POWERS(*)
+C     beginning of local variable declarations
       INTEGER :: I, II, J, K, KHI, KOEF, L, LTOP, NI, NI1, NL, NR, NRI,
      &NRI1, NRL, NRLI, NRLK
       INTEGER :: LEFTX, NINTRP
@@ -76558,6 +77349,7 @@ C     THE COEFFICIENTS ARE NOW OF THE POWER FORM WITH ORIGIN XL
       COMPLEX :: F
       COMPLEX, INTENT(INOUT) :: RS(N)
       COMPLEX :: Z
+C     beginning of local variable declarations
       INTEGER :: I, IA, INR, IP(32), IQ, IS, IT, IW(7), IX, J, JN, KL,
      &KM, KN, L, L1, L2, LF, LN, M, NP, NR
       REAL :: ANG, B, C(4), CM, CP, CT, CX, EP6, EPS, EPS0, FAC, FACT,
@@ -76777,6 +77569,7 @@ C  ERROR RETURN.
       DOUBLE PRECISION :: X, Y
       DOUBLE PRECISION, INTENT(IN) :: TOL
       DOUBLE PRECISION, INTENT(INOUT) :: R, RS1(N), RS2(N), ERR(N)
+C     beginning of local variable declarations
       INTEGER :: I, IA, INR, IQ, IS, IT, IX, J, JN, KL, KM, KN, L, L1,
      &L2, LF, LN, M, MM1, NP, NR
       INTEGER :: IP(32), IW(7)
@@ -77034,9 +77827,10 @@ C  ERROR RETURN.
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A
       REAL :: X(N), Y(N)
+      REAL :: TRP
+C     beginning of local variable declarations
       INTEGER :: I, IL, IR, NM1
       REAL :: R
-      REAL :: TRP
       REAL :: NSWC_AI_R4
       NM1 = N-1
       IF (A.LT.X(2)) GO TO 50
@@ -77070,6 +77864,7 @@ C     EVALUATION
       REAL, INTENT(INOUT) :: T(M)
       REAL :: X(N), XI(NI), Y(N)
       REAL, INTENT(INOUT) :: YI(NI)
+C     beginning of local variable declarations
       INTEGER :: I, II, IL, ILM1, ILOLD, IPM, IR, ISTEP, J, JMAX, K, L,
      &MM1, NUM
       REAL :: DL, DR, XX
@@ -77222,6 +78017,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N), T(N)
       REAL :: X(N), Y(N)
+C     beginning of local variable declarations
       INTEGER :: I, IBEG, IEND, K
       REAL :: DIFF, F, R
 C     ******************************************************************
@@ -77274,6 +78070,7 @@ C     ******************************************************************
       REAL, INTENT(IN) :: X(*), A(N)
       REAL, INTENT(INOUT) :: C(N)
       DOUBLE PRECISION, INTENT(INOUT) :: T(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, K, NM1
       DOUBLE PRECISION :: XX, R
       IF (N.GT.1) GO TO 10
@@ -77303,6 +78100,7 @@ C     ******************************************************************
       REAL, INTENT(INOUT) :: RNORM
       REAL, INTENT(IN) :: X(NP), Y(NP)
       REAL, INTENT(INOUT) :: A(*), PHI(2,*), PHIX(4,NP)
+C     beginning of local variable declarations
       INTEGER :: K, LA, LB, LS, M, MP1, ND1
       REAL :: ALPHA, C, TEMP, XMAX, XMIN, ZA, ZB
       REAL :: LAMBDA
@@ -77444,6 +78242,7 @@ C                  IN Z TO A POLYNOMIAL IN X
       REAL, INTENT(INOUT) :: RNORM
       REAL, INTENT(IN) :: X(NP), Y(NP), W(NP)
       REAL, INTENT(INOUT) :: A(*), PHI(2,*), PHIX(4,NP)
+C     beginning of local variable declarations
       INTEGER :: K, LA, LB, LS, M, MP1, ND1, NW
       REAL :: ALPHA, C, TEMP, XMAX, XMIN, ZA, ZB
       REAL :: LAMBDA
@@ -77602,6 +78401,7 @@ C                        ERROR RETURN
       REAL, INTENT(IN) :: ALPHA, BETA
       REAL, INTENT(IN) :: X(N), Y(N)
       REAL, INTENT(INOUT) :: A(N), B(N), C(N)
+C     beginning of local variable declarations
       INTEGER :: I, J, M, NM1
       REAL :: DEL, H, R, T
       INTEGER :: NSWC_AI_I4
@@ -77710,6 +78510,7 @@ C     ERROR RETURN
       REAL, INTENT(IN) :: A1, AN, B1, BN
       REAL, INTENT(IN) :: X(N), Y(N)
       REAL, INTENT(INOUT) :: YP(N), YPP(N), W(N,3)
+C     beginning of local variable declarations
       INTEGER :: I, J, NM1, NM2
       REAL :: DNEW, DOLD, H
 C     WRITTEN BY RONDALL E. JONES
@@ -77842,6 +78643,7 @@ C     COMPUTE FIRST DERIVATIVES
       REAL, INTENT(IN) :: X(M), Y(M), WGT(M)
       REAL, INTENT(INOUT) :: BREAK(L)
       REAL, INTENT(INOUT) :: Z(*), A(*), B(*), C(*), WK(*)
+C     beginning of local variable declarations
       INTEGER :: J, K, LA, LM1, LQ, LW, N
       REAL :: TEMP(20)
 C-----------------------------------------------------------------------
@@ -77903,6 +78705,7 @@ C                       ERROR RETURN
       REAL, INTENT(INOUT) :: Z(*), A(*), B(*), C(*), WK(*)
       INTEGER, INTENT(IN) :: NDER(*)
       INTEGER, INTENT(INOUT) :: IWK(*)
+C     beginning of local variable declarations
       INTEGER :: J, K, LA, LM1, LW, N
       REAL :: R
       REAL :: TEMP(20)
@@ -77971,6 +78774,7 @@ C                       ERROR RETURN
       INTEGER, INTENT(IN) :: N, NI
       REAL, INTENT(IN) :: X(N), Y(N), A(N), B(N), C(N), XI(NI)
       REAL, INTENT(INOUT) :: YI(NI)
+C     beginning of local variable declarations
       INTEGER :: I, IL, IR, K
       REAL :: DX, XX
       REAL :: NSWC_AI_R4
@@ -78058,6 +78862,7 @@ C     NEXT POINT
       INTEGER, INTENT(IN) :: N, NI
       REAL, INTENT(IN) :: X(N), Y(N), YP(N), XI(NI)
       REAL, INTENT(INOUT) :: YI(NI)
+C     beginning of local variable declarations
       INTEGER :: I, IL, IR, K, NM1
       REAL :: A, B, C, D, DX, H, XX
       REAL :: NSWC_AI_R4
@@ -78147,6 +78952,7 @@ C     NEXT POINT
       INTEGER, INTENT(IN) :: N, NI
       REAL, INTENT(IN) :: X(N), Y(N), YPP(N), XI(NI)
       REAL, INTENT(INOUT) :: YI(NI)
+C     beginning of local variable declarations
       INTEGER :: I, IL, IR, K, NM1
       REAL :: H, H2, XL, XL2, XL3, XR, XR2, XR3, XX
       REAL :: NSWC_AI_R4
@@ -78239,6 +79045,7 @@ C     NEXT POINT
       INTEGER, INTENT(IN) :: N, NI
       REAL, INTENT(IN) :: X(N), Y(N), A(N), B(N), C(N), XI(NI)
       REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
+C     beginning of local variable declarations
       INTEGER :: I, IL, IR, K
       REAL :: BI, CI, DX, XX
       REAL :: NSWC_AI_R4
@@ -78333,6 +79140,7 @@ C     NEXT POINT
       INTEGER, INTENT(IN) :: N, NI
       REAL, INTENT(IN) :: X(N), Y(N), YP(N), XI(NI)
       REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
+C     beginning of local variable declarations
       INTEGER :: I, IL, IR, K, NM1
       REAL :: A, B, C, D, DX, H, XX
       REAL :: NSWC_AI_R4
@@ -78428,6 +79236,7 @@ C     NEXT POINT
       INTEGER, INTENT(IN) :: N, NI
       REAL, INTENT(IN) :: X(N), Y(N), YPP(N), XI(NI)
       REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
+C     beginning of local variable declarations
       INTEGER :: I, IL, IR, K, NM1
       REAL :: H, H2, XL, XL2, XL3, XR, XR2, XR3, XX
       REAL :: NSWC_AI_R4
@@ -78524,6 +79333,7 @@ C     NEXT POINT
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: ALPHA, BETA
       REAL, INTENT(IN) :: X(N), Y(N), A(N), B(N), C(N)
+C     beginning of local variable declarations
       INTEGER :: I, K, KP1, L, LM1
       REAL :: A0, B0, D, D2, H, H2, R, S, SUM
       INTEGER :: INTRVL
@@ -78604,6 +79414,7 @@ C     CASE WHEN A0 AND B0 ARE IN THE SAME INTERVAL
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A, B
       REAL, INTENT(IN) :: X(N), Y(N), YP(N)
+C     beginning of local variable declarations
       INTEGER :: I, IP1, K, KP1, L, LM1, LP1
       REAL :: A0, B0, BI, CI, D, D2, H, H2, R, S, SUM
       INTEGER :: INTRVL
@@ -78696,6 +79507,7 @@ C     CASE WHEN A0 AND B0 ARE IN THE SAME INTERVAL
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A, B
       REAL, INTENT(IN) :: X(N), Y(N), YPP(N)
+C     beginning of local variable declarations
       INTEGER :: I, IP1, K, KP1, L, LM1, LP1
       REAL :: A0, B0, D, DMA, DMB, DPA, DPB, H, R, S, SUM
       INTEGER :: INTRVL
@@ -78770,6 +79582,7 @@ C     CASE WHEN A0 AND B0 ARE IN THE SAME INTERVAL
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: X(N), Y(*)
       REAL, INTENT(INOUT) :: A(*), B(*), C(*), T(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, NM1, NM2, NM3
       REAL :: ALPHA, DEL, DEL0, DELI, DELTA, E, H, HI, R, S, SI, W
 C-----------------------------------------------------------------------
@@ -78876,6 +79689,7 @@ C     ERROR RETURN
       REAL, INTENT(INOUT) :: BREAK(L)
       REAL, INTENT(INOUT) :: Z(*), A(*), B(*), C(*), WK(*)
       INTEGER, INTENT(INOUT) :: IWK(*)
+C     beginning of local variable declarations
       INTEGER :: J, K, LA, LM1, LW, N
       REAL :: R
       REAL :: TEMP(20)
@@ -78957,6 +79771,7 @@ C                           ERROR RETURN
       INTEGER, INTENT(IN) :: M, N
       REAL, INTENT(IN) :: X(N), Y(*), A(*), B(*), C(*), XI(M)
       REAL, INTENT(INOUT) :: YI(M)
+C     beginning of local variable declarations
       INTEGER :: I, IL, IR, J, K
       REAL :: DX, H, T, T0, X1, XOLD, XX
       REAL :: NSWC_AI_R4
@@ -79031,6 +79846,7 @@ C     XX .GE. X(N). THIS CASE MAY NEVER OCCUR.
       INTEGER, INTENT(IN) :: M, N
       REAL, INTENT(IN) :: X(N), Y(*), A(*), B(*), C(*), XI(M)
       REAL, INTENT(INOUT) :: YI(M), YPI(M), YPPI(M)
+C     beginning of local variable declarations
       INTEGER :: I, IL, IR, J, K
       REAL :: BI2, CI3, DX, H, T, T0, X1, XOLD, XX
       REAL :: NSWC_AI_R4
@@ -79112,6 +79928,7 @@ C     XX .GE. X(N). THIS CASE MAY NEVER OCCUR.
       INTEGER, INTENT(IN) :: KDX, KX, M, N
       REAL, INTENT(IN) :: X(KX,N)
       REAL, INTENT(INOUT) :: T(M), DX(KDX,N), WK(*)
+C     beginning of local variable declarations
       INTEGER :: IA, IB, IC, IE, MM1
 C-----------------------------------------------------------------------
 C               CLOSED CURVE CUBIC SPLINE FITTING
@@ -79145,6 +79962,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: KDX, KX, M, N
       REAL, INTENT(IN) :: X(KX,N)
       REAL, INTENT(INOUT) :: T(M), DX(KDX,N), A(*), B(M), C(*), E(*)
+C     beginning of local variable declarations
       INTEGER :: I, IM1, J, L, MM1, MM2
       REAL :: ALPHA, DEL, DEL0, DEL1, DELI, DELM, ETA, H, HM, P, R, SI,
      &SM, SUM, TAU
@@ -79282,6 +80100,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: KDX, KX, KZ, L, M, N
       REAL, INTENT(IN) :: T(M), X(KX,N), DX(KDX,N), TI(L)
       REAL, INTENT(INOUT) :: Z(KZ, N)
+C     beginning of local variable declarations
       INTEGER :: I, IL, IR, J, K
       REAL :: A, B, C, D, DT, H, T0, TOLD, W
       REAL :: NSWC_AI_R4
@@ -79359,6 +80178,7 @@ C     NEXT POINT
       REAL, INTENT(IN) :: TI
       REAL, INTENT(IN) :: T(M), X(KX,N), DX(KDX,N)
       REAL, INTENT(INOUT) :: Z(N), DZ(N), DDZ(N)
+C     beginning of local variable declarations
       INTEGER :: I, IL, IR, J
       REAL :: A, B, C, D, DT, H, T0, W
       REAL :: NSWC_AI_R4
@@ -79425,6 +80245,7 @@ C     COMPUTATION WHEN T0 .GE. T(M)
       REAL, INTENT(IN) :: X(N), Y(N), SLP1, SLPN
       REAL, INTENT(INOUT) :: YP(N), TEMP(N)
       REAL, INTENT(IN) :: SIGMA
+C     beginning of local variable declarations
       INTEGER :: I, IBAK, NM1, NP1
       REAL :: C1, C2, C3, DELX1, DELX2, DELXN, DELXNM, DIAG, DIAG1,
      &DIAG2, DX1, DX2, SDIAG1, SDIAG2, SIGMAP, SLPP1, SLPPN
@@ -79547,11 +80368,12 @@ C X-VALUES NOT STRICTLY INCREASING
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: T, X(N), Y(N), YP(N), SIGMA
+      REAL :: CURV2
+C     beginning of local variable declarations
       INTEGER :: I, IM1
       REAL :: COSHP1, COSHP2, DEL1, DEL2, DELP1, DELP2, DELS, DUMMY,
      &SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1, SINHP2, SUM
       INTEGER :: INTRVL
-      REAL :: CURV2
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
 C                            DEPARTMENT OF COMPUTER SCIENCES
@@ -79613,11 +80435,12 @@ C SET UP AND PERFORM INTERPOLATION
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: T, X(N), Y(N), YP(N), SIGMA
+      REAL :: CURVD
+C     beginning of local variable declarations
       INTEGER :: I, IM1
       REAL :: COSHM1, COSHM2, DEL1, DEL2, DELS, DUMMY, SIGMAP, SINHMS,
      &SUM
       INTEGER :: INTRVL
-      REAL :: CURVD
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
 C                            DEPARTMENT OF COMPUTER SCIENCES
@@ -79672,12 +80495,13 @@ C SET UP AND PERFORM DIFFERENTIATION
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: XL, XU, X(N), Y(N), YP(N), SIGMA
+      REAL :: CURVI
+C     beginning of local variable declarations
       INTEGER :: I, IL, ILM1, ILP1, IU, IUM1
       REAL :: C1, C2, CL1, CL2, CMM1, CMM2, CS, CU1, CU2, DEL1, DEL2,
      &DELI, DELL1, DELL2, DELS, DELU1, DELU2, DUMMY, SIGMAP, SS, SSIGN,
      &SUM, T, T1, T2, XXL, XXU
       INTEGER :: INTRVL
-      REAL :: CURVI
       REAL :: TERM
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -79816,6 +80640,7 @@ C CORRECT SIGN AND RETURN
       REAL, INTENT(IN) :: X(N), Y(N), SLP1, SLPN
       REAL, INTENT(INOUT) :: XP(N), YP(N), TEMP(N), S(N)
       REAL, INTENT(IN) :: SIGMA
+C     beginning of local variable declarations
       INTEGER :: I, IBAK, IM1, NM1, NP1
       REAL :: C1, C2, C3, DELS1, DELS2, DELSN, DELSNM, DELT, DIAG,
      &DIAG1, DIAG2, DIAGIN, DX1, DX2, DY1, DY2, SDIAG1, SDIAG2, SIGMAP,
@@ -79973,6 +80798,7 @@ C COINCIDENT ADJACENT POINTS
       REAL, INTENT(IN) :: T
       REAL, INTENT(INOUT) :: XS, YS
       REAL, INTENT(IN) :: X(N), Y(N), XP(N), YP(N), S(N), SIGMA
+C     beginning of local variable declarations
       INTEGER :: I, IM1
       REAL :: C1, C2, COSHP1, COSHP2, D, DEL1, DEL2, DELP1, DELP2, DELS,
      &DUMMY, SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1, SINHP2, SUMX, SUMY,
@@ -80058,6 +80884,7 @@ C SET UP AND PERFORM INTERPOLATION
       REAL, INTENT(IN) :: X(N), Y(N)
       REAL, INTENT(INOUT) :: XP(N), YP(N), TEMP(*), S(N)
       REAL, INTENT(IN) :: SIGMA
+C     beginning of local variable declarations
       INTEGER :: I, IBAK, IM1, NM1, NP1, NPI, NPIBAK
       REAL :: DELS1, DELS2, DIAG, DIAG1, DIAG2, DIAGIN, DX1, DX2, DY1,
      &DY2, SDIAG1, SDIAG2, SIGMAP, XPN, YPN
@@ -80199,6 +81026,7 @@ C COINCIDENT ADJACENT POINTS
       REAL, INTENT(IN) :: T
       REAL, INTENT(INOUT) :: XS, YS
       REAL, INTENT(IN) :: X(N), Y(N), XP(N), YP(N), S(N), SIGMA
+C     beginning of local variable declarations
       INTEGER :: I, IM1
       REAL :: C1, C2, CI, CIM1, COSHP1, COSHP2, D, DEL1, DEL2, DELP1,
      &DELP2, DELS, DUMMY, SI, SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1,
@@ -80293,6 +81121,7 @@ C SET UP AND PERFORM INTERPOLATION
      &SLPNY, SLPNZ
       REAL, INTENT(INOUT) :: XP(N), YP(N), ZP(N), TEMP(N), S(N)
       REAL, INTENT(IN) :: SIGMA
+C     beginning of local variable declarations
       INTEGER :: I, IBAK, IM1, NM1, NP1
       REAL :: C1, C2, C3, DELS1, DELS2, DELSN, DELSNM, DELT, DIAG,
      &DIAG1, DIAG2, DIAGIN, DX1, DX2, DY1, DY2, DZ1, DZ2, SDIAG1,
@@ -80474,6 +81303,7 @@ C COINCIDENT ADJACENT POINTS
       REAL, INTENT(INOUT) :: XS, YS, ZS
       REAL, INTENT(IN) :: X(N), Y(N), Z(N), XP(N), YP(N), ZP(N), S(N)
       REAL, INTENT(IN) :: SIGMA
+C     beginning of local variable declarations
       INTEGER :: I, IM1
       REAL :: C1, C2, COSHP1, COSHP2, D, DEL1, DEL2, DELP1, DELP2, DELS,
      &DUMMY, SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1, SINHP2, SUMX, SUMY,
@@ -80560,6 +81390,7 @@ C SET UP AND PERFORM INTERPOLATION
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: DEL1, DEL2, SIGMA
       REAL, INTENT(INOUT) :: C1, C2, C3
+C     beginning of local variable declarations
       REAL :: COSHM1, COSHM2, DEL, DELM, DELP, DENOM, DUMMY, SINHMM,
      &SINHMP
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
@@ -80618,6 +81449,7 @@ C TWO COEFFICIENTS
       IMPLICIT NONE
       REAL, INTENT(INOUT) :: DIAG, SDIAG
       REAL, INTENT(IN) :: SIGMA, DEL
+C     beginning of local variable declarations
       REAL :: COSHM, DENOM, SIGDEL, SINHM
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -80656,6 +81488,7 @@ C-----------------------------------------------------------
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
       REAL, INTENT(IN) :: X, T(M)
+C     beginning of local variable declarations
       INTEGER :: I, IL, IR
       REAL :: TM
       REAL :: NSWC_AI_R4
@@ -80713,6 +81546,7 @@ C     NORMAL EXIT
       REAL, INTENT(IN) :: X
       REAL, INTENT(IN) :: T(*), BCOEF(N)
       REAL, INTENT(INOUT) :: WK(K,3)
+C     beginning of local variable declarations
       INTEGER :: I, IMK, IPJ, J, JC, JCMAX, JCMIN, JDRVP1, JJ, KM1, KMJ,
      &L, NMI, NPK
       REAL :: DL, DR, FKMJ
@@ -80857,6 +81691,7 @@ C     GIVEN ITS RELEVANT B-SPLINE COEFFS IN WK(1,1),...,WK(K-JDERIV,1).
       REAL, INTENT(IN) :: X
       REAL, INTENT(IN) :: T(*), BCOEFF(N)
       REAL, INTENT(INOUT) :: WK(*)
+C     beginning of local variable declarations
       INTEGER :: I, IPK, KP1, NP1, NPK
       REAL :: SUM, TLAST, TNEW, XVAL
 C-----------------------------------------------------------------------
@@ -80896,6 +81731,7 @@ C     COMPUTE THE ANTIDERIVATIVE
       REAL, INTENT(IN) :: X
       REAL, INTENT(IN) :: T(*), BCOEF(N)
       REAL, INTENT(INOUT) :: WK(K,3)
+C     beginning of local variable declarations
       INTEGER :: I, IMK, IPJ, J, JC, JCMIN, JJ, KM1, KMJ, L, M
       REAL :: DL, DR, TIPJ
       INTEGER :: INTRVL
@@ -80980,6 +81816,7 @@ C     B-SPLINE COEFFS IN WK(1,1),...,WK(K,1).
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: T(*), A(N)
       REAL, INTENT(INOUT) :: BREAK(*), C(K,*), WK(K,*)
+C     beginning of local variable declarations
       INTEGER :: I, IL, ILJ, ILKJ, J, JJ, JP1, KM1, KMJ, KP1, LEFT
       REAL :: DIFF, R, S, TERM, X
 C-----------------------------------------------------------------------
@@ -81065,6 +81902,7 @@ C          PIECEWISE CONSTANT CASE
       INTEGER, INTENT(IN) :: L, N, NI
       REAL :: A(L,N), X(N), XI(NI)
       REAL, INTENT(INOUT) :: YI(NI)
+C     beginning of local variable declarations
       INTEGER :: I, IL, IR, J, K, LM1, LMJ
       REAL :: DX, S, XX
       REAL :: NSWC_AI_R4
@@ -81149,6 +81987,7 @@ C     NEXT POINT
       REAL, INTENT(IN) :: X
       REAL, INTENT(IN) :: T(*)
       REAL, INTENT(INOUT) :: BLIST(K)
+C     beginning of local variable declarations
       INTEGER :: I, IMJ, L
       REAL :: S, TERM, TI, TIMJ
 C-----------------------------------------------------------------------
@@ -81201,6 +82040,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: X
       REAL, INTENT(IN) :: T(*)
       REAL, INTENT(INOUT) :: DBIATX(IDIM,NDERIV), A(K,K)
+C     beginning of local variable declarations
       INTEGER :: I, IDERIV, IL, J, JJ, JLOW, JP1MID, KP1, KP1MM, L,
      &LDUMMY, M, MHIGH
       REAL :: FACTOR, FKP1MM, SUM
@@ -81324,6 +82164,7 @@ C        THAT  A(J,I) = 0  FOR J .LT. I .
       REAL, INTENT(IN) :: GTAU(N)
       REAL, INTENT(INOUT) :: Q(*)
       REAL, INTENT(IN) :: T(*), TAU(N)
+C     beginning of local variable declarations
       INTEGER :: I, ILP1MX, J, JJ, KM1, KPKM2, LEFT, LENQ, NP1
       REAL :: TAUI
 C-----------------------------------------------------------------------
@@ -81437,6 +82278,7 @@ C     *** ERROR RETURN
       INTEGER, INTENT(OUT) :: IFLAG
       INTEGER, INTENT(IN) :: NBANDL, NBANDU, NROW, NROWW
       REAL, INTENT(INOUT) :: W(NROWW,NROW)
+C     beginning of local variable declarations
       INTEGER :: I, IPK, J, JBEG, JEND, JMAX, K, KMAX, MDJ, MIDDLE,
      &MIDMK, MJ, NROWM1
       REAL :: FACTOR, PIVOT
@@ -81559,6 +82401,7 @@ C                                       CHECK THE LAST DIAGONAL ENTRY .
       INTEGER, INTENT(IN) :: NBANDL, NBANDU, NROW, NROWW
       REAL, INTENT(IN) :: W(NROWW,NROW)
       REAL, INTENT(INOUT) :: B(NROW)
+C     beginning of local variable declarations
       INTEGER :: I, IMJ, IPJ, J, JMAX, MIDDLE, MMJ, MPJ, NROWM1
 C  FROM  * A PRACTICAL GUIDE TO SPLINES *  BY C. DE BOOR
 C  COMPANION ROUTINE TO  BANFAC . IT RETURNS THE SOLUTION  X  OF THE
@@ -81621,6 +82464,7 @@ C                                A  IS LOWER TRIANGULAR .
       REAL, INTENT(IN) :: TAU(NTAU), GTAU(NTAU), WGT(NTAU)
       REAL, INTENT(IN) :: T(*)
       REAL, INTENT(INOUT) :: A(N), WK(N), Q(K,N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, L, LEFT, LEFTMK, MM
       REAL :: DW
 C-----------------------------------------------------------------------
@@ -81691,6 +82535,7 @@ C             ERROR RETURN
       INTEGER, INTENT(INOUT) :: IFLAG
       INTEGER, INTENT(IN) :: N, NB
       REAL, INTENT(INOUT) :: W(NB,N), DIAG(N)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, IPJ, J, JMAX, K, KPI
       REAL :: RATIO, T
 C-----------------------------------------------------------------------
@@ -81792,6 +82637,7 @@ C     FACTORIZATION
       INTEGER, INTENT(IN) :: N, NB
       REAL, INTENT(IN) :: W(NB,N)
       REAL, INTENT(INOUT) :: B(N)
+C     beginning of local variable declarations
       INTEGER :: J, JMAX, JPK, K, NBM1
 C-----------------------------------------------------------------------
 C     BCHSLV SOLVES THE LINEAR SYSTEM C*X = B FOR X WHEN W CONTAINS
@@ -81848,6 +82694,7 @@ C     BACKSUBSTITUTION. SOLVE L X = D  Y  FOR X AND STORE X IN B.
       REAL, INTENT(INOUT) :: COEFF(N), W(*)
       INTEGER, INTENT(IN) :: NDERIV(*)
       INTEGER, INTENT(INOUT) :: IW(*)
+C     beginning of local variable declarations
       INTEGER :: I1, I2, I3, I7, MDG, MDW, NBKPT
 C-----------------------------------------------------------------------
 C      THIS SUBPROGRAM FITS A PIECE-WISE POLYNOMIAL CURVE
@@ -82041,6 +82888,7 @@ C      I7,...           WORK(*) FOR BSPVD( ) AND LSEI( )
       REAL, INTENT(INOUT) :: BF(NORD,NORD), G(MDG,*), W(MDW,*), WORK(*)
       INTEGER, INTENT(IN) :: NDERIV(*)
       INTEGER, INTENT(INOUT) :: IWORK(*)
+C     beginning of local variable declarations
       INTEGER :: I, IDATA, IDERIV, IERR, ILEFT, INTRVL, INTW1, IP, IP1,
      &IR, IROW, ITYPE, IW1, IW2, J, L, LW, M, MT, N, NB, NEQCON, NINCON,
      &NORDM1, NORDP1, NP1
@@ -82299,6 +83147,7 @@ C                       TO THE AMOUNT OF STORAGE NEEDED BY IW(*).
       INTEGER, INTENT(INOUT) :: IP, IR
       INTEGER, INTENT(IN) :: JT, MDG, MT, NB
       REAL, INTENT(INOUT) :: G(MDG,*)
+C     beginning of local variable declarations
       INTEGER :: I, IE, IG, IG1, IG2, J, JG, K, KH, L, LP1, MH, MU, NBP1
       REAL :: RHO
 C***AUTHOR  LAWSON, C. L., (JPL)
@@ -82475,6 +83324,7 @@ C                                             ALG. STEP 25
       REAL :: G(MDG,*)
       REAL, INTENT(OUT) :: RNORM
       REAL, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: I, I1, I2, IE, II, IRM1, IX, J, JG, L, NP1
       REAL :: RSQ, S
 C***AUTHOR  LAWSON, C. L., (JPL)
@@ -82628,6 +83478,7 @@ C            A ZERO DIAGONAL TERM OCCURS
       REAL, INTENT(IN) :: XBREAK(NX), YBREAK(NY)
       REAL, INTENT(INOUT) :: F(*)
       REAL, INTENT(INOUT) :: S(*), T(*), WK(NUM)
+C     beginning of local variable declarations
       INTEGER :: I, IMAX, J, L, LD, M, N, NU
 C-----------------------------------------------------------------------
 C            WEIGHTED LEAST SQUARES BICUBIC SPLINE FITTING
@@ -82737,6 +83588,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: KA, KDZ, KZ, M, N
       REAL, INTENT(IN) :: T(*), A(KA,N)
       REAL, INTENT(INOUT) :: Z(KZ,*), DZ(KDZ,*)
+C     beginning of local variable declarations
       INTEGER :: I, IL, ILJ, ILKJ, J, JJ, JP1, K, KMJ, L, LEFT, MP1, MU
       REAL :: DEL, DIFF, R, S, TERM, X
       REAL :: C(4), WK(4,5)
@@ -82834,6 +83686,7 @@ C                    AT THE KNOT T(M+1)
       REAL, INTENT(INOUT) :: Z(KZ,MY)
       REAL, INTENT(IN) :: S(M), T(N), F(KF,N), F1(KF1,N), F2(KF2,N),
      &F12(KF12,N)
+C     beginning of local variable declarations
       INTEGER :: I, IOLD, IP1, J, JOLD, JP1, K, L, MM1, NM1
       REAL :: A, B, B1, B2, B3, BX, C, C1, C2, C3, CX, D, DFI, DFIP1,
      &DS, DT, DX, DY, FI, FIP1, XX, YY
@@ -82996,6 +83849,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(INOUT) :: Z(KZ,MY)
       REAL, INTENT(IN) :: S(M), T(N), F(KF,N), F1(KF1,N), F2(KF2,N),
      &F12(KF12,N)
+C     beginning of local variable declarations
       INTEGER :: I, IOLD, IP1, J, JOLD, JP1, K, L, MM1, NM1
       REAL :: A, A1, A2, A3, AX, C, C1, C2, C3, CX, D, DFI, DFIP1, DS,
      &DT, DX, DY, FI, FIP1, XX, YY
@@ -83152,6 +84006,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: X(M), Y(N), Z(IZ,N), OPT(*)
       REAL, INTENT(INOUT) :: ZP(M,N,*), TEMP(*)
       REAL, INTENT(IN) :: SIGMA
+C     beginning of local variable declarations
       INTEGER :: I, IBAK, IBAKP1, IM1, IP1, J, JBAK, JBAKP1, JM1, JP1,
      &KEY, L, MM1, MP1, NM1, NP1, NPI, NPIBAK, NPM, NPMPJ
       REAL :: C1, C2, C3, DEL1, DEL2, DELI, DELX1, DELX2, DELXM, DELXMM,
@@ -83513,12 +84368,13 @@ C THE OPTION VECTOR HAS AN ERROR
       REAL, INTENT(IN) :: XX, YY, X(M), Y(N)
       REAL :: Z(IZ,N), ZP(M,N,*)
       REAL, INTENT(IN) :: SIGMA
+      REAL :: SURF2
+C     beginning of local variable declarations
       INTEGER :: I, IM1, J, JM1
       REAL :: COSHP1, COSHP2, DEL1, DEL2, DELP1, DELP2, DELS, DUMMY, F1,
      &F2, FP1, FP2, SIGMAP, SIGMAX, SIGMAY, SINHM1, SINHM2, SINHMS,
      &SINHP1, SINHP2, ZI, ZIM1, ZXXI, ZXXIM1
       REAL :: HERMNZ
-      REAL :: SURF2
       REAL :: HERMZ
       INTEGER :: INTRVL
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
@@ -83635,6 +84491,7 @@ C PERFORM FINAL INTERPOLATION IN X-DIRECTION
       REAL, INTENT(IN) :: X(M), Y(N), Z(IZ,N), ZP(M,N,*)
       REAL, INTENT(INOUT) :: WORK(4,MD)
       REAL, INTENT(IN) :: SIGMA
+C     beginning of local variable declarations
       INTEGER :: I, II, IM1, J, JJ, JM1, LASTI, LASTJ
       REAL :: C1, C2, C3, C4, COSHP1, COSHP2, DEL1, DEL2, DELP1, DELP2,
      &DELS, DELTDX, DELTDY, DUMMY, SIGMAX, SIGMAY, SINHM1, SINHM2,
@@ -83793,6 +84650,7 @@ C GRID AND PERFORM INTRPOLATION
       REAL, INTENT(IN) :: X(NX), Y(NY), Z(KZ,NY)
       REAL, INTENT(IN) :: TX(*), TY(*)
       REAL, INTENT(INOUT) :: A(KA,NY), WK(L)
+C     beginning of local variable declarations
       INTEGER :: IW, M
 C-----------------------------------------------------------------------
 C         PIECEWISE POLYNOMIAL INTERPOLATION IN TWO VARIABLES
@@ -83831,6 +84689,7 @@ C     ERROR RETURN
       INTEGER, INTENT(IN) :: K, KA, KZ, M, N
       REAL, INTENT(IN) :: X(M), Z(KZ,N), T(*)
       REAL, INTENT(INOUT) :: A(KA,M), WORK(*)
+C     beginning of local variable declarations
       INTEGER :: I, J, MP1
 C-------------------------------------------------------------------
 C     BSTRP1 COMPUTES B-SPLINE INTERPOLATION COEFFICIENTS FOR
@@ -83866,6 +84725,7 @@ C     REMAINING DATA SETS
       REAL, INTENT(IN) :: X(MX), WX(MX), Y(MY), WY(MY), Z(KZ,MY)
       REAL, INTENT(IN) :: TX(*), TY(*)
       REAL, INTENT(INOUT) :: A(KA,NY), WK(L)
+C     beginning of local variable declarations
       INTEGER :: IERR, IQ, IW, M
 C-----------------------------------------------------------------------
 C             WEIGHTED LEAST SQUARES FITTING OF PIECEWISE
@@ -83913,6 +84773,7 @@ C     ERROR RETURN
       REAL, INTENT(IN) :: TAU(NTAU), WGT(NTAU), Z(KZ,M)
       REAL, INTENT(IN) :: T(*)
       REAL, INTENT(INOUT) :: A(KA,N), WK(N), Q(K,N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JJ, L, LEFT, LEFTMK, MM
       REAL :: DW
 C-----------------------------------------------------------------------
@@ -83999,6 +84860,7 @@ C             ERROR RETURN
       INTEGER, INTENT(IN) :: KB, M, N, NB
       REAL, INTENT(IN) :: W(NB,N)
       REAL, INTENT(INOUT) :: B(KB,N)
+C     beginning of local variable declarations
       INTEGER :: I, J, JMAX, JPK, K, NBM1
       REAL :: T
 C-----------------------------------------------------------------------
@@ -84072,6 +84934,7 @@ C     BACKSUBSTITUTION. SOLVE L X = D  Y  FOR X AND STORE X IN B.
       REAL, INTENT(IN) :: X0, Y0
       REAL, INTENT(IN) :: A(KA,NY), TX(*), TY(*)
       REAL, INTENT(INOUT) :: WK(*)
+C     beginning of local variable declarations
       INTEGER :: I, IW, J, L, M
       INTEGER :: INTRVL
 C-----------------------------------------------------------------------
@@ -84115,6 +84978,7 @@ C     CASE WHEN  J .GT. KY
       INTEGER, INTENT(INOUT) :: IADJ(*), IEND(N)
       INTEGER, INTENT(OUT) :: IER
       REAL :: X(N), Y(N)
+C     beginning of local variable declarations
       INTEGER :: NN, K, KM1, NL, NR, IND, INDX, N0, ITEMP, IERR, KM1D2,
      &KMI, I, KMIN
       REAL :: XL, YL, XR, YR, DXR, DYR, XK, YK, DXK, DYK, CPROD, SPROD
@@ -84322,6 +85186,7 @@ C ALL NODES ARE COLLINEAR
       INTEGER, INTENT(INOUT) :: IADJ(*), IEND(KK)
       INTEGER, INTENT(OUT) :: IER
       REAL :: X(KK), Y(KK)
+C     beginning of local variable declarations
       LOGICAL :: SWPTST
       INTEGER :: TINDX
       INTEGER :: K, KM1, I1, I2, I3, INDKF, INDKL, NABOR1, IO1, IO2,
@@ -84434,6 +85299,7 @@ C ALL NODES ARE COLLINEAR
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KK, I1, I2
       INTEGER, INTENT(INOUT) :: IADJ(*), IEND(KK)
+C     beginning of local variable declarations
       INTEGER :: K, KM1, NRIGHT, NLEFT, NF, NL, N1, N2, I, IMIN, IMAX,
      &KEND, NEXT, INDX
 C***********************************************************
@@ -84539,6 +85405,7 @@ C INSERT NLEFT AND 0 AS THE LAST NEIGHBORS OF K
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KK, I1, I2, I3
       INTEGER, INTENT(INOUT) :: IADJ(*), IEND(KK)
+C     beginning of local variable declarations
       INTEGER :: K, KM1, N(3), NFT(3), IP1, IP2, IP3, INDX, NF, NL, N1,
      &N2, IMIN, IMAX, I, ITEMP
 C***********************************************************
@@ -84666,6 +85533,7 @@ C ADD NODE K TO IEND AND ITS NEIGHBORS TO IADJ
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NFRST, NLAST, KK
       INTEGER, INTENT(INOUT) :: IARR(*)
+C     beginning of local variable declarations
       INTEGER :: INC, K, NF, NL, NLP1, NS, NSL, I, IBAK, INDX, IMAX
 C***********************************************************
 C                                               ROBERT RENKA
@@ -84757,6 +85625,7 @@ C PERFORM THE REMAINING NS-NSL SHIFTS ONE AT A TIME
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NIN1, NIN2, NOUT1, NOUT2
       INTEGER, INTENT(INOUT) :: IADJ(*), IEND(*)
+C     beginning of local variable declarations
       INTEGER :: TINDX
       INTEGER :: IN(2), IO(2), IP1, IP2, J, K, NF, NL, I, IMIN, IMAX
 C***********************************************************
@@ -84916,6 +85785,7 @@ C   SHIFT DOWN BY 1 AND INSERT IN(2)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IN1, IN2, IO1, IO2
       REAL, INTENT(IN) :: X(*), Y(*)
+C     beginning of local variable declarations
       REAL :: DX11, DX12, DX22, DX21, DY11, DY12, DY22, DY21, SIN1,
      &SIN2, COS1, COS2, SIN12
 C***********************************************************
@@ -84993,6 +85863,7 @@ C COMPUTE VECTOR CROSS PRODUCTS
       INTEGER FUNCTION TINDX(NVERTX,NABOR,IADJ,IEND)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NVERTX, NABOR, IADJ(*), IEND(*)
+C     beginning of local variable declarations
       INTEGER :: NB, INDX
 C***********************************************************
 C                                               ROBERT RENKA
@@ -85030,6 +85901,7 @@ C SEARCH THE LIST OF NVERTX NEIGHBORS FOR NB
       INTEGER, INTENT(INOUT) :: I1, I2, I3
       REAL, INTENT(IN) :: PX, PY
       REAL :: X(*), Y(*)
+C     beginning of local variable declarations
       REAL :: X0, X1, X2, Y0, Y1, Y2
       INTEGER :: N0, N1, N2, N3, N4, INDX, IND, NF, NL, NEXT
       REAL :: XP, YP
@@ -85255,6 +86127,7 @@ C ALL POINTS ARE COLLINEAR
       REAL, INTENT(IN) :: X(N), Y(N), Z(N)
       REAL, INTENT(INOUT) :: ZXZY(2,N)
       INTEGER, INTENT(IN) :: IADJ(*), IEND(N)
+C     beginning of local variable declarations
       INTEGER :: J, MITER
       REAL :: EPS
 C-----------------------------------------------------------------------
@@ -85281,6 +86154,7 @@ C     ERROR RETURN
       INTEGER, INTENT(INOUT) :: NIT, IER
       REAL, INTENT(IN) :: X(N), Y(N), Z(N), EPS
       REAL, INTENT(INOUT) :: ZXZY(2,N)
+C     beginning of local variable declarations
       INTEGER :: NN, MAXIT, ITER, K, INDF, INDL, INDX, NB
       REAL :: TOL, DGMAX, XK, YK, ZK, ZXK, ZYK, A11, A12, A22, R1, R2,
      &DELX, DELY, DELXS, DELYS, DSQ, DCUB, T, DZX, DZY
@@ -85459,6 +86333,7 @@ C PARAMETER OUT OF RANGE
       REAL, INTENT(INOUT) :: ZXZY(2,N)
       INTEGER, INTENT(IN) :: IADJ(*)
       INTEGER, INTENT(INOUT) :: IEND(N)
+C     beginning of local variable declarations
       INTEGER :: J
 C-----------------------------------------------------------------------
 C                      DERIVATIVE ESTIMATION
@@ -85483,6 +86358,7 @@ C     ERROR RETURN
       INTEGER, INTENT(INOUT) :: IEND(N), IER
       REAL, INTENT(IN) :: X(N), Y(N), Z(N)
       REAL, INTENT(INOUT) :: DX, DY
+C     beginning of local variable declarations
       INTEGER :: NN, KK, LMN, LMX, LMIN, LMAX, LM1, LNP, NPTS(30), IERR,
      &NP, I, J, IM1, JP1, IP1, L
       REAL :: SUM, DS, R, RS, RTOL, AVSQ, AV, XK, YK, ZK, A(6,6), C, S,
@@ -85735,6 +86611,7 @@ C NO UNIQUE SOLUTION DUE TO COLLINEAR NODES
       IMPLICIT NONE
       REAL, INTENT(IN) :: XK, YK, ZK, XI, YI, ZI, S1, S2, R
       REAL, INTENT(INOUT) :: ROW(6)
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: DX, DY, DXSQ, DYSQ, D, W, W1, W2
 C***********************************************************
@@ -85805,6 +86682,7 @@ C   OF INFLUENCE.  SET ROW TO THE ZERO VECTOR.
       INTEGER, INTENT(INOUT) :: NPTS(L), IER
       REAL, INTENT(IN) :: X(*), Y(*)
       REAL, INTENT(INOUT) :: DS
+C     beginning of local variable declarations
       INTEGER :: LM1, N1, I, NI, NP, INDF, INDL, INDX, NB
       REAL :: X1, Y1, DNP, DNB
 C***********************************************************
@@ -85924,6 +86802,7 @@ C L IS OUT OF RANGE
       REAL, INTENT(IN) :: ZXZY(2,N)
       INTEGER, INTENT(IN) :: IADJ(*)
       INTEGER, INTENT(INOUT) :: IEND(N)
+C     beginning of local variable declarations
       INTEGER :: IST, J
 C-----------------------------------------------------------------------
 C                    EVALUATION OF THE SURFACE
@@ -85954,6 +86833,7 @@ C     ERROR RETURN
       REAL, INTENT(INOUT) :: ZI(NROWS,M)
       INTEGER, INTENT(IN) :: IADJ(*)
       INTEGER, INTENT(INOUT) :: IEND(N)
+C     beginning of local variable declarations
       INTEGER :: I, IST, J
 C-----------------------------------------------------------------------
 C                EVALUATION OF THE SURFACE OVER A GRID
@@ -85987,6 +86867,7 @@ C     ERROR RETURN
       REAL :: X(N), Y(N)
       REAL, INTENT(IN) :: Z(N), ZXZY(2,N)
       REAL, INTENT(OUT) :: PZ
+C     beginning of local variable declarations
       INTEGER :: NN, I1, I2, I3, IERR, N1, N2, INDX
       REAL :: XP, YP, ZX1, ZY1, ZX2, ZY2, ZX3, ZY3, X1, Y1, X2, Y2, X3,
      &Y3, Z1, Z2, Z3, DUM, DP, U, V, XQ, YQ, R1, R2, A1, A2, B1, B2, C1,
@@ -86215,6 +87096,7 @@ C NODES ARE COLLINEAR
       REAL, INTENT(IN) :: X, Y, X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3, ZX1,
      &ZX2, ZX3, ZY1, ZY2, ZY3
       REAL, INTENT(INOUT) :: W, WX, WY
+C     beginning of local variable declarations
       INTEGER :: I, IP1, IP2, IP3
       REAL :: U(3), V(3), SL(3), AREA, XP, YP, R(3), RX(3), RY(3),
      &PHI(3), PHIX(3), PHIY(3), RMIN, C1, C2, RO(3), ROX(3), ROY(3),
@@ -86460,6 +87342,7 @@ C VERTICES ARE COLLINEAR
       REAL, INTENT(INOUT) :: FITDWK(FDWKLN), FITCDS(NCROWS,DIMEN)
       REAL, INTENT(INOUT) :: FITVLS(NFPTS), RESIDS(NFPTS)
       REAL, INTENT(IN) :: WTS(NFPTS)
+C     beginning of local variable declarations
       INTEGER :: INDSTT, P, DIMP1
       INTEGER :: NEWSTT, MAXSTT, ALFSTT, PSISTT, CSTT, SSQSTT, PSIWID,
      &ALFL
@@ -86605,6 +87488,7 @@ C     ***************
       INTEGER, INTENT(IN) :: DIMEN, NPTS
       INTEGER, INTENT(IN) :: IWKLEN
       INTEGER, INTENT(INOUT) :: IWORK(IWKLEN)
+C     beginning of local variable declarations
       INTEGER :: ALFL
       INTEGER :: NEWSTT, PSIWID, KMXBAS, STARTJ, KJP1D2, INDEX
       INTEGER :: NPLYT4
@@ -86775,6 +87659,7 @@ C     ***************
       INTEGER, INTENT(IN) :: NPTS, DIMEN
       INTEGER, INTENT(INOUT) :: NPOLYS
       INTEGER, INTENT(OUT) :: ERROR
+C     beginning of local variable declarations
       INTEGER :: TOP, BOT
       INTEGER :: I, ROWLEN
 C     ***************
@@ -86855,6 +87740,7 @@ C     ****************
       INTEGER, INTENT(IN) :: NPOLYS, DIMEN, DEGREE
       INTEGER, INTENT(OUT) :: ALFLP1
       INTEGER, INTENT(INOUT) :: INDEXS(4,NPOLYS), NEWKJ(DIMEN,DEGREE)
+C     beginning of local variable declarations
       INTEGER :: J, KJ, CURDEG, JPRIME, NWITHK, I, CURM1, RALEN, DIMM1,
      &DIMM2
       INTEGER :: DIMP1
@@ -86996,6 +87882,7 @@ C     ***************
       REAL, INTENT(INOUT) :: COORD(NCROWS,DIMEN), MAXABS(DIMP1)
       REAL, INTENT(IN) :: WEIGHT(NPTS)
       REAL, INTENT(INOUT) :: Z(NPTS), SUMSQS(NPOLYS), C(NPOLYS)
+C     beginning of local variable declarations
       INTEGER :: K
       INTEGER :: P, STTDEG, ONPLYS
       REAL :: RUNTOT, RNTOT1
@@ -87068,6 +87955,7 @@ C     ***************
       REAL, INTENT(INOUT) :: SUMSQS(NPOLYS), C(NPOLYS)
       REAL, INTENT(IN) :: F(NPTS), WEIGHT(NPTS)
       REAL, INTENT(INOUT) :: Z(NPTS)
+C     beginning of local variable declarations
       INTEGER :: JPRIME, P, J, CURDEG, KJ, KJP, L, JPM1, JM1
       INTEGER :: M, START, JINDEX, JPINDX, Q, J3, J1, J1MJ2
       INTEGER :: J0MJ1, J1M1, STARTA
@@ -87239,6 +88127,7 @@ C     ***************
       INTEGER, INTENT(IN) :: NPTS
       REAL, INTENT(OUT) :: MAXABS
       REAL, INTENT(IN) :: COORD(NPTS)
+C     beginning of local variable declarations
       INTEGER :: P
       REAL :: A
 C     ***************
@@ -87270,6 +88159,7 @@ C     ****************
       INTEGER, INTENT(IN) :: NPTS
       REAL, INTENT(IN) :: MAXABS
       REAL, INTENT(INOUT) :: COORD(NPTS)
+C     beginning of local variable declarations
       INTEGER :: P
 C     ***************
 C     PURPOSE
@@ -87300,6 +88190,7 @@ C     ****************
       REAL, INTENT(INOUT) :: FITDWK(FDWKLN)
       REAL, INTENT(IN) :: EVLCDS(NEROWS,DIMEN)
       REAL, INTENT(INOUT) :: EVLVLS(NEPTS), TEMP(DIMEN)
+C     beginning of local variable declarations
       INTEGER :: MAXSTT, ALFSTT, CSTT
       INTEGER :: GBASIZ, ALFL, DIMP1
       INTEGER :: TOP, BOT, CURDEG, PSISTT
@@ -87437,6 +88328,7 @@ C     ***************
       REAL, INTENT(INOUT) :: F(NEPTS)
       REAL, INTENT(IN) :: MAXABS(DIMP1)
       REAL, INTENT(INOUT) :: X(DIMEN)
+C     beginning of local variable declarations
       INTEGER :: JM1, JPRIME, M, P, K, I, J, INDEX
       REAL :: RUNTOT, RNTOT1
 C     ***************
@@ -87513,6 +88405,7 @@ C     ***************
      &FITCDS(NCROWS,DIMEN)
       DOUBLE PRECISION, INTENT(INOUT) :: FITVLS(NFPTS), RESIDS(NFPTS)
       DOUBLE PRECISION, INTENT(IN) :: WTS(NFPTS)
+C     beginning of local variable declarations
       INTEGER :: INDSTT, P, DIMP1
       INTEGER :: NEWSTT, MAXSTT, ALFSTT, PSISTT, CSTT, SSQSTT, PSIWID,
      &ALFL
@@ -87672,6 +88565,7 @@ C     ***************
       DOUBLE PRECISION, INTENT(IN) :: WEIGHT(NPTS)
       DOUBLE PRECISION, INTENT(INOUT) :: Z(NPTS), SUMSQS(NPOLYS),
      &C(NPOLYS)
+C     beginning of local variable declarations
       INTEGER :: K
       INTEGER :: P, STTDEG, ONPLYS
       DOUBLE PRECISION :: RUNTOT, RNTOT1
@@ -87744,6 +88638,7 @@ C     ***************
       DOUBLE PRECISION, INTENT(INOUT) :: SUMSQS(NPOLYS), C(NPOLYS)
       DOUBLE PRECISION, INTENT(IN) :: F(NPTS), WEIGHT(NPTS)
       DOUBLE PRECISION, INTENT(INOUT) :: Z(NPTS)
+C     beginning of local variable declarations
       INTEGER :: JPRIME, P, J, CURDEG, KJ, KJP, L, JPM1, JM1
       INTEGER :: M, START, JINDEX, JPINDX, Q, J3, J1, J1MJ2
       INTEGER :: J0MJ1, J1M1, STARTA
@@ -87915,6 +88810,7 @@ C     ***************
       INTEGER, INTENT(IN) :: NPTS
       DOUBLE PRECISION, INTENT(OUT) :: MAXABS
       DOUBLE PRECISION, INTENT(IN) :: COORD(NPTS)
+C     beginning of local variable declarations
       INTEGER :: P
       DOUBLE PRECISION :: A
 C     ***************
@@ -87946,6 +88842,7 @@ C     ****************
       INTEGER, INTENT(IN) :: NPTS
       DOUBLE PRECISION, INTENT(IN) :: MAXABS
       DOUBLE PRECISION, INTENT(INOUT) :: COORD(NPTS)
+C     beginning of local variable declarations
       INTEGER :: P
 C     ***************
 C     PURPOSE
@@ -87976,6 +88873,7 @@ C     ****************
       DOUBLE PRECISION, INTENT(INOUT) :: FITDWK(FDWKLN)
       DOUBLE PRECISION, INTENT(IN) :: EVLCDS(NEROWS,DIMEN)
       DOUBLE PRECISION, INTENT(INOUT) :: EVLVLS(NEPTS), TEMP(DIMEN)
+C     beginning of local variable declarations
       INTEGER :: MAXSTT, ALFSTT, CSTT
       INTEGER :: GBASIZ, ALFL, DIMP1
       INTEGER :: TOP, BOT, CURDEG, PSISTT
@@ -88114,6 +89012,7 @@ C     ***************
       DOUBLE PRECISION, INTENT(INOUT) :: F(NEPTS)
       DOUBLE PRECISION, INTENT(IN) :: MAXABS(DIMP1)
       DOUBLE PRECISION, INTENT(INOUT) :: X(DIMEN)
+C     beginning of local variable declarations
       INTEGER :: JM1, JPRIME, M, P, K, I, J, INDEX
       DOUBLE PRECISION :: RUNTOT, RNTOT1
 C     ***************
@@ -88184,6 +89083,7 @@ C     ***************
       REAL, INTENT(INOUT) :: RELERR
       REAL :: F
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: ICHECK, IS, ISMAX, K, NF, NPTS
       REAL :: EPS, ERR, RESULT(8), STACK(100), SUB1, SUB2, SUB3, SUM,
      &TOL, X
@@ -88303,6 +89203,7 @@ C     SUBDIVISION RESULT
       REAL, INTENT(INOUT) :: RESULT(*)
       REAL :: F
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: I, INEW, IOLD, J
       REAL :: ACUM, DIFF, FUNCT(127), FZERO, P(381), SUM, X
 C     --------------------
@@ -88664,6 +89565,7 @@ C TRIVIAL CASE
       REAL, INTENT(INOUT) :: WORK(LENW)
       INTEGER, INTENT(INOUT) :: IWORK(LIMIT)
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: L1, L2, L3
 C-----------------------------------------------------------------------
 C                 COMPUTATION OF A DEFINITE INTEGRAL
@@ -88943,6 +89845,9 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: LIMIT
       INTEGER, INTENT(OUT) :: NEVAL
       EXTERNAL F
+      DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
+     &RLIST(LIMIT)
+C     beginning of local variable declarations
       REAL :: ABSEPS
       REAL :: AREA, AREA1, AREA12, AREA2, A1, A2
       REAL :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
@@ -88957,8 +89862,6 @@ C-----------------------------------------------------------------------
       INTEGER :: MAXERR
       INTEGER :: NRES, NRMAX, NUMRL2
       LOGICAL :: EXTRAP, NOEXT
-      DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
-     &RLIST(LIMIT)
 C            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
 C            LIMEXP IN SUBROUTINE QELG (RLIST2 SHOULD BE OF DIMENSION
 C            (LIMEXP+2) AT LEAST).
@@ -89223,6 +90126,7 @@ C           COMPUTE GLOBAL INTEGRAL SUM.
       REAL, INTENT(IN) :: UFLOW
       REAL :: F
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: J, JTW, JTWM1
       REAL :: ABSC, CENTR, DHLGTH, FC, FSUM, FVAL1, FVAL2, HLGTH, RESG,
      &RESK, RESKH, TOL
@@ -89378,6 +90282,7 @@ C           THE INTEGRAL, AND ESTIMATE THE ABSOLUTE ERROR.
       REAL, INTENT(INOUT) :: WORK(LENW)
       INTEGER, INTENT(INOUT) :: IWORK(LIMIT)
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: L1, L2, L3
 C-----------------------------------------------------------------------
 C                   INTEGRATION OVER INFINITE INTERVALS
@@ -89673,6 +90578,9 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: LIMIT
       INTEGER, INTENT(OUT) :: NEVAL
       EXTERNAL F
+      DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
+     &RLIST(LIMIT)
+C     beginning of local variable declarations
       REAL :: ABSEPS
       REAL :: AREA, AREA1, AREA12, AREA2, A1, A2
       REAL :: BOUN
@@ -89688,8 +90596,6 @@ C-----------------------------------------------------------------------
       INTEGER :: MAXERR
       INTEGER :: NRES, NRMAX, NUMRL2
       LOGICAL :: EXTRAP, NOEXT
-      DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
-     &RLIST(LIMIT)
 C            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
 C            LIMEXP IN SUBROUTINE QELG.
 C            LIST OF MAJOR VARIABLES
@@ -89956,6 +90862,7 @@ C           COMPUTE GLOBAL INTEGRAL SUM.
       REAL, INTENT(IN) :: UFLOW
       REAL :: F
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: J
       REAL :: ABSC, ABSC1, ABSC2, CENTR, DINF, FC, FSUM, FVAL1, FVAL2,
      &HLGTH, RESG, RESK, RESKH, TABSC1, TABSC2, TOL
@@ -90153,10 +91060,11 @@ C     ..................................................................
       INTEGER, INTENT(INOUT) :: IORD
       INTEGER, INTENT(IN) :: LAST, LIMIT
       INTEGER, INTENT(INOUT) :: MAXERR, NRMAX
+      DIMENSION ELIST(LAST), IORD(LAST)
+C     beginning of local variable declarations
       REAL :: ERRMAX, ERRMIN
       INTEGER :: I, IBEG, IDO
       INTEGER :: ISUCC, J, JBND, JUPBN, K
-      DIMENSION ELIST(LAST),IORD(LAST)
 C           CHECK WHETHER THE LIST CONTAINS MORE THAN
 C           TWO ERROR ESTIMATES.
 C***FIRST EXECUTABLE STATEMENT  QPSRT
@@ -90226,6 +91134,7 @@ C           SET MAXERR AND ERMAX.
       REAL, INTENT(IN) :: EPMACH, OFLOW
       REAL, INTENT(OUT) :: RESULT
       REAL, INTENT(INOUT) :: EPSTAB(52), RES3LA(3)
+C     beginning of local variable declarations
       INTEGER :: I, IB, IB2, IE, INDX, K1, K2, K3, LIMEXP, NEWELM, NUM
       REAL :: DELTA1, DELTA2, DELTA3, E0, E1, E1ABS, E2, E3, EPSINF,
      &ERR1, ERR2, ERR3, ERROR, RES, SS, TOL1, TOL2, TOL3
@@ -90508,8 +91417,9 @@ C                     FUNCTIONAL VALUES.
       INTEGER, INTENT(OUT) :: LAST
       INTEGER, INTENT(IN) :: LENIW, LENW, LIMIT
       EXTERNAL F
+      DIMENSION IWORK(LENIW), WORK(LENW)
+C     beginning of local variable declarations
       INTEGER :: L1, L2, L3, L4, L5
-      DIMENSION IWORK(LENIW),WORK(LENW)
 C         CHECK VALIDITY OF LIMIT,LENIW AND LENW.
       IER = 6
       LAST = 0
@@ -90662,6 +91572,9 @@ C***ROUTINES CALLED  F,SPMPAR,QELG,QXLQM,QPSRT,QXRRD,QXCPY
       INTEGER, INTENT(IN) :: LIMIT
       INTEGER, INTENT(INOUT) :: LP(LIMIT), LN(LIMIT)
       EXTERNAL F
+      DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
+     &RLIST(LIMIT), VALP(21,LIMIT), VALN(21,LIMIT)
+C     beginning of local variable declarations
       REAL :: ABSEPS
       REAL :: AREA, AREA1, AREA12, AREA2, A1, A2
       REAL :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
@@ -90677,8 +91590,6 @@ C***ROUTINES CALLED  F,SPMPAR,QELG,QXLQM,QPSRT,QXRRD,QXCPY
       INTEGER :: MAXERR, NRES, NRMAX, NUMRL2
       INTEGER :: LP1, LP2, LN1, LN2
       LOGICAL :: EXTRAP, NOEXT
-      DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
-     &RLIST(LIMIT), VALP(21,LIMIT), VALN(21,LIMIT)
 C            MACHINE DEPENDENT CONSTANTS
 C            ---------------------------
 C          EPMACH IS THE LARGEST RELATIVE SPACING.
@@ -90912,6 +91823,7 @@ C           COMPUTE GLOBAL INTEGRAL SUM.
       INTEGER, INTENT(IN) :: L
       REAL, INTENT(INOUT) :: A(L)
       REAL, INTENT(IN) :: B(L)
+C     beginning of local variable declarations
       INTEGER :: I
 C  TO COPY THE REAL VECTOR B OF LENGTH L   I N T O
 C          THE REAL VECTOR A OF LENGTH L
@@ -90991,6 +91903,7 @@ C***ROUTINES CALLED  QXRUL
       INTEGER, INTENT(IN) :: KEY
       INTEGER, INTENT(INOUT) :: LR, LS
       EXTERNAL F
+C     beginning of local variable declarations
       REAL :: T
       REAL :: RESG, RESK, ERROLD
       INTEGER :: K, K0, K1, K2
@@ -91027,6 +91940,7 @@ C***ROUTINES CALLED  QXRUL
       INTEGER, INTENT(IN) :: KE, K1
       INTEGER, INTENT(INOUT) :: L1, L2
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: I, IS, K, KS
       REAL :: LDL
       REAL :: Y2, XX(41), WW(52)
@@ -91234,6 +92148,7 @@ C***ROUTINES CALLED  F
       REAL, INTENT(IN) :: XU, XL
       INTEGER, INTENT(INOUT) :: LR, LS
       INTEGER, INTENT(IN) :: LZ
+C     beginning of local variable declarations
       REAL :: DLEN, CENTR
       DLEN = (XU - XL)*0.5
       CENTR = XL + DLEN
@@ -91302,6 +92217,8 @@ C***ROUTINES CALLED  F
       INTEGER, INTENT(IN) :: LENW, LIMIT
       INTEGER, INTENT(OUT) :: NEVAL
       EXTERNAL F
+      DIMENSION IWORK(LIMIT), WORK(LENW)
+C     beginning of local variable declarations
       INTEGER :: L1, L2, L3
 C-----------------------------------------------------------------------
 C           DOUBLE PRECISION COMPUTATION OF A DEFINITE INTEGRAL
@@ -91429,7 +92346,6 @@ C              - DQELG
 C              - F (USER-PROVIDED FUNCTION)
 C              - DPMPAR
 C-----------------------------------------------------------------------
-      DIMENSION IWORK(LIMIT), WORK(LENW)
 C         CHECK VALIDITY OF LIMIT AND LENW.
       IER = 6
       NEVAL = 0
@@ -91582,6 +92498,9 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: LIMIT
       INTEGER, INTENT(OUT) :: NEVAL
       EXTERNAL F
+      DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
+     &RLIST(LIMIT)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: ABSEPS
       DOUBLE PRECISION :: AREA, AREA1, AREA12, AREA2, A1, A2
       DOUBLE PRECISION :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2,
@@ -91597,8 +92516,6 @@ C-----------------------------------------------------------------------
       INTEGER :: MAXERR
       INTEGER :: NRES, NRMAX, NUMRL2
       LOGICAL :: EXTRAP, NOEXT
-      DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
-     &RLIST(LIMIT)
 C            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
 C            LIMEXP IN SUBROUTINE DQELG (RLIST2 SHOULD BE OF DIMENSION
 C            (LIMEXP+2) AT LEAST).
@@ -91909,6 +92826,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(INOUT) :: RESASC
       INTEGER, INTENT(OUT) :: ISIG
       EXTERNAL F
+C     beginning of local variable declarations
       DOUBLE PRECISION :: ABSC
       DOUBLE PRECISION :: CENTR, DHLGTH
       DOUBLE PRECISION :: FC, FSUM, FVAL1, FVAL2, FV1(10), FV2(10),
@@ -92038,6 +92956,8 @@ C           THE INTEGRAL, AND ESTIMATE THE ABSOLUTE ERROR.
       INTEGER, INTENT(IN) :: LENW, LIMIT
       INTEGER, INTENT(OUT) :: NEVAL
       EXTERNAL F
+      DIMENSION IWORK(LIMIT), WORK(LENW)
+C     beginning of local variable declarations
       INTEGER :: L1, L2, L3
 C-----------------------------------------------------------------------
 C         DOUBLE PRECISION INTEGRATION OVER INFINITE INTERVALS
@@ -92172,7 +93092,6 @@ C              - DQELG
 C              - F (USER PROVIDED FUNCTION)
 C              - DPMPAR
 C-----------------------------------------------------------------------
-      DIMENSION IWORK(LIMIT),WORK(LENW)
 C         CHECK VALIDITY OF LIMIT AND LENW.
       IER = 6
       NEVAL = 0
@@ -92334,6 +93253,9 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: LIMIT
       INTEGER, INTENT(OUT) :: NEVAL
       EXTERNAL F
+      DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
+     &RLIST(LIMIT)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: ABSEPS
       DOUBLE PRECISION :: AREA, AREA1, AREA12, AREA2, A1, A2
       DOUBLE PRECISION :: BOUN
@@ -92350,8 +93272,6 @@ C-----------------------------------------------------------------------
       INTEGER :: MAXERR
       INTEGER :: NRES, NRMAX, NUMRL2
       LOGICAL :: EXTRAP, NOEXT
-      DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
-     &RLIST(LIMIT)
 C            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
 C            LIMEXP IN SUBROUTINE DQELG.
 C            LIST OF MAJOR VARIABLES
@@ -92620,6 +93540,7 @@ C           COMPUTE GLOBAL INTEGRAL SUM.
       DOUBLE PRECISION, INTENT(INOUT) :: RESULT
       DOUBLE PRECISION, INTENT(IN) :: UFLOW
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: J
       DOUBLE PRECISION :: ABSC, ABSC1, ABSC2
       DOUBLE PRECISION :: CENTR, DINF
@@ -92828,10 +93749,11 @@ C     ..................................................................
       INTEGER, INTENT(INOUT) :: IORD
       INTEGER, INTENT(IN) :: LAST, LIMIT
       INTEGER, INTENT(INOUT) :: MAXERR, NRMAX
+      DIMENSION ELIST(LAST), IORD(LAST)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: ERRMAX, ERRMIN
       INTEGER :: I, IBEG, IDO
       INTEGER :: ISUCC, J, JBND, JUPBN, K
-      DIMENSION ELIST(LAST),IORD(LAST)
 C           CHECK WHETHER THE LIST CONTAINS MORE THAN
 C           TWO ERROR ESTIMATES.
 C***FIRST EXECUTABLE STATEMENT DQPSRT
@@ -92941,6 +93863,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(INOUT) :: RES3LA(3)
       INTEGER, INTENT(INOUT) :: N
       INTEGER, INTENT(INOUT) :: NRES
+C     beginning of local variable declarations
       DOUBLE PRECISION :: DELTA1, DELTA2, DELTA3
       DOUBLE PRECISION :: EPSINF
       DOUBLE PRECISION :: ERROR, ERR1, ERR2, ERR3, E0, E1, E1ABS, E2, E3
@@ -93191,8 +94114,9 @@ C                     FUNCTIONAL VALUES.
       INTEGER, INTENT(OUT) :: LAST
       INTEGER, INTENT(IN) :: LENIW, LENW, LIMIT
       EXTERNAL F
+      DIMENSION IWORK(LENIW), WORK(LENW)
+C     beginning of local variable declarations
       INTEGER :: L1, L2, L3, L4, L5
-      DIMENSION IWORK(LENIW),WORK(LENW)
 C         CHECK VALIDITY OF LIMIT,LENIW AND LENW.
       IER = 6
       LAST = 0
@@ -93345,6 +94269,9 @@ C***ROUTINES CALLED  F,DPMPAR,DQELG,DQXLQM,DQPSRT,DQXRRD,DQXCPY
       INTEGER, INTENT(IN) :: LIMIT
       INTEGER, INTENT(INOUT) :: LP(LIMIT), LN(LIMIT)
       EXTERNAL F
+      DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
+     &RLIST(LIMIT), VALP(21,LIMIT), VALN(21,LIMIT)
+C     beginning of local variable declarations
       DOUBLE PRECISION :: ABSEPS
       DOUBLE PRECISION :: AREA, AREA1, AREA12, AREA2, A1, A2
       DOUBLE PRECISION :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
@@ -93360,8 +94287,6 @@ C***ROUTINES CALLED  F,DPMPAR,DQELG,DQXLQM,DQPSRT,DQXRRD,DQXCPY
       INTEGER :: MAXERR, NRES, NRMAX, NUMRL2
       INTEGER :: LP1, LP2, LN1, LN2
       LOGICAL :: EXTRAP, NOEXT
-      DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
-     &RLIST(LIMIT), VALP(21,LIMIT), VALN(21,LIMIT)
 C            MACHINE DEPENDENT CONSTANTS
 C            ---------------------------
 C          EPMACH IS THE LARGEST RELATIVE SPACING.
@@ -93595,6 +94520,7 @@ C           COMPUTE GLOBAL INTEGRAL SUM.
       INTEGER, INTENT(IN) :: L
       DOUBLE PRECISION, INTENT(INOUT) :: A(L)
       DOUBLE PRECISION, INTENT(IN) :: B(L)
+C     beginning of local variable declarations
       INTEGER :: I
 C  TO COPY THE DOUBLE PRECISION VECTOR B OF LENGTH L   I N T O
 C          THE DOUBLE PRECISION VECTOR A OF LENGTH L
@@ -93674,6 +94600,7 @@ C***ROUTINES CALLED  DQXRUL
       INTEGER, INTENT(IN) :: KEY
       INTEGER, INTENT(INOUT) :: LR, LS
       EXTERNAL F
+C     beginning of local variable declarations
       DOUBLE PRECISION :: T
       DOUBLE PRECISION :: RESG, RESK, ERROLD
       INTEGER :: K, K0, K1, K2
@@ -93710,6 +94637,7 @@ C***ROUTINES CALLED  DQXRUL
       INTEGER, INTENT(IN) :: KE, K1
       INTEGER, INTENT(INOUT) :: L1, L2
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: I, IS, K, KS
       DOUBLE PRECISION :: LDL
       DOUBLE PRECISION :: Y2, XX(41), WW(52)
@@ -93917,6 +94845,7 @@ C***ROUTINES CALLED  F
       DOUBLE PRECISION, INTENT(IN) :: XU, XL
       INTEGER, INTENT(INOUT) :: LR, LS
       INTEGER, INTENT(IN) :: LZ
+C     beginning of local variable declarations
       DOUBLE PRECISION :: DLEN, CENTR
       DLEN = (XU - XL)*0.5D0
       CENTR = XL + DLEN
@@ -93977,6 +94906,7 @@ C***ROUTINES CALLED  F
       EXTERNAL F
       INTEGER :: IDATA(*), IER, MCALLS, NCALLS, NW
       REAL :: ANS, EPS, ERR, RDATA(*), T(2,*), W(6,NW)
+C     beginning of local variable declarations
       INTEGER :: I, J, JKP, K, L, MAXC, MAXK, MW, NFE
       REAL :: ONE, POINT5, ZERO
       REAL :: RNDERR
@@ -94158,8 +95088,9 @@ C       EXITS FROM SUBROUTINE
       FUNCTION RNDERR(X, A, Y, B)
       IMPLICIT NONE
       REAL :: A, B, X, Y
-      REAL :: S, T
       REAL :: RNDERR
+C     beginning of local variable declarations
+      REAL :: S, T
 C       THIS FUNCTION COMPUTES THE ROUNDING ERROR COMMITTED WHEN THE
 C       SUM X+A IS FORMED.  IN THE CALLING PROGRAM, Y MUST BE THE SAME
 C       AS X AND B MUST BE THE SAME AS A.  THEY ARE DECLARED AS
@@ -94181,6 +95112,7 @@ C       FORTRAN COMPILERS.
       REAL, INTENT(IN) :: VEC(2,*)
       INTEGER :: IDATA(*)
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: I, J, K, NQUAD
       REAL :: POINT5, X, Y
       DOUBLE PRECISION :: A1, A2, S, SN, DZERO, DONE, DTHREE, DSIX
@@ -94308,6 +95240,7 @@ C       COMPUTE ESTIMATES FOR INTEGRAL AND ERROR
       REAL :: RHFCN
       REAL :: KERNEL, NORM
       EXTERNAL KERNEL, RHFCN
+C     beginning of local variable declarations
       INTEGER :: I1, I10, I11, I12, I13, I14, I15, I16, I17, I18, I19,
      &I2, I20, I21, I3, I4, I5, I6, I7, I8, I9, M, N, NHALF, NMAX, NSQ,
      &NUP
@@ -94478,6 +95411,7 @@ C   WHICH W IS TO BE SPLIT.
       REAL :: KERNEL, LUFACT(NUP,NUP), KMM(NUP,NUP), KMN(NUP,NHALF),
      &KNM(NHALF,NUP), IMKNN(NUP,NUP)
       EXTERNAL KERNEL, RHFCN
+C     beginning of local variable declarations
       INTEGER :: I, IND, J, LOOP, M, MNEW, N
       REAL :: ASIDE2(5), AVERR, COND, DENR1, DENR2, EPS, ERROR, ESTERR,
      &PASTC, PASTRE, R1RAT, RATE, RELERR, RELMIN, RT, TEMP, TEMP2, TEST,
@@ -94783,6 +95717,7 @@ C   MORE ITERATES ARE COMPUTED WITH THE NEW M.
       REAL :: KERNEL
       REAL, INTENT(INOUT) :: KMN(NUP,NHALF)
       EXTERNAL KERNEL, RHFCN
+C     beginning of local variable declarations
       INTEGER :: I, J
 C   USE THE VALUES OF XN(I), I=1,...,N, TO CALCULATE THE NYSTROM
 C   INTERPOLATES XM(I), I=1,...,M.
@@ -94820,8 +95755,9 @@ C   CALCULATE NYSTROM INTERPOLATING FORMULA.
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       REAL, INTENT(IN) :: AVERR, COND, UNITRD
-      REAL :: FLOAT1, FLOAT2
       REAL :: RMIN
+C     beginning of local variable declarations
+      REAL :: FLOAT1, FLOAT2
 C   FOR A LINEAR SYSTEM   (I-KMM)*XM=RHFCN   OF ORDER M, THIS IS THE
 C   VALUE OF RELMIN USED IN IEGS. THE VARIABLE UNITRD IS DEFINED IN
 C   IEGAUS, AND THE VARIABLES COND AND AVERR ARE DEFINED IN IEGS
@@ -94838,6 +95774,7 @@ C   INTEGRAL EQUATION WITH A SMALLER RELATIVE ERROR THAN RMIN.
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IFLAG, N
       REAL :: X(N), Y(N)
+C     beginning of local variable declarations
       INTEGER :: I
 C   IFLAG=0    CALCULATE THE MAXIMUM NORM OF X.
 C   IFLAG=1    CALCULATE THE MAXIMUM NORM OF X-Y.
@@ -94861,8 +95798,9 @@ C   FIND THE NORM OF X-Y.
       REAL, INTENT(IN) :: COND, ELINSY
       REAL, INTENT(INOUT) :: PASTC, PASTRE
       REAL, INTENT(IN) :: RELRSD
-      REAL :: C
       REAL :: CONEW
+C     beginning of local variable declarations
+      REAL :: C
 C   THIS IS USED IN UPDATING THE VALUE OF THE CONDITION NUMBER
 C   IN IEGS.
       AVERR=SQRT(ELINSY*PASTRE)
@@ -94880,6 +95818,7 @@ C   IN IEGS.
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A, B
       REAL, INTENT(INOUT) :: TV(N), WV(N)
+C     beginning of local variable declarations
       INTEGER :: I, I1, I2, K, L, LOOP, M, MT, NPI, NPLACE
       REAL :: AL, BL, FL, FLOOP, H, R, S, SCALE, T(255), W(255)
 C   INTEGRATION WEIGHTS AND NODES ARE TO BE CALCULATED AND STORED IN
@@ -95160,6 +96099,7 @@ C   POINT FORMULA IS APPLIED TO EACH SUBINTERVAL.
       REAL :: KERNEL, KMM(NUP,NUP), KMN(NUP,NHALF), KNM(NHALF,NUP),
      &IMKNN(NUP,NUP), LUFACT(NUP,NUP)
       EXTERNAL KERNEL, RHFCN
+C     beginning of local variable declarations
       INTEGER :: I, ITLOOP, J
       REAL :: DERROR, SAVEP, SUM, TEMP
       INTEGER :: MFINAL, NFINAL
@@ -95271,6 +96211,7 @@ C   COMPUTE NYSTROM INTERPOLATES AT THE NODES IN T.
       REAL :: IMKNN(NUP,NUP)
       REAL, INTENT(INOUT) :: LUFACT(NUP,NUP)
       EXTERNAL KERNEL, RHFCN
+C     beginning of local variable declarations
       INTEGER :: I, IND, J
       REAL :: SUM
 C   THIS ROUTINE CALCULATES ONE ITERATE XM GIVEN THE INITIAL GUESS
@@ -95364,6 +96305,7 @@ C   CALCULATE XM.
       INTEGER :: IERR, M, N
       REAL :: A(M,N), D(M,N), B(N), X(N)
       INTEGER :: OPTION
+C     beginning of local variable declarations
       INTEGER :: I, IP1, ISWIT, J, K, KP1, L, NM1, NMI
       REAL :: C, SUM, T
       REAL :: ERROR, RELRSD
@@ -95522,6 +96464,7 @@ C             CALCULATE THE CORRECTION ERROR
       REAL, INTENT(IN) :: TOUT
       REAL, INTENT(INOUT) :: WORK(*), Y(NEQN)
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: IALPHA, IBETA, IDELSN, IG, IH, IHOLD, IP, IPHASE, IPHI,
      &IPSI, ISIG, ISTART, ITOLD, IV, IW, IWT, IX, IYP, IYPOUT, IYY
       LOGICAL :: START, PHASE1, NORND
@@ -95681,6 +96624,7 @@ C   REMAIN UNCHANGED.
       REAL, INTENT(INOUT) :: YPOUT(NEQN), YY(NEQN)
       LOGICAL, INTENT(INOUT) :: START, PHASE1, NORND
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: ISN, KLE4, L, MAXNUM, NOSTEP
       REAL :: ABSDEL, ABSEPS, DEL, EPS, FOURU, RELEPS, TEND, U
       REAL :: SPMPAR
@@ -95824,6 +96768,7 @@ C   RELATIVE ERROR CRITERION INAPPROPRIATE
       LOGICAL, INTENT(OUT) :: CRASH
       LOGICAL, INTENT(INOUT) :: PHASE1, NORND
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: I, IFAIL, IM1, IP1, IQ, J, KM1, KM2, KNEW, KP1, KP2, L,
      &LIMIT1, LIMIT2, NSM2, NSP1, NSP2
       REAL :: ABSH, ERK, ERKM1, ERKM2, ERKP1, ERR, FOURU, GSTR(13),
@@ -96269,6 +97214,7 @@ C       ***     END BLOCK 4     ***
       REAL, INTENT(IN) :: X, XOUT
       REAL :: Y(NEQN)
       REAL, INTENT(INOUT) :: YOUT(NEQN), YPOUT(NEQN)
+C     beginning of local variable declarations
       INTEGER :: I, J, JM1, KI, KIP1, L, LIMIT1
       REAL :: ETA, G(13), GAMMA, HI, PSIJM1, RHO(13), TEMP1, TEMP2,
      &TEMP3, TERM, W(13)
@@ -96347,6 +97293,7 @@ C   INTERPOLATE
       REAL, INTENT(IN) :: TEND, TOUT
       REAL, INTENT(INOUT) :: WORK(*), Y(NEQN), YP(NEQN)
       EXTERNAL FCN
+C     beginning of local variable declarations
       INTEGER :: KF1, KF2, KF3, KF4, KF7, KH, KHI, KSA, KSR, KT, KW,
      &KWP, KX, KY1, KY2
       LOGICAL :: ENDPNT, BLKOUT
@@ -96614,6 +97561,7 @@ C***********************************************************************
       LOGICAL, INTENT(INOUT) :: ENDPNT
       LOGICAL, INTENT(INOUT) :: BLKOUT
       EXTERNAL FCN
+C     beginning of local variable declarations
       INTEGER :: K, MAXNFE, MFLAG, N
       REAL :: A, A21, A31, A32, A41, A42, A43, A51, A52, A53, A54, A61,
      &A62, A63, A64, A65, A81, A82, A83, A84, A85, A86, A87, A91, A92,
@@ -97092,6 +98040,7 @@ C     REQUESTED ERROR UNATTAINABLE AT SMALLEST ALLOWABLE STEPSIZE
       REAL, INTENT(INOUT) :: YEX(NEQN)
       REAL :: YINC1(NEQN), YINC2(NEQN)
       REAL, INTENT(INOUT) :: YPEX(NEQN)
+C     beginning of local variable declarations
       INTEGER :: N
       REAL :: A1, A2, A3, A4, HF, HF1, HF2, SIG
 C     THIS VERSION OF EXTRA IS THE THIRD OF THE THREE CHANGES
@@ -97279,6 +98228,7 @@ C    SHOULD NOT BE ALTERED.
       REAL, INTENT(IN) :: ABSERR
       REAL, INTENT(INOUT) :: WORK(*)
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: K1, K2, K3, K4, K5, K6, K1M
 C     COMPUTE INDICES FOR THE SPLITTING OF THE WORK ARRAY
       K1M=NEQN+1
@@ -97322,6 +98272,7 @@ C         NFE- COUNTER ON THE NUMBER OF DERIVATIVE FUNCTION EVALUATIONS
       REAL :: F2(NEQN), F3(NEQN), F4(NEQN)
       REAL, INTENT(INOUT) :: F5(NEQN), SAVRE, SAVAE
       EXTERNAL F
+C     beginning of local variable declarations
       LOGICAL :: HFAILD, OUTPUT
       REAL :: A, AE, DT, EE, EEOET, ESTTOL, ET, HMIN, REMIN, RER, S,
      &SCALE, TOL, TOLN, U26, EPS, YPK, SPMPAR
@@ -97577,6 +98528,7 @@ C    DISTINGUISHED.
       REAL :: F2(NEQN), F3(NEQN), F4(NEQN)
       REAL, INTENT(INOUT) :: F5(NEQN), S(NEQN)
       EXTERNAL F
+C     beginning of local variable declarations
       REAL :: CH
       INTEGER :: K
       CH=H/4.0
@@ -97627,6 +98579,7 @@ C     COMPUTE APPROXIMATE SOLUTION AT T+H
       REAL, INTENT(IN) :: TOUT
       REAL, INTENT(INOUT) :: WORK(*), Y(NEQN)
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: K1, K1M, K2, K3, K4, K5, K6, K7, K8
 C     FEHLBERG FOURTH(FIFTH) ORDER RUNGE-KUTTA METHOD WITH
 C     GLOBAL ERROR ASSESSMENT
@@ -97819,6 +98772,7 @@ C***********************************************************************
       REAL, INTENT(INOUT) :: Y(NEQN), YG(NEQN), YGP(NEQN)
       REAL :: YP(NEQN)
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: K, MAXNFE, MFLAG
       REAL :: A, AE, DT, EE, EEOET, ESTTOL, ET, HH, HMIN, REMIN, RER, S,
      &SCALE, TOL, TOLN, TS, U, U26, YPK
@@ -98107,6 +99061,7 @@ C     INTERVAL MODE
       INTEGER, INTENT(INOUT) :: INFO(*)
       INTEGER, INTENT(INOUT) :: IWORK(LIW)
       INTEGER :: IPAR(*)
+C     beginning of local variable declarations
       EXTERNAL ZZZJAC
       REAL :: RTOL(1), ATOL(1)
       INTEGER :: INFO1(15)
@@ -98140,6 +99095,7 @@ C     --------------
       INTEGER, INTENT(INOUT) :: INFO(*)
       INTEGER, INTENT(INOUT) :: IWORK(LIW)
       INTEGER :: IPAR(*)
+C     beginning of local variable declarations
       EXTERNAL ZZZJAC
       INTEGER :: INFO1(15)
 C     --------------
@@ -98175,6 +99131,8 @@ C     -------------
       INTEGER :: IDID, INFO(*), IPAR(*), IWORK, LIW, LRW, NEQ
       REAL :: ATOL(*), RPAR(*), RTOL(*), RWORK(LRW), T, TOUT, Y(NEQ)
       EXTERNAL F, JAC
+      DIMENSION IWORK(LIW)
+C     beginning of local variable declarations
       INTEGER :: ICOMI, ICOMR, IDELSN, IINOUT, ILRW, ITSTAR, IYPOUT, ML,
      &MU
       INTEGER :: IACOR, IBAND, IBEGIN, IER, IEWT, IINTEG, IJAC, INIT,
@@ -98738,7 +99696,6 @@ C***********************************************************************
 C***REFERENCES
 C   SHAMPINE L.F., WATTS H.A., *DEPAC - DESIGN OF A USER ORIENTED
 C   PACKAGE OF ODE SOLVERS*, SAND79-2374, SANDIA LABORATORIES, 1979.
-      DIMENSION IWORK(LIW)
       COMMON /DEBDF1/ TOLD, ROWNS(210),
      1   EL0, H, HMIN, HMXI, HU, TN, UROUND,
      2   IQUIT, INIT, IYH, IEWT, IACOR, ISAVF, IWM, KSTEPS,
@@ -98820,6 +99777,7 @@ C BLOCK DEBDF1, WHICH IS USED INTERNALLY IN THE SFODE PACKAGE.
 C-----------------------------------------------------------------------
       INTEGER :: ISAV(*)
       REAL :: RSAV(*)
+C     beginning of local variable declarations
       INTEGER :: I, ILS, LENILS, LENRLS
       REAL :: RLS
       COMMON /DEBDF1/ RLS(218), ILS(33)
@@ -98843,6 +99801,7 @@ C ISAV = INTEGER ARRAY OF LENGTH 33 OR MORE.
 C-----------------------------------------------------------------------
       INTEGER :: ISAV(*)
       REAL :: RSAV(*)
+C     beginning of local variable declarations
       INTEGER :: I, ILS, LENILS, LENRLS
       REAL :: RLS
       COMMON /DEBDF1/ RLS(218), ILS(33)
@@ -98866,6 +99825,7 @@ C----------------------- END OF SUBROUTINE SVCO -----------------------
      &YH1(*), YPOUT(NEQ)
       LOGICAL :: INTOUT
       EXTERNAL F, JAC
+C     beginning of local variable declarations
       INTEGER :: INTFLG, K, L, LTOL, MAX, MAXNUM
       REAL :: ABSDEL, BIG, DEL, DT, HA, TOL
       INTEGER :: IBAND, IBEGIN, IER, IINTEG, IJAC, INIT, IOWNS, IQUIT,
@@ -99130,6 +100090,7 @@ C                       STORE VALUES BEFORE RETURNING TO STFODE
       REAL, INTENT(INOUT) :: YP(NEQ)
       REAL :: YPRIME(NEQ)
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: J, K, LK
       REAL :: ABSDX, DA, DELF, DELY, DFDUB, DFDXB, DX, DY, FBND, RELPER,
      &SRYDPB, TOLEXP, TOLMIN, TOLP, TOLSUM, YDPB
@@ -99404,6 +100365,7 @@ C IFLAG IS RETURNED NEGATIVE IF EITHER K OR T IS OUT OF BOUNDS.
 C-----------------------------------------------------------------------
       INTEGER :: K, NYH, IFLAG
       REAL :: T, YH(NYH,*), DKY(*)
+C     beginning of local variable declarations
       INTEGER :: I, IC, IER, IOWND, IOWNS, J, JB, JB2, JJ, JJ1, JP1,
      &JSTART, KFLAG, L, MAXORD, METH, MITER, N, NFE, NJE, NQ, NQU, NST
       REAL :: ROWND, ROWNS, EL0, H, HMIN, HMXI, HU, TN, UROUND, C, R, S,
@@ -99463,6 +100425,7 @@ C----------------------- END OF SUBROUTINE INTYD -----------------------
       EXTERNAL F, JAC
       INTEGER :: NEQ, NYH, IWM(*)
       REAL :: Y(*), YH(NYH,*), YH1(*), EWT(*), SAVF(*), ACOR(*), WM(*)
+C     beginning of local variable declarations
       INTEGER :: IPNYH
       INTEGER :: IOD, KSTEPS
       INTEGER :: I, I1, IALTH, IER, IOWND, IREDO, IRET, IPUP, J, JB,
@@ -99937,6 +100900,7 @@ C----------------------- END OF SUBROUTINE STOD  -----------------------
 C   CFOD DEFINES COEFFICIENTS NEEDED IN THE INTEGRATOR PACKAGE SFODE
       INTEGER, INTENT(IN) :: METH
       REAL, INTENT(INOUT) :: ELCO(13, *), TESCO(3, *)
+C     beginning of local variable declarations
       INTEGER :: I, IB, NQ, NQM1, NQP1
       REAL :: AGAMQ, FNQ, FNQM1, PC(12), PINT, RAGQ, RQFAC, RQ1FAC,
      &TSIGN, XPIN
@@ -100051,6 +101015,7 @@ C----------------------- END OF SUBROUTINE CFOD  -----------------------
       INTEGER :: NEQ, NYH, IWM(*)
       EXTERNAL F, JAC
       REAL :: Y(*), YH(NYH,*), EWT(*), FTEM(*), SAVF(*), WM(*)
+C     beginning of local variable declarations
       INTEGER :: I, I1, I2, IER, II, IOWND, IOWNS, J, J1, JJ, JSTART,
      &KFLAG, L, LENP, MAXORD, MBA, MBAND, MEB1, MEBAND, METH, MITER, ML,
      &ML3, MU, N, NFE, NJE, NQ, NQU, NST
@@ -100223,6 +101188,7 @@ C   INTEGRATOR PACKAGE SFODE.
 C***ROUTINES CALLED  SGESL,SGBSL
       INTEGER :: IWM(*)
       REAL :: WM(*), X(*), TEM(*)
+C     beginning of local variable declarations
       INTEGER :: I, IER, IOWND, IOWNS, JSTART, KFLAG, L, MAXORD, MEBAND,
      &METH, MITER, ML, MU, N, NFE, NJE, NQ, NQU, NST
       REAL :: ROWND, ROWNS, EL0, H, HMIN, HMXI, HU, TN, UROUND, DI, HL0,
@@ -100288,6 +101254,7 @@ C----------------------- END OF SUBROUTINE SLVS -----------------------
       INTEGER, INTENT(INOUT) :: IPVT(*)
       INTEGER, INTENT(OUT) :: INFO
       REAL, INTENT(INOUT) :: ABD(LDA,*)
+C     beginning of local variable declarations
       REAL :: T
       INTEGER :: I, ISAMAX, I0, J, JU, JZ, J0, J1, K, KP1, L, LM, M, MM,
      &NM1
@@ -100426,6 +101393,7 @@ C           ROW ELIMINATION WITH COLUMN INDEXING
       INTEGER, INTENT(IN) :: LDA, N, ML, MU, IPVT(*), JOB
       REAL, INTENT(IN) :: ABD(LDA,*)
       REAL, INTENT(INOUT) :: B(*)
+C     beginning of local variable declarations
       REAL :: SDOT, T
       INTEGER :: K, KB, L, LA, LB, LM, M, NM1
 C     SGBSL SOLVES THE REAL BAND SYSTEM
@@ -100532,8 +101500,9 @@ C        NOW SOLVE TRANS(L)*X = Y
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCOMP
       REAL :: V(NCOMP)
-      INTEGER :: K
       REAL :: VNORM
+C     beginning of local variable declarations
+      INTEGER :: K
 C     COMPUTE THE MAXIMUM NORM OF THE VECTOR V(*) OF LENGTH NCOMP AND
 C     RETURN THE RESULT AS VNORM
       VNORM=0.
@@ -100552,6 +101521,7 @@ C   VNWRMS = SQRT( (1/N) * SUM( V(I)/W(I) )**2 )
 C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: N
       REAL :: V(N), W(N)
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: SUM
       SUM = 0.0E0
@@ -100569,6 +101539,7 @@ C----------------------- END OF FUNCTION VNWRMS ------------------------
       REAL, INTENT(IN) :: H
       REAL, INTENT(INOUT) :: T
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: K, M, M1, MK, NK, NP1
       REAL :: HA, TA
 C     ******************************************************************
@@ -100625,6 +101596,7 @@ C     ******************************************************************
       REAL, INTENT(INOUT) :: T
       REAL, INTENT(INOUT) :: Y(N), DY(N), W(*)
       EXTERNAL F
+C     beginning of local variable declarations
       INTEGER :: I, J, K, L, M, M1
       REAL :: HA, SUM
       REAL :: A(7), B(8,7), C(7), D(9)
@@ -100709,6 +101681,7 @@ C     -------------------
       REAL, INTENT(INOUT) :: U(KU,NP1), W(NW)
       INTEGER, INTENT(IN) :: EDGE(4)
       EXTERNAL COFX, COFY
+C     beginning of local variable declarations
       INTEGER :: I, IA, IB, IC, ID, IJ, IMAX, IMIN, INDX, INDY, IW, J,
      &JCOL, JMAX, JMIN, L, M, MN, N
       REAL :: ALPHA, BETA, DEL, GAM, HX, HY, P, XI, XMIN, YJ, YMIN
@@ -100886,6 +101859,7 @@ C     ERROR RETURN
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, INDX, INDY
       INTEGER, INTENT(IN) :: EDGE(4)
+C     beginning of local variable declarations
       INTEGER :: NSWC_AI_I4
       IF (ABS(EDGE(1)) .GT. 1) GO TO 200
       IF (ABS(EDGE(2)) .GT. 1) GO TO 200
@@ -100941,6 +101915,7 @@ C                   ERROR RETURN
       REAL :: BDA(*), BDB(*), BDC(*), BDD(*)
       REAL, INTENT(INOUT) :: W(*)
       EXTERNAL COFX, COFY
+C     beginning of local variable declarations
       INTEGER :: I1, I10, I11, I12, I13, I2, I3, I4, I5, I6, I7, I8, I9,
      &K, L, LENGTH, LINPUT, LL, LOGB2N, LOUTPT
 C DIMENSION OF           BDA(N+1), BDB(N+1), BDC(M+1), BDD(M+1),
@@ -101366,6 +102341,7 @@ C     SET WORK SPACE INDICES
      &GRHS(MN,*), PERTRB, UM(*), UN(*), USOL(IDMN,*), W(*), XNU, ZM(*),
      &ZN(*)
       EXTERNAL COFX, COFY
+C     beginning of local variable declarations
       INTEGER :: I, I1, IORD, J, MP, NP
       REAL :: AI, AX1, AXI, BI, BXI, CI, CXI, CXM, DJ, DY1, DYJ, EJ,
      &EYJ, FJ, FYJ, FYN, PRTRB, XI, YJ
@@ -101620,6 +102596,7 @@ C     COMPUTE NEW RIGHT HAND SIDE FOR FOURTH ORDER SOLUTION
       INTEGER, INTENT(OUT) :: IERROR
       INTEGER, INTENT(IN) :: INTL, IORDER, M, MBDCND, MN, N, NBDCND
       REAL, INTENT(IN) :: A, B, C, D
+C     beginning of local variable declarations
       INTEGER :: I, J
       REAL :: AI, BI, CI, DJ, DLX, DLY, EJ, FJ, XI, YJ
 C     THIS PROGRAM CHECKS THE INPUT PARAMETERS FOR ERRORS
@@ -101672,6 +102649,7 @@ C     NO ERROR FOUND
       INTEGER :: MBDCND, NBDCND
       REAL :: ALPHA, BETA, GAMA, XNU
       LOGICAL :: SINGLR
+C     beginning of local variable declarations
       INTEGER :: I, J
       REAL :: AI, BI, CI, DJ, EJ, FJ, XI, YJ
       INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
@@ -101714,6 +102692,7 @@ C     THE OPERATOR MUST BE SINGULAR IF THIS POINT IS REACHED
       IMPLICIT NONE
       INTEGER :: IDMN
       REAL :: PERTRB, USOL(IDMN,*), ZM(*), ZN(*)
+C     beginning of local variable declarations
       INTEGER :: I, IFNL, II, ISTR, J, JFNL, JJ, JSTR
       REAL :: ETE, UTE
       INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
@@ -101754,6 +102733,7 @@ C     SUBTRACT OFF CONSTANT PERTRB
       IMPLICIT NONE
       INTEGER :: IDMN
       REAL :: PERTB, USOL(IDMN,*), ZM(*), ZN(*)
+C     beginning of local variable declarations
       INTEGER :: I, IFNL, II, ISTR, J, JFNL, JJ, JSTR
       REAL :: ETE, PERTRB, UTE
       INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
@@ -101798,6 +102778,7 @@ C     SUBTRACT OFF CONSTANT PERTRB
       INTEGER, INTENT(IN) :: N
       REAL :: A(N), B(N), C(N)
       REAL, INTENT(INOUT) :: D(N), U(N), Z(N)
+C     beginning of local variable declarations
       INTEGER :: J, K, NM1, NM2
       REAL :: AN, BN, DEN, V
 C     THIS SUBROUTINE SOLVES FOR A NON-ZERO EIGENVECTOR CORRESPONDING
@@ -101836,6 +102817,7 @@ C     SET LAST COMPONENT EQUAL TO ONE
       IMPLICIT NONE
       INTEGER :: IDMN, MN
       REAL :: GRHS(MN,*), USOL(IDMN,*)
+C     beginning of local variable declarations
       INTEGER :: I, J
       REAL :: AI, BI, CI, DJ, EJ, FJ, TX, TY, UXXX, UXXXX, UYYY, UYYYY,
      &XI, YJ
@@ -101892,6 +102874,7 @@ C     RESET THE RIGHT HAND SIDE IN USOL
       IMPLICIT NONE
       INTEGER :: I, IDMN, J
       REAL :: U(IDMN,*), UXXX, UXXXX
+C     beginning of local variable declarations
       INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
       REAL :: AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
 C     THIS PROGRAM COMPUTES SECOND ORDER FINITE DIFFERENCE
@@ -101958,6 +102941,7 @@ C     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT X=B
       IMPLICIT NONE
       INTEGER :: I, IDMN, J
       REAL :: U(IDMN,*), UYYY, UYYYY
+C     beginning of local variable declarations
       INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
       REAL :: AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
 C     THIS PROGRAM COMPUTES SECOND ORDER FINITE DIFFERENCE
@@ -102026,6 +103010,7 @@ C     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT Y=D
       IMPLICIT NONE
       INTEGER :: IDIMY, IERROR, IFLG, M, MP, N, NP
       REAL :: AM(*), AN(*), BM(*), BN(*), CM(*), CN(*), W(*), Y(IDIMY,*)
+C     beginning of local variable declarations
       INTEGER :: IW1, IW2, IW3, IWAH, IWBH, IWD, IWU, IWW, NH, NL
       INTEGER :: IK, K, NCMPLX, NM, NPP
       REAL :: CNV, EPS
@@ -102196,6 +103181,7 @@ C SUBROUTINE BLKTR1 SOLVES THE LINEAR SYSTEM
       INTEGER :: IDIMY, M, N
       REAL :: AM(*), AN(*), B(*), BM(*), BN(*), CM(*), CN(*), W1(*),
      &W2(*), W3(*), WD(*), WU(*), WW(*), Y(IDIMY,*)
+C     beginning of local variable declarations
       INTEGER :: I, I1, I2, I3, I4, IDXA, IDXC, IF, IFD, IM1, IM2, IM3,
      &IMI1, IMI2, IP, IP1, IP2, IP3, IPI1, IPI2, IPI3, IR, IRM1, IZ,
      &IZR, J, KDO, L, LL, NA, NC, NM1, NM2, NM3, NP, NP1, NP2, NP3, NZ
@@ -102466,6 +103452,7 @@ C BEGIN BACK SUBSTITUTION PHASE
       SUBROUTINE INDXA(I,IR,IDXA,NA)
       IMPLICIT NONE
       INTEGER :: I, IDXA, IR, NA
+C     beginning of local variable declarations
       INTEGER :: IK, K, NCMPLX, NM, NPP
       REAL :: CNV, EPS
       COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        ,
@@ -102481,6 +103468,7 @@ C BEGIN BACK SUBSTITUTION PHASE
       SUBROUTINE INDXC(I,IR,IDXC,NC)
       IMPLICIT NONE
       INTEGER :: I, IDXC, IR, NC
+C     beginning of local variable declarations
       INTEGER :: IK, K, NCMPLX, NM, NPP
       REAL :: CNV, EPS
       COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        ,
@@ -102496,6 +103484,7 @@ C BEGIN BACK SUBSTITUTION PHASE
       SUBROUTINE INDXB(I,IR,IDX,IDP)
       IMPLICIT NONE
       INTEGER :: I, IDP, IDX, IR
+C     beginning of local variable declarations
       INTEGER :: ID, IPL, IZH
       INTEGER :: IK, K, NCMPLX, NM, NPP
       REAL :: CNV, EPS
@@ -102537,6 +103526,7 @@ C B(IDX) IS THE LOCATION OF THE FIRST ROOT OF THE B(I,IR) POLYNOMIAL
       REAL, INTENT(INOUT) :: W(*)
       REAL :: X(*)
       REAL, INTENT(INOUT) :: Y(*)
+C     beginning of local variable declarations
       INTEGER :: IA, IBR, ID, J, K, M1, M2, MM
       REAL :: DEN, RT
 C PROD0 APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
@@ -102636,6 +103626,7 @@ C BEGIN SOLUTION TO SYSTEM
       REAL, INTENT(INOUT) :: D(*), U(*), W(*)
       REAL :: X(*)
       REAL, INTENT(INOUT) :: Y(*)
+C     beginning of local variable declarations
       INTEGER :: IA, IBR, ID, J, K, M1, M2, MM, MM2
       REAL :: AM, BH, DEN, RT, V, YM
 C PRODP APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
@@ -102754,6 +103745,7 @@ C BEGIN SOLUTION TO SYSTEM
       REAL, INTENT(INOUT) :: YY(*)
       COMPLEX, INTENT(INOUT) :: Y(*), D(*), W(*)
       COMPLEX :: BD(*)
+C     beginning of local variable declarations
       INTEGER :: IA, ID, IFLG, J, K, M1, M2, MM
       REAL :: RT
       COMPLEX :: CRT, DEN, Y1, Y2
@@ -102855,6 +103847,7 @@ C SCALAR MULTIPLICATION
       REAL, INTENT(INOUT) :: YY(*)
       COMPLEX, INTENT(INOUT) :: Y(*), D(*), U(*)
       COMPLEX :: BD(*)
+C     beginning of local variable declarations
       INTEGER :: IA, ID, IFLG, J, K, M1, M2, MM, MM2
       REAL :: RT
       COMPLEX :: V, DEN, BH, YM, AM, Y1, Y2, YH, CRT
@@ -102975,6 +103968,7 @@ C SCALAR MULTIPLICATION
       IMPLICIT NONE
       INTEGER :: IERROR, N
       REAL :: AH(*), AN(*), B(*), BH(*), BN(*), CN(*)
+C     beginning of local variable declarations
       INTEGER :: I, I2, I4, IB, IF, IFD, IPL, IR, J, J1, J2, JF, JS,
      &KDO, L, L1, L2, LH, LS, N2M2, NB, NMP
       REAL :: ARG, BNORM, D1, D2, D3
@@ -103086,6 +104080,7 @@ C     ERROR RETURN
       IMPLICIT NONE
       INTEGER :: N, IERR
       REAL :: D(N), E2(N)
+C     beginning of local variable declarations
       INTEGER :: NHALF, NTOP
       REAL :: DHOLD
       INTEGER :: IK, K, NCMPLX, NM, NPP
@@ -103207,6 +104202,7 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
       INTEGER :: IERROR, N
       REAL :: A(*), BH(*), BP(*), C(*)
       COMPLEX :: CBP(*)
+C     beginning of local variable declarations
       INTEGER :: I2, I3, ICV, IF, IG, IS, IT, IZ, IZM, IZM2, J, MODIZ,
      &NHALF, NT
       REAL :: DB, PSG, SCNV, SGN, XL, XM, XR
@@ -103385,9 +104381,10 @@ C     CASE OF A COMPLEX ZERO
       INTEGER, INTENT(IN) :: IZ
       REAL :: A(*), BH(*), C(*)
       REAL, INTENT(IN) :: X
+      REAL :: PSGF
+C     beginning of local variable declarations
       INTEGER :: J
       REAL :: DD, FSG, HSG
-      REAL :: PSGF
       FSG = 1.
       HSG = 1.
       DO J=1,IZ
@@ -103407,10 +104404,11 @@ C     CASE OF A COMPLEX ZERO
       INTEGER :: IZ
       REAL :: A(*), BH(*), C(*), SGN, XLL, XRR
       REAL :: F
+      REAL :: BSRH
+C     beginning of local variable declarations
       REAL :: DX, X, XL, XR
       INTEGER :: IK, K, NCMPLX, NM, NPP
       REAL :: CNV, EPS
-      REAL :: BSRH
       REAL :: NSWC_AI_R4
       COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        ,
      1                NM         ,NCMPLX     ,IK
@@ -103436,9 +104434,10 @@ C     CASE OF A COMPLEX ZERO
       INTEGER, INTENT(IN) :: IZ
       REAL :: A(*), BH(*), C(*)
       REAL, INTENT(IN) :: X
+      REAL :: PPSGF
+C     beginning of local variable declarations
       INTEGER :: J
       REAL :: SUM
-      REAL :: PPSGF
       SUM = 0.
       DO J=1,IZ
          SUM = SUM-1./(X-BH(J))**2
@@ -103451,9 +104450,10 @@ C     CASE OF A COMPLEX ZERO
       INTEGER, INTENT(IN) :: IZ
       REAL :: A(*), BH(*), C(*)
       REAL, INTENT(IN) :: X
+      REAL :: PPSPF
+C     beginning of local variable declarations
       INTEGER :: J
       REAL :: SUM
-      REAL :: PPSPF
       SUM = 0.
       DO J=1,IZ
          SUM = SUM+1./(X-BH(J))
@@ -103467,6 +104467,7 @@ C     CASE OF A COMPLEX ZERO
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: L(N)
+C     beginning of local variable declarations
       INTEGER :: I, K, LEFTLO
       INTEGER :: A, B15, B16, FHI, P, XALO, XHI
       DOUBLE PRECISION :: C, M, S, T
@@ -103551,6 +104552,7 @@ C                         ERROR RETURN
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: K, L, LEFTLO
       REAL :: S, T
       INTEGER :: A, B15, B16, FHI, P, XALO, XHI
@@ -103611,6 +104613,7 @@ C                         ERROR RETURN
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: K, L, LEFTLO
       INTEGER :: A, B15, B16, FHI, P, XALO, XHI
       DOUBLE PRECISION :: S, T
@@ -103669,6 +104672,7 @@ C                         ERROR RETURN
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IX
       REAL, INTENT(INOUT) :: U, V
+C     beginning of local variable declarations
       INTEGER :: K, LEFTLO
       REAL :: T
       INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
@@ -103721,6 +104725,7 @@ C         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IX
       DOUBLE PRECISION, INTENT(INOUT) :: U, V
+C     beginning of local variable declarations
       INTEGER :: K, LEFTLO
       DOUBLE PRECISION :: T
       INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
@@ -103773,6 +104778,7 @@ C         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IX
       REAL, INTENT(INOUT) :: D, U, V
+C     beginning of local variable declarations
       INTEGER :: J, K, LEFTLO
       REAL :: T
       INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
@@ -103829,6 +104835,7 @@ C         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IX
       DOUBLE PRECISION, INTENT(INOUT) :: U, V, D
+C     beginning of local variable declarations
       INTEGER :: J, K, LEFTLO
       DOUBLE PRECISION :: T
       INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
@@ -103886,6 +104893,7 @@ C         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: X(N), Y(N)
+C     beginning of local variable declarations
       INTEGER :: K, L, LEFTLO
       REAL :: S, T
       INTEGER :: A, B15, B16, FHI, P, XALO, XHI
@@ -103944,6 +104952,7 @@ C                         ERROR RETURN
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(INOUT) :: X(N), Y(N)
+C     beginning of local variable declarations
       INTEGER :: K, L, LEFTLO
       DOUBLE PRECISION :: S, T
       INTEGER :: A, B15, B16, FHI, P, XALO, XHI
@@ -104015,6 +105024,7 @@ C------------------
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: KX, KY, N
       REAL, INTENT(INOUT) :: X(*), Y(*)
+C     beginning of local variable declarations
       INTEGER :: I, I1, I2, J, K, LEFTLO
       REAL :: R, S, U, V
       INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
@@ -104099,6 +105109,7 @@ C------------------
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: KX, KY, N
       DOUBLE PRECISION, INTENT(INOUT) :: X(*), Y(*)
+C     beginning of local variable declarations
       INTEGER :: I, I1, I2, J, K, LEFTLO
       DOUBLE PRECISION :: R, S, U, V
       INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
@@ -104170,6 +105181,7 @@ C                          ERROR RETURN
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N)
+C     beginning of local variable declarations
       INTEGER :: I, M, MAX
       REAL :: R, S, U, V
       REAL :: T(2)
@@ -104213,6 +105225,7 @@ C                         ERROR RETURN
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(INOUT) :: A(N)
+C     beginning of local variable declarations
       INTEGER :: I, M, MAX
       DOUBLE PRECISION :: R, S, U, V, T(2)
 C-----------------------------------------------------------------------
@@ -104255,6 +105268,7 @@ C                         ERROR RETURN
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: A(N)
+C     beginning of local variable declarations
       INTEGER :: I, M
       REAL :: PHI, PI2, R
       REAL :: TEMP(1)
@@ -104284,6 +105298,7 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(INOUT) :: A(N)
+C     beginning of local variable declarations
       INTEGER :: I, M
       DOUBLE PRECISION :: PHI, PI2, R, TEMP(1)
 C-----------------------------------------------------------------------
@@ -104314,6 +105329,7 @@ C-----------------------------------------------------------------------
       REAL, INTENT(INOUT) :: A(*)
       REAL, INTENT(IN) :: FMU(M)
       REAL, INTENT(INOUT) :: X(KX,N)
+C     beginning of local variable declarations
       INTEGER :: I, II, J, K, L, L0, LDIM, MAX
       REAL :: SUM
 C-----------------------------------------------------------------------
@@ -104424,6 +105440,7 @@ C                      ERROR RETURN
       REAL, INTENT(INOUT) :: A(M)
       REAL, INTENT(IN) :: FMU(M)
       REAL, INTENT(INOUT) :: X(KX,N)
+C     beginning of local variable declarations
       INTEGER :: I, J, MAX
 C-----------------------------------------------------------------------
 C           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
@@ -104511,6 +105528,7 @@ C                       ERROR RETURN
       DOUBLE PRECISION, INTENT(INOUT) :: A(*)
       DOUBLE PRECISION, INTENT(IN) :: FMU(M)
       DOUBLE PRECISION, INTENT(INOUT) :: X(KX,N)
+C     beginning of local variable declarations
       INTEGER :: I, II, J, K, L, L0, LDIM, MAX
       DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
@@ -104621,6 +105639,7 @@ C                      ERROR RETURN
       DOUBLE PRECISION, INTENT(INOUT) :: A(M)
       DOUBLE PRECISION, INTENT(IN) :: FMU(M)
       DOUBLE PRECISION, INTENT(INOUT) :: X(KX,N)
+C     beginning of local variable declarations
       INTEGER :: I, J, MAX
 C-----------------------------------------------------------------------
 C           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
@@ -104707,6 +105726,7 @@ C                       ERROR RETURN
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A
       REAL, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: I
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 C           RANEXP GENERATES N EXPONENTIAL RANDOM VARIATES FROM AN
@@ -104768,6 +105788,7 @@ C              ERROR RETURN
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(IN) :: A
       DOUBLE PRECISION, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: I
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 C           DRNEXP GENERATES N EXPONENTIAL RANDOM VARIATES FROM AN
@@ -104829,6 +105850,7 @@ C              ERROR RETURN
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A
       REAL, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: I, IND, MAX
       REAL :: U, V, W
 C-----------------------------------------------------------------------
@@ -104878,6 +105900,7 @@ C                            ERROR RETURN
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(IN) :: A
       DOUBLE PRECISION, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: I, IND, MAX
       DOUBLE PRECISION :: U, V, W
 C-----------------------------------------------------------------------
@@ -104927,6 +105950,7 @@ C                            ERROR RETURN
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A, B
       REAL, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: I, IND, MAX
       REAL :: U, V, X1, X2
 C-----------------------------------------------------------------------
@@ -104998,6 +106022,7 @@ C                      ERROR RETURN
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(IN) :: A, B
       DOUBLE PRECISION, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: I, IND, MAX
       DOUBLE PRECISION :: U, V, X1, X2
 C-----------------------------------------------------------------------
@@ -105070,6 +106095,7 @@ C                      ERROR RETURN
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A, B
       REAL, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: I, IND, MAX
       REAL :: AHALF, BHALF, BIG, BOUND, C, T, U, V, X1, X2, XMAX
       REAL :: SPMPAR
@@ -105153,6 +106179,7 @@ C                      ERROR RETURN
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(IN) :: A, B
       DOUBLE PRECISION, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: I, IND, MAX
       DOUBLE PRECISION :: AHALF, BHALF, BIG, BOUND, C, T, U, V, XMAX,
      &X1, X2
@@ -105238,6 +106265,7 @@ C                      ERROR RETURN
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A
       REAL, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: I, IND, MAX
       REAL :: AHALF, D, S, U, V, W, Z
 C-----------------------------------------------------------------------
@@ -105306,6 +106334,7 @@ C              ERROR RETURN
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(IN) :: A
       DOUBLE PRECISION, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: I, IND, MAX
       DOUBLE PRECISION :: AHALF, D, S, U, V, W, Z
 C-----------------------------------------------------------------------
@@ -105375,6 +106404,7 @@ C              ERROR RETURN
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: ALPHA, FMU, SIG
       REAL, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: I
       REAL :: C, SIGI, T
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***
@@ -105464,6 +106494,7 @@ C        ERROR RETURN
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(IN) :: FMU, SIG, ALPHA
       DOUBLE PRECISION, INTENT(INOUT) :: X(N)
+C     beginning of local variable declarations
       INTEGER :: I
       DOUBLE PRECISION :: C, SIGI, T
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***

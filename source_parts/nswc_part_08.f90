@@ -1,3 +1,732 @@
+pure subroutine crout1(a,ka,n,iend,index,temp,jp,ierr)
+implicit none
+integer, intent(in) :: iend
+integer, intent(inout) :: ierr, index(*), jp
+integer, intent(in) :: ka, n
+real, intent(inout) :: a(*), temp(n)
+!     beginning of local variable declarations
+integer :: i, ibeg, ij, ik, il, j, jcol, jj, k, kcol, kcount, kj, &
+   & kj0, kk, kl, km1, kp1, l, lj, lj0, lk, lmin, max, mcol, ncol, nk, &
+   & nm1, nmj, nmk, nn
+real :: c, pmin, s, nswc_ai_r4
+double precision :: dsum
+!     ******************************************************************
+!     crout procedure for inverting matrices
+!     ******************************************************************
+!     A is a matrix of order n where n is greater than or equal to 1.
+!     The inverse of A is computed and stored in A.
+!     ka = Length of the columns of the array a
+!     jp = The number of the column that contains the smallest pivot
+!     iend may be 0,1,...,n-1.  It is assumed that each of the first
+!     iend columns of the matrix a contains only one nonzero element
+!     and that the nonzero element is 1 or -1.
+!     Index is an array of dimension n-1 or larger that is used by the
+!     routine for keeping track of the row interchanges that are made.
+!     Temp is a temporary storage array.
+!     ierr reports the status of the results. If A is nonsingular then
+!     the inverse of A is computed and ierr=0. Otherwise if A is found
+!     to be singular then ierr=1 And the routine terminates.
+!     --------------------
+max = ka*n
+mcol = iend*ka
+if (iend == 0) go to 100
+!           Process the first iend columns of A
+kcol = 0
+do k = 1,iend
+   kk = kcol + k
+   nk = kcol + n
+   do lk = kk,nk
+      nswc_ai_r4 = a(lk)
+      if (nswc_ai_r4 < 0) go to 20
+      if (nswc_ai_r4 == 0) go to 10
+      go to 30
+10    continue
+   end do
+   jp = k
+   go to 300
+20 l = lk - kcol
+   lj0 = mcol + l
+   do lj = lj0,max,ka
+      a(lj) = -a(lj)
+   end do
+30 l = lk - kcol
+   index(k) = l
+   if (k == l) go to 32
+   lj = lk
+   do kj = kk,max,ka
+      c = a(kj)
+      a(kj) = a(lj)
+      a(lj) = c
+      lj = lj + ka
+   end do
+32 kcol = kcol + ka
+end do
+!           Process the remaining columns of A
+100 nm1 = n - 1
+jp = 1
+ierr = 0
+pmin = 0.0
+ibeg = iend + 1
+if (ibeg == n) go to 190
+k = ibeg
+km1 = iend
+kp1 = k + 1
+kcol = mcol
+kk = kcol + k
+do kcount = ibeg,nm1
+!     Search for the k-TH pivot element (k=ibeg,...,n-1)
+   l = k
+   s = abs(a(kk))
+   do i = kp1,n
+      ik = kcol + i
+      c = abs(a(ik))
+      if (s >= c) go to 110
+      l = i
+      s = c
+110   continue
+   end do
+   if (k > ibeg .and. s >= pmin) go to 120
+   jp = k
+   pmin = s
+   if (s == 0.0) go to 300
+!              Interchanging rows k and L
+120 index(k) = l
+   if (k == l) go to 130
+   kj0 = mcol + k
+   lj = mcol + l
+   do kj = kj0,max,ka
+      c = a(kj)
+      a(kj) = a(lj)
+      a(lj) = c
+      lj = lj + ka
+   end do
+!       Compute the k-TH row of U (k=ibeg,...,n-1)
+130 c = a(kk)
+   if (k > ibeg) go to 140
+   kj0 = kk + ka
+   do kj = kj0,max,ka
+      a(kj) = a(kj)/c
+   end do
+   go to 160
+140 kl = mcol + k
+   do l = ibeg,km1
+      temp(l) = a(kl)
+      kl = kl + ka
+   end do
+   kj0 = kk + ka
+   do kj = kj0,max,ka
+      jcol = kj - k
+      dsum = -a(kj)
+      do l = ibeg,km1
+         lj = jcol + l
+         dsum = dsum + dble(temp(l))*dble(a(lj))
+      end do
+      a(kj) = sngl(-dsum)/c
+   end do
+!      Compute the k-TH column of L (k=ibeg+1,...,n)
+160 km1 = k
+   k = kp1
+   kp1 = k + 1
+   kcol = kcol + ka
+   kk = kcol + k
+   do l = ibeg,km1
+      lk = kcol + l
+      temp(l) = a(lk)
+   end do
+   do i = k,n
+      il = mcol + i
+      dsum = 0.d0
+      do l = ibeg,km1
+         dsum = dsum + dble(a(il))*dble(temp(l))
+         il = il + ka
+      end do
+      a(il) = dble(a(il)) - dsum
+   end do
+end do
+!           Check the n-TH pivot element
+190 ncol = max - ka
+nn = ncol + n
+c = abs(a(nn))
+if (c > pmin) go to 200
+jp = n
+if (c == 0.0) go to 300
+!          Replace L with the inverse of L
+200 if (ibeg == n) go to 213
+jj = mcol + ibeg
+i = ka + 1
+do j = ibeg,nm1
+   a(jj) = 1.0/a(jj)
+   temp(j) = a(jj)
+   kj = jj
+   do km1 = j,nm1
+      k = km1 + 1
+      kj = kj + 1
+      dsum = 0.d0
+      kl = kj
+      do l = j,km1
+         dsum = dsum + dble(a(kl)*temp(l))
+         kl = kl + ka
+      end do
+      a(kj) = sngl(-dsum)/a(kl)
+      temp(k) = a(kj)
+   end do
+   jj = jj + i
+end do
+213 a(nn) = 1.0/a(nn)
+if (n == 1) return
+!       Solve UX = Y where Y is the inverse of L
+do nmk = 1,nm1
+   k = n - nmk
+   lmin = max0(ibeg,k + 1)
+   kl = (lmin - 1)*ka + k
+   do l = lmin,n
+      temp(l) = a(kl)
+      a(kl) = 0.0
+      kl = kl + ka
+   end do
+   kj0 = mcol + k
+   do kj = kj0,max,ka
+      dsum = -a(kj)
+      lj = (kj - k) + lmin
+      do l = lmin,n
+         dsum = dsum + dble(temp(l)*a(lj))
+         lj = lj + 1
+      end do
+      a(kj) = -dsum
+   end do
+end do
+!                 Column interchanges
+jcol = ncol - ka
+do nmj = 1,nm1
+   j = n - nmj
+   k = index(j)
+   if (j == k) go to 251
+   ij = jcol
+   ik = (k - 1)*ka
+   do i = 1,n
+      ij = ij + 1
+      ik = ik + 1
+      c = a(ij)
+      a(ij) = a(ik)
+      a(ik) = c
+   end do
+251 jcol = jcol - ka
+end do
+return
+!                    Error return
+300 ierr = 1
+end subroutine crout1
+
+pure subroutine assgn(n,a,c,t,iwk,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n
+integer, intent(inout) :: a(n,*), c(n), t, iwk(*)
+!     beginning of local variable declarations
+integer :: i1, i2, i3, i4, i5, i6
+interface
+   pure subroutine assgn1(n,a,c,t,ch,lc,lr,lz,nz,rh,slc,slr,u,ierr)
+      implicit none
+      integer, intent(in) :: n
+      integer, intent(inout) :: a(n,*)
+      integer, intent(inout) :: c(n)
+      integer, intent(inout) :: t
+      integer, intent(inout) :: ch(n)
+      integer, intent(inout) :: lc(n)
+      integer, intent(inout) :: lr(n)
+      integer, intent(inout) :: lz(n)
+      integer, intent(inout) :: nz(n)
+      integer, intent(inout) :: rh(*)
+      integer, intent(inout) :: slc(n)
+      integer, intent(inout) :: slr(n)
+      integer, intent(inout) :: u(*)
+      integer, intent(out) :: ierr
+   end subroutine assgn1
+end interface
+!     -------------------
+!     Solution of the assignment problem
+!     -------------------
+i1 = n + 1
+i2 = i1 + n
+i3 = i2 + n
+i4 = i3 + n + 1
+i5 = i4 + n
+i6 = i5 + n
+call assgn1(n,a,c,t,iwk(1),iwk(i1),iwk(i2),iwk(i3),iwk(1), &
+   & iwk(i3),iwk(i4),iwk(i5),iwk(i6),ierr)
+end subroutine assgn
+
+pure subroutine assgn1(n,a,c,t,ch,lc,lr,lz,nz,rh,slc,slr, &
+   & u,ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: n
+integer, intent(inout) :: a(n,*), c(n), ch(n), lc(n), lr(n), &
+   & lz(n), nz(n), rh(*), slc(n), slr(n), u(*)
+integer, intent(inout) :: t
+!     beginning of local variable declarations
+integer :: i, j, k, kslc, kslr, l, lj, lm, m, maxnum, mm, nl, nm, np1, h, q, r, s, nswc_ai_i4
+interface
+   pure elemental function ipmpar(i)
+      implicit none
+      integer, intent(in) :: i
+      integer :: ipmpar
+   end function ipmpar
+end interface
+! This subroutine solves the square assignment problem
+! the meaning of the input parameters is
+! n = Number of rows and columns of the cost matrix
+! a(i,j) = Element in row i and column j of the cost matrix
+! ( at the end of computation the elements of A are changed)
+! the meaning of the output parameters is
+! c(j) = Row assigned to column j (j=1,n)
+! t = Cost of the optimal assignment
+! all parameters are integer
+! the meaning of the local variables is
+! a(i,j) = Element of the cost matrix IF a(i,j) is positive,
+!          column of the unassigned zero following in row i
+!          (i=1,n) the unassigned zero of column j (j=1,n)
+!          if a(i,j) is not positive
+! a(i,n+1) = Column of the first unassigned zero of row i
+!            (i=1,n)
+! ch(i) = Column of the next unexplored and unassigned zero
+!         of row i (i=1,n)
+! lc(j) = Label of column j (j=1,n)
+! lr(i) = Label of row i (i=1,n)
+! LZ(i) = Column of the last unassigned zero of row i(i=1,n)
+! NZ(i) = Column of the next unassigned zero of row i(i=1,n)
+! RH(i) = Unexplored row following the unexplored row i
+!         (i=1,n)
+! RH(n+1) = First unexplored row
+! SLC(k) = k-TH element contained in the set of the labelled
+!          columns
+! slr(k) = k-TH element contained in the set of the labelled
+!          rows
+! U(i) = Unassigned row following the unassigned row i
+!        (i=1,n)
+! U(n+1) = First unassigned row
+! ierr = 0 If the routine terminates successfully. Otherwise
+!          ierr = 1
+! the vectors c,ch,lc,lr,LZ,NZ,SLC,slr must be dimensioned
+! at least at (n), the vectors RH,U at  least at (n+1),
+! and the matrix a at least at (n,n+1). To save storage
+! LZ and RH may use the same storage area, and NZ and ch
+! may use the same storage area.
+! Initialization
+maxnum = ipmpar(3)
+ierr = 0
+np1 = n + 1
+do j = 1,n
+   c(j) = 0
+   lz(j) = 0
+   nz(j) = 0
+   u(j) = 0
+end do
+u(np1) = 0
+t = 0
+! Reduction of the initial cost matrix
+do j = 1,n
+   s = a(1,j)
+   do l = 2,n
+      if (a(l,j) < s) s = a(l,j)
+   end do
+   nswc_ai_i4 = s
+   if (nswc_ai_i4 < 0) go to 20
+   if (nswc_ai_i4 == 0) go to 40
+   go to 30
+20 mm = maxnum + s
+   if (t < -mm) go to 400
+   t = t + s
+   do i = 1,n
+      if (a(i,j) > mm) go to 400
+      a(i,j) = a(i,j) - s
+   end do
+   go to 40
+30 mm = maxnum - s
+   if (t > mm) go to 400
+   t = t + s
+   do i = 1,n
+      a(i,j) = a(i,j) - s
+   end do
+40 continue
+end do
+do i = 1,n
+   q = a(i,1)
+   do l = 2,n
+      if (a(i,l) < q) q = a(i,l)
+   end do
+   mm = maxnum - q
+   if (t > mm) go to 400
+   t = t + q
+   l = np1
+   do j = 1,n
+      a(i,j) = a(i,j) - q
+      if (a(i,j) /= 0) go to 60
+      a(i,l) = -j
+      l = j
+60    continue
+   end do
+end do
+! Choice of the initial solution
+k = np1
+do i = 1,n
+   lj = np1
+   j = -a(i,np1)
+80 if (c(j) == 0) go to 130
+   lj = j
+   j = -a(i,j)
+   if (j /= 0) go to 80
+   lj = np1
+   j = -a(i,np1)
+90 r = c(j)
+   lm = lz(r)
+   m = nz(r)
+100 if (m == 0) go to 110
+   if (c(m) == 0) go to 120
+   lm = m
+   m = -a(r,m)
+   go to 100
+110 lj = j
+   j = -a(i,j)
+   if (j /= 0) go to 90
+   u(k) = i
+   k = i
+   go to 140
+120 nz(r) = -a(r,m)
+   lz(r) = j
+   a(r,lm) = -j
+   a(r,j) = a(r,m)
+   a(r,m) = 0
+   c(m) = r
+130 c(j) = i
+   a(i,lj) = a(i,j)
+   nz(i) = -a(i,j)
+   lz(i) = lj
+   a(i,j) = 0
+140 continue
+end do
+! Research of a new assignment
+150 if (u(np1) == 0) return
+do i = 1,n
+   ch(i) = 0
+   lc(i) = 0
+   lr(i) = 0
+   rh(i) = 0
+end do
+rh(np1) = -1
+kslc = 0
+kslr = 1
+r = u(np1)
+lr(r) = -1
+slr(1) = r
+if (a(r,np1) == 0) go to 220
+170 l = -a(r,np1)
+if (a(r,l) == 0) go to 180
+if (rh(r) /= 0) go to 180
+rh(r) = rh(np1)
+ch(r) = -a(r,l)
+rh(np1) = r
+180 if (lc(l) == 0) go to 200
+if (rh(r) == 0) go to 210
+190 l = ch(r)
+ch(r) = -a(r,l)
+if (a(r,l) /= 0) go to 180
+rh(np1) = rh(r)
+rh(r) = 0
+go to 180
+200 lc(l) = r
+if (c(l) == 0) go to 360
+kslc = kslc + 1
+slc(kslc) = l
+r = c(l)
+lr(r) = l
+kslr = kslr + 1
+slr(kslr) = r
+if (a(r,np1) /= 0) go to 170
+210 continue
+if (rh(np1) > 0) go to 350
+! Reduction of the current cost matrix
+220 h = maxnum
+do j = 1,n
+   if (lc(j) /= 0) go to 240
+   do k = 1,kslr
+      i = slr(k)
+      if (a(i,j) < h) h = a(i,j)
+   end do
+240 continue
+end do
+mm = maxnum - h
+if (mm == 0 .or. t > mm) go to 400
+t = t + h
+do j = 1,n
+   if (lc(j) /= 0) go to 290
+   do k = 1,kslr
+      i = slr(k)
+      a(i,j) = a(i,j) - h
+      if (a(i,j) /= 0) go to 280
+      if (rh(i) /= 0) go to 250
+      rh(i) = rh(np1)
+      ch(i) = j
+      rh(np1) = i
+250   l = np1
+260   nl = -a(i,l)
+      if (nl == 0) go to 270
+      l = nl
+      go to 260
+270   a(i,l) = -j
+280   continue
+   end do
+290 continue
+end do
+if (kslc == 0) go to 350
+do i = 1,n
+   if (lr(i) /= 0) go to 340
+   do k = 1,kslc
+      j = slc(k)
+      if (a(i,j) > 0) go to 320
+      l = np1
+300   nl = - a(i,l)
+      if (nl == j) go to 310
+      l = nl
+      go to 300
+310   a(i,l) = a(i,j)
+      a(i,j) = h
+      go to 330
+320   mm = maxnum - h
+      if (a(i,j) > mm) go to 400
+      a(i,j) = a(i,j) + h
+330   continue
+   end do
+340 continue
+end do
+350 r = rh(np1)
+go to 190
+! Assignment of a new row
+360 c(l) = r
+m = np1
+370 nm = -a(r,m)
+if (nm == l) go to 380
+m = nm
+go to 370
+380 a(r,m) = a(r,l)
+a(r,l) = 0
+if (lr(r) < 0) go to 390
+l = lr(r)
+a(r,l) = a(r,np1)
+a(r,np1) = -l
+r = lc(l)
+go to 360
+390 u(np1) = u(r)
+u(r) = 0
+go to 150
+! Error return - Integer overflow occurs
+400 ierr = 1
+end subroutine assgn1
+
+pure subroutine mkp(n,m,p,w,k,bck,xstar,vstar,wk,iwk,num)
+implicit none
+integer, intent(in) :: m, n, num
+integer, intent(inout) :: p(n), w(n)
+integer, intent(in) :: k(m)
+integer, intent(inout) :: xstar(n), bck, vstar, iwk(num)
+real, intent(inout) :: wk(n)
+!     beginning of local variable declarations
+integer :: i, isumw, j, jj, jn, jnn, l, lx, lxi, maxw, minw, mn, n5, np1, npl, bb, bl, x, xl, b, ubb, f, pbl, q, v, bs, ps, ws, xs
+real :: ap, aw
+interface
+   pure subroutine mkp1(n,m,p,w,k,bck,xstar,vstar,np1,n5,bb,bl, &
+      & x,xl,b,ubb,lx,lxi,f,pbl,q,v,bs,ps,ws,xs,iwk)
+      implicit none
+      integer, intent(in) :: n5
+      integer, intent(in) :: np1
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      integer, intent(in) :: p(n)
+      integer, intent(in) :: w(n)
+      integer, intent(in) :: k(m)
+      integer, intent(inout) :: bck
+      integer, intent(inout) :: xstar(n)
+      integer, intent(inout) :: vstar
+      integer, intent(inout) :: bb(m,n)
+      integer, intent(inout) :: bl(m,np1)
+      integer, intent(inout) :: x(m,n)
+      integer, intent(inout) :: xl(m,n)
+      integer, intent(inout) :: b(np1)
+      integer, intent(inout) :: ubb(n)
+      integer, intent(inout) :: lx(n)
+      integer, intent(inout) :: lxi(n)
+      integer, intent(inout) :: f(m)
+      integer, intent(inout) :: pbl(m)
+      integer, intent(inout) :: q(m)
+      integer, intent(inout) :: v(m)
+      integer, intent(inout) :: bs(n)
+      integer, intent(inout) :: ps(np1)
+      integer, intent(inout) :: ws(np1)
+      integer, intent(inout) :: xs(n)
+      integer, intent(inout) :: iwk(n5)
+   end subroutine mkp1
+   pure subroutine risort(a,m,n)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(inout) :: a(n)
+      integer, intent(inout) :: m(n)
+   end subroutine risort
+end interface
+! Subroutine to solve A 0-1 multiple knapsack problem of n
+! ITEMS (WITH  n .GE. 2) AND  m  KNAPSACKS (WITH  m .GE. 1 ,
+! I.E. also suitable for A 0-1 single knapsack problem).
+! The problem to be solved is
+! MAXIMIZE  vstar = p(1)*(x(1,1) + ... + x(m,1)) + ...
+!                   ... + p(n)*(x(1,n) + ... + x(m,n))
+! subject to
+! w(1)*x(i,1) + ... + w(n)*x(i,n) .LE. k(i)   FOR  i=1,...,m
+! x(1,j) + ... + x(m,j) .LE. 1   FOR  j=1,...,n
+! x(i,j) = 0 OR 1   FOR  i=1,...,m ,  j=1,...,n ,
+! where all p(j), w(j), and k(i) are positive integers.
+! Before mkp is called, array k must be sorted so that
+! k(1) .LE. k(2) .LE. ... .LE. k(m) .
+! Meaning of the input parameters ...
+! n    = Number of items.
+! m    = Number of knapsacks.
+! p(j) = Profit of item  j  (j=1,...,n) .
+! w(j) = Weight of item  j  (j=1,...,n) .
+! k(i) = Capacity of knapsack  i  (i=1,...,m) .
+! bck  = -1  If exact solution is required.
+!      = Maximum number of backtrackings to be performed, if
+!        heuristic solution is required.
+! wk   = Real work space of dimension n.
+! iwk  = Work space of dimension .GE. 5*m + 14*n + 4*m*n + 3
+! num  = Dimension of iwk
+! meaning of the output parameters ...
+! xstar(j) = 0  If item  j  is not in the optimal solution
+!               (I.E. if  x(i,j) = 0  For all  i ).
+!          = Knapsack where item  j  is inserted, otherwise
+!            (I.E. IF  x(xstar(j),j) = 1 ).
+! vstar    = Value of the optimal solution if  vstar .GT. 0.
+!          = ERROR CONDITION (INFEASIBILITY OR TRIVIALITY)
+!            in the input data if  vstar .LT. 0 .
+!            = -1  IF  n .LT. 2  OR  m .LT. 1 .
+!            = -2  If some  p(j) ,  w(j)  or  k(i) are not
+!                  positive.
+!            = -3  If a knapsack cannot contain any item.
+!            = -4  If an item cannot fit into any knapsack.
+!            = -5  If knapsack  m  contains all the items.
+!            = -7  If array  k is not correctly sorted.
+!            = -8  IF num .LT. 5*m + 14*n + 4*m*n + 3.
+!            (In all the above cases array  xstar is not
+!            defined).
+! All the parameters except wk are of integer type. When mkp
+! terminates, all the input parameters are unchanged except
+! bck, which gives the number of backtrackings performed.
+!                    Check the input data
+if (m < 1 .or. n < 2) go to 100
+mn = m*n
+if (num < 5*m + 14*n + 4*mn + 3) go to 160
+if (p(1) <= 0 .or. w(1) <= 0) go to 110
+ap = p(1)
+aw = w(1)
+wk(1) = -ap/aw
+maxw = w(1)
+minw = w(1)
+isumw = w(1)
+do j = 2,n
+   if (p(j) <= 0 .or. w(j) <= 0) go to 110
+   ap = p(j)
+   aw = w(j)
+   wk(j) = -ap/aw
+   if (w(j) > maxw) maxw = w(j)
+   if (w(j) < minw) minw = w(j)
+   isumw = isumw + w(j)
+end do
+if (k(1) <= 0) go to 110
+if (m == 1) go to 30
+do i = 2,m
+   if (k(i) <= 0) go to 110
+   if (k(i) < k(i - 1)) go to 150
+end do
+30 if (minw > k(1)) go to 120
+if (maxw > k(m)) go to 130
+if (isumw <= k(m)) go to 140
+vstar = 0
+!             Reorder the arrays p and w so that
+!                p(j)/w(j) .GE. p(j+1)/w(j+1)
+n5 = 5*n
+do j = 1,n
+   jj = n5 + j
+   iwk(jj) = j
+end do
+call risort(wk, iwk(n5 + 1), n)
+do j = 1,n
+   iwk(j) = p(j)
+   jn = j + n
+   iwk(jn) = w(j)
+end do
+do j = 1,n
+   jj = n5 + j
+   l = iwk(jj)
+   p(j) = iwk(l)
+   npl = n + l
+   w(j) = iwk(npl)
+end do
+!                Partition the work space iwk
+lx = jj + 1
+lxi = lx + n
+bs = lxi + n
+xs = bs + n
+ubb = xs + n
+np1 = n + 1
+b = ubb + n
+ps = b + np1
+ws = ps + np1
+f = ws + np1
+pbl = f + m
+q = pbl + m
+v = q + m
+bb = v + m
+x = bb + mn
+xl = x + mn
+bl = xl + mn
+!                     Solve the problem
+call mkp1(n, m, p, w, k, bck, xstar, vstar, np1, n5, &
+   & iwk(bb), iwk(bl), iwk(x), iwk(xl), &
+   & iwk(b), iwk(ubb), iwk(lx), iwk(lxi), &
+   & iwk(f), iwk(pbl), iwk(q), iwk(v), &
+   & iwk(bs), iwk(ps), iwk(ws), iwk(xs), iwk(1))
+!           Restore the initial ordering to p and w,
+!                and reorder xstar accordingly
+do j = 1,n
+   iwk(j) = p(j)
+   jn = j + n
+   iwk(jn) = w(j)
+   jnn = jn + n
+   iwk(jnn) = xstar(j)
+end do
+do j = 1,n
+   jj = n5 + j
+   l = iwk(jj)
+   p(l) = iwk(j)
+   jn = j + n
+   w(l) = iwk(jn)
+   jnn = jn + n
+   xstar(l) = iwk(jnn)
+end do
+return
+!                        Error return
+100 vstar = -1
+return
+110 vstar = -2
+return
+120 vstar = -3
+return
+130 vstar = -4
+return
+140 vstar = -5
+return
+150 vstar = -7
+return
+160 vstar = -8
+end subroutine mkp
+
 pure subroutine mkp1(n, m, p, w, k, bck, xstar, vstar, np1, n5, &
    & bb, bl, x, xl, b, ubb, lx, lxi, &
    & f, pbl, q, v, bs, ps, ws, xs, iwk)
@@ -9,6 +738,7 @@ integer, intent(inout) :: bb(m,n), bl(m,np1), x(m,n), xl(m,n)
 integer, intent(inout) :: b(np1), ubb(n), lx(n), lxi(n)
 integer, intent(inout) :: f(m), pbl(m), q(m), v(m)
 integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n), iwk(n5)
+!     beginning of local variable declarations
 integer :: i, i1, ibv, iflag, ii, ip, ip1, iuv, j, jbck, jj, k1, kub, lb, li, lj, lr, lri, lub, lubi, m1, n1, s, u, ub, vb
 interface
    pure subroutine parc(i,ii,ub,iflag,vb,lub,lj,li,f,bb,q,b,n,m &
@@ -275,6 +1005,7 @@ integer, intent(in) :: m, n, n5, np1
 integer, intent(in) :: p(n), w(n), q(m), b(np1)
 integer, intent(inout) :: ub, iwk(n5)
 integer, intent(inout) :: lx(n), bs(n), ps(np1), ws(np1), xs(n)
+!     beginning of local variable declarations
 integer :: j, jj, ns, qs, sb
 interface
    pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
@@ -339,6 +1070,7 @@ integer, intent(inout) :: bl(m,np1), xl(m,n), iwk(n5)
 integer, intent(in) :: p(n), w(n), q(m), b(np1)
 integer, intent(inout) :: pbl(m), v(m)
 integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n)
+!     beginning of local variable declarations
 integer :: ii, ikub, j, jb, jbs, jj, ns, pb, qs, sb, u
 interface
    pure subroutine sknp(ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
@@ -449,6 +1181,7 @@ integer, intent(in) :: f(m), bb(m,n), q(m), b(np1)
 integer, intent(inout) :: ub
 integer, intent(in) :: vb
 integer, intent(in) :: lx(n), lxi(n)
+!     beginning of local variable declarations
 integer :: i1, iq, j, r, s
 ! Subroutine for parametric computation of the upper bounds.
 iflag = 0
@@ -494,6 +1227,7 @@ implicit none
 integer, intent(in) :: kub, n, n5, np1, ns
 integer, intent(inout) :: qs, vs
 integer, intent(inout) :: ps(np1), ws(np1), xs(n), iwk(n5)
+!     beginning of local variable declarations
 integer :: i1, i2, i3, i4, i5
 interface
    pure subroutine sknp1(ns,qs,kub,vs,n,np1,ps,ws,xs,d,min,pbar &
@@ -539,6 +1273,7 @@ integer, intent(inout) :: qs
 integer, intent(out) :: vs
 integer, intent(inout) :: ps(np1), ws(np1), xs(n)
 integer, intent(inout) :: d(n), min(n), pbar(n), wbar(n), zbar(n)
+!     beginning of local variable declarations
 integer :: ii, ii1, in, ip, j, j1, jj, kk, l, lim, lim1, ll, lold, mfirst, mink, ms, n1, nn, diff, pr, r, t, nswc_ai_i4
 real :: a, b, c
 ! Subroutine to solve the 0-1 single knapsack problem
@@ -751,6 +1486,7 @@ real, intent(inout) :: c, error
 real, intent(in) :: rerr, t
 real, intent(inout) :: y
 external fun
+!     beginning of local variable declarations
 integer :: ier, ierc, num1
 real :: a
 interface
@@ -864,6 +1600,7 @@ implicit none
 integer, intent(inout) :: ierr, num
 real, intent(inout) :: c
 external fun
+!     beginning of local variable declarations
 integer :: num1
 real :: eta, x0, xmin
 logical :: find
@@ -920,6 +1657,7 @@ real, intent(in) :: eta
 real, intent(inout) :: x
 real, intent(in) :: xl
 external fun, cond
+!     beginning of local variable declarations
 integer :: i, ier, num1
 real :: dx, tol, x1, x2, xbar, xm
 logical :: cnd
@@ -1018,6 +1756,7 @@ implicit none
 integer, intent(inout) :: ierr, num
 real, intent(inout) :: c
 external fun
+!     beginning of local variable declarations
 integer :: i, num1
 real :: dx, eta, tol, x1, x2, xbar, xm
 logical :: cmplex, iend, right
@@ -1122,6 +1861,7 @@ integer, intent(inout) :: ierr, num
 real, intent(in) :: x
 logical, intent(inout) :: cond
 external fun
+!     beginning of local variable declarations
 integer :: ier, ier1, ier2, iwk(100), n, num1, num2
 real :: a, c, error1, error2, wk(400), y, z1, z2
 real :: acondg
@@ -1178,8 +1918,9 @@ real, intent(in) :: c
 real :: x
 real, intent(in) :: y
 external fun
-real :: a, b, t
 real :: acondf
+!     beginning of local variable declarations
+real :: a, b, t
 !-----------------------------------------------------------------------
 !        acondf is the function integrated along the x-axis in
 !        acond. y is a dummy variable.
@@ -1194,8 +1935,9 @@ implicit none
 real :: c, x
 real, intent(in) :: y
 external fun
-real :: a, b, s, t, u, v
 real :: acondg
+!     beginning of local variable declarations
+real :: a, b, s, t, u, v
 interface
    pure elemental subroutine crec(x,y,u,v)
       implicit none
@@ -1222,6 +1964,7 @@ integer, intent(inout) :: ierr, num
 real :: x
 logical, intent(out) :: cond
 external fun
+!     beginning of local variable declarations
 integer :: iwk(100), n
 real :: c, error, t, wk(400), y, y1, z
 real :: xcondy
@@ -1281,8 +2024,9 @@ implicit none
 real, intent(in) :: c
 real :: x, y
 external fun
-real :: a, b, s, t, u, v
 real :: xcondx
+!     beginning of local variable declarations
+real :: a, b, s, t, u, v
 interface
    pure elemental subroutine crec(x,y,u,v)
       implicit none
@@ -1305,8 +2049,9 @@ implicit none
 real, intent(in) :: c
 real :: x, y
 external fun
-real :: a, b, s, t, u, v
 real :: xcondy
+!     beginning of local variable declarations
+real :: a, b, s, t, u, v
 interface
    pure elemental subroutine crec(x,y,u,v)
       implicit none
@@ -1332,6 +2077,7 @@ real, intent(out) :: esterr, result
 real, intent(in) :: t
 integer, intent(out) :: ier
 integer, intent(out) :: num
+!     beginning of local variable declarations
 real :: a, aim, ak, are, arg, b, bb, e, eps, epsr1, f, fim, fre, &
    & pid16, r, s, si(32), tol
 complex :: rex(52), cres, res3la(3)
@@ -1513,6 +2259,7 @@ complex, intent(out) :: result
 complex, intent(inout) :: res3la(3)
 integer, intent(inout) :: n
 integer, intent(inout) :: nres
+!     beginning of local variable declarations
 real :: a1, a2, b1, b2, c1, c2, d1, d2, e1abs, epmach, epsinf, &
    & err1, err2, err3, error, oflow, res1, res2
 complex :: delta1, delta2, delta3, e0, e1, e2, e3, res, ss
@@ -1730,6 +2477,7 @@ real :: f
 real, intent(inout) :: work(lenw)
 integer, intent(inout) :: iwork(limit)
 external f, phi
+!     beginning of local variable declarations
 integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !                   Integration over infinite intervals
@@ -1912,6 +2660,8 @@ real, intent(inout) :: rlist(limit)
 real :: y
 real :: f
 external f, phi
+dimension iord(limit)
+!     beginning of local variable declarations
 integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, &
    & ktmin, maxerr, nres, nrmax, numrl2
 real :: a1, a2, abseps, area, area1, area12, area2, b1, b2, boun, &
@@ -2065,7 +2815,6 @@ end interface
 !              - Phi (user-provided function)
 !              - spmpar
 !-----------------------------------------------------------------------
-dimension iord(limit)
 !            The dimension of RLIST2 is determined by the value of
 !            LIMEXP in subroutine qelg.
 !            List of major variables
@@ -2334,6 +3083,7 @@ real, intent(in) :: uflow
 real :: y
 real :: f
 external f, phi
+!     beginning of local variable declarations
 integer :: j
 real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, fv1(7), fv2(7)
 real, parameter :: xgk(8) = [0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
@@ -2510,6 +3260,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: isn, ndim
 real, intent(inout) :: c(*)
 integer :: n(ndim)
+!     beginning of local variable declarations
 integer :: i, isign, nspan, ntot
 !-----------------------------------------------------------------------
 !     Let ntot denote the product of n(1),...,n(ndim). The complex
@@ -2547,6 +3298,7 @@ integer :: isn
 integer, intent(in) :: ndim
 real, intent(inout) :: a(*), b(*)
 integer :: n(ndim)
+!     beginning of local variable declarations
 integer :: i, nspan, ntot
 !     ------------
 if (abs(isn) /= 1) go to 40
@@ -2574,6 +3326,7 @@ subroutine sfft(a,b,ntot,n,nspan,isn,ierr)
 implicit none
 integer :: ierr, isn, n, nspan, ntot
 real :: a(*), b(*)
+!     beginning of local variable declarations
 integer :: i, inc, j, jc, jf, jj, k, k1, k2, k3, k4, kk, ks, kspan, kspnn, kt, l, m, max, maxf, maxn, maxp, nfac(15), nn, np(209), &
    & nt, num
 real :: aa, aj, ajm, ajp, ak, akm, akp, at(23), bb, bj, bjm, bjp, &
@@ -3187,6 +3940,7 @@ subroutine cosqi(n,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*)
+!     beginning of local variable declarations
 integer :: k
 real :: dt, fk
 real, parameter :: pih = 1.57079632679491
@@ -3236,6 +3990,7 @@ subroutine cosqf(n,x,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*), x(*)
+!     beginning of local variable declarations
 real :: tsqx
 integer :: nswc_ai_i4
 real, parameter :: sqrt2 = 1.4142135623731
@@ -3255,6 +4010,7 @@ implicit none
 integer :: n
 real :: w(*)
 real, intent(inout) :: x(*), xh(*)
+!     beginning of local variable declarations
 integer :: i, k, kc, modn, np2, ns2
 real :: xim1
 ns2 = (n + 1)/2
@@ -3317,6 +4073,7 @@ subroutine cosqb(n,x,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*), x(*)
+!     beginning of local variable declarations
 real :: x1
 integer :: nswc_ai_i4
 real, parameter :: tsqrt2 = 2.82842712474619
@@ -3338,6 +4095,7 @@ implicit none
 integer :: n
 real :: w(*)
 real, intent(inout) :: x(*), xh(*)
+!     beginning of local variable declarations
 integer :: i, k, kc, modn, np2, ns2
 real :: xim1
 ns2 = (n + 1)/2
@@ -3403,6 +4161,7 @@ subroutine sinqf(n,x,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*), x(*)
+!     beginning of local variable declarations
 integer :: k, kc, ns2
 real :: xhold
 if (n == 1) return
@@ -3456,6 +4215,7 @@ subroutine sinqb(n,x,wsave)
 implicit none
 integer :: n
 real, intent(inout) :: wsave(*), x(*)
+!     beginning of local variable declarations
 integer :: k, kc, ns2
 real :: xhold
 if (n > 1) go to 101
@@ -3501,6 +4261,7 @@ pure subroutine rffti1(n,wa,ifac)
 implicit none
 integer, intent(in) :: n
 real, intent(inout) :: wa(*), ifac(*)
+!     beginning of local variable declarations
 integer :: i, ib, ido, ii, ip, ipm, is, j, k1, l1, l2, ld, nf, &
    & nfm1, nl, nq, nr, ntry
 real :: arg, argh, argld, fi, tpi
@@ -3611,6 +4372,7 @@ integer, intent(in) :: n
 real, intent(inout) :: c(*), ch(*)
 real :: wa(*)
 real, intent(in) :: ifac(*)
+!     beginning of local variable declarations
 integer :: i, idl1, ido, ip, iw, ix2, ix3, ix4, k1, l1, l2, na, nf
 nf = ifac(2)
 na = 0
@@ -3675,6 +4437,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,2,l1)
 real, intent(inout) :: ch(ido,l1,*)
 real :: wa1(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k, nswc_ai_i4
 real :: ti2, tr2
 do k = 1,l1
@@ -3724,6 +4487,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,3,l1)
 real, intent(inout) :: ch(ido,l1,*)
 real :: wa1(*), wa2(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k
 real :: ci2, ci3, cr2, cr3, di2, di3, dr2, dr3, ti2, tr2
 real, parameter :: taur = -.5
@@ -3790,6 +4554,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,4,l1)
 real, intent(inout) :: ch(ido,l1,*)
 real :: wa1(*), wa2(*), wa3(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k, nswc_ai_i4
 real :: ci2, ci3, ci4, cr2, cr3, cr4, ti1, ti2, ti3, ti4, tr1, tr2, tr3, tr4
 real, parameter :: sqrt2 = 1.414213562373095
@@ -3884,6 +4649,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,5,l1)
 real, intent(inout) :: ch(ido,l1,*)
 real :: wa1(*), wa2(*), wa3(*), wa4(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k
 real :: ci2, ci3, ci4, ci5, cr2, cr3, cr4, cr5, di2, di3, di4, di5, dr2, dr3, dr4, dr5, ti2, ti3, ti4, ti5, tr2, tr3, tr4, tr5
 real, parameter :: tr11 = .309016994374947
@@ -3996,6 +4762,7 @@ real, intent(inout) :: c1(ido,l1,ip), c2(idl1,ip)
 real :: cc(ido,ip,l1)
 real, intent(inout) :: ch(ido,l1,ip), ch2(idl1,ip)
 real :: wa(*)
+!     beginning of local variable declarations
 integer :: i, ic, idij, idp2, ik, ipp2, ipph, is, j, j2, jc, k, l, &
    & lc, nbd
 real :: ai1, ai2, ar1, ar1h, ar2, ar2h, arg, dc2, dcp, ds2, dsp
@@ -4207,6 +4974,7 @@ integer, intent(in) :: n
 real, intent(inout) :: c(*), ch(*)
 real :: wa(*)
 real, intent(in) :: ifac(*)
+!     beginning of local variable declarations
 integer :: i, idl1, ido, ip, iw, ix2, ix3, ix4, k1, kh, l1, l2, &
    & na, nf
 nf = ifac(2)
@@ -4272,6 +5040,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,l1,*)
 real, intent(inout) :: ch(ido,2,l1)
 real :: wa1(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k, nswc_ai_i4
 real :: ti2, tr2
 do k = 1,l1
@@ -4321,6 +5090,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,l1,*)
 real, intent(inout) :: ch(ido,3,l1)
 real :: wa1(*), wa2(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k
 real :: ci2, cr2, di2, di3, dr2, dr3, ti2, ti3, tr2, tr3
 real, parameter :: taur = -.5
@@ -4385,6 +5155,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,l1,*)
 real, intent(inout) :: ch(ido,4,l1)
 real :: wa1(*), wa2(*), wa3(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k, nswc_ai_i4
 real :: ci2, ci3, ci4, cr2, cr3, cr4, ti1, ti2, ti3, ti4, tr1, tr2, tr3, tr4
 real, parameter :: hsqt2 = .7071067811865475
@@ -4475,6 +5246,7 @@ integer, intent(in) :: ido, l1
 real :: cc(ido,l1,*)
 real, intent(inout) :: ch(ido,5,l1)
 real :: wa1(*), wa2(*), wa3(*), wa4(*)
+!     beginning of local variable declarations
 integer :: i, ic, idp2, k
 real :: ci2, ci3, ci4, ci5, cr2, cr3, cr4, cr5, di2, di3, di4, di5, dr2, dr3, dr4, dr5, ti2, ti3, ti4, ti5, tr2, tr3, tr4, tr5
 real, parameter :: tr11 = .309016994374947
@@ -4582,6 +5354,7 @@ integer, intent(in) :: idl1, ido, ip, l1
 real, intent(inout) :: c1(ido,l1,ip), c2(idl1,ip), cc(ido,ip,l1), &
    & ch(ido,l1,ip), ch2(idl1,ip)
 real :: wa(*)
+!     beginning of local variable declarations
 integer :: i, ic, idij, idp2, ik, ipp2, ipph, is, j, j2, jc, k, l, &
    & lc, nbd
 real :: ai1, ai2, ar1, ar1h, ar2, ar2h, arg, dc2, dcp, ds2, dsp
@@ -4756,6 +5529,7 @@ double precision, intent(in) :: eps
 double precision, intent(inout) :: error
 double precision, intent(inout) :: p(*), q(*), w(*)
 external f, g, phi
+!     beginning of local variable declarations
 integer :: i1, i2, i3, i4, i5, lp1, lpm, mp1, n, np1
 !     ******************************************************************
 !     Rational Chebychev approximation of continuous functions
@@ -4796,6 +5570,7 @@ double precision, intent(out) :: error
 double precision, intent(inout) :: p(lp1), q(mp1), x(np1), &
    & xval(np1), c(np1,np1), d(np1), err(np1), h(np1)
 external f, g, phi
+!     beginning of local variable declarations
 integer :: i, ii, j, k, kount, lpi
 double precision :: b1, del, dn, dnp1, h1, olderr, sign, sum, templ, test, u, xi, xlb, xm1, y, y2, y3, z, zz, z1, z2, z3
 double precision, parameter :: pi = 3.14159265358979323846264338328d0
@@ -5055,6 +5830,7 @@ integer, intent(in) :: l, lp1, m, np1
 double precision, intent(in) :: t, ft, gt, phit
 double precision, intent(inout) :: del
 double precision, intent(in) :: d(np1)
+!     beginning of local variable declarations
 integer :: i, ii
 double precision :: p, q, r
 double precision, parameter :: zero = 0.d0
@@ -5102,6 +5878,7 @@ double precision :: anorm, brakpt(kbreak), dx, epsln, errest, &
    & vallft(kbreak), valrgt(kbreak), xlft, xrgt
 double precision :: f
 external f
+!     beginning of local variable declarations
 integer :: k, kdimen, ndimen
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
@@ -5176,6 +5953,7 @@ integer :: ierr, kdimen, kmax, ndimen
 double precision :: xknots(kdimen), coefs(kmax,ndimen)
 double precision :: f
 external f
+!     beginning of local variable declarations
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
@@ -5368,6 +6146,7 @@ subroutine adset(xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
 integer :: ierr, kdimen, kmax, ndimen
 double precision :: xknots(kdimen), coefs(kmax,ndimen)
+!     beginning of local variable declarations
 integer :: j, k, limsm
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
@@ -5488,6 +6267,7 @@ end subroutine adset
 subroutine adtake(ierr)
 implicit none
 integer :: ierr
+!     beginning of local variable declarations
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
@@ -5563,6 +6343,7 @@ subroutine adcomp(f)
 implicit none
 double precision :: f
 external f
+!     beginning of local variable declarations
 integer :: j
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
@@ -5663,6 +6444,7 @@ implicit none
 double precision :: aaa, bbb, fit, points(*), weight(*)
 double precision :: f
 external f, fit
+!     beginning of local variable declarations
 integer :: j
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
@@ -5729,6 +6511,7 @@ end function errint
 subroutine newton(nl, nr, ni)
 implicit none
 integer :: ni, nl, nr
+!     beginning of local variable declarations
 integer :: idif, ipt, ipt2, j, k, nddx, nl1, nl2, nr1, nr2, nrl, &
    & nrlj, nrlj1
 integer :: leftx, nintrp
@@ -5858,6 +6641,7 @@ end subroutine newton
 double precision function polydd(x)
 implicit none
 double precision :: x
+!     beginning of local variable declarations
 integer :: j, k
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
@@ -5891,6 +6675,7 @@ end function polydd
 
 subroutine adchk
 implicit none
+!     beginning of local variable declarations
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
@@ -5944,6 +6729,7 @@ subroutine adput(xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
 integer :: ierr, kdimen, kmax, ndimen
 double precision :: xknots(kdimen), coefs(kmax,ndimen)
+!     beginning of local variable declarations
 integer :: k
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
@@ -6017,6 +6803,7 @@ end subroutine adput
 subroutine adtran(d, powers)
 implicit none
 double precision :: d(20,*), powers(*)
+!     beginning of local variable declarations
 integer :: i, ii, j, k, khi, koef, l, ltop, ni, ni1, nl, nr, nri, &
    & nri1, nrl, nrli, nrlk
 integer :: leftx, nintrp
@@ -6141,6 +6928,7 @@ real, intent(in) :: tol
 complex :: f
 complex, intent(inout) :: rs(n)
 complex :: z
+!     beginning of local variable declarations
 integer :: i, ia, inr, iq, is, it, ix, j, jn, kl, km, kn, l, l1, l2, lf, ln, m, np, nr
 real :: ang, b, c(4), cm, cp, ct, cx, ep6, eps, eps0, fac, fact, &
    & fc(3), pi, r1, ra, re, sc(4), sf, sp, sr
@@ -6368,6 +7156,7 @@ integer, intent(in) :: ic, n
 double precision :: x, y
 double precision, intent(in) :: tol
 double precision, intent(inout) :: r, rs1(n), rs2(n), err(n)
+!     beginning of local variable declarations
 integer :: i, ia, inr, iq, is, it, ix, j, jn, kl, km, kn, l, l1, &
    & l2, lf, ln, m, mm1, np, nr
 double precision :: ang, b, cm, cp, ct, cx, eps, eps0, ep6, fac, fact, pi, ra, r1, s, sf, sp, sr, t, u, v, w, c(4), fc(3), sc(4), &
@@ -6628,10 +7417,10 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: a
 real :: x(n), y(n)
-integer :: i, il, ir, nm1
-real :: r
 real :: trp
-real :: nswc_ai_r4
+!     beginning of local variable declarations
+integer :: i, il, ir, nm1
+real :: r, nswc_ai_r4
 nm1 = n - 1
 if (a < x(2)) go to 50
 if (a >= x(nm1)) go to 40
@@ -6664,6 +7453,7 @@ integer, intent(in) :: m, n, ni
 real, intent(inout) :: t(m)
 real :: x(n), xi(ni), y(n)
 real, intent(inout) :: yi(ni)
+!     beginning of local variable declarations
 integer :: i, ii, il, ilm1, ilold, ipm, ir, istep, j, jmax, k, l, &
    & mm1, num
 real :: dl, dr, xx, nswc_ai_r4
@@ -6815,6 +7605,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n
 real, intent(inout) :: a(n), t(n)
 real :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, k
 real :: diff, f, r
 !     ******************************************************************
@@ -6867,6 +7658,7 @@ real, intent(in) :: alpha
 real, intent(in) :: x(*), a(n)
 real, intent(inout) :: c(n)
 double precision, intent(inout) :: t(n)
+!     beginning of local variable declarations
 integer :: i, j, k, nm1
 double precision :: xx, r
 if (n > 1) go to 10
@@ -6896,6 +7688,7 @@ integer, intent(in) :: nd, np
 real, intent(inout) :: rnorm
 real, intent(in) :: x(np), y(np)
 real, intent(inout) :: a(*), phi(2,*), phix(4,np)
+!     beginning of local variable declarations
 integer :: k, la, lb, ls, m, mp1, nd1
 real :: alpha, c, temp, xmax, xmin, za, zb, lambda
 double precision :: dalpha, dsum
@@ -7036,6 +7829,7 @@ integer, intent(in) :: nd, np
 real, intent(inout) :: rnorm
 real, intent(in) :: x(np), y(np), w(np)
 real, intent(inout) :: a(*), phi(2,*), phix(4,np)
+!     beginning of local variable declarations
 integer :: k, la, lb, ls, m, mp1, nd1, nw
 real :: alpha, c, temp, xmax, xmin, za, zb, lambda, nswc_ai_r4
 double precision :: dalpha, dsum
@@ -7192,6 +7986,7 @@ integer, intent(in) :: n
 real, intent(in) :: alpha, beta
 real, intent(in) :: x(n), y(n)
 real, intent(inout) :: a(n), b(n), c(n)
+!     beginning of local variable declarations
 integer :: i, j, m, nm1, nswc_ai_i4
 real :: del, h, r, t
 !-----------------------------------------------------------------------
@@ -7299,6 +8094,7 @@ integer, intent(in) :: isx, n
 real, intent(in) :: a1, an, b1, bn
 real, intent(in) :: x(n), y(n)
 real, intent(inout) :: yp(n), ypp(n), w(n,3)
+!     beginning of local variable declarations
 integer :: i, j, nm1, nm2
 real :: dnew, dold, h
 !     Written by Rondall E. Jones
@@ -7431,6 +8227,7 @@ integer, intent(in) :: l, m
 real, intent(in) :: x(m), y(m), wgt(m)
 real, intent(inout) :: break(l)
 real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
+!     beginning of local variable declarations
 integer :: j, k, la, lm1, lq, lw, n
 real :: temp(20)
 interface
@@ -7519,6 +8316,7 @@ real, intent(in) :: xcon(*), con(*)
 real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
 integer, intent(in) :: nder(*)
 integer, intent(inout) :: iwk(*)
+!     beginning of local variable declarations
 integer :: j, k, la, lm1, lw, n
 real :: r, temp(20)
 !-----------------------------------------------------------------------
@@ -7586,6 +8384,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
 real, intent(inout) :: yi(ni)
+!     beginning of local variable declarations
 integer :: i, il, ir, k
 real :: dx, xx, nswc_ai_r4
 !     Abstract
@@ -7672,6 +8471,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), yp(n), xi(ni)
 real, intent(inout) :: yi(ni)
+!     beginning of local variable declarations
 integer :: i, il, ir, k, nm1
 real :: a, b, c, d, dx, h, xx, nswc_ai_r4
 !     Abstract
@@ -7760,6 +8560,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
 real, intent(inout) :: yi(ni)
+!     beginning of local variable declarations
 integer :: i, il, ir, k, nm1
 real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
 !     Abstract
@@ -7851,6 +8652,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
 real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
+!     beginning of local variable declarations
 integer :: i, il, ir, k
 real :: bi, ci, dx, xx, nswc_ai_r4
 !     Abstract
@@ -7944,6 +8746,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), yp(n), xi(ni)
 real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
+!     beginning of local variable declarations
 integer :: i, il, ir, k, nm1
 real :: a, b, c, d, dx, h, xx, nswc_ai_r4
 !     Abstract
@@ -8038,6 +8841,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
 real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
 real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
+!     beginning of local variable declarations
 integer :: i, il, ir, k, nm1
 real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx, nswc_ai_r4
 !     Abstract
@@ -8133,6 +8937,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: alpha, beta
 real, intent(in) :: x(n), y(n), a(n), b(n), c(n)
+!     beginning of local variable declarations
 integer :: i, k, kp1, l, lm1
 real :: a0, b0, d, d2, h, h2, r, s, sum
 interface
@@ -8221,6 +9026,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(in) :: x(n), y(n), yp(n)
+!     beginning of local variable declarations
 integer :: i, ip1, k, kp1, l, lm1, lp1
 real :: a0, b0, bi, ci, d, d2, h, h2, r, s, sum
 interface
@@ -8321,6 +9127,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b
 real, intent(in) :: x(n), y(n), ypp(n)
+!     beginning of local variable declarations
 integer :: i, ip1, k, kp1, l, lm1, lp1
 real :: a0, b0, d, dma, dmb, dpa, dpb, h, r, s, sum
 interface
@@ -8403,6 +9210,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: n
 real, intent(in) :: x(n), y(*)
 real, intent(inout) :: a(*), b(*), c(*), t(*)
+!     beginning of local variable declarations
 integer :: i, j, nm1, nm2, nm3
 real :: alpha, del, del0, deli, delta, e, h, hi, r, s, si, w
 !-----------------------------------------------------------------------
@@ -8509,6 +9317,7 @@ real, intent(in) :: x(m), y(m)
 real, intent(inout) :: break(l)
 real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
 integer, intent(inout) :: iwk(*)
+!     beginning of local variable declarations
 integer :: j, k, la, lm1, lw, n
 real :: r, temp(20), con(3), xcon(3)
 integer, parameter :: nder(3) = [3, 7, 11]
@@ -8587,6 +9396,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
 real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
 real, intent(inout) :: yi(m)
+!     beginning of local variable declarations
 integer :: i, il, ir, j, k
 real :: dx, h, t, t0, x1, xold, xx, nswc_ai_r4
 !-----------------------------------------------------------------------
@@ -8660,6 +9470,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
 real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
 real, intent(inout) :: yi(m), ypi(m), yppi(m)
+!     beginning of local variable declarations
 integer :: i, il, ir, j, k
 real :: bi2, ci3, dx, h, t, t0, x1, xold, xx, nswc_ai_r4
 !-----------------------------------------------------------------------
@@ -8740,6 +9551,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: kdx, kx, m, n
 real, intent(in) :: x(kx,n)
 real, intent(inout) :: t(m), dx(kdx,n), wk(*)
+!     beginning of local variable declarations
 integer :: ia, ib, ic, ie, mm1
 interface
    pure subroutine cslop1(m,n,x,kx,t,dx,kdx,a,b,c,e,ierr)
@@ -8790,6 +9602,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: kdx, kx, m, n
 real, intent(in) :: x(kx,n)
 real, intent(inout) :: t(m), dx(kdx,n), a(*), b(m), c(*), e(*)
+!     beginning of local variable declarations
 integer :: i, im1, j, l, mm1, mm2
 real :: alpha, del, del0, del1, deli, delm, eta, h, hm, p, r, si, &
    & sm, sum, tau
@@ -8935,6 +9748,7 @@ implicit none
 integer, intent(in) :: kdx, kx, kz, l, m, n
 real, intent(in) :: t(m), x(kx,n), dx(kdx,n), ti(l)
 real, intent(inout) :: z(kz, n)
+!     beginning of local variable declarations
 integer :: i, il, ir, j, k
 real :: a, b, c, d, dt, h, t0, told, w, nswc_ai_r4
 !-----------------------------------------------------------------------
@@ -9011,6 +9825,7 @@ integer, intent(in) :: kdx, kx, m, n
 real, intent(in) :: ti
 real, intent(in) :: t(m), x(kx,n), dx(kdx,n)
 real, intent(inout) :: z(n), dz(n), ddz(n)
+!     beginning of local variable declarations
 integer :: i, il, ir, j
 real :: a, b, c, d, dt, h, t0, w, nswc_ai_r4
 !-----------------------------------------------------------------------
@@ -9076,6 +9891,7 @@ integer, intent(out) :: ierr
 real, intent(in) :: x(n), y(n), slp1, slpn
 real, intent(inout) :: yp(n), temp(n)
 real, intent(in) :: sigma
+!     beginning of local variable declarations
 integer :: i, ibak, nm1, np1
 real :: c1, c2, c3, delx1, delx2, delxn, delxnm, diag, diag1, &
    & diag2, dx1, dx2, sdiag1, sdiag2, sigmap, slpp1, slppn
@@ -9217,10 +10033,11 @@ pure function curv2(t,n,x,y,yp,sigma)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: t, x(n), y(n), yp(n), sigma
+real :: curv2
+!     beginning of local variable declarations
 integer :: i, im1
 real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, &
    & sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sum
-real :: curv2
 interface
    pure function intrvl(x,t,m)
       implicit none
@@ -9298,10 +10115,11 @@ pure function curvd(t,n,x,y,yp,sigma)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: t, x(n), y(n), yp(n), sigma
+real :: curvd
+!     beginning of local variable declarations
 integer :: i, im1
 real :: coshm1, coshm2, del1, del2, dels, dummy, sigmap, sinhms, &
    & sum
-real :: curvd
 interface
    pure function intrvl(x,t,m)
       implicit none
@@ -9372,11 +10190,12 @@ pure function curvi(xl,xu,n,x,y,yp,sigma)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
+real :: curvi
+!     beginning of local variable declarations
 integer :: i, il, ilm1, ilp1, iu, ium1
 real :: c1, c2, cl1, cl2, cmm1, cmm2, cs, cu1, cu2, del1, del2, &
    & deli, dell1, dell2, dels, delu1, delu2, dummy, sigmap, ss, ssign, &
    & sum, t, t1, t2, xxl, xxu
-real :: curvi
 interface
    pure function intrvl(x,t,m)
       implicit none
@@ -9537,6 +10356,7 @@ integer, intent(out) :: ierr
 real, intent(in) :: x(n), y(n), slp1, slpn
 real, intent(inout) :: xp(n), yp(n), temp(n), s(n)
 real, intent(in) :: sigma
+!     beginning of local variable declarations
 integer :: i, ibak, im1, nm1, np1
 real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
    & diag1, diag2, diagin, dx1, dx2, dy1, dy2, sdiag1, sdiag2, sigmap, &
@@ -9706,833 +10526,4 @@ return
 ! Coincident adjacent points
 12 ierr = 2
 end subroutine kurv1
-
-pure subroutine kurv2(t,xs,ys,n,x,y,xp,yp,s,sigma)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: t
-real, intent(inout) :: xs, ys
-real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
-integer :: i, im1
-real :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
-   & dummy, sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sumx, sumy, &
-   & tn
-interface
-   pure function intrvl(x,t,m)
-      implicit none
-      integer, intent(in) :: m
-      real, intent(in) :: x
-      real, intent(in) :: t(m)
-      integer :: intrvl
-   end function intrvl
-   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
-      implicit none
-      real, intent(inout) :: sinhm
-      real, intent(inout) :: coshm
-      real, intent(in) :: x
-      integer, intent(in) :: isw
-   end subroutine snhcsh
-end interface
-!                      From the spline under tension package
-!                       coded by A. K. Cline and R. J. Renka
-!                            department of computer sciences
-!                              University of Texas at Austin
-! this subroutine performs the mapping of points in the
-! interval (0.,1.) Onto a curve in the plane. The subroutine
-! kurv1 should be called earlier to determine certain
-! necessary parameters. The resulting curve has a parametric
-! representation both of whose components are splines under
-! tension and functions of the polygonal arclength
-! parameter.
-! On input--
-!   t contains a real value to be mapped to a point on the
-!   curve. The interval (0.,1.) Is mapped onto the entire
-!   curve, with 0. Mapping to (x(1),y(1)) and 1. Mapping
-!   to (x(n),y(n)). Values outside this interval result in
-!   extrapolation.
-!   n contains the number of points which were specified
-!   to determine the curve.
-!   x and y are arrays containing the x- and y-coordinates
-!   of the specified points.
-!   xp and yp are the arrays output from kurv1 containing
-!   curvature information.
-!   s is an array containing the polygonal arclengths of
-!   the curve.
-! And
-!   sigma contains the tension factor (its sign is ignored).
-! The parameters n, x, y, xp, yp, s, and sigma should be
-! input unaltered from the output of kurv1.
-! On output--
-!   xs and ys contain the x- and y-coordinates of the image
-!   point on the curve.
-! None of the input parameters are altered.
-! This subroutine references package modules intrvl and
-! snhcsh.
-!-----------------------------------------------------------
-! Determine interval
-tn = s(n)*t
-im1 = intrvl(tn,s,n)
-i = im1 + 1
-! Denormalize tension factor
-sigmap = abs(sigma)*float(n - 1)/s(n)
-! Set up and perform interpolation
-del1 = tn - s(im1)
-del2 = s(i) - tn
-dels = s(i) - s(im1)
-sumx = (x(i)*del1 + x(im1)*del2)/dels
-sumy = (y(i)*del1 + y(im1)*del2)/dels
-if (sigmap /= 0.) go to 1
-d = del1*del2/(6.*dels)
-c1 = (del1 + dels)*d
-c2 = (del2 + dels)*d
-xs = sumx - xp(i)*c1 - xp(im1)*c2
-ys = sumy - yp(i)*c1 - yp(im1)*c2
-return
-1 delp1 = sigmap*(del1 + dels)/2.
-delp2 = sigmap*(del2 + dels)/2.
-call snhcsh(sinhm1,dummy,sigmap*del1,-1)
-call snhcsh(sinhm2,dummy,sigmap*del2,-1)
-call snhcsh(sinhms,dummy,sigmap*dels,-1)
-call snhcsh(sinhp1,dummy,sigmap*del1/2.,-1)
-call snhcsh(sinhp2,dummy,sigmap*del2/2.,-1)
-call snhcsh(dummy,coshp1,delp1,1)
-call snhcsh(dummy,coshp2,delp2,1)
-d = sigmap*sigmap*dels*(sinhms + sigmap*dels)
-c1 = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)*sinhp2 + sigmap* &
-   & coshp1*del2))/d
-c2 = (sinhm2*del1 - del2*(2.*(coshp2 + 1.)*sinhp1 + sigmap* &
-   & coshp2*del1))/d
-xs = sumx + xp(i)*c1 + xp(im1)*c2
-ys = sumy + yp(i)*c1 + yp(im1)*c2
-end subroutine kurv2
-
-pure subroutine kurvp1(n,x,y,xp,yp,temp,s,sigma,ierr)
-implicit none
-integer, intent(in) :: n
-integer, intent(out) :: ierr
-real, intent(in) :: x(n), y(n)
-real, intent(inout) :: xp(n), yp(n), temp(*), s(n)
-real, intent(in) :: sigma
-integer :: i, ibak, im1, nm1, np1, npi, npibak
-real :: dels1, dels2, diag, diag1, diag2, diagin, dx1, dx2, dy1, &
-   & dy2, sdiag1, sdiag2, sigmap, xpn, ypn
-interface
-   pure elemental subroutine terms(diag,sdiag,sigma,del)
-      implicit none
-      real, intent(inout) :: diag
-      real, intent(inout) :: sdiag
-      real, intent(in) :: sigma
-      real, intent(in) :: del
-   end subroutine terms
-end interface
-!                      From the spline under tension package
-!                       coded by A. K. Cline and R. J. Renka
-!                            department of computer sciences
-!                              University of Texas at Austin
-! this subroutine determines the parameters necessary to
-! compute a spline under tension forming a closed curve in
-! the plane and passing through a sequence of pairs
-! (x(1),y(1)),...,(x(n),y(n)). For actual computation of
-! points on the curve it is necessary to call the subroutine
-! kurvp2.
-! On input--
-!   n is the number of points to be interpolated (n.GE.2).
-!   x is an array containing the n x-coordinates of the
-!   points.
-!   y is an array containing the n y-coordinates of the
-!   points. (Adjacent x-y pairs must be distinct, I. E.
-!   Either x(i) .NE. x(i+1) or y(i) .NE. y(i+1), for
-!   i = 1,...,n-1.)
-!   xp and yp are arrays of length at least n.
-!   Temp is an array of length at least 2*n which is used
-!   for scratch storage.
-!   s is an array of length at least n.
-! And
-!   sigma contains the tension factor. This value indicates
-!   the curviness desired. If abs(sigma) is nearly zero
-!   (E.G. .001) the resulting curve is approximately a cubic
-!   spline. If abs(sigma) is large (E. G. 50.) The resulting
-!   curve is nearly a polygonal line. If sigma equals zero A
-!   cubic spline results. A standard value for sigma is
-!   approximately 1. In absolute value.
-! On output--
-!   xp and yp contain information about the curvature of the
-!   curve at the given nodes.
-!   s contains the polygonal arclengths of the curve.
-!   ierr contains an error flag,
-!        = 0 For normal return,
-!        = 1 If n is less than 2,
-!        = 2 If adjacent coordinate pairs coincide.
-! And
-!   n, x, y, and sigma are unaltered,
-! this subroutine references package modules terms and
-! snhcsh.
-!-----------------------------------------------------------
-nm1 = n - 1
-np1 = n + 1
-ierr = 0
-if (n <= 1) go to 7
-! Determine polygonal arclengths
-s(1) = sqrt((x(n) - x(1))**2 + (y(n) - y(1))**2)
-do i = 2,n
-   im1 = i - 1
-   s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + &
-      & (y(i) - y(im1))**2)
-end do
-! Denormalize tension factor
-sigmap = abs(sigma)*float(n)/s(n)
-! Set up right hand sides of tridiagonal (with corner
-! elements) linear system for xp and yp
-dels1 = s(1)
-if (dels1 == 0.) go to 8
-dx1 = (x(1) - x(n))/dels1
-dy1 = (y(1) - y(n))/dels1
-call terms(diag1,sdiag1,sigmap,dels1)
-dels2 = s(2) - s(1)
-if (dels2 == 0.) go to 8
-dx2 = (x(2) - x(1))/dels2
-dy2 = (y(2) - y(1))/dels2
-call terms(diag2,sdiag2,sigmap,dels2)
-diag = diag1 + diag2
-diagin = 1./diag
-xp(1) = (dx2 - dx1)*diagin
-yp(1) = (dy2 - dy1)*diagin
-temp(np1) = -sdiag1*diagin
-temp(1) = sdiag2*diagin
-dx1 = dx2
-dy1 = dy2
-diag1 = diag2
-sdiag1 = sdiag2
-if (n == 2) go to 3
-do i = 2,nm1
-   npi = n + i
-   dels2 = s(i + 1) - s(i)
-   if (dels2 == 0.) go to 8
-   dx2 = (x(i + 1) - x(i))/dels2
-   dy2 = (y(i + 1) - y(i))/dels2
-   call terms(diag2,sdiag2,sigmap,dels2)
-   diag = diag1 + diag2 - sdiag1*temp(i - 1)
-   diagin = 1./diag
-   xp(i) = (dx2 - dx1 - sdiag1*xp(i - 1))*diagin
-   yp(i) = (dy2 - dy1 - sdiag1*yp(i - 1))*diagin
-   temp(npi) = -temp(npi - 1)*sdiag1*diagin
-   temp(i) = sdiag2*diagin
-   dx1 = dx2
-   dy1 = dy2
-   diag1 = diag2
-   sdiag1 = sdiag2
-end do
-3 dels2 = s(1)
-dx2 = (x(1) - x(n))/dels2
-dy2 = (y(1) - y(n))/dels2
-call terms(diag2,sdiag2,sigmap,dels2)
-xp(n) = dx2 - dx1
-yp(n) = dy2 - dy1
-temp(nm1) = temp(2*n - 1) - temp(nm1)
-if (n == 2) go to 5
-! Perform first step of back substitution
-do i = 3,n
-   ibak = np1 - i
-   npibak = n + ibak
-   xp(ibak) = xp(ibak) - temp(ibak)*xp(ibak + 1)
-   yp(ibak) = yp(ibak) - temp(ibak)*yp(ibak + 1)
-   temp(ibak) = temp(npibak) - temp(ibak)*temp(ibak + 1)
-end do
-5 xp(n) = (xp(n) - sdiag2*xp(1) - sdiag1*xp(nm1))/ &
-   & (diag1 + diag2 + sdiag2*temp(1) + sdiag1*temp(nm1))
-yp(n) = (yp(n) - sdiag2*yp(1) - sdiag1*yp(nm1))/ &
-   & (diag1 + diag2 + sdiag2*temp(1) + sdiag1*temp(nm1))
-! Perform second step of back substitution
-xpn = xp(n)
-ypn = yp(n)
-do i = 1,nm1
-   xp(i) = xp(i) + temp(i)*xpn
-   yp(i) = yp(i) + temp(i)*ypn
-end do
-return
-! Too few points
-7 ierr = 1
-return
-! Coincident adjacent points
-8 ierr = 2
-end subroutine kurvp1
-
-pure subroutine kurvp2(t,xs,ys,n,x,y,xp,yp,s,sigma)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: t
-real, intent(inout) :: xs, ys
-real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
-integer :: i, im1
-real :: c1, c2, ci, cim1, coshp1, coshp2, d, del1, del2, delp1, &
-   & delp2, dels, dummy, si, sigmap, sinhm1, sinhm2, sinhms, sinhp1, &
-   & sinhp2, sumx, sumy, tn
-interface
-   pure function intrvl(x,t,m)
-      implicit none
-      integer, intent(in) :: m
-      real, intent(in) :: x
-      real, intent(in) :: t(m)
-      integer :: intrvl
-   end function intrvl
-   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
-      implicit none
-      real, intent(inout) :: sinhm
-      real, intent(inout) :: coshm
-      real, intent(in) :: x
-      integer, intent(in) :: isw
-   end subroutine snhcsh
-end interface
-!                      From the spline under tension package
-!                       coded by A. K. Cline and R. J. Renka
-!                            department of computer sciences
-!                              University of Texas at Austin
-! this subroutine performs the mapping of points in the
-! interval (0.,1.) Onto a closed curve in the plane. The
-! subroutine kurvp1 should be called earlier to determine
-! certain necessary parameters. The resulting curve has A
-! parametric representation both of whose components are
-! periodic splines under tension and functions of the poly-
-! gonal arclength parameter.
-! On input--
-!   t contains a value to be mapped onto the curve. The
-!   interval (0.,1.) Is mapped onto the entire closed curve
-!   with both 0. And 1. Mapping to (x(1),y(1)). The mapping
-!   is periodic with period one thus any interval of the
-!   form (TT,TT+1.) Maps onto the entire curve.
-!   n contains the number of points which were specified
-!   to determine the curve.
-!   x and y are arrays containing the x- and y-coordinates
-!   of the specified points.
-!   xp and yp are the arrays output from kurvp1 containing
-!   curvature information.
-!   s is an array containing the polygonal arclengths of
-!   the curve.
-! And
-!   sigma contains the tension factor (its sign is ignored).
-! The parameters n, x, y, xp, yp, s and sigma should
-! be input unaltered from the output of kurvp1.
-! On output--
-!   xs and ys contain the x- and y-coordinates of the image
-!   point on the curve.
-! None of the input parameters are altered.
-! This subroutine references package modules intrvl and
-! snhcsh.
-!-----------------------------------------------------------
-! Determine interval
-tn = t - float(ifix(t))
-if (tn < 0.) tn = tn + 1.
-tn = s(n)*tn + s(1)
-im1 = n
-if (tn < s(n)) im1 = intrvl(tn,s,n)
-i = im1 + 1
-if (i > n) i = 1
-! Denormalize tension factor
-sigmap = abs(sigma)*float(n)/s(n)
-! Set up and perform interpolation
-si = s(i)
-if (im1 == n) si = s(n) + s(1)
-del1 = tn - s(im1)
-del2 = si - tn
-dels = si - s(im1)
-sumx = (x(i)*del1 + x(im1)*del2)/dels
-sumy = (y(i)*del1 + y(im1)*del2)/dels
-if (sigmap /= 0.) go to 1
-d = del1*del2/(6.*dels)
-c1 = (del1 + dels)*d
-c2 = (del2 + dels)*d
-xs = sumx - xp(i)*c1 - xp(im1)*c2
-ys = sumy - yp(i)*c1 - yp(im1)*c2
-return
-1 delp1 = sigmap*(del1 + dels)/2.
-delp2 = sigmap*(del2 + dels)/2.
-call snhcsh(sinhm1,dummy,sigmap*del1,-1)
-call snhcsh(sinhm2,dummy,sigmap*del2,-1)
-call snhcsh(sinhms,dummy,sigmap*dels,-1)
-call snhcsh(sinhp1,dummy,sigmap*del1/2.,-1)
-call snhcsh(sinhp2,dummy,sigmap*del2/2.,-1)
-call snhcsh(dummy,coshp1,delp1,1)
-call snhcsh(dummy,coshp2,delp2,1)
-d = sigmap*sigmap*dels*(sinhms + sigmap*dels)
-ci = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)*sinhp2 + sigmap* &
-   & coshp1*del2))/d
-cim1 = (sinhm2*del1 - del2*(2.*(coshp2 + 1.)*sinhp1 + &
-   & sigmap*coshp2*del1))/d
-xs = sumx + ci*xp(i) + cim1*xp(im1)
-ys = sumy + ci*yp(i) + cim1*yp(im1)
-end subroutine kurvp2
-
-pure subroutine qurv1(n,x,y,z,slp1x,slp1y,slp1z,slpnx, &
-   & slpny,slpnz,islpsw,xp,yp,zp,temp, &
-   & s,sigma,ierr)
-implicit none
-integer, intent(in) :: n, islpsw
-integer, intent(out) :: ierr
-real, intent(in) :: x(n), y(n), z(n), slp1x, slp1y, slp1z, slpnx, &
-   & slpny, slpnz
-real, intent(inout) :: xp(n), yp(n), zp(n), temp(n), s(n)
-real, intent(in) :: sigma
-integer :: i, ibak, im1, nm1, np1
-real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
-   & diag1, diag2, diagin, dx1, dx2, dy1, dy2, dz1, dz2, sdiag1, &
-   & sdiag2, sigmap, slpp1x, slpp1y, slpp1z, slppnx, slppny, slppnz, t
-interface
-   pure elemental subroutine ceez(del1,del2,sigma,c1,c2,c3,n)
-      implicit none
-      real, intent(in) :: del1
-      real, intent(in) :: del2
-      real, intent(in) :: sigma
-      real, intent(inout) :: c1
-      real, intent(inout) :: c2
-      real, intent(inout) :: c3
-      integer, intent(in) :: n
-   end subroutine ceez
-   pure elemental subroutine terms(diag,sdiag,sigma,del)
-      implicit none
-      real, intent(inout) :: diag
-      real, intent(inout) :: sdiag
-      real, intent(in) :: sigma
-      real, intent(in) :: del
-   end subroutine terms
-end interface
-!                      From the spline under tension package
-!                       coded by A. K. Cline and R. J. Renka
-!                            department of computer sciences
-!                              University of Texas at Austin
-! this subroutine determines the parameters necessary to
-! compute a spline under tension passing through a sequence
-! of triples (x(1),y(1),z(1)),...,(x(n),y(n),z(n)). The
-! slopes at the two ends of the curve may be specified or
-! omitted. For actual computation of points on the curve
-! it is necessary to call the subroutine qurv2.
-! On input--
-!   n is the number of points to be interpolated (n.GE.2).
-!   x is an array containing the n x-coordinates of the
-!   points.
-!   y is an array containing the n y-coordinates of the
-!   points.
-!   z is an array containing the n z-coordinates of the
-!   points. (Adjacent x-y-z triples must be distinct, I. E.
-!   Either x(i) .NE. x(i+1) or y(i) .NE. y(i+1) or z(i) .NE.
-!   z(i+1), FOR i = 1,...,n-1 ).
-!   slp1x, slp1y, slp1z and slpnx, SLPNY, SLPNZ contain the
-!   desired values of the components of tangent vectors to
-!   the curve at (x(1),y(1),z(1)) and(x(n),y(n),z(n)),
-!   respectively. The positive sense of the curve is assumed
-!   to be that moving from point 1 to point n. the user may
-!   omit values for either or both of these triples and
-!   signal this with islpsw.
-!   islpsw contains a switch indicating which slope data
-!   should be used and which should be estimated by this
-!   subroutine,
-!          = 0 IF slp1x, slp1y, slp1z AND slpnx, SLPNY,
-!              SLPNZ are to be used,
-!          = 1 If slp1x, slp1y, slp1z are to be used but
-!              not slpnx, SLPNY, SLPNZ,
-!          = 2 If slpnx, SLPNY, SLPNZ are to be used but
-!              not slp1x, slp1y, slp1z,
-!          = 3 If both end-tangents are to be estimated
-!              internally.
-!   xp, yp, and zp are arrays of length at least n.
-!   Temp is an array of length at least n which is used
-!   for scratch storage.
-!   s is an array of length at least n.
-! And
-!   sigma contains the tension factor. This value indicates
-!   the curviness desired. If abs(sigma) is nearly zero
-!   (E.G. .001) the resulting curve is approximately a cubic
-!   spline. If abs(sigma) is large (E. G. 50.) The resulting
-!   curve is nearly a polygonal line. If sigma equals zero A
-!   cubic spline results. A standard value for sigma is
-!   approximately 1. In absolute value.
-! On output--
-!   xp, yp, and zp contain information about the curvature
-!   of the curve at the given nodes.
-!   s contains the polygonal arclengths of the curve.
-!   ierr contains an error flag,
-!        = 0 For normal return,
-!        = 1 If n is less than 2,
-!        = 2 If adjacent triples coincide.
-! And
-!   n, x, y, z, slp1x, slp1y, slp1z, slpnx, SLPNY, SLPNZ,
-!   islpsw, and sigma are unaltered,
-! this subroutine references package modules ceez, terms,
-! and snhcsh.
-!-----------------------------------------------------------
-nm1 = n - 1
-np1 = n + 1
-ierr = 0
-if (n <= 1) go to 9
-! Determine polygonal arclengths
-s(1) = 0.
-do i = 2,n
-   im1 = i - 1
-   s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + (y(i) - y(im1))**2 &
-      & + (z(i) - z(im1))**2)
-end do
-! Denormalize tension factor
-sigmap = abs(sigma)*float(n - 1)/s(n)
-! Approximate end slopes
-if (islpsw >= 2) go to 2
-slpp1x = slp1x
-slpp1y = slp1y
-slpp1z = slp1z
-go to 3
-2 dels1 = s(2) - s(1)
-dels2 = dels1 + dels1
-if (n > 2) dels2 = s(3) - s(1)
-if (dels1 == 0. .or. dels2 == 0.) go to 9
-call ceez(dels1,dels2,sigmap,c1,c2,c3,n)
-slpp1x = c1*x(1) + c2*x(2)
-slpp1y = c1*y(1) + c2*y(2)
-slpp1z = c1*z(1) + c2*z(2)
-if (n == 2) go to 3
-slpp1x = slpp1x + c3*x(3)
-slpp1y = slpp1y + c3*y(3)
-slpp1z = slpp1z + c3*z(3)
-3 delt = sqrt(slpp1x*slpp1x + slpp1y*slpp1y + slpp1z*slpp1z)
-slpp1x = slpp1x/delt
-slpp1y = slpp1y/delt
-slpp1z = slpp1z/delt
-if (islpsw == 1 .or. islpsw == 3) go to 4
-slppnx = slpnx
-slppny = slpny
-slppnz = slpnz
-go to 5
-4 delsn = s(n) - s(nm1)
-delsnm = delsn + delsn
-if (n > 2) delsnm = s(n) - s(n - 2)
-if (delsn == 0. .or. delsnm == 0.) go to 10
-call ceez(-delsn,-delsnm,sigmap,c1,c2,c3,n)
-slppnx = c1*x(n) + c2*x(nm1)
-slppny = c1*y(n) + c2*y(nm1)
-slppnz = c1*z(n) + c2*z(nm1)
-if (n == 2) go to 5
-slppnx = slppnx + c3*x(n - 2)
-slppny = slppny + c3*y(n - 2)
-slppnz = slppnz + c3*z(n - 2)
-5 delt = sqrt(slppnx*slppnx + slppny*slppny + slppnz*slppnz)
-slppnx = slppnx/delt
-slppny = slppny/delt
-slppnz = slppnz/delt
-! Set up right hand sides and tridiagonal system for xp, yp
-! and zp and perform forward elimination
-dx1 = (x(2) - x(1))/s(2)
-dy1 = (y(2) - y(1))/s(2)
-dz1 = (z(2) - z(1))/s(2)
-call terms(diag1,sdiag1,sigmap,s(2))
-xp(1) = (dx1 - slpp1x)/diag1
-yp(1) = (dy1 - slpp1y)/diag1
-zp(1) = (dz1 - slpp1z)/diag1
-temp(1) = sdiag1/diag1
-if (n == 2) go to 7
-do i = 2,nm1
-   dels2 = s(i + 1) - s(i)
-   if (dels2 == 0.) go to 10
-   dx2 = (x(i + 1) - x(i))/dels2
-   dy2 = (y(i + 1) - y(i))/dels2
-   dz2 = (z(i + 1) - z(i))/dels2
-   call terms(diag2,sdiag2,sigmap,dels2)
-   diag = diag1 + diag2 - sdiag1*temp(i - 1)
-   diagin = 1./diag
-   xp(i) = (dx2 - dx1 - sdiag1*xp(i - 1))*diagin
-   yp(i) = (dy2 - dy1 - sdiag1*yp(i - 1))*diagin
-   zp(i) = (dz2 - dz1 - sdiag1*zp(i - 1))*diagin
-   temp(i) = sdiag2*diagin
-   dx1 = dx2
-   dy1 = dy2
-   dz1 = dz2
-   diag1 = diag2
-   sdiag1 = sdiag2
-end do
-7 diag = diag1 - sdiag1*temp(nm1)
-xp(n) = (slppnx - dx1 - sdiag1*xp(nm1))/diag
-yp(n) = (slppny - dy1 - sdiag1*yp(nm1))/diag
-zp(n) = (slppnz - dz1 - sdiag1*zp(nm1))/diag
-! Perform back substitution
-do i = 2,n
-   ibak = np1 - i
-   t = temp(ibak)
-   xp(ibak) = xp(ibak) - t*xp(ibak + 1)
-   yp(ibak) = yp(ibak) - t*yp(ibak + 1)
-   zp(ibak) = zp(ibak) - t*zp(ibak + 1)
-end do
-return
-! Too few points
-9 ierr = 1
-return
-! Coincident adjacent points
-10 ierr = 2
-end subroutine qurv1
-
-pure subroutine qurv2(t,xs,ys,zs,n,x,y,z,xp,yp,zp,s,sigma)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: t
-real, intent(inout) :: xs, ys, zs
-real, intent(in) :: x(n), y(n), z(n), xp(n), yp(n), zp(n), s(n)
-real, intent(in) :: sigma
-integer :: i, im1
-real :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
-   & dummy, sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sumx, sumy, &
-   & sumz, tn
-interface
-   pure function intrvl(x,t,m)
-      implicit none
-      integer, intent(in) :: m
-      real, intent(in) :: x
-      real, intent(in) :: t(m)
-      integer :: intrvl
-   end function intrvl
-   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
-      implicit none
-      real, intent(inout) :: sinhm
-      real, intent(inout) :: coshm
-      real, intent(in) :: x
-      integer, intent(in) :: isw
-   end subroutine snhcsh
-end interface
-!                      From the spline under tension package
-!                       coded by A. K. Cline and R. J. Renka
-!                            department of computer sciences
-!                              University of Texas at Austin
-! this subroutine performs the mapping of points in the
-! interval (0.,1.) Onto a curve in space.  The subroutine
-! qurv1 should be called earlier to determine certain
-! necessary parameters. The resulting curve has a parametric
-! representation all of whose components are splines under
-! tension and functions of the polygonal arclength
-! parameter.
-! On input--
-!   t contains a real value to be mapped to a point on the
-!   curve. The interval (0.,1.) Is mapped onto the entire
-!   curve, with 0. Mapping to (x(1),y(1,z(1)) and 1. Mapping
-!   to (x(n),y(n),z(n)). Values outside this interval result
-!   in extrapolation.
-!   n contains the number of points which were specified
-!   to determine the curve.
-!   x, y, and z are arrays containing the x-, y- and z-
-!   coordinates of the specified points.
-!   xp, yp, and zp are the arrays output from qurv1
-!   containing curvature information.
-!   s is an array containing the polygonal arclengths of
-!   the curve.
-! And
-!   sigma contains the tension factor (its sign is ignored).
-! The parameters n, x, y, z, xp, yp, zp, s, and sigma
-! should be input unaltered from the output of qurv1.
-! On output--
-!   xs, ys and zs contain the x-, y- and z-coordinates of
-!   the image point on the curve.
-! None of the input parameters are altered.
-! This subroutine references package modules intrvl and
-! snhcsh.
-!-----------------------------------------------------------
-! Determine interval
-tn = s(n)*t
-im1 = intrvl(tn,s,n)
-i = im1 + 1
-! Denormalize tension factor
-sigmap = abs(sigma)*float(n - 1)/s(n)
-! Set up and perform interpolation
-del1 = tn - s(im1)
-del2 = s(i) - tn
-dels = s(i) - s(im1)
-sumx = (x(i)*del1 + x(im1)*del2)/dels
-sumy = (y(i)*del1 + y(im1)*del2)/dels
-sumz = (z(i)*del1 + z(im1)*del2)/dels
-if (sigmap /= 0.) go to 1
-d = del1*del2/(6.*dels)
-c1 = (del1 + dels)*d
-c2 = (del2 + dels)*d
-xs = sumx - xp(i)*c1 - xp(im1)*c2
-ys = sumy - yp(i)*c1 - yp(im1)*c2
-zs = sumz - zp(i)*c1 - zp(im1)*c2
-return
-1 delp1 = sigmap*(del1 + dels)/2.
-delp2 = sigmap*(del2 + dels)/2.
-call snhcsh(sinhm1,dummy,sigmap*del1,-1)
-call snhcsh(sinhm2,dummy,sigmap*del2,-1)
-call snhcsh(sinhms,dummy,sigmap*dels,-1)
-call snhcsh(sinhp1,dummy,sigmap*del1/2.,-1)
-call snhcsh(sinhp2,dummy,sigmap*del2/2.,-1)
-call snhcsh(dummy,coshp1,delp1,1)
-call snhcsh(dummy,coshp2,delp2,1)
-d = sigmap*sigmap*dels*(sinhms + sigmap*dels)
-c1 = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)*sinhp2 + sigmap* &
-   & coshp1*del2))/d
-c2 = (sinhm2*del1 - del2*(2.*(coshp2 + 1.)*sinhp1 + sigmap* &
-   & coshp2*del1))/d
-xs = sumx + xp(i)*c1 + xp(im1)*c2
-ys = sumy + yp(i)*c1 + yp(im1)*c2
-zs = sumz + zp(i)*c1 + zp(im1)*c2
-end subroutine qurv2
-
-pure elemental subroutine ceez(del1,del2,sigma,c1,c2,c3,n)
-implicit none
-integer, intent(in) :: n
-real, intent(in) :: del1, del2, sigma
-real, intent(inout) :: c1, c2, c3
-real :: coshm1, coshm2, del, delm, delp, denom, dummy, sinhmm, &
-   & sinhmp
-interface
-   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
-      implicit none
-      real, intent(inout) :: sinhm
-      real, intent(inout) :: coshm
-      real, intent(in) :: x
-      integer, intent(in) :: isw
-   end subroutine snhcsh
-end interface
-!                      From the spline under tension package
-!                       coded by A. K. Cline and R. J. Renka
-!                            department of computer sciences
-!                              University of Texas at Austin
-! this subroutine determines the coefficients c1, c2, and c3
-! used to determine endpoint slopes. Specifically, if
-! function values Y1, Y2, and Y3 are given at points X1, X2,
-! and X3, respectively, the quantity c1*Y1 + c2*Y2 + c3*Y3
-! is the value of the derivative at X1 of a spline under
-! tension (with tension factor sigma) passing through the
-! three points and having third derivative equal to zero at
-! X1. Optionally, only two values, c1 and c2 are determined.
-! On input--
-!   del1 IS X2-X1 (.GT. 0.).
-!   del2 is X3-X1 (.GT. 0.). If n .EQ. 2, this parameter is
-!   ignored.
-!   sigma is the tension factor.
-! And
-!   n is a switch indicating the number of coefficients to
-!   be returned. If n .EQ. 2 only two coefficients are
-!   returned. Otherwise all three are returned.
-! On output--
-!   c1, c2, and c3 contain the coefficients.
-! None of the input parameters are altered.
-! This subroutine references package module snhcsh.
-!-----------------------------------------------------------
-if (n == 2) go to 2
-if (sigma /= 0.) go to 1
-del = del2 - del1
-! TENSION .EQ. 0.
-c1 = -(del1 + del2)/(del1*del2)
-c2 = del2/(del1*del)
-c3 = -del1/(del2*del)
-return
-! TENSION .NE. 0.
-1 call snhcsh(dummy,coshm1,sigma*del1,1)
-call snhcsh(dummy,coshm2,sigma*del2,1)
-delp = sigma*(del2 + del1)/2.
-delm = sigma*(del2 - del1)/2.
-call snhcsh(sinhmp,dummy,delp,-1)
-call snhcsh(sinhmm,dummy,delm,-1)
-denom = coshm1*(del2 - del1) - 2.*del1*(sinhmp + delp)* &
-   & (sinhmm + delm)
-c1 = 2.*(sinhmp + delp)*(sinhmm + delm)/denom
-c2 = -coshm2/denom
-c3 = coshm1/denom
-return
-! Two coefficients
-2 c1 = -1./del1
-c2 = -c1
-end subroutine ceez
-
-pure elemental subroutine terms(diag,sdiag,sigma,del)
-implicit none
-real, intent(inout) :: diag, sdiag
-real, intent(in) :: sigma, del
-real :: coshm, denom, sigdel, sinhm
-interface
-   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
-      implicit none
-      real, intent(inout) :: sinhm
-      real, intent(inout) :: coshm
-      real, intent(in) :: x
-      integer, intent(in) :: isw
-   end subroutine snhcsh
-end interface
-!                      From the spline under tension package
-!                       coded by A. K. Cline and R. J. Renka
-!                            department of computer sciences
-!                              University of Texas at Austin
-! this subroutine computes the diagonal and superdiagonal
-! terms of the tridiagonal linear system associated with
-! spline under tension interpolation.
-! On input--
-!   sigma contains the tension factor.
-! And
-!   del contains the step size.
-! On output--
-!               (sigma*del*cosh(sigma*del) - Sinh(sigma*del)
-!   diag = del*--------------------------------------------.
-!                     (sigma*del)**2 * SINH(sigma*del)
-!                   sinh(sigma*del) - sigma*del
-!   sdiag = del*----------------------------------.
-!                (sigma*del)**2 * SINH(sigma*del)
-! and
-!   sigma and del are unaltered.
-! This subroutine references package module snhcsh.
-!-----------------------------------------------------------
-if (sigma /= 0.) go to 1
-diag = del/3.
-sdiag = del/6.
-return
-1 sigdel = sigma*del
-call snhcsh(sinhm,coshm,sigdel,0)
-denom = del/((sinhm + sigdel)*sigdel*sigdel)
-diag = denom*(sigdel*coshm - sinhm)
-sdiag = denom*sinhm
-end subroutine terms
-
-pure integer function intrvl(x, t, m)
-implicit none
-integer, intent(in) :: m
-real, intent(in) :: x, t(m)
-integer :: i, il, ir
-real :: tm, nswc_ai_r4
-!-----------------------------------------------------------------------
-!             Location of a value x in a sequence t
-!                       ----------------
-!     Input--
-!        x is a real number.
-!        t is an array of nondecreasing values. It is
-!          assumed that t(1) .LT. t(m).
-!        m is the length of t (m .GE. 2).
-!     Output--
-!        intrvl has the value i when  t(i) .LE. x .LT. t(i+1).
-!        Otherwise, if L is the integer where t(L) .LT. t(L+1)
-!        and t(L+1) = ... = t(m), then intrvl has the value i
-!        where
-!                  i = 1   IF x .LT. t(1)
-!                  i = L   IF x .GE. t(L)
-!-----------------------------------------------------------------------
-if (x < t(2)) go to 100
-tm = t(m)
-i = m - 1
-10 if (t(i) < tm) go to 20
-i = i - 1
-go to 10
-20 if (x >= t(i)) go to 110
-il = 2
-ir = i
-!     Bisection search
-30 i = (il + ir)/2
-if (i == il) go to 110
-nswc_ai_r4 = x - t(i)
-if (nswc_ai_r4 < 0) go to 40
-if (nswc_ai_r4 == 0) go to 60
-go to 50
-40 ir = i
-go to 30
-50 il = i
-go to 30
-!     Case when x = t(i) for some i
-60 if (x < t(i + 1)) go to 110
-i = i + 1
-go to 60
-!     Left end
-100 intrvl = 1
-return
-!     Normal exit
-110 intrvl = i
-end function intrvl
 

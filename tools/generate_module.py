@@ -20,6 +20,7 @@ from remove_final_returns import transform_free as remove_final_returns
 from storage_modernization import module_state
 from module_kinds import transform as named_module_kinds
 from module_pi_constants import transform as shared_module_pi
+from declaration_sections import remove_empty_free_markers
 
 ROOT = Path(__file__).resolve().parents[1]
 BINDINGS = Path(__file__).with_name('module-bindings.json')
@@ -186,7 +187,8 @@ def module_source(text, calls=None, intrinsics=None, coalesce=True, modern_state
     if not named_kinds:
         return generated
     generated = named_module_kinds(generated)
-    return shared_module_pi(generated) if pi_constants else generated
+    generated = shared_module_pi(generated) if pi_constants else generated
+    return remove_empty_free_markers(generated)
 
 
 def review_intrinsics(text, compiler):

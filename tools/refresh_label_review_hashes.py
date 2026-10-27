@@ -84,7 +84,7 @@ def main():
     parser.add_argument('before', type=Path)
     parser.add_argument('after', type=Path)
     parser.add_argument('--apply', action='store_true')
-    parser.add_argument('--conversion', choices=['labels', 'exits', 'generics', 'copies'], default='labels')
+    parser.add_argument('--conversion', choices=['labels', 'exits', 'generics', 'copies', 'sections'], default='labels')
     parser.add_argument('--compiler', help='Also verify fixed-form symbols, warnings and assembly')
     args = parser.parse_args()
     before, after = args.before.read_bytes(), args.after.read_bytes()
@@ -93,6 +93,10 @@ def main():
         from goto_to_exit import transform as transformer
     if args.conversion == 'generics':
         from fixed_generic_intrinsics import transform as transformer
+    if args.conversion == 'sections':
+        from declaration_sections import transform as transformer
+        from validate_declaration_sections import verify as verify_sections
+        verify_sections(before, after, args.compiler or 'gfortran')
     if args.conversion == 'copies':
         from remove_redundant_copies import transform as transformer
         from validate_redundant_copies import verify as verify_copies
@@ -100,7 +104,7 @@ def main():
         if transformer(before, report) != after:
             raise ValueError('Source change does not match copy cleanup')
         verify_copies(before, after, report, args.compiler or 'gfortran')
-    if args.compiler and args.conversion != 'copies':
+    if args.compiler and args.conversion not in ('copies', 'sections'):
         if args.conversion == 'generics':
             from fixed_generic_intrinsics import review as fixed_review, MANIFEST as fixed_manifest
             if fixed_review(before, args.compiler) != json.loads(fixed_manifest.read_text()):

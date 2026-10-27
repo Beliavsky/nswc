@@ -1708,7 +1708,7 @@
       }
     },
     "DERFI": {
-      "source_hash": "1ec7567500de76dd12007c05cd517a7b3568302b47a147f2d44426685775bf83",
+      "source_hash": "80bb65a342ad05af063fe3bf3d04a47c5aab6ff12308247cbbc790409d2688c5",
       "constants": {
         "c": [
           ".5625d0"
@@ -1835,7 +1835,7 @@
       }
     },
     "DAERF": {
-      "source_hash": "3a3e910f02d8c0d80b6d671e85d6793c4680526fef1b32f0adbd327eff4f4f22",
+      "source_hash": "45633518d8c85d829b19aa551ee221a6268ffc92641437345d9dd445ca6ff45d",
       "constants": {
         "c": [
           "1.12837916709551257389615890312155d0"
@@ -1846,7 +1846,7 @@
       }
     },
     "PNDF": {
-      "source_hash": "7239d031f35a37f682489e2d5b291ba12008711f497e2e40ae23d0c7343d18b6",
+      "source_hash": "a921e038a74e9ae9f0b659134596ca1eb06273c05183d54f9dc9b07bebfc5461",
       "constants": {
         "a": [
           ".707106781186548"
@@ -3207,7 +3207,7 @@
       }
     },
     "SI": {
-      "source_hash": "01e4575255234e76eb8eee708cb639694cbe4cf2a87fc91a1274228e337e20e5",
+      "source_hash": "b77d7c3390d63575057952f3ea5976b59c75211f336afa8b6b58f9ceb8437688",
       "constants": {
         "n1": [
           "16"
@@ -3293,7 +3293,7 @@
       }
     },
     "CIN": {
-      "source_hash": "677054b01ec0274971f3994d85f5edfa689d3a72f8e3feaf9cfc61a0c137a7c8",
+      "source_hash": "e5298d2066746262a43239512ac86104d6eb6523fb07e769127ad5762d186c72",
       "constants": {
         "n1": [
           "16"
@@ -4855,7 +4855,7 @@
       }
     },
     "DGRAT": {
-      "source_hash": "bed4775785d16f4d90eaa9693319b16bab8fd5f9a7754f780a1064ca091d2474",
+      "source_hash": "f9fb65b798831aec8d49466c95ee309309e1f87940738daa0be48cbcf25fedcc",
       "constants": {
         "alog10": [
           "2.30258509299404568401799145468d0"
@@ -8988,7 +8988,7 @@
       }
     },
     "ORIMP": {
-      "source_hash": "b78dfdd89848a7eaddea81a5c110a69298921ff48e24ab6adae9981b49c13fa1",
+      "source_hash": "48899bf2e567e9184d521f7fe32bbf0a292afd7c8a5aa83e57730c8d133e691c",
       "constants": {
         "zero": [
           "0.0"

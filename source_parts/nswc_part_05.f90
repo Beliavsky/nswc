@@ -1,3 +1,616 @@
+subroutine dabslv(mo,m,n,a,na,b,nb,c,nc,wk,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer :: m
+integer, intent(in) :: mo
+integer :: n
+integer, intent(in) :: na, nb, nc
+double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n), &
+   & wk(*)
+!     beginning of local variable declarations
+integer :: iu, iv, iw
+! ----------------------------------------------------------------------
+!     dabslv solves the real matrix equation AX + XB = c. A is reduced
+!     to lower Schur form, b is reduced to upper Schur form, and the
+!     transformed system is solved by back substitution.
+! ----------------------------------------------------------------------
+!        mo is an input argument which specifies if the routine is
+!     being called for the first time. On an initial call mo = 0 And
+!     we have the following setup.
+!        a(na,m)
+!           A is a matrix of order m. it is assumed that
+!           na .GE. m .GE. 1.
+!        b(nb,n)
+!           b is a matrix of order n. it is assumed that
+!           nb .GE. n .GE. 1.
+!        c(nc,n)
+!           c is a matrix having m rows and n columns.
+!           It is assumed that nc .GE. m.
+!        WK(---)
+!           WK is an array of dimension m**2  + n**2 + 2K
+!           WHERE K = max(m,n). WK IS A GENERAL STORAGE
+!           area for the routine.
+!     ierr is a variable that reports the status of the results. When
+!     the routine terminates, ierr has one of the following values...
+!        ierr =  0  The solution was obtained and stored in c.
+!        ierr =  1  The equations are inconsistent for A and b.
+!                   The problem cannot be solved.
+!        ierr = -1  A could not be reduced to lower Schur form.
+!                   The problem cannot be solved.
+!        ierr = -2  b could not be reduced to upper Schur form.
+!                   The problem cannot be solved.
+!     When ierr = 0, a contains the lower Schur form of the matrix a,
+!     b contains the upper Schur form of the matrix b, and WK contains
+!     the orthonal matrices involved in the Schur decompositions of
+!     A and b. this information can be reused to solve a new set of
+!     equations AX + XB = c without having to redecompose A and b.
+!     The following options are available...
+!        mo = 1      New matrices A and c are given. The data for b
+!                    is reused in solving the new set of equations.
+!        mo = 2      New matrices b and c are given. The data for A
+!                    is reused in solving the new set of equations.
+!     mo .NE. 0,1,2  a new matrix c is given. The data for A and b
+!                    is reused in solving the new set of equations.
+!     When dabslv is recalled, it is assumed that m, n, and WK have
+!     not been modified.
+! ----------------------------------------------------------------------
+!     This subroutine is a modification by
+!        Alfred H. Morris, Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
+!     of the subroutine axpxb written by
+!        R.H. Bartels and G.W.Stewart
+!        University of Texas at Austin.
+!     Reference. Bartels, R.H. and Stewart, G.W., algorithm 432,
+!        solution of the matrix equation AX + XB = c, comm. ACM
+!        15 (1972), PP. 820-826.
+! ----------------------------------------------------------------------
+iu = 1
+iv = m*m + 1
+iw = n*n + iv
+call dabsv1(mo,m,n,a,na,wk(iu),m,b,nb,wk(iv),n, &
+   & c,nc,wk(iw),ierr)
+end subroutine dabslv
+
+subroutine dabsv1(mo,m,n,a,na,u,nu,b,nb,v,nv,c,nc,wk,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer :: m
+integer, intent(in) :: mo
+integer :: n
+integer, intent(in) :: na, nb, nc, nu, nv
+double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n)
+double precision, intent(inout) :: u(nu,m), v(nv,n)
+double precision, intent(inout) :: wk(*)
+!     beginning of local variable declarations
+integer :: i, j, k
+double precision :: temp
+! ----------------------------------------------------------------------
+!     dabsv1 solves the real matrix equation AX + XB = c. A is reduced
+!     to lower Schur form, b is reduced to upper Schur form, and the
+!     transformed system is solved by back substitution.
+! ----------------------------------------------------------------------
+!     If required, reduce A to lower real Schur form
+if (mo /= 0 .and. mo /= 1) go to 35
+do i = 1,m
+   do j = i,m
+      temp = a(i,j)
+      a(i,j) = a(j,i)
+      a(j,i) = temp
+   end do
+end do
+call dorth(na,m,1,m,a,wk)
+call drtrn1(m,1,m,a,na,u,nu,wk)
+if (m == 1) go to 20
+call dschur(m,1,m,a,na,u,nu,wk(1),wk(m + 1),ierr)
+if (ierr /= 0) go to 200
+20 do i = 1,m
+   do j = i,m
+      temp = a(i,j)
+      a(i,j) = a(j,i)
+      a(j,i) = temp
+   end do
+end do
+!     If required, reduce b to upper real Schur form
+35 if (mo /= 0 .and. mo /= 2) go to 45
+call dorth(nb,n,1,n,b,wk)
+call drtrn1(n,1,n,b,nb,v,nv,wk)
+if (n == 1) go to 45
+call dschur(n,1,n,b,nb,v,nv,wk(1),wk(n + 1),ierr)
+if (ierr /= 0) go to 210
+!     Transform c
+45 do j = 1,n
+   do i = 1,m
+      wk(i) = 0.d0
+      do k = 1,m
+         wk(i) = wk(i) + u(k,i)*c(k,j)
+      end do
+   end do
+   do i = 1,m
+      c(i,j) = wk(i)
+   end do
+end do
+do i = 1,m
+   do j = 1,n
+      wk(j) = 0.d0
+      do k = 1,n
+         wk(j) = wk(j) + c(i,k)*v(k,j)
+      end do
+   end do
+   do j = 1,n
+      c(i,j) = wk(j)
+   end do
+end do
+!     Solve the transformed system
+call dshslv(a,b,c,m,n,na,nb,nc,ierr)
+if (ierr /= 0) go to 220
+!     Transform c back to the solution
+do j = 1,n
+   do i = 1,m
+      wk(i) = 0.d0
+      do k = 1,m
+         wk(i) = wk(i) + u(i,k)*c(k,j)
+      end do
+   end do
+   do i = 1,m
+      c(i,j) = wk(i)
+   end do
+end do
+do i = 1,m
+   do j = 1,n
+      wk(j) = 0.d0
+      do k = 1,n
+         wk(j) = wk(j) + c(i,k)*v(j,k)
+      end do
+   end do
+   do j = 1,n
+      c(i,j) = wk(j)
+   end do
+end do
+return
+!     Error return
+200 ierr = -1
+return
+210 ierr = -2
+return
+220 ierr = 1
+end subroutine dabsv1
+
+pure subroutine dschur(n, low, igh, h, nh, z, nz, wr, wi, ierr)
+implicit none
+integer, intent(in) :: n
+integer, intent(in) :: nh, nz, igh
+integer, intent(in) :: low
+integer, intent(out) :: ierr
+double precision, intent(inout) :: h(nh,n), wr(n), wi(n), z(nz,n)
+!     beginning of local variable declarations
+integer :: ip1, i, j, k, l, m, en, ll, mm, na, its, mp2, enm2
+double precision :: p, q, r, s, t, w, x, y, zz, norm, s1, s2
+logical :: notlas
+! ----------------------------------------------------------------------
+!     It is assumed that h is an upper Hessenberg matrix. dschur
+!     obtains an orthogonal matrix q for which  transpose(q)*h*q
+!     is in Schur form. The eigenvalues of h are also computed.
+!     On input-
+!        n is the order of the matrix,
+!        low and igh are integers determined by the balancing
+!          subroutine dbal.  If  dbal  has not been used, set
+!          low = 1, igh = n.
+!        h contains the upper Hessenberg matrix,
+!        nh is the first dimension of h,
+!        z contains a matrix of order n,
+!        nz is the first dimension of z.
+!     On output-
+!        h contains the transformed matrix in upper Schur form,
+!        z contains the matrix z*q where q is the orthogonal
+!          matrix which reduces h to upper Schur form,
+!        wr and wi contain the real and imaginary parts,
+!          respectively, of the eigenvalues.  The eigenvalues
+!          are unordered except that complex conjugate pairs
+!          of values appear consecutively with the eigenvalue
+!          having the positive imaginary part first.  If an
+!          error exit is made, the eigenvalues should be correct
+!          for indices ierr+1,...,n.
+!        ierr is set to
+!          0          FOR NORMAL RETURN,
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
+!                     determined after 50 iterations.
+! -----------------
+!     Written by jack dongarra
+!          Argonne National Laboratory
+!          may 1961
+!     modified by A.H. Morris (NSWC)
+! ----------------------------------------------------------------------
+!     This subroutine is a modification of the EISPACK subroutine
+!     hqr2,  which is based on the Algol procedure hqr by peters
+!     and Wilkinson, NUM. Math. 16 (1970), PP.181-204.
+! ----------------------------------------------------------------------
+!     double precision dsqrt, dabs
+!     integer min0
+ierr = 0
+norm = 0.d0
+k = 1
+!     ********** Store roots isolated by balanc
+!                and compute matrix norm **********
+do i = 1,n
+   do j = k,n
+      norm = norm + abs(h(i,j))
+   end do
+   k = i
+   if (i >= low .and. i <= igh) go to 20
+   wr(i) = h(i,i)
+   wi(i) = 0.d0
+20 continue
+end do
+en = igh
+t = 0.d0
+!     ********** Search for next eigenvalues **********
+30 if (en < low) go to 300
+its = 0
+na = en - 1
+enm2 = na - 1
+!     ********** Look for single small sub-diagonal element
+!                for l=en step -1 Until low do -- **********
+40 do ll = low,en
+   l = en + low - ll
+   if (l == low) exit
+   s = abs(h(l - 1,l - 1)) + abs(h(l,l))
+   if (s == 0.d0) s = norm
+   s1 = s
+   s2 = s1 + abs(h(l,l - 1))
+   if (s1 == s2) exit
+end do
+!     ********** Form shift **********
+x = h(en,en)
+if (l == en) go to 220
+y = h(na,na)
+w = h(en,na)*h(na,en)
+if (l == na) go to 230
+if (its == 50) go to 290
+if (its /= 10 .and. its /= 20 .and. its /= 30) go to 80
+!     ********** Form exceptional shift **********
+t = t + x
+do i = low,en
+   h(i,i) = h(i,i) - x
+end do
+s = abs(h(en,na)) + abs(h(na,enm2))
+x = 0.75d0*s
+y = x
+w = -0.4375d0*s*s
+80 its = its + 1
+!     ********** Look for two consecutive small
+!                sub-diagonal elements.
+!                FOR m=en-2 STEP -1 UNTIL l DO -- **********
+do mm = l,enm2
+   m = enm2 + l - mm
+   zz = h(m,m)
+   r = x - zz
+   s = y - zz
+   p = (r*s - w)/h(m + 1,m) + h(m,m + 1)
+   q = h(m + 1,m + 1) - zz - r - s
+   r = h(m + 2,m + 1)
+   s = abs(p) + abs(q) + abs(r)
+   p = p/s
+   q = q/s
+   r = r/s
+   if (m == l) exit
+   s1 = abs(p)*(abs(h(m - 1,m - 1)) + abs(zz) + abs(h(m + 1,m + 1)))
+   s2 = s1 + abs(h(m,m - 1))*(abs(q) + abs(r))
+   if (s1 == s2) exit
+end do
+mp2 = m + 2
+do i = mp2,en
+   h(i,i - 2) = 0.d0
+   if (i == mp2) go to 110
+   h(i,i - 3) = 0.d0
+110 continue
+end do
+!     ********** Double QR step involving rows l to en and
+!                COLUMNS m TO en **********
+do k = m,na
+   notlas = k /= na
+   if (k == m) go to 120
+   p = h(k,k - 1)
+   q = h(k + 1,k - 1)
+   r = 0.d0
+   if (notlas) r = h(k + 2,k - 1)
+   x = abs(p) + abs(q) + abs(r)
+   if (x == 0.d0) go to 210
+   p = p/x
+   q = q/x
+   r = r/x
+120 s = sqrt(p*p + q*q + r*r)
+   if (p < 0.d0) s = -s
+   if (k == m) go to 130
+   h(k,k - 1) = -s*x
+   go to 140
+130 if (l /= m) h(k,k - 1) = -h(k,k - 1)
+140 p = p + s
+   x = p/s
+   y = q/s
+   zz = r/s
+   q = q/p
+   r = r/p
+!     ********** Row modification **********
+   do j = k,n
+      p = h(k,j) + q*h(k + 1,j)
+      if (.not.notlas) go to 150
+      p = p + r*h(k + 2,j)
+      h(k + 2,j) = h(k + 2,j) - p*zz
+150   h(k + 1,j) = h(k + 1,j) - p*y
+      h(k,j) = h(k,j) - p*x
+   end do
+   j = min(en,k + 3)
+!     ********** Column modification **********
+   do i = 1,j
+      p = x*h(i,k) + y*h(i,k + 1)
+      if (.not.notlas) go to 170
+      p = p + zz*h(i,k + 2)
+      h(i,k + 2) = h(i,k + 2) - p*r
+170   h(i,k + 1) = h(i,k + 1) - p*q
+      h(i,k) = h(i,k) - p
+   end do
+!     ********** Accumulate transformations **********
+   do i = low,igh
+      p = x*z(i,k) + y*z(i,k + 1)
+      if (.not.notlas) go to 190
+      p = p + zz*z(i,k + 2)
+      z(i,k + 2) = z(i,k + 2) - p*r
+190   z(i,k + 1) = z(i,k + 1) - p*q
+      z(i,k) = z(i,k) - p
+   end do
+210 continue
+end do
+go to 40
+!     ********** One root found **********
+220 h(en,en) = x + t
+wr(en) = h(en,en)
+wi(en) = 0.d0
+en = na
+go to 30
+!     ********** Two roots found **********
+230 p = (y - x)/2.d0
+q = p*p + w
+zz = sqrt(abs(q))
+h(en,en) = x + t
+x = h(en,en)
+h(na,na) = y + t
+if (q < 0.d0) go to 270
+!     ********** Real pair **********
+if (p < 0.d0) zz = -zz
+zz = p + zz
+wr(na) = x + zz
+wr(en) = wr(na)
+if (zz /= 0.d0) wr(en) = x - w/zz
+wi(na) = 0.d0
+wi(en) = 0.d0
+x = h(en,na)
+s = abs(x) + abs(zz)
+p = x/s
+q = zz/s
+r = sqrt(p*p + q*q)
+p = p/r
+q = q/r
+!     ********** Row modification **********
+do j = na,n
+   zz = h(na,j)
+   h(na,j) = q*zz + p*h(en,j)
+   h(en,j) = q*h(en,j) - p*zz
+end do
+!     ********** Column modification **********
+do i = 1,en
+   zz = h(i,na)
+   h(i,na) = q*zz + p*h(i,en)
+   h(i,en) = q*h(i,en) - p*zz
+end do
+!     ********** Accumulate transformations **********
+do i = low,igh
+   zz = z(i,na)
+   z(i,na) = q*zz + p*z(i,en)
+   z(i,en) = q*z(i,en) - p*zz
+end do
+go to 280
+!     ********** Complex pair **********
+270 wr(na) = x + p
+wr(en) = x + p
+wi(na) = zz
+wi(en) = -zz
+280 en = enm2
+go to 30
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 50 iterations **********
+290 ierr = en
+return
+300 do i = 1,n
+   ip1 = i + 1
+   if (abs(wi(i)) /= 0.d0) ip1 = ip1 + 1
+   if (ip1 > n) go to 320
+   do j = ip1,n
+      h(j,i) = 0.d0
+   end do
+320 continue
+end do
+end subroutine dschur
+
+pure subroutine dshslv(a,b,c,m,n,na,nb,nc,ierr)
+implicit none
+!     ------------------------------------------------------------------
+!     dshslv solves the matrix equation AX + XB = c where
+!     A is in lower Schur form and b in upper Schur form.
+!     ------------------------------------------------------------------
+integer, intent(in) :: m, n, na, nb, nc
+integer, intent(inout) :: ierr
+double precision, intent(in) :: a(na,m), b(nb,n)
+double precision, intent(inout) :: c(nc,n)
+!     beginning of local variable declarations
+double precision :: sum, p(4), t(4,4)
+integer :: dk, dl, i, ib, j, ja, k, km1, kk, l, lm1, ll
+interface
+   pure subroutine dpslv(n,m,a,ka,b,kb,ierr)
+      implicit none
+      integer, intent(in) :: kb
+      integer, intent(in) :: ka
+      integer, intent(in) :: m
+      integer, intent(in) :: n
+      double precision, intent(inout) :: a(ka,n)
+      double precision, intent(inout) :: b(kb,m)
+      integer, intent(out) :: ierr
+   end subroutine dpslv
+end interface
+l = 1
+10 lm1 = l - 1
+dl = 1
+if (l == n) go to 15
+if (b(l + 1,l) /= 0.d0) dl = 2
+15 ll = l + dl - 1
+if (l == 1) go to 30
+do j = l,ll
+   do i = 1,m
+      sum = c(i,j)
+      do ib = 1,lm1
+         sum = sum - c(i,ib)*b(ib,j)
+      end do
+      c(i,j) = sum
+   end do
+end do
+30 k = 1
+40 km1 = k - 1
+dk = 1
+if (k == m) go to 45
+if (a(k,k + 1) /= 0.d0) dk = 2
+45 kk = k + dk - 1
+if (k == 1) go to 60
+do i = k,kk
+   do j = l,ll
+      sum = c(i,j)
+      do ja = 1,km1
+         sum = sum - a(i,ja)*c(ja,j)
+      end do
+      c(i,j) = sum
+   end do
+end do
+60 if (dl == 2) go to 80
+if (dk == 2) go to 70
+t(1,1) = a(k,k) + b(l,l)
+if (t(1,1) == 0.d0) go to 200
+c(k,l) = c(k,l)/t(1,1)
+ierr = 0
+go to 100
+70 t(1,1) = a(k,k) + b(l,l)
+t(1,2) = a(k,kk)
+t(2,1) = a(kk,k)
+t(2,2) = a(kk,kk) + b(l,l)
+p(1) = c(k,l)
+p(2) = c(kk,l)
+call dpslv(2, 1, t, 4, p, 4, ierr)
+if (ierr /= 0) go to 200
+c(k,l) = p(1)
+c(kk,l) = p(2)
+go to 100
+80 if (dk == 2) go to 90
+t(1,1) = a(k,k) + b(l,l)
+t(1,2) = b(ll,l)
+t(2,1) = b(l,ll)
+t(2,2) = a(k,k) + b(ll,ll)
+p(1) = c(k,l)
+p(2) = c(k,ll)
+call dpslv(2, 1, t, 4, p, 4, ierr)
+if (ierr /= 0) go to 200
+c(k,l) = p(1)
+c(k,ll) = p(2)
+go to 100
+90 t(1,1) = a(k,k) + b(l,l)
+t(1,2) = a(k,kk)
+t(1,3) = b(ll,l)
+t(1,4) = 0.d0
+t(2,1) = a(kk,k)
+t(2,2) = a(kk,kk) + b(l,l)
+t(2,3) = 0.d0
+t(2,4) = t(1,3)
+t(3,1) = b(l,ll)
+t(3,2) = 0.d0
+t(3,3) = a(k,k) + b(ll,ll)
+t(3,4) = t(1,2)
+t(4,1) = 0.d0
+t(4,2) = t(3,1)
+t(4,3) = t(2,1)
+t(4,4) = a(kk,kk) + b(ll,ll)
+p(1) = c(k,l)
+p(2) = c(kk,l)
+p(3) = c(k,ll)
+p(4) = c(kk,ll)
+call dpslv(4, 1, t, 4, p, 4, ierr)
+if (ierr /= 0) go to 200
+c(k,l) = p(1)
+c(kk,l) = p(2)
+c(k,ll) = p(3)
+c(kk,ll) = p(4)
+100 k = k + dk
+if (k <= m) go to 40
+l = l + dl
+if (l <= n) go to 10
+return
+!     Error return
+200 ierr = 1
+end subroutine dshslv
+
+subroutine taslv(mo,n,a,na,c,nc,wk,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: mo
+integer :: n
+integer, intent(in) :: na, nc
+real, intent(inout) :: a(na,n), c(nc,n), wk(*)
+!     beginning of local variable declarations
+integer :: iw
+! ----------------------------------------------------------------------
+!     taslv solves the real matrix equation transpose(a)*X + X*a = c
+!     where c is a symmetric matrix. A is reduced to upper Schur form
+!     and the transformed system is solved.
+! ----------------------------------------------------------------------
+!        mo is an input argument which specifies if the routine is
+!     being called for the first time. On an initial call mo = 0 And
+!     we have the following setup.
+!        a(na,n)
+!           A is a matrix of order n. it is assumed that
+!           na .GE. n .GE. 1.
+!        c(nc,n)
+!           c is a symmetric matrix of order n. it is
+!           assumed that nc .GE. n.
+!        wk(---)
+!           wk is an array of dimension n**2 + 2n that
+!           is a general storage area for the routine.
+!     ierr is a variable that reports the status of the results. When
+!     the routine terminates, ierr has one of the following values...
+!        ierr =  0  The solution was obtained and stored in c.
+!        ierr =  1  The equations are inconsistent for A. the
+!                   problem cannot be solved.
+!        ierr = -1  A could not be REDUCEDTO upper Schur form.
+!                   The problem cannot be solved.
+!     When ierr = 0, a contains the upper Schur form of the matrix
+!     A and wk contains the orthogonal matrix involved in the Schur
+!     decomposition of A. this information can be reused to solve A
+!     new set of equations transpose(a)*X + X*a = c without having
+!     to redecompose A. in this case, the input argument mo may be
+!     set to any nonzero value. When mo .NE. 0, it is assumed that
+!     only c has been modified. On output the solution for the new
+!     set of equations is stored in c.
+! ----------------------------------------------------------------------
+!     This subroutine is a modification by
+!        Alfred H. Morris, Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
+!     of the subroutine atxpxa written by
+!        R.H. Bartels and G.W. Stewart
+!        University of Texas at Austin.
+!     Reference. Bartels, R.H. and Stewart, G.W., algorithm 432,
+!        solution of the matrix equation AX + XB = c, comm. ACM
+!        15 (1972), PP. 820-826.
+! ----------------------------------------------------------------------
+iw = n*n + 1
+call taslv1(mo,n,a,na,wk(1),n,c,nc,wk(iw),ierr)
+end subroutine taslv
+
 subroutine taslv1(mo,n,a,na,u,nu,c,nc,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
@@ -5,6 +618,7 @@ integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nc, nu
 real, intent(inout) :: a(na,n), u(nu,n), c(nc,n), wk(*)
+!     beginning of local variable declarations
 integer :: i, j, k
 ! ----------------------------------------------------------------------
 !     taslv1 solves the real matrix equation transpose(a)*X + X*a = c
@@ -101,6 +715,7 @@ integer, intent(in) :: n, na, nc
 integer, intent(inout) :: ierr
 real, intent(in) :: a(na,n)
 real, intent(inout) :: c(nc,n)
+!     beginning of local variable declarations
 real :: sum, p(4), t(4,4)
 integer :: dk, dl, i, ia, j, k, kk, km1, l, ll, ldl
 interface
@@ -240,6 +855,7 @@ integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nc
 double precision, intent(inout) :: a(na,n), c(nc,n), wk(*)
+!     beginning of local variable declarations
 integer :: iw
 ! ----------------------------------------------------------------------
 !     dtaslv solves the real matrix equation transpose(a)*X + X*a = c
@@ -297,6 +913,7 @@ integer :: n
 integer, intent(in) :: na, nc, nu
 double precision, intent(inout) :: a(na,n), u(nu,n), c(nc,n), &
    & wk(*)
+!     beginning of local variable declarations
 integer :: i, j, k
 ! ----------------------------------------------------------------------
 !     dtasv1 solves the real matrix equation transpose(a)*X + X*a = c
@@ -393,6 +1010,7 @@ integer, intent(in) :: n, na, nc
 integer, intent(inout) :: ierr
 double precision, intent(in) :: a(na,n)
 double precision, intent(inout) :: c(nc,n)
+!     beginning of local variable declarations
 double precision :: sum, p(4), t(4,4)
 integer :: dk, dl, i, ia, j, k, kk, km1, l, ll, ldl
 interface
@@ -585,6 +1203,7 @@ integer, intent(inout) :: maxits, ierr
 complex, intent(inout) :: work(nw)
 complex, intent(inout) :: a(nm,n), b(nm,n), c(nm,n), s(nm,n)
 real, intent(in) :: tol
+!     beginning of local variable declarations
 integer :: i1, i2, i3, i4, i5, i6, i7
 i1 = n*n + 1
 i2 = n*n + i1
@@ -641,6 +1260,7 @@ complex, intent(inout) :: a(nm,n), b(nm,n), c(nm,n), s(nm,n), &
 complex, intent(inout) :: v(nm,n), z(nm,n), r(nm,n), xold(nm,n), &
    & eye(nm,n), temp(n)
 real, intent(in) :: tol
+!     beginning of local variable declarations
 integer :: its, mats, i, j, k
 real :: anorm, ani, bnorm, bni, cnorm, cni, xnorm, xni, fxnorm, fxni, gnorm, tnorm, t
 !     real sqrt, cabs, float
@@ -859,6 +1479,7 @@ complex, intent(inout) :: f(nm,n)
 complex, intent(inout) :: g(nm,n)
 complex, intent(inout) :: h(nm,n)
 integer, intent(in) :: mats
+!     beginning of local variable declarations
 integer :: i, j, k, l, lb, l1, nk1, nm1, nm2
 complex :: rr, t, u1, u2, v1, v2, rho, tf, tg, th
 real :: r, s
@@ -1054,6 +1675,7 @@ complex, intent(inout) :: a(nm,n), b(nm,n), z(nm,n)
 complex, intent(inout) :: f(nm,n)
 real, intent(in) :: eps1
 integer, intent(in) :: mats
+!     beginning of local variable declarations
 integer :: i, j, k, l, en, jj, k1, k2, ld, ll, l1, na, ish, its, km1, lm1, enm2, lor1, enorn
 complex :: a11, a21, a33, a34, a43, a44, b11, b22, b33, b34, b44, a1, a2, u1, u2, v1, v2, t, rr, sh, ss, tf
 real :: epsa, epsb, anorm, bnorm, ani, bni, srelpr, r, s
@@ -1280,6 +1902,7 @@ integer, intent(in) :: n, nm
 complex, intent(in) :: u(nm,n), v(nm,n), l(nm,n)
 complex, intent(inout) :: f(nm,n)
 complex, intent(inout) :: temp(n)
+!     beginning of local variable declarations
 integer :: i, j, jp1, k, kk, km1, m, nm1
 complex :: denom, sum
 real :: s, t
@@ -1345,6 +1968,7 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kz
 integer :: n
 real, intent(inout) :: a(ka,n), z(kz,n), wk(n,*)
+!     beginning of local variable declarations
 integer :: i, igh, j, k, kp1, l, ll, low, m, np1, np6
 real :: anorm, anorm1, factor, p, q, s, s1
 real, parameter :: c(8) = [.500000000000000e+00, .116666666666667e+00, .166666666666667e-01, .160256410256410e-02, &
@@ -1483,6 +2107,7 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kz
 integer :: n
 double precision, intent(inout) :: a(ka,n), z(kz,n), wk(n,*)
+!     beginning of local variable declarations
 integer :: i, igh, j, k, kp1, l, ll, low, m, np1, np10
 double precision :: anorm, anorm1, factor, p, q, s, s1
 double precision, parameter :: c(12) = [.500000000000000000000000000000d+00, &
@@ -1626,6 +2251,7 @@ real, intent(in) :: b(n)
 real, intent(inout) :: c(n), d(*)
 integer, intent(inout) :: ip(*)
 external rowk
+!     beginning of local variable declarations
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
 real :: bk, c1, cj, ck, dkj
@@ -1766,6 +2392,7 @@ double precision, intent(in) :: b(n)
 double precision, intent(inout) :: c(n), d(*)
 integer, intent(inout) :: ip(*)
 external rowk
+!     beginning of local variable declarations
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
 double precision :: bk, cj, ck, c1, dkj
@@ -1906,6 +2533,7 @@ complex, intent(in) :: b(n)
 complex, intent(inout) :: c(n), d(*)
 integer, intent(inout) :: ip(*)
 external rowk
+!     beginning of local variable declarations
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
    & lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
 real :: s, si
@@ -2054,6 +2682,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 real, intent(inout) :: a(ka,n)
 real, intent(in) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !           Conversion of real matrices from banded to
@@ -2118,6 +2747,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of real matrices from standard to banded
@@ -2185,6 +2815,7 @@ integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,nb)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 interface
    pure subroutine cvrb(a,ka,m,n,ml,mu,b,kb)
@@ -2245,6 +2876,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 double precision, intent(inout) :: a(ka,n)
 double precision, intent(in) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of double precision matrices from banded
@@ -2309,6 +2941,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of double precision matrices from standard
@@ -2376,6 +3009,7 @@ integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,nb)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 interface
    pure subroutine cvdb(a,ka,m,n,ml,mu,b,kb)
@@ -2436,6 +3070,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 complex, intent(inout) :: a(ka,n)
 complex, intent(in) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !          Conversion of complex matrices from banded to
@@ -2500,6 +3135,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of complex matrices from standard to banded
@@ -2567,6 +3203,7 @@ integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,nb)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 interface
    pure subroutine cvcb(a,ka,m,n,ml,mu,b,kb)
@@ -2629,6 +3266,7 @@ integer, intent(in) :: ka, m, ml, mu, n, num
 real, intent(in) :: a(ka,*)
 real, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
 !                Conversion of real matrices from banded
@@ -2686,6 +3324,7 @@ integer, intent(in) :: ka, m, ml, mu, n, num
 double precision, intent(in) :: a(ka,*)
 double precision, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
 !          Conversion of double precision matrices from banded
@@ -2743,6 +3382,7 @@ integer, intent(in) :: ka, m, ml, mu, n, num
 complex, intent(in) :: a(ka,*)
 complex, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
 !              Conversion of complex matrices from banded
@@ -2802,6 +3442,7 @@ integer, intent(in) :: n, nb
 real, intent(in) :: a(*)
 real, intent(inout) :: b(kb,nb)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
 !                Conversion of real matrices from sparse
@@ -2861,6 +3502,7 @@ integer, intent(in) :: n, nb
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(kb,nb)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
 !          Conversion of double precision matrices from sparse
@@ -2920,6 +3562,7 @@ integer, intent(in) :: n, nb
 complex, intent(in) :: a(*)
 complex, intent(inout) :: b(kb,nb)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
 !              Conversion of complex matrices from sparse
@@ -2975,6 +3618,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 real, intent(in) :: a(ka,*)
 double precision, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, j, num
 !-----------------------------------------------------------------------
 !        Conversion of banded matrices from single to double
@@ -2993,6 +3637,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 double precision, intent(in) :: a(ka,*)
 real, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, j, num
 !-----------------------------------------------------------------------
 !        Conversion of banded matrices from double to single
@@ -3014,6 +3659,7 @@ integer, intent(out) :: nl
 integer, intent(inout) :: nu
 complex, intent(in) :: a(ka,*)
 real, intent(inout) :: b(kb,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, k, num
 !-----------------------------------------------------------------------
 !              Real part of a banded complex matrix
@@ -3063,6 +3709,7 @@ integer, intent(out) :: nl
 integer, intent(inout) :: nu
 complex, intent(in) :: a(ka,*)
 real, intent(inout) :: b(kb,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, k, num
 !-----------------------------------------------------------------------
 !            Imaginary part of a banded complex matrix
@@ -3112,6 +3759,7 @@ integer, intent(out) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 real, intent(in) :: a(ka,*), b(kb,*)
 complex, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, j, ja, jb, jc, jmax, k, num
 !-----------------------------------------------------------------------
 !        Compute a + bi for the banded real matrices A and b
@@ -3183,6 +3831,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 real, intent(in) :: a(ka,*)
 real, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !-----------------------------------------------------------------------
 !                Transposition of real banded matrices
@@ -3233,6 +3882,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 double precision, intent(in) :: a(ka,*)
 double precision, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !-----------------------------------------------------------------------
 !          Transposition of double precision banded matrices
@@ -3283,6 +3933,7 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 complex, intent(in) :: a(ka,*)
 complex, intent(inout) :: b(kb,*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !-----------------------------------------------------------------------
 !              Transposition of complex banded matrices
@@ -3336,6 +3987,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 real, intent(in) :: a(ka,*), b(kb,*)
 real, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !                 Addition of real banded matrices
@@ -3470,6 +4122,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 double precision, intent(in) :: a(ka,*), b(kb,*)
 double precision, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !           Addition of double precision banded matrices
@@ -3604,6 +4257,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 complex, intent(in) :: a(ka,*), b(kb,*)
 complex, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !                Addition of complex banded matrices
@@ -3739,6 +4393,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 real, intent(in) :: a(ka,*), b(kb,*)
 real, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !                Subtraction of real banded matrices
@@ -3873,6 +4528,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 double precision, intent(in) :: a(ka,*), b(kb,*)
 double precision, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !          Subtraction of double precision banded matrices
@@ -4007,6 +4663,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
 complex, intent(in) :: a(ka,*), b(kb,*)
 complex, intent(inout) :: c(kc,l)
+!     beginning of local variable declarations
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num, nswc_ai_i4
 !-----------------------------------------------------------------------
 !             Subtraction of complex banded matrices
@@ -4143,6 +4800,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nc, nl, nu
 real, intent(in) :: a(ka,*), b(kb,*)
 real, intent(inout) :: c(kc,nc)
+!     beginning of local variable declarations
 integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
    & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
 real :: sum
@@ -4281,6 +4939,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nc, nl, nu
 double precision, intent(in) :: a(ka,*), b(kb,*)
 double precision, intent(inout) :: c(kc,nc)
+!     beginning of local variable declarations
 integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
    & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
 double precision :: sum
@@ -4419,6 +5078,7 @@ integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nc, nl, nu
 complex, intent(in) :: a(ka,*), b(kb,*)
 complex, intent(inout) :: c(kc,nc)
+!     beginning of local variable declarations
 integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
    & last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
 complex :: sum
@@ -4553,6 +5213,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(n)
 real, intent(inout) :: y(m)
+!     beginning of local variable declarations
 integer :: i, imax, imin, jmin, k, kk, kmax, kmin, mlp1
 real :: sum
 !-----------------------------------------------------------------------
@@ -4599,6 +5260,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(n)
 real, intent(inout) :: y(m)
+!     beginning of local variable declarations
 integer :: i, imax, jmin, k, kk, kmax, kmin, mlp1
 real :: sum
 !-----------------------------------------------------------------------
@@ -4640,6 +5302,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(n)
 double precision, intent(inout) :: y(m)
+!     beginning of local variable declarations
 integer :: i, imax, imin, jmin, k, kk, kmax, kmin, mlp1
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -4687,6 +5350,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(n)
 double precision, intent(inout) :: y(m)
+!     beginning of local variable declarations
 integer :: i, imax, jmin, k, kk, kmax, kmin, mlp1
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -4728,6 +5392,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(n)
 complex, intent(inout) :: y(m)
+!     beginning of local variable declarations
 integer :: i, imax, imin, jmin, k, kk, kmax, kmin, mlp1
 complex :: sum
 !-----------------------------------------------------------------------
@@ -4774,6 +5439,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(n)
 complex, intent(inout) :: y(m)
+!     beginning of local variable declarations
 integer :: i, imax, jmin, k, kk, kmax, kmin, mlp1
 complex :: sum
 !-----------------------------------------------------------------------
@@ -4815,6 +5481,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(m)
 real, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
 real :: sum
 !-----------------------------------------------------------------------
@@ -4860,6 +5527,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*), x(m)
 real, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
 real :: sum
 !-----------------------------------------------------------------------
@@ -4900,6 +5568,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(m)
 double precision, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -4946,6 +5615,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*), x(m)
 double precision, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -4986,6 +5656,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(m)
 complex, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
 complex :: sum
 !-----------------------------------------------------------------------
@@ -5031,6 +5702,7 @@ implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 complex, intent(in) :: a(ka,*), x(m)
 complex, intent(inout) :: y(n)
+!     beginning of local variable declarations
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
 complex :: sum
 !-----------------------------------------------------------------------
@@ -5070,6 +5742,7 @@ pure real function bnrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(ka,*)
+!     beginning of local variable declarations
 integer :: i, j, num
 real :: sum
 !-----------------------------------------------------------------------
@@ -5091,6 +5764,7 @@ pure real function b1nrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 real, intent(in) :: a(*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, incr, j, jmax, jmin, num
 interface
    pure function sasum(n,sx,incx)
@@ -5146,6 +5820,7 @@ pure double precision function dbnrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(ka,*)
+!     beginning of local variable declarations
 integer :: i, j, num
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -5167,6 +5842,7 @@ pure double precision function db1nrm(a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
 double precision, intent(in) :: a(*)
+!     beginning of local variable declarations
 integer :: i, imax, imin, incr, j, jmax, jmin, num
 interface
    pure function dasum(n,dx,incx)
@@ -5387,6 +6063,7 @@ integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
 real, intent(inout) :: a(lda,*)
 integer, intent(inout) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
    & ml1, mp, n1
 real :: t
@@ -5555,6 +6232,7 @@ integer, intent(in) :: lda, n, ml, mu, job
 real, intent(in) :: a(lda,*)
 real, intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: ml1, ml2, k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 real :: t
 interface
@@ -5847,6 +6525,7 @@ integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
 double precision, intent(inout) :: a(lda,*)
 integer, intent(inout) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
    & ml1, mp, n1
 double precision :: t
@@ -6015,6 +6694,7 @@ integer, intent(in) :: lda, n, ml, mu, job
 double precision, intent(in) :: a(lda,*)
 double precision, intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: ml1, ml2, k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 double precision :: t
 interface
@@ -6146,6 +6826,7 @@ integer, intent(in) :: ka, ml, mu, n
 real, intent(out) :: cond
 real, intent(inout) :: a(ka,*), wk(*)
 integer, intent(inout) :: iwk(*)
+!     beginning of local variable declarations
 integer :: isgn, iter, iv, ix, j, jump, kase
 real :: ainorm, anorm
 interface
@@ -6252,6 +6933,7 @@ double precision, intent(inout) :: a(ka,*)
 double precision, intent(out) :: cond
 double precision, intent(inout) :: wk(*)
 integer, intent(inout) :: iwk(*)
+!     beginning of local variable declarations
 integer :: isgn, iter, iv, ix, j, jump, kase
 double precision :: anorm, ainorm
 interface
@@ -6474,6 +7156,7 @@ integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
 complex, intent(inout) :: a(lda,*)
 integer, intent(inout) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
    & ml1, mp, n1
 integer :: icamax
@@ -6610,6 +7293,7 @@ integer, intent(in) :: lda, n, ml, mu, job
 complex, intent(in) :: a(lda,*)
 complex, intent(inout) :: b(n)
 integer, intent(in) :: ipvt(n)
+!     beginning of local variable declarations
 integer :: ml1, ml2, k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 complex :: t
 interface
@@ -6741,6 +7425,7 @@ integer, intent(in) :: ka, m, n, num
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ip, j
 !                 Store the i-TH row
 ip = 1
@@ -6770,6 +7455,7 @@ integer, intent(in) :: ka, m, n, num
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ip, j
 !                 Store the i-TH row
 ip = 1
@@ -6799,6 +7485,7 @@ integer, intent(in) :: ka, m, n, num
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ip, j
 complex, parameter :: zero = (0.0,0.0)
 !                 Store the i-TH row
@@ -6828,6 +7515,7 @@ integer, intent(in) :: kb, m, n
 real, intent(in) :: a(*)
 real, intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin, j
 do i = 1,m
 !                 Clear the i-TH row
@@ -6852,6 +7540,7 @@ integer, intent(in) :: kb, m, n
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin, j
 do i = 1,m
 !                 Clear the i-TH row
@@ -6876,6 +7565,7 @@ integer, intent(in) :: kb, m, n
 complex, intent(in) :: a(*)
 complex, intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin, j
 do i = 1,m
 !                 Clear the i-TH row
@@ -6901,6 +7591,7 @@ real, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
 l = 1
 do i = 1,m
@@ -6927,6 +7618,7 @@ double precision, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
 l = 1
 do i = 1,m
@@ -6953,6 +7645,7 @@ complex, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
 real :: t
 !-----------------------------------------------------------------------
@@ -6984,6 +7677,7 @@ complex, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
 real :: t
 !-----------------------------------------------------------------------
@@ -7017,6 +7711,7 @@ real, intent(inout) :: wk(n)
 complex, intent(inout) :: c(*)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 complex :: t
 !-----------------------------------------------------------------------
@@ -7078,6 +7773,7 @@ real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
 !-----------------------------------------------------------------------
 !                  Copying a sparse real matrix
@@ -7107,6 +7803,7 @@ double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
 !-----------------------------------------------------------------------
 !              Copying a sparse double precision matrix
@@ -7136,6 +7833,7 @@ complex, intent(in) :: a(*)
 complex, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l
 complex, parameter :: zero = (0.0,0.0)
 !-----------------------------------------------------------------------
@@ -7166,6 +7864,7 @@ complex, intent(in) :: a(*)
 complex, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ibeg, iend, ip, l, mp1
 !-----------------------------------------------------------------------
 !     Computation of the conjugate of a sparse complex matrix
@@ -7193,6 +7892,7 @@ real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
 !-----------------------------------------------------------------------
 !                 Transposing a sparse real matrix
@@ -7250,6 +7950,7 @@ real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
 !-----------------------------------------------------------------------
 !                 Transposing a sparse real matrix
@@ -7308,6 +8009,7 @@ double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
 !-----------------------------------------------------------------------
 !           Transposing a sparse double precision matrix
@@ -7365,6 +8067,7 @@ double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
 !-----------------------------------------------------------------------
 !           Transposing a sparse double precision matrix
@@ -7423,6 +8126,7 @@ complex, intent(in) :: a(*)
 complex, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
 !-----------------------------------------------------------------------
 !               Transposing a sparse complex matrix
@@ -7480,6 +8184,7 @@ complex, intent(in) :: a(*)
 complex, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+!     beginning of local variable declarations
 integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
 !-----------------------------------------------------------------------
 !               Transposing a sparse complex matrix
@@ -7539,6 +8244,7 @@ real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 real :: t
 !-----------------------------------------------------------------------
@@ -7601,6 +8307,7 @@ double precision, intent(in) :: a(*), b(*)
 double precision, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 double precision :: t
 !-----------------------------------------------------------------------
@@ -7663,6 +8370,7 @@ complex, intent(in) :: a(*), b(*)
 complex, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 complex :: t
 !-----------------------------------------------------------------------
@@ -7725,6 +8433,7 @@ real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 real :: t
 !-----------------------------------------------------------------------
@@ -7787,6 +8496,7 @@ double precision, intent(in) :: a(*), b(*)
 double precision, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 double precision :: t
 !-----------------------------------------------------------------------
@@ -7849,6 +8559,7 @@ complex, intent(in) :: a(*), b(*)
 complex, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 complex :: t
 !-----------------------------------------------------------------------
@@ -7911,6 +8622,7 @@ real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, jp, jpmax, jpmin, k, kp, kpmax, kpmin
 real :: t
 !-----------------------------------------------------------------------
@@ -7966,6 +8678,7 @@ double precision, intent(in) :: a(*), b(*)
 double precision, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, jp, jpmax, jpmin, k, kp, kpmax, kpmin
 double precision :: t
 !-----------------------------------------------------------------------
@@ -8021,6 +8734,7 @@ complex, intent(in) :: a(*), b(*)
 complex, intent(inout) :: c(*), wk(n)
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+!     beginning of local variable declarations
 integer :: i, ip, j, jp, jpmax, jpmin, k, kp, kpmax, kpmin
 complex :: t
 !-----------------------------------------------------------------------
@@ -8074,6 +8788,7 @@ integer, intent(in) :: m, n
 real, intent(in) :: a(*), x(n)
 real, intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 real :: sum
 !-----------------------------------------------------------------------
@@ -8098,6 +8813,7 @@ integer, intent(in) :: m, n
 real, intent(in) :: a(*), x(n)
 real, intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 real :: sum
 !-----------------------------------------------------------------------
@@ -8122,6 +8838,7 @@ integer, intent(in) :: m, n
 real, intent(in) :: a(*), x(m)
 real, intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 real :: t
 !-----------------------------------------------------------------------
@@ -8149,6 +8866,7 @@ integer, intent(in) :: m, n
 real, intent(in) :: a(*), x(m)
 real, intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 real :: t
 !-----------------------------------------------------------------------
@@ -8173,6 +8891,7 @@ integer, intent(in) :: m, n
 double precision, intent(in) :: a(*), x(n)
 double precision, intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -8197,6 +8916,7 @@ integer, intent(in) :: m, n
 double precision, intent(in) :: a(*), x(n)
 double precision, intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -8221,6 +8941,7 @@ integer, intent(in) :: m, n
 double precision, intent(in) :: a(*), x(m)
 double precision, intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 double precision :: t
 !-----------------------------------------------------------------------
@@ -8248,6 +8969,7 @@ integer, intent(in) :: m, n
 double precision, intent(in) :: a(*), x(m)
 double precision, intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 double precision :: t
 !-----------------------------------------------------------------------
@@ -8272,6 +8994,7 @@ integer, intent(in) :: m, n
 complex, intent(in) :: a(*), x(n)
 complex, intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 complex :: sum
 !-----------------------------------------------------------------------
@@ -8296,6 +9019,7 @@ integer, intent(in) :: m, n
 complex, intent(in) :: a(*), x(n)
 complex, intent(inout) :: y(m)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 complex :: sum
 !-----------------------------------------------------------------------
@@ -8320,6 +9044,7 @@ integer, intent(in) :: m, n
 complex, intent(in) :: a(*), x(m)
 complex, intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 complex :: t
 !-----------------------------------------------------------------------
@@ -8347,6 +9072,7 @@ integer, intent(in) :: m, n
 complex, intent(in) :: a(*), x(m)
 complex, intent(inout) :: y(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, j, l, lmax, lmin
 complex :: t
 !-----------------------------------------------------------------------
@@ -8370,6 +9096,7 @@ implicit none
 integer, intent(in) :: m, n
 real, intent(in) :: a(*)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin
 real :: sum
 !-----------------------------------------------------------------------
@@ -8397,6 +9124,7 @@ real, intent(out) :: anorm
 real, intent(in) :: a(*)
 real, intent(inout) :: wk(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: ip, ipmax, ipmin, j
 !-----------------------------------------------------------------------
 !        Computation of the L1 norm of a real sparse matrix a
@@ -8423,6 +9151,7 @@ implicit none
 integer, intent(in) :: m, n
 double precision, intent(in) :: a(*)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: i, ip, ipmax, ipmin
 double precision :: sum
 !-----------------------------------------------------------------------
@@ -8450,6 +9179,7 @@ double precision, intent(in) :: a(*)
 double precision, intent(out) :: anorm
 double precision, intent(inout) :: wk(n)
 integer, intent(in) :: ia(*), ja(*)
+!     beginning of local variable declarations
 integer :: ip, ipmax, ipmin, j
 !-----------------------------------------------------------------------
 !               Computation of the L1 norm of a sparse
@@ -8477,6 +9207,7 @@ implicit none
 integer, intent(in) :: m, n
 integer, intent(in) :: ia(*)
 integer, intent(inout) :: r(m), iwk(*)
+!     beginning of local variable declarations
 integer :: i, ii, k, l, np1, num
 !-----------------------------------------------------------------------
 !        spord orders the rows of an MXN sparse matrix A,ia,ja
@@ -8517,6 +9248,7 @@ integer, intent(inout) :: num
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: r(n), c(n), ib(n)
 integer, intent(inout) :: iwk(*)
+!     beginning of local variable declarations
 integer :: i, length, li, np1, npi
 !-----------------------------------------------------------------------
 !        Reordering a sparse matrix into block triangular form
@@ -8601,6 +9333,7 @@ integer, intent(in) :: licn, n
 integer, intent(inout) :: numnz
 integer, intent(in) :: ip(n), icn(licn), lenr(n)
 integer, intent(inout) :: iperm(n), pr(n), cv(n), arp(n), out(n)
+!     beginning of local variable declarations
 integer :: i, ii, in1, in2, ioutk, j, j1, jord, k, kk
 !-----------------------------------------------------------------------
 !     Division of work array is now described.
@@ -8758,6 +9491,7 @@ integer, intent(out) :: num
 integer, intent(in) :: ip(n)
 integer, intent(in) :: icn(licn), lenr(n)
 integer, intent(inout) :: arp(n), ib(n), lowl(n), numb(n), prev(n)
+!     beginning of local variable declarations
 integer :: i, i1, i2, icnt, ii, isn, ist, ist1, iv, iw, j, k, lcnt, nnm1, stp, dummy
 ! arp(i) is one less than the number of unsearched edges leaving
 !     node i.  at the end of the algorithm it is set to A
@@ -8869,6 +9603,7 @@ real, intent(in) :: a(*), b(n)
 real, intent(inout) :: x(n), rtemp(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), itemp(*)
+!     beginning of local variable declarations
 integer :: k, l, iu, ju, u, y, p
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
@@ -8959,6 +9694,7 @@ integer, intent(inout) :: ic(n), iu(*)
 integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
+!     beginning of local variable declarations
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk, nswc_ai_i4
 real :: dk, lki, xpv, xpvmax, yk
 !  nspiv1 uses sparse Gaussian elimination with
@@ -9180,6 +9916,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n)
+!     beginning of local variable declarations
 integer :: it, iu, jt, k, l, y, t, p
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
@@ -9254,6 +9991,7 @@ integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
 real, intent(in) :: b(n), d(n), t(*)
 real, intent(inout) :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: i, j, jj, jmax, jmin, k, lj, lk
 real :: sum
 !            Solve LY = b by forward substitution
@@ -9300,6 +10038,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: iwk(*)
 integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n)
+!     beginning of local variable declarations
 integer :: it, iu, jt, k, l, y, t, p
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
@@ -9374,6 +10113,7 @@ integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
 real, intent(in) :: b(n), d(n), t(*)
 real, intent(inout) :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: i, j, jj, jmax, jmin, k, lj, lk
 !            Solve YU = b by forward substitution
 do k = 1,n
@@ -9426,6 +10166,7 @@ integer, intent(in) :: r(n)
 integer, intent(inout) :: c(n), ic(n)
 integer, intent(inout) :: it(*), jt(max), iu(n)
 integer, intent(inout) :: p(*)
+!     beginning of local variable declarations
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm, nswc_ai_i4
 real :: const, wi, wmax
 !-----------------------------------------------------------------------
@@ -9601,6 +10342,7 @@ double precision, intent(in) :: a(*), b(n)
 double precision, intent(inout) :: x(n), rtemp(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), itemp(*)
+!     beginning of local variable declarations
 integer :: k, l, iu, ju, u, y, p
 !-----------------------------------------------------------------------
 !          Solution of double precision sparse equations
@@ -9694,6 +10436,7 @@ integer, intent(inout) :: ic(n), iu(*)
 integer, intent(in) :: ja(*)
 integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
+!     beginning of local variable declarations
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, nzcnt, ck, pk, ppk, pv, v, vi, vj, vk, nswc_ai_i4
 double precision :: dk, lki, xpv, xpvmax, yk
 !  dnspiv uses sparse Gaussian elimination with
@@ -9904,706 +10647,4 @@ return
 !  Storage for u exceeded on row k
 1005 ierr = -(3*n + k)
 end subroutine dnspiv
-
-subroutine dslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: m0, max, n
-double precision, intent(in) :: a(*), b(n)
-double precision, intent(inout) :: x(n), wk(*)
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(inout) :: iwk(*)
-integer, intent(in) :: r(n)
-integer, intent(inout) :: c(n)
-integer :: it, iu, jt, k, l, y, t, p
-!-----------------------------------------------------------------------
-!          Solution of double precision sparse equations
-!-----------------------------------------------------------------------
-!     dslv employs Gaussian elimination with column interchanges to
-!     solve the NXN linear system AX = b. the argument m0 specifies
-!     if dslv is being called for the first time, or if it is being
-!     recalled where A is the same matrix but b has been modified.
-!     On an initial call to the routine (when m0=0) the LU DECOMPO-
-!     sition of A is obtained where U is a unit upper triangular
-!     matrix. Then the equations are solved. On subsequent calls
-!     (when m0.NE.0) the equations are solved using the decomposition
-!     obtained on the initial call to dslv.
-!     Input arguments when m0=0 ---
-!     n        NUMBER OF EQUATIONS AND UNKNOWNS.
-!     a,ia,ja  the double precision matrix a stored in sparse form.
-!     b        DOUBLE PRECISION ARRAY OF n ENTRIES CONTAINING THE
-!              right hand side data.
-!     r        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
-!              the rows of A.
-!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING A SUGGESTED
-!              order of the columns. c is also an output argument.
-!     MAX      INTEGER SPECIFYING THE MAXIMUM NUMBER OF OFF-DIAGONAL
-!              nonzero entries of l and U which may be stored.
-!     Output arguments when m0=0 ---
-!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
-!              the columns that was selected by the routine.
-!     x        DOUBLE PRECISION ARRAY OF n ENTRIES CONTAINING THE
-!              solution. b and x may share the same storage area.
-!     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
-!              solution of AX = b is obtained then ierr = max(1,M)
-!              where M is the total number of off-diagonal nonzero
-!              entries of l and U. otherwise ierr.LE.0.
-!     General storage areas ---
-!     iwk      INTEGER ARRAY OF DIMENSION 4*n + max + 2.
-!     wk       DOUBLE PRECISION ARRAY OF DIMENSION 2*n + max.
-!     After an initial call to dslv, the routine may be recalled with
-!     m0.NE.0 for a new b. when m0.NE.0 it is assumed that n,A,ia,ja,
-!     r,c,iwk,wk have not been modified. The routine retrieves the LU
-!     decomposition which was obtained on the initial call to dslv
-!     and solves the new equations AX = b. in this case A,ia,ja,max,
-!     and ierr are not referenced.
-!-----------------------------------------------------------------------
-!     Set indices to divide temporary storage
-y = n + 1
-t = y + n
-p = n + 1
-it = p + n + 1
-iu = it + n + 1
-jt = iu + n
-if (m0 /= 0) go to 20
-!     Compute the inverse permutation of c
-ierr = 0
-if (n <= 0) return
-do k = 1,n
-   l = c(k)
-   iwk(l) = k
-end do
-!     Obtain the LU decomposition of A
-call dsplu(a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
-   & iwk(iu),wk(y),iwk(p),ierr)
-if (ierr < 0) return
-ierr = max0(1,ierr)
-!     Solve the system of equations
-20 call dslv1(n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
-   & b,x,wk(y))
-end subroutine dslv
-
-pure subroutine dslv1(n,r,c,ic,d,t,it,jt,iu,b,x,y)
-implicit none
-integer, intent(in) :: n
-integer, intent(in) :: r(n), c(n), ic(n)
-integer, intent(in) :: it(*), jt(*), iu(n)
-double precision, intent(in) :: b(n), d(n), t(*)
-double precision, intent(inout) :: x(n), y(n)
-integer :: i, j, jj, jmax, jmin, k, lj, lk
-double precision :: sum
-!            Solve LY = b by forward substitution
-do k = 1,n
-   lk = r(k)
-   sum = b(lk)
-   jmin = it(k)
-   jmax = iu(k) - 1
-   if (jmin > jmax) go to 11
-   do jj = jmin,jmax
-      lj = jt(jj)
-      j = ic(lj)
-      sum = sum - t(jj)*y(j)
-   end do
-11 y(k) = sum/d(k)
-end do
-!            Solve UX = b by backward substitution
-!             and reorder x to correspond with A
-k = n
-do i = 1,n
-   sum = y(k)
-   jmin = iu(k)
-   jmax = it(k + 1) - 1
-   if (jmin > jmax) go to 21
-   do jj = jmin,jmax
-      lj = jt(jj)
-      j = ic(lj)
-      sum = sum - t(jj)*y(j)
-   end do
-21 y(k) = sum
-   lk = c(k)
-   x(lk) = y(k)
-   k = k - 1
-end do
-end subroutine dslv1
-
-subroutine dtslv(m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: m0, max, n
-double precision, intent(in) :: a(*), b(n)
-double precision, intent(inout) :: x(n), wk(*)
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(inout) :: iwk(*)
-integer, intent(in) :: r(n)
-integer, intent(inout) :: c(n)
-integer :: it, iu, jt, k, l, y, t, p
-!-----------------------------------------------------------------------
-!          Solution of double precision sparse equations
-!-----------------------------------------------------------------------
-!     dtslv employs Gaussian elimination with column interchanges to
-!     solve the NXN linear system XA = b. the argument m0 specifies
-!     if dtslv is being called for the first time, or if it is being
-!     recalled where A is the same matrix but b has been modified.
-!     On an initial call to the routine (when m0=0) the LU DECOMPO-
-!     sition of A is obtained where U is a unit upper triangular
-!     matrix. Then the equations are solved. On subsequent calls
-!     (when m0.NE.0) the equations are solved using the decomposition
-!     obtained on the initial call to dtslv.
-!     Input arguments when m0=0 ---
-!     n        NUMBER OF EQUATIONS AND UNKNOWNS.
-!     a,ia,ja  the double precision matrix a stored in sparse form.
-!     b        DOUBLE PRECISION ARRAY OF n ENTRIES CONTAINING THE
-!              right hand side data.
-!     r        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
-!              the rows of A.
-!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING A SUGGESTED
-!              order of the columns. c is also an output argument.
-!     MAX      INTEGER SPECIFYING THE MAXIMUM NUMBER OF OFF-DIAGONAL
-!              nonzero entries of l and U which may be stored.
-!     Output arguments when m0=0 ---
-!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
-!              the columns that was selected by the routine.
-!     x        DOUBLE PRECISION ARRAY OF n ENTRIES CONTAINING THE
-!              solution. b and x may share the same storage area.
-!     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
-!              solution of AX = b is obtained then ierr = max(1,M)
-!              where M is the total number of off-diagonal nonzero
-!              entries of l and U. otherwise ierr.LE.0.
-!     General storage areas ---
-!     iwk      INTEGER ARRAY OF DIMENSION 4*n + max + 2.
-!     wk       DOUBLE PRECISION ARRAY OF DIMENSION 2*n + max.
-!     After an initial call to dtslv, the routine may be recalled with
-!     m0.NE.0 for a new b. when m0.NE.0 it is assumed that n,A,ia,ja,
-!     r,c,iwk,wk have not been modified. The routine retrieves the LU
-!     decomposition which was obtained on the initial call to dtslv
-!     and solves the new equations XA = b. in this case A,ia,ja,max,
-!     and ierr are not referenced.
-!-----------------------------------------------------------------------
-!     Set indices to divide temporary storage
-y = n + 1
-t = y + n
-p = n + 1
-it = p + n + 1
-iu = it + n + 1
-jt = iu + n
-if (m0 /= 0) go to 20
-!     Compute the inverse permutation of c
-ierr = 0
-if (n <= 0) return
-do k = 1,n
-   l = c(k)
-   iwk(l) = k
-end do
-!     Obtain the LU decomposition of A
-call dsplu(a,ia,ja,r,c,iwk(1),n,max,wk(1),wk(t),iwk(it),iwk(jt), &
-   & iwk(iu),wk(y),iwk(p),ierr)
-if (ierr < 0) return
-ierr = max0(1,ierr)
-!     Solve the system of equations
-20 call dtslv1(n,r,c,iwk(1),wk(1),wk(t),iwk(it),iwk(jt),iwk(iu), &
-   & b,x,wk(y))
-end subroutine dtslv
-
-pure subroutine dtslv1(n,r,c,ic,d,t,it,jt,iu,b,x,y)
-implicit none
-integer, intent(in) :: n
-integer, intent(in) :: r(n), c(n), ic(n)
-integer, intent(in) :: it(*), jt(*), iu(n)
-double precision, intent(in) :: b(n), d(n), t(*)
-double precision, intent(inout) :: x(n), y(n)
-integer :: i, j, jj, jmax, jmin, k, lj, lk
-!            Solve YU = b by forward substitution
-do k = 1,n
-   lk = c(k)
-   y(k) = b(lk)
-end do
-do k = 1,n
-   if (y(k) == 0.d0) go to 21
-   jmin = iu(k)
-   jmax = it(k + 1) - 1
-   if (jmin > jmax) go to 21
-   do jj = jmin,jmax
-      lj = jt(jj)
-      j = ic(lj)
-      y(j) = y(j) - t(jj)*y(k)
-   end do
-21 continue
-end do
-!            Solve XL = y by backward substitution
-x(n) = y(n)/d(n)
-if (n == 1) return
-k = n
-y(n) = x(n)
-do i = 2,n
-   jmin = it(k)
-   jmax = iu(k) - 1
-   if (jmin > jmax) go to 31
-   do jj = jmin,jmax
-      lj = jt(jj)
-      j = ic(lj)
-      y(j) = y(j) - t(jj)*y(k)
-   end do
-31 k = k - 1
-   y(k) = y(k)/d(k)
-end do
-do k = 1,n
-   lk = r(k)
-   x(lk) = y(k)
-end do
-end subroutine dtslv1
-
-subroutine dsplu(a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: max, n
-double precision, intent(in) :: a(*)
-double precision, intent(inout) :: d(n), t(max), w(n)
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(in) :: r(n)
-integer, intent(inout) :: c(n), ic(n)
-integer, intent(inout) :: it(*), jt(max), iu(n)
-integer, intent(inout) :: p(*)
-integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, maxil, pm, nswc_ai_i4
-double precision :: const, wi, wmax
-!-----------------------------------------------------------------------
-!     dsplu employs Gaussian elimination with column interchanges
-!     to perform the LU decomposition of a double precision sparse
-!     matrix. U is a unit upper triangular matrix.
-!     Input arguments ---
-!     A,ia,ja  the sparse matrix to be decomposed.
-!     r        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
-!              the rows of A.
-!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING A SUGGESTED
-!              order of the columns. c is also an output argument.
-!     ic       INTEGER ARRAY OF n ENTRIES WHICH IS THE INVERSE OF c
-!              (I.E., ic(c(i)) = i). ic is also an output argument.
-!     n        ORDER OF THE MATRIX a.
-!     MAX      INTEGER SPECIFYING THE MAXIMUM NUMBER OF OFF-DIAGONAL
-!              nonzero entries of L and U which may be stored.
-!     Output arguments ---
-!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
-!              the columns that was selected by the routine.
-!     ic       INTEGER ARRAY OF n ENTRIES WHICH IS THE INVERSE OF c.
-!     d        DOUBLE PRECISION ARRAY CONTAINING THE n DIAGONAL
-!              elements of L.
-!     t,it,iu  t contains the off-diagonal nonzero elements of L and
-!              U. for i = 1,...,n the off-diagonal nonzero elements
-!              of the i-TH row of L are stored in locations
-!              it(i),...,iu(i)-1 of t, and the off-diagonal nonzero
-!              elements of the i-TH row of U are stored in locations
-!              iu(i),...,it(i+1)-1 of t.
-!     jt       INTEGER ARRAY CONTAINING THE COLUMN INDICES (ACCORDING
-!              to the orginal column ordering) of the elements of t
-!              (I.E., for each L(i,j) and U(i,j) in t, c(j) is the
-!              corresponding column index in jt).
-!     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
-!              LU decomposition is obtained then ierr = The number
-!              of off-diagonal entries of L and U which were stored
-!              in t. otherwise ierr is assigned a negative value.
-!     Work spaces ---
-!     w        DOUBLE PRECISION ARRAY OF DIMENSION n.
-!     p        INTEGER ARRAY OF DIMENSION n+1.
-!-----------------------------------------------------------------------
-jptr = 0
-it(1) = 1
-do j = 1,n
-   w(j) = 0.d0
-end do
-!     Perform the LU factorization of the r(k)-TH row of A
-do k = 1,n
-   lk = r(k)
-   jmin = ia(lk)
-   jmax = ia(lk + 1) - 1
-   if (jmin > jmax) go to 200
-!     Set p to the reordered row of A
-   p(n + 1) = n + 1
-   jj = jmax
-20 lj = ja(jj)
-   j = ic(lj)
-   w(j) = a(jj)
-   pm = n + 1
-21 m = pm
-   pm = p(m)
-   nswc_ai_i4 = pm - j
-   if (nswc_ai_i4 < 0) go to 21
-   if (nswc_ai_i4 == 0) go to 210
-   go to 22
-22 p(m) = j
-   p(j) = pm
-   jj = jj - 1
-   if (jj >= jmin) go to 20
-!     Process the entries in the lower triangle of A
-   i = n + 1
-30 i = p(i)
-   if (i >= k) go to 50
-   if (w(i) == 0.d0) go to 30
-!     L(k,i) is nonzero. Therefore store it in L.
-   jptr = jptr + 1
-   if (jptr > max) go to 230
-   const = w(i)
-   t(jptr) = const
-   jt(jptr) = c(i)
-   w(i) = 0.d0
-!     Perform elimination using the i-TH row of U
-   jmin = iu(i)
-   jmax = it(i + 1) - 1
-   if (jmin > jmax) go to 30
-   pm = i
-   do jj = jmin,jmax
-      lj = jt(jj)
-      j = ic(lj)
-      if (w(j) /= 0.d0) go to 43
-      nswc_ai_i4 = j - pm
-      if (nswc_ai_i4 < 0) go to 40
-      if (nswc_ai_i4 == 0) go to 43
-      go to 41
-40    pm = i
-41    m = pm
-      pm = p(m)
-      nswc_ai_i4 = pm - j
-      if (nswc_ai_i4 < 0) go to 41
-      if (nswc_ai_i4 == 0) go to 43
-      go to 42
-42    p(m) = j
-      p(j) = pm
-      pm = j
-43    w(j) = w(j) - const*t(jj)
-   end do
-   go to 30
-!     Search for the k-TH pivot element
-50 if (i > n) go to 220
-   wmax = abs(w(i))
-   maxi = i
-   pm = i
-51 m = pm
-   pm = p(m)
-   if (pm > n) go to 60
-   wi = abs(w(pm))
-   if (wi <= wmax) go to 51
-   wmax = wi
-   maxi = pm
-   maxil = m
-   go to 51
-!     Store the pivot in d
-60 if (wmax == 0.d0) go to 220
-   d(k) = w(maxi)
-!     Perform the column interchange
-   if (i == k) go to 70
-   if (i == maxi) go to 70
-   p(maxil) = p(maxi)
-   go to 80
-70 i = p(i)
-80 w(maxi) = w(k)
-   w(k) = 0.d0
-   lk = c(k)
-   ll = c(maxi)
-   c(k) = ll
-   c(maxi) = lk
-   ic(lk) = maxi
-   ic(ll) = k
-!     The remaining elements of p form the k-TH row of U
-   iu(k) = jptr + 1
-90 if (i > n) go to 100
-   if (w(i) == 0.d0) go to 91
-   jptr = jptr + 1
-   if (jptr > max) go to 230
-   t(jptr) = w(i)/d(k)
-   jt(jptr) = c(i)
-   w(i) = 0.d0
-91 i = p(i)
-   go to 90
-!     Prepare for the next row
-100 it(k + 1) = jptr + 1
-end do
-ierr = jptr
-return
-!     -------------------- Error return --------------------
-!     row r(k) is null
-200 ierr = -k
-return
-!     Row r(k) has a duplicate entry
-210 ierr = -(n + k)
-return
-!     Zero pivot in row r(k)
-220 ierr = -(2*n + k)
-return
-!     Storage for L and U exceeded on row r(k)
-230 ierr = -(3*n + k)
-end subroutine dsplu
-
-subroutine s1cnd(n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: max, n
-real, intent(out) :: cond
-real, intent(in) :: a(*)
-real, intent(inout) :: wk(*)
-integer, intent(in) :: ia(*), ja(*), r(n)
-integer, intent(inout) :: c(n), iwk(*)
-integer :: isgn, iter, iv, ix, j, jump, kase
-real :: ainorm, anorm
-!-----------------------------------------------------------------------
-!              Computation of the L1 condition number
-!                       of a sparse matrix a
-!-----------------------------------------------------------------------
-!-----------------------
-!     real wk(4*n + max)
-!     integer iwk(5*n + max + 2)
-!-----------------------
-cond = 0.0
-call s1nrm(a, ia, ja, n, n, anorm, wk)
-if (anorm == 0.0) go to 50
-ix = 2*n + max + 1
-iv = ix + n
-isgn = 4*n + max + 3
-kase = 0
-ainorm = 0.0
-call sonest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-   & iter, j, jump)
-call rslv(0, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-   & iwk(1), wk(1), ierr)
-!     Check if A is singular or if there are errors
-if (ierr > 0) go to 20
-if (abs(ierr) <= n) go to 50
-ierr = ierr + n
-if (abs(ierr) <= n) return
-ierr = ierr + n
-if (abs(ierr) <= n) go to 50
-return
-!     General loop to estimate the norm  ainorm
-!     of the inverse of A
-20 call sonest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-   & iter, j, jump)
-if (kase == 0) go to 40
-if (kase /= 1) go to 30
-call rslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-   & iwk(1), wk(1), ierr)
-go to 20
-30 call tslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-   & iwk(1), wk(1), ierr)
-go to 20
-!     Compute the value of cond
-40 cond = anorm*ainorm
-return
-!     Singular case
-50 ierr = 0
-end subroutine s1cnd
-
-subroutine ds1cnd(n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
-implicit none
-integer, intent(inout) :: ierr
-integer, intent(in) :: max, n
-double precision, intent(in) :: a(*)
-double precision, intent(out) :: cond
-double precision, intent(inout) :: wk(*)
-integer, intent(in) :: ia(*), ja(*), r(n)
-integer, intent(inout) :: c(n), iwk(*)
-integer :: isgn, iter, iv, ix, j, jump, kase
-double precision :: anorm, ainorm
-!-----------------------------------------------------------------------
-!              Computation of the L1 condition number
-!                       of a sparse matrix a
-!-----------------------------------------------------------------------
-!-----------------------
-!     double precision wk(4*n + max)
-!     integer iwk(5*n + max + 2)
-!-----------------------
-cond = 0.d0
-call ds1nrm(a, ia, ja, n, n, anorm, wk)
-if (anorm == 0.d0) go to 50
-ix = 2*n + max + 1
-iv = ix + n
-isgn = 4*n + max + 3
-kase = 0
-ainorm = 0.d0
-call donest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-   & iter, j, jump)
-call dslv(0, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-   & iwk(1), wk(1), ierr)
-!     Check if A is singular or if there are errors
-if (ierr > 0) go to 20
-if (abs(ierr) <= n) go to 50
-ierr = ierr + n
-if (abs(ierr) <= n) return
-ierr = ierr + n
-if (abs(ierr) <= n) go to 50
-return
-!     General loop to estimate the norm  ainorm
-!     of the inverse of A
-20 call donest(n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
-   & iter, j, jump)
-if (kase == 0) go to 40
-if (kase /= 1) go to 30
-call dslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-   & iwk(1), wk(1), ierr)
-go to 20
-30 call dtslv(1, n, a, ia, ja, wk(ix), r, c, max, wk(ix), &
-   & iwk(1), wk(1), ierr)
-go to 20
-!     Compute the value of cond
-40 cond = anorm*ainorm
-return
-!     Singular case
-50 ierr = 0
-end subroutine ds1cnd
-
-pure subroutine sonest(n, v, x, isgn, anorm, kase, iter, j, jump)
-implicit none
-integer, intent(inout) :: iter, j, jump, kase
-integer, intent(in) :: n
-real, intent(inout) :: anorm
-real, intent(inout) :: v(n), x(n)
-integer, intent(inout) :: isgn(n)
-integer :: i, jlast, l
-real :: altsgn, anrm, t
-integer, parameter :: itmax = 5
-interface
-   pure function isamax(n,sx,incx)
-      implicit none
-      integer, intent(in) :: n
-      real, intent(in) :: sx(*)
-      integer, intent(in) :: incx
-      integer :: isamax
-   end function isamax
-   pure function sasum(n,sx,incx)
-      implicit none
-      integer, intent(in) :: n
-      real, intent(in) :: sx(*)
-      integer, intent(in) :: incx
-      real :: sasum
-   end function sasum
-   pure subroutine scopy(n,sx,incx,sy,incy)
-      implicit none
-      integer, intent(in) :: n
-      real, intent(in) :: sx(*)
-      integer, intent(in) :: incx
-      real, intent(inout) :: sy(*)
-      integer, intent(in) :: incy
-   end subroutine scopy
-end interface
-!-----------------------------------------------------------------------
-!     sonest estimates the 1-norm of A square, real matrix  A.
-!     Reverse communication is used for evaluating
-!     matrix-vector products.
-!     On entry
-!        n       the order of the matrix.  n .GE. 1.
-!        kase    INTEGER  (= 0).
-!     On intermediate returns
-!        kase    = 1 or 2.
-!        x       MUST BE OVERWRITTEN BY
-!                     A*x,             IF kase = 1,
-!                     TRANSPOSE(A)*x,  IF kase = 2,
-!                and sonest must be RE-called, with all the other
-!                parameters unchanged.
-!        ITER    NUMBER OF THE CURRENT ITERATION.
-!     On final return
-!        kase    = 0.
-!        anorm   CONTAINS AN ESTIMATE (A LOWER BOUND) FOR NORM(A).
-!        v       = A*W,   WHERE  anorm = NORM(v)/NORM(W)
-!                         (W  is not returned).
-!        ITER    NUMBER OF INTERATIONS TAKEN.
-!        Written by nick Higham, university of manchester. Modified
-!        by A.H. Morris (NSWC).
-!     Reference
-!     N.J. Higham (1987) Fortran codes for estimating
-!     the 1-norm of a real or complex matrix, with applications
-!     to condition  estimation, numerical analysis report no. 135,
-!     university of manchester, manchester M13 9PL, england.
-!-----------------------------------------------------------------------
-if (kase /= 0) go to 20
-t = 1.0/float(n)
-do i = 1,n
-   x(i) = t
-end do
-iter = 0
-kase = 1
-jump = 1
-return
-20 select case (jump)
-case (1)
-   go to 100
-case (2)
-   go to 200
-case (3)
-   go to 300
-case (4)
-   go to 400
-case (5)
-   go to 500
-end select
-!     ................ ENTRY   (jump = 1)
-!     first iteration.  x has been overwritten by A*x.
-100 iter = 1
-if (n > 1) go to 110
-v(1) = x(1)
-anorm = abs(v(1))
-go to 510
-110 anorm = sasum(n,x,1)
-do i = 1,n
-   isgn(i) = 1
-   if (x(i) < 0.0) isgn(i) = -1
-   x(i) = isgn(i)
-end do
-kase = 2
-jump = 2
-return
-!     ................ ENTRY   (jump = 2)
-!     first iteration.  x has been overwritten by transpose(A)*x.
-200 iter = 2
-j = isamax(n,x,1)
-!     Main loop - Iterations 2,3,...,itmax.
-210 do i = 1,n
-   x(i) = 0.0
-end do
-x(j) = 1.0
-kase = 1
-jump = 3
-return
-!     ................ ENTRY   (jump = 3)
-!     x has been overwritten by A*x.
-300 call scopy(n,x,1,v,1)
-anrm = anorm
-anorm = sasum(n,v,1)
-do i = 1,n
-   l = 1
-   if (x(i) < 0.0) l = -1
-   if (l /= isgn(i)) go to 320
-end do
-!     Repeated sign vector detected, hence algorithm has converged.
-go to 410
-!     Test for cycling.
-320 if (anorm <= anrm) go to 410
-do i = 1,n
-   isgn(i) = 1
-   if (x(i) < 0.0) isgn(i) = -1
-   x(i) = isgn(i)
-end do
-kase = 2
-jump = 4
-return
-!     ................ ENTRY   (jump = 4)
-!     x has been overwritten by transpose(A)*x.
-400 jlast = j
-j = isamax(n,x,1)
-if (x(jlast) == abs(x(j)) .or. &
-   & iter >= itmax) go to 410
-iter = iter + 1
-go to 210
-!     Iteration complete.  Final stage.
-410 altsgn = 1.0
-do i = 1,n
-   x(i) = altsgn * (1.0 + float(i - 1)/float(n - 1))
-   altsgn = -altsgn
-end do
-kase = 1
-jump = 5
-return
-!     ................ ENTRY   (jump = 5)
-!     x has been overwritten by A*x.
-500 anrm = 2.0*sasum(n,x,1)/float(3*n)
-if (anrm <= anorm) go to 510
-call scopy(n,x,1,v,1)
-anorm = anrm
-510 kase = 0
-end subroutine sonest
 

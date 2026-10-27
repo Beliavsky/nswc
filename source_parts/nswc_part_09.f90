@@ -1,3 +1,840 @@
+pure subroutine kurv2(t,xs,ys,n,x,y,xp,yp,s,sigma)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: t
+real, intent(inout) :: xs, ys
+real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
+!     beginning of local variable declarations
+integer :: i, im1
+real :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
+   & dummy, sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sumx, sumy, &
+   & tn
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+! this subroutine performs the mapping of points in the
+! interval (0.,1.) Onto a curve in the plane. The subroutine
+! kurv1 should be called earlier to determine certain
+! necessary parameters. The resulting curve has a parametric
+! representation both of whose components are splines under
+! tension and functions of the polygonal arclength
+! parameter.
+! On input--
+!   t contains a real value to be mapped to a point on the
+!   curve. The interval (0.,1.) Is mapped onto the entire
+!   curve, with 0. Mapping to (x(1),y(1)) and 1. Mapping
+!   to (x(n),y(n)). Values outside this interval result in
+!   extrapolation.
+!   n contains the number of points which were specified
+!   to determine the curve.
+!   x and y are arrays containing the x- and y-coordinates
+!   of the specified points.
+!   xp and yp are the arrays output from kurv1 containing
+!   curvature information.
+!   s is an array containing the polygonal arclengths of
+!   the curve.
+! And
+!   sigma contains the tension factor (its sign is ignored).
+! The parameters n, x, y, xp, yp, s, and sigma should be
+! input unaltered from the output of kurv1.
+! On output--
+!   xs and ys contain the x- and y-coordinates of the image
+!   point on the curve.
+! None of the input parameters are altered.
+! This subroutine references package modules intrvl and
+! snhcsh.
+!-----------------------------------------------------------
+! Determine interval
+tn = s(n)*t
+im1 = intrvl(tn,s,n)
+i = im1 + 1
+! Denormalize tension factor
+sigmap = abs(sigma)*float(n - 1)/s(n)
+! Set up and perform interpolation
+del1 = tn - s(im1)
+del2 = s(i) - tn
+dels = s(i) - s(im1)
+sumx = (x(i)*del1 + x(im1)*del2)/dels
+sumy = (y(i)*del1 + y(im1)*del2)/dels
+if (sigmap /= 0.) go to 1
+d = del1*del2/(6.*dels)
+c1 = (del1 + dels)*d
+c2 = (del2 + dels)*d
+xs = sumx - xp(i)*c1 - xp(im1)*c2
+ys = sumy - yp(i)*c1 - yp(im1)*c2
+return
+1 delp1 = sigmap*(del1 + dels)/2.
+delp2 = sigmap*(del2 + dels)/2.
+call snhcsh(sinhm1,dummy,sigmap*del1,-1)
+call snhcsh(sinhm2,dummy,sigmap*del2,-1)
+call snhcsh(sinhms,dummy,sigmap*dels,-1)
+call snhcsh(sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh(sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh(dummy,coshp1,delp1,1)
+call snhcsh(dummy,coshp2,delp2,1)
+d = sigmap*sigmap*dels*(sinhms + sigmap*dels)
+c1 = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)*sinhp2 + sigmap* &
+   & coshp1*del2))/d
+c2 = (sinhm2*del1 - del2*(2.*(coshp2 + 1.)*sinhp1 + sigmap* &
+   & coshp2*del1))/d
+xs = sumx + xp(i)*c1 + xp(im1)*c2
+ys = sumy + yp(i)*c1 + yp(im1)*c2
+end subroutine kurv2
+
+pure subroutine kurvp1(n,x,y,xp,yp,temp,s,sigma,ierr)
+implicit none
+integer, intent(in) :: n
+integer, intent(out) :: ierr
+real, intent(in) :: x(n), y(n)
+real, intent(inout) :: xp(n), yp(n), temp(*), s(n)
+real, intent(in) :: sigma
+!     beginning of local variable declarations
+integer :: i, ibak, im1, nm1, np1, npi, npibak
+real :: dels1, dels2, diag, diag1, diag2, diagin, dx1, dx2, dy1, &
+   & dy2, sdiag1, sdiag2, sigmap, xpn, ypn
+interface
+   pure elemental subroutine terms(diag,sdiag,sigma,del)
+      implicit none
+      real, intent(inout) :: diag
+      real, intent(inout) :: sdiag
+      real, intent(in) :: sigma
+      real, intent(in) :: del
+   end subroutine terms
+end interface
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+! this subroutine determines the parameters necessary to
+! compute a spline under tension forming a closed curve in
+! the plane and passing through a sequence of pairs
+! (x(1),y(1)),...,(x(n),y(n)). For actual computation of
+! points on the curve it is necessary to call the subroutine
+! kurvp2.
+! On input--
+!   n is the number of points to be interpolated (n.GE.2).
+!   x is an array containing the n x-coordinates of the
+!   points.
+!   y is an array containing the n y-coordinates of the
+!   points. (Adjacent x-y pairs must be distinct, I. E.
+!   Either x(i) .NE. x(i+1) or y(i) .NE. y(i+1), for
+!   i = 1,...,n-1.)
+!   xp and yp are arrays of length at least n.
+!   Temp is an array of length at least 2*n which is used
+!   for scratch storage.
+!   s is an array of length at least n.
+! And
+!   sigma contains the tension factor. This value indicates
+!   the curviness desired. If abs(sigma) is nearly zero
+!   (E.G. .001) the resulting curve is approximately a cubic
+!   spline. If abs(sigma) is large (E. G. 50.) The resulting
+!   curve is nearly a polygonal line. If sigma equals zero A
+!   cubic spline results. A standard value for sigma is
+!   approximately 1. In absolute value.
+! On output--
+!   xp and yp contain information about the curvature of the
+!   curve at the given nodes.
+!   s contains the polygonal arclengths of the curve.
+!   ierr contains an error flag,
+!        = 0 For normal return,
+!        = 1 If n is less than 2,
+!        = 2 If adjacent coordinate pairs coincide.
+! And
+!   n, x, y, and sigma are unaltered,
+! this subroutine references package modules terms and
+! snhcsh.
+!-----------------------------------------------------------
+nm1 = n - 1
+np1 = n + 1
+ierr = 0
+if (n <= 1) go to 7
+! Determine polygonal arclengths
+s(1) = sqrt((x(n) - x(1))**2 + (y(n) - y(1))**2)
+do i = 2,n
+   im1 = i - 1
+   s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + &
+      & (y(i) - y(im1))**2)
+end do
+! Denormalize tension factor
+sigmap = abs(sigma)*float(n)/s(n)
+! Set up right hand sides of tridiagonal (with corner
+! elements) linear system for xp and yp
+dels1 = s(1)
+if (dels1 == 0.) go to 8
+dx1 = (x(1) - x(n))/dels1
+dy1 = (y(1) - y(n))/dels1
+call terms(diag1,sdiag1,sigmap,dels1)
+dels2 = s(2) - s(1)
+if (dels2 == 0.) go to 8
+dx2 = (x(2) - x(1))/dels2
+dy2 = (y(2) - y(1))/dels2
+call terms(diag2,sdiag2,sigmap,dels2)
+diag = diag1 + diag2
+diagin = 1./diag
+xp(1) = (dx2 - dx1)*diagin
+yp(1) = (dy2 - dy1)*diagin
+temp(np1) = -sdiag1*diagin
+temp(1) = sdiag2*diagin
+dx1 = dx2
+dy1 = dy2
+diag1 = diag2
+sdiag1 = sdiag2
+if (n == 2) go to 3
+do i = 2,nm1
+   npi = n + i
+   dels2 = s(i + 1) - s(i)
+   if (dels2 == 0.) go to 8
+   dx2 = (x(i + 1) - x(i))/dels2
+   dy2 = (y(i + 1) - y(i))/dels2
+   call terms(diag2,sdiag2,sigmap,dels2)
+   diag = diag1 + diag2 - sdiag1*temp(i - 1)
+   diagin = 1./diag
+   xp(i) = (dx2 - dx1 - sdiag1*xp(i - 1))*diagin
+   yp(i) = (dy2 - dy1 - sdiag1*yp(i - 1))*diagin
+   temp(npi) = -temp(npi - 1)*sdiag1*diagin
+   temp(i) = sdiag2*diagin
+   dx1 = dx2
+   dy1 = dy2
+   diag1 = diag2
+   sdiag1 = sdiag2
+end do
+3 dels2 = s(1)
+dx2 = (x(1) - x(n))/dels2
+dy2 = (y(1) - y(n))/dels2
+call terms(diag2,sdiag2,sigmap,dels2)
+xp(n) = dx2 - dx1
+yp(n) = dy2 - dy1
+temp(nm1) = temp(2*n - 1) - temp(nm1)
+if (n == 2) go to 5
+! Perform first step of back substitution
+do i = 3,n
+   ibak = np1 - i
+   npibak = n + ibak
+   xp(ibak) = xp(ibak) - temp(ibak)*xp(ibak + 1)
+   yp(ibak) = yp(ibak) - temp(ibak)*yp(ibak + 1)
+   temp(ibak) = temp(npibak) - temp(ibak)*temp(ibak + 1)
+end do
+5 xp(n) = (xp(n) - sdiag2*xp(1) - sdiag1*xp(nm1))/ &
+   & (diag1 + diag2 + sdiag2*temp(1) + sdiag1*temp(nm1))
+yp(n) = (yp(n) - sdiag2*yp(1) - sdiag1*yp(nm1))/ &
+   & (diag1 + diag2 + sdiag2*temp(1) + sdiag1*temp(nm1))
+! Perform second step of back substitution
+xpn = xp(n)
+ypn = yp(n)
+do i = 1,nm1
+   xp(i) = xp(i) + temp(i)*xpn
+   yp(i) = yp(i) + temp(i)*ypn
+end do
+return
+! Too few points
+7 ierr = 1
+return
+! Coincident adjacent points
+8 ierr = 2
+end subroutine kurvp1
+
+pure subroutine kurvp2(t,xs,ys,n,x,y,xp,yp,s,sigma)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: t
+real, intent(inout) :: xs, ys
+real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
+!     beginning of local variable declarations
+integer :: i, im1
+real :: c1, c2, ci, cim1, coshp1, coshp2, d, del1, del2, delp1, &
+   & delp2, dels, dummy, si, sigmap, sinhm1, sinhm2, sinhms, sinhp1, &
+   & sinhp2, sumx, sumy, tn
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+! this subroutine performs the mapping of points in the
+! interval (0.,1.) Onto a closed curve in the plane. The
+! subroutine kurvp1 should be called earlier to determine
+! certain necessary parameters. The resulting curve has A
+! parametric representation both of whose components are
+! periodic splines under tension and functions of the poly-
+! gonal arclength parameter.
+! On input--
+!   t contains a value to be mapped onto the curve. The
+!   interval (0.,1.) Is mapped onto the entire closed curve
+!   with both 0. And 1. Mapping to (x(1),y(1)). The mapping
+!   is periodic with period one thus any interval of the
+!   form (TT,TT+1.) Maps onto the entire curve.
+!   n contains the number of points which were specified
+!   to determine the curve.
+!   x and y are arrays containing the x- and y-coordinates
+!   of the specified points.
+!   xp and yp are the arrays output from kurvp1 containing
+!   curvature information.
+!   s is an array containing the polygonal arclengths of
+!   the curve.
+! And
+!   sigma contains the tension factor (its sign is ignored).
+! The parameters n, x, y, xp, yp, s and sigma should
+! be input unaltered from the output of kurvp1.
+! On output--
+!   xs and ys contain the x- and y-coordinates of the image
+!   point on the curve.
+! None of the input parameters are altered.
+! This subroutine references package modules intrvl and
+! snhcsh.
+!-----------------------------------------------------------
+! Determine interval
+tn = t - float(ifix(t))
+if (tn < 0.) tn = tn + 1.
+tn = s(n)*tn + s(1)
+im1 = n
+if (tn < s(n)) im1 = intrvl(tn,s,n)
+i = im1 + 1
+if (i > n) i = 1
+! Denormalize tension factor
+sigmap = abs(sigma)*float(n)/s(n)
+! Set up and perform interpolation
+si = s(i)
+if (im1 == n) si = s(n) + s(1)
+del1 = tn - s(im1)
+del2 = si - tn
+dels = si - s(im1)
+sumx = (x(i)*del1 + x(im1)*del2)/dels
+sumy = (y(i)*del1 + y(im1)*del2)/dels
+if (sigmap /= 0.) go to 1
+d = del1*del2/(6.*dels)
+c1 = (del1 + dels)*d
+c2 = (del2 + dels)*d
+xs = sumx - xp(i)*c1 - xp(im1)*c2
+ys = sumy - yp(i)*c1 - yp(im1)*c2
+return
+1 delp1 = sigmap*(del1 + dels)/2.
+delp2 = sigmap*(del2 + dels)/2.
+call snhcsh(sinhm1,dummy,sigmap*del1,-1)
+call snhcsh(sinhm2,dummy,sigmap*del2,-1)
+call snhcsh(sinhms,dummy,sigmap*dels,-1)
+call snhcsh(sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh(sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh(dummy,coshp1,delp1,1)
+call snhcsh(dummy,coshp2,delp2,1)
+d = sigmap*sigmap*dels*(sinhms + sigmap*dels)
+ci = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)*sinhp2 + sigmap* &
+   & coshp1*del2))/d
+cim1 = (sinhm2*del1 - del2*(2.*(coshp2 + 1.)*sinhp1 + &
+   & sigmap*coshp2*del1))/d
+xs = sumx + ci*xp(i) + cim1*xp(im1)
+ys = sumy + ci*yp(i) + cim1*yp(im1)
+end subroutine kurvp2
+
+pure subroutine qurv1(n,x,y,z,slp1x,slp1y,slp1z,slpnx, &
+   & slpny,slpnz,islpsw,xp,yp,zp,temp, &
+   & s,sigma,ierr)
+implicit none
+integer, intent(in) :: n, islpsw
+integer, intent(out) :: ierr
+real, intent(in) :: x(n), y(n), z(n), slp1x, slp1y, slp1z, slpnx, &
+   & slpny, slpnz
+real, intent(inout) :: xp(n), yp(n), zp(n), temp(n), s(n)
+real, intent(in) :: sigma
+!     beginning of local variable declarations
+integer :: i, ibak, im1, nm1, np1
+real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
+   & diag1, diag2, diagin, dx1, dx2, dy1, dy2, dz1, dz2, sdiag1, &
+   & sdiag2, sigmap, slpp1x, slpp1y, slpp1z, slppnx, slppny, slppnz, t
+interface
+   pure elemental subroutine ceez(del1,del2,sigma,c1,c2,c3,n)
+      implicit none
+      real, intent(in) :: del1
+      real, intent(in) :: del2
+      real, intent(in) :: sigma
+      real, intent(inout) :: c1
+      real, intent(inout) :: c2
+      real, intent(inout) :: c3
+      integer, intent(in) :: n
+   end subroutine ceez
+   pure elemental subroutine terms(diag,sdiag,sigma,del)
+      implicit none
+      real, intent(inout) :: diag
+      real, intent(inout) :: sdiag
+      real, intent(in) :: sigma
+      real, intent(in) :: del
+   end subroutine terms
+end interface
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+! this subroutine determines the parameters necessary to
+! compute a spline under tension passing through a sequence
+! of triples (x(1),y(1),z(1)),...,(x(n),y(n),z(n)). The
+! slopes at the two ends of the curve may be specified or
+! omitted. For actual computation of points on the curve
+! it is necessary to call the subroutine qurv2.
+! On input--
+!   n is the number of points to be interpolated (n.GE.2).
+!   x is an array containing the n x-coordinates of the
+!   points.
+!   y is an array containing the n y-coordinates of the
+!   points.
+!   z is an array containing the n z-coordinates of the
+!   points. (Adjacent x-y-z triples must be distinct, I. E.
+!   Either x(i) .NE. x(i+1) or y(i) .NE. y(i+1) or z(i) .NE.
+!   z(i+1), FOR i = 1,...,n-1 ).
+!   slp1x, slp1y, slp1z and slpnx, SLPNY, SLPNZ contain the
+!   desired values of the components of tangent vectors to
+!   the curve at (x(1),y(1),z(1)) and(x(n),y(n),z(n)),
+!   respectively. The positive sense of the curve is assumed
+!   to be that moving from point 1 to point n. the user may
+!   omit values for either or both of these triples and
+!   signal this with islpsw.
+!   islpsw contains a switch indicating which slope data
+!   should be used and which should be estimated by this
+!   subroutine,
+!          = 0 IF slp1x, slp1y, slp1z AND slpnx, SLPNY,
+!              SLPNZ are to be used,
+!          = 1 If slp1x, slp1y, slp1z are to be used but
+!              not slpnx, SLPNY, SLPNZ,
+!          = 2 If slpnx, SLPNY, SLPNZ are to be used but
+!              not slp1x, slp1y, slp1z,
+!          = 3 If both end-tangents are to be estimated
+!              internally.
+!   xp, yp, and zp are arrays of length at least n.
+!   Temp is an array of length at least n which is used
+!   for scratch storage.
+!   s is an array of length at least n.
+! And
+!   sigma contains the tension factor. This value indicates
+!   the curviness desired. If abs(sigma) is nearly zero
+!   (E.G. .001) the resulting curve is approximately a cubic
+!   spline. If abs(sigma) is large (E. G. 50.) The resulting
+!   curve is nearly a polygonal line. If sigma equals zero A
+!   cubic spline results. A standard value for sigma is
+!   approximately 1. In absolute value.
+! On output--
+!   xp, yp, and zp contain information about the curvature
+!   of the curve at the given nodes.
+!   s contains the polygonal arclengths of the curve.
+!   ierr contains an error flag,
+!        = 0 For normal return,
+!        = 1 If n is less than 2,
+!        = 2 If adjacent triples coincide.
+! And
+!   n, x, y, z, slp1x, slp1y, slp1z, slpnx, SLPNY, SLPNZ,
+!   islpsw, and sigma are unaltered,
+! this subroutine references package modules ceez, terms,
+! and snhcsh.
+!-----------------------------------------------------------
+nm1 = n - 1
+np1 = n + 1
+ierr = 0
+if (n <= 1) go to 9
+! Determine polygonal arclengths
+s(1) = 0.
+do i = 2,n
+   im1 = i - 1
+   s(i) = s(im1) + sqrt((x(i) - x(im1))**2 + (y(i) - y(im1))**2 &
+      & + (z(i) - z(im1))**2)
+end do
+! Denormalize tension factor
+sigmap = abs(sigma)*float(n - 1)/s(n)
+! Approximate end slopes
+if (islpsw >= 2) go to 2
+slpp1x = slp1x
+slpp1y = slp1y
+slpp1z = slp1z
+go to 3
+2 dels1 = s(2) - s(1)
+dels2 = dels1 + dels1
+if (n > 2) dels2 = s(3) - s(1)
+if (dels1 == 0. .or. dels2 == 0.) go to 9
+call ceez(dels1,dels2,sigmap,c1,c2,c3,n)
+slpp1x = c1*x(1) + c2*x(2)
+slpp1y = c1*y(1) + c2*y(2)
+slpp1z = c1*z(1) + c2*z(2)
+if (n == 2) go to 3
+slpp1x = slpp1x + c3*x(3)
+slpp1y = slpp1y + c3*y(3)
+slpp1z = slpp1z + c3*z(3)
+3 delt = sqrt(slpp1x*slpp1x + slpp1y*slpp1y + slpp1z*slpp1z)
+slpp1x = slpp1x/delt
+slpp1y = slpp1y/delt
+slpp1z = slpp1z/delt
+if (islpsw == 1 .or. islpsw == 3) go to 4
+slppnx = slpnx
+slppny = slpny
+slppnz = slpnz
+go to 5
+4 delsn = s(n) - s(nm1)
+delsnm = delsn + delsn
+if (n > 2) delsnm = s(n) - s(n - 2)
+if (delsn == 0. .or. delsnm == 0.) go to 10
+call ceez(-delsn,-delsnm,sigmap,c1,c2,c3,n)
+slppnx = c1*x(n) + c2*x(nm1)
+slppny = c1*y(n) + c2*y(nm1)
+slppnz = c1*z(n) + c2*z(nm1)
+if (n == 2) go to 5
+slppnx = slppnx + c3*x(n - 2)
+slppny = slppny + c3*y(n - 2)
+slppnz = slppnz + c3*z(n - 2)
+5 delt = sqrt(slppnx*slppnx + slppny*slppny + slppnz*slppnz)
+slppnx = slppnx/delt
+slppny = slppny/delt
+slppnz = slppnz/delt
+! Set up right hand sides and tridiagonal system for xp, yp
+! and zp and perform forward elimination
+dx1 = (x(2) - x(1))/s(2)
+dy1 = (y(2) - y(1))/s(2)
+dz1 = (z(2) - z(1))/s(2)
+call terms(diag1,sdiag1,sigmap,s(2))
+xp(1) = (dx1 - slpp1x)/diag1
+yp(1) = (dy1 - slpp1y)/diag1
+zp(1) = (dz1 - slpp1z)/diag1
+temp(1) = sdiag1/diag1
+if (n == 2) go to 7
+do i = 2,nm1
+   dels2 = s(i + 1) - s(i)
+   if (dels2 == 0.) go to 10
+   dx2 = (x(i + 1) - x(i))/dels2
+   dy2 = (y(i + 1) - y(i))/dels2
+   dz2 = (z(i + 1) - z(i))/dels2
+   call terms(diag2,sdiag2,sigmap,dels2)
+   diag = diag1 + diag2 - sdiag1*temp(i - 1)
+   diagin = 1./diag
+   xp(i) = (dx2 - dx1 - sdiag1*xp(i - 1))*diagin
+   yp(i) = (dy2 - dy1 - sdiag1*yp(i - 1))*diagin
+   zp(i) = (dz2 - dz1 - sdiag1*zp(i - 1))*diagin
+   temp(i) = sdiag2*diagin
+   dx1 = dx2
+   dy1 = dy2
+   dz1 = dz2
+   diag1 = diag2
+   sdiag1 = sdiag2
+end do
+7 diag = diag1 - sdiag1*temp(nm1)
+xp(n) = (slppnx - dx1 - sdiag1*xp(nm1))/diag
+yp(n) = (slppny - dy1 - sdiag1*yp(nm1))/diag
+zp(n) = (slppnz - dz1 - sdiag1*zp(nm1))/diag
+! Perform back substitution
+do i = 2,n
+   ibak = np1 - i
+   t = temp(ibak)
+   xp(ibak) = xp(ibak) - t*xp(ibak + 1)
+   yp(ibak) = yp(ibak) - t*yp(ibak + 1)
+   zp(ibak) = zp(ibak) - t*zp(ibak + 1)
+end do
+return
+! Too few points
+9 ierr = 1
+return
+! Coincident adjacent points
+10 ierr = 2
+end subroutine qurv1
+
+pure subroutine qurv2(t,xs,ys,zs,n,x,y,z,xp,yp,zp,s,sigma)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: t
+real, intent(inout) :: xs, ys, zs
+real, intent(in) :: x(n), y(n), z(n), xp(n), yp(n), zp(n), s(n)
+real, intent(in) :: sigma
+!     beginning of local variable declarations
+integer :: i, im1
+real :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
+   & dummy, sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sumx, sumy, &
+   & sumz, tn
+interface
+   pure function intrvl(x,t,m)
+      implicit none
+      integer, intent(in) :: m
+      real, intent(in) :: x
+      real, intent(in) :: t(m)
+      integer :: intrvl
+   end function intrvl
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+! this subroutine performs the mapping of points in the
+! interval (0.,1.) Onto a curve in space.  The subroutine
+! qurv1 should be called earlier to determine certain
+! necessary parameters. The resulting curve has a parametric
+! representation all of whose components are splines under
+! tension and functions of the polygonal arclength
+! parameter.
+! On input--
+!   t contains a real value to be mapped to a point on the
+!   curve. The interval (0.,1.) Is mapped onto the entire
+!   curve, with 0. Mapping to (x(1),y(1,z(1)) and 1. Mapping
+!   to (x(n),y(n),z(n)). Values outside this interval result
+!   in extrapolation.
+!   n contains the number of points which were specified
+!   to determine the curve.
+!   x, y, and z are arrays containing the x-, y- and z-
+!   coordinates of the specified points.
+!   xp, yp, and zp are the arrays output from qurv1
+!   containing curvature information.
+!   s is an array containing the polygonal arclengths of
+!   the curve.
+! And
+!   sigma contains the tension factor (its sign is ignored).
+! The parameters n, x, y, z, xp, yp, zp, s, and sigma
+! should be input unaltered from the output of qurv1.
+! On output--
+!   xs, ys and zs contain the x-, y- and z-coordinates of
+!   the image point on the curve.
+! None of the input parameters are altered.
+! This subroutine references package modules intrvl and
+! snhcsh.
+!-----------------------------------------------------------
+! Determine interval
+tn = s(n)*t
+im1 = intrvl(tn,s,n)
+i = im1 + 1
+! Denormalize tension factor
+sigmap = abs(sigma)*float(n - 1)/s(n)
+! Set up and perform interpolation
+del1 = tn - s(im1)
+del2 = s(i) - tn
+dels = s(i) - s(im1)
+sumx = (x(i)*del1 + x(im1)*del2)/dels
+sumy = (y(i)*del1 + y(im1)*del2)/dels
+sumz = (z(i)*del1 + z(im1)*del2)/dels
+if (sigmap /= 0.) go to 1
+d = del1*del2/(6.*dels)
+c1 = (del1 + dels)*d
+c2 = (del2 + dels)*d
+xs = sumx - xp(i)*c1 - xp(im1)*c2
+ys = sumy - yp(i)*c1 - yp(im1)*c2
+zs = sumz - zp(i)*c1 - zp(im1)*c2
+return
+1 delp1 = sigmap*(del1 + dels)/2.
+delp2 = sigmap*(del2 + dels)/2.
+call snhcsh(sinhm1,dummy,sigmap*del1,-1)
+call snhcsh(sinhm2,dummy,sigmap*del2,-1)
+call snhcsh(sinhms,dummy,sigmap*dels,-1)
+call snhcsh(sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh(sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh(dummy,coshp1,delp1,1)
+call snhcsh(dummy,coshp2,delp2,1)
+d = sigmap*sigmap*dels*(sinhms + sigmap*dels)
+c1 = (sinhm1*del2 - del1*(2.*(coshp1 + 1.)*sinhp2 + sigmap* &
+   & coshp1*del2))/d
+c2 = (sinhm2*del1 - del2*(2.*(coshp2 + 1.)*sinhp1 + sigmap* &
+   & coshp2*del1))/d
+xs = sumx + xp(i)*c1 + xp(im1)*c2
+ys = sumy + yp(i)*c1 + yp(im1)*c2
+zs = sumz + zp(i)*c1 + zp(im1)*c2
+end subroutine qurv2
+
+pure elemental subroutine ceez(del1,del2,sigma,c1,c2,c3,n)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: del1, del2, sigma
+real, intent(inout) :: c1, c2, c3
+!     beginning of local variable declarations
+real :: coshm1, coshm2, del, delm, delp, denom, dummy, sinhmm, &
+   & sinhmp
+interface
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+! this subroutine determines the coefficients c1, c2, and c3
+! used to determine endpoint slopes. Specifically, if
+! function values Y1, Y2, and Y3 are given at points X1, X2,
+! and X3, respectively, the quantity c1*Y1 + c2*Y2 + c3*Y3
+! is the value of the derivative at X1 of a spline under
+! tension (with tension factor sigma) passing through the
+! three points and having third derivative equal to zero at
+! X1. Optionally, only two values, c1 and c2 are determined.
+! On input--
+!   del1 IS X2-X1 (.GT. 0.).
+!   del2 is X3-X1 (.GT. 0.). If n .EQ. 2, this parameter is
+!   ignored.
+!   sigma is the tension factor.
+! And
+!   n is a switch indicating the number of coefficients to
+!   be returned. If n .EQ. 2 only two coefficients are
+!   returned. Otherwise all three are returned.
+! On output--
+!   c1, c2, and c3 contain the coefficients.
+! None of the input parameters are altered.
+! This subroutine references package module snhcsh.
+!-----------------------------------------------------------
+if (n == 2) go to 2
+if (sigma /= 0.) go to 1
+del = del2 - del1
+! TENSION .EQ. 0.
+c1 = -(del1 + del2)/(del1*del2)
+c2 = del2/(del1*del)
+c3 = -del1/(del2*del)
+return
+! TENSION .NE. 0.
+1 call snhcsh(dummy,coshm1,sigma*del1,1)
+call snhcsh(dummy,coshm2,sigma*del2,1)
+delp = sigma*(del2 + del1)/2.
+delm = sigma*(del2 - del1)/2.
+call snhcsh(sinhmp,dummy,delp,-1)
+call snhcsh(sinhmm,dummy,delm,-1)
+denom = coshm1*(del2 - del1) - 2.*del1*(sinhmp + delp)* &
+   & (sinhmm + delm)
+c1 = 2.*(sinhmp + delp)*(sinhmm + delm)/denom
+c2 = -coshm2/denom
+c3 = coshm1/denom
+return
+! Two coefficients
+2 c1 = -1./del1
+c2 = -c1
+end subroutine ceez
+
+pure elemental subroutine terms(diag,sdiag,sigma,del)
+implicit none
+real, intent(inout) :: diag, sdiag
+real, intent(in) :: sigma, del
+!     beginning of local variable declarations
+real :: coshm, denom, sigdel, sinhm
+interface
+   pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
+      implicit none
+      real, intent(inout) :: sinhm
+      real, intent(inout) :: coshm
+      real, intent(in) :: x
+      integer, intent(in) :: isw
+   end subroutine snhcsh
+end interface
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+! this subroutine computes the diagonal and superdiagonal
+! terms of the tridiagonal linear system associated with
+! spline under tension interpolation.
+! On input--
+!   sigma contains the tension factor.
+! And
+!   del contains the step size.
+! On output--
+!               (sigma*del*cosh(sigma*del) - Sinh(sigma*del)
+!   diag = del*--------------------------------------------.
+!                     (sigma*del)**2 * SINH(sigma*del)
+!                   sinh(sigma*del) - sigma*del
+!   sdiag = del*----------------------------------.
+!                (sigma*del)**2 * SINH(sigma*del)
+! and
+!   sigma and del are unaltered.
+! This subroutine references package module snhcsh.
+!-----------------------------------------------------------
+if (sigma /= 0.) go to 1
+diag = del/3.
+sdiag = del/6.
+return
+1 sigdel = sigma*del
+call snhcsh(sinhm,coshm,sigdel,0)
+denom = del/((sinhm + sigdel)*sigdel*sigdel)
+diag = denom*(sigdel*coshm - sinhm)
+sdiag = denom*sinhm
+end subroutine terms
+
+pure integer function intrvl(x, t, m)
+implicit none
+integer, intent(in) :: m
+real, intent(in) :: x, t(m)
+!     beginning of local variable declarations
+integer :: i, il, ir
+real :: tm, nswc_ai_r4
+!-----------------------------------------------------------------------
+!             Location of a value x in a sequence t
+!                       ----------------
+!     Input--
+!        x is a real number.
+!        t is an array of nondecreasing values. It is
+!          assumed that t(1) .LT. t(m).
+!        m is the length of t (m .GE. 2).
+!     Output--
+!        intrvl has the value i when  t(i) .LE. x .LT. t(i+1).
+!        Otherwise, if L is the integer where t(L) .LT. t(L+1)
+!        and t(L+1) = ... = t(m), then intrvl has the value i
+!        where
+!                  i = 1   IF x .LT. t(1)
+!                  i = L   IF x .GE. t(L)
+!-----------------------------------------------------------------------
+if (x < t(2)) go to 100
+tm = t(m)
+i = m - 1
+10 if (t(i) < tm) go to 20
+i = i - 1
+go to 10
+20 if (x >= t(i)) go to 110
+il = 2
+ir = i
+!     Bisection search
+30 i = (il + ir)/2
+if (i == il) go to 110
+nswc_ai_r4 = x - t(i)
+if (nswc_ai_r4 < 0) go to 40
+if (nswc_ai_r4 == 0) go to 60
+go to 50
+40 ir = i
+go to 30
+50 il = i
+go to 30
+!     Case when x = t(i) for some i
+60 if (x < t(i + 1)) go to 110
+i = i + 1
+go to 60
+!     Left end
+100 intrvl = 1
+return
+!     Normal exit
+110 intrvl = i
+end function intrvl
+
 pure subroutine bval(t, bcoef, n, k, x, jderiv, w, wk)
 implicit none
 integer, intent(in) :: jderiv, k, n
@@ -5,6 +842,7 @@ real, intent(inout) :: w
 real, intent(in) :: x
 real, intent(in) :: t(*), bcoef(n)
 real, intent(inout) :: wk(k,3)
+!     beginning of local variable declarations
 integer :: i, imk, ipj, j, jc, jcmax, jcmin, jdrvp1, jj, km1, kmj, &
    & l, nmi, npk
 real :: dl, dr, fkmj
@@ -157,6 +995,7 @@ real, intent(out) :: w
 real, intent(in) :: x
 real, intent(in) :: t(*), bcoeff(n)
 real, intent(inout) :: wk(*)
+!     beginning of local variable declarations
 integer :: i, ipk, kp1, np1, npk
 real :: sum, tlast, tnew, xval
 interface
@@ -209,6 +1048,7 @@ real, intent(out) :: w
 real, intent(in) :: x
 real, intent(in) :: t(*), bcoef(n)
 real, intent(inout) :: wk(k,3)
+!     beginning of local variable declarations
 integer :: i, imk, ipj, j, jc, jcmin, jj, km1, kmj, l, m
 real :: dl, dr, tipj
 interface
@@ -301,6 +1141,7 @@ integer, intent(out) :: l
 integer, intent(in) :: n
 real, intent(in) :: t(*), a(n)
 real, intent(inout) :: break(*), c(k,*), wk(k,*)
+!     beginning of local variable declarations
 integer :: i, il, ilj, ilkj, j, jj, jp1, km1, kmj, kp1, left
 real :: diff, r, s, term, x
 !-----------------------------------------------------------------------
@@ -386,6 +1227,7 @@ implicit none
 integer, intent(in) :: l, n, ni
 real :: a(l,n), x(n), xi(ni)
 real, intent(inout) :: yi(ni)
+!     beginning of local variable declarations
 integer :: i, il, ir, j, k, lm1, lmj
 real :: dx, s, xx, nswc_ai_r4
 !-----------------------------------------------------------------------
@@ -469,6 +1311,7 @@ integer, intent(in) :: jhigh, k, left
 real, intent(in) :: x
 real, intent(in) :: t(*)
 real, intent(inout) :: blist(k)
+!     beginning of local variable declarations
 integer :: i, imj, l
 real :: s, term, ti, timj
 !-----------------------------------------------------------------------
@@ -521,6 +1364,7 @@ integer, intent(in) :: idim, k, left, nderiv
 real, intent(in) :: x
 real, intent(in) :: t(*)
 real, intent(inout) :: dbiatx(idim,nderiv), a(k,k)
+!     beginning of local variable declarations
 integer :: i, ideriv, il, j, jj, jlow, jp1mid, kp1, kp1mm, l, &
    & ldummy, m, mhigh
 real :: factor, fkp1mm, sum
@@ -656,6 +1500,7 @@ real, intent(inout) :: bcoef(n)
 real, intent(in) :: gtau(n)
 real, intent(inout) :: q(*)
 real, intent(in) :: t(*), tau(n)
+!     beginning of local variable declarations
 integer :: i, ilp1mx, j, jj, km1, kpkm2, left, lenq, np1
 real :: taui
 interface
@@ -799,6 +1644,7 @@ implicit none
 integer, intent(out) :: iflag
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
 real, intent(inout) :: w(nroww,nrow)
+!     beginning of local variable declarations
 integer :: i, ipk, j, jbeg, jend, jmax, k, kmax, mdj, middle, midmk, mj, nrowm1, nswc_ai_i4
 real :: factor, pivot
 !  From  * a practical guide to splines *  by C. DE boor
@@ -919,6 +1765,7 @@ implicit none
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
 real, intent(in) :: w(nroww,nrow)
 real, intent(inout) :: b(nrow)
+!     beginning of local variable declarations
 integer :: i, imj, ipj, j, jmax, middle, mmj, mpj, nrowm1
 !  From  * a practical guide to splines *  by C. DE boor
 !  companion routine to  banfac . It returns the solution  X  of the
@@ -981,6 +1828,7 @@ integer, intent(in) :: k, n, ntau
 real, intent(in) :: tau(ntau), gtau(ntau), wgt(ntau)
 real, intent(in) :: t(*)
 real, intent(inout) :: a(n), wk(n), q(k,n)
+!     beginning of local variable declarations
 integer :: i, j, jj, l, left, leftmk, mm
 real :: dw
 interface
@@ -1078,6 +1926,7 @@ implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: n, nb
 real, intent(inout) :: w(nb,n), diag(n)
+!     beginning of local variable declarations
 integer :: i, imax, ipj, j, jmax, k, kpi
 real :: ratio, t
 !-----------------------------------------------------------------------
@@ -1179,6 +2028,7 @@ implicit none
 integer, intent(in) :: n, nb
 real, intent(in) :: w(nb,n)
 real, intent(inout) :: b(n)
+!     beginning of local variable declarations
 integer :: j, jmax, jpk, k, nbm1
 !-----------------------------------------------------------------------
 !     bchslv solves the linear system C*X = b for X when w contains
@@ -1235,6 +2085,7 @@ real, intent(in) :: xconst(*), yconst(*)
 real, intent(inout) :: coeff(n), w(*)
 integer, intent(in) :: nderiv(*)
 integer, intent(inout) :: iw(*)
+!     beginning of local variable declarations
 integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
 !-----------------------------------------------------------------------
 !      This subprogram fits a piece-wise polynomial curve
@@ -1428,6 +2279,7 @@ real, intent(inout) :: coeff(*)
 real, intent(inout) :: bf(nord,nord), g(mdg,*), w(mdw,*), work(*)
 integer, intent(in) :: nderiv(*)
 integer, intent(inout) :: iwork(*)
+!     beginning of local variable declarations
 integer :: i, idata, ideriv, ierr, ileft, intrvl, intw1, ip, ip1, &
    & ir, irow, itype, iw1, iw2, j, l, lw, m, mt, n, nb, neqcon, nincon, &
    & nordm1, nordp1, np1
@@ -1685,6 +2537,7 @@ implicit none
 integer, intent(inout) :: ip, ir
 integer, intent(in) :: jt, mdg, mt, nb
 real, intent(inout) :: g(mdg,*)
+!     beginning of local variable declarations
 integer :: i, ie, ig, ig1, ig2, j, jg, k, kh, l, lp1, mh, mu, nbp1
 real :: rho
 interface
@@ -1877,6 +2730,7 @@ integer, intent(in) :: ip, ir, mdg, mode, n, nb
 real :: g(mdg,*)
 real, intent(out) :: rnorm
 real, intent(inout) :: x(n)
+!     beginning of local variable declarations
 integer :: i, i1, i2, ie, ii, irm1, ix, j, jg, l, np1
 real :: rsq, s
 !***Author  Lawson, C. L., (JPL)
@@ -2037,6 +2891,7 @@ real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz, my)
 real, intent(in) :: xbreak(nx), ybreak(ny)
 real, intent(inout) :: f(*)
 real, intent(inout) :: s(*), t(*), wk(num)
+!     beginning of local variable declarations
 integer :: i, imax, j, l, ld, m, n, nu
 interface
    pure subroutine bslsq2(x,wx,mx,y,wy,my,z,kz,tx,nx,kx,ty,ny, &
@@ -2183,6 +3038,7 @@ implicit none
 integer, intent(in) :: ka, kdz, kz, m, n
 real, intent(in) :: t(*), a(ka,n)
 real, intent(inout) :: z(kz,*), dz(kdz,*)
+!     beginning of local variable declarations
 integer :: i, il, ilj, ilkj, j, jj, jp1, k, kmj, l, left, mp1, mu
 real :: del, diff, r, s, term, x, c(4), wk(4,5)
 !-----------------------------------------------------------------------
@@ -2279,6 +3135,7 @@ real, intent(in) :: x(mx), y(my)
 real, intent(inout) :: z(kz,my)
 real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
    & f12(kf12,n)
+!     beginning of local variable declarations
 integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1, nswc_ai_i4
 real :: a, b, b1, b2, b3, bx, c, c1, c2, c3, cx, d, dfi, dfip1, ds, dt, dx, dy, fi, fip1, xx, yy, nswc_ai_r4
 interface
@@ -2472,6 +3329,7 @@ real, intent(in) :: x(mx), y(my)
 real, intent(inout) :: z(kz,my)
 real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
    & f12(kf12,n)
+!     beginning of local variable declarations
 integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1, nswc_ai_i4
 real :: a, a1, a2, a3, ax, c, c1, c2, c3, cx, d, dfi, dfip1, ds, dt, dx, dy, fi, fip1, xx, yy, nswc_ai_r4
 interface
@@ -2659,6 +3517,7 @@ integer, intent(out) :: ierr
 real, intent(in) :: x(m), y(n), z(iz,n), opt(*)
 real, intent(inout) :: zp(m,n,*), temp(*)
 real, intent(in) :: sigma
+!     beginning of local variable declarations
 integer :: i, ibak, ibakp1, im1, ip1, j, jbak, jbakp1, jm1, jp1, key, l, mm1, mp1, nm1, np1, npi, npibak, npm, npmpj, ind(8), &
    & loc(8), num(8), nswc_ai_i4
 real :: c1, c2, c3, del1, del2, deli, delx1, delx2, delxm, delxmm, &
@@ -3037,11 +3896,12 @@ integer, intent(in) :: m, n, iz
 real, intent(in) :: xx, yy, x(m), y(n)
 real :: z(iz,n), zp(m,n,*)
 real, intent(in) :: sigma
+real :: surf2
+!     beginning of local variable declarations
 integer :: i, im1, j, jm1
 real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, f1, &
    & f2, fp1, fp2, sigmap, sigmax, sigmay, sinhm1, sinhm2, sinhms, &
    & sinhp1, sinhp2, zi, zim1, zxxi, zxxim1
-real :: surf2
 integer :: intrvl
 interface
    pure elemental subroutine snhcsh(sinhm,coshm,x,isw)
@@ -3177,6 +4037,7 @@ real, intent(inout) :: dz(idz,nd)
 real, intent(in) :: x(m), y(n), z(iz,n), zp(m,n,*)
 real, intent(inout) :: work(4,md)
 real, intent(in) :: sigma
+!     beginning of local variable declarations
 integer :: i, ii, im1, j, jj, jm1, lasti, lastj
 real :: c1, c2, c3, c4, coshp1, coshp2, del1, del2, delp1, delp2, &
    & dels, deltdx, deltdy, dummy, sigmax, sigmay, sinhm1, sinhm2, &
@@ -3344,6 +4205,7 @@ integer, intent(in) :: ka, kx, ky, kz, l, nx, ny
 real, intent(in) :: x(nx), y(ny), z(kz,ny)
 real, intent(in) :: tx(*), ty(*)
 real, intent(inout) :: a(ka,ny), wk(l)
+!     beginning of local variable declarations
 integer :: iw, m
 interface
    pure subroutine bstrp1(x,z,kz,m,n,t,k,a,ka,work,iflag)
@@ -3398,6 +4260,7 @@ integer, intent(out) :: iflag
 integer, intent(in) :: k, ka, kz, m, n
 real, intent(in) :: x(m), z(kz,n), t(*)
 real, intent(inout) :: a(ka,m), work(*)
+!     beginning of local variable declarations
 integer :: i, j, mp1
 interface
    pure subroutine bstrp(tau,gtau,t,n,k,bcoef,q,iflag)
@@ -3446,6 +4309,7 @@ integer, intent(in) :: ka, kx, ky, kz, l, mx, my, nx, ny
 real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz,my)
 real, intent(in) :: tx(*), ty(*)
 real, intent(inout) :: a(ka,ny), wk(l)
+!     beginning of local variable declarations
 integer :: ierr, iq, iw, m
 interface
    pure subroutine bslsq1(tau,wgt,ntau,z,kz,m,t,n,k,a,ka,wk,q, &
@@ -3513,6 +4377,7 @@ integer, intent(in) :: k, ka, kz, m, n, ntau
 real, intent(in) :: tau(ntau), wgt(ntau), z(kz,m)
 real, intent(in) :: t(*)
 real, intent(inout) :: a(ka,n), wk(n), q(k,n)
+!     beginning of local variable declarations
 integer :: i, j, jj, l, left, leftmk, mm
 real :: dw
 interface
@@ -3628,6 +4493,7 @@ implicit none
 integer, intent(in) :: kb, m, n, nb
 real, intent(in) :: w(nb,n)
 real, intent(inout) :: b(kb,n)
+!     beginning of local variable declarations
 integer :: i, j, jmax, jpk, k, nbm1
 real :: t
 !-----------------------------------------------------------------------
@@ -3701,6 +4567,7 @@ real, intent(out) :: f
 real, intent(in) :: x0, y0
 real, intent(in) :: a(ka,ny), tx(*), ty(*)
 real, intent(inout) :: wk(*)
+!     beginning of local variable declarations
 integer :: i, iw, j, l, m
 interface
    pure subroutine bval(t,bcoef,n,k,x,jderiv,w,wk)
@@ -3763,6 +4630,7 @@ integer, intent(in) :: n
 integer, intent(inout) :: iadj(*), iend(n)
 integer, intent(out) :: ier
 real :: x(n), y(n)
+!     beginning of local variable declarations
 integer :: nn, k, km1, nl, nr, ind, indx, n0, itemp, ierr, km1d2, &
    & kmi, i, kmin
 real :: xl, yl, xr, yr, dxr, dyr, xk, yk, dxk, dyk, cprod, sprod
@@ -3970,6 +4838,7 @@ integer, intent(in) :: kk
 integer, intent(inout) :: iadj(*), iend(kk)
 integer, intent(out) :: ier
 real :: x(kk), y(kk)
+!     beginning of local variable declarations
 logical :: swptst
 integer :: tindx
 integer :: k, km1, i1, i2, i3, indkf, indkl, nabor1, io1, io2, &
@@ -4082,6 +4951,7 @@ pure subroutine bdyadd(kk,i1,i2, iadj,iend)
 implicit none
 integer, intent(in) :: kk, i1, i2
 integer, intent(inout) :: iadj(*), iend(kk)
+!     beginning of local variable declarations
 integer :: k, km1, nright, nleft, nf, nl, n1, n2, i, imin, imax, &
    & kend, next, indx
 interface
@@ -4196,6 +5066,7 @@ pure subroutine intadd(kk,i1,i2,i3, iadj,iend)
 implicit none
 integer, intent(in) :: kk, i1, i2, i3
 integer, intent(inout) :: iadj(*), iend(kk)
+!     beginning of local variable declarations
 integer :: k, km1, n(3), nft(3), ip1, ip2, ip3, indx, nf, nl, n1, &
    & n2, imin, imax, i, itemp
 interface
@@ -4332,6 +5203,7 @@ pure subroutine shiftd(nfrst,nlast,kk, iarr)
 implicit none
 integer, intent(in) :: nfrst, nlast, kk
 integer, intent(inout) :: iarr(*)
+!     beginning of local variable declarations
 integer :: k, nf, nl, nlp1, ns, nsl, i, ibak, indx, imax
 integer, parameter :: inc = 5
 !***********************************************************
@@ -4423,6 +5295,7 @@ pure subroutine swapd(nin1,nin2,nout1,nout2, iadj,iend)
 implicit none
 integer, intent(in) :: nin1, nin2, nout1, nout2
 integer, intent(inout) :: iadj(*), iend(*)
+!     beginning of local variable declarations
 integer :: in(2), io(2), ip1, ip2, j, k, nf, nl, i, imin, imax
 interface
    pure subroutine shiftd(nfrst,nlast,kk,iarr)
@@ -4598,6 +5471,7 @@ pure logical function swptst(in1,in2,io1,io2,x,y)
 implicit none
 integer, intent(in) :: in1, in2, io1, io2
 real, intent(in) :: x(*), y(*)
+!     beginning of local variable declarations
 real :: dx11, dx12, dx22, dx21, dy11, dy12, dy22, dy21, sin1, &
    & sin2, cos1, cos2, sin12
 !***********************************************************
@@ -4675,6 +5549,7 @@ end function swptst
 pure integer function tindx(nvertx,nabor,iadj,iend)
 implicit none
 integer, intent(in) :: nvertx, nabor, iadj(*), iend(*)
+!     beginning of local variable declarations
 integer :: nb, indx
 !***********************************************************
 !                                               Robert Renka
@@ -4712,6 +5587,7 @@ integer, intent(in) :: nst, iadj(*), iend(*)
 integer, intent(inout) :: i1, i2, i3
 real, intent(in) :: px, py
 real :: x(*), y(*)
+!     beginning of local variable declarations
 real :: x0, x1, x2, y0, y1, y2, xp, yp
 integer :: n0, n1, n2, n3, n4, indx, ind, nf, nl, next
 !***********************************************************
@@ -4945,6 +5821,7 @@ integer, intent(in) :: n
 real, intent(in) :: x(n), y(n), z(n)
 real, intent(inout) :: zxzy(2,n)
 integer, intent(in) :: iadj(*), iend(n)
+!     beginning of local variable declarations
 integer :: j, miter
 real :: eps
 interface
@@ -4986,6 +5863,7 @@ integer, intent(in) :: n, iadj(*), iend(n)
 integer, intent(inout) :: nit, ier
 real, intent(in) :: x(n), y(n), z(n), eps
 real, intent(inout) :: zxzy(2,n)
+!     beginning of local variable declarations
 integer :: nn, maxit, iter, k, indf, indl, indx, nb
 real :: tol, dgmax, xk, yk, zk, zxk, zyk, a11, a12, a22, r1, r2, &
    & delx, dely, delxs, delys, dsq, dcub, t, dzx, dzy
@@ -5164,6 +6042,7 @@ real, intent(in) :: x(n), y(n), z(n)
 real, intent(inout) :: zxzy(2,n)
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(n)
+!     beginning of local variable declarations
 integer :: j
 interface
    pure subroutine gradl1(n,k,x,y,z,iadj,iend,dx,dy,ier)
@@ -5203,6 +6082,7 @@ integer, intent(in) :: n, k, iadj(*)
 integer, intent(inout) :: iend(n), ier
 real, intent(in) :: x(n), y(n), z(n)
 real, intent(inout) :: dx, dy
+!     beginning of local variable declarations
 integer :: nn, kk, lmin, lmax, lm1, lnp, npts(30), ierr, np, i, j, im1, jp1, ip1, l
 real :: sum, ds, r, rs, avsq, av, xk, yk, zk, a(6,6), c, s, dmin
 integer, parameter :: lmn = 10
@@ -5499,6 +6379,7 @@ pure subroutine setrm(xk,yk,zk,xi,yi,zi,s1,s2,r, row)
 implicit none
 real, intent(in) :: xk, yk, zk, xi, yi, zi, s1, s2, r
 real, intent(inout) :: row(6)
+!     beginning of local variable declarations
 integer :: i
 real :: dx, dy, dxsq, dysq, d, w, w1, w2
 !***********************************************************
@@ -5569,6 +6450,7 @@ integer, intent(in) :: l
 integer, intent(inout) :: npts(l), ier
 real, intent(in) :: x(*), y(*)
 real, intent(inout) :: ds
+!     beginning of local variable declarations
 integer :: lm1, n1, i, ni, np, indf, indl, indx, nb
 real :: x1, y1, dnp, dnb
 !***********************************************************
@@ -5688,6 +6570,7 @@ real, intent(inout) :: zi(m)
 real, intent(in) :: zxzy(2,n)
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(n)
+!     beginning of local variable declarations
 integer :: ist, j
 !-----------------------------------------------------------------------
 !                    Evaluation of the surface
@@ -5718,6 +6601,7 @@ real, intent(in) :: xi(l), yi(m)
 real, intent(inout) :: zi(nrows,m)
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(n)
+!     beginning of local variable declarations
 integer :: i, ist, j
 !-----------------------------------------------------------------------
 !                Evaluation of the surface over a grid
@@ -5751,6 +6635,7 @@ real, intent(in) :: px, py
 real :: x(n), y(n)
 real, intent(in) :: z(n), zxzy(2,n)
 real, intent(out) :: pz
+!     beginning of local variable declarations
 integer :: nn, i1, i2, i3, ierr, n1, n2, indx
 real :: xp, yp, zx1, zy1, zx2, zy2, zx3, zy3, x1, y1, x2, y2, x3, &
    & y3, z1, z2, z3, dum, dp, u, v, xq, yq, r1, r2, a1, a2, b1, b2, c1, &
@@ -6007,6 +6892,7 @@ integer, intent(inout) :: ier
 real, intent(in) :: x, y, x1, x2, x3, y1, y2, y3, z1, z2, z3, zx1, &
    & zx2, zx3, zy1, zy2, zy3
 real, intent(inout) :: w, wx, wy
+!     beginning of local variable declarations
 integer :: i, ip1, ip2, ip3
 real :: u(3), v(3), sl(3), area, xp, yp, r(3), rx(3), ry(3), &
    & phi(3), phix(3), phiy(3), rmin, c1, c2, ro(3), rox(3), roy(3), &
@@ -6252,6 +7138,7 @@ integer, intent(inout) :: fitiwk(fiwkln)
 real, intent(inout) :: fitdwk(fdwkln), fitcds(ncrows,dimen)
 real, intent(inout) :: fitvls(nfpts), resids(nfpts)
 real, intent(in) :: wts(nfpts)
+!     beginning of local variable declarations
 integer :: indstt, p, dimp1, newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, alfl
 real :: scale
 !     ***************
@@ -6395,6 +7282,7 @@ integer, intent(inout) :: error, npolys, degree
 integer, intent(in) :: dimen, npts
 integer, intent(in) :: iwklen
 integer, intent(inout) :: iwork(iwklen)
+!     beginning of local variable declarations
 integer :: alfl, newstt, psiwid, kmxbas, startj, kjp1d2, index, nplyt4
 interface
    pure elemental subroutine basiz(degree,npts,dimen,npolys, &
@@ -6584,6 +7472,7 @@ integer, intent(inout) :: degree
 integer, intent(in) :: npts, dimen
 integer, intent(inout) :: npolys
 integer, intent(out) :: error
+!     beginning of local variable declarations
 integer :: top, bot, i, rowlen
 !     ***************
 !     Purpose
@@ -6663,6 +7552,7 @@ implicit none
 integer, intent(in) :: npolys, dimen, degree
 integer, intent(out) :: alflp1
 integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
+!     beginning of local variable declarations
 integer :: j, kj, curdeg, jprime, nwithk, i, curm1, ralen, dimm1, dimm2, dimp1
 !     ***************
 !     Purpose
@@ -6802,6 +7692,7 @@ real, intent(inout) :: psi(npts,psiwid), alpha(alfl), f(npts)
 real, intent(inout) :: coord(ncrows,dimen), maxabs(dimp1)
 real, intent(in) :: weight(npts)
 real, intent(inout) :: z(npts), sumsqs(npolys), c(npolys)
+!     beginning of local variable declarations
 integer :: k, p, sttdeg, onplys
 real :: runtot, rntot1
 !     ***************
@@ -6873,6 +7764,7 @@ real, intent(inout) :: psi(npts,psiwid)
 real, intent(inout) :: sumsqs(npolys), c(npolys)
 real, intent(in) :: f(npts), weight(npts)
 real, intent(inout) :: z(npts)
+!     beginning of local variable declarations
 integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1, m, start, jindex, jpindx, q, j3, j1, j1mj2, j0mj1, j1m1, starta, onpp1, &
    & index1, index2
 real :: arc, runtot, rntot1, rntot2
@@ -7041,6 +7933,7 @@ implicit none
 integer, intent(in) :: npts
 real, intent(out) :: maxabs
 real, intent(in) :: coord(npts)
+!     beginning of local variable declarations
 integer :: p
 real :: a
 !     ***************
@@ -7072,6 +7965,7 @@ implicit none
 integer, intent(in) :: npts
 real, intent(in) :: maxabs
 real, intent(inout) :: coord(npts)
+!     beginning of local variable declarations
 integer :: p
 !     ***************
 !     Purpose
@@ -7102,6 +7996,7 @@ integer, intent(in) :: fitiwk(fiwkln)
 real, intent(inout) :: fitdwk(fdwkln)
 real, intent(in) :: evlcds(nerows,dimen)
 real, intent(inout) :: evlvls(nepts), temp(dimen)
+!     beginning of local variable declarations
 integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt
 interface
    pure subroutine meval1(coord,ncrows,c,nepts,dimen,npolys,alpha, &
@@ -7257,6 +8152,7 @@ real, intent(in) :: c(npolys)
 real, intent(inout) :: f(nepts)
 real, intent(in) :: maxabs(dimp1)
 real, intent(inout) :: x(dimen)
+!     beginning of local variable declarations
 integer :: jm1, jprime, m, p, k, i, j, index
 real :: runtot, rntot1
 !     ***************
@@ -7333,6 +8229,7 @@ double precision, intent(inout) :: fitdwk(fdwkln), &
    & fitcds(ncrows,dimen)
 double precision, intent(inout) :: fitvls(nfpts), resids(nfpts)
 double precision, intent(in) :: wts(nfpts)
+!     beginning of local variable declarations
 integer :: indstt, p, dimp1, newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, alfl
 double precision :: scale
 !     ***************
@@ -7490,6 +8387,7 @@ double precision, intent(inout) :: coord(ncrows,dimen), &
 double precision, intent(in) :: weight(npts)
 double precision, intent(inout) :: z(npts), sumsqs(npolys), &
    & c(npolys)
+!     beginning of local variable declarations
 integer :: k, p, sttdeg, onplys
 double precision :: runtot, rntot1
 !     ***************
@@ -7561,6 +8459,7 @@ double precision, intent(inout) :: psi(npts,psiwid)
 double precision, intent(inout) :: sumsqs(npolys), c(npolys)
 double precision, intent(in) :: f(npts), weight(npts)
 double precision, intent(inout) :: z(npts)
+!     beginning of local variable declarations
 integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1, m, start, jindex, jpindx, q, j3, j1, j1mj2, j0mj1, j1m1, starta, onpp1, &
    & index1, index2
 double precision :: arc, runtot, rntot1, rntot2
@@ -7729,6 +8628,7 @@ implicit none
 integer, intent(in) :: npts
 double precision, intent(out) :: maxabs
 double precision, intent(in) :: coord(npts)
+!     beginning of local variable declarations
 integer :: p
 double precision :: a
 !     ***************
@@ -7760,6 +8660,7 @@ implicit none
 integer, intent(in) :: npts
 double precision, intent(in) :: maxabs
 double precision, intent(inout) :: coord(npts)
+!     beginning of local variable declarations
 integer :: p
 !     ***************
 !     Purpose
@@ -7790,6 +8691,7 @@ integer, intent(in) :: fitiwk(fiwkln)
 double precision, intent(inout) :: fitdwk(fdwkln)
 double precision, intent(in) :: evlcds(nerows,dimen)
 double precision, intent(inout) :: evlvls(nepts), temp(dimen)
+!     beginning of local variable declarations
 integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt
 interface
    pure subroutine dmevl1(coord,ncrows,c,nepts,dimen,npolys,alpha, &
@@ -7946,6 +8848,7 @@ double precision, intent(in) :: c(npolys)
 double precision, intent(inout) :: f(nepts)
 double precision, intent(in) :: maxabs(dimp1)
 double precision, intent(inout) :: x(dimen)
+!     beginning of local variable declarations
 integer :: jm1, jprime, m, p, k, i, j, index
 double precision :: runtot, rntot1
 !     ***************
@@ -8016,6 +8919,7 @@ real, intent(in) :: a, b, epsil
 real, intent(inout) :: relerr
 real :: f
 external f
+!     beginning of local variable declarations
 integer :: icheck, is, k, nf, npts
 real :: eps, err, result(8), stack(100), sub1, sub2, sub3, sum, &
    & tol, x
@@ -8141,6 +9045,7 @@ real, intent(in) :: a, b, epsil
 real, intent(inout) :: result(*)
 real :: f
 external f
+!     beginning of local variable declarations
 integer :: i, inew, iold, j
 real :: acum, diff, funct(127), fzero, sum, x
 real, parameter :: p(381) = [0.77459666924148337704e00, 0.55555555555555555556e00, 0.88888888888888888889e00, &
@@ -8338,6 +9243,7 @@ real, intent(out) :: result
 real, intent(inout) :: work(lenw)
 integer, intent(inout) :: iwork(limit)
 external f
+!     beginning of local variable declarations
 integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !                 Computation of a definite integral
@@ -8617,6 +9523,9 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+   & rlist(limit)
+!     beginning of local variable declarations
 real :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, errbnd, &
    & errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, uflow
 integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2
@@ -8628,8 +9537,6 @@ interface
       real :: spmpar
    end function spmpar
 end interface
-dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-   & rlist(limit)
 !            The dimension of rlist2 is determined by the value of
 !            LIMEXP in subroutine qelg (rlist2 should be of dimension
 !            (LIMEXP+2) at least).
@@ -8894,6 +9801,7 @@ real, intent(inout) :: resabs, resasc, result
 real, intent(in) :: uflow
 real :: f
 external f
+!     beginning of local variable declarations
 integer :: j, jtw, jtwm1
 real :: absc, centr, dhlgth, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tol, fv1(10), fv2(10)
 real, parameter :: xgk(11) = [0.9956571630258081e+00, 0.9739065285171717e+00, 0.9301574913557082e+00, &
@@ -9035,6 +9943,7 @@ real :: f
 real, intent(inout) :: work(lenw)
 integer, intent(inout) :: iwork(limit)
 external f
+!     beginning of local variable declarations
 integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !                   Integration over infinite intervals
@@ -9330,6 +10239,9 @@ integer, intent(out) :: last
 integer, intent(in) :: limit
 integer, intent(out) :: neval
 external f
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+   & rlist(limit)
+!     beginning of local variable declarations
 real :: abseps, area, area1, area12, area2, a1, a2, boun, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, &
    & errbnd, errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, uflow
 integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2
@@ -9341,8 +10253,6 @@ interface
       real :: spmpar
    end function spmpar
 end interface
-dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-   & rlist(limit)
 !            The dimension of rlist2 is determined by the value of
 !            LIMEXP in subroutine qelg.
 !            List of major variables
@@ -9597,949 +10507,4 @@ if (inf == 2) neval = 2*neval
 if (ier > 2) ier = ier - 1
 999 return
 end subroutine qagie
-
-subroutine qk15i(f, boun, inf, a, b, result, abserr, resabs, &
-   & resasc, epmach, uflow)
-implicit none
-integer, intent(in) :: inf
-real, intent(in) :: a
-real, intent(inout) :: abserr
-real, intent(in) :: b, boun, epmach
-real, intent(inout) :: resabs, resasc, result
-real, intent(in) :: uflow
-real :: f
-external f
-integer :: j
-real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, hlgth, resg, resk, reskh, tabsc1, tabsc2, tol, fv1(7), fv2(7)
-real, parameter :: xgk(8) = [0.9914553711208126e+00, 0.9491079123427585e+00, 0.8648644233597691e+00, &
-   & 0.7415311855993944e+00, 0.5860872354676911e+00, 0.4058451513773972e+00, 0.2077849550078985e+00, 0.0000000000000000e+00]
-real, parameter :: wgk(8) = [0.2293532201052922e-01, 0.6309209262997855e-01, 0.1047900103222502e+00, &
-   & 0.1406532597155259e+00, 0.1690047266392679e+00, 0.1903505780647854e+00, 0.2044329400752989e+00, 0.2094821410847278e+00]
-real, parameter :: wg(8) = [0.0000000000000000e+00, 0.1294849661688697e+00, 0.0000000000000000e+00, 0.2797053914892767e+00 &
-   & , 0.0000000000000000e+00, 0.3818300505051189e+00, 0.0000000000000000e+00, 0.4179591836734694e+00]
-!-----------------------------------------------------------------------
-! 1.        PURPOSE
-!              the original (infinite) integration range is mapped
-!              onto the interval (0,1) and (a,b) is a part of (0,1).
-!              It is the purpose to compute
-!              I = Integral of transformed integrand over (a,b),
-!              j = Integral of abs(transformed integrand) over (a,b).
-! 2.        PARAMETERS
-!            on entry
-!              f      - REAL
-!                       function subprogram defining the integrand
-!                       function f(x). the actual name for f needs
-!                       to be declared E X T E R N A L in the
-!                       calling program.
-!              boun   - REAL
-!                       finite bound of original integration
-!                       RANGE (SET TO ZERO IF inf = +2)
-!              inf    - INTEGER
-!                       if inf = -1, the original interval is
-!                                   (-INFINITY,BOUND),
-!                       if inf = +1, the original interval is
-!                                   (BOUND,+INFINITY),
-!                       if inf = +2, the original interval is
-!                                   (-INFINITY,+INFINITY) and
-!                       the integral is computed as the sum of two
-!                       integrals, one over (-INFINITY,0)
-!                       and one over (0,+INFINITY).
-!              a      - REAL
-!                       lower limit for integration over subrange
-!                       of (0,1)
-!              b      - REAL
-!                       upper limit for integration over subrange
-!                       of (0,1)
-!              epmach - REAL
-!                       the relative precision of the floating
-!                       arithmetic being used.
-!              uflow  - REAL
-!                       the smallest positive magnitude.
-!            On return
-!              result - Real
-!                       approximation to the integral I
-!                       result is computed by applying the 15-point
-!                       Kronrod rule(RESK) obtained by optimal
-!                       addition of abscissae to the 7-point Gauss
-!                       RULE(RESG).
-!              abserr - REAL
-!                       estimate of the modulus of the absolute error,
-!                       which should equal or exceed abs(I-result)
-!              resabs - REAL
-!                       approximation to the integral j
-!              resasc - REAL
-!                       approximation to the integral of
-!                       abs((transformed integrand)-I/(b-a))
-!                       OVER (a,b)
-! 3.        SUBROUTINES OR FUNCTIONS NEEDED
-!                 - f (user-provided function)
-!-----------------------------------------------------------------------
-!           The abscissae and weights are supplied for the interval
-!           (-1,1).  Because of symmetry only the positive abscissae and
-!           their corresponding weights are given.
-!           xgk    - Abscissae of the 15-point Kronrod rule
-!                    xgk(2), xgk(4), ... abscissae of the 7-point
-!                    Gauss rule
-!                    xgk(1), xgk(3), ...  abscissae which are optimally
-!                    added to the 7-point Gauss rule
-!           wgk    - Weights of the 15-point Kronrod rule
-!           wg     - Weights of the 7-point Gauss rule, corresponding
-!                    to the abscissae xgk(2), xgk(4), ...
-!                    wg(1), wg(3), ... are set to zero.
-!           List of major variables
-!           -----------------------
-!           centr  - Mid point of the interval
-!           HLGTH  - Half-length of the interval
-!           absc*  - ABSCISSA
-!           TABSC* - Transformed abscissa
-!           FVAL*  - Function VALUE
-!           RESG   - result of the 7-point Gauss formula
-!           RESK   - result of the 15-point Kronrod formula
-!           RESKH  - Approximation to the mean value of the transformed
-!                    integrand over (a,b), I.E. to I/(b-a)
-dinf = min(1,inf)
-centr = 0.5*(a + b)
-hlgth = 0.5*(b - a)
-tabsc1 = boun + dinf*(1.0 - centr)/centr
-fval1 = f(tabsc1)
-if (inf == 2) fval1 = fval1 + f(-tabsc1)
-fc = (fval1/centr)/centr
-!           Compute the 15-point Kronrod approximation to
-!           the integral, and estimate the error.
-resg = wg(8)*fc
-resk = wgk(8)*fc
-resabs = abs(resk)
-do j = 1,7
-   absc = hlgth*xgk(j)
-   absc1 = centr - absc
-   absc2 = centr + absc
-   tabsc1 = boun + dinf*(1.0 - absc1)/absc1
-   tabsc2 = boun + dinf*(1.0 - absc2)/absc2
-   fval1 = f(tabsc1)
-   fval2 = f(tabsc2)
-   if (inf == 2) fval1 = fval1 + f(-tabsc1)
-   if (inf == 2) fval2 = fval2 + f(-tabsc2)
-   fval1 = (fval1/absc1)/absc1
-   fval2 = (fval2/absc2)/absc2
-   fv1(j) = fval1
-   fv2(j) = fval2
-   fsum = fval1 + fval2
-   resg = resg + wg(j)*fsum
-   resk = resk + wgk(j)*fsum
-   resabs = resabs + wgk(j)*(abs(fval1) + abs(fval2))
-end do
-reskh = resk*0.5
-resasc = wgk(8)*abs(fc - reskh)
-do j = 1,7
-   resasc = resasc + wgk(j)*(abs(fv1(j) - reskh) + &
-      & abs(fv2(j) - reskh))
-end do
-result = resk*hlgth
-resasc = resasc*hlgth
-resabs = resabs*hlgth
-abserr = abs((resk - resg)*hlgth)
-if (resasc /= 0.0 .and. abserr /= 0.0) abserr = resasc* &
-   & min(1.0, (0.2e+03*abserr/resasc)**1.5)
-tol = 50.0*epmach
-if (resabs > uflow/tol) abserr = max(abserr, tol*resabs)
-end subroutine qk15i
-
-subroutine qpsrt(limit,last,maxerr,ermax,elist,iord,nrmax)
-implicit none
-!     ..................................................................
-! 1.        qpsrt
-!           ordering routine
-!              standard Fortran subroutine
-!              real version
-! 2.        PURPOSE
-!              this routine maintains the descending ordering
-!              in the list of the local error estimates resulting from
-!              the interval subdivision process. At each call two error
-!              estimates are inserted using the sequential search
-!              method, top-down for the largest error estimate
-!              and bottom-up for the smallest error estimate.
-! 3.        CALLING SEQUENCE
-!              call qpsrt(limit,last,maxerr,ermax,elist,iord,nrmax)
-!           parameters (meaning at output)
-!              limit  - Integer
-!                       maximum number of error estimates the list
-!                       can contain
-!              last   - INTEGER
-!                       number of error estimates currently
-!                       in the list
-!              maxerr - Integer
-!                       maxerr points to the nrmax-TH largest error
-!                       estimate currently in the list
-!              ermax  - Real
-!                       nrmax-TH largest error estimate
-!                       ermax = elist(maxerr)
-!              elist  - Real
-!                       vector of dimension last containing
-!                       the error estimates
-!              iord   - INTEGER
-!                       vector of dimension last, the first k
-!                       elements of which contain pointers
-!                       to the error estimates, such that
-!                       elist(iord(1)),... , elist(iord(k))
-!                       form a decreasing sequence, with
-!                       k = last if last.LE.(limit/2+2), and
-!                       k = limit+1-last otherwise
-!              nrmax  - Integer
-!                       maxerr = iord(nrmax)
-! 4.        NO SUBROUTINES OR FUNCTIONS NEEDED
-!     ..................................................................
-real :: elist
-real, intent(inout) :: ermax
-integer, intent(inout) :: iord
-integer, intent(in) :: last, limit
-integer, intent(inout) :: maxerr, nrmax
-real :: errmax, errmin
-integer :: i, ibeg, ido, isucc, j, jbnd, jupbn, k
-dimension elist(last),iord(last)
-!           Check whether the list contains more than
-!           two error estimates.
-!***First executable statement  qpsrt
-if (last > 2) go to 10
-iord(1) = 1
-iord(2) = 2
-go to 90
-!           This part of the routine is only executed
-!           if, due to a difficult integrand, subdivision
-!           increased the error estimate. In the normal case
-!           the insert procedure should start after the
-!           nrmax-TH largest error estimate.
-10 errmax = elist(maxerr)
-if (nrmax == 1) go to 30
-ido = nrmax - 1
-do i = 1,ido
-   isucc = iord(nrmax - 1)
-! ***Jump out of do-loop
-   if (errmax <= elist(isucc)) exit
-   iord(nrmax) = isucc
-   nrmax = nrmax - 1
-end do
-!           Compute the number of elements in the list to
-!           be maintained in descending order. This number
-!           depends on the number of subdivisions still
-!           allowed.
-30 jupbn = last
-if (last > (limit/2 + 2)) jupbn = limit + 3 - last
-errmin = elist(last)
-!           Insert errmax by traversing the list top-down,
-!           starting comparison from the element elist(iord(nrmax+1)).
-jbnd = jupbn - 1
-ibeg = nrmax + 1
-if (ibeg > jbnd) go to 50
-do i = ibeg,jbnd
-   isucc = iord(i)
-! ***Jump out of do-loop
-   if (errmax >= elist(isucc)) go to 60
-   iord(i - 1) = isucc
-end do
-50 iord(jbnd) = maxerr
-iord(jupbn) = last
-go to 90
-!           Insert errmin by traversing the list bottom-up.
-60 iord(i - 1) = maxerr
-k = jbnd
-do j = i,jbnd
-   isucc = iord(k)
-! ***Jump out of do-loop
-   if (errmin < elist(isucc)) go to 80
-   iord(k + 1) = isucc
-   k = k - 1
-end do
-iord(i) = last
-go to 90
-80 iord(k + 1) = last
-!           Set maxerr and ermax.
-90 maxerr = iord(nrmax)
-ermax = elist(maxerr)
-end subroutine qpsrt
-
-pure subroutine qelg(n, epstab, result, abserr, res3la, nres, &
-   & epmach, oflow)
-implicit none
-integer, intent(inout) :: n, nres
-real, intent(out) :: abserr
-real, intent(in) :: epmach, oflow
-real, intent(out) :: result
-real, intent(inout) :: epstab(52), res3la(3)
-integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp, newelm, num
-real :: delta1, delta2, delta3, e0, e1, e1abs, e2, e3, epsinf, &
-   & err1, err2, err3, error, res, ss, tol1, tol2, tol3
-!-----------------------------------------------------------------------
-! 1.        PURPOSE
-!              the routine determines the limit of a given sequence of
-!              approximations, by means of the epsilon algorithm
-!              of P. wynn.
-!              An estimate of the absolute error is also given.
-!              The condensed epsilon table is computed. Only those
-!              elements needed for the computation of the next diagonal
-!              are preserved.
-! 2.        PARAMETERS
-!              n      - INTEGER
-!                       epstab(n) contains the new element in the
-!                       first column of the epsilon table.
-!              epstab - REAL
-!                       vector of dimension 52 containing the
-!                       elements of the two lower diagonals of
-!                       the triangular epsilon table
-!                       the elements are numbered starting at the
-!                       right-hand corner of the triangle.
-!              result - Real
-!                       resulting approximation to the integral
-!              abserr - REAL
-!                       estimate of the absolute error computed from
-!                       result and the 3 previous results
-!              res3la - REAL
-!                       vector of dimension 3 containing the last 3
-!                       results
-!              nres   - INTEGER
-!                       number of calls to the routine
-!                       (should be zero at first call)
-!              epmach - REAL
-!                       the relative precision of the floating
-!                       arithmetic being used.
-!              oflow  - REAL
-!                       the largest positive magnitude.
-! 3.        NO SUBROUTINES OR FUNCTIONS USED
-!-----------------------------------------------------------------------
-!---------------------
-!           List of major variables
-!           -----------------------
-!           e0     - The 4 elements on which the
-!           e1       COMPUTATION OF A NEW ELEMENT IN
-!           e2       THE EPSILON TABLE IS BASED
-!           e3                 e0
-!                        e3    e1    NEW
-!                              e2
-!           newelm - Number of elements to be computed in the new
-!                    diagonal
-!           ERROR  - ERROR = abs(e1-e0)+abs(e2-e1)+abs(NEW-e2)
-!           result - The element in the new diagonal with least value
-!                    of error
-!           limexp is the maximum number of elements the epsilon
-!           table can contain. If this number is reached, the upper
-!           diagonal of the epsilon table is deleted.
-nres = nres + 1
-abserr = oflow
-result = epstab(n)
-if (n < 3) go to 100
-limexp = 50
-epstab(n + 2) = epstab(n)
-newelm = (n - 1)/2
-epstab(n) = oflow
-num = n
-k1 = n
-do i = 1,newelm
-   k2 = k1 - 1
-   k3 = k1 - 2
-   res = epstab(k1 + 2)
-   e0 = epstab(k3)
-   e1 = epstab(k2)
-   e2 = res
-   e1abs = abs(e1)
-   delta2 = e2 - e1
-   err2 = abs(delta2)
-   tol2 = max(abs(e2),e1abs)*epmach
-   delta3 = e1 - e0
-   err3 = abs(delta3)
-   tol3 = max(e1abs,abs(e0))*epmach
-   if (err2 > tol2 .or. err3 > tol3) go to 10
-!           If e0, e1 and e2 are equal to within machine
-!           accuracy, convergence is assumed.
-!           result = e2
-!           abserr = abs(e1-e0) + abs(e2-e1)
-   result = res
-   abserr = err2 + err3
-! ***Jump out of do-loop
-   go to 100
-10 e3 = epstab(k1)
-   epstab(k1) = e1
-   delta1 = e1 - e3
-   err1 = abs(delta1)
-   tol1 = max(e1abs,abs(e3))*epmach
-!           If two elements are very close to each other, omit
-!           a part of the table by adjusting the value of n
-   if (err1 <= tol1 .or. err2 <= tol2 .or. err3 <= tol3) go to 20
-   ss = 1.0/delta1 + 1.0/delta2 - 1.0/delta3
-   epsinf = abs(ss*e1)
-!           Test to detect irregular behaviour in the table, and
-!           eventually omit a part of the table adjusting the value
-!           OF n.
-   if (epsinf > 0.1e-03) go to 30
-20 n = i + i - 1
-! ***Jump out of do-loop
-   exit
-!           Compute a new element and eventually adjust
-!           the value of result.
-30 res = e1 + 1.0/ss
-   epstab(k1) = res
-   k1 = k1 - 2
-   error = err2 + abs(res - e2) + err3
-   if (error > abserr) go to 40
-   abserr = error
-   result = res
-40 continue
-end do
-!           Shift the table.
-if (n == limexp) n = 2*(limexp/2) - 1
-ib = 1
-if ((num/2)*2 == num) ib = 2
-ie = newelm + 1
-do i = 1,ie
-   ib2 = ib + 2
-   epstab(ib) = epstab(ib2)
-   ib = ib2
-end do
-if (num == n) go to 80
-indx = num - n + 1
-do i = 1,n
-   epstab(i) = epstab(indx)
-   indx = indx + 1
-end do
-80 if (nres >= 4) go to 90
-res3la(nres) = result
-abserr = oflow
-go to 100
-!           Compute error estimate
-90 abserr = abs(result - res3la(3)) + abs(result - res3la(2)) + &
-   & abs(result - res3la(1))
-res3la(1) = res3la(2)
-res3la(2) = res3la(3)
-res3la(3) = result
-100 abserr = max(abserr,5.0*epmach*abs(result))
-end subroutine qelg
-
-subroutine qxgs(f,a,b,epsabs,epsrel,result,abserr,ier, &
-   & limit,leniw,lenw,last,iwork,work)
-implicit none
-!            The routine calculates an approximation result to a given
-!            definite integral  I = Integral of f over (a,b),
-!            hopefully satisfying following claim for accuracy
-!            abs(I-result).LE.max(epsabs,epsrel*abs(I)).
-!        Parameters
-!         on entry
-!            f      - REAL
-!                     function subprogram defining the integrand
-!                     function f(x). the actual name for f needs to be
-!                     declared E X T E R N A L in the driver program.
-!            a      - REAL
-!                     lower limit of integration
-!            b      - REAL
-!                     upper limit of integration
-!            epsabs - REAL
-!                     absolute accuracy requested
-!            epsrel - REAL
-!                     relative accuracy requested
-!         on return
-!            result - Real
-!                     approximation to the integral
-!            abserr - REAL
-!                     estimate of the modulus of the absolute error,
-!                     which should equal or exceed abs(I-result)
-!            ier    - INTEGER
-!                     ier = 0 Normal and reliable termination of the
-!                             routine. It is assumed that the requested
-!                             accuracy has been achieved.
-!                     ier.GT.0 abnormal termination of the routine
-!                             the estimates for integral and error are
-!                             less reliable. It is assumed that the
-!                             requested accuracy has not been achieved.
-!            Error messages
-!                     ier = 1 Maximum number of subdivisions allowed
-!                             has been achieved. One can allow more sub-
-!                             divisions by increasing the value of limit
-!                             (and taking the according dimension
-!                             adjustments into account. However, if
-!                             this yields no improvement it is advised
-!                             to analyze the integrand in order to
-!                             determine the integration difficulties. If
-!                             the position of a local difficulty can be
-!                             determined (E.G. singularity,
-!                             discontinuity within the interval) one
-!                             will probably gain from splitting up the
-!                             interval at this point and calling the
-!                             integrator on the subranges. If possible,
-!                             an appropriate special-purpose integrator
-!                             should be used, which is designed for
-!                             handling the type of difficulty involved.
-!                         = 2 The occurrence of roundoff error is DETEC-
-!                             ted, which prevents the requested
-!                             tolerance from being achieved.
-!                             The error may be under-estimated.
-!                         = 3 Extremely bad integrand behaviour
-!                             occurs at some points of the integration
-!                             interval.
-!                         = 4 The algorithm does not converge.
-!                             Roundoff error is detected in the
-!                             extrapolation table. It is presumed that
-!                             the requested tolerance cannot be
-!                             achieved, and that the returned result is
-!                             the best which can be obtained.
-!                         = 5 The integral is probably divergent, or
-!                             slowly convergent. It must be noted that
-!                             divergence can occur with any other value
-!                             of ier.
-!                         = 6 The input is invalid because epsabs or
-!                             epsrel IS NEGATIVE, limit .LT. 1,
-!                             lenw .LT. 46*limit, OR
-!                             leniw .LT. 3*limit.
-!                             Result, abserr, last are set to
-!                             zero. Except when limit or lenw or leniw
-!                             is invalid, iwork(1), work(limit*2+1) and
-!                             work(limit*3+1) are set to zero, work(1)
-!                             is set to A, and work(limit+1) to b.
-!         Dimensioning parameters
-!            limit - Integer
-!                    limit determines the maximum number of subintervals
-!                    in the partition of the given integration interval
-!                    (A,b), limit.GE.1.
-!                    If limit.LT.1, the routine will end with ier = 6.
-!            lenw  - INTEGER
-!                    dimensioning parameter for work
-!                    lenw must be at least limit*46.
-!                    If lenw.LT.limit*46, the routine will end
-!                    with ier = 6.
-!            leniw - INTEGER
-!                    dimensioning parameter for iwork
-!                    leniw must be at least limit*3.
-!                    If lenw.LT.limit*3, the routine will end
-!                    with ier = 6.
-!            last  - Integer
-!                    on return, last equals the number of subintervals
-!                    produced in the subdivision process, which deter-
-!                    mines the number of significant elements actually
-!                    in the work arrays.
-!         Work arrays
-!            iwork - INTEGER
-!                    vector of dimension at least 3*limit, the first K
-!                    elements of which contain pointers
-!                    to the error estimates over the subintervals
-!                    such that work(limit*3+iwork(1)),... ,
-!                    work(limit*3+iwork(K)) form a decreasing
-!                    sequence, with K = last if last.LE.(limit/2+2),
-!                    and K = limit+1-last otherwise.
-!            work  - Real
-!                    vector of dimension at least lenw
-!                    on return
-!                    work(1), ..., work(last) contain the left
-!                     END-POINTS OF THE SUBINTERVALS IN THE
-!                     partition of (a,b),
-!                    work(limit+1), ..., work(limit+last) contain
-!                     the right end-points,
-!                    work(limit*2+1), ..., work(limit*2+last) contain
-!                     the integral approximations over the subintervals,
-!                    work(limit*3+1), ..., work(limit*3+last)
-!                     contain the error estimates.
-!                    work(limit*4+1), ... is the area reserved to store
-!                     functional values.
-real :: a
-real, intent(out) :: abserr
-real :: b
-real, intent(in) :: epsabs, epsrel
-real :: f
-real, intent(out) :: result
-real, intent(inout) :: work
-integer, intent(out) :: ier
-integer, intent(inout) :: iwork
-integer, intent(out) :: last
-integer, intent(in) :: leniw, lenw, limit
-external f
-integer :: l1, l2, l3, l4, l5
-dimension iwork(leniw),work(lenw)
-!         Check validity of limit,leniw and lenw.
-ier = 6
-last = 0
-result = 0.0
-abserr = 0.0
-if (limit < 1 .or. leniw < limit*3 .or. lenw < limit*46) &
-   & return
-!         Prepare call for qxgse.
-l1 = limit + 1
-l2 = limit + l1
-l3 = limit + l2
-l4 = limit + l3
-l5 = 21*limit + l4
-call qxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
-   & ier,work(1),work(l1),work(l2),work(l3),iwork,last, &
-   & work(l4),work(l5),iwork(l1),iwork(l2))
-end subroutine qxgs
-
-subroutine qxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
-   & ier,alist,blist,rlist,elist,iord,last,valp,valn,lp,ln)
-implicit none
-!            The routine calculates an approximation result to A
-!            definite integral I = Integral of f over (a,b),
-!            hopefully satisfying following claim for accuracy
-!            abs(I-result).LE.max(epsabs,epsrel*abs(I)).
-!        Parameters
-!         on entry
-!            f      - REAL
-!                     function subprogram defining the integrand
-!                     function f(x). the actual name for f needs to be
-!                     declared E X t E R N A L in the driver program.
-!            a      - REAL
-!                     lower limit of integration
-!            b      - REAL
-!                     upper limit of integration
-!            epsabs - Real
-!                     absolute accuracy requested
-!            epsrel - Real
-!                     relative accuracy requested
-!            limit  - Integer
-!                     gives an upperbound on the number of subintervals
-!                     in the partition of (a,b)
-!         on return
-!            result - Real
-!                     approximation to the integral
-!            abserr - Real
-!                     estimate of the modulus of the absolute error,
-!                     which should equal or exceed abs(I-result)
-!            ier    - INTEGER
-!                     ier = 0 Normal and reliable termination of the
-!                             routine. It is assumed that the requested
-!                             accuracy has been achieved.
-!                     ier.GT.0 abnormal termination of the routine
-!                             the estimates for integral and error are
-!                             less reliable. It is assumed that the
-!                             requested accuracy has not been achieved.
-!            Error messages
-!                         = 1 Maximum number of subdivisions allowed
-!                             has been achieved. One can allow more sub-
-!                             divisions by increasing the value of limit
-!                             (and taking the according dimension
-!                             adjustments into account). However, if
-!                             this yields no improvement it is advised
-!                             to analyze the integrand in order to
-!                             determine the integration difficulties. If
-!                             the position of a local difficulty can be
-!                             determined (E.G. singularity,
-!                             discontinuity within the interval) one
-!                             will probably gain from splitting up the
-!                             interval at this point and calling the
-!                             integrator on the subranges. If possible,
-!                             an appropriate special-purpose integrator
-!                             should be used, which is designed for
-!                             handling the type of difficulty involved.
-!                         = 2 The occurrence of roundoff error is DETEC-
-!                             ted, which prevents the requested
-!                             tolerance from being achieved.
-!                             The error may be under-estimated.
-!                         = 3 Extremely bad integrand behaviour
-!                             occurs at some points of the integration
-!                             interval.
-!                         = 4 The algorithm does not converge.
-!                             Roundoff error is detected in the
-!                             extrapolation table.
-!                             It is presumed that the requested
-!                             tolerance cannot be achieved, and that the
-!                             returned result is the best which can be
-!                             obtained.
-!                         = 5 The integral is probably divergent, or
-!                             slowly convergent. It must be noted that
-!                             divergence can occur with any other value
-!                             of ier.
-!                         = 6 The input is invalid because epsabs or
-!                             epsrel is negative. Result, abserr,
-!                             last, rlist(1), iord(1), and elist(1)
-!                             are set to zero. alist(1) and blist(1)
-!                             are set to A and b respectively.
-!            alist  - Real
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the left end points
-!                     of the subintervals in the partition of the
-!                     given integration range (a,b)
-!            blist  - Real
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the right end points
-!                     of the subintervals in the partition of the given
-!                     integration range (a,b)
-!            rlist  - Real
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the integral
-!                     approximations on the subintervals
-!            elist  - Real
-!                     vector of dimension at least limit, the first
-!                      last  elements of which are the moduli of the
-!                     absolute error estimates on the subintervals
-!            iord   - INTEGER
-!                     vector of dimension at least limit, the first k
-!                     elements of which are pointers to the
-!                     error estimates over the subintervals,
-!                     such that elist(iord(1)), ..., elist(iord(k))
-!                     form a decreasing sequence, with k = last
-!                     if last.LE.(limit/2+2), and k = limit+1-last
-!                     otherwise
-!            last   - INTEGER
-!                     number of subintervals actually produced in the
-!                     subdivision process
-!            valp   - REAL
-!            valn     ARRAYS OF DIMENSION AT LEAST (21,limit) USED TO
-!                     save the functional values
-!            lp     - INTEGER
-!            ln       VECTORS OF DIMENSION AT LEAST LIMIT, USED TO
-!                     store the actual number of functional values
-!                     saved in the corresponding column
-!                     of valp,valn
-!***routines called  f,spmpar,qelg,qxlqm,qpsrt,qxrrd,qxcpy
-real :: a
-real, intent(out) :: abserr
-real, intent(inout) :: alist
-real :: b
-real, intent(inout) :: blist
-real, intent(inout) :: elist
-real, intent(in) :: epsabs, epsrel
-real :: f
-real, intent(out) :: result
-real, intent(inout) :: rlist
-real, intent(inout) :: valp, valn
-integer, intent(out) :: ier
-integer, intent(inout) :: iord
-integer, intent(out) :: last
-integer, intent(in) :: limit
-integer, intent(inout) :: lp(limit), ln(limit)
-external f
-real :: abseps, area, area1, area12, area2, a1, a2, b1, b2, correc, defabs, defab1, defab2, dres, epmach, erlarg, erlast, errbnd, &
-   & errmax, error1, error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps, res3la(3), rlist2(52), small, t, uflow, vp1(21), &
-   & vp2(21), vn1(21), vn2(21)
-integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin, maxerr, nres, nrmax, numrl2, lp1, lp2, ln1, ln2
-logical :: extrap, noext
-interface
-   pure elemental function spmpar(i)
-      implicit none
-      integer, intent(in) :: i
-      real :: spmpar
-   end function spmpar
-end interface
-dimension alist(limit), blist(limit), elist(limit), iord(limit), &
-   & rlist(limit), valp(21,limit), valn(21,limit)
-!            Machine dependent constants
-!            ---------------------------
-!          epmach is the largest relative spacing.
-!          uflow is the smallest positive magnitude.
-!          OFLOW is the largest positive magnitude.
-epmach = spmpar(1)
-uflow = spmpar(2)
-oflow = spmpar(3)
-!            Test on validity of parameters
-!            ------------------------------
-last = 0
-result = 0.0
-abserr = 0.0
-alist(1) = a
-blist(1) = b
-rlist(1) = 0.0
-elist(1) = 0.0
-ier = 6
-if (epsabs < 0.0 .or. epsrel < 0.0) go to 999
-ier = 0
-rerr = max(epsrel, 50.0*epmach)
-!           First approximation to the integral
-!           -----------------------------------
-ierro = 0
-lp(1) = 1
-ln(1) = 1
-valp(1,1) = f((a + b)*0.5)
-valn(1,1) = valp(1,1)
-call qxlqm(f,a,b,result,abserr,defabs,resabs, &
-   & valp(1,1),valn(1,1),lp(1),ln(1),2, &
-   & epmach,uflow,oflow)
-!           Test on accuracy.
-dres = abs(result)
-errbnd = max(epsabs,rerr*dres)
-last = 1
-rlist(1) = result
-elist(1) = abserr
-iord(1) = 1
-if (abserr <= 100.0*epmach*defabs .and. abserr > &
-   & errbnd) ier = 2
-if (limit == 1) ier = 1
-if (ier /= 0 .or. (abserr <= errbnd.and.abserr /= resabs) .or. &
-   & abserr == 0.0) go to 999
-!           Initialization
-!           --------------
-rlist2(1) = result
-errmax = abserr
-maxerr = 1
-area = result
-errsum = abserr
-abserr = oflow
-nrmax = 1
-nres = 0
-numrl2 = 2
-ktmin = 0
-extrap = .false.
-noext = .false.
-iroff1 = 0
-iroff2 = 0
-iroff3 = 0
-ksgn = -1
-if (dres >= (1.0 - 50.0*epmach)*defabs) ksgn = 1
-t = 1.0 + 100.0*epmach
-!           Main do-loop
-!           ------------
-do last = 2,limit
-!           Bisect the subinterval with the nrmax-TH largest error
-!           estimate.
-   a1 = alist(maxerr)
-   b1 = 0.5*(alist(maxerr) + blist(maxerr))
-   a2 = b1
-   b2 = blist(maxerr)
-   erlast = errmax
-   call qxrrd(f,valn(1,maxerr),ln(maxerr),b1,a1,vn1,vp1,ln1,lp1)
-   call qxlqm(f,a1,b1,area1,error1,resabs,defab1,vp1,vn1,lp1,ln1, &
-      & 2,epmach,uflow,oflow)
-   call qxrrd(f,valp(1,maxerr),lp(maxerr),a2,b2,vp2,vn2,lp2,ln2)
-   call qxlqm(f,a2,b2,area2,error2,resabs,defab2,vp2,vn2,lp2,ln2, &
-      & 2,epmach,uflow,oflow)
-!           Improve previous approximations to integral
-!           and error and test for accuracy.
-   area12 = area1 + area2
-   erro12 = error1 + error2
-   errsum = errsum + erro12 - errmax
-   area = area + area12 - rlist(maxerr)
-   if (defab1 == error1 .or. defab2 == error2) go to 15
-   if (abs(rlist(maxerr) - area12) > 0.1e-04*abs(area12) &
-      & .or. erro12 < 0.99*errmax) go to 10
-   if (extrap) iroff2 = iroff2 + 1
-   if (.not.extrap) iroff1 = iroff1 + 1
-10 if (last > 10 .and. erro12 > errmax) iroff3 = iroff3 + 1
-15 rlist(maxerr) = area1
-   rlist(last) = area2
-   errbnd = max(epsabs,rerr*abs(area))
-!           Test for roundoff error and eventually set error flag.
-   if (iroff1 + iroff2 >= 10 .or. iroff3 >= 20) ier = 2
-   if (iroff2 >= 5) ierro = 3
-!           Set error flag in the case that the number of subintervals
-!           equals limit.
-   if (last == limit) ier = 1
-!           Set error flag in the case of bad integrand behaviour
-!           at a point of the integration range.
-   if (max(abs(a1),abs(b2)) <= &
-      & t*(abs(a2) + 1.e+03*uflow)) ier = 4
-!           Append the newly-created intervals to the list.
-   if (error2 > error1) go to 20
-   alist(last) = a2
-   blist(maxerr) = b1
-   blist(last) = b2
-   elist(maxerr) = error1
-   elist(last) = error2
-   call qxcpy(valp(1,maxerr),vp1,lp1)
-   lp(maxerr) = lp1
-   call qxcpy(valn(1,maxerr),vn1,ln1)
-   ln(maxerr) = ln1
-   call qxcpy(valp(1,last),vp2,lp2)
-   lp(last) = lp2
-   call qxcpy(valn(1,last),vn2,ln2)
-   ln(last) = ln2
-   go to 30
-20 alist(maxerr) = a2
-   alist(last) = a1
-   blist(last) = b1
-   rlist(maxerr) = area2
-   rlist(last) = area1
-   elist(maxerr) = error2
-   elist(last) = error1
-   call qxcpy(valp(1,maxerr),vp2,lp2)
-   lp(maxerr) = lp2
-   call qxcpy(valn(1,maxerr),vn2,ln2)
-   ln(maxerr) = ln2
-   call qxcpy(valp(1,last),vp1,lp1)
-   lp(last) = lp1
-   call qxcpy(valn(1,last),vn1,ln1)
-   ln(last) = ln1
-!           CALL SUBROUTINE qpsrt TO MAINTAIN THE DESCENDING ORDERING
-!           in the list of error estimates and select the subinterval
-!           with nrmax-TH largest error estimate (to be bisected next).
-30 call qpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
-! ***Jump out of do-loop
-   if (errsum <= errbnd) go to 115
-! ***Jump out of do-loop
-   if (ier /= 0) exit
-   if (last == 2) go to 80
-   if (noext) go to 90
-   erlarg = erlarg - erlast
-   if (abs(b1 - a1) > small) erlarg = erlarg + erro12
-   if (extrap) go to 40
-!           Test whether the interval to be bisected next is the
-!           smallest interval.
-   if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
-   extrap = .true.
-   nrmax = 2
-!           The bound 0.3*ERTEST has been introduced to perform A
-!           more cautious extrapolation than in the original dqagse
-!           routine
-40 if (ierro == 3 .or. erlarg <= 0.3*ertest) go to 60
-!           The smallest interval has the largest error.
-!           Before bisecting decrease the sum of the errors over the
-!           larger intervals (erlarg) and perform extrapolation.
-   id = nrmax
-   jupbnd = last
-   if (last > (2 + limit/2)) jupbnd = limit + 3 - last
-   do k = id,jupbnd
-      maxerr = iord(nrmax)
-      errmax = elist(maxerr)
-! ***Jump out of do-loop
-      if (abs(blist(maxerr) - alist(maxerr)) > small) go to 90
-      nrmax = nrmax + 1
-   end do
-!           Perform extrapolation.
-60 numrl2 = numrl2 + 1
-   rlist2(numrl2) = area
-   call qelg(numrl2,rlist2,reseps,abseps,res3la,nres, &
-      & epmach,oflow)
-   ktmin = ktmin + 1
-   if (ktmin > 5 .and. abserr < 0.1e-02*errsum) ier = 5
-   if (abseps >= abserr) go to 70
-   ktmin = 0
-   abserr = abseps
-   result = reseps
-   correc = erlarg
-   ertest = max(epsabs,rerr*abs(reseps))
-! ***Jump out of do-loop
-   if (abserr <= ertest) exit
-!           Prepare bisection of the smallest interval.
-70 if (numrl2 == 1) noext = .true.
-   if (ier == 5) exit
-   maxerr = iord(1)
-   errmax = elist(maxerr)
-   nrmax = 1
-   extrap = .false.
-   small = small*0.5
-   erlarg = errsum
-   go to 90
-80 small = abs(b - a)*0.375
-   erlarg = errsum
-   ertest = errbnd
-   rlist2(2) = area
-90 continue
-end do
-!           Set final result and error estimate.
-!           ------------------------------------
-if (abserr == oflow) go to 115
-if (ier + ierro == 0) go to 110
-if (ierro == 3) abserr = abserr + correc
-if (ier == 0) ier = 3
-if (result /= 0.0 .and. area /= 0.0) go to 105
-if (abserr > errsum) go to 115
-if (area == 0.0) go to 130
-go to 110
-105 if (abserr/abs(result) > errsum/abs(area)) go to 115
-!           Test on divergence.
-110 if (ksgn == (-1).and.max(abs(result),abs(area)) <= &
-   & defabs*0.1e-01) go to 130
-if (0.1e-01 > (result/area).or.(result/area) > 0.1e+03 &
-   & .or.errsum > abs(area)) ier = 6
-go to 130
-!           Compute global integral sum.
-115 result = 0.0
-do k = 1,last
-   result = result + rlist(k)
-end do
-abserr = errsum
-130 if (ier > 2) ier = ier - 1
-999 return
-end subroutine qxgse
 

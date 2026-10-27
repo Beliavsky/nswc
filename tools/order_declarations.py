@@ -1,5 +1,8 @@
 """Put dummy-argument declarations before local types in fixed-form procedures.
 
+Use --mark-locals for the final argument/result/local section pass; the default
+mode preserves historical declaration-ordering behavior.
+
 Preview by default; --output writes a new file. Bounds/type dependencies take
 precedence over grouping. Separate DIMENSION statements remain in place because
 their bounds can depend on intervening PARAMETER definitions. Comments, executable
@@ -151,6 +154,7 @@ def main():
     parser.add_argument('source', type=Path)
     parser.add_argument('--output', type=Path)
     parser.add_argument('--report', type=Path)
+    parser.add_argument('--mark-locals', action='store_true', help='Group arguments/results and mark the start of local declarations')
     args = parser.parse_args()
     if args.output and args.report and args.output.resolve() == args.report.resolve():
         parser.error('Output and report must be distinct')
@@ -158,6 +162,16 @@ def main():
         if target and target.exists():
             parser.error('Output and report must name new files')
     data = args.source.read_bytes()
+    if args.mark_locals:
+        from declaration_sections import transform as sections
+        report = {}
+        output = sections(data, report)
+        if args.output:
+            args.output.write_bytes(output)
+        if args.report:
+            args.report.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8', newline='\n')
+        print(f"{len(report['marked'])} marked; {len(report['reordered'])} reordered; {len(report['skipped'])} need review.")
+        return
     result = transform(data)
     if args.output:
         args.output.write_bytes(result.data)

@@ -562,3 +562,45 @@ using `python tools/validate_sources.py`. Both checks run in GitHub Actions.
 The numerical tests remain representative, so future source changes need
 compiler comparison and appropriate numerical checks rather than relying on
 test coverage alone.
+
+## Argument and local declaration sections
+
+`tools/order_declarations.py --mark-locals` identifies dummy arguments from each
+procedure header, including dummy procedures, and treats the function result as
+part of the same declaration section. It moves their declarations ahead of
+locals, splits mixed declarations, and moves separate argument `DIMENSION`
+statements when their dependencies permit it. It does not infer or change
+`INTENT` attributes.
+
+Before the remaining local declarations it inserts:
+
+```fortran
+C     beginning of local variable declarations
+```
+
+Procedures without a local declaration section receive no marker. Local types
+and named constants required by an argument's kind, length, or array bounds stay
+before that argument declaration and are reported as prerequisites. Unsupported
+annotations, initializations, or alternate entries require review rather than
+an unsafe move. Existing comments retain their text and order. Repeated
+application makes no further changes.
+
+```sh
+python tools/order_declarations.py nswc.f --mark-locals --output candidate.f --report sections.json
+```
+
+The reviewed pass marks 1,031 procedures and reorganizes declarations in 50;
+31 procedures have no local section to mark. Its record is
+[declaration-sections.json](../tools/declaration-sections.json).
+`tools/validate_declaration_sections.py` reconstructs the input from the archive
+and requires unchanged GNU compiler symbol records, executable trees, warning
+messages, and original comments. Regeneration carries the markers into the
+external free-form source and the standalone module. Markers are omitted from
+module procedures when conversion to module storage removes their entire local
+declaration section.
+
+This is the final fixed-form declaration pass. The original ordering mode and
+its historical review remain available for reconstruction. After a newly
+verified edit, use `tools/refresh_label_review_hashes.py before.f candidate.f
+--conversion sections --apply` to migrate downstream reviews, install the fixed
+source, and regenerate the free-form sources and interface provenance.
