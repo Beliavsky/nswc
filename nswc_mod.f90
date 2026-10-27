@@ -3,6 +3,16 @@ module nswc_mod
 implicit none
 private
 integer, parameter :: nswc_sp = kind(0.0), nswc_dp = kind(0.0d0)
+real(nswc_sp), parameter :: nswc_pi_sp = 3.1415926535897932384626433832795028841971693993751_nswc_sp
+real(nswc_sp), parameter :: nswc_half_pi_sp = 1.5707963267948966192313216916397514420985846996876_nswc_sp
+real(nswc_sp), parameter :: nswc_quarter_pi_sp = 0.78539816339744830961566084581987572104929234984378_nswc_sp
+real(nswc_sp), parameter :: nswc_two_pi_sp = 6.2831853071795864769252867665590057683943387987502_nswc_sp
+real(nswc_sp), parameter :: nswc_three_half_pi_sp = 4.7123889803846898576939650749192543262957540990627_nswc_sp
+real(nswc_dp), parameter :: nswc_pi_dp = 3.1415926535897932384626433832795028841971693993751_nswc_dp
+real(nswc_dp), parameter :: nswc_half_pi_dp = 1.5707963267948966192313216916397514420985846996876_nswc_dp
+real(nswc_dp), parameter :: nswc_quarter_pi_dp = 0.78539816339744830961566084581987572104929234984378_nswc_dp
+real(nswc_dp), parameter :: nswc_two_pi_dp = 6.2831853071795864769252867665590057683943387987502_nswc_dp
+real(nswc_dp), parameter :: nswc_three_half_pi_dp = 4.7123889803846898576939650749192543262957540990627_nswc_dp
 public :: ipmpar
 public :: mach
 public :: radix
@@ -3608,21 +3618,21 @@ nswc_ai_r4 = x
 if (nswc_ai_r4 < 0) go to 1
 if (nswc_ai_r4 == 0) go to 2
 go to 5
-1 artnq = atan(y/x) + 3.1415926535898
+1 artnq = atan(y/x) + nswc_pi_sp
 return
 2 nswc_ai_r4 = y
 if (nswc_ai_r4 < 0) go to 3
 if (nswc_ai_r4 == 0) go to 8
 go to 4
-3 artnq = 4.7123889803847
+3 artnq = nswc_three_half_pi_sp
 return
-4 artnq = 1.5707963267949
+4 artnq = nswc_half_pi_sp
 return
 5 nswc_ai_r4 = y
 if (nswc_ai_r4 < 0) go to 6
 if (nswc_ai_r4 == 0) go to 8
 go to 7
-6 artnq = atan(y/x) + 6.2831853071795
+6 artnq = atan(y/x) + nswc_two_pi_sp
 return
 7 artnq = atan(y/x)
 return
@@ -3637,21 +3647,21 @@ nswc_ai_r8 = x
 if (nswc_ai_r8 < 0) go to 1
 if (nswc_ai_r8 == 0) go to 2
 go to 5
-1 dartnq = atan(y/x) + 3.14159265358979323846264338328d0
+1 dartnq = atan(y/x) + nswc_pi_dp
 return
 2 nswc_ai_r8 = y
 if (nswc_ai_r8 < 0) go to 3
 if (nswc_ai_r8 == 0) go to 8
 go to 4
-3 dartnq = 4.71238898038468985769396507492d0
+3 dartnq = nswc_three_half_pi_dp
 return
-4 dartnq = 1.57079632679489661923132169164d0
+4 dartnq = nswc_half_pi_dp
 return
 5 nswc_ai_r8 = y
 if (nswc_ai_r8 < 0) go to 6
 if (nswc_ai_r8 == 0) go to 8
 go to 7
-6 dartnq = atan(y/x) + 6.28318530717958647692528676656d0
+6 dartnq = atan(y/x) + nswc_two_pi_dp
 return
 7 dartnq = atan(y/x)
 return
@@ -3979,13 +3989,12 @@ implicit none
 real(nswc_sp) :: a(3,3)
 real(nswc_sp), intent(inout) :: theta(3)
 real(nswc_sp) :: r, t, u, v
-real(nswc_sp), parameter :: pihalf = 1.5707963267949
 !     --------------------
 if (abs(a(1,1)) > abs(a(2,1))) go to 10
 if (a(2,1) /= 0.0) go to 11
 !     Case when a(1,1) = a(2,1) = 0
 theta(3) = 0.0
-theta(2) = sign(pihalf,a(3,1))
+theta(2) = sign(nswc_half_pi_sp,a(3,1))
 u = a(2,2)
 v = a(1,2)
 if (a(3,1) > 0.0) v = -v
@@ -4219,7 +4228,6 @@ implicit none
 real(nswc_dp), intent(in) :: x
 integer :: max, n
 real(nswc_dp) :: a, t, w
-real(nswc_dp), parameter :: pi = 3.141592653589793238462643383279502884197d+00
 real(nswc_dp), parameter :: a1 = -.1028083791780141522795259479153765743002d+00
 real(nswc_dp), parameter :: a2 = .3170868848763100170457042079710451905600d-02
 real(nswc_dp), parameter :: a3 = -.4657026956105571623449026167864697920000d-04
@@ -4285,7 +4293,7 @@ go to 30
 w = (((((((((((((a13*t + a12)*t + a11)*t + a10)*t + a9)*t + &
    & a8)*t + a7)*t + a6)*t + a5)*t + a4)*t + a3)*t + &
    & a2)*t + a1)*t + 0.5d0) + 0.5d0
-dsin1 = pi*a*w
+dsin1 = nswc_pi_dp*a*w
 !                        Termination
 30 if (x < 0.0) dsin1 = - dsin1
 if (mod(n,2) /= 0) dsin1 = - dsin1
@@ -4296,7 +4304,6 @@ implicit none
 real(nswc_dp), intent(in) :: x
 integer :: max, n
 real(nswc_dp) :: a, t, w
-real(nswc_dp), parameter :: pi = 3.141592653589793238462643383279502884197d+00
 real(nswc_dp), parameter :: a1 = -.1028083791780141522795259479153765743002d+00
 real(nswc_dp), parameter :: a2 = .3170868848763100170457042079710451905600d-02
 real(nswc_dp), parameter :: a3 = -.4657026956105571623449026167864697920000d-04
@@ -4355,7 +4362,7 @@ t = 16.d0*a*a
 w = (((((((((((((a13*t + a12)*t + a11)*t + a10)*t + a9)*t + &
    & a8)*t + a7)*t + a6)*t + a5)*t + a4)*t + a3)*t + &
    & a2)*t + a1)*t + 0.5d0) + 0.5d0
-dcos1 = pi*a*w
+dcos1 = nswc_pi_dp*a*w
 go to 30
 !                 a .LT. 0.25  OR  a .GT. 0.75
 20 a = 0.25d0 + (0.75d0 - a)
@@ -8511,7 +8518,6 @@ real(nswc_sp), intent(inout) :: c, s
 real(nswc_sp), intent(in) :: t
 integer :: i, l, m, max
 real(nswc_sp) :: cy, f, fd, fn, g, gd, gn, pix, pixx, r, sy, x, xx, y, n
-real(nswc_sp), parameter :: pi = 3.1415926535898
 real(nswc_sp), parameter :: a(6) = [-.119278241233760e-05, .540730666359417e-04, -.160488306381990e-02, .281855008757077e-01, - &
    & .246740110027210e+00, .100000000000000e+01]
 real(nswc_sp), parameter :: b(6) = [-.155653074871090e-06, .844415353045065e-05, -.312116934326082e-03, .724478420395276e-02, - &
@@ -8639,7 +8645,7 @@ f = f/x
 g = g/(x*xx)
 go to 70
 60 if (x >= float(max)) go to 100
-pix = pi*x
+pix = nswc_pi_sp*x
 pixx = pix*x
 y = 1.0/pixx
 y = y*y
@@ -8689,7 +8695,6 @@ integer :: i
 real(nswc_sp) :: c, cy, d, e, eps, qm, r, ss, sy, tol, u, x, y, n, np1, qf(2), sm(2), tm(2), ts(2), g0(2), gn(2), h0(2), hn(2), wn &
    & (2)
 logical :: ind
-real(nswc_sp), parameter :: pi = 3.14159265358979
 real(nswc_sp), parameter :: euler = .577215664901533
 real(nswc_sp), parameter :: cd(18) = [0.00000000000000e+00, .311105957086528e-01, .103661260539112e+00, .216532335244554e+00, &
    & .369931427960192e+00, .566766259990589e+00, .814042066324748e+00, .112384247540813e+01, .151400478148512e+01, &
@@ -8806,8 +8811,8 @@ sm(2) = aimag(w)
 !                         Termination
 100 ind = x <= 0.0 .or. abs(y) > 1.e-2
 if (ind .and. mo /= 0) go to 130
-c = pi
-if (y > 0.0) c = -pi
+c = nswc_pi_sp
+if (y > 0.0) c = -nswc_pi_sp
 qm = exp(x)
 cy = cos(y)
 sy = sin(y)
@@ -9435,7 +9440,6 @@ integer, parameter :: n1 = 16
 integer, parameter :: n2 = 46
 integer, parameter :: m1 = 14
 integer, parameter :: m2 = 21
-real(nswc_sp), parameter :: pio2 = 1.5707963267949
 real(nswc_sp), parameter :: bb(16) = [6.84101190850653e-01, -3.74538448460062e-01, -2.82656062651542e-02, 3.06078454012071e-02, - &
    & 8.99242948380352e-04, -1.09884251456048e-03, 5.81151604367358e-05, 2.28802638122969e-05, -1.35078982929539e-06, - &
    & 3.13213946132892e-07, 1.86619586786257e-08, 3.03991719607226e-09, -1.76437788946489e-10, -2.20236421792690e-11, &
@@ -9511,10 +9515,10 @@ do i = 1,m2
 end do
 rc = bx*b1 - b2 + cc(1)
 si = (rc*cos(ax) + aic*sin(ax))/ax
-si = pio2 - si
+si = nswc_half_pi_sp - si
 if (x < 0.0) si = -si
 return
-50 si = sign(pio2,x)
+50 si = sign(nswc_half_pi_sp,x)
 end function si
 
 pure elemental function cin(x)
@@ -10030,8 +10034,6 @@ complex(nswc_sp), intent(inout) :: w
 integer :: j, k, l, m, max, n, nm1
 real(nswc_sp) :: a, a1, a2, c, cn, cut, d, e2t, eps, et, h1, h2, s, s1, s2, sn, t, t1, t2, u, u1, u2, v1, v2, w1, w2, x, y, y2
 complex(nswc_sp) :: eta, eta2, sum
-real(nswc_sp), parameter :: pi = 3.14159265358979
-real(nswc_sp), parameter :: pi2 = 6.28318530717959
 real(nswc_sp), parameter :: alpi = 1.14472988584940
 real(nswc_sp), parameter :: hl2p = .918938533204673
 real(nswc_sp), parameter :: c0(12) = [.833333333333333e-01, -.277777777777778e-02, .793650793650794e-03, -.595238095238095e-03, &
@@ -10064,7 +10066,7 @@ if (x >= 0.0) go to 50
 !            Case when the real part of z is negative
 !-----------------------------------------------------------------------
 y = abs(y)
-t = -pi*y
+t = -nswc_pi_sp*y
 et = exp(t)
 e2t = et*et
 !     SET  a1 = (1 + e2t)/2  AND  a2 = (1 - e2t)/2
@@ -10082,7 +10084,7 @@ k = mod(k,2)
 if (u > -0.5) go to 21
 u = 0.5 + (0.5 + u)
 k = k + 1
-21 u = pi*u
+21 u = nswc_pi_sp*u
 sn = sin(u)
 cn = cos(u)
 if (k /= 1) go to 30
@@ -10096,7 +10098,7 @@ if (a == 0.0) go to 200
 if (mo /= 0) go to 40
 h1 = a1/a
 h2 = -a2/a
-c = pi*et
+c = nswc_pi_sp*et
 h1 = c*h1
 h2 = c*h2
 go to 41
@@ -10186,13 +10188,13 @@ w2 = d
 go to 140
 !     Case when the real part of z is nonnegative and mo is nonzero.
 !     The angle W2 is reduced to the interval -Pi .LT. W2 .LE. pi.
-110 if (w2 > pi) go to 111
-k = 0.5 - w2/pi2
-w2 = w2 + pi2*k
+110 if (w2 > nswc_pi_sp) go to 111
+k = 0.5 - w2/nswc_two_pi_sp
+w2 = w2 + nswc_two_pi_sp*k
 go to 140
-111 k = w2/pi2 - 0.5
-w2 = w2 - pi2*float(k + 1)
-if (w2 <= -pi) w2 = pi
+111 k = w2/nswc_two_pi_sp - 0.5
+w2 = w2 - nswc_two_pi_sp*float(k + 1)
+if (w2 <= -nswc_pi_sp) w2 = nswc_pi_sp
 go to 140
 !     Case when the real part of z is negative and mo is nonzero
 120 if (mo == 0) go to 130
@@ -10255,7 +10257,6 @@ real(nswc_sp), intent(in) :: a
 integer :: i, j, m, n, nswc_ai_i4
 real(nswc_sp) :: bot, s, t, top, w, x
 real(nswc_dp) :: g, z, lnx
-real(nswc_sp), parameter :: pi = 3.1415926535898
 real(nswc_dp), parameter :: d = .41893853320467274178d0
 real(nswc_sp), parameter :: p(7) = [.539637273585445e-03, .261939260042690e-02, .204493667594920e-01, .730981088720487e-01, &
    & .279648642639792e+00, .553413866010467e+00, 1.0]
@@ -10343,7 +10344,7 @@ x = -a
 n = x
 t = x - n
 if (t > 0.9) t = 1.0 - t
-s = sin(pi*t)/pi
+s = sin(nswc_pi_sp*t)/nswc_pi_sp
 if (mod(n,2) == 0) s = -s
 if (s == 0.0) return
 !     Compute the modified asymptotic sum
@@ -10568,8 +10569,6 @@ integer :: j, k, max, n, nm1
 real(nswc_dp) :: a, a1, a2, c, cn, cut, d, eps, et, e2t, h1, &
    & h2, q1, q2, s, sn, s1, s2, t, t1, t2, u, u1, u2, v1, v2, w1, w2, &
    & x, y, y2
-real(nswc_dp), parameter :: pi = 3.141592653589793238462643383279502884197d0
-real(nswc_dp), parameter :: pi2 = 6.283185307179586476925286766559005768394d0
 real(nswc_dp), parameter :: dlpi = 1.144729885849400174143427351353058711647d0
 real(nswc_dp), parameter :: hl2p = .9189385332046727417803297364056176398614d0
 real(nswc_dp), parameter :: c0(30) = [.8333333333333333333333333333333333333333d-01, - &
@@ -10618,7 +10617,7 @@ if (x >= 0.d0) go to 50
 !            Case when the real part of z is negative
 !-----------------------------------------------------------------------
 y = abs(y)
-t = -pi*y
+t = -nswc_pi_dp*y
 et = exp(t)
 e2t = et*et
 !     SET  a1 = (1 + e2t)/2  AND  a2 = (1 - e2t)/2
@@ -10637,7 +10636,7 @@ k = mod(k,2)
 if (u > -0.5d0) go to 21
 u = 0.5d0 + (0.5d0 + u)
 k = k + 1
-21 u = pi*u
+21 u = nswc_pi_dp*u
 sn = sin(u)
 cn = cos(u)
 if (k /= 1) go to 30
@@ -10651,7 +10650,7 @@ if (a == 0.d0) go to 200
 if (mo /= 0) go to 40
 h1 = a1/a
 h2 = -a2/a
-c = pi*et
+c = nswc_pi_dp*et
 h1 = c*h1
 h2 = c*h2
 go to 41
@@ -10746,14 +10745,14 @@ w2 = d
 go to 140
 !     Case when the real part of z is nonnegative and mo is nonzero.
 !     The angle W2 is reduced to the interval -pi .LT. W2 .LE. pi.
-110 if (w2 > pi) go to 111
-k = 0.5d0 - w2/pi2
-w2 = w2 + pi2*k
+110 if (w2 > nswc_pi_dp) go to 111
+k = 0.5d0 - w2/nswc_two_pi_dp
+w2 = w2 + nswc_two_pi_dp*k
 go to 140
-111 k = w2/pi2 - 0.5d0
+111 k = w2/nswc_two_pi_dp - 0.5d0
 u = k + 1
-w2 = w2 - pi2*u
-if (w2 <= -pi) w2 = pi
+w2 = w2 - nswc_two_pi_dp*u
+if (w2 <= -nswc_pi_dp) w2 = nswc_pi_dp
 go to 140
 !     Case when the real part of z is negative and mo is nonzero
 120 if (mo == 0) go to 130
@@ -10787,7 +10786,6 @@ implicit none
 real(nswc_dp), intent(in) :: a
 integer :: j, n, nswc_ai_i4
 real(nswc_dp) :: s, t, x, w
-real(nswc_dp), parameter :: pi = 3.14159265358979323846264338327950d0
 real(nswc_dp), parameter :: d = 0.41893853320467274178032973640562d0
 !-----------------------------------------------------------------------
 !                Evaluation of the gamma function for
@@ -10856,7 +10854,7 @@ return
 !-----------------------------------------------------------------------
 60 if (abs(a) >= 1.d3) return
 if (a > 0.d0) go to 70
-s = dsin1(a)/pi
+s = dsin1(a)/nswc_pi_dp
 if (s == 0.d0) return
 x = -a
 !     Compute the modified asymptotic sum
@@ -11107,8 +11105,6 @@ integer :: j, k, l, m, max
 real(nswc_sp) :: a, a1, a2, c1, c2, cn, eps, et, h1, h2, s, s1, s2, sn, t, u, w1, w2, x, y, y2
 complex(nswc_sp) :: eta, eta2, sum
 real(nswc_dp) :: ds1, ds2
-real(nswc_sp), parameter :: pi = 3.14159265358979324
-real(nswc_sp), parameter :: pi2 = 6.28318530717958648
 real(nswc_sp), parameter :: c0(12) = [.833333333333333e-01, -.833333333333333e-02, .396825396825397e-02, -.416666666666667e-02, &
    & .757575757575758e-02, -.210927960927961e-01, .833333333333333e-01, -.443259803921569e+00, .305395433027012e+01, - &
    & .264562121212121e+02, .281460144927536e+03, -.360751054639805e+04]
@@ -11134,7 +11130,7 @@ if (x >= 0.0) go to 40
 !            Case when the real part of z is negative
 !-----------------------------------------------------------------------
 y = abs(y)
-t = -pi2*y
+t = -nswc_two_pi_sp*y
 et = exp(t)
 !     SET  a1 = (1 + et)/2  AND  a2 = (1 - et)/2
 a1 = 0.5*(1.0 + et)
@@ -11147,7 +11143,7 @@ go to 20
 k = abs(x)
 u = x + k
 if (u <= -0.5) u = 0.5 + (0.5 + u)
-u = pi*u
+u = nswc_pi_sp*u
 sn = sin(u)
 cn = cos(u)
 !     SET h1 + h2*I = pi*COT(pi*z)
@@ -11156,8 +11152,8 @@ s2 = a2*cn
 c1 = a1*cn
 c2 = -a2*sn
 s = s1*s1 + s2*s2
-h1 = pi*(s1*c1 + s2*c2)/s
-h2 = pi*(s1*c2 - s2*c1)/s
+h1 = nswc_pi_sp*(s1*c1 + s2*c2)/s
+h2 = nswc_pi_sp*(s1*c2 - s2*c1)/s
 if (aimag(z) < 0.0) go to 30
 x = 1.0 - x
 y = -y
@@ -11218,7 +11214,6 @@ implicit none
 real(nswc_sp), intent(in) :: xx
 integer :: i, m, n, nq
 real(nswc_sp) :: aug, den, sgn, upper, w, x, xmax1, xmx0, xsmall, z
-real(nswc_sp), parameter :: piov4 = .785398163397448e0
 real(nswc_dp), parameter :: dx0 = 1.461632144968362341262659542325721325d0
 real(nswc_sp), parameter :: p1(7) = [.895385022981970e-02, .477762828042627e+01, .142441585084029e+03, .118645200713425e+04, &
    & .363351846806499e+04, .413810161269013e+04, .130560269827897e+04]
@@ -11284,7 +11279,7 @@ go to 150
 !     Reduction of argument for cotan
 !---------------------------------------------------------------------
 100 w = - x
-sgn = piov4
+sgn = nswc_quarter_pi_sp
 if (w > 0.0e0) go to 120
 w = - w
 sgn = -sgn
@@ -11303,7 +11298,7 @@ w = 4.0e0 * (w - float(nq) * .25e0)
 !---------------------------------------------------------------------
 n = nq / 2
 if ((n + n) /= nq) w = 1.0e0 - w
-z = piov4 * w
+z = nswc_quarter_pi_sp * w
 m = n / 2
 if ((m + m) /= n) sgn = - sgn
 !---------------------------------------------------------------------
@@ -11370,8 +11365,6 @@ integer :: j, k, m, max
 real(nswc_dp) :: a, a1, a2, cn, cut, c1, c2, eps, et, h1, h2, &
    & q1, q2, s, sn, s1, s2, t, t1, t2, u, u1, u2, v1, v2, w1, w2, x, y, &
    & y2
-real(nswc_dp), parameter :: pi = 3.141592653589793238462643383279502884197d0
-real(nswc_dp), parameter :: pi2 = 6.283185307179586476925286766559005768394d0
 real(nswc_dp), parameter :: c0(30) = [.8333333333333333333333333333333333333333d-01, - &
    & .8333333333333333333333333333333333333333d-02, .3968253968253968253968253968253968253968d-02, - &
    & .4166666666666666666666666666666666666667d-02, .7575757575757575757575757575757575757576d-02, - &
@@ -11410,7 +11403,7 @@ if (x >= 0.d0) go to 40
 !            Case when the real part of z is negative
 !-----------------------------------------------------------------------
 y = abs(y)
-t = -pi2*y
+t = -nswc_two_pi_dp*y
 et = exp(t)
 !     SET  a1 = (1 + et)/2  AND  a2 = (1 - et)/2
 a1 = 0.5d0*(1.d0 + et)
@@ -11424,7 +11417,7 @@ if (abs(x) >= min(u, 1.d0/eps)) go to 100
 k = abs(x)
 u = x + k
 if (u <= -0.5d0) u = 0.5d0 + (0.5d0 + u)
-u = pi*u
+u = nswc_pi_dp*u
 sn = sin(u)
 cn = cos(u)
 !     SET h1 + h2*I = pi*COT(pi*z)
@@ -11433,8 +11426,8 @@ s2 = a2*cn
 c1 = a1*cn
 c2 = -a2*sn
 s = s1*s1 + s2*s2
-h1 = pi*(s1*c1 + s2*c2)/s
-h2 = pi*(s1*c2 - s2*c1)/s
+h1 = nswc_pi_dp*(s1*c1 + s2*c2)/s
+h2 = nswc_pi_dp*(s1*c2 - s2*c1)/s
 if (z(2) < 0.d0) go to 30
 x = 1.d0 - x
 y = -y
@@ -11509,7 +11502,6 @@ implicit none
 real(nswc_dp), intent(in) :: a
 integer :: j, k, l, max, n, nswc_ai_i4
 real(nswc_dp) :: eps, s, t, x, xmax, w
-real(nswc_dp), parameter :: pi = 3.1415926535897932384626433832795d0
 real(nswc_dp), parameter :: x0 = .46163214496836234126265954232572d0
 real(nswc_dp), parameter :: c(42) = [-.38057080835217921520437677667039d-01, &
    & .49141539302938712748204699654277d+00, -.56815747821244730242892064734081d-01, .83578212259143131362775650747862d-02, - &
@@ -11621,8 +11613,8 @@ k = abs(a)
 t = a + k
 if (t == 0.d0) return
 if (t <= -0.5d0) t = 1.d0 + t
-t = pi*t
-w = pi*(cos(t)/sin(t))
+t = nswc_pi_dp*t
+w = nswc_pi_dp*(cos(t)/sin(t))
 x = 1.d0 - x
 !     Compute the modified asymptotic sum
 70 t = (10.d0/x)**2
@@ -14714,7 +14706,6 @@ real(nswc_sp), parameter :: w(10) = [6.6671344308688e-2, 1.4945134915058e-1, 2.1
    & 2.9552422471475e-1, 2.9552422471475e-1, 2.6926671931000e-1, 2.1908636251598e-1, 1.4945134915058e-1, 6.6671344308688e-2]
 real(nswc_sp), parameter :: z(10) = [1.3046735791414e-2, 6.7468316655507e-2, 1.6029521585049e-1, 2.8330230293538e-1, &
    & 4.2556283050918e-1, 5.7443716949081e-1, 7.1669769706462e-1, 8.3970478414951e-1, 9.3253168334449e-1, 9.8695326420859e-1]
-real(nswc_sp), parameter :: pihalf = 1.5707963267949
 real(nswc_sp), parameter :: rpinv = .56418958354776
 !     -------------------
 !     -------------------
@@ -14804,7 +14795,7 @@ if (afrac == 0.0) go to 10
 !                           using formula 22
 temp = sqrt(x)
 rty = sqrt(y)
-c = atan(temp/rty)/pihalf
+c = atan(temp/rty)/nswc_half_pi_sp
 if (k == 0.0) go to 130
 ind = j
 m = k + k
@@ -14817,7 +14808,7 @@ if (i == m) go to 120
 t = x*(i/(i + 1.0))*t
 sum = t + sum
 go to 111
-120 p0 = (sum + 1.0)*temp*rty/pihalf + c
+120 p0 = (sum + 1.0)*temp*rty/nswc_half_pi_sp + c
 if (ind /= 0) go to 200
 p = p0
 return
@@ -14979,7 +14970,6 @@ complex(nswc_sp), intent(inout) :: w
 integer :: i, k, m, n
 real(nswc_sp) :: a, cn1, cn2, e, fn, pn, qm, qn, qnp1, r, r2, rn2, sn, t1, t2, u, v, x, y
 complex(nswc_sp) :: c, nu, s, sm1, sm2, t, tsc, w0, w1, zn, zz
-real(nswc_sp), parameter :: pi = 3.14159265358979
 !-----------------------------------------------------------------------
 !         EVALUATION OF THE COMPLEX BESSEL FUNCTION J   (z)
 !                                                    cnu
@@ -15082,7 +15072,7 @@ if (qn /= pn) go to 110
 120 w = sm1
 if (sn < 0.0) w = -w
 if (x >= 0.0) return
-nu = pi*cmplx(-cn2, cn1)
+nu = nswc_pi_sp*cmplx(-cn2, cn1)
 if (y < 0.0) nu = -nu
 w = exp(nu)*w
 return
@@ -15234,8 +15224,6 @@ real(nswc_sp) :: alpha, am, aq, ar, phi, sgn, theta, u, v, x, y, is, inu, izn
 complex(nswc_sp) :: c1, c2, eta, nu, p, p1, q, r, s, s1, s2, sm, t, z, zn
 complex(nswc_sp), parameter :: j = (0.0, 1.0)
 real(nswc_sp), parameter :: c = .398942280401433
-real(nswc_sp), parameter :: pi = 3.14159265358979
-real(nswc_sp), parameter :: pi2 = 6.28318530717959
 real(nswc_sp), parameter :: bnd = 1.04719755119660
 real(nswc_sp), parameter :: a(136) = [1.0, -.208333333333333e+00, .125000000000000e+00, .334201388888889e+00, - &
    & .401041666666667e+00 &
@@ -15368,7 +15356,7 @@ theta = atan2(aimag(q),real(q)) - phi
 if (abs(theta) > bnd) go to 120
 w = s1 + s2
 go to 200
-120 alpha = pi2
+120 alpha = nswc_two_pi_sp
 if (izn < 0.0) alpha = -alpha
 t = alpha*cmplx(abs(inu), -fn)
 alpha = exp(real(t))
@@ -15377,7 +15365,7 @@ r = cmplx(cos(u),sin(u))
 t = s1 - (alpha*r)*s1
 if (x == 0.0 .and. inu == 0.0) t = -t
 if (y >= 0.0) go to 170
-if (izn >= 0.0 .and. theta <= sign(pi,theta)) &
+if (izn >= 0.0 .and. theta <= sign(nswc_pi_sp,theta)) &
    & s2 = s2*(conjg(r)/alpha)
 if (x == 0.0) go to 180
 if (izn < 0.0) go to 170
@@ -15395,7 +15383,6 @@ complex(nswc_sp), intent(inout) :: w
 integer :: i, ind
 real(nswc_sp) :: eps, r, rnu, tol, u, v, x, y, inu, m
 complex(nswc_sp) :: a, a1, arg, e, eta, nu, p, q, t, z, zr, zz
-real(nswc_sp), parameter :: pihalf = 1.5707963267949
 real(nswc_sp), parameter :: c = 1.12837916709551
 complex(nswc_sp), parameter :: j = (0.0, 1.0)
 !-----------------------------------------------------------------------
@@ -15448,9 +15435,9 @@ do i = 1,16
 end do
 p = p + 1.0
 q = (q + a1)*zr
-w = z - pihalf*nu
+w = z - nswc_half_pi_sp*nu
 if (abs(aimag(w)) > 1.0) go to 40
-arg = w - 0.5*pihalf
+arg = w - 0.5*nswc_half_pi_sp
 w = c*sqrt(zr)*(p*cos(arg) - q*sin(arg))
 go to 50
 40 e = exp(-j*w)
@@ -15464,7 +15451,7 @@ if (y < 0.0) nu = -nu
 !     Computation of exp(i*PI*nu)
 rnu = real(nu)
 inu = aimag(nu)
-r = exp(-2.0*pihalf*inu)
+r = exp(-2.0*nswc_half_pi_sp*inu)
 u = r*cos1(rnu)
 v = r*sin1(rnu)
 w = w*cmplx(u,v)
@@ -15617,7 +15604,7 @@ sm(1) = 0.5*(sm(1) + sm(3))
 sm(2) = 0.5*(sm(2) + sm(4))
 sm(3) = ts(1)
 sm(4) = ts(2)
-020 aq(1) = qz(1) - 1.57079632679490*(qn + 0.5)
+020 aq(1) = qz(1) - nswc_half_pi_sp*(qn + 0.5)
 aq(2) = qz(2)
 ts(1) = cos(aq(1))*0.5*(exp(+aq(2)) + exp(-aq(2)))
 ts(2) = -sin(aq(1))*0.5*(exp(+aq(2)) - exp(-aq(2)))
@@ -15689,7 +15676,7 @@ sm(1) = 0.5*(sm(1) + sm(3))
 sm(2) = 0.5*(sm(2) + sm(4))
 sm(3) = ts(1)
 sm(4) = ts(2)
-027 aq(1) = qz(1) - 1.57079632679490*(qn + 0.5)
+027 aq(1) = qz(1) - nswc_half_pi_sp*(qn + 0.5)
 aq(2) = qz(2)
 ts(1) = cos(aq(1))*0.5*(exp(+aq(2)) + exp(-aq(2)))
 ts(2) = -sin(aq(1))*0.5*(exp(+aq(2)) - exp(-aq(2)))
@@ -15834,7 +15821,6 @@ real(nswc_sp) :: ak, akm, ans, ap, arg, coef, dalpha, dfn, dtm, earg, elim, etx,
 real(nswc_sp), parameter :: rtwo = 1.34839972492648e+00
 real(nswc_sp), parameter :: pdf = 7.85398163397448e-01
 real(nswc_sp), parameter :: rttp = 7.97884560802865e-01
-real(nswc_sp), parameter :: pidt = 1.57079632679490e+00
 real(nswc_sp), parameter :: pp(4) = [8.72909153935547e+00, 2.65693932265030e-01, 1.24578576865586e-01, 7.70133747430388e-04]
 integer, parameter :: inlim = 150
 real(nswc_sp), parameter :: fnulim(2) = [100.0e0, 60.0e0]
@@ -16063,7 +16049,7 @@ in = 0
 500 is = kt
 fidal = float(idalp)
 dalpha = fidal + fnf
-arg = x - pidt*dalpha - pdf
+arg = x - nswc_half_pi_sp*dalpha - pdf
 sa = sin(arg)
 sb = cos(arg)
 coef = rttp/rtx
@@ -17000,7 +16986,7 @@ if (abs(sm(4)) + abs(tm(2)) == abs(sm(4))) go to 104
 103 sm(3) = sm(3) + tm(1)
 sm(4) = sm(4) + tm(2)
 if (pm < 35.0) go to 101
-104 aq(1) = qz(1) - 1.57079632679490*(pn + 0.5)
+104 aq(1) = qz(1) - nswc_half_pi_sp*(pn + 0.5)
 aq(2) = qz(2)
 ts(1) = cos(aq(1))*0.5*(exp(+aq(2)) + exp(-aq(2)))
 ts(2) = -sin(aq(1))*0.5*(exp(+aq(2)) - exp(-aq(2)))
@@ -17059,7 +17045,7 @@ do i = m,n
    sm(3) = sm(3) + tm(1)
    sm(4) = sm(4) + tm(2)
 end do
-aq(1) = qz(1) - 1.57079632679490*(pn + 0.5)
+aq(1) = qz(1) - nswc_half_pi_sp*(pn + 0.5)
 aq(2) = qz(2)
 ts(1) = cos(aq(1))*0.5*(exp(+aq(2)) + exp(-aq(2)))
 ts(2) = -sin(aq(1))*0.5*(exp(+aq(2)) - exp(-aq(2)))
@@ -17166,7 +17152,6 @@ complex(nswc_sp), intent(in) :: z, cnu
 complex(nswc_sp), intent(inout) :: w
 real(nswc_sp) :: t, x, y
 complex(nswc_sp) :: nu, z0
-real(nswc_sp), parameter :: pihalf = 1.5707963267949
 !------------------------------------------------------------
 !     Calculation of the modified Bessel function of the
 !     first kind for complex order cnu and complex argument
@@ -17180,7 +17165,7 @@ nu = cnu
 go to 20
 10 z0 = cmplx(-y, x)
 nu = -cnu
-20 t = -pihalf*aimag(nu)
+20 t = -nswc_half_pi_sp*aimag(nu)
 if (t > exparg(1)) go to 30
 w = (0.0, 0.0)
 return
@@ -17332,9 +17317,9 @@ if (qz(1) >= 17.5) go to 023
 aq(1) = -2.0*qz(1)
 if ((qz(2)) < 0) go to 020
 go to 021
-020 aq(2) = -2.0*qz(2) - 3.14159265358979*(qn + 0.5)
+020 aq(2) = -2.0*qz(2) - nswc_pi_sp*(qn + 0.5)
 go to 022
-021 aq(2) = -2.0*qz(2) + 3.14159265358979*(qn + 0.5)
+021 aq(2) = -2.0*qz(2) + nswc_pi_sp*(qn + 0.5)
 022 qm = exp(aq(1))
 ts(1) = qm*cos(aq(2))
 ts(2) = qm*sin(aq(2))
@@ -17408,9 +17393,9 @@ if (qz(1) >= 17.5) go to 036
 aq(1) = -2.0*qz(1)
 if ((qz(2)) < 0) go to 032
 go to 033
-032 aq(2) = -2.0*qz(2) - 3.14159265358979*(qn + 0.5)
+032 aq(2) = -2.0*qz(2) - nswc_pi_sp*(qn + 0.5)
 go to 034
-033 aq(2) = -2.0*qz(2) + 3.14159265358979*(qn + 0.5)
+033 aq(2) = -2.0*qz(2) + nswc_pi_sp*(qn + 0.5)
 034 qm = exp(aq(1))
 ts(1) = qm*cos(aq(2))
 ts(2) = qm*sin(aq(2))
@@ -18155,8 +18140,6 @@ complex(nswc_sp), intent(in) :: z, cnu
 complex(nswc_sp), intent(inout) :: w
 real(nswc_sp) :: a, b, u1, u2
 complex(nswc_sp) :: w1, w2
-real(nswc_sp), parameter :: pi = 3.14159265358979e+00
-real(nswc_sp), parameter :: pihalf = 1.5707963267949e+00
 !------------------------------------------------------------
 !     Calculation of the modified Bessel function of the
 !     second kind with complex order and argument in terms
@@ -18165,10 +18148,10 @@ real(nswc_sp), parameter :: pihalf = 1.5707963267949e+00
 call cbssli(z, -cnu, w1)
 call cbssli(z, cnu, w2)
 a = real(cnu)
-b = pi*aimag(cnu)
+b = nswc_pi_sp*aimag(cnu)
 u1 = sin1(a)*cosh(b)
 u2 = cos1(a)*sinh(b)
-w = pihalf*cdiv(w1 - w2, cmplx(u1,u2))
+w = nswc_half_pi_sp*cdiv(w1 - w2, cmplx(u1,u2))
 end subroutine cbki
 
 subroutine cbka(z, cnu, w)
@@ -18227,7 +18210,6 @@ complex(nswc_sp), intent(inout) :: w
 integer :: i, ind, m, n, n1
 real(nswc_sp) :: a, ai, b, c, t, x, y, znorm, zr1, zr2, nu
 complex(nswc_sp) :: cz, ex, r, r1, u1, u2, u3, w1, w2, zr
-real(nswc_sp), parameter :: pi = 3.14159265358979
 real(nswc_sp), parameter :: cpi = 1.25331413731550
 !-------------------------------------------------------------------
 !     Calculation of the modified Bessel function of the second
@@ -18304,19 +18286,19 @@ w = u3
 w = w*w1*exp(-cz)/sqrt(cz)
 if (ind > 0) return
 !            Analytic continuation
-c = exp(0.5*b*pi)
+c = exp(0.5*b*nswc_pi_sp)
 ex = cxp(m, nu)
 if (y < 0.0) go to 100
 ex = c*ex
 w1 = cmplx(aimag(z), -real(z))
 call cbsslj(w1, r, w2)
-w2 = cmplx(pi*aimag(w2), -pi*real(w2))
+w2 = cmplx(nswc_pi_sp*aimag(w2), -nswc_pi_sp*real(w2))
 w = ex*(ex*w + w2)
 return
 100 ex = conjg(ex)/c
 w1 = cmplx(-aimag(z), real(z))
 call cbsslj(w1, r, w2)
-w2 = cmplx(-pi*aimag(w2), pi*real(w2))
+w2 = cmplx(-nswc_pi_sp*aimag(w2), nswc_pi_sp*real(w2))
 w = ex*(ex*w + w2)
 end subroutine cbkm
 
@@ -18331,7 +18313,6 @@ real(nswc_sp) :: ak, eps, eps0, phi, s, u, x, y
 complex(nswc_sp) :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
    & t2
 real(nswc_sp), parameter :: tol = 1.e-10
-real(nswc_sp), parameter :: pi = 3.14159265358979
 real(nswc_sp), parameter :: d(7) = [.577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
    & .215241674114951e-03, -.201348547807882e-04, .113302723198170e-05]
 !-----------------------------------------------------------------------
@@ -18359,7 +18340,7 @@ mu = nu*cl
 c = exp(mu)
 !                   g1 = gamma(1 + nu)
 !                   g2 = gamma(1 - nu)
-t = pi*nu
+t = nswc_pi_sp*nu
 if (anorm(nu) > tol) go to 10
 a = 1.0 + (t*t)/6.0
 go to 20
@@ -18526,7 +18507,6 @@ complex(nswc_sp), intent(inout) :: w
 integer :: i, ind, m, n, n1
 real(nswc_sp) :: a, ai, rz, t, x, y, znorm, zr1, zr2, nu, nu1
 complex(nswc_sp) :: cn, cz, ex, u1, u2, u3, w1, w2, zr
-real(nswc_sp), parameter :: pi = 3.14159265358979
 real(nswc_sp), parameter :: cpi = 1.25331413731550
 !-----------------------------------------------------------------------
 !         Calculation of the modified Bessel function of the
@@ -18611,13 +18591,13 @@ cn = cmplx(a, 0.0)
 if (y < 0.0) go to 100
 w1 = cmplx(aimag(z), -real(z))
 call cbsslj(w1, cn, w2)
-w2 = cmplx(pi*aimag(w2), -pi*real(w2))
+w2 = cmplx(nswc_pi_sp*aimag(w2), -nswc_pi_sp*real(w2))
 w = ex*(ex*w + w2)
 return
 100 ex = conjg(ex)
 w1 = cmplx(-aimag(z), real(z))
 call cbsslj(w1, cn, w2)
-w2 = cmplx(-pi*aimag(w2), pi*real(w2))
+w2 = cmplx(-nswc_pi_sp*aimag(w2), nswc_pi_sp*real(w2))
 w = ex*(ex*w + w2)
 end subroutine cbsslk
 
@@ -18679,7 +18659,6 @@ integer :: k
 real(nswc_sp) :: a, ak, eps, eps0, g1, g2, gm1, gm2, phi, t, x, y
 complex(nswc_sp) :: c, ch, cl, f, mu, p, q, sh, t1, t2, w
 real(nswc_sp), parameter :: tol = 1.e-10
-real(nswc_sp), parameter :: pi = 3.14159265358979
 real(nswc_sp), parameter :: d(7) = [.577215664901533e+00, -.420026350340952e-01, -.421977345555443e-01, .721894324666310e-02, - &
    & .215241674114951e-03, -.201348547807882e-04, .113302723198170e-05]
 !-----------------------------------------------------------------------
@@ -18707,7 +18686,7 @@ mu = nu*cl
 c = exp(mu)
 !                   g1 = gamma(1 + nu)
 !                   g2 = gamma(1 - nu)
-t = pi*nu
+t = nswc_pi_sp*nu
 if (abs(nu) > tol) go to 10
 a = 1.0 + (t*t)/6.0
 go to 20
@@ -19999,7 +19978,6 @@ complex(nswc_sp), intent(inout) :: k1, k2
 integer :: ind1
 real(nswc_sp) :: a, b
 complex(nswc_sp) :: i1, i2, i1m, i2m, cz, e
-real(nswc_sp), parameter :: pi = 3.14159265358979e+00
 complex(nswc_sp), parameter :: ex13c = (5.0e-01, -8.66025403784439e-01)
 complex(nswc_sp), parameter :: ex23c = (-5.0e-01, -8.66025403784439e-01)
 complex(nswc_sp), parameter :: j = (0.0, 1.0)
@@ -20024,8 +20002,8 @@ if (aimag(z) < 0.0) cz = conjg(cz)
 ind1 = 0
 call kml(ind1, cz, k1, k2)
 call imc(cz, i1, i2, i1m, i2m)
-k1 = ex13c*k1 - j*pi*i1
-k2 = ex23c*k2 - j*pi*i2
+k1 = ex13c*k1 - j*nswc_pi_sp*i1
+k2 = ex23c*k2 - j*nswc_pi_sp*i2
 if (ind == 0) go to 20
 e = exp(z)
 k1 = k1*e
@@ -20666,7 +20644,6 @@ implicit none
 real(nswc_sp), intent(inout) :: phi, r
 real(nswc_sp), intent(in) :: x
 real(nswc_sp) :: rtx, z
-real(nswc_sp), parameter :: pi4 = .785398163397448
 real(nswc_sp), parameter :: an0 = .297640916735064e+00
 real(nswc_sp), parameter :: an1 = .772796814419809e+00
 real(nswc_sp), parameter :: an2 = .764990563560236e+00
@@ -20783,7 +20760,7 @@ go to 40
 phi = qn0
 40 rtx = sqrt(x)
 r = sqrt(r/rtx)
-phi = pi4 + x*rtx*phi
+phi = nswc_quarter_pi_sp + x*rtx*phi
 end subroutine aimp
 
 pure complex(nswc_sp) function ck(k,l)
@@ -20983,7 +20960,6 @@ complex(nswc_sp), intent(in) :: k2
 integer :: i
 real(nswc_sp) :: c, eps, ri, tol
 complex(nswc_sp) :: an, s1
-real(nswc_sp), parameter :: hpi = 1.5707963267949
 !---------------------------------------------------------------------
 !     km computes the complete elliptic integral F(K) for a given
 !     value of k2 = K**2 by use of the Maclaurin expansion.
@@ -21003,7 +20979,7 @@ do i = 1,50
    s1 = s1 + an
    if (abs(real(an)) + abs(aimag(an)) < tol) exit
 end do
-km = hpi*s1
+km = nswc_half_pi_sp*s1
 end function km
 
 pure subroutine kl(l, fk, fl)
@@ -21013,7 +20989,6 @@ complex(nswc_sp), intent(inout) :: fk, fl
 integer :: i
 real(nswc_sp) :: bn, c, eps, ri, tol, u, x, y
 complex(nswc_sp) :: an, l2, s1, s2, w
-real(nswc_sp), parameter :: hpi = 1.5707963267949
 real(nswc_sp), parameter :: ln4 = 1.3862943611199
 ! ----------------------------------------------------------------------
 !     kl computes the complete elliptic integrals F(K) and F(l) for
@@ -21049,7 +21024,7 @@ s1 = s1 + (1.0, 0.0)
 x = real(l)
 y = aimag(l)
 if (x /= 0.0) go to 30
-w = cmplx(ln4 - log(abs(y)), hpi)
+w = cmplx(ln4 - log(abs(y)), nswc_half_pi_sp)
 go to 50
 30 if (abs(x) > abs(y)) go to 31
 u = (ln4 - 0.5*alnrel((x/y)**2)) - log(abs(y))
@@ -21061,7 +21036,7 @@ go to 50
 41 w = cmplx(u, -atan2(y,x))
 !                        Final assembly
 50 fk = w*s1 - s2
-fl = hpi*s1
+fl = nswc_half_pi_sp*s1
 end subroutine kl
 
 pure elemental subroutine cke(k,l,ck,ce,ierr)
@@ -21313,7 +21288,6 @@ complex(nswc_sp), intent(inout) :: fk, ek
 integer :: i
 real(nswc_sp) :: c, eps, ri, tol
 complex(nswc_sp) :: an, cn, s1, s2
-real(nswc_sp), parameter :: hpi = 1.5707963267949
 ! ----------------------------------------------------------------------
 !     ekm computes the complete elliptic integrals F(K) and E(K) for
 !     a given value of k2 = K**2 by use of the Maclaurin expansions.
@@ -21336,8 +21310,8 @@ do i = 1,50
    s2 = s2 - cn
    if (abs(real(an)) + abs(aimag(an)) < tol) exit
 end do
-fk = hpi*s1
-ek = hpi*s2
+fk = nswc_half_pi_sp*s1
+ek = nswc_half_pi_sp*s2
 end subroutine ekm
 
 pure elemental subroutine ekl(l,fk,fl,ek,el,gk,gl)
@@ -21347,7 +21321,6 @@ complex(nswc_sp), intent(inout) :: fk, fl, ek, el, gk, gl
 integer :: i
 real(nswc_sp) :: bn, c, dn, eps, fn, gn, ri, tol, u, x, y
 complex(nswc_sp) :: l2, an, cn, en, s1, s2, s3, s4, s5, s6, s7, w
-real(nswc_sp), parameter :: hpi = 1.5707963267949
 real(nswc_sp), parameter :: ln4 = 1.3862943611199
 ! ----------------------------------------------------------------------
 !     ekl computes the complete elliptic integrals F(K), F(l), E(K),
@@ -21403,7 +21376,7 @@ s7 = s7 + (0.5, 0.0)
 x = real(l)
 y = aimag(l)
 if (x /= 0.0) go to 30
-w = cmplx(ln4 - log(abs(y)), hpi)
+w = cmplx(ln4 - log(abs(y)), nswc_half_pi_sp)
 go to 50
 30 if (abs(x) > abs(y)) go to 31
 u = (ln4 - 0.5*alnrel((x/y)**2)) - log(abs(y))
@@ -21415,11 +21388,11 @@ go to 50
 41 w = cmplx(u, -atan2(y,x))
 !              Final assembly
 50 fk = w*s1 - s2
-fl = hpi*s1
+fl = nswc_half_pi_sp*s1
 ek = w*s6 - s4 + s5
-el = hpi*s3
+el = nswc_half_pi_sp*s3
 gk = -w*s7*l2 - s4 + s5 + s2*l2
-gl = hpi*s7*l2
+gl = nswc_half_pi_sp*s7*l2
 end subroutine ekl
 
 pure elemental subroutine ellpi(phi, cphi, k, l, f, e, ierr)
@@ -21678,7 +21651,6 @@ integer, intent(inout) :: ierr
 real(nswc_sp), intent(in) :: phi, cphi, k2, l2, n, m
 real(nswc_sp), intent(inout) :: p
 real(nswc_sp) :: a, b, c, eps, r, rf, s, s2, tol
-real(nswc_sp), parameter :: pihalf = 1.5707963267948966192
 !-----------------------------------------------------------------------
 !             Real elliptic integral of the third kind
 !-----------------------------------------------------------------------
@@ -21690,7 +21662,7 @@ eps = spmpar(1)
 !-----------------------------------------------------------------------
 tol = 4.0 * eps
 if (min(phi,cphi) < 0.0) go to 100
-if (abs((phi + cphi) - pihalf) > tol * pihalf) go to 100
+if (abs((phi + cphi) - nswc_half_pi_sp) > tol * nswc_half_pi_sp) go to 100
 if (abs(n) > 1.0) go to 110
 if (k2 < 0.0 .or. l2 < 0.0) go to 120
 if (abs((k2 + l2) - 1.0) > tol) go to 120
@@ -21731,7 +21703,6 @@ integer, intent(inout) :: ierr
 real(nswc_dp), intent(in) :: phi, cphi, k2, l2, n, m
 real(nswc_dp), intent(inout) :: p
 real(nswc_dp) :: a, b, c, eps, r, rf, s, s2, tol
-real(nswc_dp), parameter :: pihalf = 1.570796326794896619231321691639751442099d0
 !-----------------------------------------------------------------------
 !               Double precision computation of the
 !             real elliptic integral of the third kind
@@ -21744,7 +21715,7 @@ eps = dpmpar(1)
 !-----------------------------------------------------------------------
 tol = 4.d0 * eps
 if (min(phi,cphi) < 0.d0) go to 100
-if (abs((phi + cphi) - pihalf) > tol * pihalf) go to 100
+if (abs((phi + cphi) - nswc_half_pi_dp) > tol * nswc_half_pi_dp) go to 100
 if (abs(n) > 1.d0) go to 110
 if (k2 < 0.d0 .or. l2 < 0.d0) go to 120
 if (abs((k2 + l2) - 1.d0) > tol) go to 120
@@ -22562,7 +22533,6 @@ real(nswc_sp), intent(in) :: u
 real(nswc_sp), intent(in) :: k, l
 integer :: max, n
 real(nswc_sp) :: e, eps, f, f2, r, sg, tol, u1, u2, z
-real(nswc_sp), parameter :: pihalf = 1.5707963267949
 !     -------------------------------------------------------------
 !     ellpf calculates the elliptic functions sn(u,k), CN(u,k), and
 !     DN(u,k) for real u and real modulus k.  it is assumed that
@@ -22588,8 +22558,8 @@ return
 10 tol = 2.0*eps
 z = dble(k*k) + (dble(l*l) - 1.d0)
 if (abs(z) > tol) go to 100
-f = pihalf
-if (k /= 0.0) call ellpi(pihalf,0.0,k,l,f,e,ierr)
+f = nswc_half_pi_sp
+if (k /= 0.0) call ellpi(nswc_half_pi_sp,0.0,k,l,f,e,ierr)
 f2 = 2.0*f
 !                   Argument reduction
 u1 = abs(u)
@@ -22635,7 +22605,6 @@ real(nswc_sp), intent(in) :: u
 real(nswc_sp), intent(in) :: k, l
 integer :: ierr
 real(nswc_sp) :: c1, d1, e1, f1, s1, v
-real(nswc_sp), parameter :: pihalf = 1.5707963267949
 !     --------------------------------------------------------
 !     scd computes the elliptic functions sn(u,k), CN(u,k),
 !     and DN(u,k) for real u and real modulus k such that
@@ -22658,7 +22627,7 @@ c = l*s1/d1
 d = l/d1
 return
 !     Uses Fourier expansion when k .LE. l
-20 call ellpi(pihalf,0.0,l,k,f1,e1,ierr)
+20 call ellpi(nswc_half_pi_sp,0.0,l,k,f1,e1,ierr)
 if (k > l) go to 30
 call scdf(u,k,l,f,f1,s,c,d)
 return
@@ -22703,7 +22672,6 @@ real(nswc_sp), intent(inout) :: s
 real(nswc_sp), intent(in) :: u
 real(nswc_sp), intent(in) :: k, l
 real(nswc_sp) :: a, ai, coef, eps, q1, q2, qd, qh, qn, sum, temp, tol, v, w, x, i
-real(nswc_sp), parameter :: pihalf = 1.5707963267949
 !     -------------------------------------------------------------
 !     scdf computes SN(u,k), CN(u,k), and DN(u,k) for real u and
 !     k by use of the Fourier expansion for SN(u,k).  It is
@@ -22719,14 +22687,14 @@ eps = spmpar(1)
 !     -------------------------------------------------
 tol = eps/10.0
 v = f - u
-qh = exp(-pihalf*f1/f)
+qh = exp(-nswc_half_pi_sp*f1/f)
 q1 = qh*qh
 q2 = q1*q1
-coef = 4.*pihalf*qh/(k*f)
+coef = 4.*nswc_half_pi_sp*qh/(k*f)
 qn = 1.0
 qd = q1
 w = min(u,v)
-x = pihalf*w/f
+x = nswc_half_pi_sp*w/f
 !     Calculation of series for W = AMIN1(u,V)
 i = 1.0
 sum = 0.0
@@ -22758,8 +22726,6 @@ real(nswc_sp), intent(inout) :: s
 real(nswc_sp), intent(in) :: u
 real(nswc_sp), intent(in) :: k, l
 real(nswc_sp) :: a, ch, coef, e1, e1n, e2, e2n, eps, q1, q1n, q2, q2n, sh, sum, temp, tol, v, w, x, x2, xn, n
-real(nswc_sp), parameter :: pihalf = 1.5707963267949
-real(nswc_sp), parameter :: pi = 3.1415926535898
 !     ----------------------------------------------------------------
 !     scdj computes SN(u,k), CN(u,k), and DN(u,k) for real u and
 !     k using the imaginary transformation of Jacobi and A
@@ -22775,15 +22741,15 @@ eps = spmpar(1)
 !     ------------------------------------------------
 tol = eps/10.0
 v = f - u
-q1 = -exp(-pi*f/f1)
+q1 = -exp(-nswc_pi_sp*f/f1)
 q2 = q1*q1
 w = min(u,v)
-e1 = pi*max(u,v)/f1
-e2 = pi*(f + w)/f1
+e1 = nswc_pi_sp*max(u,v)/f1
+e2 = nswc_pi_sp*(f + w)/f1
 e1 = exp(-e1)
 e2 = exp(-e2)
-coef = pihalf/(k*f1)
-x = pihalf*w/f1
+coef = nswc_half_pi_sp/(k*f1)
+x = nswc_half_pi_sp*w/f1
 x2 = 2.0*x
 !     Calculation of series for W = AMIN1(u,V)
 n = 1.0
@@ -23064,8 +23030,6 @@ integer :: k, m, n, nswc_ai_i4
 real(nswc_sp) :: aj0, aj1, b, bgd1, bgd2, c, cape, caph, capv, cee, circm, d1sq, d2sq, f, g(2), h(2), p1, psi1, sum, t, t1, tau, &
    & tausq, u, &
    & v, w, xk, yk, ykm1, z, kom, l
-real(nswc_sp), parameter :: pi = 3.1415926535898
-real(nswc_sp), parameter :: twopi = 6.28318530717958
 real(nswc_sp), parameter :: alnpi = 1.14472988584940
 real(nswc_sp), parameter :: rtpi = 1.77245385090552
 real(nswc_sp), parameter :: rtpii = .56418958354776
@@ -23153,7 +23117,7 @@ kom = kom + aj0
 l = 0.0
 b = .5*(x(k)*x(k) + y(k)*y(k))
 if (b > aph1(iop)) go to 60
-p1 = aj0/twopi
+p1 = aj0/nswc_two_pi_sp
 go to 3621
 60 g(1) = (w*x(k) + z*y(k))/bgd1
 g(2) = (u*x(k) + v*y(k))/bgd2
@@ -23172,7 +23136,7 @@ go to 3621
 go to 3621
 80 if (b > aph2(iop)) go to 90
 c = rtpi*(h(2) - h(1)) - (g(2)*h(2) - g(1)*h(1))
-p1 = (aj0 - c)/twopi
+p1 = (aj0 - c)/nswc_two_pi_sp
 go to 3621
 !                 Computation of l
 90 if (g(1) < 0.0) go to 100
@@ -23208,9 +23172,9 @@ go to 130
 120 psi1 = -psi1
 if (psi1 <= 0.0) go to 121
 l = l - 1.0
-aj0 = aj0 + pi
+aj0 = aj0 + nswc_pi_sp
 go to 130
-121 aj0 = aj0 - pi
+121 aj0 = aj0 - nswc_pi_sp
 !                 Series evaluation
 130 if (b >= rsq(iop)) go to 171
 cape = aj0
@@ -23268,7 +23232,7 @@ if (n /= 1) go to 3631
 p = abs(p + abs(p1))
 return
 3631 p = p - p1
-kom = kom/twopi
+kom = kom/nswc_two_pi_sp
 a = .5*a
 if (kom < 0.0) go to 3641
 ko = int(kom + .125)
@@ -72322,7 +72286,7 @@ maxp = 209
 !     s72=sin(rad/5.0)
 !     c72=cos(rad/5.0)
 !     s120=sqrt(0.75)
-rad = 6.2831853071796
+rad = nswc_two_pi_sp
 s72 = .951056516295154
 c72 = .309016994374947
 s120 = .86602540378444
@@ -72871,8 +72835,7 @@ integer :: n
 real(nswc_sp), intent(inout) :: wsave(*)
 integer :: k
 real(nswc_sp) :: dt, fk
-real(nswc_sp), parameter :: pih = 1.57079632679491
-dt = pih/float(n)
+dt = nswc_half_pi_sp/float(n)
 fk = 0.
 do k = 1,n
    fk = fk + 1.
@@ -73213,7 +73176,7 @@ ifac(3) = 2
 107 if (nl /= 1) go to 104
 ifac(1) = n
 ifac(2) = nf
-tpi = 6.28318530717959
+tpi = nswc_two_pi_sp
 argh = tpi/float(n)
 is = 0
 nfm1 = nf - 1
@@ -73682,8 +73645,7 @@ real(nswc_sp) :: wa(*)
 integer :: i, ic, idij, idp2, ik, ipp2, ipph, is, j, j2, jc, k, l, &
    & lc, nbd
 real(nswc_sp) :: ai1, ai2, ar1, ar1h, ar2, ar2h, arg, dc2, dcp, ds2, dsp
-real(nswc_sp), parameter :: tpi = 6.28318530717959
-arg = tpi/float(ip)
+arg = nswc_two_pi_sp/float(ip)
 dcp = cos(arg)
 dsp = sin(arg)
 idp2 = ido + 2
@@ -74269,8 +74231,7 @@ real(nswc_sp) :: wa(*)
 integer :: i, ic, idij, idp2, ik, ipp2, ipph, is, j, j2, jc, k, l, &
    & lc, nbd
 real(nswc_sp) :: ai1, ai2, ar1, ar1h, ar2, ar2h, arg, dc2, dcp, ds2, dsp
-real(nswc_sp), parameter :: tpi = 6.28318530717959
-arg = tpi/float(ip)
+arg = nswc_two_pi_sp/float(ip)
 dcp = cos(arg)
 dsp = sin(arg)
 ipph = (ip + 1)/2
@@ -74482,7 +74443,6 @@ real(nswc_dp), intent(inout) :: p(lp1), q(mp1), x(np1), &
 external f, g, phi
 integer :: i, ii, j, k, kount, lpi
 real(nswc_dp) :: b1, del, dn, dnp1, h1, olderr, sign, sum, templ, test, u, xi, xlb, xm1, y, y2, y3, z, zz, z1, z2, z3
-real(nswc_dp), parameter :: pi = 3.14159265358979323846264338328d0
 real(nswc_dp), parameter :: zero = 0.d0
 real(nswc_dp), parameter :: half = .5d0
 real(nswc_dp), parameter :: one = 1.d0
@@ -74516,7 +74476,7 @@ b1 = half*(b - a)
 xm1 = half*(a + b)
 do i = 1,k
    xi = i
-   z = -b1*cos(pi*(xi/dn))
+   z = -b1*cos(nswc_pi_dp*(xi/dn))
    x(i + 1) = z + xm1
    ii = np1 - i
    x(ii) = xm1 - z
@@ -102731,7 +102691,6 @@ integer, intent(in) :: n
 real(nswc_sp), intent(inout) :: a(n)
 integer :: i, m
 real(nswc_sp) :: phi, r, temp(1)
-real(nswc_sp), parameter :: pi2 = 6.2831853071796
 !-----------------------------------------------------------------------
 !                 Gaussian random number generator
 !-----------------------------------------------------------------------
@@ -102742,14 +102701,14 @@ m = n/2
 m = m + m
 do i = 1,m,2
    r = sqrt(-2.0*log(a(i)))
-   phi = pi2*a(i + 1)
+   phi = nswc_two_pi_sp*a(i + 1)
    a(i) = r*cos(phi)
    a(i + 1) = r*sin(phi)
 end do
 if (m == n) return
 20 call urng(ix,temp,1,ierr)
 r = sqrt(-2.0*log(a(n)))
-a(n) = r*cos(pi2*temp(1))
+a(n) = r*cos(nswc_two_pi_sp*temp(1))
 end subroutine nrng
 
 pure subroutine dnrng(ix, a, n, ierr)
@@ -102759,7 +102718,6 @@ integer, intent(in) :: n
 real(nswc_dp), intent(inout) :: a(n)
 integer :: i, m
 real(nswc_dp) :: phi, r, temp(1)
-real(nswc_dp), parameter :: pi2 = 6.28318530717958647692528676656d0
 !-----------------------------------------------------------------------
 !                 Gaussian random number generator
 !-----------------------------------------------------------------------
@@ -102770,14 +102728,14 @@ m = n/2
 m = m + m
 do i = 1,m,2
    r = sqrt(-2.d0*log(a(i)))
-   phi = pi2*a(i + 1)
+   phi = nswc_two_pi_dp*a(i + 1)
    a(i) = r*cos(phi)
    a(i + 1) = r*sin(phi)
 end do
 if (m == n) return
 20 call durng(ix, temp, 1, ierr)
 r = sqrt(-2.d0*log(a(n)))
-a(n) = r*cos(pi2*temp(1))
+a(n) = r*cos(nswc_two_pi_dp*temp(1))
 end subroutine dnrng
 
 pure subroutine nrvg(mo, ix, n, m, a, fmu, x, kx, ierr)

@@ -1,0 +1,411 @@
+{
+  "input_sha256": "c8eb5e79c55884266de89286ce0cbb36a641848fc5263a86c8420fb446bad303",
+  "output_sha256": "a6237aa8fed72e11ad1a3d6b8c18ac16237a77620d5703f246a24afeb4ded2e6",
+  "declarations": [
+    {
+      "procedure": "ROT3",
+      "name": "pihalf",
+      "literal": "1.5707963267949",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "DSIN1",
+      "name": "pi",
+      "literal": "3.141592653589793238462643383279502884197d+00",
+      "constant": "nswc_pi_dp"
+    },
+    {
+      "procedure": "DCOS1",
+      "name": "pi",
+      "literal": "3.141592653589793238462643383279502884197d+00",
+      "constant": "nswc_pi_dp"
+    },
+    {
+      "procedure": "FRNL",
+      "name": "pi",
+      "literal": "3.1415926535898",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "CEXPLI",
+      "name": "pi",
+      "literal": "3.14159265358979",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "SI",
+      "name": "pio2",
+      "literal": "1.5707963267949",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "CGAMMA",
+      "name": "pi",
+      "literal": "3.14159265358979",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "CGAMMA",
+      "name": "pi2",
+      "literal": "6.28318530717959",
+      "constant": "nswc_two_pi_sp"
+    },
+    {
+      "procedure": "GAMMA",
+      "name": "pi",
+      "literal": "3.1415926535898",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "DCGAMA",
+      "name": "pi",
+      "literal": "3.141592653589793238462643383279502884197d0",
+      "constant": "nswc_pi_dp"
+    },
+    {
+      "procedure": "DCGAMA",
+      "name": "pi2",
+      "literal": "6.283185307179586476925286766559005768394d0",
+      "constant": "nswc_two_pi_dp"
+    },
+    {
+      "procedure": "DGAMMA",
+      "name": "pi",
+      "literal": "3.14159265358979323846264338327950d0",
+      "constant": "nswc_pi_dp"
+    },
+    {
+      "procedure": "CPSI",
+      "name": "pi",
+      "literal": "3.14159265358979324",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "CPSI",
+      "name": "pi2",
+      "literal": "6.28318530717958648",
+      "constant": "nswc_two_pi_sp"
+    },
+    {
+      "procedure": "PSI",
+      "name": "piov4",
+      "literal": ".785398163397448e0",
+      "constant": "nswc_quarter_pi_sp"
+    },
+    {
+      "procedure": "DCPSI",
+      "name": "pi",
+      "literal": "3.141592653589793238462643383279502884197d0",
+      "constant": "nswc_pi_dp"
+    },
+    {
+      "procedure": "DCPSI",
+      "name": "pi2",
+      "literal": "6.283185307179586476925286766559005768394d0",
+      "constant": "nswc_two_pi_dp"
+    },
+    {
+      "procedure": "DPSI",
+      "name": "pi",
+      "literal": "3.1415926535897932384626433832795d0",
+      "constant": "nswc_pi_dp"
+    },
+    {
+      "procedure": "ISUBX",
+      "name": "pihalf",
+      "literal": "1.5707963267949",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "CBSSLJ",
+      "name": "pi",
+      "literal": "3.14159265358979",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "CBDB",
+      "name": "pi",
+      "literal": "3.14159265358979",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "CBDB",
+      "name": "pi2",
+      "literal": "6.28318530717959",
+      "constant": "nswc_two_pi_sp"
+    },
+    {
+      "procedure": "CBJA",
+      "name": "pihalf",
+      "literal": "1.5707963267949",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "BESJ",
+      "name": "pidt",
+      "literal": "1.57079632679490e+00",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "CBSSLI",
+      "name": "pihalf",
+      "literal": "1.5707963267949",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "CBKI",
+      "name": "pi",
+      "literal": "3.14159265358979e+00",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "CBKI",
+      "name": "pihalf",
+      "literal": "1.5707963267949e+00",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "CBKM",
+      "name": "pi",
+      "literal": "3.14159265358979",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "CKPS",
+      "name": "pi",
+      "literal": "3.14159265358979",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "CBSSLK",
+      "name": "pi",
+      "literal": "3.14159265358979",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "CKM",
+      "name": "pi",
+      "literal": "3.14159265358979",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "KA",
+      "name": "pi",
+      "literal": "3.14159265358979e+00",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "AIMP",
+      "name": "pi4",
+      "literal": ".785398163397448",
+      "constant": "nswc_quarter_pi_sp"
+    },
+    {
+      "procedure": "KM",
+      "name": "hpi",
+      "literal": "1.5707963267949",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "KL",
+      "name": "hpi",
+      "literal": "1.5707963267949",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "EKM",
+      "name": "hpi",
+      "literal": "1.5707963267949",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "EKL",
+      "name": "hpi",
+      "literal": "1.5707963267949",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "EPI",
+      "name": "pihalf",
+      "literal": "1.5707963267948966192",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "DEPI",
+      "name": "pihalf",
+      "literal": "1.570796326794896619231321691639751442099d0",
+      "constant": "nswc_half_pi_dp"
+    },
+    {
+      "procedure": "ELLPF",
+      "name": "pihalf",
+      "literal": "1.5707963267949",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "SCD",
+      "name": "pihalf",
+      "literal": "1.5707963267949",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "SCDF",
+      "name": "pihalf",
+      "literal": "1.5707963267949",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "SCDJ",
+      "name": "pihalf",
+      "literal": "1.5707963267949",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "SCDJ",
+      "name": "pi",
+      "literal": "3.1415926535898",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "VALR2",
+      "name": "pi",
+      "literal": "3.1415926535898",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "VALR2",
+      "name": "twopi",
+      "literal": "6.28318530717958",
+      "constant": "nswc_two_pi_sp"
+    },
+    {
+      "procedure": "COSQI",
+      "name": "pih",
+      "literal": "1.57079632679491",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "RADBG",
+      "name": "tpi",
+      "literal": "6.28318530717959",
+      "constant": "nswc_two_pi_sp"
+    },
+    {
+      "procedure": "RADFG",
+      "name": "tpi",
+      "literal": "6.28318530717959",
+      "constant": "nswc_two_pi_sp"
+    },
+    {
+      "procedure": "CHEBY1",
+      "name": "pi",
+      "literal": "3.14159265358979323846264338328d0",
+      "constant": "nswc_pi_dp"
+    },
+    {
+      "procedure": "NRNG",
+      "name": "pi2",
+      "literal": "6.2831853071796",
+      "constant": "nswc_two_pi_sp"
+    },
+    {
+      "procedure": "DNRNG",
+      "name": "pi2",
+      "literal": "6.28318530717958647692528676656d0",
+      "constant": "nswc_two_pi_dp"
+    }
+  ],
+  "literals": [
+    {
+      "procedure": "ARTNQ",
+      "literal": "3.1415926535898",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "ARTNQ",
+      "literal": "4.7123889803847",
+      "constant": "nswc_three_half_pi_sp"
+    },
+    {
+      "procedure": "ARTNQ",
+      "literal": "1.5707963267949",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "ARTNQ",
+      "literal": "6.2831853071795",
+      "constant": "nswc_two_pi_sp"
+    },
+    {
+      "procedure": "DARTNQ",
+      "literal": "3.14159265358979323846264338328d0",
+      "constant": "nswc_pi_dp"
+    },
+    {
+      "procedure": "DARTNQ",
+      "literal": "4.71238898038468985769396507492d0",
+      "constant": "nswc_three_half_pi_dp"
+    },
+    {
+      "procedure": "DARTNQ",
+      "literal": "1.57079632679489661923132169164d0",
+      "constant": "nswc_half_pi_dp"
+    },
+    {
+      "procedure": "DARTNQ",
+      "literal": "6.28318530717958647692528676656d0",
+      "constant": "nswc_two_pi_dp"
+    },
+    {
+      "procedure": "BSSLJ",
+      "literal": "1.57079632679490",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "BSSLJ",
+      "literal": "1.57079632679490",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "BSSLY",
+      "literal": "1.57079632679490",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "BSSLY",
+      "literal": "1.57079632679490",
+      "constant": "nswc_half_pi_sp"
+    },
+    {
+      "procedure": "BSSLI",
+      "literal": "3.14159265358979",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "BSSLI",
+      "literal": "3.14159265358979",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "BSSLI",
+      "literal": "3.14159265358979",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "BSSLI",
+      "literal": "3.14159265358979",
+      "constant": "nswc_pi_sp"
+    },
+    {
+      "procedure": "SFFT",
+      "literal": "6.2831853071796",
+      "constant": "nswc_two_pi_sp"
+    },
+    {
+      "procedure": "RFFTI1",
+      "literal": "6.28318530717959",
+      "constant": "nswc_two_pi_sp"
+    }
+  ],
+  "skipped": []
+}

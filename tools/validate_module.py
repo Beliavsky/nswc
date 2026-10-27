@@ -13,6 +13,8 @@ from validate_interfaces import (command_run, compare_signatures, module_caller,
                                  PROBE_PREFIX, PROBE_SUFFIX, PROBES)
 from validate_sources import check_result, test_programs
 from storage_modernization import MANIFEST as STORAGE_REVIEW, normalize_module_records, new_state_intrinsics
+from module_pi_constants import MANIFEST as PI_REVIEW
+from validate_module_pi import normalize_records as normalize_pi_records
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -68,6 +70,7 @@ def verify(compiler, folder, intel=False, env=None):
             inventory = symbols(normalized)
             if stem == 'nswc_mod':
                 storage = json.loads(STORAGE_REVIEW.read_text())['module_state']
+                inventory = normalize_pi_records(inventories[0], inventory, json.loads(PI_REVIEW.read_text()))
                 inventory = normalize_module_records(inventories[0], inventory, storage)
             inventories.append(inventory)
     if not intel:

@@ -37,4 +37,5 @@ jobs:
       - run: python tools/validate_procedure_purity.py
       - run: python tools/validate_sources.py
       - run: python tools/validate_interfaces.py
+      - run: python tools/validate_module_pi.py
       - run: python tools/validate_module.py

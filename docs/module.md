@@ -127,3 +127,35 @@ operations and broadcasting, and reject invalid data argument calls.
 Use `--ifx PATH_TO_IFX` and, on Windows, `--intel-env PATH_TO_ENVIRONMENT_BATCH`
 to repeat numerical and call checks with Intel Fortran. GNU verification runs in
 GitHub Actions. Numerical coverage is representative rather than exhaustive.
+
+## Shared pi constants
+
+The generated module defines ten private parameters for pi, pi/2, pi/4,
+2*pi, and 3*pi/2, separately for `nswc_sp` and `nswc_dp`. Names include
+`nswc_pi_sp`, `nswc_half_pi_dp`, and `nswc_three_half_pi_sp`.
+Each definition uses a decimal literal of the appropriate kind, avoiding
+additional rounding from expressions built from an already rounded pi.
+
+`tools/module_pi_constants.py` runs after named-kind conversion. Its reviewed
+pass replaces 52 local parameter declarations and 18 embedded literals in
+assignment expressions. Runtime calculations, coefficient tables, comments,
+strings, and complex literal pairs stay as written. Nested scopes are accepted only when they contain no references to, or
+declarations shadowing, the parameters being removed. The fixed and external
+free-form implementations retain their existing definitions.
+
+`tools/module-pi-constants.json` records every selected declaration and literal.
+`tools/validate_module_pi.py` reproduces the module and review, checks exact
+constant bit patterns, and compares GNU assembly and compiler symbols before
+and after consolidation with source locations aligned. GNU and Intel checks
+use their normal binary32 default-real and binary64 double-precision settings;
+precision-promotion compiler options require separate numerical validation.
+The parameters remain private and do not change the public interfaces.
+
+```sh
+python tools/validate_module_pi.py
+```
+
+Add `--ifx PATH_TO_IFX` and optionally `--intel-env PATH_TO_ENVIRONMENT_BATCH`
+to repeat the constant-value checks with Intel Fortran. The ordinary module
+validation suite checks external and module numerical results with both
+compilers when Intel is supplied.
