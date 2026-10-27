@@ -96644,16 +96644,16 @@ subroutine sfode(f,neq,y,t,tout,info,rerr,aerr,idid, &
 implicit none
 integer, intent(inout) :: idid
 integer, intent(in) :: liw, lrw
-integer :: neq
+integer, intent(in) :: neq
 real(nswc_sp), intent(inout) :: aerr, rerr, t
-real(nswc_sp) :: tout
+real(nswc_sp), intent(in) :: tout
 external f
 real(nswc_sp), intent(inout) :: y(neq)
 real(nswc_sp), intent(inout) :: rwork(lrw)
-real(nswc_sp) :: rpar(*)
+real(nswc_sp), intent(inout) :: rpar(*)
 integer, intent(inout) :: info(*)
 integer, intent(inout) :: iwork(liw)
-integer :: ipar(*)
+integer, intent(inout) :: ipar(*)
 !     beginning of local variable declarations
 real(nswc_sp) :: rtol(1), atol(1)
 integer :: info1(15)
@@ -96679,15 +96679,15 @@ subroutine sfode1(f,neq,y,t,tout,info,rtol,atol,idid, &
 implicit none
 integer, intent(inout) :: idid
 integer, intent(in) :: liw, lrw
-integer :: neq
+integer, intent(in) :: neq
 real(nswc_sp), intent(inout) :: t
-real(nswc_sp) :: tout
+real(nswc_sp), intent(in) :: tout
 external f
 real(nswc_sp), intent(inout) :: y(neq), rtol(neq), atol(neq), rwork(lrw)
-real(nswc_sp) :: rpar(*)
+real(nswc_sp), intent(inout) :: rpar(*)
 integer, intent(inout) :: info(*)
 integer, intent(inout) :: iwork(liw)
-integer :: ipar(*)
+integer, intent(inout) :: ipar(*)
 !     beginning of local variable declarations
 integer :: info1(15)
 !     --------------
@@ -96721,14 +96721,14 @@ subroutine stfode(f,neq,y,t,tout,info,rtol,atol,idid, &
    & rwork,lrw,iwork,liw,rpar,ipar,jac)
 implicit none
 integer, intent(inout) :: idid, info(*)
-integer :: ipar(*)
+integer, intent(inout) :: ipar(*)
 integer, intent(inout) :: iwork
 integer, intent(in) :: liw, lrw
-integer :: neq
+integer, intent(in) :: neq
 real(nswc_sp), intent(inout) :: atol(*)
-real(nswc_sp) :: rpar(*)
+real(nswc_sp), intent(inout) :: rpar(*)
 real(nswc_sp), intent(inout) :: rtol(*), rwork(lrw), t
-real(nswc_sp) :: tout
+real(nswc_sp), intent(in) :: tout
 real(nswc_sp), intent(inout) :: y(neq)
 external f, jac
 dimension iwork(liw)
@@ -97493,18 +97493,20 @@ subroutine lsod1(f,neq,t,y,tout,rtol,atol,idid,ypout, &
    & tstop,tolfac,delsgn,rpar,ipar)
 implicit none
 integer, intent(inout) :: idid
-integer :: ipar(*)
+integer, intent(inout) :: ipar(*)
 integer, intent(inout) :: iwm(*)
-integer :: neq
-real(nswc_sp) :: acor(neq)
+integer, intent(in) :: neq
+real(nswc_sp), intent(inout) :: acor(neq)
 real(nswc_sp), intent(inout) :: atol(*)
-real(nswc_sp) :: delsgn, ewt(neq), rpar(*)
+real(nswc_sp), intent(inout) :: delsgn, ewt(neq), rpar(*)
 real(nswc_sp), intent(inout) :: rtol(*)
-real(nswc_sp) :: savf(neq)
+real(nswc_sp), intent(inout) :: savf(neq)
 real(nswc_sp), intent(inout) :: t
-real(nswc_sp) :: tolfac, tout, tstop, wm(*)
+real(nswc_sp), intent(inout) :: tolfac
+real(nswc_sp), intent(in) :: tout, tstop
+real(nswc_sp), intent(inout) :: wm(*)
 real(nswc_sp), intent(inout) :: y(neq)
-real(nswc_sp) :: yh(neq,*), yh1(*), ypout(neq)
+real(nswc_sp), intent(inout) :: yh(neq,*), yh1(*), ypout(neq)
 logical, intent(inout) :: intout
 external f, jac
 !     beginning of local variable declarations
@@ -97746,18 +97748,18 @@ end subroutine lsod1
 subroutine hstart(f,neq,a,b,y,yprime,etol,morder,small,big, &
    & spy,pv,yp,sf,rpar,ipar,h)
 implicit none
-integer :: ipar(*)
+integer, intent(inout) :: ipar(*)
 integer, intent(in) :: morder, neq
-real(nswc_sp) :: a
+real(nswc_sp), intent(in) :: a
 real(nswc_sp), intent(in) :: b, big
-real(nswc_sp) :: etol(neq)
+real(nswc_sp), intent(in) :: etol(neq)
 real(nswc_sp), intent(inout) :: h, pv(neq)
-real(nswc_sp) :: rpar(*), sf(neq)
+real(nswc_sp), intent(inout) :: rpar(*), sf(neq)
 real(nswc_sp), intent(in) :: small
 real(nswc_sp), intent(inout) :: spy(neq)
-real(nswc_sp) :: y(neq)
+real(nswc_sp), intent(in) :: y(neq)
 real(nswc_sp), intent(inout) :: yp(neq)
-real(nswc_sp) :: yprime(neq)
+real(nswc_sp), intent(in) :: yprime(neq)
 external f
 !     beginning of local variable declarations
 integer :: j, k, lk
@@ -98034,7 +98036,8 @@ implicit none
 integer, intent(in) :: k, nyh
 integer, intent(inout) :: iflag
 real(nswc_sp), intent(in) :: t
-real(nswc_sp) :: yh(nyh,*), dky(*)
+real(nswc_sp), intent(in) :: yh(nyh,*)
+real(nswc_sp), intent(inout) :: dky(*)
 !     beginning of local variable declarations
 integer :: i, ic, j, jb, jb2, jj, jj1, jp1
 real(nswc_sp) :: c, r, s, tp
@@ -98084,13 +98087,15 @@ end subroutine intyd
 subroutine stod(neq, y, yh, nyh, yh1, ewt, savf, acor, &
    & wm, iwm, f, jac, rpar, ipar)
 implicit none
-integer :: ipar(*)
-real(nswc_sp) :: rpar(*)
+integer, intent(inout) :: ipar(*)
+real(nswc_sp), intent(inout) :: rpar(*)
 external f, jac
-integer :: neq, nyh
+integer, intent(in) :: neq, nyh
 integer, intent(inout) :: iwm(*)
 real(nswc_sp), intent(inout) :: y(*)
-real(nswc_sp) :: yh(nyh,*), yh1(*), ewt(*), savf(*), acor(*), wm(*)
+real(nswc_sp), intent(inout) :: yh(nyh,*), yh1(*)
+real(nswc_sp), intent(in) :: ewt(*)
+real(nswc_sp), intent(inout) :: savf(*), acor(*), wm(*)
 !     beginning of local variable declarations
 integer :: ipnyh
 integer :: i, i1, iredo, iret, j, jb, m, ncf, newq
@@ -98677,13 +98682,16 @@ end subroutine cfod
 subroutine pjac(neq, y, yh, nyh, ewt, ftem, savf, wm, iwm, &
    & f, jac, rpar, ipar)
 implicit none
-integer :: ipar(*)
-real(nswc_sp) :: rpar(*)
-integer :: neq, nyh
+integer, intent(inout) :: ipar(*)
+real(nswc_sp), intent(inout) :: rpar(*)
+integer, intent(in) :: neq, nyh
 integer, intent(inout) :: iwm(*)
 external f, jac
 real(nswc_sp), intent(inout) :: y(*)
-real(nswc_sp) :: yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*)
+real(nswc_sp), intent(in) :: yh(nyh,*), ewt(*)
+real(nswc_sp), intent(inout) :: ftem(*)
+real(nswc_sp), intent(in) :: savf(*)
+real(nswc_sp), intent(inout) :: wm(*)
 !     beginning of local variable declarations
 integer :: i, i1, i2, ii, j, j1, jj, lenp, mba, mband, meb1, meband, ml, ml3, mu
 real(nswc_sp) :: con, di, fac, hl0, r, r0, srur, yi, yj, yjj
@@ -98860,9 +98868,9 @@ implicit none
 !   integrator package sfode.
 !***Routines called  sgesl,sgbsl
 integer, intent(in) :: iwm(*)
-real(nswc_sp) :: wm(*)
+real(nswc_sp), intent(inout) :: wm(*)
 real(nswc_sp), intent(inout) :: x(*)
-real(nswc_sp) :: tem(*)
+real(nswc_sp), intent(in) :: tem(*)
 !     beginning of local variable declarations
 integer :: i, meband, ml, mu
 real(nswc_sp) :: di, hl0, phl0, r
@@ -99178,7 +99186,7 @@ end subroutine sgbsl
 function vnorm(v,ncomp)
 implicit none
 integer, intent(in) :: ncomp
-real(nswc_sp) :: v(ncomp)
+real(nswc_sp), intent(in) :: v(ncomp)
 real(nswc_sp) :: vnorm
 !     beginning of local variable declarations
 integer :: k
@@ -99199,7 +99207,7 @@ implicit none
 !   vnwrms = sqrt( (1/n) * sum( v(i)/w(i) )**2 )
 !-----------------------------------------------------------------------
 integer, intent(in) :: n
-real(nswc_sp) :: v(n), w(n)
+real(nswc_sp), intent(in) :: v(n), w(n)
 !     beginning of local variable declarations
 integer :: i
 real(nswc_sp) :: sum

@@ -516,7 +516,7 @@
     },
     {
       "procedure": "STOD",
-      "line": 104858,
+      "line": 104863,
       "selector": "iret",
       "targets": [
         160,
@@ -526,7 +526,7 @@
     },
     {
       "procedure": "CFOD",
-      "line": 105200,
+      "line": 105205,
       "selector": "meth",
       "targets": [
         100,
@@ -535,7 +535,7 @@
     },
     {
       "procedure": "PJAC",
-      "line": 105335,
+      "line": 105343,
       "selector": "miter",
       "targets": [
         100,
@@ -547,7 +547,7 @@
     },
     {
       "procedure": "SLVS",
-      "line": 105498,
+      "line": 105506,
       "selector": "miter",
       "targets": [
         100,
@@ -559,7 +559,7 @@
     },
     {
       "procedure": "SEPEL1",
-      "line": 106786,
+      "line": 106794,
       "selector": "kswx",
       "targets": [
         170,
@@ -571,7 +571,7 @@
     },
     {
       "procedure": "SEPEL1",
-      "line": 106815,
+      "line": 106823,
       "selector": "kswy",
       "targets": [
         220,

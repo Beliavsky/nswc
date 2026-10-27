@@ -103469,16 +103469,16 @@ subroutine sfode(f,neq,y,t,tout,info,rerr,aerr,idid, &
 implicit none
 integer, intent(inout) :: idid
 integer, intent(in) :: liw, lrw
-integer :: neq
+integer, intent(in) :: neq
 real, intent(inout) :: aerr, rerr, t
-real :: tout
+real, intent(in) :: tout
 external f
 real, intent(inout) :: y(neq)
 real, intent(inout) :: rwork(lrw)
-real :: rpar(*)
+real, intent(inout) :: rpar(*)
 integer, intent(inout) :: info(*)
 integer, intent(inout) :: iwork(liw)
-integer :: ipar(*)
+integer, intent(inout) :: ipar(*)
 !     beginning of local variable declarations
 external zzzjac
 real :: rtol(1), atol(1)
@@ -103505,15 +103505,15 @@ subroutine sfode1(f,neq,y,t,tout,info,rtol,atol,idid, &
 implicit none
 integer, intent(inout) :: idid
 integer, intent(in) :: liw, lrw
-integer :: neq
+integer, intent(in) :: neq
 real, intent(inout) :: t
-real :: tout
+real, intent(in) :: tout
 external f
 real, intent(inout) :: y(neq), rtol(neq), atol(neq), rwork(lrw)
-real :: rpar(*)
+real, intent(inout) :: rpar(*)
 integer, intent(inout) :: info(*)
 integer, intent(inout) :: iwork(liw)
-integer :: ipar(*)
+integer, intent(inout) :: ipar(*)
 !     beginning of local variable declarations
 external zzzjac
 integer :: info1(15)
@@ -103548,14 +103548,14 @@ subroutine stfode(f,neq,y,t,tout,info,rtol,atol,idid, &
    & rwork,lrw,iwork,liw,rpar,ipar,jac)
 implicit none
 integer, intent(inout) :: idid, info(*)
-integer :: ipar(*)
+integer, intent(inout) :: ipar(*)
 integer, intent(inout) :: iwork
 integer, intent(in) :: liw, lrw
-integer :: neq
+integer, intent(in) :: neq
 real, intent(inout) :: atol(*)
-real :: rpar(*)
+real, intent(inout) :: rpar(*)
 real, intent(inout) :: rtol(*), rwork(lrw), t
-real :: tout
+real, intent(in) :: tout
 real, intent(inout) :: y(neq)
 external f, jac
 dimension iwork(liw)
@@ -104249,18 +104249,20 @@ subroutine lsod1(f,neq,t,y,tout,rtol,atol,idid,ypout, &
    & tstop,tolfac,delsgn,rpar,ipar)
 implicit none
 integer, intent(inout) :: idid
-integer :: ipar(*)
+integer, intent(inout) :: ipar(*)
 integer, intent(inout) :: iwm(*)
-integer :: neq
-real :: acor(neq)
+integer, intent(in) :: neq
+real, intent(inout) :: acor(neq)
 real, intent(inout) :: atol(*)
-real :: delsgn, ewt(neq), rpar(*)
+real, intent(inout) :: delsgn, ewt(neq), rpar(*)
 real, intent(inout) :: rtol(*)
-real :: savf(neq)
+real, intent(inout) :: savf(neq)
 real, intent(inout) :: t
-real :: tolfac, tout, tstop, wm(*)
+real, intent(inout) :: tolfac
+real, intent(in) :: tout, tstop
+real, intent(inout) :: wm(*)
 real, intent(inout) :: y(neq)
-real :: yh(neq,*), yh1(*), ypout(neq)
+real, intent(inout) :: yh(neq,*), yh1(*), ypout(neq)
 logical, intent(inout) :: intout
 external f, jac
 !     beginning of local variable declarations
@@ -104521,18 +104523,18 @@ end subroutine lsod1
 subroutine hstart(f,neq,a,b,y,yprime,etol,morder,small,big, &
    & spy,pv,yp,sf,rpar,ipar,h)
 implicit none
-integer :: ipar(*)
+integer, intent(inout) :: ipar(*)
 integer, intent(in) :: morder, neq
-real :: a
+real, intent(in) :: a
 real, intent(in) :: b, big
-real :: etol(neq)
+real, intent(in) :: etol(neq)
 real, intent(inout) :: h, pv(neq)
-real :: rpar(*), sf(neq)
+real, intent(inout) :: rpar(*), sf(neq)
 real, intent(in) :: small
 real, intent(inout) :: spy(neq)
-real :: y(neq)
+real, intent(in) :: y(neq)
 real, intent(inout) :: yp(neq)
-real :: yprime(neq)
+real, intent(in) :: yprime(neq)
 external f
 !     beginning of local variable declarations
 integer :: j, k, lk
@@ -104810,7 +104812,8 @@ implicit none
 integer, intent(in) :: k, nyh
 integer, intent(inout) :: iflag
 real, intent(in) :: t
-real :: yh(nyh,*), dky(*)
+real, intent(in) :: yh(nyh,*)
+real, intent(inout) :: dky(*)
 !     beginning of local variable declarations
 integer :: i, ic, ier, iownd, iowns, j, jb, jb2, jj, jj1, jp1, &
    & jstart, kflag, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
@@ -104866,13 +104869,15 @@ end subroutine intyd
 subroutine stod(neq, y, yh, nyh, yh1, ewt, savf, acor, &
    & wm, iwm, f, jac, rpar, ipar)
 implicit none
-integer :: ipar(*)
-real :: rpar(*)
+integer, intent(inout) :: ipar(*)
+real, intent(inout) :: rpar(*)
 external f, jac
-integer :: neq, nyh
+integer, intent(in) :: neq, nyh
 integer, intent(inout) :: iwm(*)
 real, intent(inout) :: y(*)
-real :: yh(nyh,*), yh1(*), ewt(*), savf(*), acor(*), wm(*)
+real, intent(inout) :: yh(nyh,*), yh1(*)
+real, intent(in) :: ewt(*)
+real, intent(inout) :: savf(*), acor(*), wm(*)
 !     beginning of local variable declarations
 integer :: ipnyh
 integer :: iod, ksteps
@@ -105470,13 +105475,16 @@ end subroutine cfod
 subroutine pjac(neq, y, yh, nyh, ewt, ftem, savf, wm, iwm, &
    & f, jac, rpar, ipar)
 implicit none
-integer :: ipar(*)
-real :: rpar(*)
-integer :: neq, nyh
+integer, intent(inout) :: ipar(*)
+real, intent(inout) :: rpar(*)
+integer, intent(in) :: neq, nyh
 integer, intent(inout) :: iwm(*)
 external f, jac
 real, intent(inout) :: y(*)
-real :: yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*)
+real, intent(in) :: yh(nyh,*), ewt(*)
+real, intent(inout) :: ftem(*)
+real, intent(in) :: savf(*)
+real, intent(inout) :: wm(*)
 !     beginning of local variable declarations
 integer :: i, i1, i2, ier, ii, iownd, iowns, j, j1, jj, jstart, &
    & kflag, l, lenp, maxord, mba, mband, meb1, meband, meth, miter, ml, &
@@ -105660,9 +105668,9 @@ implicit none
 !   integrator package sfode.
 !***Routines called  sgesl,sgbsl
 integer, intent(in) :: iwm(*)
-real :: wm(*)
+real, intent(inout) :: wm(*)
 real, intent(inout) :: x(*)
-real :: tem(*)
+real, intent(in) :: tem(*)
 !     beginning of local variable declarations
 integer :: i, ier, iownd, iowns, jstart, kflag, l, maxord, meband, &
    & meth, miter, ml, mu, n, nfe, nje, nq, nqu, nst
@@ -106029,7 +106037,7 @@ end subroutine sgbsl
 function vnorm(v,ncomp)
 implicit none
 integer, intent(in) :: ncomp
-real :: v(ncomp)
+real, intent(in) :: v(ncomp)
 real :: vnorm
 !     beginning of local variable declarations
 integer :: k
@@ -106050,7 +106058,7 @@ implicit none
 !   vnwrms = sqrt( (1/n) * sum( v(i)/w(i) )**2 )
 !-----------------------------------------------------------------------
 integer, intent(in) :: n
-real :: v(n), w(n)
+real, intent(in) :: v(n), w(n)
 !     beginning of local variable declarations
 integer :: i
 real :: sum

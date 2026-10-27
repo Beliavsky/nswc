@@ -1,0 +1,1562 @@
+{
+  "input_sha256": "167ca8d4ce2ac9c7bded35cfee77071a33409555e03044dfcc5dfb8345082015",
+  "procedures": {
+    "SFODE": {
+      "IPAR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 99151,
+              "callee": "STFODE",
+              "argument": "IPAR"
+            }
+          ]
+        }
+      },
+      "NEQ": {
+        "intent": "IN",
+        "dependencies": [
+          "STFODE:NEQ"
+        ]
+      },
+      "RPAR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 99151,
+              "callee": "STFODE",
+              "argument": "RPAR"
+            }
+          ]
+        }
+      },
+      "TOUT": {
+        "intent": "IN",
+        "dependencies": [
+          "STFODE:TOUT"
+        ]
+      }
+    },
+    "SFODE1": {
+      "IPAR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 99183,
+              "callee": "STFODE",
+              "argument": "IPAR"
+            }
+          ]
+        }
+      },
+      "NEQ": {
+        "intent": "IN",
+        "dependencies": [
+          "STFODE:NEQ"
+        ]
+      },
+      "RPAR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 99183,
+              "callee": "STFODE",
+              "argument": "RPAR"
+            }
+          ]
+        }
+      },
+      "TOUT": {
+        "intent": "IN",
+        "dependencies": [
+          "STFODE:TOUT"
+        ]
+      }
+    },
+    "STFODE": {
+      "IPAR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 99842,
+              "callee": "LSOD1",
+              "argument": "IPAR"
+            }
+          ]
+        }
+      },
+      "NEQ": {
+        "intent": "IN",
+        "dependencies": [
+          "LSOD1:NEQ"
+        ]
+      },
+      "RPAR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 99842,
+              "callee": "LSOD1",
+              "argument": "RPAR"
+            }
+          ]
+        }
+      },
+      "TOUT": {
+        "intent": "IN",
+        "dependencies": [
+          "LSOD1:TOUT"
+        ]
+      }
+    },
+    "LSOD1": {
+      "ACOR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 100142,
+              "callee": "STOD",
+              "argument": "ACOR"
+            }
+          ],
+          "preservation": "Observed shared actual storage: kept INOUT, not OUT"
+        },
+        "alias_review": {
+          "reason": "Shared or storage-associated actual in STFODE",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "DELSGN": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100064,
+              "statement": "delsgn = sign(1.0,tout-t)"
+            }
+          ],
+          "via": [],
+          "preservation": "Observed shared actual storage: kept INOUT, not OUT"
+        },
+        "alias_review": {
+          "reason": "Shared or storage-associated actual in STFODE",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "EWT": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100059,
+              "statement": "ewt(l) = tol"
+            },
+            {
+              "line": 100123,
+              "statement": "ewt(l) = rtol(ltol)*abs(yh(l,1)) + atol(ltol)"
+            }
+          ],
+          "via": [],
+          "preservation": "Observed shared actual storage: kept INOUT, not OUT"
+        },
+        "alias_review": {
+          "reason": "Shared or storage-associated actual in STFODE",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "IPAR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100041,
+              "statement": "call f(t,y,yh(1,2),rpar,ipar)",
+              "callback_contract": "LSOD1:F"
+            },
+            {
+              "line": 100096,
+              "statement": "call f(tout,y,ypout,rpar,ipar)",
+              "callback_contract": "LSOD1:F"
+            }
+          ],
+          "via": []
+        }
+      },
+      "NEQ": {
+        "intent": "IN",
+        "dependencies": [
+          "HSTART:NEQ",
+          "INTYD:NYH",
+          "STOD:NEQ",
+          "STOD:NYH",
+          "VNWRMS:N"
+        ]
+      },
+      "RPAR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100041,
+              "statement": "call f(t,y,yh(1,2),rpar,ipar)",
+              "callback_contract": "LSOD1:F"
+            },
+            {
+              "line": 100096,
+              "statement": "call f(tout,y,ypout,rpar,ipar)",
+              "callback_contract": "LSOD1:F"
+            }
+          ],
+          "via": []
+        }
+      },
+      "SAVF": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 100142,
+              "callee": "STOD",
+              "argument": "SAVF"
+            }
+          ],
+          "preservation": "Observed shared actual storage: kept INOUT, not OUT"
+        },
+        "alias_review": {
+          "reason": "Shared or storage-associated actual in STFODE",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "TOLFAC": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100126,
+              "statement": "tolfac = u*vnwrms(neq,yh,ewt)"
+            },
+            {
+              "line": 100130,
+              "statement": "tolfac = 2.*tolfac"
+            }
+          ],
+          "via": [],
+          "preservation": "Observed shared actual storage: kept INOUT, not OUT"
+        },
+        "alias_review": {
+          "reason": "Shared or storage-associated actual in STFODE",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "TOUT": {
+        "intent": "IN",
+        "dependencies": [
+          "HSTART:B",
+          "INTYD:T"
+        ]
+      },
+      "TSTOP": {
+        "intent": "IN",
+        "dependencies": [],
+        "alias_review": {
+          "reason": "Shared or storage-associated actual in STFODE",
+          "review": {
+            "intent": "IN",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "WM": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 99952,
+              "statement": "wm(1)=sqrt(u)"
+            }
+          ],
+          "via": [],
+          "preservation": "Observed shared actual storage: kept INOUT, not OUT"
+        },
+        "alias_review": {
+          "reason": "Shared or storage-associated actual in STFODE",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "YH": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100041,
+              "statement": "call f(t,y,yh(1,2),rpar,ipar)",
+              "callback_contract": "LSOD1:F"
+            },
+            {
+              "line": 100067,
+              "statement": "yh(l,1) = y(l)"
+            },
+            {
+              "line": 100068,
+              "statement": "yh(l,2) = h*yh(l,2)"
+            }
+          ],
+          "via": [],
+          "preservation": "Observed shared actual storage: kept INOUT, not OUT"
+        },
+        "alias_review": {
+          "reason": "Shared or storage-associated actual in STFODE",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "YH1": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 100142,
+              "callee": "STOD",
+              "argument": "YH1"
+            }
+          ],
+          "preservation": "Observed shared actual storage: kept INOUT, not OUT"
+        },
+        "alias_review": {
+          "reason": "Shared or storage-associated actual in STFODE",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "YPOUT": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100046,
+              "statement": "ypout(l) = yh(l,2)"
+            },
+            {
+              "line": 100096,
+              "statement": "call f(tout,y,ypout,rpar,ipar)",
+              "callback_contract": "LSOD1:F"
+            },
+            {
+              "line": 100161,
+              "statement": "ypout(l) = yh(l,2)/h"
+            }
+          ],
+          "via": [],
+          "preservation": "Observed shared actual storage: kept INOUT, not OUT"
+        },
+        "alias_review": {
+          "reason": "Shared or storage-associated actual in STFODE",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      }
+    },
+    "HSTART": {
+      "A": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "ETOL": {
+        "intent": "IN",
+        "dependencies": [],
+        "alias_review": {
+          "reason": "Forwarded shared storage from LSOD1",
+          "review": {
+            "intent": "IN",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "IPAR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100295,
+              "statement": "call f(a+da,y,sf,rpar,ipar)",
+              "callback_contract": "HSTART:F"
+            },
+            {
+              "line": 100350,
+              "statement": "call f(a,pv,yp,rpar,ipar)",
+              "callback_contract": "HSTART:F"
+            },
+            {
+              "line": 100357,
+              "statement": "call f(a+da,pv,yp,rpar,ipar)",
+              "callback_contract": "HSTART:F"
+            }
+          ],
+          "via": []
+        }
+      },
+      "RPAR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100295,
+              "statement": "call f(a+da,y,sf,rpar,ipar)",
+              "callback_contract": "HSTART:F"
+            },
+            {
+              "line": 100350,
+              "statement": "call f(a,pv,yp,rpar,ipar)",
+              "callback_contract": "HSTART:F"
+            },
+            {
+              "line": 100357,
+              "statement": "call f(a+da,pv,yp,rpar,ipar)",
+              "callback_contract": "HSTART:F"
+            }
+          ],
+          "via": []
+        }
+      },
+      "SF": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100295,
+              "statement": "call f(a+da,y,sf,rpar,ipar)",
+              "callback_contract": "HSTART:F"
+            }
+          ],
+          "via": [],
+          "preservation": "Observed shared actual storage: kept INOUT, not OUT"
+        },
+        "alias_review": {
+          "reason": "Shared or storage-associated actual in LSOD1",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "Y": {
+        "intent": "IN",
+        "dependencies": [
+          "VNORM:V"
+        ]
+      },
+      "YPRIME": {
+        "intent": "IN",
+        "dependencies": [
+          "VNORM:V"
+        ],
+        "alias_review": {
+          "reason": "Shared or storage-associated actual in LSOD1",
+          "review": {
+            "intent": "IN",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      }
+    },
+    "INTYD": {
+      "DKY": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100483,
+              "statement": "dky(i) = c*yh(i,l)"
+            },
+            {
+              "line": 100498,
+              "statement": "dky(i) = c*yh(i,jp1) + s*dky(i)"
+            },
+            {
+              "line": 100504,
+              "statement": "dky(i) = r*dky(i)"
+            }
+          ],
+          "via": []
+        },
+        "alias_review": {
+          "reason": "Forwarded shared storage from LSOD1",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "YH": {
+        "intent": "IN",
+        "dependencies": [],
+        "alias_review": {
+          "reason": "Forwarded shared storage from LSOD1",
+          "review": {
+            "intent": "IN",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      }
+    },
+    "STOD": {
+      "ACOR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100756,
+              "statement": "acor(i) = 0.0e0"
+            },
+            {
+              "line": 100770,
+              "statement": "acor(i) = savf(i)"
+            },
+            {
+              "line": 100785,
+              "statement": "acor(i) = acor(i) + y(i)"
+            },
+            {
+              "line": 100986,
+              "statement": "acor(i) = acor(i)*r"
+            }
+          ],
+          "via": []
+        },
+        "alias_review": {
+          "reason": "Forwarded shared storage from LSOD1",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "EWT": {
+        "intent": "IN",
+        "dependencies": [
+          "PJAC:EWT",
+          "VNWRMS:W"
+        ],
+        "alias_review": {
+          "reason": "Forwarded shared storage from LSOD1",
+          "review": {
+            "intent": "IN",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "IPAR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100740,
+              "statement": "call f(tn, y, savf, rpar, ipar)",
+              "callback_contract": "STOD:F"
+            },
+            {
+              "line": 100799,
+              "statement": "call f(tn, y, savf, rpar, ipar)",
+              "callback_contract": "STOD:F"
+            },
+            {
+              "line": 100963,
+              "statement": "call f(tn, y, savf, rpar, ipar)",
+              "callback_contract": "STOD:F"
+            }
+          ],
+          "via": []
+        }
+      },
+      "NEQ": {
+        "intent": "IN",
+        "dependencies": [
+          "PJAC:NEQ"
+        ]
+      },
+      "NYH": {
+        "intent": "IN",
+        "dependencies": [
+          "PJAC:NYH"
+        ]
+      },
+      "RPAR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100740,
+              "statement": "call f(tn, y, savf, rpar, ipar)",
+              "callback_contract": "STOD:F"
+            },
+            {
+              "line": 100799,
+              "statement": "call f(tn, y, savf, rpar, ipar)",
+              "callback_contract": "STOD:F"
+            },
+            {
+              "line": 100963,
+              "statement": "call f(tn, y, savf, rpar, ipar)",
+              "callback_contract": "STOD:F"
+            }
+          ],
+          "via": []
+        }
+      },
+      "SAVF": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100740,
+              "statement": "call f(tn, y, savf, rpar, ipar)",
+              "callback_contract": "STOD:F"
+            },
+            {
+              "line": 100764,
+              "statement": "savf(i) = h*savf(i) - yh(i,2)"
+            },
+            {
+              "line": 100799,
+              "statement": "call f(tn, y, savf, rpar, ipar)",
+              "callback_contract": "STOD:F"
+            },
+            {
+              "line": 100902,
+              "statement": "savf(i) = acor(i) - yh(i,lmax)"
+            },
+            {
+              "line": 100963,
+              "statement": "call f(tn, y, savf, rpar, ipar)",
+              "callback_contract": "STOD:F"
+            }
+          ],
+          "via": []
+        },
+        "alias_review": {
+          "reason": "Forwarded shared storage from LSOD1",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "WM": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [],
+          "via": [
+            {
+              "line": 100752,
+              "callee": "PJAC",
+              "argument": "WM"
+            },
+            {
+              "line": 100781,
+              "callee": "SLVS",
+              "argument": "WM"
+            }
+          ]
+        },
+        "alias_review": {
+          "reason": "Forwarded shared storage from LSOD1",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "YH": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100703,
+              "statement": "yh(i,j) = yh(i,j)*r"
+            },
+            {
+              "line": 100856,
+              "statement": "yh(i,j) = yh(i,j) + el(j)*acor(i)"
+            },
+            {
+              "line": 100864,
+              "statement": "yh(i,lmax) = acor(i)"
+            },
+            {
+              "line": 100930,
+              "statement": "yh(i,newq+1) = acor(i)*r"
+            },
+            {
+              "line": 100966,
+              "statement": "yh(i,2) = h*savf(i)"
+            }
+          ],
+          "via": []
+        },
+        "alias_review": {
+          "reason": "Forwarded shared storage from LSOD1",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "YH1": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 100726,
+              "statement": "yh1(i) = yh1(i) + yh1(ipnyh)"
+            },
+            {
+              "line": 100820,
+              "statement": "yh1(i) = yh1(i) - yh1(ipnyh)"
+            },
+            {
+              "line": 100881,
+              "statement": "yh1(i) = yh1(i) - yh1(ipnyh)"
+            }
+          ],
+          "via": []
+        },
+        "alias_review": {
+          "reason": "Forwarded shared storage from LSOD1",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      }
+    },
+    "PJAC": {
+      "EWT": {
+        "intent": "IN",
+        "dependencies": [
+          "VNWRMS:W"
+        ],
+        "alias_review": {
+          "reason": "Forwarded shared storage from STOD",
+          "review": {
+            "intent": "IN",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "FTEM": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 101184,
+              "statement": "call f(tn, y, ftem, rpar, ipar)",
+              "callback_contract": "PJAC:F"
+            },
+            {
+              "line": 101255,
+              "statement": "call f(tn, y, ftem, rpar, ipar)",
+              "callback_contract": "PJAC:F"
+            }
+          ],
+          "via": []
+        },
+        "alias_review": {
+          "reason": "Forwarded shared storage from STOD",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "IPAR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 101184,
+              "statement": "call f(tn, y, ftem, rpar, ipar)",
+              "callback_contract": "PJAC:F"
+            },
+            {
+              "line": 101208,
+              "statement": "call f(tn, y, wm(3), rpar, ipar)",
+              "callback_contract": "PJAC:F"
+            },
+            {
+              "line": 101255,
+              "statement": "call f(tn, y, ftem, rpar, ipar)",
+              "callback_contract": "PJAC:F"
+            }
+          ],
+          "via": []
+        }
+      },
+      "NEQ": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "NYH": {
+        "intent": "IN",
+        "dependencies": []
+      },
+      "RPAR": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 101184,
+              "statement": "call f(tn, y, ftem, rpar, ipar)",
+              "callback_contract": "PJAC:F"
+            },
+            {
+              "line": 101208,
+              "statement": "call f(tn, y, wm(3), rpar, ipar)",
+              "callback_contract": "PJAC:F"
+            },
+            {
+              "line": 101255,
+              "statement": "call f(tn, y, ftem, rpar, ipar)",
+              "callback_contract": "PJAC:F"
+            }
+          ],
+          "via": []
+        }
+      },
+      "SAVF": {
+        "intent": "IN",
+        "dependencies": [
+          "VNWRMS:V"
+        ],
+        "alias_review": {
+          "reason": "Forwarded shared storage from STOD",
+          "review": {
+            "intent": "IN",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "WM": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 101165,
+              "statement": "wm(i+2) = 0.0e0"
+            },
+            {
+              "line": 101170,
+              "statement": "wm(i+2) = wm(i+2)*con"
+            },
+            {
+              "line": 101186,
+              "statement": "wm(i+j1) = (ftem(i) - savf(i))*fac"
+            },
+            {
+              "line": 101195,
+              "statement": "wm(j) = wm(j) + 1.0e0"
+            },
+            {
+              "line": 101202,
+              "statement": "wm(2) = hl0"
+            },
+            {
+              "line": 101208,
+              "statement": "call f(tn, y, wm(3), rpar, ipar)",
+              "callback_contract": "PJAC:F"
+            },
+            {
+              "line": 101213,
+              "statement": "wm(i+2) = 1.0e0"
+            },
+            {
+              "line": 101216,
+              "statement": "wm(i+2) = 0.1e0*r0/di"
+            },
+            {
+              "line": 101230,
+              "statement": "wm(i+2) = 0.0e0"
+            },
+            {
+              "line": 101235,
+              "statement": "wm(i+2) = wm(i+2)*con"
+            },
+            {
+              "line": 101265,
+              "statement": "wm(ii+i) = (ftem(i) - savf(i))*fac"
+            },
+            {
+              "line": 101273,
+              "statement": "wm(ii) = wm(ii) + 1.0e0"
+            }
+          ],
+          "via": []
+        },
+        "alias_review": {
+          "reason": "Forwarded shared storage from STOD",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "YH": {
+        "intent": "IN",
+        "dependencies": [],
+        "alias_review": {
+          "reason": "Forwarded shared storage from STOD",
+          "review": {
+            "intent": "IN",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      }
+    },
+    "SLVS": {
+      "TEM": {
+        "intent": "IN",
+        "dependencies": [],
+        "alias_review": {
+          "reason": "Forwarded shared storage from STOD",
+          "review": {
+            "intent": "IN",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "WM": {
+        "intent": "INOUT",
+        "evidence": {
+          "intent": "INOUT",
+          "direct_writes": [
+            {
+              "line": 101329,
+              "statement": "wm(2) = hl0"
+            },
+            {
+              "line": 101335,
+              "statement": "wm(i+2) = 1.0e0/di"
+            }
+          ],
+          "via": []
+        },
+        "alias_review": {
+          "reason": "Forwarded shared storage from STOD",
+          "review": {
+            "intent": "INOUT",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      }
+    },
+    "VNORM": {
+      "V": {
+        "intent": "IN",
+        "dependencies": [],
+        "alias_review": {
+          "reason": "Forwarded shared storage from HSTART",
+          "review": {
+            "intent": "IN",
+            "review": "Read-only maximum norm; no calls or shared state"
+          }
+        }
+      }
+    },
+    "VNWRMS": {
+      "V": {
+        "intent": "IN",
+        "dependencies": [],
+        "alias_review": {
+          "reason": "Forwarded shared storage from LSOD1",
+          "review": {
+            "intent": "IN",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      },
+      "W": {
+        "intent": "IN",
+        "dependencies": [],
+        "alias_review": {
+          "reason": "Forwarded shared storage from LSOD1",
+          "review": {
+            "intent": "IN",
+            "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+          }
+        }
+      }
+    }
+  },
+  "remaining": {
+    "MACH1:N": "I/O reference needs separate review",
+    "MACH2:N": "I/O reference needs separate review",
+    "CBSSLJ:Z": "Unproved call dependency or no established write",
+    "CBJM:Z": "Unknown or callback effects: anorm",
+    "BESJ:X": "Unproved call dependency or no established write",
+    "ASJY:ELIM": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:FLGJY": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:FNU": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:IFLW": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:IN": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:TOL": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:WK": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:X": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "ASJY:Y": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "CBESK:Z": "Unproved call dependency or no established write",
+    "CBKA:Z": "Unknown or callback effects: anorm",
+    "CKPS:NU": "Unknown or callback effects: anorm",
+    "CBSSLK:Z": "Unproved call dependency or no established write",
+    "CKA:Z": "Unknown or callback effects: anorm",
+    "IA:Z": "Unproved call dependency or no established write",
+    "IMC:Z": "Unproved call dependency or no established write",
+    "BIM:Z": "Unknown or callback effects: anorm",
+    "JA:Z": "Unproved call dependency or no established write",
+    "JMC:Z": "Unproved call dependency or no established write",
+    "BJM:Z": "Unknown or callback effects: anorm",
+    "HBRD:N": "Unproved call dependency or no established write",
+    "HYBRD:N": "Shared or storage-associated actual in HBRD",
+    "HYBRD:WA4": "Shared or storage-associated actual in HBRD",
+    "DRPOLY:IDEG": "Unproved call dependency or no established write",
+    "DRPLY1:IDEG": "Unproved call dependency or no established write",
+    "DRPLY1:K": "Shared or storage-associated actual in DRPOLY",
+    "DRPLY1:P": "Shared or storage-associated actual in DRPOLY",
+    "DRPLY1:QK": "Shared or storage-associated actual in DRPOLY",
+    "DRPLY1:QP": "Shared or storage-associated actual in DRPOLY",
+    "DRPLY1:SVK": "Shared or storage-associated actual in DRPOLY",
+    "DRPLY1:TEMP": "Shared or storage-associated actual in DRPOLY",
+    "FXSHFR:K": "Forwarded shared storage from DRPLY1",
+    "FXSHFR:P": "Forwarded shared storage from DRPLY1",
+    "FXSHFR:QK": "Forwarded shared storage from DRPLY1",
+    "FXSHFR:QP": "Forwarded shared storage from DRPLY1",
+    "FXSHFR:SVK": "Forwarded shared storage from DRPLY1",
+    "QUADIT:K": "Forwarded shared storage from FXSHFR",
+    "QUADIT:P": "Forwarded shared storage from FXSHFR",
+    "QUADIT:QK": "Forwarded shared storage from FXSHFR",
+    "QUADIT:QP": "Forwarded shared storage from FXSHFR",
+    "REALIT:K": "Forwarded shared storage from FXSHFR",
+    "REALIT:P": "Forwarded shared storage from FXSHFR",
+    "REALIT:QK": "Forwarded shared storage from FXSHFR",
+    "REALIT:QP": "Forwarded shared storage from FXSHFR",
+    "CALCSC:K": "Forwarded shared storage from FXSHFR",
+    "CALCSC:QK": "Forwarded shared storage from FXSHFR",
+    "NEXTK:K": "Forwarded shared storage from FXSHFR",
+    "NEXTK:QK": "Forwarded shared storage from FXSHFR",
+    "NEXTK:QP": "Forwarded shared storage from FXSHFR",
+    "NEWEST:K": "Forwarded shared storage from FXSHFR",
+    "NEWEST:P": "Forwarded shared storage from FXSHFR",
+    "DCPOLY:IDEG": "Unproved call dependency or no established write",
+    "DCPLY1:IDEG": "Unproved call dependency or no established write",
+    "ICAMAX:CX": "Unknown or callback effects: cabs1",
+    "LUIMP:Q": "Shared or storage-associated actual in SLVMP",
+    "BTSLV:N": "Unproved call dependency or no established write",
+    "DECBT:N": "Unproved call dependency or no established write",
+    "SOLBT:N": "Unproved call dependency or no established write",
+    "CMSLV:N": "Unproved call dependency or no established write",
+    "CMSLV1:N": "Unproved call dependency or no established write",
+    "CSLVMP:N": "Unproved call dependency or no established write",
+    "CGECO:N": "Unproved call dependency or no established write",
+    "CGEFA:N": "Shared or storage-associated actual in CSLVMP",
+    "DCMSLV:N": "Unproved call dependency or no established write",
+    "DCMINV:N": "Unproved call dependency or no established write",
+    "ABSLV:M": "Unproved call dependency or no established write",
+    "ABSLV:N": "Unproved call dependency or no established write",
+    "ABSLV1:M": "Shared or storage-associated actual in ABSLV",
+    "ABSLV1:N": "Shared or storage-associated actual in ABSLV",
+    "DABSLV:M": "Unproved call dependency or no established write",
+    "DABSLV:N": "Unproved call dependency or no established write",
+    "DABSV1:M": "Shared or storage-associated actual in DABSLV",
+    "DABSV1:N": "Shared or storage-associated actual in DABSLV",
+    "TASLV:N": "Unproved call dependency or no established write",
+    "TASLV1:N": "Shared or storage-associated actual in TASLV",
+    "DTASLV:N": "Unproved call dependency or no established write",
+    "DTASV1:N": "Shared or storage-associated actual in DTASLV",
+    "MEXP:N": "Unproved call dependency or no established write",
+    "DMEXP:N": "Unproved call dependency or no established write",
+    "LE:N": "Unknown or callback effects: rowk",
+    "DPLE:N": "Unknown or callback effects: rowk",
+    "CLE:N": "Unknown or callback effects: rowk",
+    "BLKORD:N": "Unproved call dependency or no established write",
+    "SEIG:N": "Unproved call dependency or no established write",
+    "DSEIG:N": "Unproved call dependency or no established write",
+    "ORSOL:QR": "Shared or storage-associated actual in LLSQMP",
+    "ORSOL:S": "Shared or storage-associated actual in LLSQMP",
+    "ORIMP:QR": "Shared or storage-associated actual in LLSQMP",
+    "ORIMP:S": "Shared or storage-associated actual in LLSQMP",
+    "LSEI:N": "Unproved call dependency or no established write",
+    "LSI:N": "Unproved call dependency or no established write",
+    "SPLSQ:N": "Unproved call dependency or no established write",
+    "STLSQ:N": "Unproved call dependency or no established write",
+    "BLSQ:N": "Unproved call dependency or no established write",
+    "OPTF:N": "Unproved call dependency or no established write",
+    "OPTDRV:N": "Shared or storage-associated actual in OPTF",
+    "FXDEC:N": "Forwarded shared storage from OPTDRV",
+    "FSTOFD:N": "Forwarded shared storage from OPTDRV",
+    "FSTOFD:TYPSIZ": "Forwarded shared storage from OPTDRV",
+    "FSTOCD:N": "Forwarded shared storage from OPTDRV",
+    "LNSRCH:FPLS": "Unknown or callback effects: fcn",
+    "LNSRCH:N": "Forwarded shared storage from OPTDRV",
+    "LMDIFF:M": "Unproved call dependency or no established write",
+    "LMDIFF:N": "Unproved call dependency or no established write",
+    "LMDIF:M": "Shared or storage-associated actual in LMDIFF",
+    "LMDIF:N": "Unknown or callback effects: fcn",
+    "FDJAC1:IFLAG": "Unknown or callback effects: fcn",
+    "FDJAC1:N": "Forwarded shared storage from HYBRD",
+    "FDJAC1:WA1": "Forwarded shared storage from HYBRD",
+    "FDJAC2:IFLAG": "Unknown or callback effects: fcn",
+    "FDJAC2:M": "Forwarded shared storage from LMDIF",
+    "FDJAC2:N": "Unknown or callback effects: fcn",
+    "FDJAC2:WA": "Forwarded shared storage from LMDIF",
+    "SMPLX:M": "Unproved call dependency or no established write",
+    "SSPLX:M": "Unproved call dependency or no established write",
+    "ACONDF:X": "Procedure passed as a callback: preserve its interface",
+    "ACONDG:C": "Procedure passed as a callback: preserve its interface",
+    "ACONDG:X": "Procedure passed as a callback: preserve its interface",
+    "XCOND:X": "Procedure passed as a callback: preserve its interface",
+    "XCONDX:X": "Shared or storage-associated actual in XCOND",
+    "XCONDX:Y": "Shared or storage-associated actual in XCOND",
+    "XCONDY:X": "Procedure passed as a callback: preserve its interface",
+    "XCONDY:Y": "Procedure passed as a callback: preserve its interface",
+    "QAGI1:C": "Shared or storage-associated actual in XCOND",
+    "QAGI1:Y": "Shared or storage-associated actual in XCOND",
+    "QAGIE1:C": "Forwarded shared storage from QAGI1",
+    "QAGIE1:Y": "Forwarded shared storage from QAGI1",
+    "QK15I1:C": "Forwarded shared storage from QAGIE1",
+    "QK15I1:Y": "Forwarded shared storage from QAGIE1",
+    "FFT:ISN": "Unproved call dependency or no established write",
+    "FFT:N": "Unproved call dependency or no established write",
+    "FFT1:ISN": "Unproved call dependency or no established write",
+    "FFT1:N": "Unproved call dependency or no established write",
+    "MFFT:N": "Unproved call dependency or no established write",
+    "MFFT1:ISN": "Unproved call dependency or no established write",
+    "MFFT1:N": "Unproved call dependency or no established write",
+    "SFFT:A": "Shared or storage-associated actual in MFFT",
+    "SFFT:B": "Shared or storage-associated actual in MFFT",
+    "SFFT:IERR": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "SFFT:ISN": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "SFFT:N": "Shared or storage-associated actual in FFT1",
+    "SFFT:NSPAN": "Shared or storage-associated actual in FFT1",
+    "SFFT:NTOT": "Shared or storage-associated actual in FFT1",
+    "COSQI:N": "Unproved call dependency or no established write",
+    "COSQF:N": "Unproved call dependency or no established write",
+    "COSQF1:N": "Unproved call dependency or no established write",
+    "COSQF1:W": "Shared or storage-associated actual in COSQF",
+    "COSQB:N": "Unproved call dependency or no established write",
+    "COSQB1:N": "Unproved call dependency or no established write",
+    "COSQB1:W": "Shared or storage-associated actual in COSQB",
+    "SINQF:N": "Unproved call dependency or no established write",
+    "SINQB:N": "Unproved call dependency or no established write",
+    "RFFTI:N": "Unproved call dependency or no established write",
+    "RFFTB:N": "Unproved call dependency or no established write",
+    "RFFTB1:WA": "Shared or storage-associated actual in RFFTB",
+    "RADB2:CC": "Forwarded shared storage from RFFTB1",
+    "RADB2:WA1": "Forwarded shared storage from RFFTB1",
+    "RADB3:CC": "Forwarded shared storage from RFFTB1",
+    "RADB3:WA1": "Forwarded shared storage from RFFTB1",
+    "RADB3:WA2": "Forwarded shared storage from RFFTB1",
+    "RADB4:CC": "Forwarded shared storage from RFFTB1",
+    "RADB4:WA1": "Forwarded shared storage from RFFTB1",
+    "RADB4:WA2": "Forwarded shared storage from RFFTB1",
+    "RADB4:WA3": "Forwarded shared storage from RFFTB1",
+    "RADB5:CC": "Forwarded shared storage from RFFTB1",
+    "RADB5:WA1": "Forwarded shared storage from RFFTB1",
+    "RADB5:WA2": "Forwarded shared storage from RFFTB1",
+    "RADB5:WA3": "Forwarded shared storage from RFFTB1",
+    "RADB5:WA4": "Forwarded shared storage from RFFTB1",
+    "RADBG:CC": "Shared or storage-associated actual in RFFTB1",
+    "RADBG:WA": "Forwarded shared storage from RFFTB1",
+    "RFFTF:N": "Unproved call dependency or no established write",
+    "RFFTF1:WA": "Shared or storage-associated actual in RFFTF",
+    "RADF2:CC": "Forwarded shared storage from RFFTF1",
+    "RADF2:WA1": "Forwarded shared storage from RFFTF1",
+    "RADF3:CC": "Forwarded shared storage from RFFTF1",
+    "RADF3:WA1": "Forwarded shared storage from RFFTF1",
+    "RADF3:WA2": "Forwarded shared storage from RFFTF1",
+    "RADF4:CC": "Forwarded shared storage from RFFTF1",
+    "RADF4:WA1": "Forwarded shared storage from RFFTF1",
+    "RADF4:WA2": "Forwarded shared storage from RFFTF1",
+    "RADF4:WA3": "Forwarded shared storage from RFFTF1",
+    "RADF5:CC": "Forwarded shared storage from RFFTF1",
+    "RADF5:WA1": "Forwarded shared storage from RFFTF1",
+    "RADF5:WA2": "Forwarded shared storage from RFFTF1",
+    "RADF5:WA3": "Forwarded shared storage from RFFTF1",
+    "RADF5:WA4": "Forwarded shared storage from RFFTF1",
+    "RADFG:WA": "Forwarded shared storage from RFFTF1",
+    "ERRINT:AAA": "Shared or storage-associated actual in ADCOMP",
+    "ERRINT:BBB": "Shared or storage-associated actual in ADCOMP",
+    "ERRINT:POINTS": "Shared or storage-associated actual in ADCOMP",
+    "ERRINT:WEIGHT": "Shared or storage-associated actual in ADCOMP",
+    "NEWTON:NI": "Shared or storage-associated actual in ADCOMP",
+    "NEWTON:NL": "Shared or storage-associated actual in ADCOMP",
+    "NEWTON:NR": "Shared or storage-associated actual in ADCOMP",
+    "POLYDD:X": "Procedure passed as a callback: preserve its interface",
+    "ADTRAN:D": "Shared or storage-associated actual in ADPUT",
+    "CPSC:Z": "Unknown or callback effects: f",
+    "DCPSC:X": "Unknown or callback effects: fun",
+    "DCPSC:Y": "Unknown or callback effects: fun",
+    "BNDSL:G": "Forwarded shared storage from BFIT0",
+    "SURF2:Z": "Unknown or callback effects: hermnz",
+    "SURF2:ZP": "Unknown or callback effects: hermnz",
+    "TRMESH:X": "Unproved call dependency or no established write",
+    "TRMESH:Y": "Unproved call dependency or no established write",
+    "ADNODE:X": "Unproved call dependency or no established write",
+    "ADNODE:Y": "Unproved call dependency or no established write",
+    "TRFIND:X": "Unknown or callback effects: left",
+    "TRFIND:Y": "Unknown or callback effects: left",
+    "SFVAL:X": "Unproved call dependency or no established write",
+    "SFVAL:Y": "Unproved call dependency or no established write",
+    "SFVAL2:X": "Unproved call dependency or no established write",
+    "SFVAL2:Y": "Unproved call dependency or no established write",
+    "INTRC1:X": "Unproved call dependency or no established write",
+    "INTRC1:Y": "Unproved call dependency or no established write",
+    "GNRTP:DIMP1": "Unproved call dependency or no established write",
+    "DGNRTP:DIMP1": "Unproved call dependency or no established write",
+    "QPSRT:ELIST": "Forwarded shared storage from QXGSE",
+    "QXGS:A": "Unproved call dependency or no established write",
+    "QXGS:B": "Unproved call dependency or no established write",
+    "QXGSE:A": "Unknown or callback effects: f",
+    "QXGSE:B": "Unknown or callback effects: f",
+    "QXRRD:Z": "Forwarded shared storage from QXGSE",
+    "DQPSRT:ELIST": "Forwarded shared storage from DQXGSE",
+    "DQXGS:A": "Unproved call dependency or no established write",
+    "DQXGS:B": "Unproved call dependency or no established write",
+    "DQXGSE:A": "Unknown or callback effects: f",
+    "DQXGSE:B": "Unknown or callback effects: f",
+    "DQXRRD:Z": "Forwarded shared storage from DQXGSE",
+    "CUBTRI:IDATA": "Unproved call dependency or no established write",
+    "CUBTRI:RDATA": "Unproved call dependency or no established write",
+    "CUBRUL:IDATA": "Unknown or callback effects: f",
+    "CUBRUL:RDATA": "Unknown or callback effects: f",
+    "IEGS:ASIDE": "Shared or storage-associated actual in IESLV",
+    "IEGS:ASIDE3": "Shared or storage-associated actual in IESLV",
+    "IEGS:DELN": "Shared or storage-associated actual in IESLV",
+    "IEGS:IMKNN": "Shared or storage-associated actual in IESLV",
+    "IEGS:KMM": "Shared or storage-associated actual in IESLV",
+    "IEGS:KMN": "Shared or storage-associated actual in IESLV",
+    "IEGS:KNM": "Shared or storage-associated actual in IESLV",
+    "IEGS:LUFACT": "Shared or storage-associated actual in IESLV",
+    "IEGS:OLDX": "Shared or storage-associated actual in IESLV",
+    "IEGS:R": "Shared or storage-associated actual in IESLV",
+    "IEGS:RH": "Shared or storage-associated actual in IESLV",
+    "IEGS:RHS": "Shared or storage-associated actual in IESLV",
+    "IEGS:SAVE": "Shared or storage-associated actual in IESLV",
+    "IEGS:SAVE2": "Shared or storage-associated actual in IESLV",
+    "IEGS:TM": "Shared or storage-associated actual in IESLV",
+    "IEGS:TN": "Shared or storage-associated actual in IESLV",
+    "IEGS:WM": "Shared or storage-associated actual in IESLV",
+    "IEGS:WN": "Shared or storage-associated actual in IESLV",
+    "IEGS:XM": "Shared or storage-associated actual in IESLV",
+    "IEGS:XMZ": "Shared or storage-associated actual in IESLV",
+    "IEGS:XN": "Shared or storage-associated actual in IESLV",
+    "NSTERP:TM": "Forwarded shared storage from IEGS",
+    "NSTERP:TN": "Forwarded shared storage from IEGS",
+    "NSTERP:WM": "Forwarded shared storage from IEGS",
+    "NSTERP:WN": "Forwarded shared storage from IEGS",
+    "NSTERP:XN": "Forwarded shared storage from IEGS",
+    "RNRM:X": "Forwarded shared storage from LEAVE",
+    "RNRM:Y": "Forwarded shared storage from IEGS",
+    "LEAVE:DELN": "Forwarded shared storage from IEGS",
+    "LEAVE:ELINSY": "Shared or storage-associated actual in IEGS",
+    "LEAVE:IMKNN": "Forwarded shared storage from IEGS",
+    "LEAVE:KMM": "Forwarded shared storage from IEGS",
+    "LEAVE:KMN": "Forwarded shared storage from IEGS",
+    "LEAVE:KNM": "Forwarded shared storage from IEGS",
+    "LEAVE:LUFACT": "Forwarded shared storage from IEGS",
+    "LEAVE:R": "Forwarded shared storage from IEGS",
+    "LEAVE:RH": "Forwarded shared storage from IEGS",
+    "LEAVE:RHS": "Forwarded shared storage from IEGS",
+    "LEAVE:TM": "Shared or storage-associated actual in IEGS",
+    "LEAVE:TN": "Shared or storage-associated actual in IEGS",
+    "LEAVE:TV": "Shared or storage-associated actual in IEGS",
+    "LEAVE:WM": "Forwarded shared storage from IEGS",
+    "LEAVE:WN": "Forwarded shared storage from IEGS",
+    "LEAVE:WV": "Forwarded shared storage from IEGS",
+    "LEAVE:XM": "Shared or storage-associated actual in IEGS",
+    "LEAVE:XMZ": "Forwarded shared storage from IEGS",
+    "LEAVE:XV": "Shared or storage-associated actual in IEGS",
+    "ITERT:IMKNN": "Forwarded shared storage from IEGS",
+    "ITERT:KMN": "Forwarded shared storage from IEGS",
+    "ITERT:RHS": "Forwarded shared storage from IEGS",
+    "ITERT:TM": "Forwarded shared storage from LEAVE",
+    "ITERT:TN": "Forwarded shared storage from LEAVE",
+    "ITERT:WM": "Forwarded shared storage from IEGS",
+    "ITERT:WN": "Forwarded shared storage from IEGS",
+    "ITERT:XMZ": "Forwarded shared storage from IEGS",
+    "LNSYS:A": "Forwarded shared storage from IEGS",
+    "LNSYS:B": "Forwarded shared storage from IEGS",
+    "LNSYS:D": "Forwarded shared storage from IEGS",
+    "LNSYS:X": "Forwarded shared storage from IEGS",
+    "DE1:YP": "Shared or storage-associated actual in ODE",
+    "STEP1:WT": "Forwarded shared storage from DE1",
+    "STEP1:YP": "Forwarded shared storage from DE1",
+    "INTRP:PHI": "Forwarded shared storage from DE1",
+    "INTRP:PSI": "Forwarded shared storage from DE1",
+    "INTRP:Y": "Forwarded shared storage from DE1",
+    "RKFC:F1": "Shared or storage-associated actual in BRKF45",
+    "RKFC:F4": "Shared or storage-associated actual in BRKF45",
+    "RKFC:F7": "Shared or storage-associated actual in BRKF45",
+    "EXTRA:F": "Forwarded shared storage from RKFC",
+    "EXTRA:F1": "Forwarded shared storage from RKFC",
+    "EXTRA:F2": "Forwarded shared storage from RKFC",
+    "EXTRA:Y": "Forwarded shared storage from RKFC",
+    "EXTRA:YINC1": "Forwarded shared storage from RKFC",
+    "EXTRA:YINC2": "Forwarded shared storage from RKFC",
+    "RKFS:F2": "Shared or storage-associated actual in RKF45",
+    "RKFS:F3": "Shared or storage-associated actual in RKF45",
+    "RKFS:F4": "Shared or storage-associated actual in RKF45",
+    "RKFS:YP": "Shared or storage-associated actual in RKF45",
+    "FEHL:F2": "Forwarded shared storage from GERKS",
+    "FEHL:F3": "Forwarded shared storage from GERKS",
+    "FEHL:F4": "Forwarded shared storage from GERKS",
+    "FEHL:H": "Forwarded shared storage from GERKS",
+    "FEHL:T": "Unknown or callback effects: f",
+    "GERKS:F2": "Shared or storage-associated actual in GERK",
+    "GERKS:F3": "Shared or storage-associated actual in GERK",
+    "GERKS:F4": "Shared or storage-associated actual in GERK",
+    "GERKS:YP": "Shared or storage-associated actual in GERK",
+    "ZZZJAC:IPAR": "Procedure passed as a callback: preserve its interface",
+    "ZZZJAC:PD": "Procedure passed as a callback: preserve its interface",
+    "ZZZJAC:RPAR": "Procedure passed as a callback: preserve its interface",
+    "ZZZJAC:Y": "Procedure passed as a callback: preserve its interface",
+    "RK8:H": "Unknown or callback effects: f",
+    "SEPDE:A": "Unknown or callback effects: bval",
+    "SEPDE:B": "Unknown or callback effects: bval",
+    "SEPDE:C": "Unknown or callback effects: bval",
+    "SEPDE:D": "Unknown or callback effects: bval",
+    "SEPELL:BDA": "Shared or storage-associated actual in SEPDE",
+    "SEPELL:BDB": "Shared or storage-associated actual in SEPDE",
+    "SEPELL:BDC": "Shared or storage-associated actual in SEPDE",
+    "SEPELL:BDD": "Shared or storage-associated actual in SEPDE",
+    "SEPEL1:AM": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:AN": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:BDA": "Forwarded shared storage from SEPELL",
+    "SEPEL1:BDB": "Forwarded shared storage from SEPELL",
+    "SEPEL1:BDC": "Forwarded shared storage from SEPELL",
+    "SEPEL1:BDD": "Forwarded shared storage from SEPELL",
+    "SEPEL1:BM": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:BN": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:CM": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:CN": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:DM": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:DN": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:GRHS": "Forwarded shared storage from SEPELL",
+    "SEPEL1:UM": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:UN": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:USOL": "Forwarded shared storage from SEPELL",
+    "SEPEL1:W": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:ZM": "Shared or storage-associated actual in SEPELL",
+    "SEPEL1:ZN": "Shared or storage-associated actual in SEPELL",
+    "ORTHG:USOL": "Forwarded shared storage from SEPEL1",
+    "ORTHG:ZM": "Forwarded shared storage from SEPEL1",
+    "ORTHG:ZN": "Forwarded shared storage from SEPEL1",
+    "MINSOL:USOL": "Forwarded shared storage from SEPEL1",
+    "MINSOL:ZM": "Forwarded shared storage from SEPEL1",
+    "MINSOL:ZN": "Forwarded shared storage from SEPEL1",
+    "TRISP:A": "Forwarded shared storage from SEPEL1",
+    "TRISP:B": "Forwarded shared storage from SEPEL1",
+    "TRISP:C": "Forwarded shared storage from SEPEL1",
+    "DEFER:GRHS": "Forwarded shared storage from SEPEL1",
+    "DEFER:USOL": "Forwarded shared storage from SEPEL1",
+    "DXFN:U": "Forwarded shared storage from DEFER",
+    "DYFN:U": "Forwarded shared storage from DEFER",
+    "BLKTRI:AM": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:AN": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:BM": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:BN": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:CM": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:CN": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:M": "Shared or storage-associated actual in SEPEL1",
+    "BLKTRI:N": "Shared or storage-associated actual in SEPEL1",
+    "BLKTRI:W": "Forwarded shared storage from SEPEL1",
+    "BLKTRI:Y": "Forwarded shared storage from SEPEL1",
+    "BLKTR1:AM": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:AN": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:B": "Shared or storage-associated actual in BLKTRI",
+    "BLKTR1:BM": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:BN": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:CM": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:CN": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:M": "Forwarded shared storage from BLKTRI",
+    "BLKTR1:W1": "Shared or storage-associated actual in BLKTRI",
+    "BLKTR1:W2": "Shared or storage-associated actual in BLKTRI",
+    "BLKTR1:W3": "Shared or storage-associated actual in BLKTRI",
+    "BLKTR1:WD": "Shared or storage-associated actual in BLKTRI",
+    "BLKTR1:WU": "Shared or storage-associated actual in BLKTRI",
+    "BLKTR1:WW": "Shared or storage-associated actual in BLKTRI",
+    "BLKTR1:Y": "Forwarded shared storage from BLKTRI",
+    "INDXB:I": "Shared or storage-associated actual in COMPB",
+    "INDXB:IDP": "Shared or storage-associated actual in COMPB",
+    "INDXB:IDX": "Shared or storage-associated actual in COMPB",
+    "INDXB:IR": "Shared or storage-associated actual in COMPB",
+    "PROD0:A": "Procedure passed as a callback: preserve its interface",
+    "PROD0:AA": "Procedure passed as a callback: preserve its interface",
+    "PROD0:B": "Procedure passed as a callback: preserve its interface",
+    "PROD0:BD": "Procedure passed as a callback: preserve its interface",
+    "PROD0:BM1": "Procedure passed as a callback: preserve its interface",
+    "PROD0:BM2": "Procedure passed as a callback: preserve its interface",
+    "PROD0:C": "Procedure passed as a callback: preserve its interface",
+    "PROD0:U": "Procedure passed as a callback: preserve its interface",
+    "PROD0:X": "Procedure passed as a callback: preserve its interface",
+    "PRODP:A": "Procedure passed as a callback: preserve its interface",
+    "PRODP:AA": "Procedure passed as a callback: preserve its interface",
+    "PRODP:B": "Procedure passed as a callback: preserve its interface",
+    "PRODP:BD": "Procedure passed as a callback: preserve its interface",
+    "PRODP:BM1": "Procedure passed as a callback: preserve its interface",
+    "PRODP:BM2": "Procedure passed as a callback: preserve its interface",
+    "PRODP:C": "Procedure passed as a callback: preserve its interface",
+    "PRODP:X": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:A": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:AA": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:B": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:BD": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:BM1": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:BM2": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:C": "Procedure passed as a callback: preserve its interface",
+    "CPROD0:X": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:A": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:AA": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:B": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:BD": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:BM1": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:BM2": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:C": "Procedure passed as a callback: preserve its interface",
+    "CPRODP:X": "Procedure passed as a callback: preserve its interface",
+    "COMPB:AH": "Shared or storage-associated actual in BLKTRI",
+    "COMPB:AN": "Forwarded shared storage from BLKTRI",
+    "COMPB:B": "Shared or storage-associated actual in BLKTRI",
+    "COMPB:BH": "Shared or storage-associated actual in BLKTRI",
+    "COMPB:BN": "Forwarded shared storage from BLKTRI",
+    "COMPB:CN": "Forwarded shared storage from BLKTRI",
+    "COMPB:IERROR": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "COMPB:N": "Storage association, alternate entry, pointer, or unsupported I/O",
+    "TQLRT0:D": "Shared or storage-associated actual in COMPB",
+    "TQLRT0:E2": "Shared or storage-associated actual in COMPB",
+    "TQLRT0:IERR": "Shared or storage-associated actual in COMPB",
+    "TQLRT0:N": "Shared or storage-associated actual in COMPB",
+    "PPADD:A": "Shared or storage-associated actual in COMPB",
+    "PPADD:BH": "Shared or storage-associated actual in COMPB",
+    "PPADD:BP": "Shared or storage-associated actual in COMPB",
+    "PPADD:C": "Shared or storage-associated actual in COMPB",
+    "PPADD:CBP": "Shared or storage-associated actual in COMPB",
+    "PPADD:IERROR": "Shared or storage-associated actual in COMPB",
+    "PPADD:N": "Shared or storage-associated actual in COMPB",
+    "PSGF:A": "Forwarded shared storage from PPADD",
+    "PSGF:BH": "Forwarded shared storage from PPADD",
+    "PSGF:C": "Forwarded shared storage from PPADD",
+    "BSRH:A": "Forwarded shared storage from PPADD",
+    "BSRH:BH": "Shared or storage-associated actual in PPADD",
+    "BSRH:C": "Forwarded shared storage from PPADD",
+    "BSRH:IZ": "Unknown or callback effects: f",
+    "BSRH:XLL": "Shared or storage-associated actual in PPADD",
+    "BSRH:XRR": "Shared or storage-associated actual in PPADD",
+    "PPSGF:A": "Forwarded shared storage from PPADD",
+    "PPSGF:BH": "Forwarded shared storage from PPADD",
+    "PPSGF:C": "Forwarded shared storage from PPADD",
+    "PPSPF:A": "Procedure passed as a callback: preserve its interface",
+    "PPSPF:BH": "Procedure passed as a callback: preserve its interface",
+    "PPSPF:C": "Procedure passed as a callback: preserve its interface",
+    "STORE2:A": "Outside this reviewed batch",
+    "STORE2:B": "Outside this reviewed batch",
+    "DSTOR2:A": "Outside this reviewed batch",
+    "DSTOR2:B": "Outside this reviewed batch",
+    "U12LS:H": "Outside this reviewed batch",
+    "U12LS:W": "Outside this reviewed batch",
+    "U12US:H": "Outside this reviewed batch",
+    "U12US:W": "Outside this reviewed batch",
+    "LPDP:PRGOPT": "Outside this reviewed batch",
+    "RNDERR:A": "Outside this reviewed batch",
+    "RNDERR:B": "Outside this reviewed batch",
+    "RNDERR:X": "Outside this reviewed batch",
+    "RNDERR:Y": "Outside this reviewed batch",
+    "LEAVE:MF": "Outside this reviewed batch",
+    "LEAVE:NF": "Outside this reviewed batch",
+    "ITERT:N": "Outside this reviewed batch",
+    "LNSYS:N": "Outside this reviewed batch",
+    "SEPDE:KU": "Outside this reviewed batch",
+    "SEPDE:MP1": "Outside this reviewed batch",
+    "SEPELL:IDMN": "Outside this reviewed batch",
+    "SEPELL:MN": "Outside this reviewed batch",
+    "SEPEL1:IDMN": "Outside this reviewed batch",
+    "SEPEL1:MN": "Outside this reviewed batch",
+    "ORTHG:IDMN": "Outside this reviewed batch",
+    "MINSOL:IDMN": "Outside this reviewed batch",
+    "DEFER:IDMN": "Outside this reviewed batch",
+    "DEFER:MN": "Outside this reviewed batch",
+    "DXFN:IDMN": "Outside this reviewed batch",
+    "DYFN:IDMN": "Outside this reviewed batch",
+    "BLKTRI:IDIMY": "Outside this reviewed batch",
+    "BLKTR1:IDIMY": "Outside this reviewed batch"
+  },
+  "refinement_sha256": "cf356634c6b76158e0d465e6d4c0f4706565d450c281ac51075559749d1b9e25",
+  "output_sha256": "097151bcad1e47ea1a09c33a1bcb95ce3ab8bada55fb623b10fe24d75debb457"
+}

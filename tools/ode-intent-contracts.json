@@ -1,0 +1,197 @@
+{
+  "input_sha256": "167ca8d4ce2ac9c7bded35cfee77071a33409555e03044dfcc5dfb8345082015",
+  "callback_source_sha256": "9f3f40db0a4f50be4f69143c352f41b68dc3834c06b4ddf2ffcc396561462074",
+  "select": [
+    "SFODE",
+    "SFODE1",
+    "STFODE",
+    "LSOD1",
+    "STOD",
+    "PJAC",
+    "SLVS",
+    "VNWRMS",
+    "INTYD",
+    "HSTART",
+    "VNORM"
+  ],
+  "readonly_duplicates": true,
+  "callback_modes": {
+    "SFODE:F": [
+      "IN",
+      "IN",
+      "OUT",
+      "INOUT",
+      "INOUT"
+    ],
+    "SFODE1:F": [
+      "IN",
+      "IN",
+      "OUT",
+      "INOUT",
+      "INOUT"
+    ],
+    "STFODE:F": [
+      "IN",
+      "IN",
+      "OUT",
+      "INOUT",
+      "INOUT"
+    ],
+    "LSOD1:F": [
+      "IN",
+      "IN",
+      "OUT",
+      "INOUT",
+      "INOUT"
+    ],
+    "HSTART:F": [
+      "IN",
+      "IN",
+      "OUT",
+      "INOUT",
+      "INOUT"
+    ],
+    "STOD:F": [
+      "IN",
+      "IN",
+      "OUT",
+      "INOUT",
+      "INOUT"
+    ],
+    "PJAC:F": [
+      "IN",
+      "IN",
+      "OUT",
+      "INOUT",
+      "INOUT"
+    ]
+  },
+  "alias_safe": {
+    "LSOD1:ACOR": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "LSOD1:DELSGN": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "LSOD1:EWT": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "LSOD1:SAVF": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "LSOD1:TOLFAC": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "LSOD1:TSTOP": {
+      "intent": "IN",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "LSOD1:WM": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "LSOD1:YH": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "LSOD1:YH1": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "LSOD1:YPOUT": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "STOD:ACOR": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "STOD:EWT": {
+      "intent": "IN",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "STOD:SAVF": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "STOD:WM": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "STOD:YH": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "STOD:YH1": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "PJAC:EWT": {
+      "intent": "IN",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "PJAC:FTEM": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "PJAC:SAVF": {
+      "intent": "IN",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "PJAC:WM": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "PJAC:YH": {
+      "intent": "IN",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "SLVS:TEM": {
+      "intent": "IN",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "SLVS:WM": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "VNWRMS:V": {
+      "intent": "IN",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "VNWRMS:W": {
+      "intent": "IN",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "INTYD:DKY": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "INTYD:YH": {
+      "intent": "IN",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "HSTART:ETOL": {
+      "intent": "IN",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "HSTART:SF": {
+      "intent": "INOUT",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "HSTART:YPRIME": {
+      "intent": "IN",
+      "review": "ODE workspace partition and history-view review in docs/argument-intents.md"
+    },
+    "VNORM:V": {
+      "intent": "IN",
+      "review": "Read-only maximum norm; no calls or shared state"
+    }
+  },
+  "trust_existing_inputs": true,
+  "function_results_are_data": true
+}

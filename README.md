@@ -398,9 +398,9 @@ complete compiler symbol inventories before and after formatting.
 
 ## Argument intents
 
-The maintained sources have 4,359 `INTENT(IN)`, 262 `INTENT(OUT)`, and 2,924
+The maintained sources have 4,385 `INTENT(IN)`, 262 `INTENT(OUT)`, and 2,957
 `INTENT(INOUT)` arguments across 1,047 procedures. Of the 8,101 data arguments,
-556 remain without intents pending further review. Arrays that may retain
+497 remain without intents pending further review. Arrays that may retain
 incoming values use `INOUT`; `OUT` is restricted to scalars initialized before
 any possible branch or read. The [intent guide](docs/argument-intents.md)
 describes the analysis, exclusions, and reproduction commands. The compiler

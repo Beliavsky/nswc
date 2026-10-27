@@ -1,6 +1,6 @@
 {
-  "input_sha256": "19c50a2e956a58add8bbdb5338dfce8211ac71283dbdd6e022530125a01a8880",
-  "output_sha256": "0d2ff31e4a112f8ba3e810e7b2c4e4e13ea70df6d12924ed2f9a3e86f0042d18",
+  "input_sha256": "7305bebd8a4b958327b561003961f88b583f80f3f736c0779c0fa1abb28e3a14",
+  "output_sha256": "929f280ec967dbe71566fccb69368f3ee832e2b0dcaec2c10a9e73be924c7d56",
   "rules_sha256": "aad1b729a8132aea0af622902764aadd4f4f9e3dd91a13ab802e537b45aa8947",
   "vocabulary_sha256": "e13c433e8d8472ee7b186ca09901f0f4d964404eff21040392bcd0b3b3d4a0f0",
   "changed_lines": 28273,
@@ -492,51 +492,51 @@
     },
     "FUTHER": {
       "count": 1,
-      "first_line": 104386
+      "first_line": 104388
     },
     "UNDERFLOWED": {
       "count": 2,
-      "first_line": 104776
+      "first_line": 104778
     },
     "NQCUR": {
       "count": 2,
-      "first_line": 104799
+      "first_line": 104801
     },
     "SGBCO": {
       "count": 6,
-      "first_line": 105772
+      "first_line": 105780
     },
     "AF": {
       "count": 1,
-      "first_line": 106616
+      "first_line": 106624
     },
     "AFUN": {
       "count": 5,
-      "first_line": 106756
+      "first_line": 106764
     },
     "DFUN": {
       "count": 2,
-      "first_line": 106756
+      "first_line": 106764
     },
     "CFUN": {
       "count": 1,
-      "first_line": 106766
+      "first_line": 106774
     },
     "BFUN": {
       "count": 3,
-      "first_line": 106766
+      "first_line": 106774
     },
     "WALTHAM": {
       "count": 1,
-      "first_line": 106815
+      "first_line": 106823
     },
     "NINT": {
       "count": 1,
-      "first_line": 106954
+      "first_line": 106962
     },
     "EFUN": {
       "count": 1,
-      "first_line": 107401
+      "first_line": 107409
     }
   },
   "uncertain_prose": [
@@ -2269,193 +2269,193 @@
       "text": "        SVCO(RWORK(22+NEQ),IWORK(21+NEQ))."
     },
     {
-      "line": 104563,
+      "line": 104565,
       "text": "                               F(X,U,UPRIME,RPAR,IPAR)"
     },
     {
-      "line": 104789,
+      "line": 104791,
       "text": "   PACKAGE SFODE."
     },
     {
-      "line": 105373,
+      "line": 105378,
       "text": " POLYNOMIAL, I.E.,"
     },
     {
-      "line": 106458,
+      "line": 106466,
       "text": "                             AF(X)*D U/DX + BF(X)*DU/DX  + CF(X)*U +"
     },
     {
-      "line": 106460,
+      "line": 106468,
       "text": "                             DF(Y)*D U/DY  + EF(Y)*DU/DY + FF(Y)*U"
     },
     {
-      "line": 106473,
+      "line": 106481,
       "text": "                         (3) DU(A,Y)/DX+ALPHA*U(A,Y),DU(B,Y)/DX+"
     },
     {
-      "line": 106482,
+      "line": 106490,
       "text": "                         (3) DU(X,C)/DY+GAMA*U(X,C),DU(X,D)/DY+"
     },
     {
-      "line": 106493,
+      "line": 106501,
       "text": "                        IORDER"
     },
     {
-      "line": 106496,
+      "line": 106504,
       "text": "                        A,B"
     },
     {
-      "line": 106500,
+      "line": 106508,
       "text": "                          B."
     },
     {
-      "line": 106501,
+      "line": 106509,
       "text": "                        M"
     },
     {
-      "line": 106508,
+      "line": 106516,
       "text": "                        MBDCND"
     },
     {
-      "line": 106528,
+      "line": 106536,
       "text": "                        BDA"
     },
     {
-      "line": 106541,
+      "line": 106549,
       "text": "                        BDB"
     },
     {
-      "line": 106554,
+      "line": 106562,
       "text": "                        C,D"
     },
     {
-      "line": 106558,
+      "line": 106566,
       "text": "                          THAN D."
     },
     {
-      "line": 106559,
+      "line": 106567,
       "text": "                        N"
     },
     {
-      "line": 106566,
+      "line": 106574,
       "text": "                        NBDCND"
     },
     {
-      "line": 106576,
+      "line": 106584,
       "text": "                              I.E., U(X,C) AND DU(X,D)/DY+XNU*U(X,D)"
     },
     {
-      "line": 106586,
+      "line": 106594,
       "text": "                        BDC"
     },
     {
-      "line": 106599,
+      "line": 106607,
       "text": "                        BDD"
     },
     {
-      "line": 106607,
+      "line": 106615,
       "text": "                        XNU"
     },
     {
-      "line": 106612,
+      "line": 106620,
       "text": "                        COFX"
     },
     {
-      "line": 106614,
+      "line": 106622,
       "text": "                          PARAMETERS X, AFUN, BFUN, CFUN WHICH"
     },
     {
-      "line": 106618,
+      "line": 106626,
       "text": "                        COFY"
     },
     {
-      "line": 106620,
+      "line": 106628,
       "text": "                          PARAMETERS Y, DFUN, EFUN, FFUN WHICH"
     },
     {
-      "line": 106626,
+      "line": 106634,
       "text": "                        AFUN AND DFUN MUST SATISFY AFUN*DFUN GREATER"
     },
     {
-      "line": 106632,
+      "line": 106640,
       "text": "                        GRHS"
     },
     {
-      "line": 106655,
+      "line": 106663,
       "text": "                        MN"
     },
     {
-      "line": 106660,
+      "line": 106668,
       "text": "                        USOL"
     },
     {
-      "line": 107619,
+      "line": 107627,
       "text": "     IFLG"
     },
     {
-      "line": 107629,
+      "line": 107637,
       "text": "     NP"
     },
     {
-      "line": 107633,
+      "line": 107641,
       "text": "     N"
     },
     {
-      "line": 107637,
+      "line": 107645,
       "text": "     AN,BN,CN"
     },
     {
-      "line": 107644,
+      "line": 107652,
       "text": "     M"
     },
     {
-      "line": 107647,
+      "line": 107655,
       "text": "     AM,BM,CM"
     },
     {
-      "line": 107650,
+      "line": 107658,
       "text": "     IDIMY"
     },
     {
-      "line": 107654,
+      "line": 107662,
       "text": "       LEAST M."
     },
     {
-      "line": 107655,
+      "line": 107663,
       "text": "     Y"
     },
     {
-      "line": 107659,
+      "line": 107667,
       "text": "     W"
     },
     {
-      "line": 107670,
+      "line": 107678,
       "text": "     Y"
     },
     {
-      "line": 107688,
+      "line": 107696,
       "text": "     W"
     },
     {
-      "line": 109107,
+      "line": 109115,
       "text": "                    EXCEED IEND.)"
     },
     {
-      "line": 110991,
+      "line": 110999,
       "text": "        VARIATE C*(X1/X2)."
     },
     {
-      "line": 111097,
+      "line": 111105,
       "text": "        VARIATE C*(X1/X2)."
     },
     {
-      "line": 111386,
+      "line": 111394,
       "text": "        PROCESS STATIONARITY"
     },
     {
-      "line": 111485,
+      "line": 111493,
       "text": "        PROCESS STATIONARITY"
     }
   ],
-  "generated_source_sha256": "d658087e4e544a6162c863c3fe747dd34171df97e00e69398cdbbca4deed1207"
+  "generated_source_sha256": "ae81e2588ecc379d47598f3500ae49bd7e0881d3c3eccdc8fcffa6a7a21e1818"
 }

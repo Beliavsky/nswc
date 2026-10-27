@@ -22,13 +22,18 @@ from combine_declarations import transform as combine
 MANIFEST = Path(__file__).with_name('additional-intents.json')
 
 
-def analyze(data, inventory):
+def analyze(data, inventory, refinements=None):
+    refinements = refinements or {}
+    callback_modes = refinements.get('callback_modes', {})
     lines, scopes = units(data)
     existing = {'procedures': {}, 'input_sha256': digest(data)}
     formals, bodies, excluded = {}, {}, {}
+    implicit_results = set()
     for p, (start, _, end) in scopes.items():
         stmts = list(statements(lines[start:end]))
         header = stmts[0].code.lower()
+        if re.search(r'\bfunction\b', header) and not re.search(r'\bresult\s*\(', header):
+            implicit_results.add(p)
         formals[p] = [s.strip() for s in header[header.index('(')+1:header.rindex(')')].split(',')] if '(' in header else []
         bodies[p] = [mask_strings(s.code).strip() for s in stmts[1:-1]]
         modes = {}
@@ -50,9 +55,11 @@ def analyze(data, inventory):
             for _, actuals in invocations(code):
                 for actual in actuals:
                     attrs = inventory[p].get(actual, {}).get('attributes', '')
+                    if refinements.get('function_results_are_data') and p in implicit_results and actual.upper() == p and 'FUNCTION' in attrs:
+                        continue
                     if actual.upper() in scopes and 'PROCEDURE' in attrs and 'DUMMY' not in attrs and 'INTRINSIC-PROC' not in attrs:
                         excluded[actual.upper()] = 'Procedure passed as a callback: preserve its interface'
-    writable = infer(data, inventory, existing, allow_common=True)
+    writable = infer(data, inventory, existing, allow_common=True, callback_modes=callback_modes)
     potential, requirements, blocked, calls = set(), {}, {}, []
     for p in scopes:
         records = inventory[p]
@@ -99,7 +106,12 @@ def analyze(data, inventory):
                     continue
                 target = callee.upper()
                 if 'DUMMY' in attrs or target not in scopes:
-                    for actual in actuals:
+                    modes = callback_modes.get(p + ':' + callee.upper())
+                    if modes and len(modes) != len(actuals):
+                        raise ValueError('Callback argument count changed')
+                    for i, actual in enumerate(actuals):
+                        if modes and modes[i] == 'IN':
+                            continue
                         for d in set(re.findall(r'\b[a-z]\w*\b', actual)) & own:
                             blocked[(p, d)] = 'Unknown or callback effects: ' + callee
                     continue
@@ -112,6 +124,10 @@ def analyze(data, inventory):
     # New contracts must not change the treatment of observed overlapping
     # arguments or actuals also visible through COMMON/EQUIVALENCE.
     hazards = {}
+    trusted = {(p, d.lower()) for p, entry in existing['procedures'].items()
+               for d, mode in entry['arguments'].items() if mode == 'IN' and (p, d.lower()) not in blocked} if refinements.get('trust_existing_inputs') else set()
+    raw_requirements = {key: (None if key in blocked else set() if key in trusted else deps.copy()) for key, deps in requirements.items()}
+    readonly = prove_inputs(potential, raw_requirements) if refinements.get('readonly_duplicates') else set()
     for p, callee, actuals in calls:
         records = inventory[p]
         if len(actuals) != len(formals[callee]) or any(re.match(r'[a-z]\w*\s*=(?!=)', a) for a in actuals):
@@ -121,7 +137,8 @@ def analyze(data, inventory):
         bases = [variable_base(a, records, p.lower()) for a in actuals]
         for formal, base in zip(formals[callee], bases):
             attrs = records.get(base, {}).get('attributes', '') if base else ''
-            if base and (bases.count(base) > 1 or 'IN-COMMON' in attrs or 'IN-EQUIVALENCE' in attrs or p in excluded):
+            repeated = bases.count(base) > 1 and not all((callee, f) in readonly for f, b in zip(formals[callee], bases) if b == base)
+            if base and (repeated or 'IN-COMMON' in attrs or 'IN-EQUIVALENCE' in attrs or p in excluded):
                 hazards[(callee, formal)] = 'Shared or storage-associated actual in ' + p
     # Forwarded workspace views can overlap even when their names differ in
     # this scope. Carry observed hazards down the call graph to a fixed point.
@@ -135,8 +152,15 @@ def analyze(data, inventory):
         if not added:
             break
         hazards.update(added)
+    waived = {}
+    for key in list(hazards):
+        review = refinements.get('alias_safe', {}).get(key[0] + ':' + key[1].upper())
+        if review and ('shared storage' in hazards[key].lower() or 'storage-associated actual' in hazards[key]):
+            waived[key] = {'reason': hazards.pop(key), 'review': review}
     for key in potential:
-        if key in blocked or key in hazards:
+        if key in trusted:
+            requirements[key] = set()
+        elif key in blocked or key in hazards:
             requirements[key] = None
     proved = prove_inputs(potential, requirements)
     result = {'input_sha256': digest(data), 'procedures': {}, 'remaining': {}}
@@ -164,7 +188,15 @@ def analyze(data, inventory):
                     reason = 'Non-definable actual at a known call'
             result['remaining'][p+':'+d.upper()] = reason
         if new:
+            for d, entry in new.items():
+                if (p, d.lower()) in waived:
+                    entry['alias_review'] = waived[(p, d.lower())]
             result['procedures'][p] = new
+    if refinements.get('select'):
+        for p in list(result['procedures']):
+            if p not in refinements['select']:
+                for d in result['procedures'].pop(p):
+                    result['remaining'][p + ':' + d] = 'Outside this reviewed batch'
     return result
 
 

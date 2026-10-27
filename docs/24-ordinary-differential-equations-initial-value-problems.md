@@ -635,7 +635,7 @@ RERR and AERR may Le modified on any continuation call to SFODEL1.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RK` | `SUBROUTINE` | `N, T, H, A, F` | [`L106065`](../source_parts/nswc_part_11.f90#L37) |
+| `RK` | `SUBROUTINE` | `N, T, H, A, F` | [`L106073`](../source_parts/nswc_part_11.f90#L37) |
 
 
 Let y’(¢) = f(t,y(t)) denote a system of n ordinary first order nonstiff differential equations where f(t,y) = (fi(t,y),...,fn(t,y)) and y(t) = (yi(t), ...,yn(t)). Assume that y(to) is known. Then for a small real number A, the subroutine RK is available for computing y(to +h). RK employs the standard fourth-order Runge-Kutta procedure.
@@ -697,7 +697,7 @@ Note that the statements A(3) = 1.0 and A(4) = 0.0, which store the derivatives 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RK8` | `SUBROUTINE` | `N, T, H, Y, DY, W, F` | [`L106122`](../source_parts/nswc_part_11.f90#L94) |
+| `RK8` | `SUBROUTINE` | `N, T, H, Y, DY, W, F` | [`L106130`](../source_parts/nswc_part_11.f90#L94) |
 
 
 Let y(t) = f(t,y(t)) denote a system of n ordinary first. order nonstiff differential

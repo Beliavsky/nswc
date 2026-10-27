@@ -156,7 +156,7 @@ def initial_scalar_outputs(body, candidates, records, spec_reads):
     return result
 
 
-def infer(base, inventory, existing, allow_common=False):
+def infer(base, inventory, existing, allow_common=False, callback_modes=None):
     """Infer writes; COMMON opt-in requires the supplemental alias checks."""
     lines, scopes = units(base)
     formal_order, bodies, direct, calls, excluded, spec_reads = {}, {}, {}, {}, {}, {}
@@ -207,6 +207,15 @@ def infer(base, inventory, existing, allow_common=False):
             for callee, actuals in invocations(whole):
                 record = records.get(callee, {})
                 attrs = record.get("attributes", "")
+                modes = (callback_modes or {}).get(name + ':' + callee.upper())
+                if modes and 'DUMMY' in attrs and 'PROCEDURE' in attrs:
+                    if len(modes) != len(actuals):
+                        raise ConversionError('Callback argument count changed: ' + name + ':' + callee)
+                    for mode, actual in zip(modes, actuals):
+                        target = definable_base(actual, records, name.lower())
+                        if mode in ('OUT', 'INOUT') and target in dummies:
+                            direct[name].setdefault(target, []).append({'line': line, 'statement': whole,
+                                'callback_contract': name + ':' + callee.upper()})
                 if (callee.upper() not in scopes or "INTRINSIC-PROC" in attrs
                         or ("DUMMY" in attrs and "PROCEDURE" in attrs)
                         or ("VARIABLE" in attrs and "PROCEDURE" not in attrs)):

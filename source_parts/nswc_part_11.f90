@@ -1,7 +1,7 @@
 function vnorm(v,ncomp)
 implicit none
 integer, intent(in) :: ncomp
-real :: v(ncomp)
+real, intent(in) :: v(ncomp)
 real :: vnorm
 !     beginning of local variable declarations
 integer :: k
@@ -22,7 +22,7 @@ implicit none
 !   vnwrms = sqrt( (1/n) * sum( v(i)/w(i) )**2 )
 !-----------------------------------------------------------------------
 integer, intent(in) :: n
-real :: v(n), w(n)
+real, intent(in) :: v(n), w(n)
 !     beginning of local variable declarations
 integer :: i
 real :: sum

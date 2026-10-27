@@ -36,6 +36,7 @@ jobs:
       - run: python tools/validate_declaration_sections.py
       - name: Verify additional argument intents
         run: python tools/validate_additional_intents.py
+      - run: python tools/validate_ode_intents.py
       - run: python tools/validate_local_declarations.py
       - run: python tools/validate_procedure_purity.py
       - run: python tools/validate_sources.py

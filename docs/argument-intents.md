@@ -1,8 +1,8 @@
 # Argument intents
 
-The maintained sources have 4,359 `INTENT(IN)`, 262 `INTENT(OUT)`, and 2,924
+The maintained sources have 4,385 `INTENT(IN)`, 262 `INTENT(OUT)`, and 2,957
 `INTENT(INOUT)` data arguments across 1,047 of the 1,062 library procedures.
-Of 8,101 data arguments, 556 remain without intents pending further review.
+Of 8,101 data arguments, 497 remain without intents pending further review.
 Procedure callbacks are excluded from these data-argument counts.
 The maintained `nswc.f`, generated `nswc.f90`, and source partitions contain the
 same annotations. The archived `nswc_orig.f` is unchanged.
@@ -110,10 +110,10 @@ entries, pointers, and unsupported I/O still require separate review. Library
 procedures passed as callbacks keep their existing interfaces pending a review
 of the corresponding callback contracts.
 
-For example, `STOD` gains `INOUT` for `Y` and `IWM`. Its overlapping real
-workspace views and callback parameters remain unresolved. The manifest
+This first supplemental pass added `INOUT` for `STOD` arguments `Y` and `IWM`,
+leaving workspace views and callback parameters for the ODE review below. The manifest
 `tools/additional-intents.json` records evidence for each addition and a reason
-for each of the 556 remaining data arguments.
+for each of the 497 remaining data arguments.
 
 Generate a draft from the source before this supplemental pass:
 
@@ -128,6 +128,71 @@ analysis, and checks compiler-confirmed intents. Only the reviewed dummy intent
 attributes may change; all other symbols and executable compiler trees must
 agree. The maintained sources and generated explicit interfaces include the
 additional annotations.
+
+## ODE workspace and callback review
+
+`tools/ode_intents.py` adds 26 `IN` and 33 `INOUT` annotations across eleven
+ODE procedures and helpers. All data arguments of `SFODE`, `SFODE1`, `STFODE`,
+`LSOD1`, `HSTART`, `INTYD`, `STOD`, `PJAC`, `SLVS`, `VNORM`, and `VNWRMS` now
+have intents. Procedure callbacks are excluded from data-argument counts.
+
+For `STOD`, `NEQ`, `NYH`, and `EWT` are `IN`; `Y`, `YH`, `YH1`, `SAVF`,
+`ACOR`, `WM`, `IWM`, `RPAR`, and `IPAR` are `INOUT`.
+
+The analyzer now supports repeated actual arguments when every corresponding
+formal argument is proved read-only, and can use existing reviewed input
+contracts without propagating workspace warnings into them. It also recognizes
+a function's own result as data when used in an expression, such as
+`VNORM = MAX(VNORM, ABS(V(K)))`.
+
+The ODE pass uses the existing `parameter_ode` callback contract in
+`tools/callback_interfaces.py`: time and solution are inputs, the derivative
+is an output, and `RPAR` and `IPAR` are read/write parameters. Callback writes
+propagate through known library calls. The Jacobian exceptions keep their
+existing treatment; no new Jacobian interface is inferred.
+
+The following workspace layout was reviewed manually. Let `n = NEQ > 0` and
+`q = ILRW`, where `q = n` for dense matrices or `2*ML + MU + 1` for banded
+matrices. `STFODE` checks the workspace allocation before calling `LSOD1`.
+Its integer workspace is a separate array.
+
+| Real workspace view | First element of `RWORK` | Length |
+|---|---:|---:|
+| `TSTOP` | 1 | 1 |
+| `TOLFAC` | 12 | 1 |
+| `YPOUT` | 21 | n |
+| `YH` and `YH1` | 240 + n | 6*n, intentionally the same storage |
+| `EWT` | 240 + 7*n | n |
+| `SAVF` | 240 + 8*n | n |
+| `ACOR` | 240 + 9*n | n |
+| `WM` | 240 + 10*n | 2 + q*n |
+| `DELSGN` | 242 + (10 + q)*n | 1 |
+
+`LSOD1` fixes the maximum order at five, so six history columns suffice.
+`HSTART` receives distinct history columns 2 through 6 as its derivative and
+work arrays. `STOD` forwards `ACOR` as `PJAC`'s `FTEM`; the saved derivative,
+weights, and matrix workspace occupy separate regions. `INTYD` writes a
+separate solution or derivative output. The norm functions only read their
+vectors; `SLVS` does not use `TEM` in this implementation. The overlapping
+`YH` and `YH1` views both retain their incoming values and receive `INOUT`.
+
+These reviews are recorded in `tools/ode-intent-contracts.json` and bound to
+the complete input source and callback-contract hashes. Each permitted
+workspace exception specifies its expected intent. The analyzer must still
+prove reads or writes and records the exception alongside its evidence.
+This is a reusable reviewed exception mechanism, not a general symbolic
+workspace-range solver. The historical conservative pass remains reproducible.
+
+```sh
+python tools/ode_intents.py before-ode.f --report draft-ode.json --output candidate.f
+python tools/validate_ode_intents.py
+```
+
+The validator reconstructs the reviewed source, repeats inference, and checks
+that only the intended compiler dummy attributes change. Tests cover read-only
+and writable aliases, callback write propagation, stale review rejection, and
+function results. The numerical ODE test checks that nonzero incoming `RPAR`
+and `IPAR` values survive and that callback updates are returned.
 
 ## Reproduction
 

@@ -1,6 +1,6 @@
 {
-  "input_sha256": "d46a5eb31dcd7b841b38748aef659878285bd763c025e242668ed301e5988689",
-  "output_sha256": "0225849c094be2f7d98eb4669010f26966036cf60fdfa7a7fd0d76e68fdd7dec",
+  "input_sha256": "cb8c731550e81aea3a5cf949c72220261d01002465d049ef5171f02f30d641f2",
+  "output_sha256": "924beeaf5d80c7b7aea817bb5c5e8f584b6e2bb2aadc3ff184358761026fda6d",
   "declarations": [
     {
       "procedure": "ROT3",

@@ -6754,20 +6754,20 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEQ
       PROCEDURE(nswc_cb_parameter_ode) :: F
-      REAL :: A
+      REAL, INTENT(IN) :: A
       REAL, INTENT(IN) :: B
-      REAL :: Y(NEQ)
-      REAL :: YPRIME(NEQ)
-      REAL :: ETOL(NEQ)
+      REAL, INTENT(IN) :: Y(NEQ)
+      REAL, INTENT(IN) :: YPRIME(NEQ)
+      REAL, INTENT(IN) :: ETOL(NEQ)
       INTEGER, INTENT(IN) :: MORDER
       REAL, INTENT(IN) :: SMALL
       REAL, INTENT(IN) :: BIG
       REAL, INTENT(INOUT) :: SPY(NEQ)
       REAL, INTENT(INOUT) :: PV(NEQ)
       REAL, INTENT(INOUT) :: YP(NEQ)
-      REAL :: SF(NEQ)
-      REAL :: RPAR(*)
-      INTEGER :: IPAR(*)
+      REAL, INTENT(INOUT) :: SF(NEQ)
+      REAL, INTENT(INOUT) :: RPAR(*)
+      INTEGER, INTENT(INOUT) :: IPAR(*)
       REAL, INTENT(INOUT) :: H
     END SUBROUTINE HSTART
     SUBROUTINE HTRP(N,X,Y,A,T,IERR)
@@ -7034,8 +7034,8 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: NYH
       REAL, INTENT(IN) :: T
       INTEGER, INTENT(IN) :: K
-      REAL :: YH(NYH,*)
-      REAL :: DKY(*)
+      REAL, INTENT(IN) :: YH(NYH,*)
+      REAL, INTENT(INOUT) :: DKY(*)
       INTEGER, INTENT(INOUT) :: IFLAG
     END SUBROUTINE INTYD
     PURE SUBROUTINE IORDER(A,IP,N)
@@ -7621,29 +7621,29 @@ module nswc_interfaces
       &EWT,SAVF,ACOR,WM,IWM,JAC,INTOUT,TSTOP,TOLFAC,DELSGN,RPAR,IPAR)
       IMPORT :: nswc_cb_parameter_ode
       IMPLICIT NONE
-      INTEGER :: NEQ
+      INTEGER, INTENT(IN) :: NEQ
       PROCEDURE(nswc_cb_parameter_ode) :: F
       REAL, INTENT(INOUT) :: T
       REAL, INTENT(INOUT) :: Y(NEQ)
-      REAL :: TOUT
+      REAL, INTENT(IN) :: TOUT
       REAL, INTENT(INOUT) :: RTOL(*)
       REAL, INTENT(INOUT) :: ATOL(*)
       INTEGER, INTENT(INOUT) :: IDID
-      REAL :: YPOUT(NEQ)
-      REAL :: YH(NEQ,*)
-      REAL :: YH1(*)
-      REAL :: EWT(NEQ)
-      REAL :: SAVF(NEQ)
-      REAL :: ACOR(NEQ)
-      REAL :: WM(*)
+      REAL, INTENT(INOUT) :: YPOUT(NEQ)
+      REAL, INTENT(INOUT) :: YH(NEQ,*)
+      REAL, INTENT(INOUT) :: YH1(*)
+      REAL, INTENT(INOUT) :: EWT(NEQ)
+      REAL, INTENT(INOUT) :: SAVF(NEQ)
+      REAL, INTENT(INOUT) :: ACOR(NEQ)
+      REAL, INTENT(INOUT) :: WM(*)
       INTEGER, INTENT(INOUT) :: IWM(*)
       EXTERNAL JAC
       LOGICAL, INTENT(INOUT) :: INTOUT
-      REAL :: TSTOP
-      REAL :: TOLFAC
-      REAL :: DELSGN
-      REAL :: RPAR(*)
-      INTEGER :: IPAR(*)
+      REAL, INTENT(IN) :: TSTOP
+      REAL, INTENT(INOUT) :: TOLFAC
+      REAL, INTENT(INOUT) :: DELSGN
+      REAL, INTENT(INOUT) :: RPAR(*)
+      INTEGER, INTENT(INOUT) :: IPAR(*)
     END SUBROUTINE LSOD1
     SUBROUTINE LSQR(IND,A,MDA,M,N,B,MDB,NB,RE,AE,KRANK,KSURE,   &
       &RNORM,WORK,LW,IWORK,LIW,IERR)
@@ -8652,19 +8652,19 @@ module nswc_interfaces
       &,IPAR)
       IMPORT :: nswc_cb_parameter_ode
       IMPLICIT NONE
-      INTEGER :: NYH
-      INTEGER :: NEQ
+      INTEGER, INTENT(IN) :: NYH
+      INTEGER, INTENT(IN) :: NEQ
       REAL, INTENT(INOUT) :: Y(*)
-      REAL :: YH(NYH,*)
-      REAL :: EWT(*)
-      REAL :: FTEM(*)
-      REAL :: SAVF(*)
-      REAL :: WM(*)
+      REAL, INTENT(IN) :: YH(NYH,*)
+      REAL, INTENT(IN) :: EWT(*)
+      REAL, INTENT(INOUT) :: FTEM(*)
+      REAL, INTENT(IN) :: SAVF(*)
+      REAL, INTENT(INOUT) :: WM(*)
       INTEGER, INTENT(INOUT) :: IWM(*)
       PROCEDURE(nswc_cb_parameter_ode) :: F
       EXTERNAL JAC
-      REAL :: RPAR(*)
-      INTEGER :: IPAR(*)
+      REAL, INTENT(INOUT) :: RPAR(*)
+      INTEGER, INTENT(INOUT) :: IPAR(*)
     END SUBROUTINE PJAC
     PURE ELEMENTAL SUBROUTINE PKILL(R0,SX,SY,H,K,P)
       IMPLICIT NONE
@@ -10410,19 +10410,19 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LIW
       INTEGER, INTENT(IN) :: LRW
-      INTEGER :: NEQ
+      INTEGER, INTENT(IN) :: NEQ
       PROCEDURE(nswc_cb_parameter_ode) :: F
       REAL, INTENT(INOUT) :: Y(NEQ)
       REAL, INTENT(INOUT) :: T
-      REAL :: TOUT
+      REAL, INTENT(IN) :: TOUT
       INTEGER, INTENT(INOUT) :: INFO(*)
       REAL, INTENT(INOUT) :: RERR
       REAL, INTENT(INOUT) :: AERR
       INTEGER, INTENT(INOUT) :: IDID
       REAL, INTENT(INOUT) :: RWORK(LRW)
       INTEGER, INTENT(INOUT) :: IWORK(LIW)
-      REAL :: RPAR(*)
-      INTEGER :: IPAR(*)
+      REAL, INTENT(INOUT) :: RPAR(*)
+      INTEGER, INTENT(INOUT) :: IPAR(*)
     END SUBROUTINE SFODE
     SUBROUTINE SFODE1(F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID,RWORK, &
       &LRW,IWORK,LIW,RPAR,IPAR)
@@ -10430,19 +10430,19 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LIW
       INTEGER, INTENT(IN) :: LRW
-      INTEGER :: NEQ
+      INTEGER, INTENT(IN) :: NEQ
       PROCEDURE(nswc_cb_parameter_ode) :: F
       REAL, INTENT(INOUT) :: Y(NEQ)
       REAL, INTENT(INOUT) :: T
-      REAL :: TOUT
+      REAL, INTENT(IN) :: TOUT
       INTEGER, INTENT(INOUT) :: INFO(*)
       REAL, INTENT(INOUT) :: RTOL(NEQ)
       REAL, INTENT(INOUT) :: ATOL(NEQ)
       INTEGER, INTENT(INOUT) :: IDID
       REAL, INTENT(INOUT) :: RWORK(LRW)
       INTEGER, INTENT(INOUT) :: IWORK(LIW)
-      REAL :: RPAR(*)
-      INTEGER :: IPAR(*)
+      REAL, INTENT(INOUT) :: RPAR(*)
+      INTEGER, INTENT(INOUT) :: IPAR(*)
     END SUBROUTINE SFODE1
     SUBROUTINE SFVAL(N,X,Y,Z,M,XI,YI,ZI,IADJ,IEND,ZXZY,IERR)
       IMPLICIT NONE
@@ -10669,10 +10669,10 @@ module nswc_interfaces
     END SUBROUTINE SLVMP
     SUBROUTINE SLVS(WM,IWM,X,TEM)
       IMPLICIT NONE
-      REAL :: WM(*)
+      REAL, INTENT(INOUT) :: WM(*)
       INTEGER, INTENT(IN) :: IWM(*)
       REAL, INTENT(INOUT) :: X(*)
-      REAL :: TEM(*)
+      REAL, INTENT(IN) :: TEM(*)
     END SUBROUTINE SLVS
     PURE SUBROUTINE SMADD(N,A,B,C)
       IMPLICIT NONE
@@ -11288,19 +11288,19 @@ module nswc_interfaces
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LIW
       INTEGER, INTENT(IN) :: LRW
-      INTEGER :: NEQ
+      INTEGER, INTENT(IN) :: NEQ
       PROCEDURE(nswc_cb_parameter_ode) :: F
       REAL, INTENT(INOUT) :: Y(NEQ)
       REAL, INTENT(INOUT) :: T
-      REAL :: TOUT
+      REAL, INTENT(IN) :: TOUT
       INTEGER, INTENT(INOUT) :: INFO(*)
       REAL, INTENT(INOUT) :: RTOL(*)
       REAL, INTENT(INOUT) :: ATOL(*)
       INTEGER, INTENT(INOUT) :: IDID
       REAL, INTENT(INOUT) :: RWORK(LRW)
       INTEGER, INTENT(INOUT) :: IWORK(LIW)
-      REAL :: RPAR(*)
-      INTEGER :: IPAR(*)
+      REAL, INTENT(INOUT) :: RPAR(*)
+      INTEGER, INTENT(INOUT) :: IPAR(*)
       EXTERNAL JAC
     END SUBROUTINE STFODE
     SUBROUTINE STLSQ(M,N,TA,ITA,JTA,DAMP,U,X,ATOL,BTOL,CONLIM,  &
@@ -11329,20 +11329,20 @@ module nswc_interfaces
       &RPAR,IPAR)
       IMPORT :: nswc_cb_parameter_ode
       IMPLICIT NONE
-      INTEGER :: NYH
-      INTEGER :: NEQ
+      INTEGER, INTENT(IN) :: NYH
+      INTEGER, INTENT(IN) :: NEQ
       REAL, INTENT(INOUT) :: Y(*)
-      REAL :: YH(NYH,*)
-      REAL :: YH1(*)
-      REAL :: EWT(*)
-      REAL :: SAVF(*)
-      REAL :: ACOR(*)
-      REAL :: WM(*)
+      REAL, INTENT(INOUT) :: YH(NYH,*)
+      REAL, INTENT(INOUT) :: YH1(*)
+      REAL, INTENT(IN) :: EWT(*)
+      REAL, INTENT(INOUT) :: SAVF(*)
+      REAL, INTENT(INOUT) :: ACOR(*)
+      REAL, INTENT(INOUT) :: WM(*)
       INTEGER, INTENT(INOUT) :: IWM(*)
       PROCEDURE(nswc_cb_parameter_ode) :: F
       EXTERNAL JAC
-      REAL :: RPAR(*)
-      INTEGER :: IPAR(*)
+      REAL, INTENT(INOUT) :: RPAR(*)
+      INTEGER, INTENT(INOUT) :: IPAR(*)
     END SUBROUTINE STOD
     SUBROUTINE STORE2(A,B)
       IMPLICIT NONE
@@ -11787,14 +11787,14 @@ module nswc_interfaces
     FUNCTION VNORM(V,NCOMP)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCOMP
-      REAL :: V(NCOMP)
+      REAL, INTENT(IN) :: V(NCOMP)
       REAL :: VNORM
     END FUNCTION VNORM
     FUNCTION VNWRMS(N,V,W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      REAL :: V(N)
-      REAL :: W(N)
+      REAL, INTENT(IN) :: V(N)
+      REAL, INTENT(IN) :: W(N)
       REAL :: VNWRMS
     END FUNCTION VNWRMS
     PURE SUBROUTINE VRSHFT(L3,ZR,ZI,CONV,NN,PR,PI,HR,HI,QPR,QPI,&

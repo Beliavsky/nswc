@@ -9,15 +9,15 @@ from validate_explicit_typing import symbols
 ROOT=Path(__file__).resolve().parents[1]
 
 
-def verify(before, after, manifest, compiler='gfortran'):
-    if transform(before,manifest)!=after or transform(after,manifest)!=after:
+def verify(before, after, manifest, compiler='gfortran', analyzer=analyze, transformer=transform):
+    if transformer(before,manifest)!=after or transformer(after,manifest)!=after:
         raise ValueError('Additional intent transformation does not reproduce')
     with tempfile.TemporaryDirectory(prefix='nswc-intent-proof-') as folder:
         old=compile_dump(before.decode('ascii'),folder,compiler,fixed=True)
         new=compile_dump(after.decode('ascii'),folder,compiler,fixed=True)
     old_records=symbols(old[0],include_intrinsics=True)
     new_records=symbols(new[0],include_intrinsics=True)
-    report=analyze(before,old_records)
+    report=analyzer(before,old_records)
     if report!={k:v for k,v in manifest.items() if k!='output_sha256'}:
         raise ValueError('Intent evidence does not reproduce')
     for p,args in manifest['procedures'].items():
@@ -37,6 +37,10 @@ def main():
     from validate_declaration_sections import historical_input
     from declaration_sections import transform as sections
     before=sections(historical_input())
-    verify(before,(ROOT/'nswc.f').read_bytes(),json.loads(MANIFEST.read_text()))
+    after=transform(before)
+    from ode_intents import transform as ode_intents
+    if ode_intents(after)!=(ROOT/'nswc.f').read_bytes():
+        raise ValueError('Maintained source differs from the ODE refinement')
+    verify(before,after,json.loads(MANIFEST.read_text()))
 
 if __name__=='__main__':main()

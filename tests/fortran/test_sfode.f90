@@ -33,6 +33,7 @@ program test_sfode
    call sfode(rhs,n,y,t,1.0,info,rerr,aerr,idid,rwork,lrw,iwork,liw,rpar,ipar)
    if (idid/=2 .and. idid/=3) error stop 'legacy sfode status'
    if (abs(y(1)-cos(1.0))>3.0e-3) error stop 'legacy sfode solution'
+   call check_callback_state()
 
    call init_common()
    rtol=1.0e-4
@@ -40,6 +41,7 @@ program test_sfode
    call sfode1(rhs,n,y,t,1.0,info,rtol,atol,idid,rwork,lrw,iwork,liw,rpar,ipar)
    if (idid/=2 .and. idid/=3) error stop 'legacy sfode1 status'
    if (abs(y(1)-cos(1.0))>3.0e-3) error stop 'legacy sfode1 solution'
+   call check_callback_state()
 
    print '(a,3es24.15)', 'Stiff ODE diagnostics: ',t,y(1),y(1)-cos(t)
    print '(a)', 'test_sfode: PASS'
@@ -52,9 +54,14 @@ contains
       rwork=0.0
       iwork=0
       info=0
-      rpar=0.0
-      ipar=0
+      rpar=17.0
+      ipar=23
    end subroutine init_common
+
+   subroutine check_callback_state()
+      if (ipar(1)<=23) error stop 'ODE callback updates not returned'
+      if (rpar(1)-17.0/=real(ipar(1)-23)) error stop 'ODE callback state not preserved'
+   end subroutine check_callback_state
 
    subroutine rhs(x,u,up,rp,ip)
       real, intent(in) :: x
@@ -63,8 +70,8 @@ contains
       real, intent(inout) :: rp(*)
       integer, intent(inout) :: ip(*)
       up(1)=-1000.0*(u(1)-cos(x))-sin(x)
-      rp(1)=rp(1)+0.0
-      ip(1)=ip(1)+0
+      rp(1)=rp(1)+1.0
+      ip(1)=ip(1)+1
    end subroutine rhs
 
 end program test_sfode

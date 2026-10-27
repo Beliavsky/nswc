@@ -40,7 +40,7 @@ def main():
     before=generics(branches(spacing(exits(comments(labels(baseline()))))))
     report={}; after=transform(before,report)
     from declaration_sections import transform as sections
-    from additional_intents import transform as intents
+    from ode_intents import finish as intents
     if report!=json.loads(MANIFEST.read_text()) or intents(sections(after))!=(ROOT/'nswc.f').read_bytes():
         raise ValueError('Copy cleanup does not reproduce')
     if transform(after)!=after: raise ValueError('Cleanup is not idempotent')

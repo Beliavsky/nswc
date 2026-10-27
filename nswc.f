@@ -99124,16 +99124,16 @@ C     INTERVAL MODE
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IDID
       INTEGER, INTENT(IN) :: LIW, LRW
-      INTEGER :: NEQ
+      INTEGER, INTENT(IN) :: NEQ
       REAL, INTENT(INOUT) :: AERR, RERR, T
-      REAL :: TOUT
+      REAL, INTENT(IN) :: TOUT
       EXTERNAL F
       REAL, INTENT(INOUT) :: Y(NEQ)
       REAL, INTENT(INOUT) :: RWORK(LRW)
-      REAL :: RPAR(*)
+      REAL, INTENT(INOUT) :: RPAR(*)
       INTEGER, INTENT(INOUT) :: INFO(*)
       INTEGER, INTENT(INOUT) :: IWORK(LIW)
-      INTEGER :: IPAR(*)
+      INTEGER, INTENT(INOUT) :: IPAR(*)
 C     beginning of local variable declarations
       EXTERNAL ZZZJAC
       REAL :: RTOL(1), ATOL(1)
@@ -99160,15 +99160,15 @@ C     --------------
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IDID
       INTEGER, INTENT(IN) :: LIW, LRW
-      INTEGER :: NEQ
+      INTEGER, INTENT(IN) :: NEQ
       REAL, INTENT(INOUT) :: T
-      REAL :: TOUT
+      REAL, INTENT(IN) :: TOUT
       EXTERNAL F
       REAL, INTENT(INOUT) :: Y(NEQ), RTOL(NEQ), ATOL(NEQ), RWORK(LRW)
-      REAL :: RPAR(*)
+      REAL, INTENT(INOUT) :: RPAR(*)
       INTEGER, INTENT(INOUT) :: INFO(*)
       INTEGER, INTENT(INOUT) :: IWORK(LIW)
-      INTEGER :: IPAR(*)
+      INTEGER, INTENT(INOUT) :: IPAR(*)
 C     beginning of local variable declarations
       EXTERNAL ZZZJAC
       INTEGER :: INFO1(15)
@@ -99203,14 +99203,14 @@ C     -------------
      1                   RWORK,LRW,IWORK,LIW,RPAR,IPAR,JAC)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IDID, INFO(*)
-      INTEGER :: IPAR(*)
+      INTEGER, INTENT(INOUT) :: IPAR(*)
       INTEGER, INTENT(INOUT) :: IWORK
       INTEGER, INTENT(IN) :: LIW, LRW
-      INTEGER :: NEQ
+      INTEGER, INTENT(IN) :: NEQ
       REAL, INTENT(INOUT) :: ATOL(*)
-      REAL :: RPAR(*)
+      REAL, INTENT(INOUT) :: RPAR(*)
       REAL, INTENT(INOUT) :: RTOL(*), RWORK(LRW), T
-      REAL :: TOUT
+      REAL, INTENT(IN) :: TOUT
       REAL, INTENT(INOUT) :: Y(NEQ)
       EXTERNAL F, JAC
       DIMENSION IWORK(LIW)
@@ -99902,18 +99902,20 @@ C----------------------- END OF SUBROUTINE SVCO -----------------------
      2                TSTOP,TOLFAC,DELSGN,RPAR,IPAR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IDID
-      INTEGER :: IPAR(*)
+      INTEGER, INTENT(INOUT) :: IPAR(*)
       INTEGER, INTENT(INOUT) :: IWM(*)
-      INTEGER :: NEQ
-      REAL :: ACOR(NEQ)
+      INTEGER, INTENT(IN) :: NEQ
+      REAL, INTENT(INOUT) :: ACOR(NEQ)
       REAL, INTENT(INOUT) :: ATOL(*)
-      REAL :: DELSGN, EWT(NEQ), RPAR(*)
+      REAL, INTENT(INOUT) :: DELSGN, EWT(NEQ), RPAR(*)
       REAL, INTENT(INOUT) :: RTOL(*)
-      REAL :: SAVF(NEQ)
+      REAL, INTENT(INOUT) :: SAVF(NEQ)
       REAL, INTENT(INOUT) :: T
-      REAL :: TOLFAC, TOUT, TSTOP, WM(*)
+      REAL, INTENT(INOUT) :: TOLFAC
+      REAL, INTENT(IN) :: TOUT, TSTOP
+      REAL, INTENT(INOUT) :: WM(*)
       REAL, INTENT(INOUT) :: Y(NEQ)
-      REAL :: YH(NEQ,*), YH1(*), YPOUT(NEQ)
+      REAL, INTENT(INOUT) :: YH(NEQ,*), YH1(*), YPOUT(NEQ)
       LOGICAL, INTENT(INOUT) :: INTOUT
       EXTERNAL F, JAC
 C     beginning of local variable declarations
@@ -100168,18 +100170,18 @@ C                       STORE VALUES BEFORE RETURNING TO STFODE
       SUBROUTINE HSTART(F,NEQ,A,B,Y,YPRIME,ETOL,MORDER,SMALL,BIG,
      1                                    SPY,PV,YP,SF,RPAR,IPAR,H)
       IMPLICIT NONE
-      INTEGER :: IPAR(*)
+      INTEGER, INTENT(INOUT) :: IPAR(*)
       INTEGER, INTENT(IN) :: MORDER, NEQ
-      REAL :: A
+      REAL, INTENT(IN) :: A
       REAL, INTENT(IN) :: B, BIG
-      REAL :: ETOL(NEQ)
+      REAL, INTENT(IN) :: ETOL(NEQ)
       REAL, INTENT(INOUT) :: H, PV(NEQ)
-      REAL :: RPAR(*), SF(NEQ)
+      REAL, INTENT(INOUT) :: RPAR(*), SF(NEQ)
       REAL, INTENT(IN) :: SMALL
       REAL, INTENT(INOUT) :: SPY(NEQ)
-      REAL :: Y(NEQ)
+      REAL, INTENT(IN) :: Y(NEQ)
       REAL, INTENT(INOUT) :: YP(NEQ)
-      REAL :: YPRIME(NEQ)
+      REAL, INTENT(IN) :: YPRIME(NEQ)
       EXTERNAL F
 C     beginning of local variable declarations
       INTEGER :: J, K, LK
@@ -100457,7 +100459,8 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: K, NYH
       INTEGER, INTENT(INOUT) :: IFLAG
       REAL, INTENT(IN) :: T
-      REAL :: YH(NYH,*), DKY(*)
+      REAL, INTENT(IN) :: YH(NYH,*)
+      REAL, INTENT(INOUT) :: DKY(*)
 C     beginning of local variable declarations
       INTEGER :: I, IC, IER, IOWND, IOWNS, J, JB, JB2, JJ, JJ1, JP1,
      &JSTART, KFLAG, L, MAXORD, METH, MITER, N, NFE, NJE, NQ, NQU, NST
@@ -100513,13 +100516,15 @@ C----------------------- END OF SUBROUTINE INTYD -----------------------
       SUBROUTINE STOD(NEQ, Y, YH, NYH, YH1, EWT, SAVF, ACOR,
      1   WM, IWM, F, JAC, RPAR, IPAR)
       IMPLICIT NONE
-      INTEGER :: IPAR(*)
-      REAL :: RPAR(*)
+      INTEGER, INTENT(INOUT) :: IPAR(*)
+      REAL, INTENT(INOUT) :: RPAR(*)
       EXTERNAL F, JAC
-      INTEGER :: NEQ, NYH
+      INTEGER, INTENT(IN) :: NEQ, NYH
       INTEGER, INTENT(INOUT) :: IWM(*)
       REAL, INTENT(INOUT) :: Y(*)
-      REAL :: YH(NYH,*), YH1(*), EWT(*), SAVF(*), ACOR(*), WM(*)
+      REAL, INTENT(INOUT) :: YH(NYH,*), YH1(*)
+      REAL, INTENT(IN) :: EWT(*)
+      REAL, INTENT(INOUT) :: SAVF(*), ACOR(*), WM(*)
 C     beginning of local variable declarations
       INTEGER :: IPNYH
       INTEGER :: IOD, KSTEPS
@@ -101105,13 +101110,16 @@ C----------------------- END OF SUBROUTINE CFOD  -----------------------
       SUBROUTINE PJAC(NEQ, Y, YH, NYH, EWT, FTEM, SAVF, WM, IWM,
      1   F, JAC, RPAR, IPAR)
       IMPLICIT NONE
-      INTEGER :: IPAR(*)
-      REAL :: RPAR(*)
-      INTEGER :: NEQ, NYH
+      INTEGER, INTENT(INOUT) :: IPAR(*)
+      REAL, INTENT(INOUT) :: RPAR(*)
+      INTEGER, INTENT(IN) :: NEQ, NYH
       INTEGER, INTENT(INOUT) :: IWM(*)
       EXTERNAL F, JAC
       REAL, INTENT(INOUT) :: Y(*)
-      REAL :: YH(NYH,*), EWT(*), FTEM(*), SAVF(*), WM(*)
+      REAL, INTENT(IN) :: YH(NYH,*), EWT(*)
+      REAL, INTENT(INOUT) :: FTEM(*)
+      REAL, INTENT(IN) :: SAVF(*)
+      REAL, INTENT(INOUT) :: WM(*)
 C     beginning of local variable declarations
       INTEGER :: I, I1, I2, IER, II, IOWND, IOWNS, J, J1, JJ, JSTART,
      &KFLAG, L, LENP, MAXORD, MBA, MBAND, MEB1, MEBAND, METH, MITER, ML,
@@ -101284,9 +101292,9 @@ C   SLVS SOLVES THE LINEAR SYSTEM IN THE ITERATION SCHEME FOR THE
 C   INTEGRATOR PACKAGE SFODE.
 C***ROUTINES CALLED  SGESL,SGBSL
       INTEGER, INTENT(IN) :: IWM(*)
-      REAL :: WM(*)
+      REAL, INTENT(INOUT) :: WM(*)
       REAL, INTENT(INOUT) :: X(*)
-      REAL :: TEM(*)
+      REAL, INTENT(IN) :: TEM(*)
 C     beginning of local variable declarations
       INTEGER :: I, IER, IOWND, IOWNS, JSTART, KFLAG, L, MAXORD, MEBAND,
      &METH, MITER, ML, MU, N, NFE, NJE, NQ, NQU, NST
@@ -101598,7 +101606,7 @@ C        NOW SOLVE TRANS(L)*X = Y
       FUNCTION VNORM(V,NCOMP)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCOMP
-      REAL :: V(NCOMP)
+      REAL, INTENT(IN) :: V(NCOMP)
       REAL :: VNORM
 C     beginning of local variable declarations
       INTEGER :: K
@@ -101619,7 +101627,7 @@ C CONTAINED IN THE ARRAY W OF LENGTH N..
 C   VNWRMS = SQRT( (1/N) * SUM( V(I)/W(I) )**2 )
 C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: N
-      REAL :: V(N), W(N)
+      REAL, INTENT(IN) :: V(N), W(N)
 C     beginning of local variable declarations
       INTEGER :: I
       REAL :: SUM

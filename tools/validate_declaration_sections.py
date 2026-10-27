@@ -36,7 +36,7 @@ def historical_input():
 
 def main():
     before=historical_input();report={};after=transform(before,report)
-    from additional_intents import transform as intents
+    from ode_intents import finish as intents
     if report!=json.loads(MANIFEST.read_text()) or intents(after)!=(ROOT/'nswc.f').read_bytes():
         raise ValueError('Declaration sections or review do not reproduce')
     verify(before,after)
