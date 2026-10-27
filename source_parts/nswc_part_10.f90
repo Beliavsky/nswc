@@ -3016,10 +3016,11 @@ real, intent(inout) :: c(*)
 !     permitted by the Fortran being used, then the user may use the
 !     SUBROUTINE fft1.
 !-----------------------------------------------------------------------
-if (abs(isn) /= 1) go to 10
-call sfft(c(1),c(2),n,n,n,isn + isn,ierr)
-return
-10 ierr = 4
+if (abs(isn) /= 1) then
+   ierr = 4
+else
+   call sfft(c(1),c(2),n,n,n,isn + isn,ierr)
+end if
 end subroutine fft
 
 subroutine fft1(a,b,n,isn,ierr)
@@ -3035,10 +3036,11 @@ integer, intent(inout) :: ierr
 integer :: isn, n
 real, intent(inout) :: a(n), b(n)
 !     ------------
-if (abs(isn) /= 1) go to 10
-call sfft(a,b,n,n,n,isn,ierr)
-return
-10 ierr = 4
+if (abs(isn) /= 1) then
+   ierr = 4
+else
+   call sfft(a,b,n,n,n,isn,ierr)
+end if
 end subroutine fft1
 
 subroutine mfft(c,n,ndim,isn,ierr)

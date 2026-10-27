@@ -3866,16 +3866,17 @@ real(nswc_sp) :: d, t
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL u + I*v = 1/(x + I*y)
 !-----------------------------------------------------------------------
-if (abs(x) > abs(y)) go to 10
-t = x/y
-d = y + t*x
-u = t/d
-v = -1.0/d
-return
-10 t = y/x
-d = x + t*y
-u = 1.0/d
-v = -t/d
+if (abs(x) > abs(y)) then
+   t = y/x
+   d = x + t*y
+   u = 1.0/d
+   v = -t/d
+else
+   t = x/y
+   d = y + t*x
+   u = t/d
+   v = -1.0/d
+end if
 end subroutine crec
 
 pure elemental subroutine dcrec(x, y, u, v)
@@ -3899,16 +3900,17 @@ real(nswc_dp), intent(in) :: x, y
 real(nswc_dp), intent(inout) :: u, v
 !     beginning of local variable declarations
 real(nswc_dp) :: d, t
-if (abs(x) > abs(y)) go to 10
-t = x/y
-d = y + t*x
-u = t/d
-v = -1.d0/d
-return
-10 t = y/x
-d = x + t*y
-u = 1.d0/d
-v = -t/d
+if (abs(x) > abs(y)) then
+   t = y/x
+   d = x + t*y
+   u = 1.d0/d
+   v = -t/d
+else
+   t = x/y
+   d = y + t*x
+   u = t/d
+   v = -1.d0/d
+end if
 end subroutine dcrec
 
 pure elemental complex(nswc_sp) function cdiv(a, b)
@@ -3935,18 +3937,19 @@ ar = real(a)
 ai = aimag(a)
 br = real(b)
 bi = aimag(b)
-if (abs(br) < abs(bi)) go to 10
-t = bi/br
-d = br + t*bi
-u = (ar + ai*t)/d
-v = (ai - ar*t)/d
-cdiv = cmplx(u,v)
-return
-10 t = br/bi
-d = bi + t*br
-u = (ar*t + ai)/d
-v = (ai*t - ar)/d
-cdiv = cmplx(u,v)
+if (abs(br) < abs(bi)) then
+   t = br/bi
+   d = bi + t*br
+   u = (ar*t + ai)/d
+   v = (ai*t - ar)/d
+   cdiv = cmplx(u,v)
+else
+   t = bi/br
+   d = br + t*bi
+   u = (ar + ai*t)/d
+   v = (ai - ar*t)/d
+   cdiv = cmplx(u,v)
+end if
 end function cdiv
 
 pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)
@@ -12208,14 +12211,15 @@ real(nswc_dp), parameter :: w(163) = [.270805020110221007d+01, .2772588722239781
 !     -------------------
 !     w(J) = LN(J + 14) for each J
 !     -------------------
-if (x >= 178.0) go to 10
-n = x
-t = (x - n)/(x + n)
-t2 = t*t
-z = (((c1*t2 + c2)*t2 + c3)*t2 + 2.0)*t
-glog = w(n - 14) + z
-return
-10 glog = log(x)
+if (x >= 178.0) then
+   glog = log(x)
+else
+   n = x
+   t = (x - n)/(x + n)
+   t2 = t*t
+   z = (((c1*t2 + c2)*t2 + c3)*t2 + 2.0)*t
+   glog = w(n - 14) + z
+end if
 end function glog
 
 pure elemental real(nswc_sp) function gam1(a)
@@ -17724,10 +17728,11 @@ pure elemental real(nswc_sp) function blnd(a,b)
 !! <!-- nswc-ford:end -->
 implicit none
 real(nswc_sp), intent(in) :: a, b
-if (a > 20.0) go to 10
-blnd = (logam(a) - logam(a + b)) + logam(b + 1.0)
-return
-10 blnd = algdiv(b,a) + logam(b + 1.0)
+if (a > 20.0) then
+   blnd = algdiv(b,a) + logam(b + 1.0)
+else
+   blnd = (logam(a) - logam(a + b)) + logam(b + 1.0)
+end if
 end function blnd
 
 pure elemental real(nswc_sp) function logam(x)
@@ -17793,13 +17798,14 @@ real(nswc_sp), parameter :: w(200) = [.57236494292470e+00, 0.0, -.12078223763525
 !     ---------------------
 !     ---------------------
 !     ------------------------------------------------------------------
-if (x > 100.0) go to 10
-n = 2.0*x + 0.1
-logam = w(n)
-return
-10 t = (1.0/x)**2
-z = (((-0.75*t + 1.0)*t - 3.5)*t + 105.0)/(x*1260.0)
-logam = (d + z) + (x - 0.5)*(log(x) - 1.0)
+if (x > 100.0) then
+   t = (1.0/x)**2
+   z = (((-0.75*t + 1.0)*t - 3.5)*t + 105.0)/(x*1260.0)
+   logam = (d + z) + (x - 0.5)*(log(x) - 1.0)
+else
+   n = 2.0*x + 0.1
+   logam = w(n)
+end if
 end function logam
 
 subroutine cbsslj(z, cnu, w)
@@ -68236,14 +68242,15 @@ integer :: l
 !-----------------------------------------------------------------------
 !               Eigenvalues of symmetric real matrices
 !-----------------------------------------------------------------------
-if (ka == 0) go to 10
-call tred1(ka, n, a, w, t(n + 1), t(1))
-call tqlrat(n, w, t, ierr)
-return
-10 l = n*(n + 1)
-l = l/2
-call tred3(n, l, a, w, t(n + 1), t(1))
-call tqlrat(n, w, t, ierr)
+if (ka == 0) then
+   l = n*(n + 1)
+   l = l/2
+   call tred3(n, l, a, w, t(n + 1), t(1))
+   call tqlrat(n, w, t, ierr)
+else
+   call tred1(ka, n, a, w, t(n + 1), t(1))
+   call tqlrat(n, w, t, ierr)
+end if
 end subroutine seig
 
 pure subroutine seig1(a, ka, n, w, t, ierr)
@@ -68268,14 +68275,15 @@ integer :: l
 !-----------------------------------------------------------------------
 !               Eigenvalues of symmetric real matrices
 !-----------------------------------------------------------------------
-if (ka == 0) go to 10
-call tred1(ka, n, a, w, t, t)
-call imtql1(n, w, t, ierr)
-return
-10 l = n*(n + 1)
-l = l/2
-call tred3(n, l, a, w, t, t)
-call imtql1(n, w, t, ierr)
+if (ka == 0) then
+   l = n*(n + 1)
+   l = l/2
+   call tred3(n, l, a, w, t, t)
+   call imtql1(n, w, t, ierr)
+else
+   call tred1(ka, n, a, w, t, t)
+   call imtql1(n, w, t, ierr)
+end if
 end subroutine seig1
 
 pure subroutine seigv(a, ka, n, w, z, t, ierr)
@@ -69462,14 +69470,15 @@ integer :: l
 !                Double precision computation of the
 !               eigenvalues of symmetric real matrices
 !-----------------------------------------------------------------------
-if (ka == 0) go to 10
-call dtred1(ka, n, a, w, t(n + 1), t(1))
-call dtql(n, w, t, ierr)
-return
-10 l = n*(n + 1)
-l = l/2
-call dtred3(n, l, a, w, t(n + 1), t(1))
-call dtql(n, w, t, ierr)
+if (ka == 0) then
+   l = n*(n + 1)
+   l = l/2
+   call dtred3(n, l, a, w, t(n + 1), t(1))
+   call dtql(n, w, t, ierr)
+else
+   call dtred1(ka, n, a, w, t(n + 1), t(1))
+   call dtql(n, w, t, ierr)
+end if
 end subroutine dseig
 
 pure subroutine dseigv(a, ka, n, w, z, t, ierr)
@@ -93172,10 +93181,11 @@ real(nswc_sp), intent(inout) :: c(*)
 !     permitted by the Fortran being used, then the user may use the
 !     SUBROUTINE fft1.
 !-----------------------------------------------------------------------
-if (abs(isn) /= 1) go to 10
-call sfft(c(1),c(2),n,n,n,isn + isn,ierr)
-return
-10 ierr = 4
+if (abs(isn) /= 1) then
+   ierr = 4
+else
+   call sfft(c(1),c(2),n,n,n,isn + isn,ierr)
+end if
 end subroutine fft
 
 subroutine fft1(a,b,n,isn,ierr)
@@ -93191,10 +93201,11 @@ integer, intent(inout) :: ierr
 integer :: isn, n
 real(nswc_sp), intent(inout) :: a(n), b(n)
 !     ------------
-if (abs(isn) /= 1) go to 10
-call sfft(a,b,n,n,n,isn,ierr)
-return
-10 ierr = 4
+if (abs(isn) /= 1) then
+   ierr = 4
+else
+   call sfft(a,b,n,n,n,isn,ierr)
+end if
 end subroutine fft1
 
 subroutine mfft(c,n,ndim,isn,ierr)
@@ -102930,15 +102941,16 @@ real(nswc_sp) :: coshm, denom, sigdel, sinhm
 !   sigma and del are unaltered.
 ! This subroutine references package module snhcsh.
 !-----------------------------------------------------------
-if (sigma /= 0.) go to 1
-diag = del/3.
-sdiag = del/6.
-return
-1 sigdel = sigma*del
-call snhcsh(sinhm,coshm,sigdel,0)
-denom = del/((sinhm + sigdel)*sigdel*sigdel)
-diag = denom*(sigdel*coshm - sinhm)
-sdiag = denom*sinhm
+if (sigma /= 0.) then
+   sigdel = sigma*del
+   call snhcsh(sinhm,coshm,sigdel,0)
+   denom = del/((sinhm + sigdel)*sigdel*sigdel)
+   diag = denom*(sigdel*coshm - sinhm)
+   sdiag = denom*sinhm
+else
+   diag = del/3.
+   sdiag = del/6.
+end if
 end subroutine terms
 
 pure integer function intrvl(x, t, m)
@@ -123324,12 +123336,13 @@ real(nswc_sp) :: c
 !   IN iegs.
 averr = sqrt(elinsy*pastre)
 pastre = elinsy
-if (relrsd == 0.0) go to 1
-c = max(1.0,elinsy/relrsd)
-conew = sqrt(c*pastc)
-pastc = c
-return
-1 conew = cond
+if (relrsd == 0.0) then
+   conew = cond
+else
+   c = max(1.0,elinsy/relrsd)
+   conew = sqrt(c*pastc)
+   pastc = c
+end if
 end function conew
 
 pure subroutine wandt(wv,tv,n,a,b)

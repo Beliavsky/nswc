@@ -3564,16 +3564,17 @@ real :: d, t
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL u + I*v = 1/(x + I*y)
 !-----------------------------------------------------------------------
-if (abs(x) > abs(y)) go to 10
-t = x/y
-d = y + t*x
-u = t/d
-v = -1.0/d
-return
-10 t = y/x
-d = x + t*y
-u = 1.0/d
-v = -t/d
+if (abs(x) > abs(y)) then
+   t = y/x
+   d = x + t*y
+   u = 1.0/d
+   v = -t/d
+else
+   t = x/y
+   d = y + t*x
+   u = t/d
+   v = -1.0/d
+end if
 end subroutine crec
 
 pure elemental subroutine dcrec(x, y, u, v)
@@ -3597,16 +3598,17 @@ double precision, intent(in) :: x, y
 double precision, intent(inout) :: u, v
 !     beginning of local variable declarations
 double precision :: d, t
-if (abs(x) > abs(y)) go to 10
-t = x/y
-d = y + t*x
-u = t/d
-v = -1.d0/d
-return
-10 t = y/x
-d = x + t*y
-u = 1.d0/d
-v = -t/d
+if (abs(x) > abs(y)) then
+   t = y/x
+   d = x + t*y
+   u = 1.d0/d
+   v = -t/d
+else
+   t = x/y
+   d = y + t*x
+   u = t/d
+   v = -1.d0/d
+end if
 end subroutine dcrec
 
 pure elemental complex function cdiv(a, b)
@@ -3633,18 +3635,19 @@ ar = real(a)
 ai = aimag(a)
 br = real(b)
 bi = aimag(b)
-if (abs(br) < abs(bi)) go to 10
-t = bi/br
-d = br + t*bi
-u = (ar + ai*t)/d
-v = (ai - ar*t)/d
-cdiv = cmplx(u,v)
-return
-10 t = br/bi
-d = bi + t*br
-u = (ar*t + ai)/d
-v = (ai*t - ar)/d
-cdiv = cmplx(u,v)
+if (abs(br) < abs(bi)) then
+   t = br/bi
+   d = bi + t*br
+   u = (ar*t + ai)/d
+   v = (ai*t - ar)/d
+   cdiv = cmplx(u,v)
+else
+   t = bi/br
+   d = br + t*bi
+   u = (ar + ai*t)/d
+   v = (ai - ar*t)/d
+   cdiv = cmplx(u,v)
+end if
 end function cdiv
 
 pure elemental subroutine cdivid(ar,ai,br,bi,cr,ci)

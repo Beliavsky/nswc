@@ -39,7 +39,8 @@ def main():
     before=sections(historical_input())
     after=transform(before)
     from ode_intents import transform as ode_intents
-    if ode_intents(after)!=(ROOT/'nswc.f').read_bytes():
+    from structure_terminal_branches import transform_two_way
+    if transform_two_way(ode_intents(after))!=(ROOT/'nswc.f').read_bytes():
         raise ValueError('Maintained source differs from the ODE refinement')
     verify(before,after,json.loads(MANIFEST.read_text()))
 

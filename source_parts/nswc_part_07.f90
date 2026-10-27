@@ -8697,14 +8697,15 @@ integer :: l
 !-----------------------------------------------------------------------
 !               Eigenvalues of symmetric real matrices
 !-----------------------------------------------------------------------
-if (ka == 0) go to 10
-call tred1(ka, n, a, w, t(n + 1), t(1))
-call tqlrat(n, w, t, ierr)
-return
-10 l = n*(n + 1)
-l = l/2
-call tred3(n, l, a, w, t(n + 1), t(1))
-call tqlrat(n, w, t, ierr)
+if (ka == 0) then
+   l = n*(n + 1)
+   l = l/2
+   call tred3(n, l, a, w, t(n + 1), t(1))
+   call tqlrat(n, w, t, ierr)
+else
+   call tred1(ka, n, a, w, t(n + 1), t(1))
+   call tqlrat(n, w, t, ierr)
+end if
 end subroutine seig
 
 pure subroutine seig1(a, ka, n, w, t, ierr)
@@ -8756,14 +8757,15 @@ end interface
 !-----------------------------------------------------------------------
 !               Eigenvalues of symmetric real matrices
 !-----------------------------------------------------------------------
-if (ka == 0) go to 10
-call tred1(ka, n, a, w, t, t)
-call imtql1(n, w, t, ierr)
-return
-10 l = n*(n + 1)
-l = l/2
-call tred3(n, l, a, w, t, t)
-call imtql1(n, w, t, ierr)
+if (ka == 0) then
+   l = n*(n + 1)
+   l = l/2
+   call tred3(n, l, a, w, t, t)
+   call imtql1(n, w, t, ierr)
+else
+   call tred1(ka, n, a, w, t, t)
+   call imtql1(n, w, t, ierr)
+end if
 end subroutine seig1
 
 pure subroutine seigv(a, ka, n, w, z, t, ierr)
@@ -10018,14 +10020,15 @@ integer :: l
 !                Double precision computation of the
 !               eigenvalues of symmetric real matrices
 !-----------------------------------------------------------------------
-if (ka == 0) go to 10
-call dtred1(ka, n, a, w, t(n + 1), t(1))
-call dtql(n, w, t, ierr)
-return
-10 l = n*(n + 1)
-l = l/2
-call dtred3(n, l, a, w, t(n + 1), t(1))
-call dtql(n, w, t, ierr)
+if (ka == 0) then
+   l = n*(n + 1)
+   l = l/2
+   call dtred3(n, l, a, w, t(n + 1), t(1))
+   call dtql(n, w, t, ierr)
+else
+   call dtred1(ka, n, a, w, t(n + 1), t(1))
+   call dtql(n, w, t, ierr)
+end if
 end subroutine dseig
 
 pure subroutine dseigv(a, ka, n, w, z, t, ierr)

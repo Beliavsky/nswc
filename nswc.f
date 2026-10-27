@@ -2569,16 +2569,17 @@ C     beginning of local variable declarations
 C-----------------------------------------------------------------------
 C             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
 C-----------------------------------------------------------------------
-      IF (ABS(X) .GT. ABS(Y)) GO TO 10
+      IF (ABS(X) .GT. ABS(Y)) THEN
+         T = Y/X
+         D = X + T*Y
+         U = 1.0/D
+         V = -T/D
+      ELSE
          T = X/Y
          D = Y + T*X
          U = T/D
          V = -1.0/D
-         RETURN
-   10 T = Y/X
-      D = X + T*Y
-      U = 1.0/D
-      V = -T/D
+      END IF
       END SUBROUTINE CREC
 
       SUBROUTINE DCREC(X, Y, U, V)
@@ -2590,16 +2591,17 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(INOUT) :: U, V
 C     beginning of local variable declarations
       DOUBLE PRECISION :: D, T
-      IF (ABS(X) .GT. ABS(Y)) GO TO 10
+      IF (ABS(X) .GT. ABS(Y)) THEN
+         T = Y/X
+         D = X + T*Y
+         U = 1.D0/D
+         V = -T/D
+      ELSE
          T = X/Y
          D = Y + T*X
          U = T/D
          V = -1.D0/D
-         RETURN
-   10 T = Y/X
-      D = X + T*Y
-      U = 1.D0/D
-      V = -T/D
+      END IF
       END SUBROUTINE DCREC
 
       COMPLEX FUNCTION CDIV(A, B)
@@ -2614,18 +2616,19 @@ C-----------------------------------------------------------------------
       AI = AIMAG(A)
       BR = REAL(B)
       BI = AIMAG(B)
-      IF (ABS(BR) .LT. ABS(BI)) GO TO 10
+      IF (ABS(BR) .LT. ABS(BI)) THEN
+         T = BR/BI
+         D = BI + T*BR
+         U = (AR*T + AI)/D
+         V = (AI*T - AR)/D
+         CDIV = CMPLX(U,V)
+      ELSE
          T = BI/BR
          D = BR + T*BI
          U = (AR + AI*T)/D
          V = (AI - AR*T)/D
          CDIV = CMPLX(U,V)
-         RETURN
-   10 T = BR/BI
-      D = BI + T*BR
-      U = (AR*T + AI)/D
-      V = (AI*T - AR)/D
-      CDIV = CMPLX(U,V)
+      END IF
       END FUNCTION CDIV
 
       SUBROUTINE CDIVID(AR,AI,BR,BI,CR,CI)
@@ -10106,14 +10109,15 @@ C     -------------------
      4 W(158)/.514749447681345304D+01/, W(159)/.515329159449777895D+01/,
      5 W(160)/.515905529921452903D+01/, W(161)/.516478597392351405D+01/,
      6 W(162)/.517048399503815178D+01/, W(163)/.517614973257382914D+01/
-      IF (X .GE. 178.0) GO TO 10
-      N = X
-      T = (X - N)/(X + N)
-      T2 = T*T
-      Z = (((C1*T2 + C2)*T2 + C3)*T2 + 2.0)*T
-      GLOG = W(N - 14) + Z
-      RETURN
-   10 GLOG = LOG(X)
+      IF (X .GE. 178.0) THEN
+         GLOG = LOG(X)
+      ELSE
+         N = X
+         T = (X - N)/(X + N)
+         T2 = T*T
+         Z = (((C1*T2 + C2)*T2 + C3)*T2 + 2.0)*T
+         GLOG = W(N - 14) + Z
+      END IF
       END FUNCTION GLOG
 
       REAL FUNCTION GAM1(A)
@@ -15006,10 +15010,11 @@ C                           ERROR RETURN
       REAL, INTENT(IN) :: A, B
       REAL :: ALGDIV
       REAL :: LOGAM
-      IF (A .GT. 20.0) GO TO 10
+      IF (A .GT. 20.0) THEN
+         BLND = ALGDIV(B,A) + LOGAM(B + 1.0)
+      ELSE
          BLND = (LOGAM(A) - LOGAM(A + B)) + LOGAM(B + 1.0)
-         RETURN
-   10 BLND = ALGDIV(B,A) + LOGAM(B + 1.0)
+      END IF
       END FUNCTION BLND
 
       REAL FUNCTION LOGAM(X)
@@ -15127,13 +15132,14 @@ C     ---------------------
      *     W(197)/.35224532627544E+03/, W(198)/.35453908551944E+03/,
      *     W(199)/.35683538282361E+03/, W(200)/.35913420536958E+03/
 C     ------------------------------------------------------------------
-      IF (X .GT. 100.0) GO TO 10
+      IF (X .GT. 100.0) THEN
+         T = (1.0/X)**2
+         Z = (((-0.75*T + 1.0)*T - 3.5)*T + 105.0)/(X*1260.0)
+         LOGAM = (D + Z) + (X - 0.5)*(LOG(X) - 1.0)
+      ELSE
          N = 2.0*X + 0.1
          LOGAM = W(N)
-         RETURN
-   10 T = (1.0/X)**2
-      Z = (((-0.75*T + 1.0)*T - 3.5)*T + 105.0)/(X*1260.0)
-      LOGAM = (D + Z) + (X - 0.5)*(LOG(X) - 1.0)
+      END IF
       END FUNCTION LOGAM
 
       SUBROUTINE CBSSLJ(Z, CNU, W)
@@ -54798,14 +54804,15 @@ C     beginning of local variable declarations
 C-----------------------------------------------------------------------
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
-      IF (KA .EQ. 0) GO TO 10
+      IF (KA .EQ. 0) THEN
+         L = N*(N + 1)
+         L = L/2
+         CALL TRED3(N, L, A, W, T(N+1), T(1))
+         CALL TQLRAT(N, W, T, IERR)
+      ELSE
          CALL TRED1(KA, N, A, W, T(N+1), T(1))
          CALL TQLRAT(N, W, T, IERR)
-         RETURN
-10    L = N*(N + 1)
-      L = L/2
-      CALL TRED3(N, L, A, W, T(N+1), T(1))
-      CALL TQLRAT(N, W, T, IERR)
+      END IF
       END SUBROUTINE SEIG
 
       SUBROUTINE SEIG1(A, KA, N, W, T, IERR)
@@ -54818,14 +54825,15 @@ C     beginning of local variable declarations
 C-----------------------------------------------------------------------
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
-      IF (KA .EQ. 0) GO TO 10
+      IF (KA .EQ. 0) THEN
+         L = N*(N + 1)
+         L = L/2
+         CALL TRED3(N, L, A, W, T, T)
+         CALL IMTQL1(N, W, T, IERR)
+      ELSE
          CALL TRED1(KA, N, A, W, T, T)
          CALL IMTQL1(N, W, T, IERR)
-         RETURN
-10    L = N*(N + 1)
-      L = L/2
-      CALL TRED3(N, L, A, W, T, T)
-      CALL IMTQL1(N, W, T, IERR)
+      END IF
       END SUBROUTINE SEIG1
 
       SUBROUTINE SEIGV(A, KA, N, W, Z, T, IERR)
@@ -55710,14 +55718,15 @@ C-----------------------------------------------------------------------
 C                DOUBLE PRECISION COMPUTATION OF THE
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
-      IF (KA .EQ. 0) GO TO 10
+      IF (KA .EQ. 0) THEN
+         L = N*(N + 1)
+         L = L/2
+         CALL DTRED3(N, L, A, W, T(N+1), T(1))
+         CALL DTQL(N, W, T, IERR)
+      ELSE
          CALL DTRED1(KA, N, A, W, T(N+1), T(1))
          CALL DTQL(N, W, T, IERR)
-         RETURN
-10    L = N*(N + 1)
-      L = L/2
-      CALL DTRED3(N, L, A, W, T(N+1), T(1))
-      CALL DTQL(N, W, T, IERR)
+      END IF
       END SUBROUTINE DSEIG
 
       SUBROUTINE DSEIGV(A, KA, N, W, Z, T, IERR)
@@ -73680,10 +73689,11 @@ C     AS A REAL ARRAY OF DIMENSION 2*N. IF THIS ASSOCIATION IS NOT
 C     PERMITTED BY THE FORTRAN BEING USED, THEN THE USER MAY USE THE
 C     SUBROUTINE FFT1.
 C-----------------------------------------------------------------------
-      IF (ABS(ISN) .NE. 1) GO TO 10
-      CALL SFFT(C(1),C(2),N,N,N,ISN+ISN,IERR)
-      RETURN
-   10 IERR = 4
+      IF (ABS(ISN) .NE. 1) THEN
+         IERR = 4
+      ELSE
+         CALL SFFT(C(1),C(2),N,N,N,ISN+ISN,IERR)
+      END IF
       END SUBROUTINE FFT
 
       SUBROUTINE FFT1(A,B,N,ISN,IERR)
@@ -73692,10 +73702,11 @@ C-----------------------------------------------------------------------
       INTEGER :: ISN, N
       REAL, INTENT(INOUT) :: A(N), B(N)
 C     ------------
-      IF (ABS(ISN) .NE. 1) GO TO 10
-      CALL SFFT(A,B,N,N,N,ISN,IERR)
-      RETURN
-   10 IERR = 4
+      IF (ABS(ISN) .NE. 1) THEN
+         IERR = 4
+      ELSE
+         CALL SFFT(A,B,N,N,N,ISN,IERR)
+      END IF
       END SUBROUTINE FFT1
 
       SUBROUTINE MFFT(C,N,NDIM,ISN,IERR)
@@ -81502,15 +81513,16 @@ C AND
 C   SIGMA AND DEL ARE UNALTERED.
 C THIS SUBROUTINE REFERENCES PACKAGE MODULE SNHCSH.
 C-----------------------------------------------------------
-      IF (SIGMA .NE. 0.) GO TO 1
-      DIAG = DEL/3.
-      SDIAG = DEL/6.
-      RETURN
-    1 SIGDEL = SIGMA*DEL
-      CALL SNHCSH(SINHM,COSHM,SIGDEL,0)
-      DENOM = DEL/((SINHM+SIGDEL)*SIGDEL*SIGDEL)
-      DIAG = DENOM*(SIGDEL*COSHM-SINHM)
-      SDIAG = DENOM*SINHM
+      IF (SIGMA .NE. 0.) THEN
+         SIGDEL = SIGMA*DEL
+         CALL SNHCSH(SINHM,COSHM,SIGDEL,0)
+         DENOM = DEL/((SINHM+SIGDEL)*SIGDEL*SIGDEL)
+         DIAG = DENOM*(SIGDEL*COSHM-SINHM)
+         SDIAG = DENOM*SINHM
+      ELSE
+         DIAG = DEL/3.
+         SDIAG = DEL/6.
+      END IF
       END SUBROUTINE TERMS
 
       INTEGER FUNCTION INTRVL(X, T, M)
@@ -95863,12 +95875,13 @@ C   THIS IS USED IN UPDATING THE VALUE OF THE CONDITION NUMBER
 C   IN IEGS.
       AVERR=SQRT(ELINSY*PASTRE)
       PASTRE=ELINSY
-      IF(RELRSD .EQ. 0.0) GO TO 1
-      C=MAX(1.0,ELINSY/RELRSD)
-      CONEW=SQRT(C*PASTC)
-      PASTC=C
-      RETURN
-1     CONEW=COND
+      IF (RELRSD .EQ. 0.0) THEN
+         CONEW=COND
+      ELSE
+         C=MAX(1.0,ELINSY/RELRSD)
+         CONEW=SQRT(C*PASTC)
+         PASTC=C
+      END IF
       END FUNCTION CONEW
 
       SUBROUTINE WANDT(WV,TV,N,A,B)

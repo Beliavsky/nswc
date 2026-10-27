@@ -1698,14 +1698,15 @@ double precision, parameter :: w(163) = [.270805020110221007d+01, .2772588722239
 !     -------------------
 !     w(J) = LN(J + 14) for each J
 !     -------------------
-if (x >= 178.0) go to 10
-n = x
-t = (x - n)/(x + n)
-t2 = t*t
-z = (((c1*t2 + c2)*t2 + c3)*t2 + 2.0)*t
-glog = w(n - 14) + z
-return
-10 glog = log(x)
+if (x >= 178.0) then
+   glog = log(x)
+else
+   n = x
+   t = (x - n)/(x + n)
+   t2 = t*t
+   z = (((c1*t2 + c2)*t2 + c3)*t2 + 2.0)*t
+   glog = w(n - 14) + z
+end if
 end function glog
 
 pure elemental real function gam1(a)
@@ -8036,10 +8037,11 @@ interface
       real :: logam
    end function logam
 end interface
-if (a > 20.0) go to 10
-blnd = (logam(a) - logam(a + b)) + logam(b + 1.0)
-return
-10 blnd = algdiv(b,a) + logam(b + 1.0)
+if (a > 20.0) then
+   blnd = algdiv(b,a) + logam(b + 1.0)
+else
+   blnd = (logam(a) - logam(a + b)) + logam(b + 1.0)
+end if
 end function blnd
 
 pure elemental real function logam(x)
@@ -8104,13 +8106,14 @@ real, parameter :: w(200) = [.57236494292470e+00, 0.0, -.12078223763525e+00, 0.0
 !     ---------------------
 !     ---------------------
 !     ------------------------------------------------------------------
-if (x > 100.0) go to 10
-n = 2.0*x + 0.1
-logam = w(n)
-return
-10 t = (1.0/x)**2
-z = (((-0.75*t + 1.0)*t - 3.5)*t + 105.0)/(x*1260.0)
-logam = (d + z) + (x - 0.5)*(log(x) - 1.0)
+if (x > 100.0) then
+   t = (1.0/x)**2
+   z = (((-0.75*t + 1.0)*t - 3.5)*t + 105.0)/(x*1260.0)
+   logam = (d + z) + (x - 0.5)*(log(x) - 1.0)
+else
+   n = 2.0*x + 0.1
+   logam = w(n)
+end if
 end function logam
 
 subroutine cbsslj(z, cnu, w)

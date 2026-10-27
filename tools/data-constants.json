@@ -3752,7 +3752,7 @@
       }
     },
     "GLOG": {
-      "source_hash": "0e44b17c44f1f92ba0afcc91b27ce983ce1ed9df6f68ed4cc4a468cb718cdd42",
+      "source_hash": "fa37cfbab3381b028f024808430759d4e8e94b414273bb30b5164bb1de24e60b",
       "constants": {
         "c1": [
           ".286228750476730"
@@ -5347,7 +5347,7 @@
       }
     },
     "LOGAM": {
-      "source_hash": "3dcb862c12ef8e9d84f403c71915767ca0a42d66270cdbd79a960f2d717d2e4d",
+      "source_hash": "9a85d1b3362b18f3e3d9ac4145997c3a5a7b3b7fd258adf72c5e70f18fe0b8d1",
       "constants": {
         "d": [
           ".41893853320467"

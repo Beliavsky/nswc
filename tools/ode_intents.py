@@ -31,8 +31,10 @@ def transform(data, manifest=None):
 
 
 def finish(data):
+    """Finish supplemental intents and subsequent two-way terminal branches."""
     from additional_intents import transform as previous
-    return transform(previous(data))
+    from structure_terminal_branches import transform_two_way
+    return transform_two_way(transform(previous(data)))
 
 
 def main():

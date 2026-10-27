@@ -1,7 +1,8 @@
-"""Structure terminal three-way sign dispatches in fixed-form procedures.
+"""Structure terminal branches in fixed-form procedures.
 
-Preview by default. Only straight-line assignment arms at procedure end are
-accepted. Retain the tested temporary: evaluating/converting it once matters.
+Preview by default. Sign dispatches accept straight-line assignment arms;
+--two-way also accepts ordinary CALLs. Both modes require procedure-end arms.
+Retain tested expressions/temporaries: evaluating/converting once matters.
 """
 import argparse
 from bisect import bisect_left
@@ -15,11 +16,14 @@ from name_procedure_ends import statements, split_line, code_comment
 from remove_unused_labels import references, SPEC
 
 MANIFEST = Path(__file__).with_name('terminal-branches.json')
+TWO_WAY_MANIFEST = Path(__file__).with_name('two-way-terminal-branches.json')
 NAME = r'[A-Z][A-Z0-9_]*'
 NEG = re.compile(rf'IF\s*\(\s*({NAME})\s*\.LT\.\s*0\s*\)\s*GO\s*TO\s*(\d+)', re.I)
 ZERO = re.compile(rf'IF\s*\(\s*({NAME})\s*\.EQ\.\s*0\s*\)\s*GO\s*TO\s*(\d+)', re.I)
 JUMP = re.compile(r'GO\s*TO\s*(\d+)', re.I)
 ASSIGN = re.compile(rf'{NAME}\s*(?:\([^=]*\))?\s*=(?![=>])\s*.+', re.I)
+TWO_WAY = re.compile(r'IF\s*\((.*)\)\s*GO\s*TO\s*(\d+)',re.I)
+CALL = re.compile(rf'CALL\s+{NAME}(?:\s*\(.*\))?',re.I)
 
 
 def transform(data, report=None):
@@ -121,8 +125,90 @@ def transform(data, report=None):
     return output
 
 
+def transform_two_way(data, report=None):
+    """Structure a top-level terminal IF/GOTO with two straight-line arms.
+
+    The taken arm becomes THEN, the fall-through arm ELSE. Only assignments
+    and ordinary CALLs qualify; all other entry points/control flow and layouts
+    requiring movement of comments are excluded. The condition is not inverted.
+    """
+    lines,scopes=units(data);all_statements=list(statements(lines))
+    starts=[s.lines[0] for s in all_statements]
+    edits={};removed=set();converted=[];skipped=[]
+    for name,(start,_,stop) in scopes.items():
+        unit=all_statements[bisect_left(starts,start):bisect_left(starts,stop)]
+        for i,branch in enumerate(unit):
+            match=TWO_WAY.fullmatch(branch.code.strip())
+            if not match:continue
+            try:
+                target=int(match[2]);condition=match[1]
+                refs,reason=references(unit)
+                if reason:raise ValueError(reason)
+                labelled=[(j,int(lines[s.lines[0]][:5])) for j,s in enumerate(unit) if lines[s.lines[0]][:5].strip()]
+                if len(labelled)!=1 or labelled[0][1]!=target:
+                    raise ValueError('additional, duplicate or missing labels')
+                destination=labelled[0][0]
+                if destination<=i+2 or destination>=len(unit)-1:
+                    raise ValueError('not two nonempty forward terminal arms')
+                if any(target in references([s])[0] for j,s in enumerate(unit) if j!=i):
+                    raise ValueError('another statement references the destination')
+                for s in unit[:i]:
+                    compact=re.sub(r'\s+','',s.code).upper()
+                    if compact.startswith('ENTRY') or not (SPEC.match(compact) or ASSIGN.fullmatch(s.code.strip())):
+                        raise ValueError('unsupported preceding control flow')
+                if unit[destination-1].code.strip().upper()!='RETURN':
+                    raise ValueError('fall-through arm has no terminal RETURN')
+                fall=unit[i+1:destination-1];taken=unit[destination:-1]
+                if taken and taken[-1].code.strip().upper()=='RETURN':taken=taken[:-1]
+                if not fall or not taken:raise ValueError('empty branch arm')
+                for s in fall+taken:
+                    code=s.code.strip()
+                    if not (ASSIGN.fullmatch(code) or CALL.fullmatch(code)):
+                        raise ValueError('arm contains unsupported control flow or statement')
+                    if re.search(r'(?:\(|,)\s*\*\s*\d+',code):
+                        raise ValueError('alternate-return call requires review')
+                if any(re.match(r'\s*[Cc*!]\$',line) for line in lines[start:stop]):
+                    raise ValueError('directive requires review')
+                if any(re.search(r'\d+H',s.code,re.I) for s in unit):
+                    raise ValueError('Hollerith requires review')
+                tail=unit[i:-1]
+                if any(len(s.lines)!=1 for s in tail):
+                    raise ValueError('continued branch statement requires review')
+                for s in tail:
+                    raw,_=split_line(lines[s.lines[0]])
+                    if raw[72:].strip() or code_comment(raw[6:72])[1]:
+                        raise ValueError('sequence field or inline comment requires review')
+                covered={s.lines[0] for s in tail}
+                if any(lines[j].strip() for j in range(branch.lines[0],unit[-1].lines[0]) if j not in covered):
+                    raise ValueError('comment between branches requires review')
+                _,newline=split_line(lines[branch.lines[0]])
+                out=['      IF ('+condition+') THEN'+newline]
+                out.extend('         '+s.code.strip()+newline for s in taken)
+                out.append('      ELSE'+newline)
+                out.extend('         '+s.code.strip()+newline for s in fall)
+                out.append('      END IF'+newline)
+                if any(len(line.rstrip('\r\n'))>72 for line in out):
+                    raise ValueError('structured statement exceeds fixed width')
+                edits[branch.lines[0]]=''.join(out)
+                removed.update(range(branch.lines[0],unit[-1].lines[0]))
+                converted.append({'procedure':name,'line':branch.lines[0]+1,
+                                  'condition':condition,'target':target,
+                                  'taken_statements':len(taken),'fallthrough_statements':len(fall)})
+                break
+            except ValueError as error:
+                skipped.append({'procedure':name,'line':branch.lines[0]+1,'reason':str(error)})
+                # A later dispatch would have this unsupported branch in its
+                # prefix, so only the first candidate in a procedure can qualify.
+                break
+    output=''.join(edits.get(i,'' if i in removed else line) for i,line in enumerate(lines)).encode('latin-1')
+    if report is not None:
+        report.update(input_sha256=hashlib.sha256(data).hexdigest(),
+                      output_sha256=hashlib.sha256(output).hexdigest(),converted=converted,skipped=skipped)
+    return output
+
+
 def finish_fixed(data):
-    """Final formatting, branches, generics, copies and sections for validators."""
+    """Finish formatting, branches, declarations, intents and two-way tails."""
     from normalize_fixed_spacing import transform as spacing
     from fixed_generic_intrinsics import transform as generics
     from remove_redundant_copies import transform as copies
@@ -136,6 +222,7 @@ def main():
     parser.add_argument('source', type=Path)
     parser.add_argument('--output', type=Path)
     parser.add_argument('--report', type=Path)
+    parser.add_argument('--two-way',action='store_true',help='Convert terminal IF/GOTO branches with assignment/CALL arms')
     args = parser.parse_args()
     for path in (args.output, args.report):
         if path and path.exists():
@@ -143,7 +230,7 @@ def main():
     if args.output and args.report and args.output.resolve() == args.report.resolve():
         parser.error('Output and report must be separate files')
     report = {}
-    output = transform(args.source.read_bytes(), report)
+    output = (transform_two_way if args.two_way else transform)(args.source.read_bytes(), report)
     if args.output:
         with args.output.open('xb') as stream:
             stream.write(output)

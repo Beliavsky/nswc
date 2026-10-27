@@ -2609,12 +2609,13 @@ real :: c
 !   IN iegs.
 averr = sqrt(elinsy*pastre)
 pastre = elinsy
-if (relrsd == 0.0) go to 1
-c = max(1.0,elinsy/relrsd)
-conew = sqrt(c*pastc)
-pastc = c
-return
-1 conew = cond
+if (relrsd == 0.0) then
+   conew = cond
+else
+   c = max(1.0,elinsy/relrsd)
+   conew = sqrt(c*pastc)
+   pastc = c
+end if
 end function conew
 
 pure subroutine wandt(wv,tv,n,a,b)

@@ -120,6 +120,46 @@ are compared bitwise at `-O0` (apart from NaN payloads) and numerically at `-O2`
 GNU optimization can choose a different sign for a zero result between these
 equivalent source forms; optimized assembly is not required to be identical.
 
+## Two-way terminal branches
+
+The same tool has a separate `--two-way` mode for a forward conditional jump
+over a straight-line arm ending in `RETURN`, followed by another straight-line
+arm at procedure end. For example, `fft1` now uses:
+
+```fortran
+      IF (ABS(ISN) .NE. 1) THEN
+         IERR = 4
+      ELSE
+         CALL SFFT(A,B,N,N,N,ISN,IERR)
+      END IF
+```
+
+The condition is retained and evaluated once. The two arms preserve their
+individual statement order. Only assignments and ordinary calls are accepted.
+The destination must be the only labelled statement, with no other references
+to it. Earlier control flow, alternate entries or returns, nested constructs,
+continued branch statements, directives, and comments within the reordered
+region cause an exclusion. Emitted lines must fit fixed-form columns 7--72.
+
+```sh
+python tools/structure_terminal_branches.py nswc.f --two-way
+python tools/structure_terminal_branches.py input.f --two-way --output candidate.f --report review.json
+python tools/validate_two_way_terminal_branches.py
+```
+
+The reviewed pass converts 13 routines, including `fft`, `fft1`, complex
+arithmetic helpers, logarithm helpers, eigenvalue wrappers, `terms`, and `conew`.
+`tools/two-way-terminal-branches.json` records conversions and exclusions.
+This final fixed-form pass follows argument-intent refinement, preserving
+earlier review inputs. Its output flows into both free-form sources through
+normal regeneration. The validator reconstructs the input, checks the report
+and idempotence, compares compiler symbols, and exercises both branches of
+all 13 routines at GNU `-O0` and `-O2`, including invalid FFT sign arguments.
+
+For intentional changes, migrate downstream reviews with
+`python tools/refresh_label_review_hashes.py before.f candidate.f --conversion two-way --apply`
+before installing the candidate and regenerating the free-form sources.
+
 ## Redundant generated copies
 
 `tools/remove_redundant_copies.py` removes a generated `NSWC_AI_*` scalar

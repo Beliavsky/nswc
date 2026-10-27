@@ -86,11 +86,16 @@ def main():
     parser.add_argument('before', type=Path)
     parser.add_argument('after', type=Path)
     parser.add_argument('--apply', action='store_true')
-    parser.add_argument('--conversion', choices=['labels', 'exits', 'generics', 'copies', 'sections', 'intents', 'ode-intents'], default='labels')
+    parser.add_argument('--conversion', choices=['labels', 'exits', 'generics', 'copies', 'sections', 'intents', 'ode-intents', 'two-way'], default='labels')
     parser.add_argument('--compiler', help='Also verify fixed-form symbols, warnings and assembly')
     args = parser.parse_args()
     before, after = args.before.read_bytes(), args.after.read_bytes()
     transformer = transform
+    if args.conversion == 'two-way':
+        from structure_terminal_branches import transform_two_way as transformer
+        from validate_two_way_terminal_branches import verify as verify_branches
+        report={};transformer(before,report)
+        verify_branches(before,after,report,args.compiler or 'gfortran')
     if args.conversion == 'ode-intents':
         from ode_intents import transform as transformer, MANIFEST as ode_manifest, analyze as ode_analyze
         from validate_additional_intents import verify as verify_intents
@@ -114,7 +119,7 @@ def main():
         if transformer(before, report) != after:
             raise ValueError('Source change does not match copy cleanup')
         verify_copies(before, after, report, args.compiler or 'gfortran')
-    if args.compiler and args.conversion not in ('copies', 'sections', 'intents', 'ode-intents'):
+    if args.compiler and args.conversion not in ('copies', 'sections', 'intents', 'ode-intents', 'two-way'):
         if args.conversion == 'generics':
             from fixed_generic_intrinsics import review as fixed_review, MANIFEST as fixed_manifest
             if fixed_review(before, args.compiler) != json.loads(fixed_manifest.read_text()):

@@ -28,6 +28,7 @@ jobs:
       - run: python tools/validate_unused_labels.py
       - run: python tools/validate_goto_exits.py
       - run: python tools/validate_terminal_branches.py
+      - run: python tools/validate_two_way_terminal_branches.py
       - run: python tools/validate_free_formatting.py
       - run: python tools/validate_data_constants.py
       - run: python tools/validate_generic_intrinsics.py

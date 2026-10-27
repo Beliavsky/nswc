@@ -11,6 +11,10 @@ def main():
     from declaration_sections import transform as sections
     from additional_intents import transform as previous
     before=previous(sections(historical_input()))
-    verify(before,(ROOT/'nswc.f').read_bytes(),json.loads(MANIFEST.read_text()),analyzer=analyze,transformer=transform)
+    from structure_terminal_branches import transform_two_way
+    after=transform(before)
+    if transform_two_way(after)!=(ROOT/'nswc.f').read_bytes():
+        raise ValueError('ODE intents and terminal branches do not reproduce')
+    verify(before,after,json.loads(MANIFEST.read_text()),analyzer=analyze,transformer=transform)
 
 if __name__=='__main__':main()

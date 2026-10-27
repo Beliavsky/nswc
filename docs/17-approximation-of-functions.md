@@ -12,7 +12,7 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CHEBY` | `SUBROUTINE` | `A, B, F, G, PHI, EPS, ITNO, MXITER, L, M, P, Q, ERROR, IERR, W` | [`L101655`](../source_parts/nswc_part_10.f90#L5816) |
+| `CHEBY` | `SUBROUTINE` | `A, B, F, G, PHI, EPS, ITNO, MXITER, L, M, P, Q, ERROR, IERR, W` | [`L101666`](../source_parts/nswc_part_10.f90#L5818) |
 
 
 Let a < 6 and g(x) be a continuous nonvanishing function on the interval [a,b]. For any continuous function f(z), let |{f|| denote the weighted norm maz{|f(z)|/|g(z)| : a <x < b}. Also let ¢(2) be a continuous strictly monotonic mapping on [a, 6]. Then for any nonnegative integers € and m, the subroutine CHEBY is available for finding a rational function
@@ -85,7 +85,7 @@ Reference, Cody, W. J., Fraser, W., and Hart, J. F. “Rational Chebychev Approx
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ADAPT` | `SUBROUTINE` | `F, XLFT, XRGT, EPSLN, NPIECE, ERREST, XKNOTS, COEFS, IERR, KMAX, NDEG, NSMTH, ANORM, DX, MO, KBREAK, BRAKPT, KDIFF, VALLFT, VALRGT` | [`L102035`](../source_parts/nswc_part_10.f90#L6196) |
+| `ADAPT` | `SUBROUTINE` | `F, XLFT, XRGT, EPSLN, NPIECE, ERREST, XKNOTS, COEFS, IERR, KMAX, NDEG, NSMTH, ANORM, DX, MO, KBREAK, BRAKPT, KDIFF, VALLFT, VALRGT` | [`L102046`](../source_parts/nswc_part_10.f90#L6198) |
 
 
 For any continuous real-valued function f(z) defined on the interval [a,b], let ||f|I, denote the Z, norm defined by
@@ -228,8 +228,8 @@ In the ADAPT statement XBREAK, KDIFF, DLEFT, and DRIGHT are ignored since m= 0,
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CPSC` | `SUBROUTINE` | `F, Z, N, IC, TOL, R, RS, ERR` | [`L103454`](../source_parts/nswc_part_10.f90#L7615) |
-| `DCPSC` | `SUBROUTINE` | `FUN, X, Y, N, IC, TOL, R, RS1, RS2, ERR` | [`L103729`](../source_parts/nswc_part_10.f90#L7890) |
+| `CPSC` | `SUBROUTINE` | `F, Z, N, IC, TOL, R, RS, ERR` | [`L103465`](../source_parts/nswc_part_10.f90#L7617) |
+| `DCPSC` | `SUBROUTINE` | `FUN, X, Y, N, IC, TOL, R, RS1, RS2, ERR` | [`L103740`](../source_parts/nswc_part_10.f90#L7892) |
 
 
 Let f(z) = 37 an(z — zo)” denote the Taylor series of an analytic function f around

@@ -2687,15 +2687,16 @@ end interface
 !   sigma and del are unaltered.
 ! This subroutine references package module snhcsh.
 !-----------------------------------------------------------
-if (sigma /= 0.) go to 1
-diag = del/3.
-sdiag = del/6.
-return
-1 sigdel = sigma*del
-call snhcsh(sinhm,coshm,sigdel,0)
-denom = del/((sinhm + sigdel)*sigdel*sigdel)
-diag = denom*(sigdel*coshm - sinhm)
-sdiag = denom*sinhm
+if (sigma /= 0.) then
+   sigdel = sigma*del
+   call snhcsh(sinhm,coshm,sigdel,0)
+   denom = del/((sinhm + sigdel)*sigdel*sigdel)
+   diag = denom*(sigdel*coshm - sinhm)
+   sdiag = denom*sinhm
+else
+   diag = del/3.
+   sdiag = del/6.
+end if
 end subroutine terms
 
 pure integer function intrvl(x, t, m)

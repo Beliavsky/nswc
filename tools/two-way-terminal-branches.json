@@ -1,0 +1,4352 @@
+{
+  "input_sha256": "097151bcad1e47ea1a09c33a1bcb95ce3ab8bada55fb623b10fe24d75debb457",
+  "output_sha256": "d70c553f83ddefc7312bf64a1cd67f9a63888ea1ff8355cee07fb5d5c3e264be",
+  "converted": [
+    {
+      "procedure": "CREC",
+      "line": 2572,
+      "condition": "ABS(X) .GT. ABS(Y)",
+      "target": 10,
+      "taken_statements": 4,
+      "fallthrough_statements": 4
+    },
+    {
+      "procedure": "DCREC",
+      "line": 2593,
+      "condition": "ABS(X) .GT. ABS(Y)",
+      "target": 10,
+      "taken_statements": 4,
+      "fallthrough_statements": 4
+    },
+    {
+      "procedure": "CDIV",
+      "line": 2617,
+      "condition": "ABS(BR) .LT. ABS(BI)",
+      "target": 10,
+      "taken_statements": 5,
+      "fallthrough_statements": 5
+    },
+    {
+      "procedure": "GLOG",
+      "line": 10109,
+      "condition": "X .GE. 178.0",
+      "target": 10,
+      "taken_statements": 1,
+      "fallthrough_statements": 5
+    },
+    {
+      "procedure": "BLND",
+      "line": 15009,
+      "condition": "A .GT. 20.0",
+      "target": 10,
+      "taken_statements": 1,
+      "fallthrough_statements": 1
+    },
+    {
+      "procedure": "LOGAM",
+      "line": 15130,
+      "condition": "X .GT. 100.0",
+      "target": 10,
+      "taken_statements": 3,
+      "fallthrough_statements": 2
+    },
+    {
+      "procedure": "SEIG",
+      "line": 54801,
+      "condition": "KA .EQ. 0",
+      "target": 10,
+      "taken_statements": 4,
+      "fallthrough_statements": 2
+    },
+    {
+      "procedure": "SEIG1",
+      "line": 54821,
+      "condition": "KA .EQ. 0",
+      "target": 10,
+      "taken_statements": 4,
+      "fallthrough_statements": 2
+    },
+    {
+      "procedure": "DSEIG",
+      "line": 55713,
+      "condition": "KA .EQ. 0",
+      "target": 10,
+      "taken_statements": 4,
+      "fallthrough_statements": 2
+    },
+    {
+      "procedure": "FFT",
+      "line": 73683,
+      "condition": "ABS(ISN) .NE. 1",
+      "target": 10,
+      "taken_statements": 1,
+      "fallthrough_statements": 1
+    },
+    {
+      "procedure": "FFT1",
+      "line": 73695,
+      "condition": "ABS(ISN) .NE. 1",
+      "target": 10,
+      "taken_statements": 1,
+      "fallthrough_statements": 1
+    },
+    {
+      "procedure": "TERMS",
+      "line": 81505,
+      "condition": "SIGMA .NE. 0.",
+      "target": 1,
+      "taken_statements": 5,
+      "fallthrough_statements": 2
+    },
+    {
+      "procedure": "CONEW",
+      "line": 95866,
+      "condition": "RELRSD .EQ. 0.0",
+      "target": 1,
+      "taken_statements": 1,
+      "fallthrough_statements": 3
+    }
+  ],
+  "skipped": [
+    {
+      "procedure": "MACH",
+      "line": 545,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "RADIX",
+      "line": 588,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MACH1",
+      "line": 699,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MACH2",
+      "line": 931,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SPMPAR",
+      "line": 1082,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPMPAR",
+      "line": 1130,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "EPSLN",
+      "line": 1168,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DEPSLN",
+      "line": 1194,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "EXPARG",
+      "line": 1225,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DXPARG",
+      "line": 1259,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ISHELL",
+      "line": 1311,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SHELL",
+      "line": 1356,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SHELL2",
+      "line": 1403,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RSORT",
+      "line": 1450,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RISORT",
+      "line": 1499,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RRSORT",
+      "line": 1548,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSORT",
+      "line": 1595,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DISORT",
+      "line": 1644,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DDSORT",
+      "line": 1693,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "AORD",
+      "line": 1741,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DAORD",
+      "line": 1787,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QSORTI",
+      "line": 1859,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QSORTR",
+      "line": 2014,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QSORTD",
+      "line": 2170,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "IORDER",
+      "line": 2300,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RORDER",
+      "line": 2355,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DORDER",
+      "line": 2410,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ARTNQ",
+      "line": 2471,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DARTNQ",
+      "line": 2501,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CPABS",
+      "line": 2533,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCPABS",
+      "line": 2552,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CDIVID",
+      "line": 2641,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCSQRT",
+      "line": 2681,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CAPO",
+      "line": 2723,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SROTG",
+      "line": 2771,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DROTG",
+      "line": 2823,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ROT3",
+      "line": 2863,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CONSTR",
+      "line": 2918,
+      "reason": "comment between branches requires review"
+    },
+    {
+      "procedure": "ANG",
+      "line": 2938,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SIN1",
+      "line": 3017,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "COS1",
+      "line": 3063,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSIN1",
+      "line": 3142,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCOS1",
+      "line": 3225,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SNHCSH",
+      "line": 3315,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ESUM",
+      "line": 3347,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DESUM",
+      "line": 3371,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "REXP",
+      "line": 3398,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DREXP",
+      "line": 3441,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "REXP1",
+      "line": 3481,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DREXP1",
+      "line": 3532,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ALNREL",
+      "line": 3569,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "DLNREL",
+      "line": 3609,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "RLOG",
+      "line": 3647,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RLOG1",
+      "line": 3691,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRLOG",
+      "line": 3751,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRLOG1",
+      "line": 3818,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LOCPT",
+      "line": 3888,
+      "reason": "another statement references the destination"
+    },
+    {
+      "procedure": "PFIND",
+      "line": 3943,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "HULL",
+      "line": 4087,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PAREA",
+      "line": 4421,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "HC",
+      "line": 4502,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "HC1",
+      "line": 4582,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "IPATH",
+      "line": 4879,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "FUPD",
+      "line": 4932,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "BUPD",
+      "line": 4959,
+      "reason": "another statement references the destination"
+    },
+    {
+      "procedure": "IUPD",
+      "line": 4989,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RARC",
+      "line": 5034,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CERF",
+      "line": 5099,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CERFC",
+      "line": 5240,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ERF",
+      "line": 5390,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ERFC",
+      "line": 5453,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ERFC1",
+      "line": 5530,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCERF",
+      "line": 5606,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCERFC",
+      "line": 5854,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DERF",
+      "line": 6243,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DERFC",
+      "line": 6297,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DERFC1",
+      "line": 6360,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DERFC0",
+      "line": 6506,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ERFI",
+      "line": 6609,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DERFI",
+      "line": 6731,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "AERF",
+      "line": 6826,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DAERF",
+      "line": 6944,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PNDF",
+      "line": 7047,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PNI",
+      "line": 7086,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPNI",
+      "line": 7131,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DAW",
+      "line": 7220,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPDAW",
+      "line": 7347,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPDAW0",
+      "line": 7503,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CFRNLI",
+      "line": 7598,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "FRNL",
+      "line": 7810,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CEXPLI",
+      "line": 7973,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "EXPLI",
+      "line": 8255,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DE1E",
+      "line": 8806,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SI",
+      "line": 9012,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CIN",
+      "line": 9122,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CEXEXI",
+      "line": 9248,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CLI",
+      "line": 9424,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ALI",
+      "line": 9563,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CGAMMA",
+      "line": 9687,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "GAMMA",
+      "line": 9928,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "GAM1",
+      "line": 10151,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "GAMLN",
+      "line": 10197,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "GAMLN1",
+      "line": 10243,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "DCGAMA",
+      "line": 10326,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DGAMMA",
+      "line": 10522,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DGAM1",
+      "line": 10744,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DGAMLN",
+      "line": 10799,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CPSI",
+      "line": 10874,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PSI",
+      "line": 11022,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCPSI",
+      "line": 11178,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPSI",
+      "line": 11381,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PSIDF",
+      "line": 11599,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BETALN",
+      "line": 11814,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "GSUMLN",
+      "line": 11891,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ALGDIV",
+      "line": 11953,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DBETLN",
+      "line": 12000,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DGSMLN",
+      "line": 12078,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DLGDIV",
+      "line": 12182,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "GRATIO",
+      "line": 12349,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RCOMP",
+      "line": 12614,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRCOMP",
+      "line": 12646,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "GAMINV",
+      "line": 12743,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DGRAT",
+      "line": 12987,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DGR29",
+      "line": 13476,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DGR17",
+      "line": 13602,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DGINV",
+      "line": 13679,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BRATIO",
+      "line": 13934,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "FPSER",
+      "line": 14084,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "APSER",
+      "line": 14120,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BPSER",
+      "line": 14153,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BUP",
+      "line": 14231,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BFRAC",
+      "line": 14319,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BRCOMP",
+      "line": 14348,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BRCMP1",
+      "line": 14450,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BGRAT",
+      "line": 14555,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "GRAT1",
+      "line": 14622,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BASYM",
+      "line": 14719,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ISUBX",
+      "line": 14832,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBSSLJ",
+      "line": 15176,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBJM",
+      "line": 15338,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBDB",
+      "line": 15502,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBJA",
+      "line": 15641,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BSSLJ",
+      "line": 15752,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BESJ",
+      "line": 16092,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ASJY",
+      "line": 16718,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "JAIRY",
+      "line": 17036,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BSSLY",
+      "line": 17251,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBSSLI",
+      "line": 17558,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BSSLI",
+      "line": 17631,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BESI",
+      "line": 17999,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ASIK",
+      "line": 18455,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "CBESK",
+      "line": 18516,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBKM",
+      "line": 18692,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CKPS",
+      "line": 18813,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBKML",
+      "line": 18917,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBSSLK",
+      "line": 18998,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CKM",
+      "line": 19168,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CKML",
+      "line": 19279,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CXP",
+      "line": 19318,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BSSLK",
+      "line": 19390,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CAI",
+      "line": 19621,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "AIRM",
+      "line": 19708,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "AII",
+      "line": 19739,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "AIA",
+      "line": 19830,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBI",
+      "line": 19949,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BII",
+      "line": 19988,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BIA",
+      "line": 20099,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "IA",
+      "line": 20274,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BIM",
+      "line": 20391,
+      "reason": "not two nonempty forward terminal arms"
+    },
+    {
+      "procedure": "JA",
+      "line": 20417,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BJM",
+      "line": 20534,
+      "reason": "not two nonempty forward terminal arms"
+    },
+    {
+      "procedure": "KA",
+      "line": 20562,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "AI",
+      "line": 20695,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "AIE",
+      "line": 20791,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BI",
+      "line": 20908,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BIE",
+      "line": 21040,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "AIMP",
+      "line": 21157,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CK",
+      "line": 21267,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "KL",
+      "line": 21486,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CKE",
+      "line": 21581,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "EKL",
+      "line": 21874,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ELLPI",
+      "line": 21926,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DELLPI",
+      "line": 22053,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "EPI",
+      "line": 22170,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DEPI",
+      "line": 22226,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RFVAL",
+      "line": 22317,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRFVAL",
+      "line": 22412,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RDVAL",
+      "line": 22510,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRDVAL",
+      "line": 22618,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RJVAL",
+      "line": 22733,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRJVAL",
+      "line": 22859,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RCVAL1",
+      "line": 22977,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRCVL1",
+      "line": 23058,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ELLPF",
+      "line": 23113,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SCD",
+      "line": 23182,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SCDF",
+      "line": 23276,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SCDJ",
+      "line": 23340,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ELPFC1",
+      "line": 23384,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PEQ",
+      "line": 23468,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "PEQ1",
+      "line": 23509,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "PLEM",
+      "line": 23546,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "PLEM1",
+      "line": 23589,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "VALR2",
+      "line": 23661,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CIRCV",
+      "line": 23916,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ERFC0",
+      "line": 24141,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PKILL",
+      "line": 24264,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PMULT",
+      "line": 24817,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPMULT",
+      "line": 24857,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PDIV",
+      "line": 24897,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPDIV",
+      "line": 24948,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PLPWR",
+      "line": 25002,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPLPWR",
+      "line": 25052,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MPLNMV",
+      "line": 25225,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSEVL",
+      "line": 25271,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "DCSEVL",
+      "line": 25297,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "LGRNGN",
+      "line": 25329,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "LGRNGV",
+      "line": 25366,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LGRNGX",
+      "line": 25496,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "ORTHOV",
+      "line": 25617,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ZEROIN",
+      "line": 25732,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DZERO",
+      "line": 25825,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "HBRD",
+      "line": 25957,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "HYBRD",
+      "line": 26124,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QDCRT",
+      "line": 26349,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DQDCRT",
+      "line": 26397,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBCRT",
+      "line": 26460,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCBCRT",
+      "line": 26631,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QTCRT",
+      "line": 26817,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DQTCRT",
+      "line": 26952,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRPOLY",
+      "line": 27113,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "DRPLY1",
+      "line": 27188,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "FXSHFR",
+      "line": 27396,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QUADIT",
+      "line": 27520,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "REALIT",
+      "line": 27598,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CALCSC",
+      "line": 27669,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "NEXTK",
+      "line": 27711,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "NEWEST",
+      "line": 27758,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QUADPL",
+      "line": 27818,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCPOLY",
+      "line": 27884,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "DCPLY1",
+      "line": 27948,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SCALCP",
+      "line": 28049,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CAUCHY",
+      "line": 28072,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "NOSHFT",
+      "line": 28123,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "FXSHFT",
+      "line": 28189,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "VRSHFT",
+      "line": 28260,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CALCT",
+      "line": 28318,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "NEXTH",
+      "line": 28337,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "RBND",
+      "line": 28466,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBND",
+      "line": 28607,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SCOPY",
+      "line": 28697,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCOPY",
+      "line": 28743,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CCOPY",
+      "line": 28788,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "ISWAP",
+      "line": 28832,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SSWAP",
+      "line": 28896,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSWAP",
+      "line": 28948,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSWAP",
+      "line": 28999,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "SROT",
+      "line": 29035,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DROT",
+      "line": 29071,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "CSROT",
+      "line": 29108,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "SROTMG",
+      "line": 29156,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SROTM",
+      "line": 29283,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DROTMG",
+      "line": 29403,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DROTM",
+      "line": 29533,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SDOT",
+      "line": 29636,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DDOT",
+      "line": 29681,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CDOTC",
+      "line": 29726,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "CDOTU",
+      "line": 29761,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "SSCAL",
+      "line": 29796,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSCAL",
+      "line": 29835,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSCAL",
+      "line": 29871,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "CSSCAL",
+      "line": 29895,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "SAXPY",
+      "line": 29923,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DAXPY",
+      "line": 29968,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CAXPY",
+      "line": 30012,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "SASUM",
+      "line": 30047,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DASUM",
+      "line": 30086,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SCASUM",
+      "line": 30124,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "SNRM2",
+      "line": 30181,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DNRM2",
+      "line": 30288,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SCNRM2",
+      "line": 30396,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ISAMAX",
+      "line": 30494,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "IDAMAX",
+      "line": 30531,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ICAMAX",
+      "line": 30571,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "TIP",
+      "line": 30883,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DTIP",
+      "line": 31001,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CTIP",
+      "line": 31119,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "INFCTR",
+      "line": 31231,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MPROD",
+      "line": 31513,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RLOC",
+      "line": 31575,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DMPROD",
+      "line": 31608,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DLOC",
+      "line": 31670,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "CMPROD",
+      "line": 31702,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CLOC",
+      "line": 31764,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "RNK",
+      "line": 31992,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DRNK",
+      "line": 32037,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "CROUT",
+      "line": 32075,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "KROUT",
+      "line": 32260,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DEC",
+      "line": 32453,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SOL",
+      "line": 32516,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "NPIVOT",
+      "line": 32560,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SLV",
+      "line": 32609,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPSLV",
+      "line": 32695,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MSLV",
+      "line": 32783,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MSLV1",
+      "line": 32814,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SLVMP",
+      "line": 32849,
+      "reason": "another statement references the destination"
+    },
+    {
+      "procedure": "LUIMP",
+      "line": 32945,
+      "reason": "not two nonempty forward terminal arms"
+    },
+    {
+      "procedure": "SGECO",
+      "line": 33024,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SGEFA",
+      "line": 33156,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SGESL",
+      "line": 33240,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SGEDI",
+      "line": 33332,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DMSLV",
+      "line": 33409,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DMSLV1",
+      "line": 33440,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DGECO",
+      "line": 33535,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DGEFA",
+      "line": 33667,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DGESL",
+      "line": 33751,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DGEDI",
+      "line": 33843,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ARCEDC",
+      "line": 34093,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ARCEPR",
+      "line": 34247,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ARCEPC",
+      "line": 34343,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ARCESL",
+      "line": 34547,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "ARCEFE",
+      "line": 34653,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "ARCEBE",
+      "line": 34731,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BTSLV",
+      "line": 34755,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "DECBT",
+      "line": 34810,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SMSLV",
+      "line": 34972,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SSPCO",
+      "line": 35067,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SSPFA",
+      "line": 35314,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SSPSL",
+      "line": 35506,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SSPDI",
+      "line": 35659,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSMSLV",
+      "line": 35823,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSPCO",
+      "line": 35918,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSPFA",
+      "line": 36165,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSPSL",
+      "line": 36357,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSPDI",
+      "line": 36510,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PCHOL",
+      "line": 36671,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "SPPFA",
+      "line": 36734,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SPPDI",
+      "line": 36848,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPCHOL",
+      "line": 36929,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DPPFA",
+      "line": 36992,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPPDI",
+      "line": 37106,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "TOPLX",
+      "line": 37188,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DTOPLX",
+      "line": 37269,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CMSLV",
+      "line": 37354,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CMSLV1",
+      "line": 37386,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSLVMP",
+      "line": 37422,
+      "reason": "another statement references the destination"
+    },
+    {
+      "procedure": "CLUIMP",
+      "line": 37515,
+      "reason": "not two nonempty forward terminal arms"
+    },
+    {
+      "procedure": "CGECO",
+      "line": 37599,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CGEFA",
+      "line": 37735,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CGESL",
+      "line": 37820,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CGEDI",
+      "line": 37915,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCMSLV",
+      "line": 37984,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCFACT",
+      "line": 38032,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCSOL",
+      "line": 38116,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCMINV",
+      "line": 38230,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "SSVDC",
+      "line": 38348,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSVDC",
+      "line": 38753,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSVDC",
+      "line": 39163,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DET",
+      "line": 39499,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPDET",
+      "line": 39561,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CDET",
+      "line": 39625,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ABSLV1",
+      "line": 39764,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SCHUR",
+      "line": 39914,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SHRSLV",
+      "line": 40125,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DABSV1",
+      "line": 40312,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSCHUR",
+      "line": 40462,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSHSLV",
+      "line": 40673,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "TASLV1",
+      "line": 40839,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SYMSLV",
+      "line": 40933,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DTASV1",
+      "line": 41122,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSYMSV",
+      "line": 41216,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SQUIN2",
+      "line": 41456,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CQZHES",
+      "line": 41680,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CQZIT",
+      "line": 41902,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "TRISLV",
+      "line": 42110,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MEXP",
+      "line": 42191,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DMEXP",
+      "line": 42340,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LE",
+      "line": 42475,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPLE",
+      "line": 42616,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CLE",
+      "line": 42758,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CVBR",
+      "line": 42896,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CVRB",
+      "line": 42961,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CVRB1",
+      "line": 43031,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CVBD",
+      "line": 43077,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CVDB",
+      "line": 43142,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CVDB1",
+      "line": 43212,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CVBC",
+      "line": 43258,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CVCB",
+      "line": 43323,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CVCB1",
+      "line": 43393,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MCVBS",
+      "line": 43444,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DMCVBS",
+      "line": 43502,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CMCVBS",
+      "line": 43560,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MCVSB",
+      "line": 43622,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DMCVSB",
+      "line": 43682,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CMCVSB",
+      "line": 43742,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BREAL",
+      "line": 43834,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BIMAG",
+      "line": 43884,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BCVRC",
+      "line": 43935,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BPOSE",
+      "line": 44006,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DBPOSE",
+      "line": 44057,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBPOSE",
+      "line": 44108,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BADD",
+      "line": 44163,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DBADD",
+      "line": 44301,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBADD",
+      "line": 44439,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BSUBT",
+      "line": 44577,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DBSUBT",
+      "line": 44715,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBSUBT",
+      "line": 44853,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BPROD",
+      "line": 45003,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DBPROD",
+      "line": 45142,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBPROD",
+      "line": 45281,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BVPRD",
+      "line": 45405,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "BVPRD1",
+      "line": 45453,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "DBVPD",
+      "line": 45495,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "DBVPD1",
+      "line": 45543,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "CBVPD",
+      "line": 45584,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "CBVPD1",
+      "line": 45632,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "BTPRD",
+      "line": 45672,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "BTPRD1",
+      "line": 45719,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "DBTPD",
+      "line": 45760,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "DBTPD1",
+      "line": 45807,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "CBTPD",
+      "line": 45847,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "CBTPD1",
+      "line": 45894,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "B1NRM",
+      "line": 45966,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DB1NRM",
+      "line": 46037,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BSLV",
+      "line": 46102,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BSLV1",
+      "line": 46160,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SNBFA",
+      "line": 46265,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SNBSL",
+      "line": 46365,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DBSLV",
+      "line": 46467,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DBSLV1",
+      "line": 46525,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DBFA",
+      "line": 46630,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DBSL",
+      "line": 46730,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "B1CND",
+      "line": 46813,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DB1CND",
+      "line": 46873,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBSLV",
+      "line": 46952,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBSLV1",
+      "line": 47011,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBFA",
+      "line": 47116,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBSL",
+      "line": 47216,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CVRS",
+      "line": 47293,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CVDS",
+      "line": 47323,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CVCS",
+      "line": 47355,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CVSR",
+      "line": 47387,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "CVSD",
+      "line": 47412,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "CVSC",
+      "line": 47437,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "SCVRD",
+      "line": 47460,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SCVDR",
+      "line": 47487,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSREAL",
+      "line": 47518,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSIMAG",
+      "line": 47550,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SCVRC",
+      "line": 47589,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RSCOPY",
+      "line": 47645,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSCOPY",
+      "line": 47675,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSCOPY",
+      "line": 47707,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RPOSE",
+      "line": 47764,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RPOSE1",
+      "line": 47823,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPOSE",
+      "line": 47881,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DPOSE1",
+      "line": 47940,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CPOSE",
+      "line": 47998,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CPOSE1",
+      "line": 48057,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SADD",
+      "line": 48123,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSADD",
+      "line": 48186,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSADD",
+      "line": 48249,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SSUBT",
+      "line": 48312,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSSUBT",
+      "line": 48375,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSSUBT",
+      "line": 48438,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SPROD",
+      "line": 48501,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSPROD",
+      "line": 48557,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSPROD",
+      "line": 48613,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MVPRD",
+      "line": 48661,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "MVPRD1",
+      "line": 48686,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "MTPRD",
+      "line": 48714,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "MTPRD1",
+      "line": 48739,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DVPRD",
+      "line": 48764,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DVPRD1",
+      "line": 48789,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DTPRD",
+      "line": 48817,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DTPRD1",
+      "line": 48842,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "CVPRD",
+      "line": 48867,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "CVPRD1",
+      "line": 48892,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "CTPRD",
+      "line": 48920,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "CTPRD1",
+      "line": 48945,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "SNRM",
+      "line": 48970,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DSNRM",
+      "line": 49025,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "SPORD",
+      "line": 49093,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MC21B",
+      "line": 49208,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MC13E",
+      "line": 49352,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "NSPIV1",
+      "line": 49589,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RSLV",
+      "line": 49802,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "RSLV1",
+      "line": 49836,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "TSLV",
+      "line": 49925,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "TSLV1",
+      "line": 49958,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SPLU",
+      "line": 50057,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DNSPIV",
+      "line": 50340,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSLV",
+      "line": 50554,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "DSLV1",
+      "line": 50588,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DTSLV",
+      "line": 50678,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "DTSLV1",
+      "line": 50711,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DSPLU",
+      "line": 50811,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "S1CND",
+      "line": 50950,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DS1CND",
+      "line": 51009,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SONEST",
+      "line": 51088,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DONEST",
+      "line": 51217,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CNSPIV",
+      "line": 51470,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSLV",
+      "line": 51684,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "CSLV1",
+      "line": 51718,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CTSLV",
+      "line": 51808,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "CTSLV1",
+      "line": 51841,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSPLU",
+      "line": 51944,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "EIGV",
+      "line": 52119,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "EIGV1",
+      "line": 52158,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BALANC",
+      "line": 52234,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BALINV",
+      "line": 52356,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ELMHES",
+      "line": 52432,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ELMHS0",
+      "line": 52518,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ORTHES",
+      "line": 52602,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "HQR",
+      "line": 52721,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BALBAK",
+      "line": 52899,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ELTRAN",
+      "line": 52972,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ELTRN0",
+      "line": 53036,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ORTRAN",
+      "line": 53101,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ORTRN1",
+      "line": 53176,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "HQR2",
+      "line": 53287,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DEIGV",
+      "line": 53643,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DBAL",
+      "line": 53719,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DBALNV",
+      "line": 53841,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DORTH",
+      "line": 53915,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DHQR",
+      "line": 54036,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DBABK",
+      "line": 54214,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DORTRN",
+      "line": 54288,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRTRN1",
+      "line": 54363,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DHQR2",
+      "line": 54470,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "TRED1",
+      "line": 54901,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "TRED3",
+      "line": 54998,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "TQLRAT",
+      "line": 55092,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "IMTQL1",
+      "line": 55212,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "TRED2",
+      "line": 55323,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "TQL2",
+      "line": 55459,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "IMTQL2",
+      "line": 55611,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DTRED1",
+      "line": 55782,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DTRED3",
+      "line": 55879,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DTQL",
+      "line": 55972,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DTRED2",
+      "line": 56091,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DTQL2",
+      "line": 56226,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBAL",
+      "line": 56432,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CORTH",
+      "line": 56575,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "COMQR",
+      "line": 56710,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBABK2",
+      "line": 56891,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "COMQR2",
+      "line": 57015,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCBAL",
+      "line": 57397,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCORTH",
+      "line": 57540,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCOMQR",
+      "line": 57671,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCBABK",
+      "line": 57855,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCMQR2",
+      "line": 57974,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "XL1",
+      "line": 58430,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LLSQ",
+      "line": 58723,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LLSQMP",
+      "line": 58759,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ORTHO",
+      "line": 58861,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ORIMP",
+      "line": 59095,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DLLSQ",
+      "line": 59119,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DORTHO",
+      "line": 59207,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LSQR",
+      "line": 59458,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "U11LS",
+      "line": 59593,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "U12LS",
+      "line": 59796,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "U11US",
+      "line": 59940,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "U12US",
+      "line": 60143,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DLSQR",
+      "line": 60361,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DU11LS",
+      "line": 60496,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DU12LS",
+      "line": 60696,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DU11US",
+      "line": 60840,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DU12US",
+      "line": 61040,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "HFTI",
+      "line": 61237,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "HFTI2",
+      "line": 61467,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "H12",
+      "line": 61637,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DHFTI",
+      "line": 61785,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DHFTI2",
+      "line": 62015,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DH12",
+      "line": 62184,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LSEI",
+      "line": 62512,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LSI",
+      "line": 62794,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LPDP",
+      "line": 63071,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "WNNLS",
+      "line": 63369,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "WNLSM",
+      "line": 63466,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "WNLIT",
+      "line": 64005,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "L2SLV",
+      "line": 64522,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DECOM2",
+      "line": 64749,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SOLVE2",
+      "line": 64962,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SOLVE3",
+      "line": 65092,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "COVAR",
+      "line": 65175,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SPLSQ",
+      "line": 65437,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "STLSQ",
+      "line": 65776,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BLSQ",
+      "line": 66099,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "FMIN",
+      "line": 66247,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "OPTDRV",
+      "line": 66520,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "OPCHK1",
+      "line": 66633,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "OPSTP",
+      "line": 66720,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "FXDEC",
+      "line": 66796,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SCALEX",
+      "line": 66828,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "LLTSLV",
+      "line": 66865,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "LNSRCH",
+      "line": 67013,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SECFAC",
+      "line": 67132,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QRUPDT",
+      "line": 67211,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "JROT",
+      "line": 67260,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LMDIFF",
+      "line": 67382,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "LMDIF",
+      "line": 67560,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ENORM",
+      "line": 67791,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DOGLEG",
+      "line": 67893,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "FDJAC1",
+      "line": 68058,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LMPAR",
+      "line": 68275,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QFORM",
+      "line": 68426,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QRFAC",
+      "line": 68544,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QRSOLV",
+      "line": 68675,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "R1MPYQ",
+      "line": 68791,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "R1UPDT",
+      "line": 68890,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SMPLX1",
+      "line": 69117,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SSPLX1",
+      "line": 69958,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CROUT1",
+      "line": 70710,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ASSGN1",
+      "line": 70990,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MKP",
+      "line": 71244,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MKP1",
+      "line": 71391,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SIGMA1",
+      "line": 71559,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PI1",
+      "line": 71604,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PARC",
+      "line": 71696,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SKNP1",
+      "line": 71787,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LAINV",
+      "line": 72041,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ABCON",
+      "line": 72121,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SRCH",
+      "line": 72185,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ABCON1",
+      "line": 72275,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "XCOND",
+      "line": 72478,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "LAINV1",
+      "line": 72635,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CQEXT",
+      "line": 72788,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QAGIE1",
+      "line": 73311,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MFFT",
+      "line": 73716,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MFFT1",
+      "line": 73748,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SFFT",
+      "line": 73848,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "COSQF",
+      "line": 74444,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "COSQB",
+      "line": 74527,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SINQB",
+      "line": 74667,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "RFFTI1",
+      "line": 74720,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RFFTB1",
+      "line": 74833,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RADB2",
+      "line": 74896,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RADB3",
+      "line": 74953,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "RADB4",
+      "line": 75022,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RADB5",
+      "line": 75126,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "RADBG",
+      "line": 75228,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RFFTF1",
+      "line": 75443,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RADF2",
+      "line": 75503,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RADF3",
+      "line": 75558,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "RADF4",
+      "line": 75625,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RADF5",
+      "line": 75723,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "RADFG",
+      "line": 75824,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CHEBY",
+      "line": 75993,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "CHEBY1",
+      "line": 76040,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CERR",
+      "line": 76294,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ADAPT",
+      "line": 76390,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "ADAPT1",
+      "line": 76598,
+      "reason": "not two nonempty forward terminal arms"
+    },
+    {
+      "procedure": "ADSET",
+      "line": 76653,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ADTAKE",
+      "line": 76746,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ADCOMP",
+      "line": 76850,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ERRINT",
+      "line": 76933,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "NEWTON",
+      "line": 77026,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ADCHK",
+      "line": 77159,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ADPUT",
+      "line": 77214,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ADTRAN",
+      "line": 77308,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CPSC",
+      "line": 77452,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DCPSC",
+      "line": 77689,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "TRP",
+      "line": 77865,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LTRP",
+      "line": 77905,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "HTRP",
+      "line": 78055,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PCOEFF",
+      "line": 78105,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "PFIT",
+      "line": 78142,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "WPFIT",
+      "line": 78285,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CBSPL",
+      "line": 78440,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SPLIFT",
+      "line": 78604,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SPFIT",
+      "line": 78684,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSPFIT",
+      "line": 78753,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SCOMP",
+      "line": 78839,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SCOMP1",
+      "line": 78923,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SCOMP2",
+      "line": 79013,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SEVAL",
+      "line": 79113,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SEVAL1",
+      "line": 79203,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SEVAL2",
+      "line": 79299,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSINT",
+      "line": 79390,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSINT1",
+      "line": 79466,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSINT2",
+      "line": 79559,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PDSPL",
+      "line": 79623,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PDFIT",
+      "line": 79738,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PSCMP",
+      "line": 79813,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PSEVL",
+      "line": 79889,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSLOOP",
+      "line": 79975,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "CSLOP1",
+      "line": 80019,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LOPCMP",
+      "line": 80145,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LOPDF",
+      "line": 80222,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CURV1",
+      "line": 80335,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CURV2",
+      "line": 80443,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "CURVD",
+      "line": 80510,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "CURVI",
+      "line": 80573,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "KURV1",
+      "line": 80737,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "KURV2",
+      "line": 80884,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "KURVP1",
+      "line": 80966,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "KURVP2",
+      "line": 81118,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "QURV1",
+      "line": 81225,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QURV2",
+      "line": 81390,
+      "reason": "continued branch statement requires review"
+    },
+    {
+      "procedure": "CEEZ",
+      "line": 81451,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "INTRVL",
+      "line": 81540,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BVAL",
+      "line": 81637,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BVALI0",
+      "line": 81798,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BSPP",
+      "line": 81871,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PPVAL",
+      "line": 81965,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BSPVB",
+      "line": 82047,
+      "reason": "another statement references the destination"
+    },
+    {
+      "procedure": "BSTRP",
+      "line": 82240,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BANFAC",
+      "line": 82370,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BANSLV",
+      "line": 82452,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BSLSQ",
+      "line": 82521,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BCHFAC",
+      "line": 82625,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BCHSLV",
+      "line": 82686,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BFIT0",
+      "line": 82929,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BNDACC",
+      "line": 83285,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BNDSL",
+      "line": 83454,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SPFIT2",
+      "line": 83542,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSURF",
+      "line": 83729,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CSRF",
+      "line": 83892,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SURF",
+      "line": 84110,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SURF2",
+      "line": 84468,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "NSURF2",
+      "line": 84586,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BSTRP2",
+      "line": 84699,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BSLSQ2",
+      "line": 84775,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BSLSQ1",
+      "line": 84840,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BCHSV1",
+      "line": 84919,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BVAL2",
+      "line": 84987,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "TRMESH",
+      "line": 85114,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ADNODE",
+      "line": 85284,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BDYADD",
+      "line": 85418,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "INTADD",
+      "line": 85501,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SHIFTD",
+      "line": 85614,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SWAPD",
+      "line": 85704,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SWPTST",
+      "line": 85883,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "TINDX",
+      "line": 85923,
+      "reason": "not two nonempty forward terminal arms"
+    },
+    {
+      "procedure": "TRFIND",
+      "line": 86007,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "GRADG",
+      "line": 86165,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "GRADG1",
+      "line": 86292,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "GRADL",
+      "line": 86370,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "GRADL1",
+      "line": 86506,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SETRM",
+      "line": 86688,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "GETNP",
+      "line": 86777,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SFVAL",
+      "line": 86839,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SFVAL2",
+      "line": 86870,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "INTRC1",
+      "line": 87008,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "TVAL",
+      "line": 87235,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MFIT",
+      "line": 87478,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "ALLOT",
+      "line": 87593,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BASIZ",
+      "line": 87726,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MTABLE",
+      "line": 87866,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "INCDG",
+      "line": 88003,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MEVAL",
+      "line": 88311,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "MEVAL1",
+      "line": 88382,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "DMFIT",
+      "line": 88542,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DINCDG",
+      "line": 88686,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DMEVAL",
+      "line": 88995,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DMEVL1",
+      "line": 89066,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "QSUBA",
+      "line": 89164,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QUAD",
+      "line": 89534,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QAGSE",
+      "line": 89956,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QAGIE",
+      "line": 90690,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QPSRT",
+      "line": 91100,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QELG",
+      "line": 91227,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QXGSE",
+      "line": 91640,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "QXRRD",
+      "line": 92195,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DQAGSE",
+      "line": 92610,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DQAGIE",
+      "line": 93366,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DQPSRT",
+      "line": 93789,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DQELG",
+      "line": 93924,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DQXGSE",
+      "line": 94337,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DQXRRD",
+      "line": 94892,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CUBTRI",
+      "line": 95037,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CUBRUL",
+      "line": 95245,
+      "reason": "another statement references the destination"
+    },
+    {
+      "procedure": "IEGS",
+      "line": 95541,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "NSTERP",
+      "line": 95782,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "RNRM",
+      "line": 95839,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "LEAVE",
+      "line": 96188,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ITERT",
+      "line": 96292,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LNSYS",
+      "line": 96418,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "ODE",
+      "line": 96666,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "DE1",
+      "line": 96720,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "STEP1",
+      "line": 96975,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BRKF45",
+      "line": 97597,
+      "reason": "fall-through arm has no terminal RETURN"
+    },
+    {
+      "procedure": "RKFC",
+      "line": 97777,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RKFS",
+      "line": 98361,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "GERKS",
+      "line": 98884,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "STFODE",
+      "line": 99789,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "LSOD1",
+      "line": 99947,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "HSTART",
+      "line": 100329,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "INTYD",
+      "line": 100474,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "STOD",
+      "line": 100609,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PJAC",
+      "line": 101222,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SLVS",
+      "line": 101338,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SGBFA",
+      "line": 101435,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SGBSL",
+      "line": 101551,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RK",
+      "line": 101656,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "RK8",
+      "line": 101734,
+      "reason": "arm contains unsupported control flow or statement"
+    },
+    {
+      "procedure": "SEPDE",
+      "line": 101806,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PDEDGE",
+      "line": 101972,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "SEPEL1",
+      "line": 102502,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CHKPRM",
+      "line": 102762,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "CHKSNG",
+      "line": 102796,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DEFER",
+      "line": 102986,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DXFN",
+      "line": 103019,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DYFN",
+      "line": 103089,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BLKTRI",
+      "line": 103257,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BLKTR1",
+      "line": 103361,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "INDXA",
+      "line": 103606,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "INDXC",
+      "line": 103625,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "INDXB",
+      "line": 103644,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PROD0",
+      "line": 103700,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PRODP",
+      "line": 103801,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CPROD0",
+      "line": 103919,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "CPRODP",
+      "line": 104023,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "COMPB",
+      "line": 104138,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "TQLRT0",
+      "line": 104261,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PPADD",
+      "line": 104379,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "PSGF",
+      "line": 104542,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "BSRH",
+      "line": 104569,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "URGET",
+      "line": 104663,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "URNG",
+      "line": 104724,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DURNG",
+      "line": 104785,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "URNG0",
+      "line": 104863,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DURNG0",
+      "line": 104916,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "URNG1",
+      "line": 104973,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DURNG1",
+      "line": 105030,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "URNG2",
+      "line": 105067,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DURNG2",
+      "line": 105126,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RCIR1",
+      "line": 105196,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRCIR1",
+      "line": 105281,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RNOR",
+      "line": 105343,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRNOR",
+      "line": 105386,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "NRNG",
+      "line": 105430,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "DNRNG",
+      "line": 105459,
+      "reason": "unsupported preceding control flow"
+    },
+    {
+      "procedure": "NRVG",
+      "line": 105545,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "NRVG1",
+      "line": 105646,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DNRVG",
+      "line": 105744,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DNRVG1",
+      "line": 105845,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RANEXP",
+      "line": 105914,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRNEXP",
+      "line": 105976,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RGAM",
+      "line": 106024,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRGAM",
+      "line": 106074,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RBETA",
+      "line": 106141,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRBETA",
+      "line": 106214,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "FRAN",
+      "line": 106287,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DFRAN",
+      "line": 106373,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "TRAN",
+      "line": 106450,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DTRAN",
+      "line": 106520,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "RMK1",
+      "line": 106604,
+      "reason": "additional, duplicate or missing labels"
+    },
+    {
+      "procedure": "DRMK1",
+      "line": 106694,
+      "reason": "additional, duplicate or missing labels"
+    }
+  ]
+}
