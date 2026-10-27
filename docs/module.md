@@ -5,6 +5,12 @@ All 1,062 procedures, including implementation helpers, are public. Other module
 entities are private. Prefer the documented entry points and import selected
 names to avoid conflicts with local variables or other libraries.
 
+Public declarations are consolidated into lines of at most 100 characters,
+grouped under comments naming the 26 manual chapters. An additional group lists
+procedures and implementation helpers without an indexed manual entry. Names
+retain their source order within each group. The module generator reads these
+categories from the existing source interface inventory and chapter headings.
+
 ```fortran
 program roots
    use nswc_mod, only: dcbrt

@@ -34,7 +34,7 @@ end subroutine data
 '''
         result = module_source(source, {'CALLER': ['LEAF'], 'CALLBACK': ['LEAF']})
         self.assertIn('module nswc_mod\nimplicit none\nprivate\n', result)
-        self.assertIn('public :: caller\n', result)
+        self.assertRegex(result, r'(?m)^public :: [^\n]*\bcaller\b')
         self.assertIn('real(nswc_sp) :: x, keep\nexternal user_callback\n', result)
         self.assertIn('real(nswc_sp) :: leaf, x\nexternal leaf\n', result)
         self.assertIn('real(nswc_sp) :: leaf(2)\n', result)

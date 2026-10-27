@@ -13,1068 +13,158 @@ real(nswc_dp), parameter :: nswc_half_pi_dp = 1.57079632679489661923132169163975
 real(nswc_dp), parameter :: nswc_quarter_pi_dp = 0.78539816339744830961566084581987572104929234984378_nswc_dp
 real(nswc_dp), parameter :: nswc_two_pi_dp = 6.2831853071795864769252867665590057683943387987502_nswc_dp
 real(nswc_dp), parameter :: nswc_three_half_pi_dp = 4.7123889803846898576939650749192543262957540990627_nswc_dp
-public :: ipmpar
-public :: mach
-public :: radix
-public :: mach1
-public :: store2
-public :: mach2
-public :: dstor2
-public :: spmpar
-public :: dpmpar
-public :: epsln
-public :: depsln
-public :: exparg
-public :: dxparg
-public :: ishell
-public :: shell
-public :: shell2
-public :: rsort
-public :: risort
-public :: rrsort
-public :: dsort
-public :: disort
-public :: ddsort
-public :: aord
-public :: daord
-public :: qsorti
-public :: qsortr
-public :: qsortd
-public :: iorder
-public :: rorder
-public :: dorder
-public :: cbrt
-public :: dcbrt
-public :: artnq
-public :: dartnq
-public :: cpabs
-public :: dcpabs
-public :: crec
-public :: dcrec
-public :: cdiv
-public :: cdivid
-public :: dcsqrt
-public :: poca
-public :: capo
-public :: rota
-public :: srotg
-public :: drotg
-public :: rot3
-public :: constr
-public :: ang
-public :: sin0
-public :: cos0
-public :: sin1
-public :: cos1
-public :: dsin1
-public :: dcos1
-public :: snhcsh
-public :: esum
-public :: desum
-public :: rexp
-public :: drexp
-public :: rexp1
-public :: drexp1
-public :: alnrel
-public :: dlnrel
-public :: rlog
-public :: rlog1
-public :: drlog
-public :: drlog1
-public :: locpt
-public :: pfind
-public :: hull
-public :: parea
-public :: hc
-public :: hc1
-public :: ipath
-public :: fupd
-public :: bupd
-public :: iupd
-public :: rarc
-public :: cerf
-public :: cerfc
-public :: erf
-public :: erfc
-public :: erfc1
-public :: dcerf
-public :: dcerfc
-public :: erfcm2
-public :: derf
-public :: derfc
-public :: derfc1
-public :: derfc0
-public :: erfi
-public :: derfi
-public :: aerf
-public :: daerf
-public :: pndf
-public :: pni
-public :: dpni
-public :: daw
-public :: dpdaw
-public :: dpdaw0
-public :: cfrnli
-public :: frnl
-public :: cexpli
-public :: expli
-public :: dei
-public :: dei1
-public :: de1e
-public :: dei0
-public :: si
-public :: cin
-public :: cexexi
-public :: cli
-public :: ali
-public :: cgamma
-public :: cgam0
-public :: gamma
-public :: glog
-public :: gam1
-public :: gamln
-public :: gamln1
-public :: dcgama
-public :: dgamma
-public :: dpdel
-public :: dgam1
-public :: dgamln
-public :: dgmln1
-public :: cpsi
-public :: psi
-public :: dcpsi
-public :: dpsi
-public :: dpsi0
-public :: psidf
-public :: betaln
-public :: gsumln
-public :: bcorr
-public :: algdiv
-public :: dbetln
-public :: dgsmln
-public :: dbcorr
-public :: dlgdiv
-public :: gratio
-public :: rcomp
-public :: drcomp
-public :: gaminv
-public :: dgrat
-public :: dgr29
-public :: dgr17
-public :: dginv
-public :: bratio
-public :: fpser
-public :: apser
-public :: bpser
-public :: bup
-public :: bfrac
-public :: brcomp
-public :: brcmp1
-public :: bgrat
-public :: grat1
-public :: basym
-public :: isubx
-public :: blnd
-public :: logam
-public :: cbsslj
-public :: cbjm
-public :: cbdb
-public :: cbja
-public :: bsslj
-public :: besj
-public :: asjy
-public :: jairy
-public :: bssly
-public :: cbssli
-public :: bssli
-public :: besi
-public :: asik
-public :: cbesk
-public :: cbki
-public :: cbka
-public :: cbkm
-public :: ckps
-public :: cbkml
-public :: cbsslk
-public :: cka
-public :: ckm
-public :: ckml
-public :: cxp
-public :: bsslk
-public :: cai
-public :: airm
-public :: aii
-public :: aia
-public :: cbi
-public :: bii
-public :: bia
-public :: ia
-public :: imc
-public :: bim
-public :: ja
-public :: jmc
-public :: bjm
-public :: ka
-public :: kml
-public :: ai
-public :: aie
-public :: bi
-public :: bie
-public :: aimp
-public :: ck
-public :: cflect
-public :: km
-public :: kl
-public :: cke
-public :: atn
-public :: ekm
-public :: ekl
-public :: ellpi
-public :: dellpi
-public :: epi
-public :: depi
-public :: rfval
-public :: drfval
-public :: rdval
-public :: drdval
-public :: rjval
-public :: drjval
-public :: rcval1
-public :: drcvl1
-public :: ellpf
-public :: scd
-public :: scdm
-public :: scdf
-public :: scdj
-public :: elpfc1
-public :: peq
-public :: peq1
-public :: plem
-public :: plem1
-public :: valr2
-public :: circv
-public :: erfc0
-public :: erfcr
-public :: pkill
-public :: plcopy
-public :: dpcopy
-public :: padd
-public :: dpadd
-public :: psubt
-public :: dpsubt
-public :: pmult
-public :: dpmult
-public :: pdiv
-public :: dpdiv
-public :: plpwr
-public :: dplpwr
-public :: pinv
-public :: dpinv
-public :: mplnmv
-public :: csevl
-public :: dcsevl
-public :: lgrngn
-public :: lgrngv
-public :: lgrngx
-public :: orthos
-public :: orthov
-public :: orthox
-public :: zeroin
-public :: dzero
-public :: hbrd
-public :: hybrd
-public :: qdcrt
-public :: dqdcrt
-public :: cbcrt
-public :: dcbcrt
-public :: qtcrt
-public :: dqtcrt
-public :: drpoly
-public :: drply1
-public :: fxshfr
-public :: quadit
-public :: realit
-public :: calcsc
-public :: nextk
-public :: newest
-public :: quadsd
-public :: quadpl
-public :: dcpoly
-public :: dcply1
-public :: scalcp
-public :: cauchy
-public :: noshft
-public :: fxshft
-public :: vrshft
-public :: calct
-public :: nexth
-public :: polyev
-public :: errev
-public :: rbnd
+! Elementary Operations
+public :: ipmpar, spmpar, dpmpar, epsln, depsln, exparg, dxparg, ishell, shell, shell2, risort
+public :: dsort, disort, ddsort, aord, daord, qsorti, qsortr, qsortd, iorder, rorder, dorder, cbrt
+public :: dcbrt, artnq, dartnq, cpabs, dcpabs, crec, dcrec, cdiv, cdivid, dcsqrt, poca, capo, rota
+public :: srotg, drotg, rot3, constr, ang, sin1, cos1, dsin1, dcos1, snhcsh, rexp, drexp, alnrel
+public :: dlnrel, rlog, rlog1, drlog, drlog1
+
+! Geometry
+public :: locpt, pfind, hull, parea, hc
+
+! Special Functions
+public :: cerf, cerfc, erf, erfc, erfc1, dcerf, dcerfc, derf, derfc, derfc1, erfi, derfi, aerf
+public :: daerf, pndf, pni, dpni, daw, dpdaw, cfrnli, frnl, cexpli, expli, dei, dei1, si, cin
+public :: cexexi, cli, ali, cgamma, gamma, gamln, dcgama, dgamma, dgamln, cpsi, psi, dcpsi, dpsi
+public :: psidf, betaln, dbetln, gratio, rcomp, drcomp, gaminv, dgrat, dginv, bratio, brcomp, isubx
+public :: cbsslj, bsslj, besj, bssly, cbssli, bssli, besi, cbesk, cbsslk, bsslk, cai, cbi, ai, aie
+public :: bi, bie, ck, cke, ellpi, dellpi, epi, depi, rfval, drfval, rdval, drdval, rjval, drjval
+public :: ellpf, elpfc1, peq, peq1, plem, plem1, valr2, circv, pkill
+
+! Polynomials
+public :: plcopy, dpcopy, padd, dpadd, psubt, dpsubt, pmult, dpmult, pdiv, dpdiv, plpwr, dplpwr
+public :: pinv, dpinv, mplnmv, csevl, dcsevl, lgrngn, lgrngv, lgrngx, orthos, orthov, orthox
+
+! Solutions of Nonlinear Equations
+public :: zeroin, dzero, hbrd, qdcrt, dqdcrt, cbcrt, dcbcrt, qtcrt, dqtcrt, drpoly, dcpoly, rbnd
 public :: cbnd
-public :: scopy
-public :: dcopy
-public :: ccopy
-public :: iswap
-public :: sswap
-public :: dswap
-public :: cswap
-public :: srot
-public :: drot
-public :: csrot
-public :: srotmg
-public :: srotm
-public :: drotmg
-public :: drotm
-public :: sdot
-public :: ddot
-public :: cdotc
-public :: cdotu
-public :: sscal
-public :: dscal
-public :: cscal
-public :: csscal
-public :: saxpy
-public :: daxpy
-public :: caxpy
-public :: sasum
-public :: dasum
-public :: scasum
-public :: snrm2
-public :: dnrm2
-public :: scnrm2
-public :: isamax
-public :: idamax
-public :: icamax
-public :: mcvfs
-public :: dmcvfs
-public :: mcvsf
-public :: dmcvsf
-public :: mcvrd
-public :: mcvdr
-public :: mcvrc
-public :: cmreal
-public :: cmimag
-public :: mcopy
-public :: smcopy
-public :: dmcopy
-public :: cmcopy
-public :: cmconj
-public :: tpose
-public :: dtpose
-public :: ctpose
-public :: tip
-public :: dtip
-public :: ctip
-public :: infctr
-public :: cmadj
-public :: ctrans
-public :: madd
-public :: dmadd
-public :: cmadd
-public :: smadd
-public :: msubt
-public :: dmsubt
-public :: cmsubt
-public :: smsubt
-public :: mtms
-public :: dmtms
-public :: cmtms
-public :: mprod
-public :: rloc
-public :: ychg
-public :: dmprod
-public :: dloc
-public :: dychg
-public :: cmprod
-public :: cloc
-public :: cychg
-public :: svprd
-public :: dsvprd
-public :: tmprod
-public :: smprod
-public :: kprod
-public :: dkprod
-public :: ckprod
-public :: rnk
-public :: drnk
-public :: crout
-public :: krout
-public :: dec
-public :: sol
-public :: npivot
-public :: slv
-public :: dpslv
-public :: mslv
-public :: mslv1
-public :: slvmp
-public :: luimp
-public :: sgeco
-public :: sgefa
-public :: sgesl
-public :: sgedi
-public :: dmslv
-public :: dmslv1
-public :: dgeco
-public :: dgefa
-public :: dgesl
-public :: dgedi
-public :: arceco
-public :: arcedc
-public :: arcepr
-public :: arcepc
-public :: arcesl
-public :: arcefs
-public :: arcefm
-public :: arcefe
-public :: arcebs
-public :: arcebm
-public :: arcebe
-public :: btslv
-public :: decbt
-public :: solbt
-public :: smslv
-public :: sspco
-public :: sspfa
-public :: sspsl
-public :: sspdi
-public :: dsmslv
-public :: dspco
-public :: dspfa
-public :: dspsl
-public :: dspdi
-public :: pchol
-public :: sppfa
-public :: sppsl
-public :: sppdi
-public :: dpchol
-public :: dppfa
-public :: dppsl
-public :: dppdi
-public :: toplx
-public :: dtoplx
-public :: cmslv
-public :: cmslv1
-public :: cslvmp
-public :: cluimp
-public :: cgeco
-public :: cgefa
-public :: cgesl
-public :: cgedi
-public :: dcmslv
-public :: dcfact
-public :: dcsol
-public :: dcminv
-public :: ssvdc
-public :: dsvdc
-public :: csvdc
-public :: det
-public :: dpdet
-public :: cdet
-public :: abslv
-public :: abslv1
-public :: schur
-public :: shrslv
-public :: dabslv
-public :: dabsv1
-public :: dschur
-public :: dshslv
-public :: taslv
-public :: taslv1
-public :: symslv
-public :: dtaslv
-public :: dtasv1
-public :: dsymsv
-public :: squint
-public :: squin2
-public :: cqzhes
-public :: cqzit
-public :: trislv
-public :: mexp
-public :: dmexp
-public :: le
-public :: dple
-public :: cle
-public :: cvbr
-public :: cvrb
-public :: cvrb1
-public :: cvbd
-public :: cvdb
-public :: cvdb1
-public :: cvbc
-public :: cvcb
-public :: cvcb1
-public :: mcvbs
-public :: dmcvbs
-public :: cmcvbs
-public :: mcvsb
-public :: dmcvsb
-public :: cmcvsb
-public :: bcvrd
-public :: bcvdr
-public :: breal
-public :: bimag
-public :: bcvrc
-public :: bpose
-public :: dbpose
-public :: cbpose
-public :: badd
-public :: dbadd
-public :: cbadd
-public :: bsubt
-public :: dbsubt
-public :: cbsubt
-public :: bprod
-public :: dbprod
-public :: cbprod
-public :: bvprd
-public :: bvprd1
-public :: dbvpd
-public :: dbvpd1
-public :: cbvpd
-public :: cbvpd1
-public :: btprd
-public :: btprd1
-public :: dbtpd
-public :: dbtpd1
-public :: cbtpd
-public :: cbtpd1
-public :: bnrm
-public :: b1nrm
-public :: dbnrm
-public :: db1nrm
-public :: bslv
-public :: bslv1
-public :: snbfa
-public :: snbsl
-public :: dbslv
-public :: dbslv1
-public :: dbfa
-public :: dbsl
-public :: b1cnd
-public :: db1cnd
-public :: cbslv
-public :: cbslv1
-public :: cbfa
-public :: cbsl
-public :: cvrs
-public :: cvds
-public :: cvcs
-public :: cvsr
-public :: cvsd
-public :: cvsc
-public :: scvrd
-public :: scvdr
-public :: csreal
-public :: csimag
-public :: scvrc
-public :: rscopy
-public :: dscopy
-public :: cscopy
-public :: sconj
-public :: rpose
-public :: rpose1
-public :: dpose
-public :: dpose1
-public :: cpose
-public :: cpose1
-public :: sadd
-public :: dsadd
-public :: csadd
-public :: ssubt
-public :: dssubt
-public :: cssubt
-public :: sprod
-public :: dsprod
-public :: csprod
-public :: mvprd
-public :: mvprd1
-public :: mtprd
-public :: mtprd1
-public :: dvprd
-public :: dvprd1
-public :: dtprd
-public :: dtprd1
-public :: cvprd
-public :: cvprd1
-public :: ctprd
-public :: ctprd1
-public :: snrm
-public :: s1nrm
-public :: dsnrm
-public :: ds1nrm
-public :: spord
-public :: blkord
-public :: mc21a
-public :: mc21b
-public :: mc13d
-public :: mc13e
-public :: spslv
-public :: nspiv1
-public :: rslv
-public :: rslv1
-public :: tslv
-public :: tslv1
-public :: splu
-public :: dspslv
-public :: dnspiv
-public :: dslv
-public :: dslv1
-public :: dtslv
-public :: dtslv1
-public :: dsplu
-public :: s1cnd
-public :: ds1cnd
-public :: sonest
-public :: donest
-public :: cspslv
-public :: cnspiv
-public :: cslv
-public :: cslv1
-public :: ctslv
-public :: ctslv1
-public :: csplu
-public :: eig
-public :: eig1
-public :: eigv
-public :: eigv1
-public :: balanc
-public :: balinv
-public :: elmhes
-public :: elmhs0
-public :: orthes
-public :: hqr
-public :: balbak
-public :: eltran
-public :: eltrn0
-public :: ortran
-public :: ortrn1
-public :: hqr2
-public :: deig
-public :: deigv
-public :: dbal
-public :: dbalnv
-public :: dorth
-public :: dhqr
-public :: dbabk
-public :: dortrn
-public :: drtrn1
-public :: dhqr2
-public :: seig
-public :: seig1
-public :: seigv
-public :: seigv1
-public :: tred1
-public :: tred3
-public :: tqlrat
-public :: imtql1
-public :: tred2
-public :: tql2
-public :: imtql2
-public :: dseig
-public :: dseigv
-public :: dtred1
-public :: dtred3
-public :: dtql
-public :: dtred2
-public :: dtql2
-public :: ceig
-public :: ceigv
-public :: cbal
-public :: corth
-public :: comqr
-public :: cbabk2
-public :: comqr2
-public :: dceig
-public :: dceigv
-public :: dcbal
-public :: dcorth
-public :: dcomqr
-public :: dcbabk
-public :: dcmqr2
+
+! Vectors
+public :: scopy, dcopy, ccopy, sswap, dswap, cswap, srot, drot, csrot, srotmg, srotm, drotmg, drotm
+public :: sdot, ddot, cdotc, cdotu, sscal, dscal, cscal, csscal, saxpy, daxpy, caxpy, sasum, dasum
+public :: scasum, snrm2, dnrm2, scnrm2, isamax, idamax, icamax
+
+! Matrices
+public :: mcvfs, dmcvfs, mcvsf, dmcvsf, mcvrd, mcvdr, mcvrc, cmreal, cmimag, mcopy, smcopy, dmcopy
+public :: cmcopy, cmconj, tpose, dtpose, ctpose, tip, dtip, ctip, cmadj, ctrans, madd, dmadd, cmadd
+public :: smadd, msubt, dmsubt, cmsubt, smsubt, mtms, dmtms, cmtms, mprod, dmprod, cmprod, svprd
+public :: dsvprd, tmprod, smprod, kprod, dkprod, ckprod, rnk, drnk, crout, krout, npivot, mslv
+public :: mslv1, slvmp, dmslv, dmslv1, arceco, arcesl, btslv, smslv, dsmslv, pchol, dpchol, toplx
+public :: dtoplx, cmslv, cmslv1, cslvmp, dcmslv, ssvdc, dsvdc, csvdc, det, dpdet, cdet, abslv
+public :: dabslv, taslv, dtaslv, squint, mexp, dmexp
+
+! Large Dense Systems of Linear Equations
+public :: le, dple, cle
+
+! Banded Matrices
+public :: cvbr, cvrb, cvrb1, cvbd, cvdb, cvdb1, cvbc, cvcb, cvcb1, mcvbs, dmcvbs, cmcvbs, mcvsb
+public :: dmcvsb, cmcvsb, bcvrd, bcvdr, breal, bimag, bcvrc, bpose, dbpose, cbpose, badd, dbadd
+public :: cbadd, bsubt, dbsubt, cbsubt, bprod, dbprod, cbprod, bvprd, bvprd1, dbvpd, dbvpd1, cbvpd
+public :: cbvpd1, btprd, btprd1, dbtpd, dbtpd1, cbtpd, cbtpd1, bnrm, b1nrm, dbnrm, db1nrm, bslv
+public :: bslv1, dbslv, dbslv1, b1cnd, db1cnd, cbslv, cbslv1
+
+! Sparse Matrices
+public :: cvrs, cvds, cvcs, cvsr, cvsd, cvsc, scvrd, scvdr, csreal, csimag, scvrc, rscopy, dscopy
+public :: cscopy, sconj, rpose, rpose1, dpose, dpose1, cpose, cpose1, sadd, dsadd, csadd, ssubt
+public :: dssubt, cssubt, sprod, dsprod, csprod, mvprd, mvprd1, mtprd, mtprd1, dvprd, dvprd1, dtprd
+public :: dtprd1, cvprd, cvprd1, ctprd, ctprd1, snrm, s1nrm, dsnrm, ds1nrm, spord, blkord, spslv
+public :: rslv, tslv, dspslv, dslv, dtslv, s1cnd, ds1cnd, cspslv, cslv, ctslv
+
+! Eigenvalues and Eigenvectors
+public :: eig, eig1, eigv, eigv1, deig, deigv, seig, seig1, seigv, seigv1, dseig, dseigv, ceig
+public :: ceigv, dceig, dceigv
+
+! L1 Solution of Linear Equations
 public :: cl1
-public :: xl1
-public :: llsq
-public :: llsqmp
-public :: ortho
-public :: orsol
-public :: orimp
-public :: dllsq
-public :: dortho
-public :: dorsol
-public :: lsqr
-public :: u11ls
-public :: u12ls
-public :: u11us
-public :: u12us
-public :: dlsqr
-public :: du11ls
-public :: du12ls
-public :: du11us
-public :: du12us
-public :: hfti
-public :: hfti2
-public :: h12
-public :: dhfti
-public :: dhfti2
-public :: dh12
-public :: lsei
-public :: lsi
-public :: lpdp
-public :: wnnls
-public :: wnlsm
-public :: wnlit
-public :: l2slv
-public :: decom2
-public :: solve2
-public :: solve3
-public :: covar
-public :: splsq
-public :: normlz
-public :: stlsq
-public :: blsq
-public :: fmin
-public :: optf
-public :: optdrv
-public :: opchk1
-public :: opstp
-public :: fxdec
-public :: scalex
-public :: lltslv
-public :: fstofd
-public :: fstocd
-public :: lnsrch
-public :: secfac
-public :: qrupdt
-public :: jrot
-public :: lmdiff
-public :: lmdif
-public :: enorm
-public :: dogleg
-public :: fdjac1
-public :: fdjac2
-public :: lmpar
-public :: qform
-public :: qrfac
-public :: qrsolv
-public :: r1mpyq
-public :: r1updt
-public :: smplx
-public :: smplx1
-public :: ssplx
-public :: ssplx1
-public :: crout1
-public :: assgn
-public :: assgn1
-public :: mkp
-public :: mkp1
-public :: sigma1
-public :: pi1
-public :: parc
-public :: sknp
-public :: sknp1
-public :: lainv
-public :: abcon
-public :: srch
-public :: abcon1
-public :: acond
-public :: acondf
-public :: acondg
-public :: xcond
-public :: xcondx
-public :: xcondy
-public :: lainv1
-public :: cqext
-public :: qagi1
-public :: qagie1
-public :: qk15i1
-public :: fft
-public :: fft1
-public :: mfft
-public :: mfft1
-public :: sfft
-public :: cosqi
-public :: cosqf
-public :: cosqf1
-public :: cosqb
-public :: cosqb1
-public :: sinqf
-public :: sinqb
-public :: rffti
-public :: rffti1
-public :: rfftb
-public :: rfftb1
-public :: radb2
-public :: radb3
-public :: radb4
-public :: radb5
-public :: radbg
-public :: rfftf
-public :: rfftf1
-public :: radf2
-public :: radf3
-public :: radf4
-public :: radf5
-public :: radfg
-public :: cheby
-public :: cheby1
-public :: cerr
-public :: adapt
-public :: adapt1
-public :: adset
-public :: adtake
-public :: adcomp
-public :: errint
-public :: newton
-public :: polydd
-public :: adchk
-public :: adput
-public :: adtran
-public :: cpsc
-public :: dcpsc
-public :: trp
-public :: ltrp
-public :: htrp
-public :: pcoeff
-public :: pfit
-public :: wpfit
-public :: cbspl
-public :: splift
-public :: spfit
-public :: cspfit
-public :: scomp
-public :: scomp1
-public :: scomp2
-public :: seval
-public :: seval1
-public :: seval2
-public :: csint
-public :: csint1
-public :: csint2
-public :: pdspl
-public :: pdfit
-public :: pscmp
-public :: psevl
-public :: csloop
-public :: cslop1
-public :: lopcmp
-public :: lopdf
-public :: curv1
-public :: curv2
-public :: curvd
-public :: curvi
-public :: kurv1
-public :: kurv2
-public :: kurvp1
-public :: kurvp2
-public :: qurv1
-public :: qurv2
-public :: ceez
-public :: terms
-public :: intrvl
-public :: bval
-public :: bvali
-public :: bvali0
-public :: bspp
-public :: ppval
-public :: bspvb
-public :: bspvd
-public :: bstrp
-public :: banfac
-public :: banslv
-public :: bslsq
-public :: bchfac
-public :: bchslv
-public :: bfit
-public :: bfit0
-public :: bndacc
-public :: bndsl
-public :: spfit2
-public :: cspp
-public :: csurf
-public :: csurf1
-public :: csrf
-public :: csrf2
-public :: surf
-public :: surf2
-public :: nsurf2
-public :: bstrp2
-public :: bstrp1
-public :: bslsq2
-public :: bslsq1
-public :: bchsv1
-public :: bval2
-public :: trmesh
-public :: adnode
-public :: bdyadd
-public :: intadd
-public :: shiftd
-public :: swapd
-public :: swptst
-public :: tindx
-public :: trfind
-public :: gradg
-public :: gradg1
-public :: gradl
-public :: gradl1
-public :: setrm
-public :: getnp
-public :: sfval
-public :: sfval2
-public :: intrc1
-public :: tval
-public :: mfit
-public :: allot
-public :: basiz
-public :: mtable
-public :: gnrtp
-public :: incdg
-public :: scalpm
-public :: scaldn
-public :: meval
-public :: meval1
-public :: dmfit
-public :: dgnrtp
-public :: dincdg
-public :: dscalp
-public :: dscald
-public :: dmeval
-public :: dmevl1
-public :: qsuba
-public :: quad
-public :: qags
-public :: qagse
-public :: qk21f
-public :: qagi
-public :: qagie
-public :: qk15i
-public :: qpsrt
-public :: qelg
-public :: qxgs
-public :: qxgse
-public :: qxcpy
-public :: qxlqm
-public :: qxrul
-public :: qxrrd
-public :: dqags
-public :: dqagse
-public :: dqk21
-public :: dqagi
-public :: dqagie
-public :: dqk15i
-public :: dqpsrt
-public :: dqelg
-public :: dqxgs
-public :: dqxgse
-public :: dqxcpy
-public :: dqxlqm
-public :: dqxrul
-public :: dqxrrd
-public :: cubtri
-public :: rnderr
-public :: cubrul
+
+! Least Squares Solution of Linear Equations
+public :: llsq, llsqmp, dllsq, lsqr, dlsqr, hfti, hfti2, dhfti, dhfti2, lsei, wnnls, l2slv, splsq
+public :: stlsq, blsq
+
+! Optimization
+public :: fmin, optf, lmdiff, smplx, ssplx, assgn, mkp
+
+! Transforms
+public :: lainv, fft, fft1, mfft, mfft1, cosqi, cosqf, cosqb, sinqf, sinqb
+
+! Approximation of Functions
+public :: cheby, adapt, cpsc, dcpsc
+
+! Curve Fitting
+public :: trp, ltrp, htrp, pcoeff, pfit, wpfit, cbspl, splift, spfit, cspfit, scomp, scomp1, scomp2
+public :: seval, seval1, seval2, csint, csint1, csint2, pdspl, pdfit, pscmp, psevl, csloop, lopcmp
+public :: lopdf, curv1, curv2, curvd, curvi, kurv1, kurv2, kurvp1, kurvp2, qurv1, qurv2, intrvl
+public :: bval, bvali, bspp, ppval, bstrp, bslsq, bfit
+
+! Surface Fitting over Rectangular Grids
+public :: spfit2, csurf, csurf1, csrf, csrf2, surf, surf2, nsurf2, bstrp2, bslsq2, bval2
+
+! Surface Fitting over Arbitrarily Positioned Data Points
+public :: trmesh, gradg, gradl, sfval, sfval2
+
+! Manifold Fitting
+public :: mfit, meval, dmfit, dmeval
+
+! Numerical Integration
+public :: qsuba, qags, qagi, qxgs, dqags, dqagi, dqxgs, cubtri
+
+! Integral Equations
 public :: ieslv
-public :: iegs
-public :: nsterp
-public :: rmin
-public :: rnrm
-public :: conew
-public :: wandt
-public :: leave
-public :: itert
-public :: lnsys
-public :: ode
-public :: de1
-public :: step1
-public :: intrp
-public :: brkf45
-public :: rkfc
-public :: extra
-public :: rkf45
-public :: rkfs
-public :: fehl
-public :: gerk
-public :: gerks
-public :: sfode
-public :: sfode1
-public :: zzzjac
-public :: stfode
-public :: rsco
-public :: svco
-public :: lsod1
-public :: hstart
-public :: intyd
-public :: stod
-public :: cfod
-public :: pjac
-public :: slvs
-public :: sgbfa
-public :: sgbsl
-public :: vnorm
-public :: vnwrms
-public :: rk
-public :: rk8
+
+! Ordinary Differential Equations / Initial Value Problems
+public :: ode, brkf45, rkf45, gerk, sfode, sfode1, rk, rk8
+
+! Partial Differential Equations
 public :: sepde
-public :: pdedge
-public :: sepell
-public :: sepel1
-public :: chkprm
-public :: chksng
-public :: orthg
-public :: minsol
-public :: trisp
-public :: defer
-public :: dxfn
-public :: dyfn
-public :: blktri
-public :: blktr1
-public :: indxa
-public :: indxc
-public :: indxb
-public :: prod0
-public :: prodp
-public :: cprod0
-public :: cprodp
-public :: compb
-public :: tqlrt0
-public :: ppadd
-public :: psgf
-public :: bsrh
-public :: ppsgf
-public :: ppspf
+
+! Discrete Random Number Generation
 public :: urget
-public :: urng
-public :: durng
-public :: urng0
-public :: durng0
-public :: urng1
-public :: durng1
-public :: urng2
-public :: durng2
-public :: rcir
-public :: rcir1
-public :: drcir
-public :: drcir1
-public :: rnor
-public :: drnor
-public :: nrng
-public :: dnrng
-public :: nrvg
-public :: nrvg1
-public :: dnrvg
-public :: dnrvg1
-public :: ranexp
-public :: drnexp
-public :: rgam
-public :: drgam
-public :: rbeta
-public :: drbeta
-public :: fran
-public :: dfran
-public :: tran
-public :: dtran
-public :: rmk1
-public :: drmk1
+
+! Continuous Random Number Generation
+public :: urng, durng, urng2, durng2, rcir, drcir, rnor, drnor, nrng, dnrng, nrvg, nrvg1, dnrvg
+public :: dnrvg1, ranexp, drnexp, rgam, drgam, rbeta, drbeta, fran, dfran, tran, dtran, rmk1, drmk1
+
+! Additional procedures and implementation helpers
+public :: mach, radix, mach1, store2, mach2, dstor2, rsort, rrsort, sin0, cos0, esum, desum, rexp1
+public :: drexp1, hc1, ipath, fupd, bupd, iupd, rarc, erfcm2, derfc0, dpdaw0, de1e, dei0, cgam0
+public :: glog, gam1, gamln1, dpdel, dgam1, dgmln1, dpsi0, gsumln, bcorr, algdiv, dgsmln, dbcorr
+public :: dlgdiv, dgr29, dgr17, fpser, apser, bpser, bup, bfrac, brcmp1, bgrat, grat1, basym, blnd
+public :: logam, cbjm, cbdb, cbja, asjy, jairy, asik, cbki, cbka, cbkm, ckps, cbkml, cka, ckm, ckml
+public :: cxp, airm, aii, aia, bii, bia, ia, imc, bim, ja, jmc, bjm, ka, kml, aimp, cflect, km, kl
+public :: atn, ekm, ekl, rcval1, drcvl1, scd, scdm, scdf, scdj, erfc0, erfcr, hybrd, drply1, fxshfr
+public :: quadit, realit, calcsc, nextk, newest, quadsd, quadpl, dcply1, scalcp, cauchy, noshft
+public :: fxshft, vrshft, calct, nexth, polyev, errev, iswap, infctr, rloc, ychg, dloc, dychg, cloc
+public :: cychg, dec, sol, slv, dpslv, luimp, sgeco, sgefa, sgesl, sgedi, dgeco, dgefa, dgesl, dgedi
+public :: arcedc, arcepr, arcepc, arcefs, arcefm, arcefe, arcebs, arcebm, arcebe, decbt, solbt
+public :: sspco, sspfa, sspsl, sspdi, dspco, dspfa, dspsl, dspdi, sppfa, sppsl, sppdi, dppfa, dppsl
+public :: dppdi, cluimp, cgeco, cgefa, cgesl, cgedi, dcfact, dcsol, dcminv, abslv1, schur, shrslv
+public :: dabsv1, dschur, dshslv, taslv1, symslv, dtasv1, dsymsv, squin2, cqzhes, cqzit, trislv
+public :: snbfa, snbsl, dbfa, dbsl, cbfa, cbsl, mc21a, mc21b, mc13d, mc13e, nspiv1, rslv1, tslv1
+public :: splu, dnspiv, dslv1, dtslv1, dsplu, sonest, donest, cnspiv, cslv1, ctslv1, csplu, balanc
+public :: balinv, elmhes, elmhs0, orthes, hqr, balbak, eltran, eltrn0, ortran, ortrn1, hqr2, dbal
+public :: dbalnv, dorth, dhqr, dbabk, dortrn, drtrn1, dhqr2, tred1, tred3, tqlrat, imtql1, tred2
+public :: tql2, imtql2, dtred1, dtred3, dtql, dtred2, dtql2, cbal, corth, comqr, cbabk2, comqr2
+public :: dcbal, dcorth, dcomqr, dcbabk, dcmqr2, xl1, ortho, orsol, orimp, dortho, dorsol, u11ls
+public :: u12ls, u11us, u12us, du11ls, du12ls, du11us, du12us, h12, dh12, lsi, lpdp, wnlsm, wnlit
+public :: decom2, solve2, solve3, covar, normlz, optdrv, opchk1, opstp, fxdec, scalex, lltslv
+public :: fstofd, fstocd, lnsrch, secfac, qrupdt, jrot, lmdif, enorm, dogleg, fdjac1, fdjac2, lmpar
+public :: qform, qrfac, qrsolv, r1mpyq, r1updt, smplx1, ssplx1, crout1, assgn1, mkp1, sigma1, pi1
+public :: parc, sknp, sknp1, abcon, srch, abcon1, acond, acondf, acondg, xcond, xcondx, xcondy
+public :: lainv1, cqext, qagi1, qagie1, qk15i1, sfft, cosqf1, cosqb1, rffti, rffti1, rfftb, rfftb1
+public :: radb2, radb3, radb4, radb5, radbg, rfftf, rfftf1, radf2, radf3, radf4, radf5, radfg
+public :: cheby1, cerr, adapt1, adset, adtake, adcomp, errint, newton, polydd, adchk, adput, adtran
+public :: cslop1, ceez, terms, bvali0, bspvb, bspvd, banfac, banslv, bchfac, bchslv, bfit0, bndacc
+public :: bndsl, cspp, bstrp1, bslsq1, bchsv1, adnode, bdyadd, intadd, shiftd, swapd, swptst, tindx
+public :: trfind, gradg1, gradl1, setrm, getnp, intrc1, tval, allot, basiz, mtable, gnrtp, incdg
+public :: scalpm, scaldn, meval1, dgnrtp, dincdg, dscalp, dscald, dmevl1, quad, qagse, qk21f, qagie
+public :: qk15i, qpsrt, qelg, qxgse, qxcpy, qxlqm, qxrul, qxrrd, dqagse, dqk21, dqagie, dqk15i
+public :: dqpsrt, dqelg, dqxgse, dqxcpy, dqxlqm, dqxrul, dqxrrd, rnderr, cubrul, iegs, nsterp, rmin
+public :: rnrm, conew, wandt, leave, itert, lnsys, de1, step1, intrp, rkfc, extra, rkfs, fehl, gerks
+public :: zzzjac, stfode, rsco, svco, lsod1, hstart, intyd, stod, cfod, pjac, slvs, sgbfa, sgbsl
+public :: vnorm, vnwrms, pdedge, sepell, sepel1, chkprm, chksng, orthg, minsol, trisp, defer, dxfn
+public :: dyfn, blktri, blktr1, indxa, indxc, indxb, prod0, prodp, cprod0, cprodp, compb, tqlrt0
+public :: ppadd, psgf, bsrh, ppsgf, ppspf, urng0, durng0, urng1, durng1, rcir1, drcir1
 real(nswc_sp), save, volatile :: nswc_state_spdata_d1
 real(nswc_sp), save, volatile :: nswc_state_spdata_d2
 real(nswc_dp), save, volatile :: nswc_state_dpdata_d1
