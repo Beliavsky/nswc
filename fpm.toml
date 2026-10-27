@@ -1,0 +1,23 @@
+name = "nswc"
+version = "0.1.0"
+description = "NSWC mathematics library with explicit module interfaces"
+author = "Alfred H. Morris, Jr. and contributing authors"
+homepage = "https://github.com/Beliavsky/nswc"
+keywords = ["mathematics", "numerical", "legacy-fortran"]
+
+[build]
+auto-executables = false
+auto-tests = true
+auto-examples = true
+
+[library]
+source-dir = "src"
+
+[fortran]
+implicit-typing = false
+# Legacy dummy callbacks have implicit interfaces; their EXTERNAL declarations remain.
+implicit-external = true
+source-form = "free"
+
+[install]
+library = true

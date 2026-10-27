@@ -67,8 +67,10 @@ python tools/regenerate_sources.py
 python tools/regenerate_sources.py --check
 ```
 
-`tools/generate_module.py` also regenerates just the module from `nswc.f90`;
-`--check` verifies it without writing. Do not maintain independent source copies.
+`tools/generate_module.py` also regenerates the module from `nswc.f90` and
+updates its exact fpm mirror and module-based drivers; `--check` verifies those
+files without writing. See the [fpm guide](fpm.md). Do not maintain independent
+source copies.
 
 The checked-in `tools/module-bindings.json` records the compiler-resolved
 intrinsics that share names with library routines. The generator adds explicit

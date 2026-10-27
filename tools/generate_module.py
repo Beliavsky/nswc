@@ -237,11 +237,20 @@ def main():
     if args.check:
         check_binding_review(source)
     generated = module_source(source)
+    from generate_fpm import outputs as fpm_outputs,obsolete as obsolete_fpm
+    package=fpm_outputs(ROOT,generated)
     if args.check:
         if not target.exists() or target.read_bytes() != generated.encode('ascii'):
             raise ValueError('Generated module is stale')
+        if obsolete_fpm(ROOT,package) or any(not path.exists() or path.read_bytes()!=text.encode('ascii') for path,text in package.items()):
+            raise ValueError('Generated fpm package is stale')
     else:
         target.write_text(generated, encoding='ascii', newline='\n')
+        for path,text in package.items():
+            path.parent.mkdir(parents=True,exist_ok=True)
+            if not path.exists() or path.read_bytes()!=text.encode('ascii'):
+                path.write_text(text,encoding='ascii',newline='\n')
+        for path in obsolete_fpm(ROOT,package):path.unlink()
     print('Checked 1062 generated module procedures.' if args.check else 'Generated nswc_mod.f90.')
 
 

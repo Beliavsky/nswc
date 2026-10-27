@@ -27,6 +27,7 @@ from remove_final_returns import transform_free as remove_final_returns
 from modernize_obsolescent import transform as modernize_obsolescent, computed_gotos
 from storage_modernization import equivalence_free
 from ford_documentation import transform as ford_comments, line_numbers
+from generate_fpm import outputs as fpm_outputs, obsolete as obsolete_fpm
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -72,6 +73,7 @@ def generate(root=ROOT):
     outputs = {root / "nswc.f90": free,
                root / 'nswc_mod.f90': module_source(free),
                root / 'tools/comment-case-review.json': json.dumps(report, indent=2) + '\n'}
+    outputs.update(fpm_outputs(root,outputs[root/'nswc_mod.f90']))
     # Comments affect physical locations but not reviewed transfer bindings.
     review_path = root / 'tools/obsolescent-features.json'
     review = json.loads(review_path.read_text())
@@ -128,6 +130,7 @@ def main():
     outputs, links = generate()
     obsolete = [path for path in (ROOT / "source_parts").glob("nswc_part_*.f*")
                 if re.fullmatch(r"nswc_part_\d+\.(?:f|f90)", path.name) and path not in outputs]
+    obsolete.extend(obsolete_fpm(ROOT,outputs))
     changed = [path for path, text in outputs.items()
                if not path.exists() or path.read_bytes() != text.encode("utf-8")]
     if args.check:
@@ -136,6 +139,7 @@ def main():
         print(f"Checked 1062 procedures and {links} source links.")
         return int(bool(changed or obsolete))
     for path in changed:
+        path.parent.mkdir(parents=True,exist_ok=True)
         path.write_text(outputs[path], encoding="utf-8", newline="\n")
     for path in obsolete:
         path.unlink()

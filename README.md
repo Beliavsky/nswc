@@ -70,6 +70,12 @@ viewable code partitions.
 
 Run the commands below from the root of your downloaded or cloned repository.
 
+For an fpm build, run `fpm build`, `fpm test`, and
+`fpm run --example --all`. The package includes the module library, 54 numerical
+test drivers, and three examples. It can also be used as a Git or local dependency
+of another fpm project. See the [fpm guide](docs/fpm.md) for compiler selection,
+dependency declarations, and regeneration checks.
+
 For new programs, use `nswc_mod.f90`, which supplies module `nswc_mod` with all
 1,062 library procedures and explicit interfaces. For existing programs that
 call external procedures, retain `nswc.f90`. Both free-form versions provide the

@@ -1,0 +1,31 @@
+name: fpm package
+
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        toolchain:
+          - {compiler: gcc, version: '14'}
+          - {compiler: intel, version: '2025.0'}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: fortran-lang/setup-fortran@v1
+        with:
+          compiler: ${{ matrix.toolchain.compiler }}
+          version: ${{ matrix.toolchain.version }}
+      - uses: fortran-lang/setup-fpm@v9
+        with:
+          fpm-version: 'v0.12.0'
+      - run: python tools/generate_fpm.py --check
+      - run: python tools/validate_fpm.py --compiler "$FC"
