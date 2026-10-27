@@ -160,8 +160,8 @@ def transform(text, manifest=None):
     return ''.join(output)
 
 
-def compile_dump(text, work, compiler='gfortran'):
-    path = Path(work) / 'input.f90'
+def compile_dump(text, work, compiler='gfortran', fixed=False):
+    path = Path(work) / ('input.f' if fixed else 'input.f90')
     path.write_text(text, encoding='ascii', newline='\n')
     obj = Path(work) / 'input.o'
     result = subprocess.run([compiler, '-std=legacy', '-fno-allow-argument-mismatch',

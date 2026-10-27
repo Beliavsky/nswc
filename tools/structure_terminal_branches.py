@@ -122,9 +122,10 @@ def transform(data, report=None):
 
 
 def finish_fixed(data):
-    """Final formatting and structured-tail passes for historical validators."""
+    """Final formatting, structured tails and generics for historical validators."""
     from normalize_fixed_spacing import transform as spacing
-    return transform(spacing(data))
+    from fixed_generic_intrinsics import transform as generics
+    return generics(transform(spacing(data)))
 
 
 def main():

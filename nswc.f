@@ -941,7 +941,7 @@ C     K = 2**I SUCH THAT B**(-K) DOES NOT UNDERFLOW.
          Z = (X*X)*ONE
          CALL DSTOR2(Z*XINT, Z*T)
          IF (D1 .EQ. D2) GO TO 40
-         IF (Z + Z .EQ. ZERO .OR. DABS(Z) .GE. X) GO TO 40
+         IF (Z + Z .EQ. ZERO .OR. ABS(Z) .GE. X) GO TO 40
          CALL DSTOR2(Z, P*Z)
          IF (T*D2 .EQ. T*Z) GO TO 40
          K = K + K
@@ -953,7 +953,7 @@ C     LOOP TO DETERMINE MINEXP AND XMIN
          X = (X*BINV)*ONE
          CALL DSTOR2(X*XINT, X*T)
          IF (D1 .EQ. D2) GO TO 90
-         IF (X + X .EQ. ZERO .OR. DABS(X) .GE. XMIN) GO TO 90
+         IF (X + X .EQ. ZERO .OR. ABS(X) .GE. XMIN) GO TO 90
          CALL DSTOR2(X, P*X)
          IF (T*D2 .EQ. T*X) GO TO 80
          K = K + 1
@@ -968,7 +968,7 @@ C     THIS LOSS OF ACCURACY.
          X = (X*BINV)*ONE
          CALL DSTOR2(X*XINT, X*T)
          IF (D1 .EQ. D2) GO TO 90
-         IF (X + X .NE. ZERO .AND. DABS(X) .LT. Z) GO TO 81
+         IF (X + X .NE. ZERO .AND. ABS(X) .LT. Z) GO TO 81
    90 MINEXP = 1 - K
 C-----------------------------------------------------------------------
 C     DEFINE AN INITIAL APPROXIMATION FOR MAXEXP AND XMIN
@@ -1160,7 +1160,7 @@ C--------------------------------------------------------------------
    20 IF (B .NE. 16) GO TO 30
          LNB = 2.7725887222398
          GO TO 50
-   30 LNB = ALOG(FLOAT(B))
+   30 LNB = LOG(FLOAT(B))
    50 M = 1 - IPMPAR(5)
       EPSLN = M * LNB
       END FUNCTION EPSLN
@@ -1186,7 +1186,7 @@ C--------------------------------------------------------------------
          LNB = 2.77258872223978123766892848583D+00
          GO TO 50
    30 DB = B
-      LNB = DLOG(DB)
+      LNB = LOG(DB)
    50 M = 1 - IPMPAR(8)
       DEPSLN = M * LNB
       END FUNCTION DEPSLN
@@ -1215,7 +1215,7 @@ C--------------------------------------------------------------------
    20 IF (B .NE. 16) GO TO 30
          LNB = 2.7725887222398
          GO TO 50
-   30 LNB = ALOG(FLOAT(B))
+   30 LNB = LOG(FLOAT(B))
    50 IF (L .EQ. 0) GO TO 60
          M = IPMPAR(6) - 1
          EXPARG = 0.99999 * (M * LNB)
@@ -1249,7 +1249,7 @@ C--------------------------------------------------------------------
          LNB = 2.77258872223978123766892848583D+00
          GO TO 50
    30 DB = B
-      LNB = DLOG(DB)
+      LNB = LOG(DB)
    50 IF (L .EQ. 0) GO TO 60
          M = IPMPAR(9) - 1
          DXPARG = 0.999999999999D+00 * (M * LNB)
@@ -1756,7 +1756,7 @@ C               SO THAT DABS(A(J)) .LE. DABS(A(J+KI))
             L = J
             LL = J + KI
             S = A(LL)
-   30          IF (DABS(S) .GE. DABS(A(L))) GO TO 31
+   30          IF (ABS(S) .GE. ABS(A(L))) GO TO 31
                A(LL) = A(L)
                LL = L
                L = L - KI
@@ -2399,12 +2399,12 @@ C                   CUBE ROOT OF A REAL NUMBER
 C-----------------------------------------------------------------------
       NSWC_AI_R4 = X
       IF (NSWC_AI_R4 .LT. 0) THEN
-         R = ALOG(-X)/3.0
+         R = LOG(-X)/3.0
          CBRT = -EXP(R)
       ELSE IF (NSWC_AI_R4 .EQ. 0) THEN
          CBRT = 0.0
       ELSE
-         R = ALOG(X)/3.0
+         R = LOG(X)/3.0
          CBRT = EXP(R)
       END IF
       END FUNCTION CBRT
@@ -2419,13 +2419,13 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION :: NSWC_AI_R8
       NSWC_AI_R8 = X
       IF (NSWC_AI_R8 .LT. 0) THEN
-         R = DLOG(-X)/3.D0
-         DCBRT = -DEXP(R)
+         R = LOG(-X)/3.D0
+         DCBRT = -EXP(R)
       ELSE IF (NSWC_AI_R8 .EQ. 0) THEN
          DCBRT = 0.D0
       ELSE
-         R = DLOG(X)/3.D0
-         DCBRT = DEXP(R)
+         R = LOG(X)/3.D0
+         DCBRT = EXP(R)
       END IF
       END FUNCTION DCBRT
 
@@ -2467,7 +2467,7 @@ C-----------------------------------------------------------------------
       IF (NSWC_AI_R8 .LT. 0) GO TO 1
       IF (NSWC_AI_R8 .EQ. 0) GO TO 2
       GO TO 5
-    1 DARTNQ=DATAN(Y/X)+3.14159265358979323846264338328D0
+    1 DARTNQ=ATAN(Y/X)+3.14159265358979323846264338328D0
       RETURN
     2 NSWC_AI_R8 = Y
       IF (NSWC_AI_R8 .LT. 0) GO TO 3
@@ -2481,9 +2481,9 @@ C-----------------------------------------------------------------------
       IF (NSWC_AI_R8 .LT. 0) GO TO 6
       IF (NSWC_AI_R8 .EQ. 0) GO TO 8
       GO TO 7
-    6 DARTNQ=DATAN(Y/X)+6.28318530717958647692528676656D0
+    6 DARTNQ=ATAN(Y/X)+6.28318530717958647692528676656D0
       RETURN
-    7 DARTNQ=DATAN(Y/X)
+    7 DARTNQ=ATAN(Y/X)
       RETURN
     8 DARTNQ=0.D0
       END FUNCTION DARTNQ
@@ -2513,13 +2513,13 @@ C     --------------------------------------
 C     --------------------------------------
 C     EVALUATION OF SQRT(X*X + Y*Y)
 C     --------------------------------------
-      IF (DABS(X) .LE. DABS(Y)) GO TO 10
+      IF (ABS(X) .LE. ABS(Y)) GO TO 10
          A = Y/X
-         DCPABS = DABS(X)*DSQRT(1.D0 + A*A)
+         DCPABS = ABS(X)*SQRT(1.D0 + A*A)
          RETURN
    10 IF (Y .EQ. 0.D0) GO TO 20
          A = X/Y
-         DCPABS = DABS(Y)*DSQRT(1.D0 + A*A)
+         DCPABS = ABS(Y)*SQRT(1.D0 + A*A)
          RETURN
    20 DCPABS = 0.D0
       END FUNCTION DCPABS
@@ -2552,7 +2552,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X, Y
       DOUBLE PRECISION, INTENT(INOUT) :: U, V
       DOUBLE PRECISION :: D, T
-      IF (DABS(X) .GT. DABS(Y)) GO TO 10
+      IF (ABS(X) .GT. ABS(Y)) GO TO 10
          T = X/Y
          D = Y + T*X
          U = T/D
@@ -2598,7 +2598,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(INOUT) :: CR, CI
       DOUBLE PRECISION :: D, T, U, V
       DOUBLE PRECISION :: DPMPAR
-      IF (DABS(BR) .LE. DABS(BI)) GO TO 10
+      IF (ABS(BR) .LE. ABS(BI)) GO TO 10
       T = BI/BR
       D = BR + T*BI
       U = (AR + AI*T)/D
@@ -2644,24 +2644,24 @@ C ----------------------------------------------------------------------
          W(1) = 0.D0
          W(2) = 0.D0
          RETURN
-   11 W(1) = DSQRT(0.5D0*DABS(Y))
-      W(2) = DSIGN(W(1),Y)
+   11 W(1) = SQRT(0.5D0*ABS(Y))
+      W(2) = SIGN(W(1),Y)
       RETURN
    20 IF (Y .NE. 0.D0) GO TO 21
-         W(1) = DSQRT(X)
+         W(1) = SQRT(X)
          W(2) = 0.D0
          RETURN
    21 R = DCPABS(X,Y)
-      W(1) = DSQRT(0.5D0*(R + X))
+      W(1) = SQRT(0.5D0*(R + X))
       W(2) = 0.5D0*Y/W(1)
       RETURN
    30 IF (Y .NE. 0.D0) GO TO 31
          W(1) = 0.D0
-         W(2) = DSQRT(DABS(X))
+         W(2) = SQRT(ABS(X))
          RETURN
    31 R = DCPABS(X,Y)
-      W(2) = DSQRT(0.5D0*(R - X))
-      W(2) = DSIGN(W(2),Y)
+      W(2) = SQRT(0.5D0*(R - X))
+      W(2) = SIGN(W(2),Y)
       W(1) = 0.5D0*Y/W(2)
       END SUBROUTINE DCSQRT
 
@@ -2775,12 +2775,12 @@ C     NEXT BE CALLED TO APPLY THE TRANSFORMATION TO A 2 BY N MATRIX.
 C ------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(INOUT) :: DA, DB, DC, DS
       DOUBLE PRECISION :: U, V, R
-      IF (DABS(DA) .LE. DABS(DB)) GO TO 10
+      IF (ABS(DA) .LE. ABS(DB)) GO TO 10
 C *** HERE DABS(DA) .GT. DABS(DB) ***
       U = DA + DA
       V = DB / U
 C     NOTE THAT U AND R HAVE THE SIGN OF DA
-      R = DSQRT(.25D0 + V**2) * U
+      R = SQRT(.25D0 + V**2) * U
 C     NOTE THAT DC IS POSITIVE
       DC = DA / R
       DS = V * (DC + DC)
@@ -2793,7 +2793,7 @@ C *** HERE DABS(DA) .LE. DABS(DB) ***
       V = DA / U
 C     NOTE THAT U AND R HAVE THE SIGN OF DB
 C     (R IS IMMEDIATELY STORED IN DA)
-      DA = DSQRT(.25D0 + V**2) * U
+      DA = SQRT(.25D0 + V**2) * U
 C     NOTE THAT DS IS POSITIVE
       DS = DB / DA
       DC = V * (DS + DS)
@@ -3085,7 +3085,7 @@ C     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
 C            LARGEST POSITIVE INTEGER THAT MAY BE USED.
                        MAX = IPMPAR(3)
 C------------------------
-      A = DABS(X)
+      A = ABS(X)
       T = MAX
       IF (A .LT. T) GO TO 10
          DSIN1 = 0.D0
@@ -3167,7 +3167,7 @@ C     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
 C            LARGEST POSITIVE INTEGER THAT MAY BE USED.
                        MAX = IPMPAR(3)
 C------------------------
-      A = DABS(X)
+      A = ABS(X)
       T = MAX
       IF (A .LT. T) GO TO 10
          DCOS1 = 1.D0
@@ -3316,15 +3316,15 @@ C-----------------------------------------------------------------------
       IF (MU .LT. 0) GO TO 20
          W = MU + X
          IF (W .GT. 0.D0) GO TO 20
-         DESUM = DEXP(W)
+         DESUM = EXP(W)
          RETURN
    10 IF (MU .GT. 0) GO TO 20
          W = MU + X
          IF (W .LT. 0.D0) GO TO 20
-         DESUM = DEXP(W)
+         DESUM = EXP(W)
          RETURN
    20 W = MU
-      DESUM = DEXP(W)*DEXP(X)
+      DESUM = EXP(W)*EXP(X)
       END FUNCTION DESUM
 
       REAL FUNCTION REXP(X)
@@ -3380,7 +3380,7 @@ C---------------------------
      *     C4 / .1388888888888888888888888888888889D-02/,
      *     C5 / .1984126984126984126984126984126984D-03/
 C---------------------------
-      IF (DABS(X) .GT. 0.15D0) GO TO 10
+      IF (ABS(X) .GT. 0.15D0) GO TO 10
 C        Z IS A MINIMAX APPROXIMATION OF THE SERIES
 C                C6 + C7*X + C8*X**2 + ....
 C        THIS APPROXIMATION IS ACCURATE TO WITHIN
@@ -3395,11 +3395,11 @@ C        DIGIT.
       DREXP = X*W
       RETURN
    10 IF (X .LT. 0.D0) GO TO 20
-         E = DEXP(X)
+         E = EXP(X)
          DREXP = E*(0.5D0 + (0.5D0 - 1.D0/E))
          RETURN
    20 IF (X .LT. -77.D0) GO TO 30
-         DREXP = (DEXP(X) - 0.5D0) - 0.5D0
+         DREXP = (EXP(X) - 0.5D0) - 0.5D0
          RETURN
    30 DREXP = -1.D0
       END FUNCTION DREXP
@@ -3468,8 +3468,8 @@ C---------------------------
      *     C5 / .1984126984126984126984126984126984D-03/
 C---------------------------
       W = 1.D0
-      IF (DABS(X) .LT. 1.D-33) RETURN
-      IF (DABS(X) .GT. 0.15D0) GO TO 10
+      IF (ABS(X) .LT. 1.D-33) RETURN
+      IF (ABS(X) .GT. 0.15D0) GO TO 10
 C        Z IS A MINIMAX APPROXIMATION OF THE SERIES
 C                C6 + C7*X + C8*X**2 + ....
 C        THIS APPROXIMATION IS ACCURATE TO WITHIN
@@ -3483,11 +3483,11 @@ C        DIGIT.
      *          C1)*X + 0.5D0)*X + 1.D0
       RETURN
    10 IF (X .LT. 0.D0) GO TO 20
-         IF (E .LT. 0.D0) E = DEXP(X)
+         IF (E .LT. 0.D0) E = EXP(X)
          W = (E*(0.5D0 + (0.5D0 - 1.D0/E)))/X
          RETURN
    20 IF (X .LT. -77.D0) GO TO 30
-         IF (E .LT. 0.D0) E = DEXP(X)
+         IF (E .LT. 0.D0) E = EXP(X)
          W = ((E - 0.5D0) - 0.5D0)/X
          RETURN
    30 W = -1.D0/X
@@ -3514,7 +3514,7 @@ C--------------------------
       RETURN
    10 X = 1.0 + A
       IF (A .LT. 0.0) X = (A + 0.5) + 0.5
-      ALNREL = ALOG(X)
+      ALNREL = LOG(X)
       END FUNCTION ALNREL
 
       DOUBLE PRECISION FUNCTION DLNREL(A)
@@ -3544,10 +3544,10 @@ C-------------------------
      *     C4 /.1111111111111111111111111111111D+00/,
      *     C5 /.9090909090909090909090909090909D-01/
 C-------------------------
-      IF (DABS(A) .LT. 0.375D0) GO TO 10
+      IF (ABS(A) .LT. 0.375D0) GO TO 10
       T = 1.D0 + A
       IF (A .LT. 0.D0) T = 0.5D0 + (0.5D0 + A)
-      DLNREL = DLOG(T)
+      DLNREL = LOG(T)
       RETURN
 C        W IS A MINIMAX APPROXIMATION OF THE SERIES
 C               C6 + C7*T**2 + C8*T**4 + ...
@@ -3604,7 +3604,7 @@ C                  SERIES EXPANSION
       RLOG = R*(U - 2.0*T*W) + W1
       RETURN
   100 R = (X - 0.5) - 0.5
-      RLOG = R - ALOG(X)
+      RLOG = R - LOG(X)
       END FUNCTION RLOG
 
       REAL FUNCTION RLOG1(X)
@@ -3647,7 +3647,7 @@ C                  SERIES EXPANSION
       RLOG1 = R*(U - 2.0*T*W) + W1
       RETURN
   100 W = (X + 0.5) + 0.5
-      RLOG1 = X - ALOG(W)
+      RLOG1 = X - LOG(W)
       END FUNCTION RLOG1
 
       DOUBLE PRECISION FUNCTION DRLOG(X)
@@ -3713,7 +3713,7 @@ C        THE 21-ST SIGNIFICANT DIGIT.
       DRLOG = R*(U - 2.D0*T*W) + W1
       RETURN
   100 R = (X - 0.5D0) - 0.5D0
-      DRLOG = R - DLOG(X)
+      DRLOG = R - LOG(X)
       END FUNCTION DRLOG
 
       DOUBLE PRECISION FUNCTION DRLOG1(X)
@@ -3779,7 +3779,7 @@ C        THE 21-ST SIGNIFICANT DIGIT.
       DRLOG1 = R*(U - 2.D0*T*W) + W1
       RETURN
   100 W = (X + 0.5D0) + 0.5D0
-      DRLOG1 = X - DLOG(W)
+      DRLOG1 = X - LOG(W)
       END FUNCTION DRLOG1
 
       SUBROUTINE LOCPT(X0, Y0, X, Y, N, L, M)
@@ -3893,7 +3893,7 @@ C                 LINE IN THE PATH ARE PARALLEL
          S = HI*K
          T = H*KI
          D = S - T
-         IF (ABS(D) .LE. TOL*AMAX1(ABS(S),ABS(T))) GO TO 40
+         IF (ABS(D) .LE. TOL*MAX(ABS(S),ABS(T))) GO TO 40
 C-----------------------------------------------------------------------
 C                   THE LINES ARE NOT PARALLEL
 C-----------------------------------------------------------------------
@@ -3902,11 +3902,11 @@ C-----------------------------------------------------------------------
          S = HI*Q
          T = KI*P
          DIFF = S - T
-         IF (ABS(DIFF) .LE. TOL*AMAX1(ABS(S),ABS(T))) DIFF = 0.0
+         IF (ABS(DIFF) .LE. TOL*MAX(ABS(S),ABS(T))) DIFF = 0.0
          S = H*Q
          T = K*P
          DIFF1 = S - T
-         IF (ABS(DIFF1) .LE. TOL*AMAX1(ABS(S),ABS(T))) DIFF1 = 0.0
+         IF (ABS(DIFF1) .LE. TOL*MAX(ABS(S),ABS(T))) DIFF1 = 0.0
          S = DIFF/D
          T = DIFF1/D
          IF (S .LT. 0.0 .OR. S .GT. ONEP) GO TO 100
@@ -3938,30 +3938,30 @@ C                     THE LINES ARE PARALLEL
 C-----------------------------------------------------------------------
    40    IF (ABS(HI) .GT. ABS(KI)) GO TO 50
             D = A(2) - Y(I)
-            IF (ABS(D) .LE. TOL0*AMAX1(ABS(A(2)),ABS(Y(I)))) D = 0.0
+            IF (ABS(D) .LE. TOL0*MAX(ABS(A(2)),ABS(Y(I)))) D = 0.0
             S = D/KI
             P = X(I) + S*HI
-            IF (ABS(A(1) - P) .GT. TOL*AMAX1(ABS(A(1)),ABS(P)))
+            IF (ABS(A(1) - P) .GT. TOL*MAX(ABS(A(1)),ABS(P)))
      *          GO TO 100
             D = B(2) - Y(I)
-            IF (ABS(D) .LE. TOL0*AMAX1(ABS(B(2)),ABS(Y(I)))) D = 0.0
+            IF (ABS(D) .LE. TOL0*MAX(ABS(B(2)),ABS(Y(I)))) D = 0.0
             T = D/KI
             GO TO 60
    50    D = A(1) - X(I)
-         IF (ABS(D) .LE. TOL0*AMAX1(ABS(A(1)),ABS(X(I)))) D = 0.0
+         IF (ABS(D) .LE. TOL0*MAX(ABS(A(1)),ABS(X(I)))) D = 0.0
          S = D/HI
          P = Y(I) + S*KI
-         IF (ABS(P - A(2)) .GT. TOL*AMAX1(ABS(P),ABS(A(2))))
+         IF (ABS(P - A(2)) .GT. TOL*MAX(ABS(P),ABS(A(2))))
      *       GO TO 100
          D = B(1) - X(I)
-         IF (ABS(D) .LE. TOL0*AMAX1(ABS(B(1)),ABS(X(I)))) D = 0.0
+         IF (ABS(D) .LE. TOL0*MAX(ABS(B(1)),ABS(X(I)))) D = 0.0
          T = D/HI
 C              THE 2 LINES ARE PORTIONS OF THE SAME
 C                     STRAIGHT INFINITE LINE
    60    IF (S .GT. 0.0 .AND. S .LT. ONEM) GO TO 220
          IF (T .GT. 0.0 .AND. T .LT. ONEM) GO TO 220
-         TMIN = AMIN1(S,T)
-         TMAX = AMAX1(S,T)
+         TMIN = MIN(S,T)
+         TMAX = MAX(S,T)
          IF (TMAX .LE. 0.0) GO TO 70
          IF (TMIN .GE. ONEM) GO TO 80
          GO TO 220
@@ -5163,7 +5163,7 @@ C------------------------
          Y = -Y
          SN = -1.0
    10 IF (MO .NE. 0  .AND.  SN .EQ. 1.0  .AND.
-     *   AMAX1(X, ABS(Y)) .GE. 100.0) GO TO 60
+     *   MAX(X, ABS(Y)) .GE. 100.0) GO TO 60
       R = X*X + Y*Y
       SZ(1) = X*X - Y*Y
       SZ(2) = 2.0*X*Y
@@ -5507,7 +5507,7 @@ C                       W = ERF(Z)    IF MO = 0
 C                       W = ERFC(Z)   OTHERWISE
 C-----------------------------------------------------------------------
 C------------------------
-      ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
+      ANORM(X,Y) = MAX(ABS(X),ABS(Y))
 C------------------------
 C     C = 1/SQRT(PI)
 C------------------------
@@ -5529,14 +5529,14 @@ C------------------------
       SZ(2) = 2.D0*X*Y
       IF (R .LE. 1.D0) GO TO 20
       IF (R .GE. 144.D0) GO TO 100
-      IF (DABS(Y) .GT. 31.8D0*X) GO TO 50
-      IF (DABS(Y) .GT. 7.0D0*X .AND. R .LT. 64.D0) GO TO 50
-      IF (DABS(Y) .GT. 3.2D0*X .AND. R .LT. 49.D0) GO TO 50
-      IF (DABS(Y) .GT. 2.0D0*X .AND. R .LT. 36.D0) GO TO 50
-      IF (DABS(Y) .GT. 1.2D0*X .AND. R .LT. 25.D0) GO TO 50
-      IF (DABS(Y) .GT. 0.9D0*X .AND. R .LT. 16.D0) GO TO 50
+      IF (ABS(Y) .GT. 31.8D0*X) GO TO 50
+      IF (ABS(Y) .GT. 7.0D0*X .AND. R .LT. 64.D0) GO TO 50
+      IF (ABS(Y) .GT. 3.2D0*X .AND. R .LT. 49.D0) GO TO 50
+      IF (ABS(Y) .GT. 2.0D0*X .AND. R .LT. 36.D0) GO TO 50
+      IF (ABS(Y) .GT. 1.2D0*X .AND. R .LT. 25.D0) GO TO 50
+      IF (ABS(Y) .GT. 0.9D0*X .AND. R .LT. 16.D0) GO TO 50
       IF (R .GE. 6.25D0) GO TO 80
-      IF (DABS(Y) .GT. 0.6D0*X) GO TO 50
+      IF (ABS(Y) .GT. 0.6D0*X) GO TO 50
       IF (R .GE. 4.0D0) GO TO 40
       D = X - 2.D0
       IF (D*D + Y*Y .LT. 1.D0) GO TO 40
@@ -5626,9 +5626,9 @@ C                    FOR  (EXP(Z*Z)/Z)*ERF(Z)
       C2 = C + C
       SM(1) = C2*(X*WN(1) - Y*WN(2))
       SM(2) = C2*(X*WN(2) + Y*WN(1))
-      E = DEXP(-SZ(1))
-      QF(1) = E*DCOS(-SZ(2))
-      QF(2) = E*DSIN(-SZ(2))
+      E = EXP(-SZ(1))
+      QF(1) = E*COS(-SZ(2))
+      QF(2) = E*SIN(-SZ(2))
       TM(1) = QF(1)*SM(1) - QF(2)*SM(2)
       TM(2) = QF(1)*SM(2) + QF(2)*SM(1)
       W(1) = SN*TM(1)
@@ -5702,9 +5702,9 @@ C                      ASYMPTOTIC EXPANSION
       SM(2) = C*SM(2)
       IF (X .LT. 1.D-2) GO TO 200
 C                       TERMINATION
-  130 E = DEXP(-SZ(1))
-      QF(1) = E*DCOS(-SZ(2))
-      QF(2) = E*DSIN(-SZ(2))
+  130 E = EXP(-SZ(1))
+      QF(1) = E*COS(-SZ(2))
+      QF(2) = E*SIN(-SZ(2))
       TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
       TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
       SM(1) = TS(1)
@@ -5721,9 +5721,9 @@ C                       TERMINATION
       W(2) = SM(2)
       RETURN
 C               MODIFIED ASYMPTOTIC EXPANSION
-  200 E = DEXP(-SZ(1))
-      QF(1) = E*DCOS(-SZ(2))
-      QF(2) = E*DSIN(-SZ(2))
+  200 E = EXP(-SZ(1))
+      QF(1) = E*COS(-SZ(2))
+      QF(2) = E*SIN(-SZ(2))
       W(1) = QF(1)*SM(1) - QF(2)*SM(2)
       W(2) = QF(1)*SM(2) + QF(2)*SM(1)
       IF (MO .EQ. 0) GO TO 210
@@ -5754,7 +5754,7 @@ C           W = ERFC(Z)           IF MO = 0 OR REAL(Z) .LT. 0
 C           W = DEXP(X*X)*ERFC(Z)  OTHERWISE
 C-----------------------------------------------------------------------
 C------------------------
-      ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
+      ANORM(X,Y) = MAX(ABS(X),ABS(Y))
 C------------------------
 C     C = 1/SQRT(PI)
 C------------------------
@@ -5772,20 +5772,20 @@ C------------------------
          Y = -Y
          SN = -1.D0
    10 IF (MO .NE. 0  .AND.  SN .EQ. 1.D0  .AND.
-     *   DMAX1(X, DABS(Y)) .GE. 144.D0) GO TO 100
+     *   MAX(X, ABS(Y)) .GE. 144.D0) GO TO 100
       R = X*X + Y*Y
       SZ(1) = X*X - Y*Y
       SZ(2) = 2.D0*X*Y
       IF (R .LE. 1.D0) GO TO 20
       IF (R .GE. 144.D0) GO TO 100
-      IF (DABS(Y) .GT. 31.8D0*X) GO TO 50
-      IF (DABS(Y) .GT. 7.0D0*X .AND. R .LT. 64.D0) GO TO 50
-      IF (DABS(Y) .GT. 3.2D0*X .AND. R .LT. 49.D0) GO TO 50
-      IF (DABS(Y) .GT. 2.0D0*X .AND. R .LT. 36.D0) GO TO 50
-      IF (DABS(Y) .GT. 1.2D0*X .AND. R .LT. 25.D0) GO TO 50
-      IF (DABS(Y) .GT. 0.9D0*X .AND. R .LT. 16.D0) GO TO 50
+      IF (ABS(Y) .GT. 31.8D0*X) GO TO 50
+      IF (ABS(Y) .GT. 7.0D0*X .AND. R .LT. 64.D0) GO TO 50
+      IF (ABS(Y) .GT. 3.2D0*X .AND. R .LT. 49.D0) GO TO 50
+      IF (ABS(Y) .GT. 2.0D0*X .AND. R .LT. 36.D0) GO TO 50
+      IF (ABS(Y) .GT. 1.2D0*X .AND. R .LT. 25.D0) GO TO 50
+      IF (ABS(Y) .GT. 0.9D0*X .AND. R .LT. 16.D0) GO TO 50
       IF (R .GE. 6.25D0) GO TO 80
-      IF (DABS(Y) .GT. 0.6D0*X) GO TO 50
+      IF (ABS(Y) .GT. 0.6D0*X) GO TO 50
       IF (R .GE. 4.0D0) GO TO 40
       D = X - 2.D0
       IF (D*D + Y*Y .LT. 1.D0) GO TO 40
@@ -5816,9 +5816,9 @@ C                          TAYLOR SERIES
    30 SM(1) = 0.5D0 + (0.5D0 - SM(1))
       SM(2) = -SM(2)
       IF (MO .EQ. 0) GO TO 140
-      E = DEXP(SZ(1))
-      QF(1) = E*DCOS(SZ(2))
-      QF(2) = E*DSIN(SZ(2))
+      E = EXP(SZ(1))
+      QF(1) = E*COS(SZ(2))
+      QF(2) = E*SIN(SZ(2))
       W(1) = QF(1)*SM(1) - QF(2)*SM(2)
       W(2) = QF(1)*SM(2) + QF(2)*SM(1)
       RETURN
@@ -5876,13 +5876,13 @@ C                    FOR  (EXP(Z*Z)/Z)*ERF(Z)
       SM(1) = C2*(X*WN(1) - Y*WN(2))
       SM(2) = C2*(X*WN(2) + Y*WN(1))
       IF (MO .EQ. 0 .OR. SN .NE. 1.D0) GO TO 70
-         E = DEXP(SZ(1))
-         W(1) = E*DCOS(SZ(2)) - SM(1)
-         W(2) = E*DSIN(SZ(2)) - SM(2)
+         E = EXP(SZ(1))
+         W(1) = E*COS(SZ(2)) - SM(1)
+         W(2) = E*SIN(SZ(2)) - SM(2)
          RETURN
-   70 E = DEXP(-SZ(1))
-      QF(1) = E*DCOS(-SZ(2))
-      QF(2) = E*DSIN(-SZ(2))
+   70 E = EXP(-SZ(1))
+      QF(1) = E*COS(-SZ(2))
+      QF(2) = E*SIN(-SZ(2))
       TM(1) = QF(1)*SM(1) - QF(2)*SM(2)
       TM(2) = QF(1)*SM(2) + QF(2)*SM(1)
       W(1) = 1.D0 - SN*TM(1)
@@ -5954,9 +5954,9 @@ C                      ASYMPTOTIC EXPANSION
       IF (X .LT. 1.D-2) GO TO 200
 C                       TERMINATION
   130 IF (MO .NE. 0 .AND. SN .EQ. 1.D0) GO TO 140
-      E = DEXP(-SZ(1))
-      QF(1) = E*DCOS(-SZ(2))
-      QF(2) = E*DSIN(-SZ(2))
+      E = EXP(-SZ(1))
+      QF(1) = E*COS(-SZ(2))
+      QF(2) = E*SIN(-SZ(2))
       TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
       TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
       SM(1) = TS(1)
@@ -5970,19 +5970,19 @@ C                       TERMINATION
       RETURN
 C               MODIFIED ASYMPTOTIC EXPANSION
   200 IF (MO .NE. 0 .AND. SN .EQ. 1.D0) GO TO 210
-      E = DEXP(-SZ(1))
-      QF(1) = E*DCOS(-SZ(2))
-      QF(2) = E*DSIN(-SZ(2))
+      E = EXP(-SZ(1))
+      QF(1) = E*COS(-SZ(2))
+      QF(2) = E*SIN(-SZ(2))
       TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
       TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
       W(1) = 1.D0 + SN*TS(1)
       W(2) = SN*TS(2)
       RETURN
-  210 IF (DABS(Y) .GE. 100.D0) GO TO 140
+  210 IF (ABS(Y) .GE. 100.D0) GO TO 140
       IF (SZ(1) .LE. DXPARG(1)) GO TO 140
-      E = DEXP(SZ(1))
-      W(1) = E*DCOS(SZ(2)) + SM(1)
-      W(2) = E*DSIN(SZ(2)) + SM(2)
+      E = EXP(SZ(1))
+      W(1) = E*COS(SZ(2)) + SM(1)
+      W(2) = E*SIN(SZ(2)) + SM(2)
       END SUBROUTINE DCERFC
 
       SUBROUTINE ERFCM2(MO, Z, W)
@@ -5998,7 +5998,7 @@ C           CALCULATION OF ERFC(Z) USING THE TAYLOR SERIES
 C                          AROUND Z0 = 2
 C-----------------------------------------------------------------------
 C------------------------------
-      ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
+      ANORM(X,Y) = MAX(ABS(X),ABS(Y))
 C------------------------------
 C     C = (2/SQRT(PI))*EXP(-4)
 C     E = ERFC(2)
@@ -6109,9 +6109,9 @@ C------------------------------
 C                     COMPUTE EXP(Z*Z)*ERFC(Z)
       X = Z(1)*Z(1) - Z(2)*Z(2)
       Y = 2.D0*Z(1)*Z(2)
-      X = DEXP(X)
-      T(1) = X*DCOS(Y)
-      T(2) = X*DSIN(Y)
+      X = EXP(X)
+      T(1) = X*COS(Y)
+      T(2) = X*SIN(Y)
       X = T(1)*W(1) - T(2)*W(2)
       Y = T(1)*W(2) + T(2)*W(1)
       W(1) = X
@@ -6153,7 +6153,7 @@ C-------------------------------
      *     A(21) / .7043407712019701609635599701333D-20/
 C-------------------------------
 C                     DABS(X) .LE. 1
-      AX = DABS(X)
+      AX = ABS(X)
       IF (AX .GT. 1.D0) GO TO 20
       T = X*X
       W = A(21)
@@ -6165,11 +6165,11 @@ C                     DABS(X) .LE. 1
       RETURN
 C                     DABS(X) .GT. 1
    20 IF (AX .GE. 8.5D0) GO TO 30
-      DERF = 0.5D0 + (0.5D0 - DEXP(-X*X)*DERFC0(AX))
+      DERF = 0.5D0 + (0.5D0 - EXP(-X*X)*DERFC0(AX))
       IF (X .LT. 0.D0) DERF = -DERF
       RETURN
 C                 LIMIT VALUE FOR LARGE X
-   30 DERF = DSIGN(1.D0,X)
+   30 DERF = SIGN(1.D0,X)
       END FUNCTION DERF
 
       DOUBLE PRECISION FUNCTION DERFC(X)
@@ -6206,7 +6206,7 @@ C-------------------------------
      *     A(21) / .7043407712019701609635599701333D-20/
 C-------------------------------
 C                     DABS(X) .LE. 1
-      AX = DABS(X)
+      AX = ABS(X)
       IF (AX .GT. 1.D0) GO TO 20
       T = X*X
       W = A(21)
@@ -6221,14 +6221,14 @@ C                       X .LT. -1
       DERFC = 2.D0
       IF (X .LT. -8.3D0) RETURN
       T = X*X
-      DERFC = 2.D0 - DEXP(-T) * DERFC0(AX)
+      DERFC = 2.D0 - EXP(-T) * DERFC0(AX)
       RETURN
 C                       X .GT. 1
    30 DERFC = 0.D0
       IF (X .GT. 100.D0) RETURN
       T = X*X
       IF (T .GT. -DXPARG(1)) RETURN
-      DERFC = DEXP(-T) * DERFC0(X)
+      DERFC = EXP(-T) * DERFC0(X)
       END FUNCTION DERFC
 
       DOUBLE PRECISION FUNCTION DERFC1(IND, X)
@@ -6268,7 +6268,7 @@ C-------------------------------
      *     A(21) / .7043407712019701609635599701333D-20/
 C-------------------------------
 C                     DABS(X) .LE. 1
-      AX = DABS(X)
+      AX = ABS(X)
       IF (AX .GT. 1.D0) GO TO 20
       T = X*X
       W = A(21)
@@ -6277,15 +6277,15 @@ C                     DABS(X) .LE. 1
          W = T*W + A(K)
       END DO
       DERFC1 = 0.5D0 + (0.5D0 - X*(1.D0 + W))
-      IF (IND .NE. 0) DERFC1 = DEXP(T) * DERFC1
+      IF (IND .NE. 0) DERFC1 = EXP(T) * DERFC1
       RETURN
 C                       X .LT. -1
    20 IF (X .GT. 0.D0) GO TO 50
       IF (X .LT. -8.3D0) GO TO 80
       IF (IND .EQ. 0) GO TO 30
-         DERFC1 = 2.D0*DEXP(X*X) - DERFC0(AX)
+         DERFC1 = 2.D0*EXP(X*X) - DERFC0(AX)
          RETURN
-   30 DERFC1 = 2.D0 - DEXP(-X*X)*DERFC0(AX)
+   30 DERFC1 = 2.D0 - EXP(-X*X)*DERFC0(AX)
       RETURN
 C                       X .GT. 1
    50 IF (IND .EQ. 0) GO TO 60
@@ -6295,11 +6295,11 @@ C                       X .GT. 1
       IF (X .GT. 100.D0) RETURN
       T = X*X
       IF (T .GT. -DXPARG(1)) RETURN
-      DERFC1 = DEXP(-T) * DERFC0(X)
+      DERFC1 = EXP(-T) * DERFC0(X)
       RETURN
 C             LIMIT VALUE FOR LARGE NEGATIVE X
    80 DERFC1 = 2.D0
-      IF (IND .NE. 0) DERFC1 = 2.D0*DEXP(X*X)
+      IF (IND .NE. 0) DERFC1 = 2.D0*EXP(X*X)
       END FUNCTION DERFC1
 
       DOUBLE PRECISION FUNCTION DERFC0(X)
@@ -6517,7 +6517,7 @@ C-----------------------------------------------------------------------
      2     B3(5)/.2275172815174473E+00/, B3(6)/.1125348514036959E+01/
 C-----------------------------------------------------------------------
       IF (P .LT. 0.0 .OR. Q .LE. 0.0) GO TO 100
-      EPS = AMAX1(SPMPAR(1),1.E-15)
+      EPS = MAX(SPMPAR(1),1.E-15)
       T = 0.5 + (0.5 - (P + Q))
       IF (ABS(T) .GT. 3.0*EPS) GO TO 110
 C                      0 .LE. P .LE. 0.75
@@ -6537,7 +6537,7 @@ C                    0.75 .LT. P .LE. 0.9375
      *            + B1(3))*V + B1(2))*V + B1(1)
       GO TO 40
 C                  1.E-100 .LE. Q .LT. 0.0625
-   20 V1 = ALOG(Q)
+   20 V1 = LOG(Q)
       V = 1.0/SQRT(-V1)
       IF (V1 .LT. C2) GO TO 30
       T = (((((((A2(9)*V + A2(8))*V + A2(7))*V + A2(6))*V + A2(5))*V
@@ -6560,6 +6560,7 @@ C                         ERROR RETURN
 
       DOUBLE PRECISION FUNCTION DERFI(P, Q)
       IMPLICIT NONE
+      INTRINSIC :: ERF
 C-----------------------------------------------------------------------
 C                  DOUBLE PRECISION COMPUTATION OF
 C                    THE INVERSE ERROR FUNCTION
@@ -6575,7 +6576,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION :: C, C1, C2, R, EPS, F, LNQ, S, T, X
       DOUBLE PRECISION :: A(7), A1(7), A2(7), A3(11), A4(9), B(7),
      &B1(6), B2(6), B3(10), B4(9)
-      DOUBLE PRECISION :: DPMPAR, DERF, DERFC1
+      DOUBLE PRECISION :: DPMPAR, DERFC1
 C-----------------------------------------------------------------------
 C     C2 = LN(1.E-100)
 C     R  = SQRT(PI)/2
@@ -6639,7 +6640,7 @@ C-----------------------------------------------------------------------
       IF (P .LT. 0.D0 .OR. Q .LE. 0.D0) GO TO 100
       EPS = DPMPAR(1)
       T = 0.5D0 + (0.5D0 - (P + Q))
-      IF (DABS(T) .GT. 3.D0*EPS) GO TO 110
+      IF (ABS(T) .GT. 3.D0*EPS) GO TO 110
 C                      0 .LE. P .LE. 0.75
       IF (P .GT. 0.75D0) GO TO 10
       X = C - P*P
@@ -6650,8 +6651,8 @@ C                      0 .LE. P .LE. 0.75
       DERFI = P*(S/T)
       IF (EPS .GT. 1.D-19) RETURN
       X = DERFI
-      F = DERF(X) - P
-      DERFI = X - R * DEXP(X*X) * F
+      F = ERF(X) - P
+      DERFI = X - R * EXP(X*X) * F
       RETURN
 C                    0.75 .LT. P .LE. 0.9375
    10 IF (P .GT. 0.9375D0) GO TO 40
@@ -6669,12 +6670,12 @@ C                    0.75 .LT. P .LE. 0.9375
    30 DERFI = P*(S/T)
       IF (EPS .GT. 1.D-19) RETURN
       X = DERFI
-      T = DERFC1(1,X) - DEXP(X*X)*Q
+      T = DERFC1(1,X) - EXP(X*X)*Q
       DERFI = X + R * T
       RETURN
 C                  1.E-100 .LE. Q .LT. 0.0625
-   40 LNQ = DLOG(Q)
-      X = 1.D0/DSQRT(- LNQ)
+   40 LNQ = LOG(Q)
+      X = 1.D0/SQRT(- LNQ)
       IF (LNQ .LT. C2) GO TO 50
       S = (((((((((A3(1)*X + A3(2))*X + A3(3))*X + A3(4))*X + A3(5))*X
      *                     + A3(6))*X + A3(7))*X + A3(8))*X + A3(9))*X
@@ -6692,7 +6693,7 @@ C                 1.E-10000 .LE. Q .LT. 1.E-100
       IF (EPS .GT. 5.D-20) RETURN
       X = DERFI
       T = DERFC1(1,X)
-      F = (DLOG(T) - LNQ) - X*X
+      F = (LOG(T) - LNQ) - X*X
       DERFI = X + R*T*F
       RETURN
 C                         ERROR RETURN
@@ -6728,7 +6729,7 @@ C---------------------
       AX = ABS(X)
       XPH = AX + AH
       XMH = AX - AH
-      T = AMAX1(AH,AX)
+      T = MAX(AH,AX)
       T = T*T
       IF (1.6*T*T .LT. EPS) GO TO 140
       IF ((AX*AH)**2 .LT. 0.5*EPS) GO TO 150
@@ -6742,7 +6743,7 @@ C---------------------
 C-------------------------------------------------
 C        FOR (AX LESS THAN OR EQUAL TO .40)
 C-------------------------------------------------
-   10 E = AMAX1(1.E-15,EPS)
+   10 E = MAX(1.E-15,EPS)
       IF (AX .GT. 0.40) GO TO 30
       H2 = XPH*XPH
       A2 = XMH*XMH
@@ -6819,11 +6820,12 @@ C     THE VALUE IS  2.0*EXP(-X*X)*ERF(H)
 
       DOUBLE PRECISION FUNCTION DAERF(X, H)
       IMPLICIT NONE
+      INTRINSIC :: ERF, ERFC
       DOUBLE PRECISION, INTENT(IN) :: X, H
       INTEGER :: J
       DOUBLE PRECISION :: AH, AX, A2, C, DN2, E, EPS, HF, HG, H2, H3, N,
      &N1, P, S, ST, T, U, V, XMH, XPH, X2, Z
-      DOUBLE PRECISION :: DERF, DERFC, DPMPAR, DEPSLN, DXPARG
+      DOUBLE PRECISION :: DPMPAR, DEPSLN, DXPARG
 C-----------------------------------------------------------------------
 C             COMPUTATION OF ERF(X + H) - ERF(X - H)
 C-----------------------------------------------------------------------
@@ -6840,11 +6842,11 @@ C          SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0 .
 C---------------------
       DAERF = 0.D0
       IF (H .EQ. 0.D0) RETURN
-      AH = DABS(H)
-      AX = DABS(X)
+      AH = ABS(H)
+      AX = ABS(X)
       XPH = AX + AH
       XMH = AX - AH
-      T = DMAX1(AH,AX)
+      T = MAX(AH,AX)
       T = T*T
       IF (1.6D0*T*T .LT. EPS) GO TO 140
       IF ((AX*AH)**2 .LT. 0.5D0*EPS) GO TO 150
@@ -6858,7 +6860,7 @@ C---------------------
 C-------------------------------------------------
 C        FOR (AX LESS THAN OR EQUAL TO .40)
 C-------------------------------------------------
-   10 E = DMAX1(1.D-30,EPS)
+   10 E = MAX(1.D-30,EPS)
       IF (AX .GT. 0.4D0) GO TO 30
       H2 = XPH*XPH
       A2 = XMH*XMH
@@ -6876,7 +6878,7 @@ C-------------------------------------------------
         HF = A2*HF
         T = ST*DN2/N1
         S = S + T
-        IF (DABS(T) .GT. E*DABS(S)) GO TO 20
+        IF (ABS(T) .GT. E*ABS(S)) GO TO 20
       S = 0.5D0 + (0.5D0 + S)
       DAERF = 2.D0*C*AH*S
       GO TO 45
@@ -6886,7 +6888,7 @@ C-------------------------------------------------
    30 N = 1.D0
       J = 0
       H2 = 0.D0
-      Z = DEXP(-0.5D0*AX*AX)
+      Z = EXP(-0.5D0*AX*AX)
       U = 2.D0*AH*C*Z
       H3 = Z
       V = 2.D0*H*H
@@ -6898,7 +6900,7 @@ C-------------------------------------------------
         N = N + 1.D0
         HG = H3/N
         S = S + HG
-        IF (DABS(HG) .GT. E*DABS(S)) GO TO 35
+        IF (ABS(HG) .GT. E*ABS(S)) GO TO 35
         IF (J .NE. 0) GO TO 40
         J = 1
         GO TO 35
@@ -6910,15 +6912,15 @@ C        SPECIAL CASES
 C-------------------------------------------------
   100 IF (XPH .LT. 8.5D0) GO TO 110
       IF (XMH .GT. -8.3D0) GO TO 120
-      DAERF = DSIGN(2.D0,H)
+      DAERF = SIGN(2.D0,H)
       RETURN
-  110 DAERF = DERF(XPH) - DERF(XMH)
+  110 DAERF = ERF(XPH) - ERF(XMH)
       IF (H .LT. 0.D0) DAERF = -DAERF
       RETURN
-  120 DAERF = DERFC(XMH)
+  120 DAERF = ERFC(XMH)
       IF (H .LT. 0.D0) DAERF = -DAERF
       RETURN
-  130 DAERF = DERFC(XMH) - DERFC(XPH)
+  130 DAERF = ERFC(XMH) - ERFC(XPH)
       IF (H .LT. 0.D0) DAERF = -DAERF
       RETURN
   140 DAERF = 2.D0*C*H*(0.5D0 + (0.5D0 - (X*X + H*H/3.D0)))
@@ -6926,11 +6928,11 @@ C-------------------------------------------------
 C     THE VALUE IS  2.0*EXP(-X*X)*ERF(H)
   150 T = 2.D0
       X2 = X*X
-      IF (X2 .GE. EPS) T = 2.D0*DEXP(-X2)
+      IF (X2 .GE. EPS) T = 2.D0*EXP(-X2)
       IF (H*H .GE. 3.D0*EPS) GO TO 160
          DAERF = C*H*T
          RETURN
-  160 DAERF = T*DERF(H)
+  160 DAERF = T*ERF(H)
       END FUNCTION DAERF
 
       FUNCTION PNDF(X,IND)
@@ -6985,9 +6987,9 @@ C     RT2 = SQRT(2)
 C------------------------
       DATA RT2 /1.414213562373095/
 C------------------------
-      T = AMIN1(P,Q)
+      T = MIN(P,Q)
       IF (T .LE. 0.0) GO TO 10
-      EPS = AMAX1(SPMPAR(1),1.E-15)
+      EPS = MAX(SPMPAR(1),1.E-15)
       W = 0.5 + (0.5 - (P + Q))
       IF (ABS(W) .GT. 2.0*EPS) GO TO 10
       U = ABS(D + D)
@@ -7029,12 +7031,12 @@ C     RT2 = SQRT(2)
 C------------------------
       DATA RT2 /1.4142135623730950488016887242097D0/
 C------------------------
-      T = DMIN1(P,Q)
+      T = MIN(P,Q)
       IF (T .LE. 0.D0) GO TO 10
       EPS = DPMPAR(1)
       W = 0.5D0 + (0.5D0 - (P + Q))
-      IF (DABS(W) .GT. 2.D0*EPS) GO TO 10
-      U = DABS(D + D)
+      IF (ABS(W) .GT. 2.D0*EPS) GO TO 10
+      U = ABS(D + D)
       V = T + T
       W = DERFI(U, V)
       IF (W .LT. 0.D0) GO TO 20
@@ -7243,7 +7245,7 @@ C----------------------------
      *     B(44) /-.18079295866694391771955199999999D-30/,
      *     B(45) / .16090686015283030305450666666666D-31/
 C----------------------------
-      AX = DABS(X)
+      AX = ABS(X)
       IF (AX .GE. 4.D0) GO TO 30
       T = X*X
       IF (AX .GT. 1.D0) GO TO 20
@@ -7834,7 +7836,7 @@ C-----------------------------------------------------------------------
 C           EVALUATION OF THE COMPLEX EXPONENTIAL INTEGRAL
 C-----------------------------------------------------------------------
 C-------------------------
-      ANORM(X,Y) = AMAX1(ABS(X),ABS(Y))
+      ANORM(X,Y) = MAX(ABS(X),ABS(Y))
 C-------------------------
       DATA PI /3.14159265358979/
       DATA EULER /.577215664901533/
@@ -7865,7 +7867,7 @@ C-------------------------
       X = REAL(Z)
       Y = AIMAG(Z)
       R = CPABS(X,Y)
-      EPS = AMAX1(EPS,1.E-15)
+      EPS = MAX(EPS,1.E-15)
       IF (R .LE. 1.0) GO TO 20
       IF (R .GE. 40.0) GO TO 60
       IF (R .LT. 4.0) GO TO 10
@@ -7893,7 +7895,7 @@ C                        TAYLOR SERIES
      *        GO TO 30
       SM(1) = X + SM(1)
       SM(2) = Y + SM(2)
-      SM(1) = (EULER + ALOG(R)) + SM(1)
+      SM(1) = (EULER + LOG(R)) + SM(1)
       SM(2) = ATAN2(-Y, -X) + SM(2)
       GO TO 110
 C                      RATIONAL EXPANSION
@@ -8175,7 +8177,7 @@ C                IMPROVE CONDITIONING  ----------
       XMX0 = DBLE(X) - DX0
       IF (ABS(XMX0) .LT. 0.07E0) GO TO 140
       XX0 = X / X0
-      EI = ALOG(XX0) + XMX0 * FRAC
+      EI = LOG(XX0) + XMX0 * FRAC
       IF (INT .EQ. 3) EI = EXP(-X) * EI
       GO TO 410
 C     ---------- EVALUATE APPROXIMATION FOR LN(X/X0)
@@ -8234,7 +8236,7 @@ C                E-SUB-1 JOINS AT LABEL 300 ----------
       IF (Y .GT. 4.0E0) GO TO 340
       IF (Y .GT. 1.0E0) GO TO 320
 C     ---------- 0.0 .LT. -X .LE. 1.0 ----------
-      EI = ALOG(Y) - (((((A(6) * Y + A(5)) * Y + A(4))
+      EI = LOG(Y) - (((((A(6) * Y + A(5)) * Y + A(4))
      1            * Y + A(3)) * Y + A(2)) * Y + A(1)) /
      2       ((((B(5) * Y + B(4)) * Y + B(3))
      3            * Y + B(2)) * Y + B(1))
@@ -8294,7 +8296,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
       DOUBLE PRECISION :: DE1E
       DEI = -DE1E(-X)
-      IF (X .GT. 4.D0 .OR. X .LT. -1.D0) DEI = DEXP(X) * DEI
+      IF (X .GT. 4.D0 .OR. X .LT. -1.D0) DEI = EXP(X) * DEI
       END FUNCTION DEI
 
       DOUBLE PRECISION FUNCTION DEI1(X)
@@ -8306,7 +8308,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION :: DE1E
       DEI1  = -DE1E(-X)
       IF (X .GT. 4.D0 .OR. X .LT. -1.D0) RETURN
-      DEI1 = DEXP(-X) * DEI1
+      DEI1 = EXP(-X) * DEI1
       END FUNCTION DEI1
 
       DOUBLE PRECISION FUNCTION DE1E(X)
@@ -8697,7 +8699,7 @@ C     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 C            SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0.
                        EPS = DPMPAR(1)
 C------------------------------
-      IF (DABS(X) .GE. 90.D0) GO TO 80
+      IF (ABS(X) .GE. 90.D0) GO TO 80
       IF (X .GT. -1.D0) GO TO 40
 C                    -90 .LT. X .LT. -4
       IF (X .GT. -32.D0) GO TO 10
@@ -8718,7 +8720,7 @@ C                    -90 .LT. X .LT. -4
 C                     -4 .LE. X .LE. 1
    30 M = 29
       IF (EPS .GE. 1.D-20) M = 20
-      DE1E = -DLOG(-X) + DCSEVL((2.D0*X+5.D0)/3.D0, E, M)
+      DE1E = -LOG(-X) + DCSEVL((2.D0*X+5.D0)/3.D0, E, M)
       RETURN
    40 IF (X .GT. 1.0D0) GO TO 60
       IF (X .LT. -0.4D0 .OR. X .GT. -0.35D0) GO TO 50
@@ -8726,7 +8728,7 @@ C                     -4 .LE. X .LE. 1
          RETURN
    50 M = 25
       IF (EPS .GE. 1.D-20) M = 18
-      DE1E = (-DLOG(DABS(X)) - 0.6875D0 + X)  + DCSEVL(X, R, M)
+      DE1E = (-LOG(ABS(X)) - 0.6875D0 + X)  + DCSEVL(X, R, M)
       RETURN
 C                     1 .LT. X .LT. 90
    60 IF (X .GT. 4.0D0) GO TO 70
@@ -8746,7 +8748,7 @@ C                   ASYMPTOTIC EXPANSION
    81    M = M + 1
          C = (M*T)*C
          W = C + W
-         IF (DABS(C) .GT. EPS) GO TO 81
+         IF (ABS(C) .GT. EPS) GO TO 81
       DE1E = (1.D0 + W)/X
       END FUNCTION DE1E
 
@@ -8831,7 +8833,7 @@ C-------------------------
       DO N = 2,40
          C = A(N)*T
          W = W + C
-         IF (DABS(C) .LT. EPS) EXIT
+         IF (ABS(C) .LT. EPS) EXIT
          T = H*T
       END DO
       DEI0 = H * (A(1) + W)
@@ -9048,9 +9050,9 @@ C            FOR X .GT. AMAX.
       END DO
       RC=BX*B1-B2+CC(1)
       CIN=(RC*SIN(AX)-AIC*COS(AX))/AX
-      CIN=(ECON-CIN)+ALOG(AX)
+      CIN=(ECON-CIN)+LOG(AX)
       RETURN
-   50 CIN=ECON+ALOG(AX)
+   50 CIN=ECON+LOG(AX)
       END FUNCTION CIN
 
       SUBROUTINE CEXEXI(Z, W)
@@ -9180,7 +9182,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C                 EXPANSION INVOLVING EI AND DI
 C-----------------------------------------------------------------------
-   40 ZL(1) = EULER + 0.5*ALOG(R)
+   40 ZL(1) = EULER + 0.5*LOG(R)
       ZL(2) = ATAN2(-Y, -X)
 C                    SET SM = EXP(Z)*EI(-Z)
       SM(1) = 0.0
@@ -9248,7 +9250,7 @@ C                  SERIES FOR X*X + Y*Y .LE. 1
 C-----------------------------------------------------------------------
   100 SM(1) = 0.0
       SM(2) = 0.0
-      ZL(1) = EULER + 0.5*ALOG(R)
+      ZL(1) = EULER + 0.5*LOG(R)
       ZL(2) = ATAN2(-Y, -X)
       SR(1) = CONST + 0.5*(ZL(1)*ZL(1) - ZL(2)*ZL(2))
       SR(2) = ZL(1)*ZL(2)
@@ -9319,7 +9321,7 @@ C     ---------------------
       TM(2) =  AZ(2)
       GO TO 30
    10 IF (R .LT. 3.0) GO TO 20
-      ZL(1) = ALOG(R)
+      ZL(1) = LOG(R)
       ZL(2) = ATAN2(AZ(2),AZ(1))
       SR(1) = C + 0.5*(ZL(1)*ZL(1) - ZL(2)*ZL(2))
       SR(2) = ZL(1)*ZL(2)
@@ -9332,10 +9334,10 @@ C     ---------------------
       ZD(2) = AZ(2)
       DS = ZD(1)*ZD(1) + ZD(2)*ZD(2)
       IF (DS .EQ. 0.0) GO TO 100
-      DL(1) = 0.5*ALOG(DS)
+      DL(1) = 0.5*LOG(DS)
       DL(2) = ATAN2(ZD(2),ZD(1))
       IF (DS .GT. 0.25) GO TO 50
-         ZL(1) = ALOG(R)
+         ZL(1) = LOG(R)
          ZL(2) = ATAN2(-AZ(2),-AZ(1))
          SR(1) = -C + (DL(1)*ZL(1) - DL(2)*ZL(2))
          SR(2) = DL(1)*ZL(2) + DL(2)*ZL(1)
@@ -9459,14 +9461,14 @@ C                            X .LT. -2
       W = (((((((((((C(10)*T + C(9))*T + C(8))*T + C(7))*T + C(6))*T +
      *               C(5))*T + C(4))*T + C(3))*T + C(2))*T + C(1))*T +
      *               0.5) + 0.5) / ((D(2)*T + D(1))*T + 1.0)
-      ALI = 0.5*ALOG(-X)**2 - (2.0*CONST + W/X)
+      ALI = 0.5*LOG(-X)**2 - (2.0*CONST + W/X)
       RETURN
 C                        -2 .LE. X .LT. -1
    10 T = -(1.0 + X)
       W = (((((A(5)*T + A(4))*T + A(3))*T + A(2))*T + A(1))*T + 1.0)/
      *    ((((((B(6)*T + B(5))*T + B(4))*T + B(3))*T + B(2))*T +
      *          B(1))*T + 1.0)
-      ALI = -(CONST + T*W) + ALOG(-X)*ALOG(T)
+      ALI = -(CONST + T*W) + LOG(-X)*LOG(T)
       RETURN
 C                       -1 .LE. X .LT. -1/2
    20 T = 0.5 + (0.5 + X)
@@ -9475,7 +9477,7 @@ C                       -1 .LE. X .LT. -1/2
       W = (((((((((((C(10)*T + C(9))*T + C(8))*T + C(7))*T + C(6))*T +
      *               C(5))*T + C(4))*T + C(3))*T + C(2))*T + C(1))*T +
      *               0.5) + 0.5) / ((D(2)*T + D(1))*T + 1.0)
-      ALI = (-CONST + T*W) + ALOG(-X)*ALOG(T)
+      ALI = (-CONST + T*W) + LOG(-X)*LOG(T)
       RETURN
 C                       -1/2 .LE. X .LT. 0
    30 T = -X
@@ -9495,7 +9497,7 @@ C                            X .GT. 1
       W = (((((A(5)*T + A(4))*T + A(3))*T + A(2))*T + A(1))*T + 1.0)/
      *    ((((((B(6)*T + B(5))*T + B(4))*T + B(3))*T + B(2))*T +
      *          B(1))*T + 1.0)
-      ALI = (CONST - W/X) + 0.5*ALOG(X)**2
+      ALI = (CONST - W/X) + 0.5*LOG(X)**2
       RETURN
 C-----------------------------------------------------------------------
 C              EVALUATION FOR  -26.63 .LE. X .LE. -6.97
@@ -9587,7 +9589,7 @@ C     SET  A1 = (1 + E2T)/2  AND  A2 = (1 - E2T)/2
          GO TO 20
    10 A2 = 0.5*(0.5 + (0.5 - E2T))
 C     COMPUTE SIN(PI*X) AND COS(PI*X)
-   20 IF (ABS(X) .GE. AMIN1(FLOAT(MAX), 1.0/EPS)) GO TO 200
+   20 IF (ABS(X) .GE. MIN(FLOAT(MAX), 1.0/EPS)) GO TO 200
       K = ABS(X)
       U = X + K
       K = MOD(K,2)
@@ -9612,7 +9614,7 @@ C     SET  H1 + H2*I  TO  PI/SIN(PI*Z)  OR  LOG(PI/SIN(PI*Z))
       H1 = C*H1
       H2 = C*H2
       GO TO 41
-   40 H1 = (ALPI + T) - 0.5*ALOG(A)
+   40 H1 = (ALPI + T) - 0.5*LOG(A)
       H2 = -ATAN2(A2,A1)
    41 IF (AIMAG(Z) .LT. 0.0) GO TO 42
          X = 1.0 - X
@@ -9656,10 +9658,10 @@ C     LET S1 + S2*I BE THE PRODUCT OF THE TERMS (Z+J)/(Z+N)
 C     SET  W1 + W2*I = LOG(S1 + S2*I)  WHEN MO IS NONZERO
    70 S = S1*S1 + S2*S2
       IF (MO .EQ. 0) GO TO 80
-      W1 = 0.5 * ALOG(S)
+      W1 = 0.5 * LOG(S)
       W2 = ATAN2(S2,S1)
 C     SET  V1 + V2*I = (Z - 0.5) * LOG(Z + N) - Z
-   80 T1 = 0.5 * ALOG(A) - 1.0
+   80 T1 = 0.5 * LOG(A) - 1.0
       T2 = ATAN2(Y,T)
       U = X - 0.5
       V1 = (U*T1 - 0.5) - Y*T2
@@ -9997,7 +9999,7 @@ C     -------------------
       Z = (((C1*T2 + C2)*T2 + C3)*T2 + 2.0)*T
       GLOG = W(N - 14) + Z
       RETURN
-   10 GLOG = ALOG(X)
+   10 GLOG = LOG(X)
       END FUNCTION GLOG
 
       REAL FUNCTION GAM1(A)
@@ -10077,7 +10079,7 @@ C--------------------------
      *     C4/.837308034031215E-03/, C5/-.165322962780713E-02/
 C-----------------------------------------------------------------------
       IF (A .GT. 0.8) GO TO 10
-         GAMLN = GAMLN1(A) - ALOG(A)
+         GAMLN = GAMLN1(A) - LOG(A)
          RETURN
    10 IF (A .GT. 2.25) GO TO 20
          T = (A - 0.5) - 0.5
@@ -10091,11 +10093,11 @@ C-----------------------------------------------------------------------
          T = T - 1.0
          W = T*W
       END DO
-      GAMLN = GAMLN1(T - 1.0) + ALOG(W)
+      GAMLN = GAMLN1(T - 1.0) + LOG(W)
       RETURN
    30 T = (1.0/A)**2
       W = (((((C5*T + C4)*T + C3)*T + C2)*T + C1)*T + C0)/A
-      GAMLN = (D + W) + (A - 0.5)*(ALOG(A) - 1.0)
+      GAMLN = (D + W) + (A - 0.5)*(LOG(A) - 1.0)
       END FUNCTION GAMLN
 
       REAL FUNCTION GAMLN1(A)
@@ -10207,9 +10209,9 @@ C---------------------------
 C-----------------------------------------------------------------------
 C            CASE WHEN THE REAL PART OF Z IS NEGATIVE
 C-----------------------------------------------------------------------
-      Y = DABS(Y)
+      Y = ABS(Y)
       T = -PI*Y
-      ET = DEXP(T)
+      ET = EXP(T)
       E2T = ET*ET
 C     SET  A1 = (1 + E2T)/2  AND  A2 = (1 - E2T)/2
       A1 = 0.5D0*(1.D0 + E2T)
@@ -10220,16 +10222,16 @@ C     SET  A1 = (1 + E2T)/2  AND  A2 = (1 - E2T)/2
    10 A2 = 0.5D0*(0.5D0 + (0.5D0 - E2T))
 C     COMPUTE SIN(PI*X) AND COS(PI*X)
    20 U = MAX
-      IF (DABS(X) .GE. DMIN1(U, 1.D0/EPS)) GO TO 200
-      K = DABS(X)
+      IF (ABS(X) .GE. MIN(U, 1.D0/EPS)) GO TO 200
+      K = ABS(X)
       U = X + K
       K = MOD(K,2)
       IF (U .GT. -0.5D0) GO TO 21
          U = 0.5D0 + (0.5D0 + U)
          K = K + 1
    21 U = PI*U
-      SN = DSIN(U)
-      CN = DCOS(U)
+      SN = SIN(U)
+      CN = COS(U)
       IF (K .NE. 1) GO TO 30
       SN = -SN
       CN = -CN
@@ -10245,8 +10247,8 @@ C     SET  H1 + H2*I  TO  PI/SIN(PI*Z)  OR  LOG(PI/SIN(PI*Z))
       H1 = C*H1
       H2 = C*H2
       GO TO 41
-   40 H1 = (DLPI + T) - 0.5D0*DLOG(A)
-      H2 = -DATAN2(A2,A1)
+   40 H1 = (DLPI + T) - 0.5D0*LOG(A)
+      H2 = -ATAN2(A2,A1)
    41 IF (Z(2) .LT. 0.D0) GO TO 42
          X = 1.0 - X
          Y = -Y
@@ -10290,11 +10292,11 @@ C     LET S1 + S2*I BE THE PRODUCT OF THE TERMS (Z+J)/(Z+N)
 C     SET  W1 + W2*I = LOG(S1 + S2*I)  WHEN MO IS NONZERO
    70 S = S1*S1 + S2*S2
       IF (MO .EQ. 0) GO TO 80
-      W1 = 0.5D0 * DLOG(S)
-      W2 = DATAN2(S2,S1)
+      W1 = 0.5D0 * LOG(S)
+      W2 = ATAN2(S2,S1)
 C     SET  V1 + V2*I = (Z - 0.5) * LOG(Z + N) - Z
-   80 T1 = 0.5D0 * DLOG(A) - 1.D0
-      T2 = DATAN2(Y,T)
+   80 T1 = 0.5D0 * LOG(A) - 1.D0
+      T2 = ATAN2(Y,T)
       U = X - 0.5D0
       V1 = (U*T1 - 0.5D0) - Y*T2
       V2 = U*T2 + Y*T1
@@ -10325,9 +10327,9 @@ C-----------------------------------------------------------------------
       IF (Z(1) .LT. 0.D0) GO TO 120
       IF (MO .NE. 0) GO TO 110
 C     CASE WHEN THE REAL PART OF Z IS NONNEGATIVE AND MO = 0
-      A = DEXP(W1)
-      W1 = A * DCOS(W2)
-      W2 = A * DSIN(W2)
+      A = EXP(W1)
+      W1 = A * COS(W2)
+      W2 = A * SIN(W2)
       IF (N .EQ. 0) GO TO 140
       C = (S1*W1 + S2*W2)/S
       D = (S1*W2 - S2*W1)/S
@@ -10351,9 +10353,9 @@ C     CASE WHEN THE REAL PART OF Z IS NEGATIVE AND MO IS NONZERO
       W2 = H2 - W2
       GO TO 110
 C     CASE WHEN THE REAL PART OF Z IS NEGATIVE AND MO = 0
-  130 A = DEXP(-W1)
-      T1 = A * DCOS(-W2)
-      T2 = A * DSIN(-W2)
+  130 A = EXP(-W1)
+      T1 = A * COS(-W2)
+      T2 = A * SIN(-W2)
       W1 = H1*T1 - H2*T2
       W2 = H1*T2 + H2*T1
       IF (N .EQ. 0) GO TO 140
@@ -10398,7 +10400,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
       DGAMMA = 0.D0
       X = A
-      IF (DABS(A) .GT. 20.D0) GO TO 60
+      IF (ABS(A) .GT. 20.D0) GO TO 60
 C-----------------------------------------------------------------------
 C             EVALUATION OF DGAMMA(A) FOR DABS(A) .LE. 20
 C-----------------------------------------------------------------------
@@ -10431,8 +10433,8 @@ C     LET T BE THE PRODUCT OF A+J WHEN A .LT. 1
    30 CONTINUE
 C     THE FOLLOWING CODE CHECKS IF 1/T CAN OVERFLOW. THIS
 C     CODE MAY BE OMITTED IF DESIRED.
-      IF (DABS(T) .GE. 1.D-33) GO TO 40
-      IF (DABS(T)*DPMPAR(3) .LE. 1.000000001D0) RETURN
+      IF (ABS(T) .GE. 1.D-33) GO TO 40
+      IF (ABS(T)*DPMPAR(3) .LE. 1.000000001D0) RETURN
       DGAMMA = 1.D0/T
       RETURN
 C     COMPUTE DGAMMA(1 + X) FOR 0 .LE. X .LT. 1
@@ -10446,7 +10448,7 @@ C     TERMINATION
 C-----------------------------------------------------------------------
 C           EVALUATION OF DGAMMA(A) FOR DABS(A) .GT. 20
 C-----------------------------------------------------------------------
-   60 IF (DABS(A) .GE. 1.D3) RETURN
+   60 IF (ABS(A) .GE. 1.D3) RETURN
       IF (A .GT. 0.D0) GO TO 70
       S = DSIN1(A)/PI
       IF (S .EQ. 0.D0) RETURN
@@ -10454,9 +10456,9 @@ C-----------------------------------------------------------------------
 C     COMPUTE THE MODIFIED ASYMPTOTIC SUM
    70 W = DPDEL(X)
 C     FINAL ASSEMBLY
-      W = (D + W) + (X - 0.5D0)*(DLOG(X) - 1.D0)
+      W = (D + W) + (X - 0.5D0)*(LOG(X) - 1.D0)
       IF (W .GT. DXPARG(0)) RETURN
-      DGAMMA = DEXP(W)
+      DGAMMA = EXP(W)
       IF (A .LT. 0.D0) DGAMMA = (1.D0/(DGAMMA*S))/X
       END FUNCTION DGAMMA
 
@@ -10673,7 +10675,7 @@ C--------------------------
       DATA D /0.41893853320467274178032973640562D0/
 C--------------------------
       IF (A .GE. 0.5D0) GO TO 10
-         DGAMLN = DGMLN1(A) - DLOG(A)
+         DGAMLN = DGMLN1(A) - LOG(A)
          RETURN
    10 IF (A .GT. 2.5D0) GO TO 20
          X = A - 1.D0
@@ -10688,10 +10690,10 @@ C--------------------------
          X = X - 1.D0
          W = X*W
       END DO
-      DGAMLN = DGMLN1(X - 1.D0) + DLOG(W)
+      DGAMLN = DGMLN1(X - 1.D0) + LOG(W)
       RETURN
    30 W = DPDEL(A)
-      DGAMLN = (D + W) + (A - 0.5D0)*(DLOG(A) - 1.D0)
+      DGAMLN = (D + W) + (A - 0.5D0)*(LOG(A) - 1.D0)
       END FUNCTION DGAMLN
 
       DOUBLE PRECISION FUNCTION DGMLN1(X)
@@ -10759,7 +10761,7 @@ C     SET  A1 = (1 + ET)/2  AND  A2 = (1 - ET)/2
          GO TO 20
    10 A2 = 0.5*(0.5 + (0.5 - ET))
 C     COMPUTE SIN(PI*X) AND COS(PI*X), OR -SIN(PI*X) AND -COS(PI*X)
-   20 IF (ABS(X) .GE. AMIN1(FLOAT(MAX), 1.0/EPS)) GO TO 100
+   20 IF (ABS(X) .GE. MIN(FLOAT(MAX), 1.0/EPS)) GO TO 100
       K = ABS(X)
       U = X + K
       IF (U .LE. -0.5) U = 0.5 + (0.5 + U)
@@ -10799,7 +10801,7 @@ C     LET S1 + S2*I BE THE SUM OF THE TERMS 1/(Z+J) FOR J = 0,1,...,N-1
    51 S1 = DS1
       S2 = DS2
 C     SET W1 + W2*I = LOG(Z+N)
-      W1 = 0.5*ALOG(A)
+      W1 = 0.5*LOG(A)
       W2 = ATAN2(Y,T)
 C     LET A1 + A2*I BE THE ASYMPTOTIC SUM
       ETA = CMPLX(T/A,-Y/A)
@@ -10887,7 +10889,7 @@ C        XSMALL = ABSOLUTE ARGUMENT BELOW WHICH PI*COTAN(PI*X)
 C                 MAY BE REPRESENTED BY 1/X.
 C---------------------------------------------------------------------
       XMAX1 = IPMPAR(3)
-      XMAX1 = AMIN1(XMAX1, 1.0/SPMPAR(1))
+      XMAX1 = MIN(XMAX1, 1.0/SPMPAR(1))
       XSMALL = 1.E-9
 C---------------------------------------------------------------------
       X = XX
@@ -10979,7 +10981,7 @@ C---------------------------------------------------------------------
          UPPER = (UPPER + P2(I+1)) * W
       END DO
       AUG = UPPER / (DEN + Q2(4)) - 0.5E0 / X + AUG
-  350 PSI = AUG + ALOG(X)
+  350 PSI = AUG + LOG(X)
       RETURN
 C---------------------------------------------------------------------
 C     ERROR RETURN
@@ -11051,9 +11053,9 @@ C----------------------------
 C-----------------------------------------------------------------------
 C            CASE WHEN THE REAL PART OF Z IS NEGATIVE
 C-----------------------------------------------------------------------
-      Y = DABS(Y)
+      Y = ABS(Y)
       T = -PI2*Y
-      ET = DEXP(T)
+      ET = EXP(T)
 C     SET  A1 = (1 + ET)/2  AND  A2 = (1 - ET)/2
       A1 = 0.5D0*(1.D0 + ET)
       IF (T .LT. -0.15D0) GO TO 10
@@ -11062,13 +11064,13 @@ C     SET  A1 = (1 + ET)/2  AND  A2 = (1 - ET)/2
    10 A2 = 0.5D0*(0.5D0 + (0.5D0 - ET))
 C     COMPUTE SIN(PI*X) AND COS(PI*X), OR -SIN(PI*X) AND -COS(PI*X)
    20 U = MAX
-      IF (DABS(X) .GE. DMIN1(U, 1.D0/EPS)) GO TO 100
-      K = DABS(X)
+      IF (ABS(X) .GE. MIN(U, 1.D0/EPS)) GO TO 100
+      K = ABS(X)
       U = X + K
       IF (U .LE. -0.5D0) U = 0.5D0 + (0.5D0 + U)
       U = PI*U
-      SN = DSIN(U)
-      CN = DCOS(U)
+      SN = SIN(U)
+      CN = COS(U)
 C     SET H1 + H2*I = PI*COT(PI*Z)
       S1 = A1*SN
       S2 = A2*CN
@@ -11103,8 +11105,8 @@ C     LET S1 + S2*I BE THE SUM OF THE TERMS 1/(Z+J) FOR J = 0,1,...,N-1
          GO TO 50
    51 CONTINUE
 C     SET W1 + W2*I = LOG(Z+N)
-      W1 = 0.5D0*DLOG(A)
-      W2 = DATAN2(Y,T)
+      W1 = 0.5D0*LOG(A)
+      W2 = ATAN2(Y,T)
 C     LET A1 + A2*I BE THE ASYMPTOTIC SUM
       U1 = T/A
       U2 = -Y/A
@@ -11249,7 +11251,7 @@ C            SUCH THAT 1.D0 + EPS .GT. 1.D0.
 C----------------------------
       DPSI = 0.D0
       X = A
-      IF (DABS(A) .GE. 10.D0) GO TO 60
+      IF (ABS(A) .GE. 10.D0) GO TO 60
 C-----------------------------------------------------------------------
 C             EVALUATION OF DPSI(A) FOR DABS(A) .LT. 10
 C-----------------------------------------------------------------------
@@ -11268,8 +11270,8 @@ C     LET T BE THE SUM OF 1/(A-J) WHEN A .GE. 2
    12 X = X - 1.D0
       GO TO 40
 C     CHECK IF 1/A CAN OVERFLOW
-   20 IF (DABS(A) .GE. 1.D-35) GO TO 30
-      IF (DABS(A)*XMAX .LE. 1.000000001D0) RETURN
+   20 IF (ABS(A) .GE. 1.D-35) GO TO 30
+      IF (ABS(A)*XMAX .LE. 1.000000001D0) RETURN
 C     LET T BE THE SUM OF -1/(A+J) WHEN A .LT. 1
    30 T = -1.D0/A
       IF (A .GT. 0.D0) GO TO 40
@@ -11284,7 +11286,7 @@ C     LET T BE THE SUM OF -1/(A+J) WHEN A .LT. 1
       IF (X .EQ. 0.D0) RETURN
       T = T - 1.D0/X
 C     COMPUTE  T + DPSI(1 + X)  FOR 0 .LE. X .LT. 1
-   40 IF (DABS(X - X0) .GT. 2.D-2) GO TO 50
+   40 IF (ABS(X - X0) .GT. 2.D-2) GO TO 50
          DPSI = T + DPSI0(1.D0 + X)
          RETURN
    50 K = 42
@@ -11296,14 +11298,14 @@ C           EVALUATION OF DPSI(A) FOR DABS(A) .GE. 10
 C-----------------------------------------------------------------------
    60 IF (A .GT. 0.D0) GO TO 70
       T = MAX
-      IF (DABS(A) .GE. DMIN1(T, 1.D0/EPS)) RETURN
+      IF (ABS(A) .GE. MIN(T, 1.D0/EPS)) RETURN
 C     SET W = PI*COT(PI*A) WHEN A IS NEGATIVE
-      K = DABS(A)
+      K = ABS(A)
       T = A + K
       IF (T .EQ. 0.D0) RETURN
       IF (T .LE. -0.5D0) T = 1.D0 + T
       T = PI*T
-      W = PI*(DCOS(T)/DSIN(T))
+      W = PI*(COS(T)/SIN(T))
       X = 1.D0 - X
 C     COMPUTE THE MODIFIED ASYMPTOTIC SUM
    70 T = (10.D0/X)**2
@@ -11314,7 +11316,7 @@ C     COMPUTE THE MODIFIED ASYMPTOTIC SUM
       END DO
       S = 0.5D0/X + T*S
 C     FINAL ASSEMBLY
-      DPSI = DLOG(X) - S
+      DPSI = LOG(X) - S
       IF (A .LT. 0.D0) DPSI = DPSI - W
       END FUNCTION DPSI
 
@@ -11470,12 +11472,12 @@ C------------------------
       FN = FLOAT(NN)
       FNP = FN + 1.0
       EPS = SPMPAR(1)
-      WDTOL = AMAX1(0.5*EPS, 0.5E-18)
+      WDTOL = MAX(0.5*EPS, 0.5E-18)
 C-----------------------------------------------------------------------
 C     ELIM = APPROXIMATE EXPONENTIAL OVER AND UNDERFLOW LIMIT
 C-----------------------------------------------------------------------
-      ELIM = AMIN1(EXPARG(0), ABS(EXPARG(1))) - 6.906
-      XLN = ALOG(X)
+      ELIM = MIN(EXPARG(0), ABS(EXPARG(1))) - 6.906
+      XLN = LOG(X)
       T = FNP*XLN
 C-----------------------------------------------------------------------
 C     OVERFLOW AND UNDERFLOW TEST FOR SMALL AND LARGE X
@@ -11486,7 +11488,7 @@ C-----------------------------------------------------------------------
 C     COMPUTE XMIN AND THE NUMBER OF TERMS OF THE SERIES, FLN+1
 C-----------------------------------------------------------------------
       ND = -C*EPSLN(0)
-      ND = AMIN1(ND,18.0)
+      ND = MIN(ND,18.0)
       FLN = ND - 3.0
       ALPHA = 3.5 + 0.4*FLN
       BETA = 0.21 + FLN*(0.0006038*FLN + 0.008677)
@@ -11494,10 +11496,10 @@ C-----------------------------------------------------------------------
       MX = INT(XM) + 1
       XMIN = FLOAT(MX)
       IF (N .EQ. 0) GO TO 50
-      XM = -2.302*ND - AMIN1(0.0,XLN)
+      XM = -2.302*ND - MIN(0.0,XLN)
       FNS = FLOAT(N)
       ARG = XM/FNS
-      ARG = AMIN1(0.0,ARG)
+      ARG = MIN(0.0,ARG)
       EPS = EXP(ARG)
       XM = 1.0 - EPS
       IF (ABS(ARG) .LT. 1.0E-3) XM = -ARG
@@ -11511,7 +11513,7 @@ C-----------------------------------------------------------------------
          NX = INT(X)
          XINC = XMIN - FLOAT(NX)
          XDMY = X + XINC
-         XDMLN = ALOG(XDMY)
+         XDMLN = LOG(XDMY)
    60 CONTINUE
 C-----------------------------------------------------------------------
 C     GENERATE W(N+M-1,X) BY THE ASYMPTOTIC EXPANSION
@@ -11519,7 +11521,7 @@ C-----------------------------------------------------------------------
       T = FN*XDMLN
       T1 = XDMLN + XDMLN
       T2 = T + XDMLN
-      TK = AMAX1(ABS(T),ABS(T1),ABS(T2))
+      TK = MAX(ABS(T),ABS(T1),ABS(T2))
       IF (TK .GT. ELIM) GO TO 320
       TSS = EXP(-T)
       TT = 0.5/XDMY
@@ -11677,8 +11679,8 @@ C     E = 0.5*LN(2*PI)
 C--------------------------
       DATA E /.918938533204673/
 C--------------------------
-      A = AMIN1(A0,B0)
-      B = AMAX1(A0,B0)
+      A = MIN(A0,B0)
+      B = MAX(A0,B0)
       IF (A .GE. 8.0) GO TO 60
       IF (A .GE. 1.0) GO TO 20
 C-----------------------------------------------------------------------
@@ -11709,7 +11711,7 @@ C                REDUCTION OF A WHEN B .LE. 1000
          H = A/B
          W = W * (H/(1.0 + H))
       END DO
-      W = ALOG(W)
+      W = LOG(W)
       IF (B .LT. 8.0) GO TO 40
       BETALN = W + GAMLN(A) + ALGDIV(A,B)
       RETURN
@@ -11720,7 +11722,7 @@ C                 REDUCTION OF B WHEN B .LT. 8
          B = B - 1.0
          Z = Z * (B/(A + B))
       END DO
-      BETALN = W + ALOG(Z) + (GAMLN(A) + (GAMLN(B) - GSUMLN(A,B)))
+      BETALN = W + LOG(Z) + (GAMLN(A) + (GAMLN(B) - GSUMLN(A,B)))
       RETURN
 C                REDUCTION OF A WHEN B .GT. 1000
    50 N = A - 1.0
@@ -11729,7 +11731,7 @@ C                REDUCTION OF A WHEN B .GT. 1000
          A = A - 1.0
          W = W * (A/(1.0 + A/B))
       END DO
-      BETALN = (ALOG(W) - N*ALOG(B)) + (GAMLN(A) + ALGDIV(A,B))
+      BETALN = (LOG(W) - N*LOG(B)) + (GAMLN(A) + ALGDIV(A,B))
       RETURN
 C-----------------------------------------------------------------------
 C                   PROCEDURE WHEN A .GE. 8
@@ -11737,12 +11739,12 @@ C-----------------------------------------------------------------------
    60 W = BCORR(A,B)
       H = A/B
       C = H/(1.0 + H)
-      U = -(A - 0.5)*ALOG(C)
+      U = -(A - 0.5)*LOG(C)
       V = B*ALNREL(H)
       IF (U .LE. V) GO TO 61
-         BETALN = (((-0.5*ALOG(B) + E) + W) - V) - U
+         BETALN = (((-0.5*LOG(B) + E) + W) - V) - U
          RETURN
-   61 BETALN = (((-0.5*ALOG(B) + E) + W) - U) - V
+   61 BETALN = (((-0.5*LOG(B) + E) + W) - U) - V
       END FUNCTION BETALN
 
       REAL FUNCTION GSUMLN(A, B)
@@ -11761,7 +11763,7 @@ C-----------------------------------------------------------------------
    10 IF (X .GT. 1.25) GO TO 20
          GSUMLN = GAMLN1(X) + ALNREL(X)
          RETURN
-   20 GSUMLN = GAMLN1(X - 1.0) + ALOG(X*(1.0 + X))
+   20 GSUMLN = GAMLN1(X - 1.0) + LOG(X*(1.0 + X))
       END FUNCTION GSUMLN
 
       REAL FUNCTION BCORR(A0, B0)
@@ -11778,8 +11780,8 @@ C-----------------------------------------------------------------------
      *     C2/.793650666825390E-03/, C3/-.595202931351870E-03/,
      *     C4/.837308034031215E-03/, C5/-.165322962780713E-02/
 C------------------------
-      A = AMIN1(A0, B0)
-      B = AMAX1(A0, B0)
+      A = MIN(A0, B0)
+      B = MAX(A0, B0)
       H = A/B
       C = H/(1.0 + H)
       X = 1.0/(1.0 + H)
@@ -11838,7 +11840,7 @@ C                SET W = DEL(B) - DEL(A + B)
       W = W*(C/B)
 C                    COMBINE THE RESULTS
       U = D*ALNREL(A/B)
-      V = A*(ALOG(B) - 1.0)
+      V = A*(LOG(B) - 1.0)
       IF (U .LE. V) GO TO 30
          ALGDIV = (W - V) - U
          RETURN
@@ -11859,8 +11861,8 @@ C     E = 0.5*LN(2*PI)
 C--------------------------
       DATA E /.9189385332046727417803297364056D0/
 C--------------------------
-      A = DMIN1(A0,B0)
-      B = DMAX1(A0,B0)
+      A = MIN(A0,B0)
+      B = MAX(A0,B0)
       IF (A .GE. 10.D0) GO TO 60
       IF (A .GE. 1.D0) GO TO 20
 C-----------------------------------------------------------------------
@@ -11891,7 +11893,7 @@ C               REDUCTION OF A WHEN B .LE. 1000
          H = A/B
          W = W * (H/(1.D0 + H))
       END DO
-      W = DLOG(W)
+      W = LOG(W)
       IF (B .LT. 10.D0) GO TO 40
       DBETLN = W + DGAMLN(A) + DLGDIV(A,B)
       RETURN
@@ -11902,7 +11904,7 @@ C                REDUCTION OF B WHEN B .LT. 10
          B = B - 1.D0
          Z = Z * (B/(A + B))
       END DO
-      DBETLN = W + DLOG(Z) + (DGAMLN(A) + (DGAMLN(B) - DGSMLN(A,B)))
+      DBETLN = W + LOG(Z) + (DGAMLN(A) + (DGAMLN(B) - DGSMLN(A,B)))
       RETURN
 C               REDUCTION OF A WHEN B .GT. 1000
    50 N = A - 1.D0
@@ -11912,7 +11914,7 @@ C               REDUCTION OF A WHEN B .GT. 1000
          W = W*(A/(1.D0 + A/B))
       END DO
       SN = N
-      DBETLN = (DLOG(W) - SN*DLOG(B)) + (DGAMLN(A) + DLGDIV(A,B))
+      DBETLN = (LOG(W) - SN*LOG(B)) + (DGAMLN(A) + DLGDIV(A,B))
       RETURN
 C-----------------------------------------------------------------------
 C                  PROCEDURE WHEN A .GE. 10
@@ -11920,12 +11922,12 @@ C-----------------------------------------------------------------------
    60 W = DBCORR(A,B)
       H = A/B
       C = H/(1.D0 + H)
-      U = -(A - 0.5D0)*DLOG(C)
+      U = -(A - 0.5D0)*LOG(C)
       V = B*DLNREL(H)
       IF (U .LE. V) GO TO 61
-         DBETLN = (((-0.5D0*DLOG(B) + E) + W) - V) - U
+         DBETLN = (((-0.5D0*LOG(B) + E) + W) - V) - U
          RETURN
-   61 DBETLN = (((-0.5D0*DLOG(B) + E) + W) - U) - V
+   61 DBETLN = (((-0.5D0*LOG(B) + E) + W) - U) - V
       END FUNCTION DBETLN
 
       DOUBLE PRECISION FUNCTION DGSMLN(A, B)
@@ -11944,7 +11946,7 @@ C-----------------------------------------------------------------------
    10 IF (X .GT. 1.5D0) GO TO 20
          DGSMLN = DGMLN1(X) + DLNREL(X)
          RETURN
-   20 DGSMLN = DGMLN1(X - 1.D0) + DLOG(X*(1.D0 + X))
+   20 DGSMLN = DGMLN1(X - 1.D0) + LOG(X*(1.D0 + X))
       END FUNCTION DGSMLN
 
       DOUBLE PRECISION FUNCTION DBCORR(A0, B0)
@@ -11978,8 +11980,8 @@ C--------------------------
      *     E(14) /-.234065664793997056856992426667D-21/,
      *     E(15) / .171348014966398575409015466667D-22/
 C--------------------------
-      A = DMIN1(A0, B0)
-      B = DMAX1(A0, B0)
+      A = MIN(A0, B0)
+      B = MAX(A0, B0)
       H = A/B
       C = H/(1.D0 + H)
       X = 1.D0/(1.D0 + H)
@@ -12067,7 +12069,7 @@ C                SET W = DEL(B) - DEL(A + B)
       W = W*(C/B)
 C                    COMBINE THE RESULTS
       U = D*DLNREL(A/B)
-      V = A*(DLOG(B) - 1.D0)
+      V = A*(LOG(B) - 1.D0)
       IF (U .LE. V) GO TO 40
          DLGDIV = (W - V) - U
          RETURN
@@ -12302,7 +12304,7 @@ C             TAYLOR SERIES FOR P(A,X)/X**A
          SUM = SUM + T
          IF (ABS(T) .GT. TOL) GO TO 111
       J = A*X*((SUM/6.0 - 0.5/(A + 2.0))*X + 1.0/(A + 1.0))
-      Z = A*ALOG(X)
+      Z = A*LOG(X)
       H = GAM1(A)
       G = 1.0 + H
       IF (X .LT. 0.25) GO TO 120
@@ -12471,7 +12473,7 @@ C------------------------
       RCOMP = 0.0
       IF (X .EQ. 0.0) RETURN
       IF (A .GE. 20.0) GO TO 20
-      T = A*ALOG(X) - X
+      T = A*LOG(X) - X
       IF (T .LT. EXPARG(1)) RETURN
       IF (A .GE. 1.0) GO TO 10
          RCOMP = (A*EXP(T))*(1.0 + GAM1(A))
@@ -12502,17 +12504,17 @@ C--------------------------
       DRCOMP = 0.D0
       IF (X .EQ. 0.D0) RETURN
       IF (A .GT. 20.D0) GO TO 20
-      T = A*DLOG(X) - X
+      T = A*LOG(X) - X
       IF (T .LT. DXPARG(1)) RETURN
       IF (A .GE. 1.D0) GO TO 10
-         DRCOMP = (A*DEXP(T))*(1.D0 + DGAM1(A))
+         DRCOMP = (A*EXP(T))*(1.D0 + DGAM1(A))
          RETURN
-   10 DRCOMP = DEXP(T)/DGAMMA(A)
+   10 DRCOMP = EXP(T)/DGAMMA(A)
       RETURN
    20 T = X/A
       IF (T .EQ. 0.D0) RETURN
       W = -(DPDEL(A) + A*DRLOG(T))
-      IF (W .GE. DXPARG(1)) DRCOMP = C * DSQRT(A) * DEXP(W)
+      IF (W .GE. DXPARG(1)) DRCOMP = C * SQRT(A) * EXP(W)
       END FUNCTION DRCOMP
 
       SUBROUTINE GAMINV(A, X, X0, P, Q, IERR)
@@ -12600,7 +12602,7 @@ C------------------------
       IF (A .LE. 0.0) GO TO 500
       IF (P .LT. 0.0 .OR. Q .LT. 0.0) GO TO 520
       T = ((P + Q) - 0.5) - 0.5
-      IF (ABS(T) .GT. 5.0*AMAX1(E,1.E-15)) GO TO 520
+      IF (ABS(T) .GT. 5.0*MAX(E,1.E-15)) GO TO 520
       IERR = 0
       XMIN = XMIN/E
       IF ((P/E) .LE. XMIN) GO TO 400
@@ -12608,7 +12610,7 @@ C------------------------
       IF (A .EQ. 1.0) GO TO 410
       E2 = E + E
       AMAX = 0.4E-10/(E*E)
-      EPS = AMAX1(100.0*E,1.E-10)
+      EPS = MAX(100.0*E,1.E-10)
       IOP = 1
       IF (E .GT. 1.E-10) IOP = 2
       XN = X0
@@ -12628,17 +12630,17 @@ C                       WHEN A .LT. 1
          GO TO 100
    10 IF (B .GE. 0.45) GO TO 20
       IF (B .EQ. 0.0) GO TO 560
-      Y = -ALOG(B)
+      Y = -LOG(B)
       S = 0.5 + (0.5 - A)
-      Z = ALOG(Y)
+      Z = LOG(Y)
       T = Y - S*Z
       IF (B .LT. 0.15) GO TO 11
-         XN = Y - S*ALOG(T) - ALOG(1.0 + S/(T + 1.0))
+         XN = Y - S*LOG(T) - LOG(1.0 + S/(T + 1.0))
          GO TO 200
    11 IF (B .LE. 1.E-2) GO TO 12
          U = ((T + 2.0*(3.0 - A))*T + (2.0 - A)*(3.0 - A))/
      *           ((T + (5.0 - A))*T + 2.0)
-         XN = Y - S*ALOG(T) - ALOG(U)
+         XN = Y - S*LOG(T) - LOG(U)
          GO TO 200
    12 C1 = -S*Z
       C2 = -S*(1.0 + C1)
@@ -12660,7 +12662,7 @@ C                       WHEN A .LT. 1
    21 IF (P .LE. 0.9) GO TO 22
          XN = EXP((ALNREL(-Q) + GAMLN1(A))/A)
          GO TO 30
-   22 XN = EXP(ALOG(P*G)/A)
+   22 XN = EXP(LOG(P*G)/A)
    30 IF (XN .EQ. 0.0) GO TO 510
       T = 0.5 + (0.5 - XN/(A + 1.0))
       XN = XN/T
@@ -12677,7 +12679,7 @@ C                       WHEN A .GT. 1
      *           - ((3.0*S2 + 7.0)*S2 - 16.0)/810.0
       XN = A + S*RTA + (S2 - 1.0)/3.0 + S*(S2 - 7.0)/(36.0*RTA)
      *       + XN/A
-      XN = AMAX1(XN, 0.0)
+      XN = MAX(XN, 0.0)
       AMIN = 20.0
       IF (E .LT. 1.E-8) AMIN = 250.0
       IF (A .LT. AMIN) GO TO 60
@@ -12686,27 +12688,27 @@ C                       WHEN A .GT. 1
          IF (ABS(D) .LE. 1.E-1) RETURN
    60 IF (P .LE. 0.5) GO TO 70
       IF (XN .LT. 3.0*A) GO TO 200
-      W = ALOG(Q)
+      W = LOG(Q)
       Y = -(W + GAMLN(A))
-      D = AMAX1(2.0, A*(A - 1.0))
+      D = MAX(2.0, A*(A - 1.0))
       IF (Y .LT. LN10*D) GO TO 61
          S = 1.0 - A
-         Z = ALOG(Y)
+         Z = LOG(Y)
          GO TO 12
    61 T = A - 1.0
-      XN = Y + T*ALOG(XN) - ALNREL(-T/(XN + 1.0))
-      XN = Y + T*ALOG(XN) - ALNREL(-T/(XN + 1.0))
+      XN = Y + T*LOG(XN) - ALNREL(-T/(XN + 1.0))
+      XN = Y + T*LOG(XN) - ALNREL(-T/(XN + 1.0))
       GO TO 200
    70 AP1 = A + 1.0
       IF (XN .GT. 0.70*AP1) GO TO 101
-      W = ALOG(P) + GAMLN(AP1)
+      W = LOG(P) + GAMLN(AP1)
       IF (XN .GT. 0.15*AP1) GO TO 80
          AP2 = A + 2.0
          AP3 = A + 3.0
          X = EXP((W + X)/A)
-         X = EXP((W + X - ALOG(1.0 + (X/AP1)*(1.0 + X/AP2)))/A)
-         X = EXP((W + X - ALOG(1.0 + (X/AP1)*(1.0 + X/AP2)))/A)
-         X = EXP((W + X - ALOG(1.0 + (X/AP1)*(1.0 + (X/AP2)*(1.0
+         X = EXP((W + X - LOG(1.0 + (X/AP1)*(1.0 + X/AP2)))/A)
+         X = EXP((W + X - LOG(1.0 + (X/AP1)*(1.0 + X/AP2)))/A)
+         X = EXP((W + X - LOG(1.0 + (X/AP1)*(1.0 + (X/AP2)*(1.0
      *                      + X/AP3))))/A)
          XN = X
          IF (XN .GT. 1.E-2*AP1) GO TO 80
@@ -12719,9 +12721,9 @@ C                       WHEN A .GT. 1
          T = T*(XN/APN)
          SUM = SUM + T
          IF (T .GT. 1.E-4) GO TO 81
-      T = W - ALOG(SUM)
+      T = W - LOG(SUM)
       XN = EXP((XN + T)/A)
-      XN = XN*(1.0 - (A*ALOG(XN) - XN - T)/(A - XN))
+      XN = XN*(1.0 - (A*LOG(XN) - XN - T)/(A - XN))
       GO TO 101
 C                 SCHRODER ITERATION USING P
   100 IF (P .GT. 0.5) GO TO 200
@@ -12788,7 +12790,7 @@ C                       SPECIAL CASES
   410 IF (Q .LT. 0.9) GO TO 411
          X = -ALNREL(-P)
          RETURN
-  411 X = -ALOG(Q)
+  411 X = -LOG(Q)
       RETURN
 C                       ERROR RETURN
   500 IERR = -2
@@ -12810,6 +12812,7 @@ C                       ERROR RETURN
 
       SUBROUTINE DGRAT(A, X, ANS, QANS, IERR)
       IMPLICIT NONE
+      INTRINSIC :: ERF
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(IN) :: A, X
       DOUBLE PRECISION, INTENT(INOUT) :: ANS, QANS
@@ -12818,7 +12821,7 @@ C                       ERROR RETURN
      &C, E, G, H, J, L, R, RTA, RTPI, RTX, S, SUM, T, TOL, TWOA, U, X0,
      &Y, Z, WK(20)
       DOUBLE PRECISION :: DPMPAR, DRLOG, DREXP
-      DOUBLE PRECISION :: DERF, DERFC1, DGAM1, DRCOMP
+      DOUBLE PRECISION :: DERFC1, DGAM1, DRCOMP
 C-----------------------------------------------------------------------
 C        EVALUATION OF THE INCOMPLETE GAMMA RATIO FUNCTIONS
 C                      P(A,X) AND Q(A,X)
@@ -12871,8 +12874,8 @@ C            SELECT THE APPROPRIATE ALGORITHM
       Z = DRLOG(L)
       IF (Z .GE. 700.D0/A) GO TO 330
       Y = A*Z
-      RTA = DSQRT(A)
-      IF (DABS(S) .LE. 0.4D0) GO TO 200
+      RTA = SQRT(A)
+      IF (ABS(S) .LE. 0.4D0) GO TO 200
    30 R = DRCOMP(A,X)
       IF (R .EQ. 0.D0) GO TO 331
       IF (X .LE. DMAX1(A,ALOG10)) GO TO 50
@@ -12910,12 +12913,12 @@ C                 ASYMPTOTIC EXPANSION
       DO N = 2,20
          AMN = AMN - 1.D0
          T = T*(AMN/X)
-         IF (DABS(T) .LE. 1.D-3) GO TO 90
+         IF (ABS(T) .LE. 1.D-3) GO TO 90
          WK(N) = T
       END DO
       N = 20
    90 SUM = T
-   91 IF (DABS(T) .LT. E) GO TO 100
+   91 IF (ABS(T) .LT. E) GO TO 100
       AMN = AMN - 1.D0
       T = T*(AMN/X)
       SUM = SUM + T
@@ -12937,10 +12940,10 @@ C             TAYLOR SERIES FOR P(A,X)/X**A
          C = -C*(X/L)
          T = C/(A + L)
          SUM = SUM + T
-         IF (DABS(T) .GT. TOL) GO TO 120
+         IF (ABS(T) .GT. TOL) GO TO 120
       J = A*X*((SUM/6.D0 - 0.5D0/(A + 2.D0))*X + 1.D0/(A + 1.D0))
-      Z = A*DLOG(X)
-      U = DEXP(Z)
+      Z = A*LOG(X)
+      U = EXP(Z)
       H = DGAM1(A)
       G = 1.D0 + H
       ANS = U*G*(0.5D0 + (0.5D0 - J))
@@ -12953,14 +12956,14 @@ C             TAYLOR SERIES FOR P(A,X)/X**A
       RETURN
 C             FINITE SUMS FOR Q WHEN A .GE. 1
 C                 AND 2*A IS AN INTEGER
-  140 SUM = DEXP(-X)
+  140 SUM = EXP(-X)
       T = SUM
       N = 1
       C = 0.D0
       GO TO 160
-  150 RTX = DSQRT(X)
+  150 RTX = SQRT(X)
       SUM = DERFC1(0,RTX)
-      T = DEXP(-X)/(RTPI*RTX)
+      T = EXP(-X)/(RTPI*RTX)
       N = 0
       C = -0.5D0
   160 IF (N .EQ. I) GO TO 161
@@ -12989,12 +12992,12 @@ C              CONTINUED FRACTION EXPANSION
          B2NM1 = B2NM1/B2N
          A2N = A2N/B2N
          B2N = 1.D0
-         IF (DABS(A2N - A2NM1/B2NM1) .GE. TOL*A2N) GO TO 180
+         IF (ABS(A2N - A2NM1/B2NM1) .GE. TOL*A2N) GO TO 180
       QANS = R*A2N
       ANS = 0.5D0 + (0.5D0 - QANS)
       RETURN
 C                 MINIMAX APPROXIMATIONS
-  200 IF (DABS(S) .LE. 2.D0*E .AND. A*E*E .GT. 3.28D-3) GO TO 420
+  200 IF (ABS(S) .LE. 2.D0*E .AND. A*E*E .GT. 3.28D-3) GO TO 420
       IF (E .LT. 1.D-17) GO TO 210
          CALL DGR17(A, Y, L, Z, RTA, ANS, QANS)
          RETURN
@@ -13008,13 +13011,13 @@ C                     SPECIAL CASES
       QANS = 0.D0
       RETURN
   320 IF (X .GE. 0.25D0) GO TO 321
-         ANS = DERF(DSQRT(X))
+         ANS = ERF(SQRT(X))
          QANS = 0.5D0 + (0.5D0 - ANS)
          RETURN
-  321 QANS = DERFC1(0,DSQRT(X))
+  321 QANS = DERFC1(0,SQRT(X))
       ANS = 0.5D0 + (0.5D0 - QANS)
       RETURN
-  330 IF (DABS(S) .LE. 2.D0*E) GO TO 420
+  330 IF (ABS(S) .LE. 2.D0*E) GO TO 420
   331 IF (X .LE. A) GO TO 300
       GO TO 310
 C                     ERROR RETURN
@@ -13266,10 +13269,10 @@ C---------------------------
 C---------------------------
       DATA A18(1) /.724036968309299822373280436D+00/
 C---------------------------
-      E = DEXP(-Y)
-      W = 0.5D0*DERFC1(1,DSQRT(Y))
+      E = EXP(-Y)
+      W = 0.5D0*DERFC1(1,SQRT(Y))
       U = 1.D0/A
-      Z = DSQRT(Z + Z)
+      Z = SQRT(Z + Z)
       IF (L .LT. 1.D0) Z = -Z
       T = ((((((A0(1)*Z + A0(2))*Z + A0(3))*Z + A0(4))*Z + A0(5))*Z +
      *          A0(6))*Z + A0(7)) / (((((((((B0(1)*Z + B0(2))*Z +
@@ -13426,10 +13429,10 @@ C------------------------
       DATA
      * A10(1)/-.19144384985654775D-02/, A10(2) /.13324454494800656D-02/
 C------------------------
-      E = DEXP(-Y)
-      W = 0.5D0*DERFC1(1,DSQRT(Y))
+      E = EXP(-Y)
+      W = 0.5D0*DERFC1(1,SQRT(Y))
       U = 1.D0/A
-      Z = DSQRT(Z + Z)
+      Z = SQRT(Z + Z)
       IF (L .LT. 1.D0) Z = -Z
       C0 = ((((A0(1)*Z + A0(2))*Z + A0(3))*Z + A0(4))*Z + A0(5)) /
      *     ((((((B0(1)*Z + B0(2))*Z + B0(3))*Z + B0(4))*Z + B0(5))*Z +
@@ -13531,13 +13534,13 @@ C------------------------
       IF (A .LE. 0.D0) GO TO 500
       IF (P .LT. 0.D0 .OR. Q .LT. 0.D0) GO TO 520
       T = ((P + Q) - 0.5D0) - 0.5D0
-      IF (DABS(T) .GT. 5.D0*DMAX1(E,1.D-30)) GO TO 520
+      IF (ABS(T) .GT. 5.D0*MAX(E,1.D-30)) GO TO 520
       IERR = 0
       XMIN = XMIN/E
       IF ((P/E) .LE. XMIN) GO TO 400
       IF ((Q/E) .LE. XMIN) GO TO 560
       IF (A .EQ. 1.D0) GO TO 410
-      E = DMAX1(E,1.D-30)
+      E = MAX(E,1.D-30)
       EPS = 1.D3*E
       AMIN = 5.D3
       IF (E .LT. 1.D-17) AMIN = 2.D6
@@ -13549,7 +13552,7 @@ C         PRECISION ARITHMETIC (IF THIS IS POSSIBLE)
       IF (P0 .EQ. 0.0 .OR. Q0 .EQ. 0.0) GO TO 10
       CALL GAMINV(SNGL(A), X0, 0.0, P0, Q0, IER)
       IF (IER .LT. 0.0 .AND. IER .NE. -8) GO TO 10
-      IERR = MAX0(IER,0)
+      IERR = MAX(IER,0)
       IF (X0 .GT. 1.E34) GO TO 10
          XN = X0
          GO TO 100
@@ -13563,23 +13566,23 @@ C                       WHEN A .LT. 1
       B = QG/A
       IF (QG .GT. 0.6D0*A) GO TO 30
       IF (A .GE. 0.30D0 .OR. B .LT. 0.35D0) GO TO 20
-         T = DEXP(-(B + C))
-         U = T*DEXP(T)
-         XN = T*DEXP(U)
+         T = EXP(-(B + C))
+         U = T*EXP(T)
+         XN = T*EXP(U)
          GO TO 100
    20 IF (B .GE. 0.45D0) GO TO 30
       IF (B .EQ. 0.D0) GO TO 560
-      Y = -DLOG(B)
+      Y = -LOG(B)
       S = 0.5D0 + (0.5D0 - A)
-      Z = DLOG(Y)
+      Z = LOG(Y)
       T = Y - S*Z
       IF (B .LT. 0.15D0) GO TO 21
-         XN = Y - S*DLOG(T) - DLOG(1.D0 + S/(T + 1.D0))
+         XN = Y - S*LOG(T) - LOG(1.D0 + S/(T + 1.D0))
          GO TO 200
    21 IF (B .LE. 1.D-2) GO TO 22
          U = ((T + 2.D0*(3.D0 - A))*T + (2.D0 - A)*(3.D0 - A))/
      *            ((T + (5.D0 - A))*T + 2.D0)
-         XN = Y - S*DLOG(T) - DLOG(U)
+         XN = Y - S*LOG(T) - LOG(U)
          GO TO 200
    22 C1 = -S*Z
       C2 = -S*(1.D0 + C1)
@@ -13593,12 +13596,12 @@ C                       WHEN A .LT. 1
       XN = ((((C5/Y + C4)/Y + C3)/Y + C2)/Y + C1) + Y
       GO TO 200
    30 IF (B*Q .GT. 1.D-8) GO TO 31
-         XN = DEXP(-(Q/A + C))
+         XN = EXP(-(Q/A + C))
          GO TO 40
    31 IF (P .LE. 0.9D0) GO TO 32
-         XN = DEXP((DLNREL(-Q) + DGMLN1(A))/A)
+         XN = EXP((DLNREL(-Q) + DGMLN1(A))/A)
          GO TO 40
-   32 XN = DEXP(DLOG(P*G)/A)
+   32 XN = EXP(LOG(P*G)/A)
    40 IF (XN .EQ. 0.D0) GO TO 510
       T = 0.5D0 + (0.5D0 - XN/(A + 1.D0))
       XN = XN/T
@@ -13608,7 +13611,7 @@ C                       WHEN A .GT. 1
    50 T = P - 0.5D0
       IF (Q .LT. 0.5D0) T = 0.5D0 - Q
       CALL DPNI(P, Q, T, S, IER)
-      RTA = DSQRT(A)
+      RTA = SQRT(A)
       S2 = S*S
       XN = (((12.D0*S2 - 243.D0)*S2 - 923.D0)*S2 + 1472.D0)/204120.D0
      *     - S*(((3753.D0*S2 + 4353.D0)*S2 - 289517.D0)*S2 - 289717.D0)
@@ -13617,36 +13620,36 @@ C                       WHEN A .GT. 1
      *           - ((3.D0*S2 + 7.D0)*S2 - 16.D0)/810.D0
       XN = A + S*RTA + (S2 - 1.D0)/3.D0 + S*(S2 - 7.D0)/(36.D0*RTA)
      *       + XN/A
-      XN = DMAX1(XN, 0.D0)
+      XN = MAX(XN, 0.D0)
       IF (A .LT. AMIN) GO TO 60
          X = XN
          D = 0.5D0 + (0.5D0 - X/A)
-         IF (DABS(D) .GT. 1.D-1) GO TO 60
-         IF (DABS(D) .GT. 1.D-3) GO TO 100
+         IF (ABS(D) .GT. 1.D-1) GO TO 60
+         IF (ABS(D) .GT. 1.D-3) GO TO 100
          RETURN
    60 IF (P .LE. 0.5D0) GO TO 70
       IF (XN .LT. 3.D0*A) GO TO 200
-      W = DLOG(Q)
+      W = LOG(Q)
       Y = -(W + DGAMLN(A))
-      D = DMAX1(2.D0, A*(A - 1.D0))
+      D = MAX(2.D0, A*(A - 1.D0))
       IF (Y .LT. LN10*D) GO TO 61
          S = 1.D0 - A
-         Z = DLOG(Y)
+         Z = LOG(Y)
          GO TO 22
    61 T = A - 1.D0
-      XN = Y + T*DLOG(XN) - DLNREL(-T/(XN + 1.D0))
-      XN = Y + T*DLOG(XN) - DLNREL(-T/(XN + 1.D0))
+      XN = Y + T*LOG(XN) - DLNREL(-T/(XN + 1.D0))
+      XN = Y + T*LOG(XN) - DLNREL(-T/(XN + 1.D0))
       GO TO 200
    70 AP1 = A + 1.D0
       IF (XN .GT. 0.7D0*AP1) GO TO 101
-      W = DLOG(P) + DGAMLN(AP1)
+      W = LOG(P) + DGAMLN(AP1)
       IF (XN .GT. 0.15D0*AP1) GO TO 80
          AP2 = A + 2.D0
          AP3 = A + 3.D0
-         X = DEXP((W + X)/A)
-         X = DEXP((W + X - DLOG(1.0 + (X/AP1)*(1.D0 + X/AP2)))/A)
-         X = DEXP((W + X - DLOG(1.0 + (X/AP1)*(1.D0 + X/AP2)))/A)
-         X = DEXP((W + X - DLOG(1.0 + (X/AP1)*(1.D0 + (X/AP2)*(1.D0
+         X = EXP((W + X)/A)
+         X = EXP((W + X - LOG(1.0 + (X/AP1)*(1.D0 + X/AP2)))/A)
+         X = EXP((W + X - LOG(1.0 + (X/AP1)*(1.D0 + X/AP2)))/A)
+         X = EXP((W + X - LOG(1.0 + (X/AP1)*(1.D0 + (X/AP2)*(1.D0
      *                      + X/AP3))))/A)
          XN = X
          IF (XN .LE. 1.D-2*AP1) GO TO 101
@@ -13657,9 +13660,9 @@ C                       WHEN A .GT. 1
          T = T*(XN/APN)
          SUM = SUM + T
          IF (T .GT. 1.D-4) GO TO 81
-      T = W - DLOG(SUM)
-      XN = DEXP((XN + T)/A)
-      XN = XN*(1.D0 - (A*DLOG(XN) - XN - T)/(A - XN))
+      T = W - LOG(SUM)
+      XN = EXP((XN + T)/A)
+      XN = XN*(1.D0 - (A*LOG(XN) - XN - T)/(A - XN))
       GO TO 101
 C                 SCHRODER ITERATION USING P
   100 IF (P .GT. 0.5D0) GO TO 200
@@ -13673,20 +13676,20 @@ C                 SCHRODER ITERATION USING P
       IF (R .LT. XMIN) GO TO 550
       T = (PN - P)/R
       W = 0.5D0*(AM1 - XN)
-      IF (DABS(T) .LE. 0.1D0 .AND. DABS(W*T) .LE. 0.1D0) GO TO 120
+      IF (ABS(T) .LE. 0.1D0 .AND. ABS(W*T) .LE. 0.1D0) GO TO 120
          X = XN*(1.D0 - T)
          IF (X .LE. 0.D0) GO TO 540
-         D = DABS(T)
+         D = ABS(T)
          GO TO 121
   120 H = T*(1.D0 + W*T)
       X = XN*(1.D0 - H)
       IF (X .LE. 0.D0) GO TO 540
-      IF (DABS(W) .GE. 1.D0 .AND. DABS(W)*T*T .LE. EPS) RETURN
-      D = DABS(H)
+      IF (ABS(W) .GE. 1.D0 .AND. ABS(W)*T*T .LE. EPS) RETURN
+      D = ABS(H)
   121 XN = X
       IF (D .GT. TOL) GO TO 110
       IF (D .LE. EPS) RETURN
-      IF (DABS(P - PN) .LE. TOL*P) RETURN
+      IF (ABS(P - PN) .LE. TOL*P) RETURN
       GO TO 110
 C                 SCHRODER ITERATION USING Q
   200 IF (Q .LE. XMIN) GO TO 550
@@ -13699,20 +13702,20 @@ C                 SCHRODER ITERATION USING Q
       IF (R .LT. XMIN) GO TO 550
       T = (Q - QN)/R
       W = 0.5D0*(AM1 - XN)
-      IF (DABS(T) .LE. 0.1D0 .AND. DABS(W*T) .LE. 0.1D0) GO TO 220
+      IF (ABS(T) .LE. 0.1D0 .AND. ABS(W*T) .LE. 0.1D0) GO TO 220
          X = XN*(1.D0 - T)
          IF (X .LE. 0.D0) GO TO 540
-         D = DABS(T)
+         D = ABS(T)
          GO TO 221
   220 H = T*(1.D0 + W*T)
       X = XN*(1.D0 - H)
       IF (X .LE. 0.D0) GO TO 540
-      IF (DABS(W) .GE. 1.D0 .AND. DABS(W)*T*T .LE. EPS) RETURN
-      D = DABS(H)
+      IF (ABS(W) .GE. 1.D0 .AND. ABS(W)*T*T .LE. EPS) RETURN
+      D = ABS(H)
   221 XN = X
       IF (D .GT. TOL) GO TO 210
       IF (D .LE. EPS) RETURN
-      IF (DABS(Q - QN) .LE. TOL*Q) RETURN
+      IF (ABS(Q - QN) .LE. TOL*Q) RETURN
       GO TO 210
 C                       SPECIAL CASES
   400 IERR = -8
@@ -13720,7 +13723,7 @@ C                       SPECIAL CASES
   410 IF (Q .LT. 0.9D0) GO TO 411
          X = -DLNREL(-P)
          RETURN
-  411 X = -DLOG(Q)
+  411 X = -LOG(Q)
       RETURN
 C                       ERROR RETURN
   500 IERR = -2
@@ -13793,14 +13796,14 @@ C-----------------------------------------------------------------------
       IF (Y .EQ. 0.0) GO TO 210
       IF (A .EQ. 0.0) GO TO 211
       IF (B .EQ. 0.0) GO TO 201
-      EPS = AMAX1(EPS, 1.E-15)
-      IF (AMAX1(A,B) .LT. 1.E-3*EPS) GO TO 230
+      EPS = MAX(EPS, 1.E-15)
+      IF (MAX(A,B) .LT. 1.E-3*EPS) GO TO 230
       IND = 0
       A0 = A
       B0 = B
       X0 = X
       Y0 = Y
-      IF (AMIN1(A0, B0) .GT. 1.0) GO TO 30
+      IF (MIN(A0, B0) .GT. 1.0) GO TO 30
 C             PROCEDURE FOR A0 .LE. 1 OR B0 .LE. 1
       IF (X .LE. 0.5) GO TO 10
       IND = 1
@@ -13808,10 +13811,10 @@ C             PROCEDURE FOR A0 .LE. 1 OR B0 .LE. 1
       B0 = A
       X0 = Y
       Y0 = X
-   10 IF (B0 .LT. AMIN1(EPS,EPS*A0)) GO TO 80
-      IF (A0 .LT. AMIN1(EPS,EPS*B0) .AND. B0*X0 .LE. 1.0) GO TO 90
-      IF (AMAX1(A0, B0) .GT. 1.0) GO TO 20
-      IF (A0 .GE. AMIN1(0.2, B0)) GO TO 100
+   10 IF (B0 .LT. MIN(EPS,EPS*A0)) GO TO 80
+      IF (A0 .LT. MIN(EPS,EPS*B0) .AND. B0*X0 .LE. 1.0) GO TO 90
+      IF (MAX(A0, B0) .GT. 1.0) GO TO 20
+      IF (A0 .GE. MIN(0.2, B0)) GO TO 100
       IF (X0**A0 .LE. 0.9) GO TO 100
       IF (X0 .GE. 0.3) GO TO 110
       N = 20
@@ -13933,7 +13936,7 @@ C                  SET  FPSER = X**A
       FPSER = 1.0
       IF (A .LE. 1.E-3*EPS) GO TO 10
       FPSER = 0.0
-      T = A*ALOG(X)
+      T = A*LOG(X)
       IF (T .LT. EXPARG(1)) RETURN
       FPSER = EXP(T)
 C                NOTE THAT 1/B(A,B) = B
@@ -13967,9 +13970,9 @@ C--------------------
       BX = B*X
       T = X - BX
       IF (B*EPS .GT. 2.E-2) GO TO 10
-         C = ALOG(X) + PSI(B) + G + T
+         C = LOG(X) + PSI(B) + G + T
          GO TO 20
-   10 C = ALOG(BX) + G + T
+   10 C = LOG(BX) + G + T
    20 TOL = 5.0*EPS*ABS(C)
       J = 1.0
       S = 0.0
@@ -13997,12 +14000,12 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C            COMPUTE THE FACTOR X**A/(A*BETA(A,B))
 C-----------------------------------------------------------------------
-      A0 = AMIN1(A,B)
+      A0 = MIN(A,B)
       IF (A0 .LT. 1.0) GO TO 10
-         Z = A*ALOG(X) - BETALN(A,B)
+         Z = A*LOG(X) - BETALN(A,B)
          BPSER = EXP(Z)/A
          GO TO 70
-   10 B0 = AMAX1(A,B)
+   10 B0 = MAX(A,B)
       IF (B0 .GE. 8.0) GO TO 60
       IF (B0 .GT. 1.0) GO TO 40
 C            PROCEDURE FOR A0 .LT. 1 AND B0 .LE. 1
@@ -14026,8 +14029,8 @@ C         PROCEDURE FOR A0 .LT. 1 AND 1 .LT. B0 .LT. 8
          B0 = B0 - 1.0
          C = C*(B0/(A0 + B0))
       END DO
-      U = ALOG(C) + U
-   50 Z = A*ALOG(X) - U
+      U = LOG(C) + U
+   50 Z = A*LOG(X) - U
       B0 = B0 - 1.0
       APB = A0 + B0
       IF (APB .GT. 1.0) GO TO 51
@@ -14039,7 +14042,7 @@ C         PROCEDURE FOR A0 .LT. 1 AND 1 .LT. B0 .LT. 8
       GO TO 70
 C            PROCEDURE FOR A0 .LT. 1 AND B0 .GE. 8
    60 U = GAMLN1(A0) + ALGDIV(A0,B0)
-      Z = A*ALOG(X) - U
+      Z = A*LOG(X) - U
       BPSER = (A0/A)*EXP(Z)
    70 IF (BPSER .EQ. 0.0 .OR. A .LE. 0.1*EPS) RETURN
 C-----------------------------------------------------------------------
@@ -14189,18 +14192,18 @@ C-----------------
       DATA CONST/.398942280401433/
       BRCOMP = 0.0
       IF (X .EQ. 0.0 .OR. Y .EQ. 0.0) RETURN
-      A0 = AMIN1(A,B)
+      A0 = MIN(A,B)
       IF (A0 .GE. 8.0) GO TO 100
       IF (X .GT. 0.375) GO TO 10
-         LNX = ALOG(X)
+         LNX = LOG(X)
          LNY = ALNREL(-X)
          GO TO 20
    10 IF (Y .GT. 0.375) GO TO 11
          LNX = ALNREL(-Y)
-         LNY = ALOG(Y)
+         LNY = LOG(Y)
          GO TO 20
-   11 LNX = ALOG(X)
-      LNY = ALOG(Y)
+   11 LNX = LOG(X)
+      LNY = LOG(Y)
    20 Z = A*LNX + B*LNY
       IF (A0 .LT. 1.0) GO TO 30
       Z = Z - BETALN(A,B)
@@ -14209,7 +14212,7 @@ C-----------------
 C-----------------------------------------------------------------------
 C              PROCEDURE FOR A .LT. 1 OR B .LT. 1
 C-----------------------------------------------------------------------
-   30 B0 = AMAX1(A,B)
+   30 B0 = MAX(A,B)
       IF (B0 .GE. 8.0) GO TO 80
       IF (B0 .GT. 1.0) GO TO 60
 C                   ALGORITHM FOR B0 .LE. 1
@@ -14233,7 +14236,7 @@ C                ALGORITHM FOR 1 .LT. B0 .LT. 8
          B0 = B0 - 1.0
          C = C*(B0/(A0 + B0))
       END DO
-      U = ALOG(C) + U
+      U = LOG(C) + U
    70 Z = Z - U
       B0 = B0 - 1.0
       APB = A0 + B0
@@ -14265,12 +14268,12 @@ C-----------------------------------------------------------------------
       IF (ABS(E) .GT. 0.6) GO TO 111
          U = RLOG1(E)
          GO TO 120
-  111 U = E - ALOG(X/X0)
+  111 U = E - LOG(X/X0)
   120 E = LAMBDA/B
       IF (ABS(E) .GT. 0.6) GO TO 121
          V = RLOG1(E)
          GO TO 130
-  121 V = E - ALOG(Y/Y0)
+  121 V = E - LOG(Y/Y0)
   130 Z = EXP(-(A*U + B*V))
       BRCOMP = CONST*SQRT(B*X0)*Z*EXP(-BCORR(A,B))
       END FUNCTION BRCOMP
@@ -14290,18 +14293,18 @@ C-----------------
 C     CONST = 1/SQRT(2*PI)
 C-----------------
       DATA CONST/.398942280401433/
-      A0 = AMIN1(A,B)
+      A0 = MIN(A,B)
       IF (A0 .GE. 8.0) GO TO 100
       IF (X .GT. 0.375) GO TO 10
-         LNX = ALOG(X)
+         LNX = LOG(X)
          LNY = ALNREL(-X)
          GO TO 20
    10 IF (Y .GT. 0.375) GO TO 11
          LNX = ALNREL(-Y)
-         LNY = ALOG(Y)
+         LNY = LOG(Y)
          GO TO 20
-   11 LNX = ALOG(X)
-      LNY = ALOG(Y)
+   11 LNX = LOG(X)
+      LNY = LOG(Y)
    20 Z = A*LNX + B*LNY
       IF (A0 .LT. 1.0) GO TO 30
       Z = Z - BETALN(A,B)
@@ -14310,7 +14313,7 @@ C-----------------
 C-----------------------------------------------------------------------
 C              PROCEDURE FOR A .LT. 1 OR B .LT. 1
 C-----------------------------------------------------------------------
-   30 B0 = AMAX1(A,B)
+   30 B0 = MAX(A,B)
       IF (B0 .GE. 8.0) GO TO 80
       IF (B0 .GT. 1.0) GO TO 60
 C                   ALGORITHM FOR B0 .LE. 1
@@ -14334,7 +14337,7 @@ C                ALGORITHM FOR 1 .LT. B0 .LT. 8
          B0 = B0 - 1.0
          C = C*(B0/(A0 + B0))
       END DO
-      U = ALOG(C) + U
+      U = LOG(C) + U
    70 Z = Z - U
       B0 = B0 - 1.0
       APB = A0 + B0
@@ -14366,12 +14369,12 @@ C-----------------------------------------------------------------------
       IF (ABS(E) .GT. 0.6) GO TO 111
          U = RLOG1(E)
          GO TO 120
-  111 U = E - ALOG(X/X0)
+  111 U = E - LOG(X/X0)
   120 E = LAMBDA/B
       IF (ABS(E) .GT. 0.6) GO TO 121
          V = RLOG1(E)
          GO TO 130
-  121 V = E - ALOG(Y/Y0)
+  121 V = E - LOG(Y/Y0)
   130 Z = ESUM(MU,-(A*U + B*V))
       BRCMP1 = CONST*SQRT(B*X0)*Z*EXP(-BCORR(A,B))
       END FUNCTION BRCMP1
@@ -14398,14 +14401,14 @@ C-----------------------------------------------------------------------
       IF (Y .GT. 0.375) GO TO 10
          LNX = ALNREL(-Y)
          GO TO 11
-   10 LNX = ALOG(X)
+   10 LNX = LOG(X)
    11 Z = -NU*LNX
       IF (B*Z .EQ. 0.0) GO TO 100
 C                 COMPUTATION OF THE EXPANSION
 C                 SET R = EXP(-Z)*Z**B/GAMMA(B)
-      R = B*(1.0 + GAM1(B))*EXP(B*ALOG(Z))
+      R = B*(1.0 + GAM1(B))*EXP(B*LOG(Z))
       R = R*EXP(A*LNX)*EXP(0.5*BM1*LNX)
-      U = ALGDIV(B,A) + B*ALOG(NU)
+      U = ALGDIV(B,A) + B*LOG(NU)
       U = R*EXP(-U)
       IF (U .EQ. 0.0) GO TO 100
       CALL GRAT1(B,Z,R,P,Q,EPS)
@@ -14476,7 +14479,7 @@ C             TAYLOR SERIES FOR P(A,X)/X**A
          SUM = SUM + T
          IF (ABS(T) .GT. TOL) GO TO 11
       J = A*X*((SUM/6.0 - 0.5/(A + 2.0))*X + 1.0/(A + 1.0))
-      Z = A*ALOG(X)
+      Z = A*LOG(X)
       H = GAM1(A)
       G = 1.0 + H
       IF (X .LT. 0.25) GO TO 20
@@ -14707,7 +14710,7 @@ C                        COMPUTE EXPANSION 14
       T = AM1*Y/X + 1.0
       IF (T .LT. J) N = INT(T)
    30 I = N - 1.0
-      C = (A*ALOG(X) + I*ALNREL(-X)) - BLND(A,I)
+      C = (A*LOG(X) + I*ALNREL(-X)) - BLND(A,I)
       IF (C .LE. -30) GO TO 60
       TOL = TOL/J
       AN = EXP(C)
@@ -14798,7 +14801,7 @@ C                     COMPUTE P USING EXPANSION 21
          GO TO 210
   201 IF (T .LT. J) N = INT(T)
   210 T = N - 0.5
-      C = (A*ALOG(X) + T*ALNREL(-X)) - BLND(A,T)
+      C = (A*LOG(X) + T*ALNREL(-X)) - BLND(A,T)
       IF (C .LE. -30.0) GO TO 251
       C = EXP(C)
       IF (C .LE. TOL/J) GO TO 251
@@ -14972,7 +14975,7 @@ C     ------------------------------------------------------------------
          RETURN
    10 T = (1.0/X)**2
       Z = (((-0.75*T + 1.0)*T - 3.5)*T + 105.0)/(X*1260.0)
-      LOGAM = (D + Z) + (X - 0.5)*(ALOG(X) - 1.0)
+      LOGAM = (D + Z) + (X - 0.5)*(LOG(X) - 1.0)
       END FUNCTION LOGAM
 
       SUBROUTINE CBSSLJ(Z, CNU, W)
@@ -15024,13 +15027,13 @@ C          USE MACLAURIN EXPANSION AND RECURSION
    20 IF (CN1 .GE. 0.0) GO TO 30
       QN = -1.25*(R + 0.5*ABS(CN2) - ABS(Y - 0.5*CN2))
       IF (CN1 .GE. QN) GO TO 30
-      QN = 1.25*(R - AMAX1(1.2*R,ABS(Y - CN2)))
+      QN = 1.25*(R - MAX(1.2*R,ABS(Y - CN2)))
       IF (CN1 .GE. QN) GO TO 30
-      QN = AMIN1(PN, -AINT(1.25*(R - ABS(CN2))))
+      QN = MIN(PN, -AINT(1.25*(R - ABS(CN2))))
       GO TO 130
    30 R2 = R*R
       QM = 0.0625*R2*R2 - CN2*CN2
-      QN = AMAX1(PN, AINT(SQRT(0.5*(QM + ABS(QM)))))
+      QN = MAX(PN, AINT(SQRT(0.5*(QM + ABS(QM)))))
       GO TO 130
 C          USE ASYMPTOTIC EXPANSION
    40 CALL CBJA(Z, CNU, W)
@@ -15040,7 +15043,7 @@ C          CALCULATION FOR 17.5 .LT. ABS(Z) .LE. 17.5 + 0.5*ABS(CNU)**2
       IF (ABS(CN2) .GE. 0.8*ABS(Y)) GO TO 60
       QM = -1.25*(R + 0.5*ABS(CN2) - ABS(Y - 0.5*CN2))
       IF (CN1 .GE. QM) GO TO 60
-      QM = 1.25*(R - AMAX1(1.2*R,ABS(Y - CN2)))
+      QM = 1.25*(R - MAX(1.2*R,ABS(Y - CN2)))
       IF (CN1 .LT. QM) N = 1
    60 QN = PN
       A = 4.E-3*R*R
@@ -15061,7 +15064,7 @@ C          THE ARGUMENT LIES INSIDE THE ZONE OF EXCLUSION
          QN = QN + 1.0
          IF (N .EQ. 0) GO TO 70
 C          USE MACLAURIN EXPANSION WITH FORWARD RECURRENCE
-      QN = AMIN1(PN, -AINT(1.25*(R - ABS(CN2))))
+      QN = MIN(PN, -AINT(1.25*(R - ABS(CN2))))
       GO TO 130
 C          USE BACKWARD RECURRENCE STARTING FROM THE
 C          ASYMPTOTIC EXPANSION
@@ -15091,11 +15094,11 @@ C          DEBYE APPROXIMATION
       IF (X .GE. 0.0) RETURN
       NU = PI*CMPLX(-CN2, CN1)
       IF (Y .LT. 0.0) NU = -NU
-      W = CEXP(NU)*W
+      W = EXP(NU)*W
       RETURN
 C          USE MACLAURIN EXPANSION WITH FORWARD OR BACKWARD RECURRENCE.
   130 M = QN - PN
-      IF (IABS(M) .GT. 1) GO TO 140
+      IF (ABS(M) .GT. 1) GO TO 140
          NU = CMPLX(CN1, CN2)
          CALL CBJM(Z, NU, W)
          GO TO 180
@@ -15104,7 +15107,7 @@ C          USE MACLAURIN EXPANSION WITH FORWARD OR BACKWARD RECURRENCE.
       W0 = 0.25*Z*Z
       IF (M .GT. 0) GO TO 160
 C          FORWARD RECURRENCE
-      M = IABS(M)
+      M = ABS(M)
       NU = NU + 1.0
       CALL CBJM(Z, NU, W)
       DO I = 2,M
@@ -15132,8 +15135,8 @@ C          FINAL ASSEMBLY
          E = SN/GAMMA(PN + 1.0)
          W = E*W*(0.5*Z)**K
          RETURN
-  190 S = CNU*CLOG(0.5*Z)
-      W = CEXP(S)*W
+  190 S = CNU*LOG(0.5*Z)
+      W = EXP(S)*W
       IF (RN2 .GT. 0.81) GO TO 200
          W = W*CGAM0(CNU)
          RETURN
@@ -15160,7 +15163,7 @@ C     THE MACLAURIN EXPANSION IS USED. IT IS ASSUMED THAT CNU IS NOT
 C     A NEGATIVE INTEGER.
 C-----------------------------------------------------------------------
 C--------------------------
-      ANORM(Z) = AMAX1(ABS(REAL(Z)),ABS(AIMAG(Z)))
+      ANORM(Z) = MAX(ABS(REAL(Z)),ABS(AIMAG(Z)))
 C--------------------------
 C     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 C            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0 .
@@ -15200,7 +15203,7 @@ C     IF SO THEN THE SUMMATION IS COMPLETE.
       A0 = ANORM(T)/M
       T = T * (S/(NU + (M + 1.0)))
       A = ANORM(T)/(M*(M + 1.0))
-      A = AMAX1(A, A0)
+      A = MAX(A, A0)
       T = (1.0, 0.0)
       KM2 = K - 2
       DO I = IMIN,KM2
@@ -15347,22 +15350,22 @@ C          T = EXP(NU*(TANH(GAMMA) - GAMMA))
       IF (ABS(IZN) .GT. 0.1*ABS(REAL(ZN))) GO TO 20
          S = (1.0 - ZN)*(1.0 + ZN)
          ETA = 1.0/S
-         Q = CSQRT(S)
+         Q = SQRT(S)
          S = 1.0/(NU*Q)
          T = ZN/(1.0 + Q)
-         T = CEXP(NU*(Q + CLOG(T)))
+         T = EXP(NU*(Q + LOG(T)))
          GO TO 30
  
    20 S = (NU - Z)*(NU + Z)
       ETA = (NU*NU)/S
-      W = CSQRT(S)
+      W = SQRT(S)
       Q = W/NU
       IF (REAL(Q) .LT. 0.0) W = -W
       S = 1.0/W
       T = Z/(NU + W)
-      T = CEXP(W + NU*CLOG(T))
+      T = EXP(W + NU*LOG(T))
    30 IS = AIMAG(S)
-      R = CSQRT(S)
+      R = SQRT(S)
       C1 = R*T
       AR = REAL(R)*REAL(R) + AIMAG(R)*AIMAG(R)
       AQ = -1.0/(REAL(Q)*REAL(Q) + AIMAG(Q)*AIMAG(Q))
@@ -15455,7 +15458,7 @@ C-----------------------------------------------------------------------
 C        COMPUTATION OF J(NU,Z) BY THE ASYMPTOTIC EXPANSION
 C-----------------------------------------------------------------------
 C--------------------------
-      ANORM(Z) = AMAX1(ABS(REAL(Z)), ABS(AIMAG(Z)))
+      ANORM(Z) = MAX(ABS(REAL(Z)), ABS(AIMAG(Z)))
 C--------------------------
 C     PIHALF = PI/2
 C     C = 2*PI**(-1/2)
@@ -15508,14 +15511,14 @@ C--------------------------
       W = Z - PIHALF*NU
       IF (ABS(AIMAG(W)) .GT. 1.0) GO TO 40
          ARG = W - 0.5*PIHALF
-         W = C*CSQRT(ZR)*(P*CCOS(ARG) - Q*CSIN(ARG))
+         W = C*SQRT(ZR)*(P*COS(ARG) - Q*SIN(ARG))
          GO TO 50
-   40 E = CEXP(-J*W)
+   40 E = EXP(-J*W)
       T = Q - J*P
       IF (AIMAG(Z) .GT. 0.0 .AND. REAL(Z) .LE. 1.E-2*AIMAG(Z) .AND.
      *    ABS(REAL(NU)) .LT. 1.E-2*AIMAG(NU)) T = 0.5*T
       CALL CREC(REAL(E), AIMAG(E), U, V)
-      W = 0.5*C*CSQRT(J*ZR)*((P - J*Q)*E + T*CMPLX(U, V))
+      W = 0.5*C*SQRT(J*ZR)*((P - J*Q)*E + T*CMPLX(U, V))
    50 IF (X .GE. -1.E-2*Y) GO TO 60
       IF (Y .LT. 0.0) NU = -NU
 C     COMPUTATION OF EXP(I*PI*NU)
@@ -15581,7 +15584,7 @@ C     -------------------
       AZ(2)=AIMAG(A)
       ZS=AZ(1)*AZ(1)+AZ(2)*AZ(2)
       ZM=SQRT(ZS)
-      PN=IABS(IN)
+      PN=ABS(IN)
       SN=+1.0
       IF ((IN) .LT. 0) GO TO 002
       GO TO 003
@@ -15925,21 +15928,21 @@ C     DEFINITION OF THE TOLERANCES TOL AND ELIM
       IF (TB.EQ.2.0E0) GO TO 1
       IF (TB.EQ.8.0E0) GO TO 2
       IF (TB.EQ.16.0E0) GO TO 3
-      TB = ALOG(TB)
+      TB = LOG(TB)
       GO TO 5
     1 TB = .69315E0
       GO TO 5
     2 TB = 2.07944E0
       GO TO 5
     3 TB = 2.77259E0
-    5 TOL = AMAX1(TA,1.E-15)
+    5 TOL = MAX(TA,1.E-15)
       I1 = IPMPAR(5)
       I2 = IPMPAR(6)
 C     LN(10**3) = 6.90776
       ELIM = FLOAT(-I2)*TB - 6.90776E0
 C     TOLLN = -LN(TOL)
       TOLLN = FLOAT(I1)*TB
-      TOLLN = AMIN1(TOLLN,34.5388E0)
+      TOLLN = MIN(TOLLN,34.5388E0)
       NZ = 0
       KT = 1
       NSWC_AI_I4 = N - 1
@@ -15978,15 +15981,15 @@ C     DECISION TREE FOR REGION WHERE SERIES, ASYMPTOTIC EXPANSION FOR X
 C     TO INFINITY AND ASYMPTOTIC EXPANSION FOR NU TO INFINITY ARE
 C     APPLIED.
       IF (SXO2.LE.(FNU+1.0E0)) GO TO 90
-      TA = AMAX1(20.0E0,FNU)
+      TA = MAX(20.0E0,FNU)
       IF (X.GT.TA) GO TO 120
       IF (X.GT.12.0E0) GO TO 110
-      XO2L = ALOG(XO2)
+      XO2L = LOG(XO2)
       NS = INT(SXO2-FNU) + 1
       GO TO 100
    90 FN = FNU
       FNP1 = FN + 1.0E0
-      XO2L = ALOG(XO2)
+      XO2L = LOG(XO2)
       IS = KT
       IF (X.LE.0.50E0) GO TO 330
       NS = 0
@@ -15997,7 +16000,7 @@ C     APPLIED.
       IS = KT
       IF (N-1+NS.GT.0) IS = 3
       GO TO 330
-  110 ANS = AMAX1(36.0E0-FNU,0.0E0)
+  110 ANS = MAX(36.0E0-FNU,0.0E0)
       NS = INT(ANS)
       FNI = FNI + FLOAT(NS)
       DFN = FNI + FNF
@@ -16014,8 +16017,8 @@ C     APPLIED.
       IS = KT
 C     UNIFORM ASYMPTOTIC EXPANSION FOR NU TO INFINITY
   130 CONTINUE
-      I1 = IABS(3-IS)
-      I1 = MAX0(I1,1)
+      I1 = ABS(3-IS)
+      I1 = MAX(I1,1)
       FLGJY = 1.0E0
       CALL ASJY(JAIRY,X,FN,FLGJY,I1,TOL,ELIM,TEMP(IS),WK,IFLW)
       IF(IFLW.NE.0) GO TO 380
@@ -16086,7 +16089,7 @@ C     SET UNDERFLOW VALUE AND UPDATE PARAMETERS
       IS = 2
   420 IF (SXO2.LE.FNP1) GO TO 430
       GO TO 130
-  430 ARG = ARG - XO2L + ALOG(FNP1)
+  430 ARG = ARG - XO2L + LOG(FNP1)
       IF (ARG.LT.(-ELIM)) GO TO 400
       GO TO 330
   440 NZ = N - NN
@@ -16208,7 +16211,7 @@ C     BACKWARD RECURSION WITH NORMALIZATION BY
 C     ASYMPTOTIC EXPANSION FOR NU TO INFINITY OR POWER SERIES.
   610 CONTINUE
 C     COMPUTATION OF LAST ORDER FOR SERIES NORMALIZATION
-      AKM = AMAX1(3.0E0-FN,0.0E0)
+      AKM = MAX(3.0E0-FN,0.0E0)
       KM = INT(AKM)
       TFN = FN + FLOAT(KM)
       TA = (GLN+TFN-0.9189385332E0-0.0833333333E0/TFN)/(TFN+0.5E0)
@@ -16555,10 +16558,10 @@ C     ZETA AND TRUNCATION FOR A(ZETA) AND B(ZETA) SERIES
 C     KMAX IS TRUNCATION INDEX FOR A(ZETA) AND B(ZETA) SERIES=MAX(2,SA)
         SA = 0.0E0
         IF (ABW2.EQ.0.0E0) GO TO 10
-        SA = TOLS/ALOG(ABW2)
+        SA = TOLS/LOG(ABW2)
    10   SB = SA
         DO I=1,5
-          AKM = AMAX1(SA,2.0E0)
+          AKM = MAX(SA,2.0E0)
           KMAX(I) = INT(AKM)
           SA = SA + SB
         END DO
@@ -16637,7 +16640,7 @@ C     CASES FOR (X/FN).GT.SQRT(1.2775)
         GO TO 100
    90   CONTINUE
 C     CASES FOR (X/FN).LT.SQRT(0.7225)
-        WK(3) = ABS(ALOG((1.0E0+WK(2))/XX)-WK(2))
+        WK(3) = ABS(LOG((1.0E0+WK(2))/XX)-WK(2))
         WK(4) = WK(3)*FN
         RCZ = CON1/WK(4)
         IF(WK(4).GT.ELIM) GO TO 75
@@ -17074,9 +17077,9 @@ C     -------------------
       AZ(1)=REAL(A)
       AZ(2)=AIMAG(A)
       ZS=AZ(1)*AZ(1)+AZ(2)*AZ(2)
-      ZL(1)=0.5*ALOG(ZS)
+      ZL(1)=0.5*LOG(ZS)
       ZL(2)=ATAN2(AZ(2),AZ(1))
-      AN=IABS(IN)
+      AN=ABS(IN)
       SN=+1.0
       IF ((IN) .LT. 0) GO TO 002
       GO TO 003
@@ -17454,7 +17457,7 @@ C     -------------------
       AZ(2)=AIMAG(A)
       ZS=AZ(1)*AZ(1)+AZ(2)*AZ(2)
       ZM=SQRT(ZS)
-      PN=IABS(IN)
+      PN=ABS(IN)
       SN=+1.0
       IF ((AZ(1)) .LT. 0) GO TO 002
       GO TO 003
@@ -17826,21 +17829,21 @@ C     DEFINITION OF THE TOLERANCES TOL AND ELIM
       IF (TB.EQ.2.0E0) GO TO 1
       IF (TB.EQ.8.0E0) GO TO 2
       IF (TB.EQ.16.0E0) GO TO 3
-      TB = ALOG(TB)
+      TB = LOG(TB)
       GO TO 5
     1 TB = .69315E0
       GO TO 5
     2 TB = 2.07944E0
       GO TO 5
     3 TB = 2.77259E0
-    5 TOL = AMAX1(TA,1.E-15)
+    5 TOL = MAX(TA,1.E-15)
       I1 = IPMPAR(5)
       I2 = IPMPAR(6)
 C     LN(10**3) = 6.90776
       ELIM = FLOAT(-I2)*TB - 6.90776E0
 C     TOLLN = -LN(TOL)
       TOLLN = FLOAT(I1)*TB
-      TOLLN = AMIN1(TOLLN,34.5388E0)
+      TOLLN = MIN(TOLLN,34.5388E0)
       NZ = 0
       KT = 1
       NSWC_AI_I4 = N - 1
@@ -17885,9 +17888,9 @@ C     APPLIED.
       IF (SXO2.LE.(FNU+1.0E0)) GO TO 90
       IF (X.LE.12.0E0) GO TO 110
       FN = 0.55E0*FNU*FNU
-      FN = AMAX1(17.0E0,FN)
+      FN = MAX(17.0E0,FN)
       IF (X.GE.FN) GO TO 430
-      ANS = AMAX1(36.0E0-FNU,0.0E0)
+      ANS = MAX(36.0E0-FNU,0.0E0)
       NS = INT(ANS)
       FNI = FNI + FLOAT(NS)
       DFN = FNI + FNF
@@ -17898,7 +17901,7 @@ C     APPLIED.
       GO TO 120
    90 FN = FNU
       FNP1 = FN + 1.0E0
-      XO2L = ALOG(XO2)
+      XO2L = LOG(XO2)
       IS = KT
       IF (X.LE.0.5E0) GO TO 230
       NS = 0
@@ -17909,7 +17912,7 @@ C     APPLIED.
       IS = KT
       IF (N-1+NS.GT.0) IS = 3
       GO TO 230
-  110 XO2L = ALOG(XO2)
+  110 XO2L = LOG(XO2)
       NS = INT(SXO2-FNU)
       GO TO 100
   120 CONTINUE
@@ -17918,7 +17921,7 @@ C     OVERFLOW TEST ON UNIFORM ASYMPTOTIC EXPANSION
       IF (ALPHA.LT.1.0E0) GO TO 150
       Z = X/ALPHA
       RA = SQRT(1.0E0+Z*Z)
-      GLN = ALOG((1.0E0+RA)/Z)
+      GLN = LOG((1.0E0+RA)/Z)
       T = RA*(1.0E0-ETX) + ETX/(Z+RA)
       ARG = ALPHA*(T-GLN)
       IF (ARG.GT.ELIM) GO TO 610
@@ -17927,7 +17930,7 @@ C     OVERFLOW TEST ON UNIFORM ASYMPTOTIC EXPANSION
 C     UNDERFLOW TEST ON UNIFORM ASYMPTOTIC EXPANSION
       Z = X/FN
       RA = SQRT(1.0E0+Z*Z)
-      GLN = ALOG((1.0E0+RA)/Z)
+      GLN = LOG((1.0E0+RA)/Z)
       T = RA*(1.0E0-ETX) + ETX/(Z+RA)
       ARG = FN*(T-GLN)
   140 IF (ARG.LT.(-ELIM)) GO TO 280
@@ -17950,12 +17953,12 @@ C     UNIFORM ASYMPTOTIC EXPANSION FOR NU TO INFINITY
       IF(I1.EQ.2) GO TO 350
       Z = X/FN
       RA = SQRT(1.0E0+Z*Z)
-      GLN = ALOG((1.0E0+RA)/Z)
+      GLN = LOG((1.0E0+RA)/Z)
       T = RA*(1.0E0-ETX) + ETX/(Z+RA)
       ARG = FN*(T-GLN)
   190 CONTINUE
-      I1 = IABS(3-IS)
-      I1 = MAX0(I1,1)
+      I1 = ABS(3-IS)
+      I1 = MAX(I1,1)
       FLGIK = 1.0E0
       CALL ASIK(X,FN,KODE,FLGIK,RA,ARG,I1,TOL,TEMP(IS))
       GO TO (180, 350, 510), IS
@@ -18017,7 +18020,7 @@ C     SET UNDERFLOW VALUE AND UPDATE PARAMETERS
       IS = 2
   320 IF (SXO2.LE.FNP1) GO TO 330
       GO TO 130
-  330 ARG = ARG - XO2L + ALOG(FNP1)
+  330 ARG = ARG - XO2L + LOG(FNP1)
       IF (ARG.LT.(-ELIM)) GO TO 300
       GO TO 230
   340 NZ = N - NN
@@ -18106,7 +18109,7 @@ C     BACKWARD RECURSION WITH NORMALIZATION BY
 C     ASYMPTOTIC EXPANSION FOR NU TO INFINITY OR POWER SERIES.
   500 CONTINUE
 C     COMPUTATION OF LAST ORDER FOR SERIES NORMALIZATION
-      AKM = AMAX1(3.0E0-FN,0.0E0)
+      AKM = MAX(3.0E0-FN,0.0E0)
       KM = INT(AKM)
       TFN = FN + FLOAT(KM)
       TA = (GLN+TFN-0.9189385332E0-0.0833333333E0/TFN)/(TFN+0.5E0)
@@ -18282,7 +18285,7 @@ C     ---------------------
         FN = FN - FLGIK
         Z = X/FN
         RA = SQRT(1.0E0+Z*Z)
-        GLN = ALOG((1.0E0+RA)/Z)
+        GLN = LOG((1.0E0+RA)/Z)
         ETX = FLOAT(KODE-1)
         T = RA*(1.0E0-ETX) + ETX/(Z+RA)
         ARG = FN*(T-GLN)*FLGIK
@@ -18304,7 +18307,7 @@ C     ---------------------
           AP = AP*T
           AK = AP*S1
           S2 = S2 + AK
-          IF (AMAX1(ABS(AK) , ABS(AP)) .LT. TOL) EXIT
+          IF (MAX(ABS(AK) , ABS(AP)) .LT. TOL) EXIT
         END DO
       T = ABS(T)
       Y(JN) = S2*COEF*SQRT(T)*CON(KK)
@@ -18452,7 +18455,7 @@ C        COMPUTATION OF THE BESSEL FUNCTION K FOR COMPLEX ORDER
 C        CNU AND COMPLEX ARGUMENT Z BY THE ASYMPTOTIC EXPANSION
 C-----------------------------------------------------------------------
 C--------------------------
-      ANORM(Z) = AMAX1(ABS(REAL(Z)), ABS(AIMAG(Z)))
+      ANORM(Z) = MAX(ABS(REAL(Z)), ABS(AIMAG(Z)))
 C--------------------------
 C     C = PI**(1/2)
 C--------------------------
@@ -18476,9 +18479,9 @@ C--------------------------
          IF (ANORM(T) .LE. EPS * ANORM(P)) EXIT
       END DO
       P = P + 1.0
-      T = CSQRT(ZR)
+      T = SQRT(ZR)
       IF (AIMAG(Z) .EQ. 0.0) T = CONJG(T)
-      W = C*T*P*CEXP(-Z)
+      W = C*T*P*EXP(-Z)
       END SUBROUTINE CBKA
 
       SUBROUTINE CBKM(Z, RZ, CNU, W)
@@ -18565,7 +18568,7 @@ C                 RECURSION
       END DO
       W = U3
    90 IF (IND .EQ. 0) RETURN
-      W = W*W1*CEXP(-CZ)/CSQRT(CZ)
+      W = W*W1*EXP(-CZ)/SQRT(CZ)
       IF (IND .GT. 0) RETURN
 C            ANALYTIC CONTINUATION
       C = EXP(0.5*B*PI)
@@ -18616,25 +18619,25 @@ C-----------------------
      *     D(5) /-.215241674114951E-03/,  D(6) /-.201348547807882E-04/,
      *     D(7) / .113302723198170E-05/
 C-----------------------
-      ANORM(T) = AMAX1(ABS(REAL(T)), ABS(AIMAG(T)))
+      ANORM(T) = MAX(ABS(REAL(T)), ABS(AIMAG(T)))
 C-----------------------------------------------------------------------
 C     ****** EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
 C            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
                       EPS = SPMPAR(1)
 C-----------------------------------------------------------------------
-      EPS0 = AMAX1(EPS, 5.E-15)
+      EPS0 = MAX(EPS, 5.E-15)
 C                     CL = - LN(Z/2)
       PHI = ATAN2(AIMAG(Z),REAL(Z))
-      CL = CMPLX(-ALOG(R), -PHI)
+      CL = CMPLX(-LOG(R), -PHI)
       MU = NU*CL
-      C = CEXP(MU)
+      C = EXP(MU)
 C                   G1 = GAMMA(1 + NU)
 C                   G2 = GAMMA(1 - NU)
       T = PI*NU
       IF (ANORM(NU) .GT. TOL) GO TO 10
          A = 1.0 + (T*T)/6.0
          GO TO 20
-   10 A = T/CSIN(T)
+   10 A = T/SIN(T)
    20 S = REAL(NU)**2 + AIMAG(NU)**2
       IF (S .GE. 1.0) GO TO 21
          T = CGAM0(NU)
@@ -18665,8 +18668,8 @@ C            INITIALIZATION OF THE SUMMATION
          CH = CMPLX(1.0, U)
          GO TO 60
    50 T = CMPLX(-Y, X)
-      SH = CSIN(T)/T
-      CH = CCOS(T)
+      SH = SIN(T)/T
+      CH = COS(T)
    60 F = GM1*CH + GM2*CL*SH
       C = (1.0, 0.0)
       W1 = F
@@ -18724,7 +18727,7 @@ C     ****** EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
 C            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
                       EPS = SPMPAR(1)
 C-----------------------------------------------------------------------
-      EPS0 = AMAX1(EPS, 5.E-15)
+      EPS0 = MAX(EPS, 5.E-15)
       X = REAL(Z)
       Y = AIMAG(Z)
       RNU = REAL(NU)
@@ -18738,7 +18741,7 @@ C     CALCULATION OF M FOR USE IN MILLER ALGORITHM.
          C = 4.0*COS1(RNU)/(C1*EPS0*F)
          GO TO 20
    10 C = 4.0*C2/F
-   20 M = (0.485/R)*(ALOG(C) + R*COS(A*TH)/(1.0 + 0.008*R))**2/
+   20 M = (0.485/R)*(LOG(C) + R*COS(A*TH)/(1.0 + 0.008*R))**2/
      *    (2.0*COS(B*TH))**2 + 1.5
       T = 0.0
       IF (R .GT. 22.5) T = 0.01*(R - 22.5)**2
@@ -18873,7 +18876,7 @@ C                 RECURSION
       END DO
       W = U3
    90 IF (IND .EQ. 0) RETURN
-      W = W*CEXP(-CZ)/CSQRT(CZ)
+      W = W*EXP(-CZ)/SQRT(CZ)
       IF (IND .GT. 0) RETURN
 C            ANALYTIC CONTINUATION
       EX = CXP(M, NU1)
@@ -18907,7 +18910,7 @@ C        COMPUTATION OF THE BESSEL FUNCTION K FOR REAL ORDER NU
 C        AND COMPLEX ARGUMENT Z BY THE ASYMPTOTIC EXPANSION
 C-----------------------------------------------------------------------
 C--------------------------
-      ANORM(Z) = AMAX1(ABS(REAL(Z)), ABS(AIMAG(Z)))
+      ANORM(Z) = MAX(ABS(REAL(Z)), ABS(AIMAG(Z)))
 C--------------------------
 C     C = PI**(1/2)
 C--------------------------
@@ -18931,9 +18934,9 @@ C--------------------------
          IF (ANORM(T) .LE. EPS * ANORM(P)) EXIT
       END DO
       P = P + 1.0
-      T = CSQRT(ZR)
+      T = SQRT(ZR)
       IF (AIMAG(Z) .EQ. 0.0) T = CONJG(T)
-      W = C*T*P*CEXP(-Z)
+      W = C*T*P*EXP(-Z)
       END SUBROUTINE CKA
 
       SUBROUTINE CKM(Z, R, ZR, NU, W1, W2)
@@ -18967,18 +18970,18 @@ C-----------------------
      *     D(5) /-.215241674114951E-03/,  D(6) /-.201348547807882E-04/,
      *     D(7) / .113302723198170E-05/
 C-----------------------
-      ANORM(W) = AMAX1(ABS(REAL(W)), ABS(AIMAG(W)))
+      ANORM(W) = MAX(ABS(REAL(W)), ABS(AIMAG(W)))
 C-----------------------------------------------------------------------
 C     ****** EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
 C            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
                       EPS = SPMPAR(1)
 C-----------------------------------------------------------------------
-      EPS0 = AMAX1(EPS, 5.E-15)
+      EPS0 = MAX(EPS, 5.E-15)
 C                     CL = - LN(Z/2)
       PHI = ATAN2(AIMAG(Z),REAL(Z))
-      CL = CMPLX(-ALOG(R), -PHI)
+      CL = CMPLX(-LOG(R), -PHI)
       MU = NU*CL
-      C = CEXP(MU)
+      C = EXP(MU)
 C                   G1 = GAMMA(1 + NU)
 C                   G2 = GAMMA(1 - NU)
       T = PI*NU
@@ -19010,8 +19013,8 @@ C            INITIALIZATION OF THE SUMMATION
          CH = CMPLX(1.0, T)
          GO TO 60
    50 W = CMPLX(-Y, X)
-      SH = CSIN(W)/W
-      CH = CCOS(W)
+      SH = SIN(W)/W
+      CH = COS(W)
    60 F = GM1*CH + GM2*CL*SH
       C = (1.0, 0.0)
       W1 = F
@@ -19067,7 +19070,7 @@ C     ****** EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
 C            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
                       EPS = SPMPAR(1)
 C-----------------------------------------------------------------------
-      EPS0 = AMAX1(EPS, 5.E-15)
+      EPS0 = MAX(EPS, 5.E-15)
       X = REAL(Z)
       Y = AIMAG(Z)
       NU2 = NU*NU
@@ -19076,7 +19079,7 @@ C     CALCULATION OF M FOR USE IN MILLER ALGORITHM.
       A = 3.0/(1.0 + R)
       B = 14.7/(28.0 + R)
       C = 4.0*COS1(NU)/(C1*EPS0*(2.0*R)**(0.25))
-      M = (0.485/R)*(ALOG(C) + R*COS(A*TH)/(1.0 + 0.008*R))**2/
+      M = (0.485/R)*(LOG(C) + R*COS(A*TH)/(1.0 + 0.008*R))**2/
      *    (2.0*COS(B*TH))**2 + 1.5
 C     BACKWARD RECURRENCE IN MILLER ALGORITHM.
       U2 = (0.0, 0.0)
@@ -19196,9 +19199,9 @@ C     -------------------
       AZ(1)=REAL(A)
       AZ(2)=AIMAG(A)
       ZS=AZ(1)*AZ(1)+AZ(2)*AZ(2)
-      ZL(1)=0.5*ALOG(ZS)
+      ZL(1)=0.5*LOG(ZS)
       ZL(2)=ATAN2(AZ(2),AZ(1))
-      AN=IABS(IN)
+      AN=ABS(IN)
       TM(1)=0.0
       TM(2)=0.0
       IF(MO.NE.0)GO TO 002
@@ -19511,9 +19514,9 @@ C     FINAL ASSEMBLY
       IF (IND .EQ. 0) RETURN
          X = REAL(Z)
          Y = AIMAG(Z)
-         Z1 = CSQRT(Z)
+         Z1 = SQRT(Z)
          ZZ = Z*Z1/1.5
-         E = CEXP(ZZ)
+         E = EXP(ZZ)
          E1 = 1.0/E
          AI = AI*E
          AIP = AIP*E
@@ -19545,7 +19548,7 @@ C     C1 = 1/(PI*SQRT(3))
       A = REAL(Z)
       B = AIMAG(Z)
       R = CPABS(A, B)
-      Z1 = CSQRT(Z)
+      Z1 = SQRT(Z)
       Z2 = Z1*Z/1.5
       IF (ABS(B) .LT. -5.0*A) GO TO 10
 C           ----  ABS(B) .GE. -5.0*A  ----
@@ -19557,13 +19560,13 @@ C           ----  ABS(B) .LT. -5.0*A  ----
    10 IF (ABS(B) .LT. -1.74*A) GO TO 30
          IF (R .GE. 8.2) GO TO 40
    20    ZM = -Z
-         Z1 = CSQRT(ZM)
+         Z1 = SQRT(ZM)
          Z3 = Z1*ZM/1.5
          CALL JA(Z3, W1, W2, W1M, W2M)
          AI = (Z1/3.0)*(W1M +W1)
          AIP = (Z/3.0)*(W2M - W2)
          IF (IND .EQ. 0) RETURN
-            E = CEXP(Z2)
+            E = EXP(Z2)
             AI = AI*E
             AIP = AIP*E
             RETURN
@@ -19639,14 +19642,14 @@ C------------------------
       IERR = 0
       IF (REAL(Z) .LT. 0.0) GO TO 30
 C             -----   REAL(Z) .GE. 0    -----
-      Z1 = CSQRT(Z)
-      Z2 = CSQRT(Z1)
+      Z1 = SQRT(Z)
+      Z2 = SQRT(Z1)
       Z2R = 1.0/Z2
       CALL CREC(REAL(Z), AIMAG(Z), U, V)
       W = -1.5*CMPLX(U,V)/Z1
       U = ABS(REAL(W))
       V = ABS(AIMAG(W))
-      T = AMAX1(U,V)
+      T = MAX(U,V)
       IF (IND .NE. 0) GO TO 10
          IF (T .EQ. 0.0) GO TO 90
          U1 = U/T
@@ -19656,7 +19659,7 @@ C             -----   REAL(Z) .GE. 0    -----
          IF (REAL(W) .LT. 0.0) XM = -XNEG
          IF (U1 .GE. R*XM .OR. V1 .GE. 0.1*R/EPS) GO TO 90
          ZETA = Z1*Z/1.5
-         E = CEXP(-ZETA)
+         E = EXP(-ZETA)
    10 M = 20
       IF (T .GT. 30.0) M = 8
       S1 = CMPLX(C(M),0.0)
@@ -19675,14 +19678,14 @@ C             -----   REAL(Z) .GE. 0    -----
       RETURN
 C             -----   REAL(Z) .LT. 0    -----
    30 ZZ = -Z
-      Z1 = CSQRT(ZZ)
-      Z2 = CSQRT(Z1)
+      Z1 = SQRT(ZZ)
+      Z2 = SQRT(Z1)
       Z2R = 1.0/Z2
       CALL CREC(REAL(ZZ), AIMAG(ZZ), U, V)
       W = 1.5*CMPLX(U,V)/Z1
       U = ABS(REAL(W))
       V = ABS(AIMAG(W))
-      T = AMAX1(U,V)
+      T = MAX(U,V)
          IF (T .EQ. 0.0) GO TO 90
          U1 = U/T
          V1 = V/T
@@ -19697,7 +19700,7 @@ C             -----   REAL(Z) .LT. 0    -----
          IF (V1 .GT. 0.5*R*ABS(XNEG)) GO TO 50
          IF (U1 .GE. 0.05*R/EPS) GO TO 90
          ZETA = Z1*ZZ/1.5
-         E = CEXP(2.0*J*ZETA)
+         E = EXP(2.0*J*ZETA)
    50 W2 =  W*W
       M = 15
       IF (T .GT. 30.0) M = 5
@@ -19718,8 +19721,8 @@ C             -----   REAL(Z) .LT. 0    -----
       S2 = W*S2
       S4 = W*S4
       IF (IND .NE. 0) GO TO 70
-         CN = CCOS(ZETA)
-         SI = CSIN(ZETA)
+         CN = COS(ZETA)
+         SI = SIN(ZETA)
          GO TO 80
    70 CN = 0.5*(1.0 + E)
       SI = 0.5*(1.0 - E)*J
@@ -19789,9 +19792,9 @@ C     SQT3 = SQRT(3)
       X = REAL(Z)
       Y = AIMAG(Z)
       R = CPABS(X, Y)
-      Z1 = CSQRT(Z)
+      Z1 = SQRT(Z)
       Z2 = Z1*Z/1.5
-      E = CEXP(-Z2)
+      E = EXP(-Z2)
       E1 = 1.0/E
       IF(REAL(Z) .LT. 0.0) GO TO 10
 C               ----  REAL(Z) .GE. 0  ----
@@ -19807,7 +19810,7 @@ C               ----  REAL(Z) .LT. 0  ----
    10 IF (R .LT. 8.1) GO TO 15
       IF (ABS(Y) .LT. 3.89*ABS(X)) GO TO 40
    15    ZM = -Z
-         Z1 = CSQRT(ZM)
+         Z1 = SQRT(ZM)
          Z2 = Z1*ZM/1.5
          CALL JA(Z2, W1, W2, W1M, W2M)
          BI = C1*Z1*(W1M -W1)
@@ -19905,14 +19908,14 @@ C------------------------
       Y = AIMAG(Z)
       IF (X .LT. ABS(Y)*SQT3) GO TO 30
 C          -----  ABS(ARG(Z)) .LE. PI/6  ----
-      Z1 = CSQRT(Z)
-      Z2 = CSQRT(Z1)
+      Z1 = SQRT(Z)
+      Z2 = SQRT(Z1)
       Z2R = 1.0/Z2
       CALL CREC(X, Y, U, V)
       W = 1.5*CMPLX(U, V)/Z1
       U = ABS(REAL(W))
       V = ABS(AIMAG(W))
-      T = AMAX1(U, V)
+      T = MAX(U, V)
       IF (IND .NE. 0) GO TO 10
          IF (T .EQ. 0.0) GO TO 90
             U1 = U/T
@@ -19920,9 +19923,9 @@ C          -----  ABS(ARG(Z)) .LE. PI/6  ----
             R = U*U1 + V*V1
             IF (U1 .GE. R*XPOS .OR. V1 .GE. 0.1*R/EPS) GO TO 90
                ZETA = Z1*Z/1.5
-               E = CEXP(ZETA)
+               E = EXP(ZETA)
    10 M = 20
-      T = AMAX1(X, ABS(Y))
+      T = MAX(X, ABS(Y))
       IF (T .GT. 30.0) M = 8
       S1 = CMPLX(C(M), 0.0)
       S2 = CMPLX(D(M), 0.0)
@@ -19943,8 +19946,8 @@ C          ----  PI/6 .LT. ABS(ARG(Z)) .LE. PI/2  ----
       CZ = Z
       IF (Y .LT. 0.0) CZ = CONJG(CZ)
       ZZ = CZ*EX3C
-      Z1 = CSQRT(ZZ)
-      Z2 = CSQRT(Z1)
+      Z1 = SQRT(ZZ)
+      Z2 = SQRT(Z1)
       Z2R = 1.0/Z2
       CF1 = C1*Z2R*EX6
       CF2 = C1*Z2*EX6C
@@ -19952,7 +19955,7 @@ C          ----  PI/6 .LT. ABS(ARG(Z)) .LE. PI/2  ----
       W = 1.5*CMPLX(U, V)/Z1
       U = ABS(REAL(W))
       V = ABS(AIMAG(W))
-      T = AMAX1(U, V)
+      T = MAX(U, V)
       IF (T .EQ. 0.0) GO TO 90
          U1 = U/T
          V1 = V/T
@@ -19960,8 +19963,8 @@ C          ----  PI/6 .LT. ABS(ARG(Z)) .LE. PI/2  ----
          IF (IND .NE. 0) GO TO 40
             IF (V1 .GE. R*XPOS .OR. U1 .GE. 0.1*R/EPS) GO TO 90
                ZETA = Z1*ZZ/1.5
-               CN = CCOS(ZETA - CLN2)
-               SI = CSIN(ZETA - CLN2)
+               CN = COS(ZETA - CLN2)
+               SI = SIN(ZETA - CLN2)
                GO TO 70
 C        E = EXP(-2*I*(ZETA - CLN2)) IF ABS(ARG(ZZ)) .LE. PI/3
 C        E = EXP( 2*I*(ZETA - CLN2)) IF ABS(ARG(ZZ)) .GT. PI/3
@@ -19977,15 +19980,15 @@ C        E = EXP( 2*I*(ZETA - CLN2)) IF ABS(ARG(ZZ)) .GT. PI/3
    44    IF (V1 .GE. 0.5*R*ABS(XNEG)) GO TO 45
          IF (U1 .GE. 0.05*R/EPS) GO TO 90
          ZETA = Z1*ZZ/1.5
-         E = CF*CEXP(2.0*S*J*ZETA)
+         E = CF*EXP(2.0*S*J*ZETA)
    45    CN = CE*C3*(1 + E)
          SI = CE*S*C3*(1 - E)*J
          GO TO 70
 C                  ----  REAL(Z) .LT. 0  ----
    50 ZZ = -Z
       IF (Y .LT. 0.0) ZZ = CONJG(ZZ)
-      Z1 = CSQRT(ZZ)
-      Z2 = CSQRT(Z1)
+      Z1 = SQRT(ZZ)
+      Z2 = SQRT(Z1)
       Z2R = 1.0/Z2
       CF1 = C2*Z2R
       CF2 = C2*Z2
@@ -19993,7 +19996,7 @@ C                  ----  REAL(Z) .LT. 0  ----
       W = 1.5*CMPLX(U, V)/Z1
       U = ABS(REAL(W))
       V = ABS(AIMAG(W))
-      T = AMAX1(U, V)
+      T = MAX(U, V)
       IF (T .EQ. 0.0) GO TO 90
          U1 = U/T
          V1 = V/T
@@ -20001,20 +20004,20 @@ C                  ----  REAL(Z) .LT. 0  ----
          IF (IND .NE. 0) GO TO 60
             IF (V1 .GE. R*XPOS .OR. U1 .GE. 0.1*R/EPS) GO TO 90
                ZETA = Z1*ZZ/1.5
-               CN = CCOS(ZETA)
-               SI = CSIN(ZETA)
+               CN = COS(ZETA)
+               SI = SIN(ZETA)
                GO TO 70
    60    E = (0.0, 0.0)
          J = (0.0, -1.0)
          IF (V1 .GE. 0.5*R*ABS(XNEG)) GO TO 65
          IF (U1 .GE. 0.05*R/EPS) GO TO 90
          ZETA = Z1*ZZ/1.5
-         E = CEXP(2.0*J*ZETA)
+         E = EXP(2.0*J*ZETA)
    65    CN = 0.5*(1.0 + E)
          SI = 0.5*(1.0 - E)*J
    70 W2 = W*W
       M = 15
-      T = AMAX1(ABS(X), ABS(Y))
+      T = MAX(ABS(X), ABS(Y))
       IF (T .GT. 30.0) M = 5
          M2 = M + M
          I = M2 - 1
@@ -20148,7 +20151,7 @@ C     BACKWARD RECURRENCE
          IA1 = IA2 + (SZ/CFA)*IA3
          IB1 = IB2 + (SZ/CFB)*IB3
       END DO
-      E = CEXP(C1*CLOG(ZH))
+      E = EXP(C1*LOG(ZH))
       CF1 = E/GM1
       CF2 = E*E/GM2
       CF3 = C2*CF2/ZH
@@ -20176,7 +20179,7 @@ C     OF THE MACLAURIN EXPANSION.  W IS REPLACED BY THE
 C     CALCULATED VALUE.
 C-------------------------------------------------------------
 C------------------
-      ANORM(Z) = AMAX1(ABS(REAL(Z)),ABS(AIMAG(Z)))
+      ANORM(Z) = MAX(ABS(REAL(Z)),ABS(AIMAG(Z)))
 C-------------------------------------------------------------
 C     EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE SMALLEST
 C     NUMBER SUCH THAT 1 + EPS .GT. 1.
@@ -20288,7 +20291,7 @@ C     BACKWARD RECURRENCE
          IA1 = IA2 - (SZ/CFA)*IA3
          IB1 = IB2 - (SZ/CFB)*IB3
       END DO
-      E = CEXP(C1*CLOG(ZH))
+      E = EXP(C1*LOG(ZH))
       CF1 = E/GM1
       CF2 = E*E/GM2
       CF3 = C2*CF2/ZH
@@ -20316,7 +20319,7 @@ C     OF THE MACLAURIN EXPANSION.  W IS REPLACED BY THE
 C     CALCULATED VALUE.
 C-------------------------------------------------------------
 C------------------
-      ANORM(Z) = AMAX1(ABS(REAL(Z)),ABS(AIMAG(Z)))
+      ANORM(Z) = MAX(ABS(REAL(Z)),ABS(AIMAG(Z)))
 C-------------------------------------------------------------
 C     EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE SMALLEST
 C     NUMBER SUCH THAT 1 + EPS .GT. 1.
@@ -20372,7 +20375,7 @@ C            ----  ABS(B) .LT. -0.5*A  ----
          K1 = EX13C*K1 - J*PI*I1
          K2 = EX23C*K2 - J*PI*I2
          IF (IND .EQ. 0) GO TO 20
-         E = CEXP(Z)
+         E = EXP(Z)
          K1 = K1*E
          K2 = K2*E
    20    IF(AIMAG(Z) .GE. 0.0) RETURN
@@ -20407,7 +20410,7 @@ C     CALCULATION OF M FOR USE IN MILLER ALGORITHM.
       A = 3.0/(1.0 + R)
       B = 14.7/(28.0 + R)
       C = 2.0/(C1*EPS*(2.0*R)**(0.25))
-      M = (0.485/R)*(ALOG(C) + R*COS(A*TH)/(1.0 + 0.008*R))**2/
+      M = (0.485/R)*(LOG(C) + R*COS(A*TH)/(1.0 + 0.008*R))**2/
      1    (2.0*COS(B*TH))**2 + 1.5
 C     BACKWARD RECURRENCE IN MILLER ALGORITHM.
       S = 0.0
@@ -20425,10 +20428,10 @@ C     BACKWARD RECURRENCE IN MILLER ALGORITHM.
          L = L - 1
       END DO
 C     FINAL ASSEMBLY
-      K1 = C1*U1/(S*CSQRT(Z))
+      K1 = C1*U1/(S*SQRT(Z))
       K2 = K1*(Z  + 1.0/6.0 - U2/U1)/Z
       IF (IND .NE. 0) RETURN
-         E = CEXP(-Z)
+         E = EXP(-Z)
          K1 = K1*E
          K2 = K2*E
       END SUBROUTINE KML
@@ -21060,7 +21063,7 @@ C     ---------------------------------------------------
       IF (L .EQ. (0.0, 0.0)) GO TO 200
       IND = 0
       BRANCH = .TRUE.
-      TOL = 8.0*AMAX1(EPS, 1.E-14)
+      TOL = 8.0*MAX(EPS, 1.E-14)
       AK1 = CFLECT(K)
       AL1 = CFLECT(L)
       AK = AK1
@@ -21069,21 +21072,21 @@ C     ---------------------------------------------------
       Y = AIMAG(AK)
       U = REAL(AL)
       V = AIMAG(AL)
-      IF (AMAX1(X,ABS(Y)) .GE. 1.0/EPS) GO TO 90
-      IF (AMAX1(U,ABS(V)) .GE. 1.1/EPS) GO TO 200
+      IF (MAX(X,ABS(Y)) .GE. 1.0/EPS) GO TO 90
+      IF (MAX(U,ABS(V)) .GE. 1.1/EPS) GO TO 200
 C     CHECK THAT K**2 + L**2 = 1
       IF (X .LT. U) GO TO 1
          T = U/X
          IF (ABS(X*X/(V*V + 1.0/(1.0 + T*T)) - 1.0) .GT. TOL) GO TO 200
-         IF (ABS(Y + T*V) .GT. TOL*AMAX1(1.0, ABS(V))) GO TO 200
+         IF (ABS(Y + T*V) .GT. TOL*MAX(1.0, ABS(V))) GO TO 200
          GO TO 10
     1 T = X/U
       IF (ABS(U*U/(Y*Y + 1.0/(1.0 + T*T)) - 1.0) .GT. TOL) GO TO 200
-      IF (ABS(V + T*Y) .GT. TOL*AMAX1(1.0, ABS(Y))) GO TO 200
+      IF (ABS(V + T*Y) .GT. TOL*MAX(1.0, ABS(Y))) GO TO 200
 C     USES  LOGARITHMIC SERIES WHEN CABS(AL)
 C     IS LESS THAN OR EQUAL TO 0.55
    10 IF (U .GT. 1.42 .OR. ABS(V) .GT. 1.42) GO TO 50
-   11 IF (CABS(AL) .GT. 0.55) GO TO 20
+   11 IF (ABS(AL) .GT. 0.55) GO TO 20
       CALL KL(AL,CKK,CKP)
       IF (BRANCH) GO TO 22
       CK1 = CKK
@@ -21092,7 +21095,7 @@ C     IS LESS THAN OR EQUAL TO 0.55
       GO TO 80
 C     USES MACLAURIN EXPANSION WHEN THE ABSOLUTE VALUE OF
 C     THE MODULUS AK IS LESS THAN OR EQUAL TO 0.55
-   20 R = CABS(AK)
+   20 R = ABS(AK)
       IF (R .GT. 0.55) GO TO 30
       IF (BRANCH) GO TO 21
       CALL KL(AK,CKP,CK1)
@@ -21165,14 +21168,14 @@ C     CALCULATION OF F(K) FOR LARGE K AND L
       IF (ABS(U/X + Y/V) .GT. TOL) GO TO 200
       T = Y/X
       PHI = ATAN2(X,ABS(Y))
-      R = (LN4 + 0.5*ALNREL(T*T)) + ALOG(X)
+      R = (LN4 + 0.5*ALNREL(T*T)) + LOG(X)
       IF (Y .LT. 0.0) R = -R
       CK = (CMPLX(PHI,R)/CMPLX(1.0,T))/X
       RETURN
   100 IF (ABS(ABS(U/Y) - 1.0) .GT. TOL) GO TO 200
       IF (ABS(X/U + V/Y) .GT. TOL) GO TO 200
       T = V/U
-      Z = CMPLX((LN4 + 0.5*ALNREL(T*T)) + ALOG(U), ATAN2(V,U))
+      Z = CMPLX((LN4 + 0.5*ALNREL(T*T)) + LOG(U), ATAN2(V,U))
       CK = (Z/CMPLX(1.0,T))/U
       RETURN
 C     ERROR RETURN
@@ -21215,7 +21218,7 @@ C     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 C            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
                       EPS = SPMPAR(1)
 C ---------------
-      TOL = AMAX1(EPS,1.E-14)
+      TOL = MAX(EPS,1.E-14)
       S1 = (1.0, 0.0)
       AN = (1.0, 0.0)
       DO I = 1,50
@@ -21254,7 +21257,7 @@ C            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
 C ---------------
 C            THE LOGARITHMIC EXPANSION IS USED FOR F(K)
 C              AND THE MACLAURIN EXPANSION FOR F(L)
-      TOL = AMAX1(EPS,1.E-14)
+      TOL = MAX(EPS,1.E-14)
       L2 = L*L
       S1 = (0.0, 0.0)
       S2 = (0.0, 0.0)
@@ -21274,12 +21277,12 @@ C                   SET W = 0.5*CLOG(16.0/L2)
       X = REAL(L)
       Y = AIMAG(L)
       IF (X .NE. 0.0) GO TO 30
-         W = CMPLX(LN4 - ALOG(ABS(Y)), HPI)
+         W = CMPLX(LN4 - LOG(ABS(Y)), HPI)
          GO TO 50
    30 IF (ABS(X) .GT. ABS(Y)) GO TO 31
-         U = (LN4 - 0.5*ALNREL((X/Y)**2)) - ALOG(ABS(Y))
+         U = (LN4 - 0.5*ALNREL((X/Y)**2)) - LOG(ABS(Y))
          GO TO 40
-   31 U = (LN4 - 0.5*ALNREL((Y/X)**2)) - ALOG(ABS(X))
+   31 U = (LN4 - 0.5*ALNREL((Y/X)**2)) - LOG(ABS(X))
    40 IF (X .GT. 0.0) GO TO 41
          W = CMPLX(U, -ATAN2(-Y,-X))
          GO TO 50
@@ -21370,7 +21373,7 @@ C     ---------------------------------------------------
       IF (L .EQ. (0.0, 0.0)) GO TO 200
       IND = 0
       BRANCH = .TRUE.
-      TOL = 8.0*AMAX1(EPS, 1.E-14)
+      TOL = 8.0*MAX(EPS, 1.E-14)
       AK1 = CFLECT(K)
       AL1 = CFLECT(L)
       AK = AK1
@@ -21380,21 +21383,21 @@ C     ---------------------------------------------------
       Y = AIMAG(AK)
       U = REAL(AL)
       V = AIMAG(AL)
-      IF (AMAX1(X,ABS(Y)) .GE. 1.0/EPS) GO TO 90
-      IF (AMAX1(U,ABS(V)) .GE. 1.1/EPS) GO TO 210
+      IF (MAX(X,ABS(Y)) .GE. 1.0/EPS) GO TO 90
+      IF (MAX(U,ABS(V)) .GE. 1.1/EPS) GO TO 210
 C     CHECK THAT K**2 + L**2 = 1
       IF (X .LT. U) GO TO 1
          T = U/X
          IF (ABS(X*X/(V*V + 1.0/(1.0 + T*T)) - 1.0) .GT. TOL) GO TO 210
-         IF (ABS(Y + T*V) .GT. TOL*AMAX1(1.0, ABS(V))) GO TO 210
+         IF (ABS(Y + T*V) .GT. TOL*MAX(1.0, ABS(V))) GO TO 210
          GO TO 10
     1 T = X/U
       IF (ABS(U*U/(Y*Y + 1.0/(1.0 + T*T)) - 1.0) .GT. TOL) GO TO 210
-      IF (ABS(V + T*Y) .GT. TOL*AMAX1(1.0, ABS(Y))) GO TO 210
+      IF (ABS(V + T*Y) .GT. TOL*MAX(1.0, ABS(Y))) GO TO 210
 C     USES  LOGARITHMIC SERIES WHEN CABS(AL)
 C     IS LESS THAN OR EQUAL TO 0.55
    10 IF (U .GT. 1.42 .OR. ABS(V) .GT. 1.42) GO TO 50
-   11 IF (CABS(AL) .GT. 0.55) GO TO 20
+   11 IF (ABS(AL) .GT. 0.55) GO TO 20
       CALL EKL(AL,CKK,CKP,CEE,CEP,GG,GP)
       IF (BRANCH) GO TO 22
       CK1 = CKK
@@ -21409,7 +21412,7 @@ C     IS LESS THAN OR EQUAL TO 0.55
       GO TO 81
 C     USES MACLAURIN EXPANSION WHEN THE ABSOLUTE VALUE OF
 C     THE MODULUS AK IS LESS THAN OR EQUAL TO 0.55
-   20 R = CABS(AK)
+   20 R = ABS(AK)
       IF (R .GT. 0.55) GO TO 30
       IF (BRANCH) GO TO 21
       CALL EKL(AK,CKP,CK1,CEP,CE1,GP,G1)
@@ -21508,7 +21511,7 @@ C     CALCULATION OF F(K) AND E(K) FOR LARGE K AND L
       T = Y/X
       K1 = CMPLX(1.0,T)
       PHI = ATAN2(X,ABS(Y))
-      R = (LN4 + 0.5*ALNREL(T*T)) + ALOG(X)
+      R = (LN4 + 0.5*ALNREL(T*T)) + LOG(X)
       C = 0.5*R + 0.25
       Z = CMPLX(Y,-X)
       IF (Y .GE. 0.0) GO TO 91
@@ -21522,7 +21525,7 @@ C     CALCULATION OF F(K) AND E(K) FOR LARGE K AND L
       IF (ABS(X/U + V/Y) .GT. TOL) GO TO 210
       T = V/U
       L1 = CMPLX(1.0,T)
-      R = (LN4 + 0.5*ALNREL(T*T)) + ALOG(U)
+      R = (LN4 + 0.5*ALNREL(T*T)) + LOG(U)
       PHI = ATAN2(V,U)
       CK = (CMPLX(R, PHI)/L1)/U
       CE = AL + (CMPLX(0.5*R - 0.25, 0.5*PHI)/L1)/U
@@ -21574,7 +21577,7 @@ C     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 C            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
                       EPS = SPMPAR(1)
 C ---------------
-      TOL = AMAX1(EPS,1.E-14)
+      TOL = MAX(EPS,1.E-14)
       S1 = (1.0, 0.0)
       S2 = (1.0, 0.0)
       AN = (1.0, 0.0)
@@ -21620,7 +21623,7 @@ C            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
 C ---------------
 C            THE LOGARITHMIC EXPANSIONS ARE USED FOR F(K) AND E(K)
 C            AND THE MACLAURIN EXPANSIONS FOR F(L) AND E(L)
-      TOL = AMAX1(EPS,1.E-14)
+      TOL = MAX(EPS,1.E-14)
       L2 = L*L
       S1 = (0.0, 0.0)
       S2 = (0.0, 0.0)
@@ -21658,12 +21661,12 @@ C              SET W = 0.5*CLOG(16.0/L2)
       X = REAL(L)
       Y = AIMAG(L)
       IF (X .NE. 0.0) GO TO 30
-         W = CMPLX(LN4 - ALOG(ABS(Y)), HPI)
+         W = CMPLX(LN4 - LOG(ABS(Y)), HPI)
          GO TO 50
    30 IF (ABS(X) .GT. ABS(Y)) GO TO 31
-         U = (LN4 - 0.5*ALNREL((X/Y)**2)) - ALOG(ABS(Y))
+         U = (LN4 - 0.5*ALNREL((X/Y)**2)) - LOG(ABS(Y))
          GO TO 40
-   31 U = (LN4 - 0.5*ALNREL((Y/X)**2)) - ALOG(ABS(X))
+   31 U = (LN4 - 0.5*ALNREL((Y/X)**2)) - LOG(ABS(X))
    40 IF (X .GT. 0.0) GO TO 41
          W = CMPLX(U, -ATAN2(-Y,-X))
          GO TO 50
@@ -21792,7 +21795,7 @@ C     SERIES EXPANSION FOR ABS(K*SIN(PHI)) .GT. TANH(1)
       S4 = S4 + D4
       IF (S3 .LT. R0) GO TO 60
       W = 1.0 + PX
-      P = LN4 - ALOG(R + QX)
+      P = LN4 - LOG(R + QX)
       T1 = (1.0 + S1)*P + QX/R*ALNREL(-0.5*R2/W)
       T2 = (0.5 + S2)*L2*P + (1.0 - QX*R/W)
       F = T1 + S3
@@ -21835,23 +21838,23 @@ C------------------------
       DATA TH1 /.7615941559557648881194582826047935904128D+00/
 C------------------------
       IF (PHI .LT. 0.D0 .OR. CPHI .LT. 0.D0) GO TO 100
-      IF (DABS(K) .GT. 1.D0 .OR. DABS(L) .GT. 1.D0) GO TO 110
+      IF (ABS(K) .GT. 1.D0 .OR. ABS(L) .GT. 1.D0) GO TO 110
       IERR = 0
       IF (PHI .NE. 0.D0) GO TO 10
          F = 0.D0
          E = 0.D0
          RETURN
    10 IF (PHI .LT. 0.79D0) GO TO 11
-         SN = DCOS(CPHI)
-         CN = DSIN(CPHI)
+         SN = COS(CPHI)
+         CN = SIN(CPHI)
          GO TO 20
-   11 SN = DSIN(PHI)
-      CN = DCOS(PHI)
+   11 SN = SIN(PHI)
+      CN = COS(PHI)
    20 K2 = K*K
       L2 = L*L
       SS = SN*SN
-      PX = DABS(K*SN)
-      QX = DABS(K*CN)
+      PX = ABS(K*SN)
+      QX = ABS(K*CN)
       IF (PX .GE. TH1) GO TO 50
 C     SERIES EXPANSION FOR ABS(K*SIN(PHI)) .LE. TANH(1)
       PN = 1.D0
@@ -21868,8 +21871,8 @@ C     SERIES EXPANSION FOR ABS(K*SIN(PHI)) .LE. TANH(1)
       HN = PN*R
       S0 = S1
       S1 = S1 + HN*AN
-      IF (DABS(TR) .LT. DABS(AN)) GO TO 40
-      IF (DABS(S1) .LE. DABS(S0)) GO TO 40
+      IF (ABS(TR) .LT. ABS(AN)) GO TO 40
+      IF (ABS(S1) .LE. ABS(S0)) GO TO 40
       PN = QN + 1.D0
       QN = PN + 1.D0
       TR = SS*TR
@@ -21918,7 +21921,7 @@ C     SERIES EXPANSION FOR ABS(K*SIN(PHI)) .GT. TANH(1)
       S4 = S4 + D4
       IF (S3 .LT. R0) GO TO 60
       W = 1.D0 + PX
-      P = LN4 - DLOG(R + QX)
+      P = LN4 - LOG(R + QX)
       T1 = (1.D0 + S1)*P + QX/R*DLNREL(-0.5D0*R2/W)
       T2 = (0.5D0 + S2)*L2*P + (1.D0 - QX*R/W)
       F = T1 + S3
@@ -21950,7 +21953,7 @@ C            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0.
                       EPS = SPMPAR(1)
 C-----------------------------------------------------------------------
       TOL = 4.0 * EPS
-      IF (AMIN1(PHI,CPHI) .LT. 0.0) GO TO 100
+      IF (MIN(PHI,CPHI) .LT. 0.0) GO TO 100
       IF (ABS((PHI + CPHI) - PIHALF) .GT. TOL * PIHALF) GO TO 100
       IF (ABS(N) .GT. 1.0) GO TO 110
       IF (K2 .LT. 0.0 .OR. L2 .LT. 0.0) GO TO 120
@@ -22005,17 +22008,17 @@ C            SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0.
                       EPS = DPMPAR(1)
 C-----------------------------------------------------------------------
       TOL = 4.D0 * EPS
-      IF (DMIN1(PHI,CPHI) .LT. 0.D0) GO TO 100
-      IF (DABS((PHI + CPHI) - PIHALF) .GT. TOL * PIHALF) GO TO 100
-      IF (DABS(N) .GT. 1.D0) GO TO 110
+      IF (MIN(PHI,CPHI) .LT. 0.D0) GO TO 100
+      IF (ABS((PHI + CPHI) - PIHALF) .GT. TOL * PIHALF) GO TO 100
+      IF (ABS(N) .GT. 1.D0) GO TO 110
       IF (K2 .LT. 0.D0 .OR. L2 .LT. 0.D0) GO TO 120
-      IF (DABS((K2 + L2) - 1.D0) .GT. TOL) GO TO 120
+      IF (ABS((K2 + L2) - 1.D0) .GT. TOL) GO TO 120
       IF (PHI .LT. 0.79D0) GO TO 10
-          S = DCOS(CPHI)
-          C = DSIN(CPHI)
+          S = COS(CPHI)
+          C = SIN(CPHI)
           GO TO 11
-   10 S = DSIN(PHI)
-      C = DCOS(PHI)
+   10 S = SIN(PHI)
+      C = COS(PHI)
    11 A = C*C
       B = L2 + K2*A
       S2 = S*S
@@ -22023,7 +22026,7 @@ C-----------------------------------------------------------------------
           R = 1.D0 - N*S2
           GO TO 30
    20 IF (M .LT. 0.D0 .OR. M .GT. 1.D0) GO TO 110
-      IF (DABS((M + N) - 1.D0) .GT. TOL) GO TO 110
+      IF (ABS((M + N) - 1.D0) .GT. TOL) GO TO 110
       R = M + N*A
    30 CALL DRJVAL(A, B, 1.D0, R, P, IERR)
       IF (IERR .NE. 0) GO TO 130
@@ -22095,9 +22098,9 @@ C-----------------------------------------------------------------------
 C          WARNING. CHANGES IN THE PROGRAM MAY IMPROVE SPEED AT THE
 C          EXPENSE OF ROBUSTNESS.
 C-----------------------------------------------------------------------
-      IF (AMIN1(X,Y,Z) .LT. 0.0) GO TO 100
-      IF (AMIN1(X+Y,X+Z,Y+Z) .LT. LOLIM) GO TO 110
-      IF (AMAX1(X,Y,Z) .GT. UPLIM) GO TO 120
+      IF (MIN(X,Y,Z) .LT. 0.0) GO TO 100
+      IF (MIN(X+Y,X+Z,Y+Z) .LT. LOLIM) GO TO 110
+      IF (MAX(X,Y,Z) .GT. UPLIM) GO TO 120
       IERR = 0
       XN = X
       YN = Y
@@ -22106,7 +22109,7 @@ C-----------------------------------------------------------------------
       XNDEV = 2.0 - (MU + XN) / MU
       YNDEV = 2.0 - (MU + YN) / MU
       ZNDEV = 2.0 - (MU + ZN) / MU
-      EPSLON = AMAX1(ABS(XNDEV),ABS(YNDEV),ABS(ZNDEV))
+      EPSLON = MAX(ABS(XNDEV),ABS(YNDEV),ABS(ZNDEV))
       IF (EPSLON .LT. ERRTOL) GO TO 20
       XNROOT = SQRT(XN)
       YNROOT = SQRT(YN)
@@ -22189,9 +22192,9 @@ C-----------------------------------------------------------------------
 C          WARNING. CHANGES IN THE PROGRAM MAY IMPROVE SPEED AT THE
 C          EXPENSE OF ROBUSTNESS.
 C-----------------------------------------------------------------------
-      IF (DMIN1(X,Y,Z) .LT. 0.D0) GO TO 100
-      IF (DMIN1(X+Y,X+Z,Y+Z) .LT. LOLIM) GO TO 110
-      IF (DMAX1(X,Y,Z) .GT. UPLIM) GO TO 120
+      IF (MIN(X,Y,Z) .LT. 0.D0) GO TO 100
+      IF (MIN(X+Y,X+Z,Y+Z) .LT. LOLIM) GO TO 110
+      IF (MAX(X,Y,Z) .GT. UPLIM) GO TO 120
       IERR = 0
       XN = X
       YN = Y
@@ -22200,11 +22203,11 @@ C-----------------------------------------------------------------------
       XNDEV = 2.D0 - (MU + XN) / MU
       YNDEV = 2.D0 - (MU + YN) / MU
       ZNDEV = 2.D0 - (MU + ZN) / MU
-      EPSLON = DMAX1(DABS(XNDEV),DABS(YNDEV),DABS(ZNDEV))
+      EPSLON = MAX(ABS(XNDEV),ABS(YNDEV),ABS(ZNDEV))
       IF (EPSLON .LT. ERRTOL) GO TO 20
-      XNROOT = DSQRT(XN)
-      YNROOT = DSQRT(YN)
-      ZNROOT = DSQRT(ZN)
+      XNROOT = SQRT(XN)
+      YNROOT = SQRT(YN)
+      ZNROOT = SQRT(ZN)
       LAMDA = XNROOT * (YNROOT + ZNROOT) + YNROOT * ZNROOT
       XN = (XN + LAMDA) * 0.25D0
       YN = (YN + LAMDA) * 0.25D0
@@ -22216,7 +22219,7 @@ C-----------------------------------------------------------------------
       E2 = XNDEV * YNDEV - ZNDEV * ZNDEV
       E3 = XNDEV * YNDEV * ZNDEV
       S = 1.D0 + (C1 * E2 - 0.1D0 - C2 * E3) * E2 + C3 * E3
-      RF = S / DSQRT(MU)
+      RF = S / SQRT(MU)
       RETURN
 C                      ERROR RETURN
   100 RF = 0.D0
@@ -22286,9 +22289,9 @@ C-----------------------------------------------------------------------
 C          WARNING. CHANGES IN THE PROGRAM MAY IMPROVE SPEED AT THE
 C          EXPENSE OF ROBUSTNESS.
 C-----------------------------------------------------------------------
-      IF (AMIN1(X,Y,Z) .LT. 0.0) GO TO 100
-      IF (AMIN1(X+Y,Z) .LT. LOLIM) GO TO 110
-      IF (AMAX1(X,Y,Z) .GT. UPLIM) GO TO 120
+      IF (MIN(X,Y,Z) .LT. 0.0) GO TO 100
+      IF (MIN(X+Y,Z) .LT. LOLIM) GO TO 110
+      IF (MAX(X,Y,Z) .GT. UPLIM) GO TO 120
       IERR = 0
       XN = X
       YN = Y
@@ -22299,7 +22302,7 @@ C-----------------------------------------------------------------------
       XNDEV = (MU - XN) / MU
       YNDEV = (MU - YN) / MU
       ZNDEV = (MU - ZN) / MU
-      EPSLON = AMAX1(ABS(XNDEV),ABS(YNDEV),ABS(ZNDEV))
+      EPSLON = MAX(ABS(XNDEV),ABS(YNDEV),ABS(ZNDEV))
       IF (EPSLON .LT. ERRTOL) GO TO 20
       XNROOT = SQRT(XN)
       YNROOT = SQRT(YN)
@@ -22393,9 +22396,9 @@ C-----------------------------------------------------------------------
 C          WARNING. CHANGES IN THE PROGRAM MAY IMPROVE SPEED AT THE
 C          EXPENSE OF ROBUSTNESS.
 C-----------------------------------------------------------------------
-      IF (DMIN1(X,Y,Z) .LT. 0.D0) GO TO 100
-      IF (DMIN1(X+Y,Z) .LT. LOLIM) GO TO 110
-      IF (DMAX1(X,Y,Z) .GT. UPLIM) GO TO 120
+      IF (MIN(X,Y,Z) .LT. 0.D0) GO TO 100
+      IF (MIN(X+Y,Z) .LT. LOLIM) GO TO 110
+      IF (MAX(X,Y,Z) .GT. UPLIM) GO TO 120
       IERR = 0
       XN = X
       YN = Y
@@ -22406,11 +22409,11 @@ C-----------------------------------------------------------------------
       XNDEV = (MU - XN) / MU
       YNDEV = (MU - YN) / MU
       ZNDEV = (MU - ZN) / MU
-      EPSLON = DMAX1(DABS(XNDEV),DABS(YNDEV),DABS(ZNDEV))
+      EPSLON = MAX(ABS(XNDEV),ABS(YNDEV),ABS(ZNDEV))
       IF (EPSLON .LT. ERRTOL) GO TO 20
-      XNROOT = DSQRT(XN)
-      YNROOT = DSQRT(YN)
-      ZNROOT = DSQRT(ZN)
+      XNROOT = SQRT(XN)
+      YNROOT = SQRT(YN)
+      ZNROOT = SQRT(ZN)
       LAMDA = XNROOT * (YNROOT + ZNROOT) + YNROOT * ZNROOT
       SIGMA = SIGMA + POWER4 / (ZNROOT * (ZN + LAMDA))
       POWER4 = POWER4 * 0.25D0
@@ -22429,7 +22432,7 @@ C-----------------------------------------------------------------------
       EF = ED + EC + EC
       S1 = ED * (- C1 + 0.25D0 * C3 * ED - 1.5D0 * C4 * ZNDEV * EF)
       S2 = ZNDEV * (C2 * EF + ZNDEV * (- C3 * EC + ZNDEV * C4 * EA))
-      RD = 3.D0 * SIGMA + POWER4 * (1.D0 + S1 + S2) / (MU * DSQRT(MU))
+      RD = 3.D0 * SIGMA + POWER4 * (1.D0 + S1 + S2) / (MU * SQRT(MU))
       RETURN
 C                        ERROR RETURN
   100 RD = 0.D0
@@ -22507,9 +22510,9 @@ C-----------------------------------------------------------------------
 C          WARNING. CHANGES IN THE PROGRAM MAY IMPROVE SPEED AT THE
 C          EXPENSE OF ROBUSTNESS.
 C-----------------------------------------------------------------------
-      IF (AMIN1(X,Y,Z,P) .LT. 0.0) GO TO 100
-      IF (AMIN1(X+Y,X+Z,Y+Z,P) .LT. LOLIM) GO TO 110
-      IF (AMAX1(X,Y,Z,P) .GT. UPLIM) GO TO 120
+      IF (MIN(X,Y,Z,P) .LT. 0.0) GO TO 100
+      IF (MIN(X+Y,X+Z,Y+Z,P) .LT. LOLIM) GO TO 110
+      IF (MAX(X,Y,Z,P) .GT. UPLIM) GO TO 120
       IERR = 0
       XN = X
       YN = Y
@@ -22523,7 +22526,7 @@ C-----------------------------------------------------------------------
       YNDEV = (MU - YN) / MU
       ZNDEV = (MU - ZN) / MU
       PNDEV = (MU - PN) / MU
-      EPSLON = AMAX1(ABS(XNDEV),ABS(YNDEV),ABS(ZNDEV),ABS(PNDEV))
+      EPSLON = MAX(ABS(XNDEV),ABS(YNDEV),ABS(ZNDEV),ABS(PNDEV))
       IF (EPSLON .LT. ERRTOL) GO TO 20
       XNROOT = SQRT(XN)
       YNROOT = SQRT(YN)
@@ -22632,9 +22635,9 @@ C-----------------------------------------------------------------------
 C          WARNING. CHANGES IN THE PROGRAM MAY IMPROVE SPEED AT THE
 C          EXPENSE OF ROBUSTNESS.
 C-----------------------------------------------------------------------
-      IF (DMIN1(X,Y,Z,P) .LT. 0.D0) GO TO 100
-      IF (DMIN1(X+Y,X+Z,Y+Z,P) .LT. LOLIM) GO TO 110
-      IF (DMAX1(X,Y,Z,P) .GT. UPLIM) GO TO 120
+      IF (MIN(X,Y,Z,P) .LT. 0.D0) GO TO 100
+      IF (MIN(X+Y,X+Z,Y+Z,P) .LT. LOLIM) GO TO 110
+      IF (MAX(X,Y,Z,P) .GT. UPLIM) GO TO 120
       IERR = 0
       XN = X
       YN = Y
@@ -22648,11 +22651,11 @@ C-----------------------------------------------------------------------
       YNDEV = (MU - YN) / MU
       ZNDEV = (MU - ZN) / MU
       PNDEV = (MU - PN) / MU
-      EPSLON = DMAX1(DABS(XNDEV),DABS(YNDEV),DABS(ZNDEV),DABS(PNDEV))
+      EPSLON = MAX(ABS(XNDEV),ABS(YNDEV),ABS(ZNDEV),ABS(PNDEV))
       IF (EPSLON .LT. ERRTOL) GO TO 20
-      XNROOT = DSQRT(XN)
-      YNROOT = DSQRT(YN)
-      ZNROOT = DSQRT(ZN)
+      XNROOT = SQRT(XN)
+      YNROOT = SQRT(YN)
+      ZNROOT = SQRT(ZN)
       LAMDA = XNROOT * (YNROOT + ZNROOT) + YNROOT * ZNROOT
       ALFA = PN * (XNROOT + YNROOT + ZNROOT) + XNROOT * YNROOT * ZNROOT
       ALFA = ALFA * ALFA
@@ -22678,7 +22681,7 @@ C-----------------------------------------------------------------------
       S1 = 1.D0 + E2 * (- C1 + 0.75D0 * C3 * E2 - 1.5D0 * C4 * E3)
       S2 = EB * (0.5D0 * C2 + PNDEV * (- C3 - C3 + PNDEV * C4))
       S3 = PNDEV * EA * (C2 - PNDEV * C3) - C2 * PNDEV * EC
-      RJ = 3.D0 * SIGMA + POWER4 * (S1 + S2 + S3) / (MU * DSQRT(MU))
+      RJ = 3.D0 * SIGMA + POWER4 * (S1 + S2 + S3) / (MU * SQRT(MU))
       RETURN
 C                        ERROR RETURN
   100 RJ = 0.D0
@@ -22751,7 +22754,7 @@ C          EXPENSE OF ROBUSTNESS.
 C-----------------------------------------------------------------------
       IF (X .LT. 0.0 .OR. Y .LE. 0.0) GO TO 100
       IF ((X + Y) .LT. LOLIM) GO TO 110
-      IF (AMAX1(X,Y) .GT. UPLIM) GO TO 120
+      IF (MAX(X,Y) .GT. UPLIM) GO TO 120
       IERR = 0
       XN = X
       YN = Y
@@ -22831,21 +22834,21 @@ C          EXPENSE OF ROBUSTNESS.
 C-----------------------------------------------------------------------
       IF (X .LT. 0.D0  .OR.  Y .LE. 0.D0) GO TO 100
       IF ((X + Y) .LT. LOLIM) GO TO 110
-      IF (DMAX1(X,Y) .GT. UPLIM) GO TO 120
+      IF (MAX(X,Y) .GT. UPLIM) GO TO 120
       IERR = 0
       XN = X
       YN = Y
    10 MU = (XN + YN + YN) / 3.D0
       SN = (YN + MU) / MU - 2.D0
-      IF (DABS(SN) .LT. ERRTOL) GO TO 20
-      LAMDA = 2.D0 * DSQRT(XN) * DSQRT(YN) + YN
+      IF (ABS(SN) .LT. ERRTOL) GO TO 20
+      LAMDA = 2.D0 * SQRT(XN) * SQRT(YN) + YN
       XN = (XN + LAMDA) * 0.25D0
       YN = (YN + LAMDA) * 0.25D0
       GO TO 10
    20 C1 = 1.D0 / 7.D0
       C2 = 9.D0 / 22.D0
       S = SN * SN * (0.3D0 + SN * (C1 + SN * (0.375D0 + SN * C2)))
-      RC = (1.D0 + S) / DSQRT(MU)
+      RC = (1.D0 + S) / SQRT(MU)
       RETURN
 C                      ERROR RETURN
   100 RC = 0.D0
@@ -22900,7 +22903,7 @@ C     CHECK THAT K**2 + L**2 = 1
 C                   ARGUMENT REDUCTION
       U1 = ABS(U)
       R = U1/F2
-      IF (R .GE. AMIN1(FLOAT(MAX),1.0/EPS)) GO TO 110
+      IF (R .GE. MIN(FLOAT(MAX),1.0/EPS)) GO TO 110
       N = INT(R)
       U1 = U1 - FLOAT(N)*F2
       SG = 1.0
@@ -23035,7 +23038,7 @@ C     -------------------------------------------------
       COEF = 4.*PIHALF*QH/(K*F)
       QN = 1.0
       QD = Q1
-      W = AMIN1(U,V)
+      W = MIN(U,V)
       X = PIHALF*W/F
 C     CALCULATION OF SERIES FOR W = AMIN1(U,V)
       I = 1.0
@@ -23090,8 +23093,8 @@ C     ------------------------------------------------
       V = F - U
       Q1 = -EXP(-PI*F/F1)
       Q2 = Q1*Q1
-      W = AMIN1(U,V)
-      E1 = PI*AMAX1(U,V)/F1
+      W = MIN(U,V)
+      E1 = PI*MAX(U,V)/F1
       E2 = PI*(F + W)/F1
       E1 = EXP(-E1)
       E2 = EXP(-E2)
@@ -23418,7 +23421,7 @@ C     TAU IS A MACHINE DEPENDENT TOLERANCE. IT IS ASSUMED THAT A
 C     7 OR MORE DIGIT FLOATING POINT ARITHMETIC IS BEING USED.
 C     -------------------
       TAU=2.0*SPMPAR(1)
-      IF (TAU.LT.3.E-11) TAU=AMAX1(5.0*TAU,1.E-14)
+      IF (TAU.LT.3.E-11) TAU=MAX(5.0*TAU,1.E-14)
 C     -------------------
       N=N0
       IF (N.EQ.2.OR.N.LT.1) GO TO 4021
@@ -23680,7 +23683,7 @@ C-----------------------
         IERR = 0
         IF (R .EQ. 0.0) RETURN
         EPS0 = SPMPAR(1)
-        Z = - ALOG(EPS0)
+        Z = - LOG(EPS0)
         IF (J .NE. 0) GOTO 40
 C------------------------------------------------------------------
 C   FOR J = 0, ERROR IN D IF D .LT. 0 OR D .GT. 1
@@ -24030,12 +24033,12 @@ C----------------------------------------
 C----------------------------------------
 C     TEST NO.1 (REPORT 83-13).
 C----------------------------------------
-      Z3 = AMIN1(SQRT(SQRT(SPMPAR(2))),1.E-30)*SX*SY
+      Z3 = MIN(SQRT(SQRT(SPMPAR(2))),1.E-30)*SX*SY
       IF (R0*R0 .LE. Z3) RETURN
       H2 = H*H + K*K
       H8 = ABS(H)
       K8 = ABS(K)
-      DM = AMAX1(SX,SY)
+      DM = MAX(SX,SY)
 C-----------------------------------------
 C     TEST NO.2 (REPORT 83-13).
 C-----------------------------------------
@@ -24046,7 +24049,7 @@ C     TEST NO.3 (REPORT 83-13).
 C-----------------------------------------
       C8 = - EPSLN(0)
 C-----------EXP(-10.3026) = 3.35E(-5)---------
-      A4 = AMAX1(C8 - 1.74249E1, 10.3026)
+      A4 = MAX(C8 - 1.74249E1, 10.3026)
       A4 = SQRT(A4 + A4)
       H3 = (R0 - H)*(R0 + H)
       H5 = (R0 - K)*(R0 + K)
@@ -24094,7 +24097,7 @@ C--------------------------
       T = T1*(Z1 - 1.0) + T2*(Z2 - 1.0)
       IF (ABS(T) .GT. 1.E-3) GO TO 35
       T9 = (T*T - 4.0*(T1*T1*(Z1 - 0.5) + T2*T2*(Z2 - 0.5)))/192.0
-      IF (ABS(T9) .GT. AMAX1(10.0*EPS,1.E-10)) GO TO 35
+      IF (ABS(T9) .GT. MAX(10.0*EPS,1.E-10)) GO TO 35
       P = 0.5*T3*(1.0 + 0.125*T)*EXP(-0.5*(Z1 + Z2))
       RETURN
 C-----------------------------------------------
@@ -24119,7 +24122,7 @@ C---------------------------------
 C-----------------------------------------------
 C     LIMITING RESULTS FOR AMIN1(S1,S2) = 0
 C-----------------------------------------------
-   40 SEPS1 = AMIN1(6.71*SQEPS,1.E-5)
+   40 SEPS1 = MIN(6.71*SQEPS,1.E-5)
 C-----------------------------------------------
 C            R = K,  S2 SMALL
 C-----------------------------------------------
@@ -24195,7 +24198,7 @@ C----------------------------
       IF (YY .GE. 5.E-15) GO TO 95
          Z = YY
          GO TO 100
-   95 Z = AMIN1(YY,Z)
+   95 Z = MIN(YY,Z)
   100 IF (Z .GE. 0.5) GO TO 105
       A = A + .5
       IF (Z .GE. 5.E-4) GO TO 105
@@ -24245,7 +24248,7 @@ C-------------------------------------------------
       T3 = -1.0
       A1 = (G3 - A*Z9)/R
       IF (ABS(A1 - 0.5) .GE. 0.5) GO TO 115
-      A2 = AMAX1(((1.0 - G3/R) + A*Z9/R)*(1.0 + A1), 0.0)
+      A2 = MAX(((1.0 - G3/R) + A*Z9/R)*(1.0 + A1), 0.0)
       SA = SQRT(A2)
       IF (SA .LT. H3/R) GO TO 115
       T3 = A1/SQRT(1.0 + SA)
@@ -24281,12 +24284,12 @@ C----------------------------------------
          T9 = D1
          GO TO 165
   140 IF (T3 .LT. 0.0) GO TO 145
-         E4 = AMAX1((1.0 - G2/R) + A*Z8/R, 0.0)
+         E4 = MAX((1.0 - G2/R) + A*Z8/R, 0.0)
          E4 = SQRT(E4)
          D2 = 0.5*(E4 + T3)
          T5 = 0.5*(Q/(1.0 + E4) + SA/(1.0 + T3))
          E4 = 0.25*(SA - Q)/D2
-  145 E3 = AMAX1((1.0 - G2/R) + A*Z8/R, 0.0)
+  145 E3 = MAX((1.0 - G2/R) + A*Z8/R, 0.0)
       IF (Z .LT. R) GO TO 150
          E3 = 0.5*SQRT(E3)
          D1 = E3
@@ -24323,11 +24326,11 @@ C-----------------------------------------------------------------------
       GO TO 195
   172 IF (E3 .LT. 2.E4*EPS) GO TO 195
       IF (F .LT. 2.E4*EPS) GO TO 200
-      IF (AMAX1(H8/S1,K8/S2) .LT. 2.0) GO TO 175
+      IF (MAX(H8/S1,K8/S2) .LT. 2.0) GO TO 175
       IF (S2 .LT. 1.E-5) GO TO 175
       IF (S2 .GE. 5.E-4) GO TO 180
       IF (S1 .NE. S2) GO TO 195
-  175 IF (AMIN1(E3,F) .LT. 2.5E-2*SQEPS) GOTO 185
+  175 IF (MIN(E3,F) .LT. 2.5E-2*SQEPS) GOTO 185
   180 NSWC_AI_R4 = E3 - F
       IF (NSWC_AI_R4 .LT. 0) GO TO 200
       IF (NSWC_AI_R4 .EQ. 0) GO TO 190
@@ -24364,8 +24367,8 @@ C-----------------------------------------------------------------------
       DO II = 1, NT
          I = II - (N1 + 1)
          IF (I .EQ. 0) GO TO 260
-         J = IABS(I)
-         Q = E3*ISIGN(1,I)*V(J)
+         J = ABS(I)
+         Q = E3*SIGN(1,I)*V(J)
          T = Q + D1
          H6 = Z + Q
          Q = T9 - Q
@@ -24411,7 +24414,7 @@ C-----------------------------------------------------------------------
       END DO
       P = Q1*G3
       IF (P .GT. YY) P = YY
-      IF (P .GT. (1.0 - AMIN1(1.E6*EPS,1.E-5))) P = 1.0
+      IF (P .GT. (1.0 - MIN(1.E6*EPS,1.E-5))) P = 1.0
       IF (P .LT. 0.0) P = 0.0
       END SUBROUTINE PKILL
 
@@ -24426,7 +24429,7 @@ C     COPYING REAL POLYNOMIALS
 C     ------------------------------------------------------------------
       LA = 1
       LB = 1
-      JMAX = MIN0(M, N)
+      JMAX = MIN(M, N)
       DO J = 1,JMAX
          B(LB) = A(LA)
          LA = LA + KA
@@ -24451,7 +24454,7 @@ C     COPYING DOUBLE PRECISION POLYNOMIALS
 C     ------------------------------------------------------------------
       LA = 1
       LB = 1
-      JMAX = MIN0(M, N)
+      JMAX = MIN(M, N)
       DO J = 1,JMAX
          B(LB) = A(LA)
          LA = LA + KA
@@ -24564,7 +24567,7 @@ C     ------------------------------------------------------------------
 C     MULTIPLICATION OF REAL POLYNOMIALS
 C     ------------------------------------------------------------------
       LC = 1
-      JMAX = MIN0(L + M - 1, N)
+      JMAX = MIN(L + M - 1, N)
       DO J = 1,JMAX
          IF (J .LE. L) GO TO 10
             IMIN = 1 + (J - L)
@@ -24574,7 +24577,7 @@ C     ------------------------------------------------------------------
    10    IMIN = 1
          LA = 1 + (J - 1)*KA
          LB = 1
-   20    IMAX = MIN0(J, M)
+   20    IMAX = MIN(J, M)
          DSUM = 0.D0
          DO I = IMIN,IMAX
             DSUM = DSUM + DBLE(A(LA))*DBLE(B(LB))
@@ -24603,7 +24606,7 @@ C     ------------------------------------------------------------------
 C     MULTIPLICATION OF DOUBLE PRECISION POLYNOMIALS
 C     ------------------------------------------------------------------
       LC = 1
-      JMAX = MIN0(L + M - 1, N)
+      JMAX = MIN(L + M - 1, N)
       DO J = 1,JMAX
          IF (J .LE. L) GO TO 10
             IMIN = 1 + (J - L)
@@ -24613,7 +24616,7 @@ C     ------------------------------------------------------------------
    10    IMIN = 1
          LA = 1 + (J - 1)*KA
          LB = 1
-   20    IMAX = MIN0(J, M)
+   20    IMAX = MIN(J, M)
          SUM = 0.D0
          DO I = IMIN,IMAX
             SUM = SUM + A(LA)*B(LB)
@@ -24669,7 +24672,7 @@ C              CASE WHEN M .GT. 1
          IC = LC
          DSUM = 0.D0
          IF (J .LE. L) DSUM = A(LA)
-         IMAX = MIN0(J, M)
+         IMAX = MIN(J, M)
          DO I = 2,IMAX
             IB = IB + KB
             IC = IC - KC
@@ -24719,7 +24722,7 @@ C              CASE WHEN M .GT. 1
          IC = LC
          SUM = 0.D0
          IF (J .LE. L) SUM = A(LA)
-         IMAX = MIN0(J, M)
+         IMAX = MIN(J, M)
          DO I = 2,IMAX
             IB = IB + KB
             IC = IC - KC
@@ -24769,7 +24772,7 @@ C                  GENERAL CASE
          IB = LB
          COEFF = -JM1
          DSUM = 0.D0
-         IMAX = MIN0(J, M)
+         IMAX = MIN(J, M)
          DO I = 2,IMAX
             IA = IA + KA
             IB = IB - KB
@@ -24818,7 +24821,7 @@ C                  GENERAL CASE
          IB = LB
          COEFF = -JM1
          SUM = 0.D0
-         IMAX = MIN0(J, M)
+         IMAX = MIN(J, M)
          DO I = 2,IMAX
             IA = IA + KA
             IB = IB - KB
@@ -25458,7 +25461,7 @@ C INITIALIZATION
       FA = F(A)
       FB = F(B)
       ATOL = 0.5*AERR
-      RTOL = AMAX1(0.5*RERR,2.0*EPS)
+      RTOL = MAX(0.5*RERR,2.0*EPS)
 C BEGIN STEP
    10 C = A
       FC = FA
@@ -25472,7 +25475,7 @@ C BEGIN STEP
       FB = FC
       FC = FA
 C CONVERGENCE TEST
-   40 TOL = RTOL*AMAX1(ABS(B),ABS(C)) + ATOL
+   40 TOL = RTOL*MAX(ABS(B),ABS(C)) + ATOL
       XM = 0.5*(C - B)
       IF (ABS(XM) .LE. TOL) GO TO 90
       IF (FB .EQ. 0.0) GO TO 90
@@ -25550,13 +25553,13 @@ C INITIALIZATION
       FA = F(A)
       FB = F(B)
       ATOL = 0.5D0*AERR
-      RTOL = DMAX1(0.5D0*RERR,2.D0*EPS)
+      RTOL = MAX(0.5D0*RERR,2.D0*EPS)
 C BEGIN STEP
    10 C = A
       FC = FA
       D = B - A
       E = D
-   20 IF (DABS(FC) .GE. DABS(FB)) GO TO 40
+   20 IF (ABS(FC) .GE. ABS(FB)) GO TO 40
       A = B
       B = C
       C = A
@@ -25564,13 +25567,13 @@ C BEGIN STEP
       FB = FC
       FC = FA
 C CONVERGENCE TEST
-   40 TOL = RTOL*DMAX1(DABS(B),DABS(C)) + ATOL
+   40 TOL = RTOL*MAX(ABS(B),ABS(C)) + ATOL
       XM = 0.5D0*(C - B)
-      IF (DABS(XM) .LE. TOL) GO TO 90
+      IF (ABS(XM) .LE. TOL) GO TO 90
       IF (FB .EQ. 0.D0) GO TO 90
 C IS BISECTION NECESSARY
-      IF (DABS(E) .LT. TOL) GO TO 70
-      IF (DABS(FA) .LE. DABS(FB)) GO TO 70
+      IF (ABS(E) .LT. TOL) GO TO 70
+      IF (ABS(FA) .LE. ABS(FB)) GO TO 70
 C IS QUADRATIC INTERPOLATION POSSIBLE
       IF (A .NE. C) GO TO 50
 C LINEAR INTERPOLATION
@@ -25586,10 +25589,10 @@ C INVERSE QUADRATIC INTERPOLATION
       Q = (Q - 1.D0)*(R - 1.D0)*(S - 1.D0)
 C ADJUST SIGNS
    60 IF (P .GT. 0.D0) Q = -Q
-      P = DABS(P)
+      P = ABS(P)
 C IS INTERPOLATION ACCEPTABLE
-      IF (2.D0*P .GE. (3.D0*XM*Q - DABS(TOL*Q))) GO TO 70
-      IF (P .GE. DABS(0.5D0*E*Q)) GO TO 70
+      IF (2.D0*P .GE. (3.D0*XM*Q - ABS(TOL*Q))) GO TO 70
+      IF (P .GE. ABS(0.5D0*E*Q)) GO TO 70
       E = D
       D = P/Q
       GO TO 80
@@ -25599,10 +25602,10 @@ C BISECTION
 C COMPLETE STEP
    80 A = B
       FA = FB
-      IF (DABS(D) .GT. TOL) B = B + D
-      IF (DABS(D) .LE. TOL) B = B + DSIGN(TOL,XM)
+      IF (ABS(D) .GT. TOL) B = B + D
+      IF (ABS(D) .LE. TOL) B = B + SIGN(TOL,XM)
       FB = F(B)
-      IF ((FB*(FC/DABS(FC))) .GT. 0.D0) GO TO 10
+      IF ((FB*(FC/ABS(FC))) .GT. 0.D0) GO TO 10
       GO TO 20
 C DONE
    90 DZERO = B
@@ -25870,7 +25873,7 @@ C     AND CALCULATE ITS NORM.
       FNORM = ENORM(N,FVEC)
 C     DETERMINE THE NUMBER OF CALLS TO FCN NEEDED TO COMPUTE
 C     THE JACOBIAN MATRIX.
-      MSUM = MIN0(ML+MU+1,N)
+      MSUM = MIN(ML+MU+1,N)
 C     INITIALIZE ITERATION COUNTER AND MONITORS.
       ITER = 1
       NCSUC = 0
@@ -25941,7 +25944,7 @@ C        ACCUMULATE THE ORTHOGONAL FACTOR IN FJAC.
 C        RESCALE IF NECESSARY.
          IF (MODE .EQ. 2) GO TO 170
          DO J = 1, N
-            DIAG(J) = AMAX1(DIAG(J),WA2(J))
+            DIAG(J) = MAX(DIAG(J),WA2(J))
             END DO
   170    CONTINUE
 C        BEGINNING OF THE INNER LOOP.
@@ -25962,7 +25965,7 @@ C           STORE THE DIRECTION P AND X + P. CALCULATE THE NORM OF P.
                END DO
             PNORM = ENORM(N,WA3)
 C           ON THE FIRST ITERATION, ADJUST THE INITIAL STEP BOUND.
-            IF (ITER .EQ. 1) DELTA = AMIN1(DELTA,PNORM)
+            IF (ITER .EQ. 1) DELTA = MIN(DELTA,PNORM)
 C           EVALUATE THE FUNCTION AT X + P AND CALCULATE ITS NORM.
             IFLAG = 1
             CALL FCN(N,WA2,WA4,IFLAG)
@@ -25999,7 +26002,7 @@ C           UPDATE THE STEP BOUND.
                NCFAIL = 0
                NCSUC = NCSUC + 1
                IF (RATIO .GE. P5 .OR. NCSUC .GT. 1)
-     *            DELTA = AMAX1(DELTA,PNORM/P5)
+     *            DELTA = MAX(DELTA,PNORM/P5)
                IF (ABS(RATIO-ONE) .LE. P1) DELTA = PNORM/P5
   240       CONTINUE
 C           TEST FOR SUCCESSFUL ITERATION.
@@ -26024,7 +26027,7 @@ C           TEST FOR CONVERGENCE.
             IF (INFO .NE. 0) GO TO 300
 C           TESTS FOR TERMINATION AND STRINGENT TOLERANCES.
             IF (NFEV .GE. MAXFEV) INFO = 2
-            IF (P1*AMAX1(P1*DELTA,PNORM) .LE. EPSMCH*XNORM) INFO = 3
+            IF (P1*MAX(P1*DELTA,PNORM) .LE. EPSMCH*XNORM) INFO = 3
             IF (NSLOW2 .EQ. 5) INFO = 4
             IF (NSLOW1 .EQ. 10) INFO = 5
             IF (INFO .NE. 0) GO TO 300
@@ -26126,17 +26129,17 @@ C           SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0.
 C-------------------
       IF (A(1) .EQ. 0.D0) GO TO 40
       D = A(2)*A(2) - 4.D0*A(1)*A(3)
-      IF (DABS(D) .LE. 2.D0*EPS*A(2)*A(2)) GO TO 20
-      R = DSQRT(DABS(D))
+      IF (ABS(D) .LE. 2.D0*EPS*A(2)*A(2)) GO TO 20
+      R = SQRT(ABS(D))
       IF (D .LT. 0.D0) GO TO 30
 C                 DISTINCT REAL ROOTS
       ZI(1) = 0.D0
       ZI(2) = 0.D0
       IF (A(2) .NE. 0.D0) GO TO 10
-         ZR(1) = DABS(0.5D0*R/A(3))
+         ZR(1) = ABS(0.5D0*R/A(3))
          ZR(2) = -ZR(1)
          RETURN
-   10 W = -(A(2) + DSIGN(R,A(2)))
+   10 W = -(A(2) + SIGN(R,A(2)))
       ZR(1) = 2.D0*A(1)/W
       ZR(2) = 0.5D0*W/A(3)
       RETURN
@@ -26149,7 +26152,7 @@ C                  EQUAL REAL ROOTS
 C                   COMPLEX ROOTS
    30 ZR(1) = -0.5D0*A(2)/A(3)
       ZR(2) = ZR(1)
-      ZI(1) = DABS(0.5D0*R/A(3))
+      ZI(1) = ABS(0.5D0*R/A(3))
       ZI(2) = -ZI(1)
       RETURN
 C                 CASE WHEN A(1) = 0
@@ -26199,7 +26202,7 @@ C-------------------
       D = R + P*T
       IF (ABS(D) .LE. TOL*ABS(R)) GO TO 110
 C           SET  SQ = (A(4)/S)**2 * (C**3/27 + D**2/4)
-      S = AMAX1(ABS(A(1)),ABS(A(2)),ABS(A(3)))
+      S = MAX(ABS(A(1)),ABS(A(2)),ABS(A(3)))
       P1 = A(3)/(3.0*S)
       Q1 = A(2)/S
       R1 = A(1)/S
@@ -26363,18 +26366,18 @@ C-------------------
       TOL = 4.D0*EPS
       C = 0.D0
       T = A(2) - P*A(3)
-      IF (DABS(T) .GT. TOL*DABS(A(2))) C = T/A(4)
+      IF (ABS(T) .GT. TOL*ABS(A(2))) C = T/A(4)
       T = 2.D0*P*P - Q
-      IF (DABS(T) .LE. TOL*DABS(Q)) T = 0.D0
+      IF (ABS(T) .LE. TOL*ABS(Q)) T = 0.D0
       D = R + P*T
-      IF (DABS(D) .LE. TOL*DABS(R)) GO TO 110
+      IF (ABS(D) .LE. TOL*ABS(R)) GO TO 110
 C           SET  SQ = (A(4)/S)**2 * (C**3/27 + D**2/4)
-      S = DMAX1(DABS(A(1)),DABS(A(2)),DABS(A(3)))
+      S = MAX(ABS(A(1)),ABS(A(2)),ABS(A(3)))
       P1 = A(3)/(3.D0*S)
       Q1 = A(2)/S
       R1 = A(1)/S
       T1 = Q - 2.25D0*P*P
-      IF (DABS(T1) .LE. TOL*DABS(Q)) T1 = 0.D0
+      IF (ABS(T1) .LE. TOL*ABS(Q)) T1 = 0.D0
       W = 0.25D0*R1*R1
       W1 = 0.5D0*P1*R1*T
       W2 = Q1*Q1*T1/27.D0
@@ -26387,35 +26390,35 @@ C           SET  SQ = (A(4)/S)**2 * (C**3/27 + D**2/4)
          SQ = W + W1
          GO TO 12
    11 SQ = W + (W1 + W2)
-   12 IF (DABS(SQ) .LE. TOL*W) SQ = 0.D0
-      RQ = DABS(S/A(4))*DSQRT(DABS(SQ))
+   12 IF (ABS(SQ) .LE. TOL*W) SQ = 0.D0
+      RQ = ABS(S/A(4))*SQRT(ABS(SQ))
       IF (SQ .GE. 0.D0) GO TO 40
 C                   ALL ROOTS ARE REAL
-      ARG = DATAN2(RQ, -0.5D0*D)
-      CF = DCOS(ARG/3.D0)
-      SF = DSIN(ARG/3.D0)
-      RT = DSQRT(-C/3.D0)
+      ARG = ATAN2(RQ, -0.5D0*D)
+      CF = COS(ARG/3.D0)
+      SF = SIN(ARG/3.D0)
+      RT = SQRT(-C/3.D0)
       Y1 = 2.D0*RT*CF
       Y2 = -RT*(CF + RT3*SF)
       Y3 = -(D/Y1)/Y2
       X1 = Y1 - P
       X2 = Y2 - P
       X3 = Y3 - P
-      IF (DABS(X1) .LE. DABS(X2)) GO TO 20
+      IF (ABS(X1) .LE. ABS(X2)) GO TO 20
          T = X1
          X1 = X2
          X2 = T
-   20 IF (DABS(X2) .LE. DABS(X3)) GO TO 30
+   20 IF (ABS(X2) .LE. ABS(X3)) GO TO 30
          T = X2
          X2 = X3
          X3 = T
-      IF (DABS(X1) .LE. DABS(X2)) GO TO 30
+      IF (ABS(X1) .LE. ABS(X2)) GO TO 30
          T = X1
          X1 = X2
          X2 = T
    30 W = X3
-      IF (DABS(X2) .LT. 0.1D0*DABS(X3)) GO TO 70
-      IF (DABS(X1) .LT. 0.1D0*DABS(X2)) X1 = - (R/X3)/X2
+      IF (ABS(X2) .LT. 0.1D0*ABS(X3)) GO TO 70
+      IF (ABS(X1) .LT. 0.1D0*ABS(X2)) X1 = - (R/X3)/X2
       ZR(1) = X1
       ZR(2) = X2
       ZR(3) = X3
@@ -26424,25 +26427,25 @@ C                   ALL ROOTS ARE REAL
       ZI(3) = 0.D0
       RETURN
 C                  REAL AND COMPLEX ROOTS
-   40 RA = DCBRT(-0.5D0*D - DSIGN(RQ,D))
+   40 RA = DCBRT(-0.5D0*D - SIGN(RQ,D))
       RB = -C/(3.D0*RA)
       T = RA + RB
       W = -P
       X = -P
-      IF (DABS(T) .LE. TOL*DABS(RA)) GO TO 41
+      IF (ABS(T) .LE. TOL*ABS(RA)) GO TO 41
          W = T - P
          X = -0.5D0*T - P
-         IF (DABS(X) .LE. TOL*DABS(P)) X = 0.D0
-   41 T = DABS(RA - RB)
+         IF (ABS(X) .LE. TOL*ABS(P)) X = 0.D0
+   41 T = ABS(RA - RB)
       Y = 0.5D0*RT3*T
-      IF (T .LE. TOL*DABS(RA)) GO TO 60
-      IF (DABS(X) .LT. DABS(Y)) GO TO 50
-         S = DABS(X)
+      IF (T .LE. TOL*ABS(RA)) GO TO 60
+      IF (ABS(X) .LT. ABS(Y)) GO TO 50
+         S = ABS(X)
          T = Y/X
          GO TO 51
-   50 S = DABS(Y)
+   50 S = ABS(Y)
       T = X/Y
-   51 IF (S .LT. 0.1D0*DABS(W)) GO TO 70
+   51 IF (S .LT. 0.1D0*ABS(W)) GO TO 70
       W1 = W/S
       SUM = 1.D0 + T*T
       IF (W1*W1 .LT. 1.D-2*SUM) W = - ((R/SUM)/S)/S
@@ -26457,13 +26460,13 @@ C               AT LEAST TWO ROOTS ARE EQUAL
    60 ZI(1) = 0.D0
       ZI(2) = 0.D0
       ZI(3) = 0.D0
-      IF (DABS(X) .LT. DABS(W)) GO TO 61
-         IF (DABS(W) .LT. 0.1D0*DABS(X)) W = - (R/X)/X
+      IF (ABS(X) .LT. ABS(W)) GO TO 61
+         IF (ABS(W) .LT. 0.1D0*ABS(X)) W = - (R/X)/X
          ZR(1) = W
          ZR(2) = X
          ZR(3) = X
          RETURN
-   61 IF (DABS(X) .LT. 0.1D0*DABS(W)) GO TO 70
+   61 IF (ABS(X) .LT. 0.1D0*ABS(W)) GO TO 70
       ZR(1) = X
       ZR(2) = X
       ZR(3) = W
@@ -26497,7 +26500,7 @@ C                  CASE WHEN A(1) = 0
 C                   CASE WHEN D = 0
   110 ZR(1) = -P
       ZI(1) = 0.D0
-      W = DSQRT(DABS(C))
+      W = SQRT(ABS(C))
       IF (C .LT. 0.D0) GO TO 120
          ZR(2) = -P
          ZR(3) = ZR(2)
@@ -26510,12 +26513,12 @@ C                   CASE WHEN D = 0
          ZI(2) = 0.D0
          ZI(3) = 0.D0
          RETURN
-  130 X = -(P + DSIGN(W,P))
+  130 X = -(P + SIGN(W,P))
       ZR(3) =  X
       ZI(2) = 0.D0
       ZI(3) = 0.D0
       T = 3.D0*A(1)/(A(3)*X)
-      IF (DABS(P) .GT. DABS(T)) GO TO 131
+      IF (ABS(P) .GT. ABS(T)) GO TO 131
          ZR(2) = T
          RETURN
   131 ZR(2) = ZR(1)
@@ -26629,7 +26632,7 @@ C                THE RESOLVENT CUBIC HAS COMPLEX ROOTS
       GO TO 80
    62 X = SQRT(T)
       IF (Q .GT. 0.0) X = -X
-   70 W = CSQRT(Z(2))
+   70 W = SQRT(Z(2))
       U = 2.0*REAL(W)
       V = 2.0*ABS(AIMAG(W))
       T =  X - B
@@ -26641,7 +26644,7 @@ C                THE RESOLVENT CUBIC HAS COMPLEX ROOTS
          X2 = T
    71 U = -X - B
       H = U*U + V*V
-      IF (X1*X1 .LT. 0.01*AMIN1(X2*X2,H)) X1 = E/(X2*H)
+      IF (X1*X1 .LT. 0.01*MIN(X2*X2,H)) X1 = E/(X2*H)
       Z(1) = CMPLX(X1, 0.0)
       Z(2) = CMPLX(X2, 0.0)
       Z(3) = CMPLX(U, V)
@@ -26715,20 +26718,20 @@ C                REORDER THE ROOTS IN INCREASING ORDER
          X1 = X2
          X2 = T
    20 U = 0.D0
-      IF (X3 .GT. 0.D0) U = DSQRT(X3)
+      IF (X3 .GT. 0.D0) U = SQRT(X3)
       IF (X2 .LE. 0.D0) GO TO 41
       IF (X1 .GE. 0.D0) GO TO 30
-      IF (DABS(X1) .GT. X2) GO TO 40
+      IF (ABS(X1) .GT. X2) GO TO 40
       X1 = 0.D0
-   30 X1 = DSQRT(X1)
-      X2 = DSQRT(X2)
+   30 X1 = SQRT(X1)
+      X2 = SQRT(X2)
       IF (Q .GT. 0.D0) X1 = -X1
       ZR(1) = ((X1 + X2) + U) - B
       ZR(2) = ((-X1 - X2) + U) - B
       ZR(3) = ((X1 - X2) - U) - B
       ZR(4) = ((-X1 + X2) - U) - B
       CALL DAORD(ZR, 4)
-      IF (DABS(ZR(1)) .GE. 0.1D0*DABS(ZR(4))) GO TO 31
+      IF (ABS(ZR(1)) .GE. 0.1D0*ABS(ZR(4))) GO TO 31
          T = ZR(2)*ZR(3)*ZR(4)
          IF (T .NE. 0.D0) ZR(1) = E/T
    31 ZI(1) = 0.D0
@@ -26736,11 +26739,11 @@ C                REORDER THE ROOTS IN INCREASING ORDER
       ZI(3) = 0.D0
       ZI(4) = 0.D0
       RETURN
-   40 V1 = DSQRT(DABS(X1))
+   40 V1 = SQRT(ABS(X1))
       V2 = 0.D0
       GO TO 50
-   41 V1 = DSQRT(DABS(X1))
-      V2 = DSQRT(DABS(X2))
+   41 V1 = SQRT(ABS(X1))
+      V2 = SQRT(ABS(X2))
       IF (Q .LT. 0.D0) U = -U
    50 ZR(1) = -U - B
       ZI(1) = V1 - V2
@@ -26758,26 +26761,26 @@ C                THE RESOLVENT CUBIC HAS COMPLEX ROOTS
       IF (NSWC_AI_R8 .LT. 0) GO TO 61
       IF (NSWC_AI_R8 .EQ. 0) GO TO 70
       GO TO 62
-   61 H = DABS(ZR(2)) + DABS(ZI(2))
-      IF (DABS(T) .LE. H) GO TO 70
+   61 H = ABS(ZR(2)) + ABS(ZI(2))
+      IF (ABS(T) .LE. H) GO TO 70
       GO TO 80
-   62 X = DSQRT(T)
+   62 X = SQRT(T)
       IF (Q .GT. 0.D0) X = -X
    70 W(1) = ZR(2)
       W(2) = ZI(2)
       CALL DCSQRT(W, W)
       U = 2.D0*W(1)
-      V = 2.D0*DABS(W(2))
+      V = 2.D0*ABS(W(2))
       T =  X - B
       X1 = T + U
       X2 = T - U
-      IF (DABS(X1) .LE. DABS(X2)) GO TO 71
+      IF (ABS(X1) .LE. ABS(X2)) GO TO 71
          T = X1
          X1 = X2
          X2 = T
    71 U = -X - B
       H = U*U + V*V
-      IF (X1*X1 .LT. 1.D-2*DMIN1(X2*X2,H)) X1 = E/(X2*H)
+      IF (X1*X1 .LT. 1.D-2*MIN(X2*X2,H)) X1 = E/(X2*H)
       ZR(1) = X1
       ZR(2) = X2
       ZI(1) = 0.D0
@@ -26787,7 +26790,7 @@ C                THE RESOLVENT CUBIC HAS COMPLEX ROOTS
       ZI(3) =  V
       ZI(4) = -V
       RETURN
-   80 V = DSQRT(DABS(T))
+   80 V = SQRT(ABS(T))
       ZR(1) = -B
       ZR(2) = -B
       ZR(3) = -B
@@ -26952,7 +26955,7 @@ C     THE FACTOR IS A POWER OF THE BASE.
       IF (SC .EQ. 0.0) SC = SMALNO
       GO TO 90
    80 IF (INFIN/SC .LT. MAX) GO TO 110
-   90 L = ALOG(SC)/ALOG(BASE) + 0.5
+   90 L = LOG(SC)/LOG(BASE) + 0.5
       FACTOR = DBLE(BASE)**L
       IF (FACTOR .EQ. 1.D0) GO TO 110
       DO I = 1,NN
@@ -26964,7 +26967,7 @@ C     COMPUTE LOWER BOUND ON MODULI OF ZEROS.
       END DO
       PT(NN) = -PT(NN)
 C     COMPUTE UPPER ESTIMATE OF BOUND
-      X = EXP((ALOG(-PT(NN)) - ALOG(PT(1)))/FLOAT(N))
+      X = EXP((LOG(-PT(NN)) - LOG(PT(1)))/FLOAT(N))
       IF (PT(N) .EQ. 0.0) GO TO 130
 C     IF THE NEWTON STEP AT THE ORIGIN IS BETTER THEN USE IT.
       XM = -PT(NN)/PT(N)
@@ -27012,7 +27015,7 @@ C     USE SCALED FORM OF RECURRENCE IF VALUE OF K AT 0 IS NONZERO.
             K(J) = T*K(J - 1) + P(J)
          END DO
          K(1) = P(1)
-         ZEROK = DABS(K(N)) .LE. DABS(BB)*ETA*10.
+         ZEROK = ABS(K(N)) .LE. ABS(BB)*ETA*10.
          GO TO 230
 C     USE UNSCALED FORM OF RECURRENCE
   210    DO I = 1,NM1
@@ -27214,11 +27217,11 @@ C MAIN LOOP
    10 CALL QUADPL(1.D0, U, V, SZR, SZI, LZR, LZI)
 C     RETURN IF ROOTS OF THE QUADRATIC ARE REAL AND NOT CLOSE
 C     TO MULTIPLE OR NEARLY EQUAL AND OF OPPOSITE SIGN
-      IF (DABS(DABS(SZR) - DABS(LZR)) .GT. 1.D-2*DABS(LZR))
+      IF (ABS(ABS(SZR) - ABS(LZR)) .GT. 1.D-2*ABS(LZR))
      *            RETURN
 C     EVALUATE POLYNOMIAL BY QUADRATIC SYNTHETIC DIVISION
       CALL QUADSD(NN, U, V, P, QP, A, B)
-      MP = DABS(A - SZR*B) + DABS(SZI*B)
+      MP = ABS(A - SZR*B) + ABS(SZI*B)
 C     COMPUTE A RIGOROUS BOUND ON THE ROUNDING ERROR IN
 C     EVALUTING P
       ZM = SQRT(ABS(SNGL(V)))
@@ -27263,7 +27266,7 @@ C     CALCULATE NEXT K POLYNOMIAL AND NEW U AND V
       CALL NEWEST(TYPE, UI, VI, NN, P, K)
 C     IF VI IS ZERO THE ITERATION IS NOT CONVERGING
       IF (VI .EQ. 0.D0) RETURN
-      RELSTP = DABS((VI - V)/VI)
+      RELSTP = ABS((VI - V)/VI)
       U = UI
       V = VI
       GO TO 10
@@ -27298,9 +27301,9 @@ C     EVALUATE P AT S
          PV = PV*S + P(I)
          QP(I) = PV
       END DO
-      MP = DABS(PV)
+      MP = ABS(PV)
 C     COMPUTE A RIGOROUS BOUND ON THE ERROR IN EVALUATING P
-      MS = DABS(S)
+      MS = ABS(S)
       EE = (MRE/(ARE+MRE))*ABS(SNGL(QP(1)))
       DO I = 2,NN
          EE = EE*MS + ABS(SNGL(QP(I)))
@@ -27316,7 +27319,7 @@ C     POLYNOMIAL VALUE IS LESS THAN 20 TIMES THIS BOUND
 C     STOP ITERATION AFTER 10 STEPS
       IF (J .GT. 10) RETURN
       IF (J .LT. 2) GO TO 50
-      IF (DABS(T) .GT. 1.D-3*DABS(S-T) .OR. MP .LE. OMP)
+      IF (ABS(T) .GT. 1.D-3*ABS(S-T) .OR. MP .LE. OMP)
      *      GO TO 50
 C     A CLUSTER OF ZEROS NEAR THE REAL AXIS HAS BEEN
 C     ENCOUNTERED RETURN WITH IFLAG SET TO INITIATE A
@@ -27334,7 +27337,7 @@ C     COMPUTE T, THE NEXT POLYNOMIAL, AND THE NEW ITERATE
          KV = KV*S + K(I)
          QK(I) = KV
       END DO
-      IF (DABS(KV) .LE. DABS(K(N))*10.*ETA) GO TO 80
+      IF (ABS(KV) .LE. ABS(K(N))*10.*ETA) GO TO 80
 C     USE THE SCALED FORM OF THE RECURRENCE IF THE VALUE
 C     OF K AT S IS NONZERO
       T = -PV/KV
@@ -27353,7 +27356,7 @@ C     USE UNSCALED FORM
          KV = KV*S + K(I)
       END DO
       T = 0.D0
-      IF (DABS(KV) .GT. DABS(K(N))*10.*ETA) T = -PV/KV
+      IF (ABS(KV) .GT. ABS(K(N))*10.*ETA) T = -PV/KV
       S = S + T
       GO TO 10
       END SUBROUTINE REALIT
@@ -27377,12 +27380,12 @@ C            CALCULATIONS ARE NORMALIZED TO AVOID OVERFLOW
 C     SYNTHETIC DIVISION OF K BY THE QUADRATIC 1,U,V
       CALL QUADSD(N, U, V, K, QK, C, D)
       TOL = 100.0*ETA
-      IF (DABS(C) .GT. TOL*DABS(K(N))) GO TO 10
-      IF (DABS(D) .GT. TOL*DABS(K(N - 1))) GO TO 10
+      IF (ABS(C) .GT. TOL*ABS(K(N))) GO TO 10
+      IF (ABS(D) .GT. TOL*ABS(K(N - 1))) GO TO 10
       TYPE = 3
 C     TYPE=3 INDICATES THE QUADRATIC IS ALMOST A FACTOR OF K
       RETURN
-   10 IF (DABS(D) .LT. DABS(C)) GO TO 20
+   10 IF (ABS(D) .LT. ABS(C)) GO TO 20
       TYPE = 2
 C     TYPE=2 INDICATES THAT ALL FORMULAS ARE DIVIDED BY D
       E = A/D
@@ -27421,7 +27424,7 @@ C     COMPUTED IN CALCSC.
       IF (TYPE .EQ. 3) GO TO 40
       TEMP = A
       IF (TYPE .EQ. 1) TEMP = B
-      IF (DABS(A1) .GT. DABS(TEMP)*ETA*10.) GO TO 20
+      IF (ABS(A1) .GT. ABS(TEMP)*ETA*10.) GO TO 20
 C     IF A1 IS NEARLY ZERO THEN USE A SPECIAL FORM OF THE
 C     RECURRENCE
       K(1) = 0.D0
@@ -27534,14 +27537,14 @@ C     PRODUCT OF THE ZEROS C/A.
          GO TO 10
 C     COMPUTE DISCRIMINANT AVOIDING OVERFLOW
    30 B = B1/2.D0
-      IF (DABS(B) .LT. DABS(C)) GO TO 40
+      IF (ABS(B) .LT. ABS(C)) GO TO 40
          E = 1.D0 - (A/B)*(C/B)
-         D = DSQRT(DABS(E))*DABS(B)
+         D = SQRT(ABS(E))*ABS(B)
          GO TO 50
    40 E = A
       IF (C .LT. 0.D0) E = -A
-      E = B*(B/DABS(C)) - E
-      D = DSQRT(DABS(E))*DSQRT(DABS(C))
+      E = B*(B/ABS(C)) - E
+      D = SQRT(ABS(E))*SQRT(ABS(C))
    50 IF (E .LT. 0.D0) GO TO 60
 C     REAL ZEROS
       IF (B .GE. 0.D0) D = -D
@@ -27552,7 +27555,7 @@ C     REAL ZEROS
 C     COMPLEX CONJUGATE ZEROS
    60 SR = -B/A
       LR = SR
-      SI = DABS(D/A)
+      SI = ABS(D/A)
       LI = -SI
       END SUBROUTINE QUADPL
 
@@ -27641,7 +27644,7 @@ C             BEING USED.
 C-------------------------
 C     INITIALIZATION
          ARE = ETA
-         MRE = 2.D0*DSQRT(2.D0)*ETA
+         MRE = 2.D0*SQRT(2.D0)*ETA
          XX = .70710678
          YY = -XX
          COSR = -.069756474
@@ -27737,7 +27740,7 @@ C     PT - MODULUS OF THE COEFFICIENTS OF P
 C     ETA,INFIN,SMALNO,BASE - CONSTANTS DESCRIBING THE
 C            FLOATING POINT ARITHMETIC.
 C     FIND THE LARGEST AND SMALLEST MODULI OF COEFFICIENTS.
-      HI = DSQRT(INFIN)
+      HI = SQRT(INFIN)
       LO = SMALNO/ETA
       MAX = 0.D0
       MIN = INFIN
@@ -27751,10 +27754,10 @@ C     SCALE ONLY IF THERE ARE VERY LARGE OR VERY SMALL COEFFICIENTS.
       SC = LO/MIN
       IF (SC .GT. 1.D0) GO TO 20
       IF (MAX .LE. HI) RETURN
-      SC = 1.D0/(DSQRT(MAX)*DSQRT(MIN))
+      SC = 1.D0/(SQRT(MAX)*SQRT(MIN))
       GO TO 30
    20 IF (INFIN/SC .LT. MAX) RETURN
-   30 L = DLOG(SC)/DLOG(BASE) + 0.5D0
+   30 L = LOG(SC)/LOG(BASE) + 0.5D0
       SCALCP = BASE**L
       END FUNCTION SCALCP
 
@@ -27770,7 +27773,7 @@ C     OF A POLYNOMIAL. PT IS THE MODULUS OF THE COEFFICIENTS.
       PT(NN) = -PT(NN)
 C     COMPUTE UPPER ESTIMATE OF BOUND.
       N = NN - 1
-      X = DEXP((DLOG(-PT(NN)) - DLOG(PT(1)))/DBLE(FLOAT(N)))
+      X = EXP((LOG(-PT(NN)) - LOG(PT(1)))/DBLE(FLOAT(N)))
       IF (PT(N) .EQ. 0.D0) GO TO 20
 C     IF THE NEWTON STEP AT THE ORIGIN IS BETTER THEN USE IT.
          XM = -PT(NN)/PT(N)
@@ -27786,7 +27789,7 @@ C     CHOP THE INTERVAL (0,X) UNTIL F .LE. 0.
          GO TO 20
    40 DX = X
 C     DO NEWTON ITERATION UNTIL X CONVERGES TO TWO DECIMAL PLACES.
-   50 IF (DABS(DX/X) .LE. 0.005D0) GO TO 70
+   50 IF (ABS(DX/X) .LE. 0.005D0) GO TO 70
          Q(1) = PT(1)
          DO I = 2,NN
             Q(I) = Q(I - 1)*X + PT(I)
@@ -27972,7 +27975,7 @@ C     SHIFT STEPS INTO THE CLUSTER TO FORCE ONE ZERO TO DOMINATE.
          TP = RELSTP
          B = .TRUE.
          IF (RELSTP .LT. ETA) TP = ETA
-         R1 = DSQRT(TP)
+         R1 = SQRT(TP)
          R2 = SR*(1.D0 + R1) - SI*R1
          SI = SR*R1 + SI*(1.D0 + R1)
          SR = R2
@@ -28174,7 +28177,7 @@ C-----------------------------------------------------------------------
             VI = XR*VI + XI*VR
             VR = VT
          END DO
-         B = AMAX1(RAT,CPABS(SNGL(VR),SNGL(VI))/P)
+         B = MAX(RAT,CPABS(SNGL(VR),SNGL(VI))/P)
 C        SAVE PRODUCT OF DISTANCES TEMPORARILY
          RELERR(L) = B
          ABSERR(L) = B ** POWER
@@ -28314,7 +28317,7 @@ C-----------------------------------------------------------------------
             VI = XR*VI + XI*VR + DBLE(AIMAG(C(M)))
             VR = VT
          END DO
-         B = AMAX1(RAT,CPABS(SNGL(VR),SNGL(VI))/P)
+         B = MAX(RAT,CPABS(SNGL(VR),SNGL(VI))/P)
 C        SAVE PRODUCT OF DISTANCES TEMPORARILY
          RELERR(L) = B
          ABSERR(L) = B ** POWER
@@ -29089,7 +29092,7 @@ C     REGULAR-CASE..
    20 DP1 = DD1*DX1
       DQ1 = DP1*DX1
       DQ2 = DP2*DY1
-      IF (DABS(DQ1) .LE. DABS(DQ2)) GO TO 40
+      IF (ABS(DQ1) .LE. ABS(DQ2)) GO TO 40
           DH21 = -DY1/DX1
           DH12 = DP2/DP1
           DU = ONE - DH12*DH21
@@ -29149,7 +29152,7 @@ C     PROCEDURE..SCALE-CHECK
           GO TO 140
   160 CONTINUE
   170     CONTINUE
-          IF (DABS(DD2) .GT. RGAMSQ) GO TO 190
+          IF (ABS(DD2) .GT. RGAMSQ) GO TO 190
                IF (DD2 .EQ. ZERO) GO TO 220
                DFLAG = -ONE
                DD2 = DD2*(GAM*GAM)
@@ -29158,7 +29161,7 @@ C     PROCEDURE..SCALE-CHECK
           GO TO 170
   190 CONTINUE
   200     CONTINUE
-          IF (DABS(DD2) .LT. GAMSQ) GO TO 220
+          IF (ABS(DD2) .LT. GAMSQ) GO TO 220
                DFLAG = -ONE
                DD2 = DD2/(GAM*GAM)
                DH21 = DH21*GAM
@@ -29753,7 +29756,7 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
 C        CODE FOR INCREMENT NOT EQUAL TO 1
       NINCX = N*INCX
       DO I = 1,NINCX,INCX
-        DTEMP = DTEMP + DABS(DX(I))
+        DTEMP = DTEMP + ABS(DX(I))
       END DO
       DASUM = DTEMP
       RETURN
@@ -29762,13 +29765,13 @@ C        CLEAN-UP LOOP
    20 M = MOD(N,6)
       IF(M .EQ. 0) GO TO 40
       DO I = 1,M
-        DTEMP = DTEMP + DABS(DX(I))
+        DTEMP = DTEMP + ABS(DX(I))
       END DO
       IF(N .LT. 6) GO TO 60
    40 MP1 = M + 1
       DO I = MP1,N,6
-        DTEMP = DTEMP + DABS(DX(I)) + DABS(DX(I + 1)) + DABS(DX(I + 2))
-     *  + DABS(DX(I + 3)) + DABS(DX(I + 4)) + DABS(DX(I + 5))
+        DTEMP = DTEMP + ABS(DX(I)) + ABS(DX(I + 1)) + ABS(DX(I + 2))
+     *  + ABS(DX(I + 3)) + ABS(DX(I + 4)) + ABS(DX(I + 5))
       END DO
    60 DASUM = DTEMP
       END FUNCTION DASUM
@@ -29966,12 +29969,12 @@ C                                                 BEGIN MAIN LOOP
          CASE (110)
          GO TO 110
          END SELECT
-   30 IF(DABS(DX(I)) .GT. CUTLO) GO TO 85
+   30 IF(ABS(DX(I)) .GT. CUTLO) GO TO 85
       NEXT = 50
       XMAX = ZERO
 C                        PHASE 1.  SUM IS ZERO
    50 IF(DX(I) .EQ. ZERO) GO TO 200
-      IF(DABS(DX(I)) .GT. CUTLO) GO TO 85
+      IF(ABS(DX(I)) .GT. CUTLO) GO TO 85
 C                                PREPARE FOR PHASE 2.
       NEXT = 70
       GO TO 105
@@ -29979,16 +29982,16 @@ C                                PREPARE FOR PHASE 4.
   100 I = J
       NEXT = 110
       SUM = (SUM / DX(I)) / DX(I)
-  105 XMAX = DABS(DX(I))
+  105 XMAX = ABS(DX(I))
       GO TO 115
 C                   PHASE 2.  SUM IS SMALL.
 C                             SCALE TO AVOID DESTRUCTIVE UNDERFLOW.
-   70 IF(DABS(DX(I)) .GT. CUTLO) GO TO 75
+   70 IF(ABS(DX(I)) .GT. CUTLO) GO TO 75
 C                     COMMON CODE FOR PHASES 2 AND 4.
 C                     IN PHASE 4 SUM IS LARGE.  SCALE TO AVOID OVERFLOW.
-  110 IF(DABS(DX(I)) .LE. XMAX) GO TO 115
+  110 IF(ABS(DX(I)) .LE. XMAX) GO TO 115
          SUM = ONE + SUM * (XMAX / DX(I))**2
-         XMAX = DABS(DX(I))
+         XMAX = ABS(DX(I))
          GO TO 200
   115 SUM = SUM + (DX(I)/XMAX)**2
       GO TO 200
@@ -29999,17 +30002,17 @@ C     FOR COMPLEX      SET HITEST = CUTHI/(2*N)
    85 HITEST = CUTHI/FLOAT(N)
 C                   PHASE 3.  SUM IS MID-RANGE.  NO SCALING.
       DO J =I,NN,INCX
-      IF(DABS(DX(J)) .GE. HITEST) GO TO 100
+      IF(ABS(DX(J)) .GE. HITEST) GO TO 100
          SUM = SUM + DX(J)**2
       END DO
-      DNRM2 = DSQRT(SUM)
+      DNRM2 = SQRT(SUM)
       GO TO 300
   200 CONTINUE
       I = I + INCX
       IF (I .LE. NN) GO TO 20
 C              END OF MAIN LOOP.
 C              COMPUTE SQUARE ROOT AND ADJUST FOR SCALING.
-      DNRM2 = XMAX * DSQRT(SUM)
+      DNRM2 = XMAX * SQRT(SUM)
   300 CONTINUE
       END FUNCTION DNRM2
 
@@ -30191,21 +30194,21 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
       IF(INCX.EQ.1)GO TO 20
 C        CODE FOR INCREMENT NOT EQUAL TO 1
       IX = 1
-      DMAX = DABS(DX(1))
+      DMAX = ABS(DX(1))
       IX = IX + INCX
       DO I = 2,N
-         IF(DABS(DX(IX)).LE.DMAX) GO TO 5
+         IF(ABS(DX(IX)).LE.DMAX) GO TO 5
          IDAMAX = I
-         DMAX = DABS(DX(IX))
+         DMAX = ABS(DX(IX))
     5    IX = IX + INCX
       END DO
       RETURN
 C        CODE FOR INCREMENT EQUAL TO 1
-   20 DMAX = DABS(DX(1))
+   20 DMAX = ABS(DX(1))
       DO I = 2,N
-         IF(DABS(DX(I)).LE.DMAX) GO TO 30
+         IF(ABS(DX(I)).LE.DMAX) GO TO 30
          IDAMAX = I
-         DMAX = DABS(DX(I))
+         DMAX = ABS(DX(I))
    30 CONTINUE
       END DO
       END FUNCTION IDAMAX
@@ -30568,7 +30571,7 @@ C THE STARTING POINT OF A SUBCYCLE IS DIVISIBLE ONLY BY IDIV
 C AND MUST NOT APPEAR IN ANY OTHER SUBCYCLE.
    80 MMIST = M - ISTART
       IF (ISTART.EQ.IDIV) GO TO 120
-      NDIM = MAX0(NDIM,ISTART)
+      NDIM = MAX(NDIM,ISTART)
       IF (ISTART.GT.NWORK) GO TO 90
       IF (MOVED(ISTART).NE.0) GO TO 160
    90 ISOID = ISTART/IDIV
@@ -30685,7 +30688,7 @@ C THE STARTING POINT OF A SUBCYCLE IS DIVISIBLE ONLY BY IDIV
 C AND MUST NOT APPEAR IN ANY OTHER SUBCYCLE.
    80 MMIST = M - ISTART
       IF (ISTART.EQ.IDIV) GO TO 120
-      NDIM = MAX0(NDIM,ISTART)
+      NDIM = MAX(NDIM,ISTART)
       IF (ISTART.GT.NWORK) GO TO 90
       IF (MOVED(ISTART).NE.0) GO TO 160
    90 ISOID = ISTART/IDIV
@@ -30802,7 +30805,7 @@ C THE STARTING POINT OF A SUBCYCLE IS DIVISIBLE ONLY BY IDIV
 C AND MUST NOT APPEAR IN ANY OTHER SUBCYCLE.
    80 MMIST = M - ISTART
       IF (ISTART.EQ.IDIV) GO TO 120
-      NDIM = MAX0(NDIM,ISTART)
+      NDIM = MAX(NDIM,ISTART)
       IF (ISTART.GT.NWORK) GO TO 90
       IF (MOVED(ISTART).NE.0) GO TO 160
    90 ISOID = ISTART/IDIV
@@ -31581,7 +31584,7 @@ C-----------------------------------------------------------------------
 C     REAL WORK(5*M0)  WHERE M0 = 5*MIN0(M,N)
 C     INTEGER IWORK(M + N)
 C--------------------
-      M0 = MIN0(M,N)
+      M0 = MIN(M,N)
 C     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
       M1 = 1
       M2 = M1 + M0
@@ -31589,7 +31592,7 @@ C     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
       M4 = M3 + M0
       M5 = M4 + M0
       EPS = 10.0*SPMPAR(1)
-      RERR = AMAX1(EPS,RE)
+      RERR = MAX(EPS,RE)
       IMAX = M5 - 1
       DO I = M4,IMAX
          WORK(I) = RERR
@@ -31625,7 +31628,7 @@ C-----------------------------------------------------------------------
 C     DOUBLE PRECISION WORK(5*M0)  WHERE M0 = 5*MIN0(M,N)
 C     INTEGER IWORK(M + N)
 C--------------------
-      M0 = MIN0(M,N)
+      M0 = MIN(M,N)
 C     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
       M1 = 1
       M2 = M1 + M0
@@ -31633,7 +31636,7 @@ C     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
       M4 = M3 + M0
       M5 = M4 + M0
       EPS = 10.D0*DPMPAR(1)
-      RERR = DMAX1(EPS,RE)
+      RERR = MAX(EPS,RE)
       IMAX = M5 - 1
       DO I = M4,IMAX
          WORK(I) = RERR
@@ -32299,7 +32302,7 @@ C     ------------------------------------------------------------------
 C     SEARCH FOR THE K-TH PIVOT ELEMENT
          P = 0.D0
          DO I = K,N
-            T = DABS(A(I,K))
+            T = ABS(A(I,K))
             IF (P .GE. T) GO TO 10
             P = T
             L = I
@@ -32540,7 +32543,7 @@ C                FORM A NEW APPROXIMATE SOLUTION
       RAT = RATIO
       RATIO = RNRM/XNRM
       IF (RATIO .LE. 0.25*RAT) GO TO 20
-      IF (RATIO .GT. AMIN1(RAT,4.0*EPS2)) IND = 1
+      IF (RATIO .GT. MIN(RAT,4.0*EPS2)) IND = 1
       END SUBROUTINE LUIMP
 
       SUBROUTINE SGECO(A,LDA,N,IPVT,RCOND,Z)
@@ -32600,7 +32603,7 @@ C     INTERNAL VARIABLES
 C     COMPUTE 1-NORM OF A
       ANORM = 0.0E0
       DO J = 1, N
-         ANORM = AMAX1(ANORM,SASUM(N,A(1,J),1))
+         ANORM = MAX(ANORM,SASUM(N,A(1,J),1))
       END DO
 C     FACTOR
       CALL SGEFA(A,LDA,N,IPVT,INFO)
@@ -33105,7 +33108,7 @@ C     INTERNAL VARIABLES
 C     COMPUTE 1-NORM OF A
       ANORM = 0.0D0
       DO J = 1, N
-         ANORM = DMAX1(ANORM,DASUM(N,A(1,J),1))
+         ANORM = MAX(ANORM,DASUM(N,A(1,J),1))
       END DO
 C     FACTOR
       CALL DGEFA(A,LDA,N,IPVT,INFO)
@@ -33121,16 +33124,16 @@ C     SOLVE TRANS(U)*W = E
          Z(J) = 0.0D0
       END DO
       DO K = 1, N
-         IF (Z(K) .NE. 0.0D0) EK = DSIGN(EK,-Z(K))
-         IF (DABS(EK-Z(K)) .LE. DABS(A(K,K))) GO TO 30
-            S = DABS(A(K,K))/DABS(EK-Z(K))
+         IF (Z(K) .NE. 0.0D0) EK = SIGN(EK,-Z(K))
+         IF (ABS(EK-Z(K)) .LE. ABS(A(K,K))) GO TO 30
+            S = ABS(A(K,K))/ABS(EK-Z(K))
             CALL DSCAL(N,S,Z,1)
             EK = S*EK
    30    CONTINUE
          WK = EK - Z(K)
          WKM = -EK - Z(K)
-         S = DABS(WK)
-         SM = DABS(WKM)
+         S = ABS(WK)
+         SM = ABS(WKM)
          IF (A(K,K) .EQ. 0.0D0) GO TO 40
             WK = WK/A(K,K)
             WKM = WKM/A(K,K)
@@ -33142,9 +33145,9 @@ C     SOLVE TRANS(U)*W = E
          KP1 = K + 1
          IF (KP1 .GT. N) GO TO 90
             DO J = KP1, N
-               SM = SM + DABS(Z(J)+WKM*A(K,J))
+               SM = SM + ABS(Z(J)+WKM*A(K,J))
                Z(J) = Z(J) + WK*A(K,J)
-               S = S + DABS(Z(J))
+               S = S + ABS(Z(J))
             END DO
             IF (S .GE. SM) GO TO 80
                T = WKM - WK
@@ -33162,8 +33165,8 @@ C     SOLVE TRANS(L)*Y = W
       DO KB = 1, N
          K = N + 1 - KB
          IF (K .LT. N) Z(K) = Z(K) + DDOT(N-K,A(K+1,K),1,Z(K+1),1)
-         IF (DABS(Z(K)) .LE. 1.0D0) GO TO 110
-            S = 1.0D0/DABS(Z(K))
+         IF (ABS(Z(K)) .LE. 1.0D0) GO TO 110
+            S = 1.0D0/ABS(Z(K))
             CALL DSCAL(N,S,Z,1)
   110    CONTINUE
          L = IPVT(K)
@@ -33181,8 +33184,8 @@ C     SOLVE L*V = Y
          Z(L) = Z(K)
          Z(K) = T
          IF (K .LT. N) CALL DAXPY(N-K,T,A(K+1,K),1,Z(K+1),1)
-         IF (DABS(Z(K)) .LE. 1.0D0) GO TO 130
-            S = 1.0D0/DABS(Z(K))
+         IF (ABS(Z(K)) .LE. 1.0D0) GO TO 130
+            S = 1.0D0/ABS(Z(K))
             CALL DSCAL(N,S,Z,1)
             YNORM = S*YNORM
   130    CONTINUE
@@ -33193,8 +33196,8 @@ C     SOLVE L*V = Y
 C     SOLVE  U*Z = V
       DO KB = 1, N
          K = N + 1 - KB
-         IF (DABS(Z(K)) .LE. DABS(A(K,K))) GO TO 150
-            S = DABS(A(K,K))/DABS(Z(K))
+         IF (ABS(Z(K)) .LE. ABS(A(K,K))) GO TO 150
+            S = ABS(A(K,K))/ABS(Z(K))
             CALL DSCAL(N,S,Z,1)
             YNORM = S*YNORM
   150    CONTINUE
@@ -33436,12 +33439,12 @@ C     COMPUTE DETERMINANT
             DET(1) = A(I,I)*DET(1)
 C        ...EXIT
             IF (DET(1) .EQ. 0.0D0) EXIT
-   10       IF (DABS(DET(1)) .GE. 1.0D0) GO TO 20
+   10       IF (ABS(DET(1)) .GE. 1.0D0) GO TO 20
                DET(1) = TEN*DET(1)
                DET(2) = DET(2) - 1.0D0
             GO TO 10
    20       CONTINUE
-   30       IF (DABS(DET(1)) .LT. TEN) GO TO 40
+   30       IF (ABS(DET(1)) .LT. TEN) GO TO 40
                DET(1) = DET(1)/TEN
                DET(2) = DET(2) + 1.0D0
             GO TO 30
@@ -34645,7 +34648,7 @@ C     FIND NORM OF A USING ONLY UPPER HALF
       END DO
       ANORM = 0.0E0
       DO J = 1, N
-         ANORM = AMAX1(ANORM,Z(J))
+         ANORM = MAX(ANORM,Z(J))
       END DO
 C     FACTOR
       CALL SSPFA(AP,N,KPVT,INFO)
@@ -34666,7 +34669,7 @@ C     SOLVE U*D*W = E
          IKM1 = IK - (K - 1)
          KS = 1
          IF (KPVT(K) .LT. 0) KS = 2
-         KP = IABS(KPVT(K))
+         KP = ABS(KPVT(K))
          KPS = K + 1 - KS
          IF (KP .EQ. KPS) GO TO 70
             T = Z(KPS)
@@ -34719,7 +34722,7 @@ C     SOLVE TRANS(U)*Y = W
             IKP1 = IK + K
             IF (KS .EQ. 2)
      *         Z(K+1) = Z(K+1) + SDOT(K-1,AP(IKP1+1),1,Z(1),1)
-            KP = IABS(KPVT(K))
+            KP = ABS(KPVT(K))
             IF (KP .EQ. K) GO TO 140
                T = Z(K)
                Z(K) = Z(KP)
@@ -34743,7 +34746,7 @@ C     SOLVE U*D*V = Y
          KS = 1
          IF (KPVT(K) .LT. 0) KS = 2
          IF (K .EQ. KS) GO TO 190
-            KP = IABS(KPVT(K))
+            KP = ABS(KPVT(K))
             KPS = K + 1 - KS
             IF (KP .EQ. KPS) GO TO 180
                T = Z(KPS)
@@ -34792,7 +34795,7 @@ C     SOLVE TRANS(U)*Z = V
             IKP1 = IK + K
             IF (KS .EQ. 2)
      *         Z(K+1) = Z(K+1) + SDOT(K-1,AP(IKP1+1),1,Z(1),1)
-            KP = IABS(KPVT(K))
+            KP = ABS(KPVT(K))
             IF (KP .EQ. K) GO TO 250
                T = Z(K)
                Z(K) = Z(KP)
@@ -34914,13 +34917,13 @@ C           ROW IMAX.
             IM = IMAX*(IMAX - 1)/2
             IMJ = IM + 2*IMAX
             DO J = IMAXP1, K
-               ROWMAX = AMAX1(ROWMAX,ABS(AP(IMJ)))
+               ROWMAX = MAX(ROWMAX,ABS(AP(IMJ)))
                IMJ = IMJ + J
             END DO
             IF (IMAX .EQ. 1) GO TO 50
                JMAX = ISAMAX(IMAX-1,AP(IM+1),1)
                JMIM = JMAX + IM
-               ROWMAX = AMAX1(ROWMAX,ABS(AP(JMIM)))
+               ROWMAX = MAX(ROWMAX,ABS(AP(JMIM)))
    50       CONTINUE
             IMIM = IMAX + IM
             IF (ABS(AP(IMIM)) .LT. ALPHA*ROWMAX) GO TO 60
@@ -34937,7 +34940,7 @@ C           ROW IMAX.
                SWAP = IMAX .NE. KM1
    80       CONTINUE
    90    CONTINUE
-         IF (AMAX1(ABSAKK,COLMAX) .NE. 0.0E0) GO TO 100
+         IF (MAX(ABSAKK,COLMAX) .NE. 0.0E0) GO TO 100
 C           COLUMN K IS ZERO.  SET INFO AND ITERATE THE LOOP.
             KPVT(K) = K
             INFO = K
@@ -35097,7 +35100,7 @@ C           APPLY D INVERSE.
 C           2 X 2 PIVOT BLOCK.
             IKM1 = IK - (K - 1)
             IF (K .EQ. 2) GO TO 60
-               KP = IABS(KPVT(K))
+               KP = ABS(KPVT(K))
                IF (KP .EQ. K - 1) GO TO 50
 C                 INTERCHANGE.
                   TEMP = B(K-1)
@@ -35151,7 +35154,7 @@ C              APPLY THE TRANSFORMATION.
                B(K) = B(K) + SDOT(K-1,AP(IK+1),1,B(1),1)
                IKP1 = IK + K
                B(K+1) = B(K+1) + SDOT(K-1,AP(IKP1+1),1,B(1),1)
-               KP = IABS(KPVT(K))
+               KP = ABS(KPVT(K))
                IF (KP .EQ. K) GO TO 130
 C                 INTERCHANGE.
                   TEMP = B(K)
@@ -35343,7 +35346,7 @@ C              2 BY 2
                KSTEP = 2
   220       CONTINUE
 C           SWAP
-            KS = IABS(KPVT(K))
+            KS = ABS(KPVT(K))
             IF (KS .EQ. K) GO TO 250
                IKS = (KS*(KS - 1))/2
                CALL SSWAP(KS,AP(IKS+1),1,AP(IK+1),1)
@@ -35484,14 +35487,14 @@ C     FIND NORM OF A USING ONLY UPPER HALF
          JM1 = J - 1
          IF (JM1 .LT. 1) GO TO 20
          DO I = 1, JM1
-            Z(I) = Z(I) + DABS(AP(IJ))
+            Z(I) = Z(I) + ABS(AP(IJ))
             IJ = IJ + 1
          END DO
    20    CONTINUE
       END DO
       ANORM = 0.0D0
       DO J = 1, N
-         ANORM = DMAX1(ANORM,Z(J))
+         ANORM = MAX(ANORM,Z(J))
       END DO
 C     FACTOR
       CALL DSPFA(AP,N,KPVT,INFO)
@@ -35512,24 +35515,24 @@ C     SOLVE U*D*W = E
          IKM1 = IK - (K - 1)
          KS = 1
          IF (KPVT(K) .LT. 0) KS = 2
-         KP = IABS(KPVT(K))
+         KP = ABS(KPVT(K))
          KPS = K + 1 - KS
          IF (KP .EQ. KPS) GO TO 70
             T = Z(KPS)
             Z(KPS) = Z(KP)
             Z(KP) = T
    70    CONTINUE
-         IF (Z(K) .NE. 0.0D0) EK = DSIGN(EK,Z(K))
+         IF (Z(K) .NE. 0.0D0) EK = SIGN(EK,Z(K))
          Z(K) = Z(K) + EK
          CALL DAXPY(K-KS,Z(K),AP(IK+1),1,Z(1),1)
          IF (KS .EQ. 1) GO TO 80
-            IF (Z(K-1) .NE. 0.0D0) EK = DSIGN(EK,Z(K-1))
+            IF (Z(K-1) .NE. 0.0D0) EK = SIGN(EK,Z(K-1))
             Z(K-1) = Z(K-1) + EK
             CALL DAXPY(K-KS,Z(K-1),AP(IKM1+1),1,Z(1),1)
    80    CONTINUE
          IF (KS .EQ. 2) GO TO 100
-            IF (DABS(Z(K)) .LE. DABS(AP(KK))) GO TO 90
-               S = DABS(AP(KK))/DABS(Z(K))
+            IF (ABS(Z(K)) .LE. ABS(AP(KK))) GO TO 90
+               S = ABS(AP(KK))/ABS(Z(K))
                CALL DSCAL(N,S,Z,1)
                EK = S*EK
    90       CONTINUE
@@ -35565,7 +35568,7 @@ C     SOLVE TRANS(U)*Y = W
             IKP1 = IK + K
             IF (KS .EQ. 2)
      *         Z(K+1) = Z(K+1) + DDOT(K-1,AP(IKP1+1),1,Z(1),1)
-            KP = IABS(KPVT(K))
+            KP = ABS(KPVT(K))
             IF (KP .EQ. K) GO TO 140
                T = Z(K)
                Z(K) = Z(KP)
@@ -35589,7 +35592,7 @@ C     SOLVE U*D*V = Y
          KS = 1
          IF (KPVT(K) .LT. 0) KS = 2
          IF (K .EQ. KS) GO TO 190
-            KP = IABS(KPVT(K))
+            KP = ABS(KPVT(K))
             KPS = K + 1 - KS
             IF (KP .EQ. KPS) GO TO 180
                T = Z(KPS)
@@ -35600,8 +35603,8 @@ C     SOLVE U*D*V = Y
             IF (KS .EQ. 2) CALL DAXPY(K-KS,Z(K-1),AP(IKM1+1),1,Z(1),1)
   190    CONTINUE
          IF (KS .EQ. 2) GO TO 210
-            IF (DABS(Z(K)) .LE. DABS(AP(KK))) GO TO 200
-               S = DABS(AP(KK))/DABS(Z(K))
+            IF (ABS(Z(K)) .LE. ABS(AP(KK))) GO TO 200
+               S = ABS(AP(KK))/ABS(Z(K))
                CALL DSCAL(N,S,Z,1)
                YNORM = S*YNORM
   200       CONTINUE
@@ -35638,7 +35641,7 @@ C     SOLVE TRANS(U)*Z = V
             IKP1 = IK + K
             IF (KS .EQ. 2)
      *         Z(K+1) = Z(K+1) + DDOT(K-1,AP(IKP1+1),1,Z(1),1)
-            KP = IABS(KPVT(K))
+            KP = ABS(KPVT(K))
             IF (KP .EQ. K) GO TO 250
                T = Z(K)
                Z(K) = Z(KP)
@@ -35720,7 +35723,7 @@ C     FORTRAN DABS,DMAX1,DSQRT
 C     INTERNAL VARIABLES
 C     INITIALIZE
 C     ALPHA IS USED IN CHOOSING PIVOT BLOCK SIZE.
-      ALPHA = (1.0D0 + DSQRT(17.0D0))/8.0D0
+      ALPHA = (1.0D0 + SQRT(17.0D0))/8.0D0
       INFO = 0
 C     MAIN LOOP ON K, WHICH GOES FROM N TO 1.
       K = N
@@ -35742,12 +35745,12 @@ C        SWAP WILL BE SET TO .TRUE. IF AN INTERCHANGE IS
 C        REQUIRED.
          KM1 = K - 1
          KK = IK + K
-         ABSAKK = DABS(AP(KK))
+         ABSAKK = ABS(AP(KK))
 C        DETERMINE THE LARGEST OFF-DIAGONAL ELEMENT IN
 C        COLUMN K.
          IMAX = IDAMAX(K-1,AP(IK+1),1)
          IMK = IK + IMAX
-         COLMAX = DABS(AP(IMK))
+         COLMAX = ABS(AP(IMK))
          IF (ABSAKK .LT. ALPHA*COLMAX) GO TO 30
             KSTEP = 1
             SWAP = .FALSE.
@@ -35760,16 +35763,16 @@ C           ROW IMAX.
             IM = IMAX*(IMAX - 1)/2
             IMJ = IM + 2*IMAX
             DO J = IMAXP1, K
-               ROWMAX = DMAX1(ROWMAX,DABS(AP(IMJ)))
+               ROWMAX = MAX(ROWMAX,ABS(AP(IMJ)))
                IMJ = IMJ + J
             END DO
             IF (IMAX .EQ. 1) GO TO 50
                JMAX = IDAMAX(IMAX-1,AP(IM+1),1)
                JMIM = JMAX + IM
-               ROWMAX = DMAX1(ROWMAX,DABS(AP(JMIM)))
+               ROWMAX = MAX(ROWMAX,ABS(AP(JMIM)))
    50       CONTINUE
             IMIM = IMAX + IM
-            IF (DABS(AP(IMIM)) .LT. ALPHA*ROWMAX) GO TO 60
+            IF (ABS(AP(IMIM)) .LT. ALPHA*ROWMAX) GO TO 60
                KSTEP = 1
                SWAP = .TRUE.
             GO TO 80
@@ -35783,7 +35786,7 @@ C           ROW IMAX.
                SWAP = IMAX .NE. KM1
    80       CONTINUE
    90    CONTINUE
-         IF (DMAX1(ABSAKK,COLMAX) .NE. 0.0D0) GO TO 100
+         IF (MAX(ABSAKK,COLMAX) .NE. 0.0D0) GO TO 100
 C           COLUMN K IS ZERO.  SET INFO AND ITERATE THE LOOP.
             KPVT(K) = K
             INFO = K
@@ -35943,7 +35946,7 @@ C           APPLY D INVERSE.
 C           2 X 2 PIVOT BLOCK.
             IKM1 = IK - (K - 1)
             IF (K .EQ. 2) GO TO 60
-               KP = IABS(KPVT(K))
+               KP = ABS(KPVT(K))
                IF (KP .EQ. K - 1) GO TO 50
 C                 INTERCHANGE.
                   TEMP = B(K-1)
@@ -35997,7 +36000,7 @@ C              APPLY THE TRANSFORMATION.
                B(K) = B(K) + DDOT(K-1,AP(IK+1),1,B(1),1)
                IKP1 = IK + K
                B(K+1) = B(K+1) + DDOT(K-1,AP(IKP1+1),1,B(1),1)
-               KP = IABS(KPVT(K))
+               KP = ABS(KPVT(K))
                IF (KP .EQ. K) GO TO 130
 C                 INTERCHANGE.
                   TEMP = B(K)
@@ -36097,7 +36100,7 @@ C              TAKE TWO PASSES THROUGH SCALING.  USE  T  FOR FLAG.
                IF (T .NE. 0.0D0) GO TO 30
                   IKP1 = IK + K
                   KKP1 = IKP1 + K
-                  T = DABS(AP(KKP1))
+                  T = ABS(AP(KKP1))
                   D = (D/T)*AP(KKP1+1) - T
                GO TO 40
    30          CONTINUE
@@ -36113,12 +36116,12 @@ C              TAKE TWO PASSES THROUGH SCALING.  USE  T  FOR FLAG.
             IF (NODET) GO TO 120
                DET(1) = D*DET(1)
                IF (DET(1) .EQ. 0.0D0) GO TO 110
-   70             IF (DABS(DET(1)) .GE. 1.0D0) GO TO 80
+   70             IF (ABS(DET(1)) .GE. 1.0D0) GO TO 80
                      DET(1) = TEN*DET(1)
                      DET(2) = DET(2) - 1.0D0
                   GO TO 70
    80             CONTINUE
-   90             IF (DABS(DET(1)) .LT. TEN) GO TO 100
+   90             IF (ABS(DET(1)) .LT. TEN) GO TO 100
                      DET(1) = DET(1)/TEN
                      DET(2) = DET(2) + 1.0D0
                   GO TO 90
@@ -36155,7 +36158,7 @@ C              1 BY 1
             GO TO 220
   180       CONTINUE
 C              2 BY 2
-               T = DABS(AP(KKP1))
+               T = ABS(AP(KKP1))
                AK = AP(KK)/T
                AKP1 = AP(KKP1+1)/T
                AKKP1 = AP(KKP1)/T
@@ -36189,7 +36192,7 @@ C              2 BY 2
                KSTEP = 2
   220       CONTINUE
 C           SWAP
-            KS = IABS(KPVT(K))
+            KS = ABS(KPVT(K))
             IF (KS .EQ. K) GO TO 250
                IKS = (KS*(KS - 1))/2
                CALL DSWAP(KS,AP(IKS+1),1,AP(IK+1),1)
@@ -36561,7 +36564,7 @@ C     BEGIN BLOCK WITH ...EXITS TO 40
             S = AP(JJ) - S
 C     ......EXIT
             IF (S .LE. 0.0D0) GO TO 40
-            AP(JJ) = DSQRT(S)
+            AP(JJ) = SQRT(S)
          END DO
          INFO = 0
    40 CONTINUE
@@ -37063,7 +37066,7 @@ C                FORM A NEW APPROXIMATE SOLUTION
       RAT = RATIO
       RATIO = RNRM/XNRM
       IF (RATIO .LE. 0.25*RAT) GO TO 20
-      IF (RATIO .GT. AMIN1(RAT,4.0*EPS2)) IND = 1
+      IF (RATIO .GT. MIN(RAT,4.0*EPS2)) IND = 1
       END SUBROUTINE CLUIMP
 
       SUBROUTINE CGECO(A,LDA,N,IPVT,RCOND,Z)
@@ -37128,7 +37131,7 @@ C     INTERNAL VARIABLES
 C     COMPUTE 1-NORM OF A
       ANORM = 0.0E0
       DO J = 1, N
-         ANORM = AMAX1(ANORM,SCASUM(N,A(1,J),1))
+         ANORM = MAX(ANORM,SCASUM(N,A(1,J),1))
       END DO
 C     FACTOR
       CALL CGEFA(A,LDA,N,IPVT,INFO)
@@ -37579,10 +37582,10 @@ C-----------------------------------------------------------------------
       DO K = 1,NM1
          KP1 = K + 1
 C               SEARCH FOR THE K-TH PIVOT ELEMENT
-         P = DABS(AR(K,K)) + DABS(AI(K,K))
+         P = ABS(AR(K,K)) + ABS(AI(K,K))
          L = K
          DO I = KP1,N
-            T = DABS(AR(I,K)) + DABS(AI(I,K))
+            T = ABS(AR(I,K)) + ABS(AI(I,K))
             IF (P .GE. T) GO TO 10
             P = T
             L = I
@@ -37614,7 +37617,7 @@ C              INTERCHANGE AND ELIMINATE BY COLUMNS
             TI = AI(L,J)
             AI(L,J) = AI(K,J)
             AI(K,J) = TI
-            IF (DABS(TR) + DABS(TI) .EQ. 0.D0) GO TO 31
+            IF (ABS(TR) + ABS(TI) .EQ. 0.D0) GO TO 31
             DO I = KP1,N
                AR(I,J) = AR(I,J) - AR(I,K)*TR + AI(I,K)*TI
                AI(I,J) = AI(I,J) - AR(I,K)*TI - AI(I,K)*TR
@@ -37623,7 +37626,7 @@ C              INTERCHANGE AND ELIMINATE BY COLUMNS
          END DO
       END DO
 C                  CHECK THE N-TH PIVOT ELEMENT
-   50 IF (DABS(AR(N,N)) + DABS(AI(N,N)) .EQ. 0.D0) IERR = N
+   50 IF (ABS(AR(N,N)) + ABS(AI(N,N)) .EQ. 0.D0) IERR = N
       RETURN
 C                    K-TH PIVOT ELEMENT IS 0
   100 IERR = K
@@ -37669,7 +37672,7 @@ C                    FORWARD ELIMINATION
             TI = BI(L,J)
             BI(L,J) = BI(K,J)
             BI(K,J) = TI
-            IF (DABS(TR) + DABS(TI) .EQ. 0.D0) GO TO 11
+            IF (ABS(TR) + ABS(TI) .EQ. 0.D0) GO TO 11
             DO I = KP1, N
                BR(I,J) = BR(I,J) - AR(I,K)*TR + AI(I,K)*TI
                BI(I,J) = BI(I,J) - AR(I,K)*TI - AI(I,K)*TR
@@ -37878,15 +37881,15 @@ C     DETERMINE WHAT IS TO BE COMPUTED.
       WANTV = .FALSE.
       JOBU = MOD(JOB,100)/10
       NCU = N
-      IF (JOBU .GT. 1) NCU = MIN0(N,P)
+      IF (JOBU .GT. 1) NCU = MIN(N,P)
       IF (JOBU .NE. 0) WANTU = .TRUE.
       IF (MOD(JOB,10) .NE. 0) WANTV = .TRUE.
 C     REDUCE X TO BIDIAGONAL FORM, STORING THE DIAGONAL ELEMENTS
 C     IN S AND THE SUPER-DIAGONAL ELEMENTS IN E.
       INFO = 0
-      NCT = MIN0(N-1,P)
-      NRT = MAX0(0,MIN0(P-2,N))
-      LU = MAX0(NCT,NRT)
+      NCT = MIN(N-1,P)
+      NRT = MAX(0,MIN(P-2,N))
+      LU = MAX(NCT,NRT)
       IF (LU .LT. 1) GO TO 170
       DO L = 1, LU
          LP1 = L + 1
@@ -37954,7 +37957,7 @@ C              BACK MULTIPLICATION.
       END DO
   170 CONTINUE
 C     SET UP THE FINAL BIDIAGONAL MATRIX OF ORDER M.
-      M = MIN0(P,N+1)
+      M = MIN(P,N+1)
       NCTP1 = NCT + 1
       NRTP1 = NRT + 1
       IF (NCT .LT. P) S(NCTP1) = X(NCTP1,NCTP1)
@@ -38120,7 +38123,7 @@ C        SPLIT AT NEGLIGIBLE S(L).
 C        PERFORM ONE QR STEP.
   540    CONTINUE
 C           CALCULATE THE SHIFT.
-            SCALE = AMAX1(ABS(S(M)),ABS(S(M-1)),ABS(E(M-1)),ABS(S(L)),
+            SCALE = MAX(ABS(S(M)),ABS(S(M-1)),ABS(E(M-1)),ABS(S(L)),
      *                    ABS(E(L)))
             SM = S(M)/SCALE
             SMM1 = S(M-1)/SCALE
@@ -38282,15 +38285,15 @@ C     DETERMINE WHAT IS TO BE COMPUTED.
       WANTV = .FALSE.
       JOBU = MOD(JOB,100)/10
       NCU = N
-      IF (JOBU .GT. 1) NCU = MIN0(N,P)
+      IF (JOBU .GT. 1) NCU = MIN(N,P)
       IF (JOBU .NE. 0) WANTU = .TRUE.
       IF (MOD(JOB,10) .NE. 0) WANTV = .TRUE.
 C     REDUCE X TO BIDIAGONAL FORM, STORING THE DIAGONAL ELEMENTS
 C     IN S AND THE SUPER-DIAGONAL ELEMENTS IN E.
       INFO = 0
-      NCT = MIN0(N-1,P)
-      NRT = MAX0(0,MIN0(P-2,N))
-      LU = MAX0(NCT,NRT)
+      NCT = MIN(N-1,P)
+      NRT = MAX(0,MIN(P-2,N))
+      LU = MAX(NCT,NRT)
       IF (LU .LT. 1) GO TO 170
       DO L = 1, LU
          LP1 = L + 1
@@ -38299,7 +38302,7 @@ C           COMPUTE THE TRANSFORMATION FOR THE L-TH COLUMN AND
 C           PLACE THE L-TH DIAGONAL IN S(L).
             S(L) = DNRM2(N-L+1,X(L,L),1)
             IF (S(L) .EQ. 0.0D0) GO TO 10
-               IF (X(L,L) .NE. 0.0D0) S(L) = DSIGN(S(L),X(L,L))
+               IF (X(L,L) .NE. 0.0D0) S(L) = SIGN(S(L),X(L,L))
                CALL DSCAL(N-L+1,1.0D0/S(L),X(L,L),1)
                X(L,L) = 1.0D0 + X(L,L)
    10       CONTINUE
@@ -38330,7 +38333,7 @@ C           COMPUTE THE L-TH ROW TRANSFORMATION AND PLACE THE
 C           L-TH SUPER-DIAGONAL IN E(L).
             E(L) = DNRM2(P-L,E(LP1),1)
             IF (E(L) .EQ. 0.0D0) GO TO 80
-               IF (E(LP1) .NE. 0.0D0) E(L) = DSIGN(E(L),E(LP1))
+               IF (E(LP1) .NE. 0.0D0) E(L) = SIGN(E(L),E(LP1))
                CALL DSCAL(P-L,1.0D0/E(L),E(LP1),1)
                E(LP1) = 1.0D0 + E(LP1)
    80       CONTINUE
@@ -38358,7 +38361,7 @@ C              BACK MULTIPLICATION.
       END DO
   170 CONTINUE
 C     SET UP THE FINAL BIDIAGONAL MATRIX OF ORDER M.
-      M = MIN0(P,N+1)
+      M = MIN(P,N+1)
       NCTP1 = NCT + 1
       NRTP1 = NRT + 1
       IF (NCT .LT. P) S(NCTP1) = X(NCTP1,NCTP1)
@@ -38448,8 +38451,8 @@ C           KASE = 4     IF E(M-1) IS NEGLIGIBLE (CONVERGENCE).
             L = M - LL
 C        ...EXIT
             IF (L .EQ. 0) EXIT
-            TEST = DABS(S(L)) + DABS(S(L+1))
-            ZTEST = TEST + DABS(E(L))
+            TEST = ABS(S(L)) + ABS(S(L+1))
+            ZTEST = TEST + ABS(E(L))
             IF (ZTEST .NE. TEST) GO TO 380
                E(L) = 0.0D0
 C        ......EXIT
@@ -38467,9 +38470,9 @@ C        ......EXIT
 C           ...EXIT
                IF (LS .EQ. L) EXIT
                TEST = 0.0D0
-               IF (LS .NE. M) TEST = TEST + DABS(E(LS))
-               IF (LS .NE. L + 1) TEST = TEST + DABS(E(LS-1))
-               ZTEST = TEST + DABS(S(LS))
+               IF (LS .NE. M) TEST = TEST + ABS(E(LS))
+               IF (LS .NE. L + 1) TEST = TEST + ABS(E(LS-1))
+               ZTEST = TEST + ABS(S(LS))
                IF (ZTEST .NE. TEST) GO TO 420
                   S(LS) = 0.0D0
 C           ......EXIT
@@ -38524,8 +38527,8 @@ C        SPLIT AT NEGLIGIBLE S(L).
 C        PERFORM ONE QR STEP.
   540    CONTINUE
 C           CALCULATE THE SHIFT.
-            SCALE = DMAX1(DABS(S(M)),DABS(S(M-1)),DABS(E(M-1)),
-     *                    DABS(S(L)),DABS(E(L)))
+            SCALE = MAX(ABS(S(M)),ABS(S(M-1)),ABS(E(M-1)),
+     *                    ABS(S(L)),ABS(E(L)))
             SM = S(M)/SCALE
             SMM1 = S(M-1)/SCALE
             EMM1 = E(M-1)/SCALE
@@ -38535,7 +38538,7 @@ C           CALCULATE THE SHIFT.
             C = (SM*EMM1)**2
             SHIFT = 0.0D0
             IF (B .EQ. 0.0D0 .AND. C .EQ. 0.0D0) GO TO 550
-               SHIFT = DSQRT(B**2+C)
+               SHIFT = SQRT(B**2+C)
                IF (B .LT. 0.0D0) SHIFT = -SHIFT
                SHIFT = C/(B + SHIFT)
   550       CONTINUE
@@ -38683,7 +38686,7 @@ C     FORTRAN ABS,AIMAG,AMAX1,CABS,CMPLX
 C     FORTRAN CONJG,MAX0,MIN0,MOD,REAL,SQRT
 C     INTERNAL VARIABLES
       CABS1(ZDUM) = ABS(REAL(ZDUM)) + ABS(AIMAG(ZDUM))
-      CSIGN(ZDUM1,ZDUM2) = CABS(ZDUM1)*(ZDUM2/CABS(ZDUM2))
+      CSIGN(ZDUM1,ZDUM2) = ABS(ZDUM1)*(ZDUM2/ABS(ZDUM2))
 C     SET THE MAXIMUM NUMBER OF ITERATIONS.
       MAXIT = 30
 C     DETERMINE WHAT IS TO BE COMPUTED.
@@ -38691,15 +38694,15 @@ C     DETERMINE WHAT IS TO BE COMPUTED.
       WANTV = .FALSE.
       JOBU = MOD(JOB,100)/10
       NCU = N
-      IF (JOBU .GT. 1) NCU = MIN0(N,P)
+      IF (JOBU .GT. 1) NCU = MIN(N,P)
       IF (JOBU .NE. 0) WANTU = .TRUE.
       IF (MOD(JOB,10) .NE. 0) WANTV = .TRUE.
 C     REDUCE X TO BIDIAGONAL FORM, STORING THE DIAGONAL ELEMENTS
 C     IN S AND THE SUPER-DIAGONAL ELEMENTS IN E.
       INFO = 0
-      NCT = MIN0(N-1,P)
-      NRT = MAX0(0,MIN0(P-2,N))
-      LU = MAX0(NCT,NRT)
+      NCT = MIN(N-1,P)
+      NRT = MAX(0,MIN(P-2,N))
+      LU = MAX(NCT,NRT)
       IF (LU .LT. 1) GO TO 170
       DO L = 1, LU
          LP1 = L + 1
@@ -38768,7 +38771,7 @@ C              BACK MULTIPLICATION.
       END DO
   170 CONTINUE
 C     SET UP THE FINAL BIDIAGONAL MATRIX OF ORDER M.
-      M = MIN0(P,N+1)
+      M = MIN(P,N+1)
       NCTP1 = NCT + 1
       NRTP1 = NRT + 1
       IF (NCT .LT. P) S(NCTP1) = X(NCTP1,NCTP1)
@@ -38835,7 +38838,7 @@ C     IF IT IS REQUIRED, GENERATE V.
 C     TRANSFORM S AND E SO THAT THEY ARE REAL.
       DO I = 1, M
          IF (CABS1(S(I)) .EQ. 0.0E0) GO TO 360
-            T = CMPLX(CABS(S(I)),0.0E0)
+            T = CMPLX(ABS(S(I)),0.0E0)
             R = S(I)/T
             S(I) = T
             IF (I .LT. M) E(I) = E(I)/R
@@ -38844,7 +38847,7 @@ C     TRANSFORM S AND E SO THAT THEY ARE REAL.
 C     ...EXIT
          IF (I .EQ. M) EXIT
          IF (CABS1(E(I)) .EQ. 0.0E0) GO TO 370
-            T = CMPLX(CABS(E(I)),0.0E0)
+            T = CMPLX(ABS(E(I)),0.0E0)
             R = T/E(I)
             E(I) = T
             S(I+1) = S(I+1)*R
@@ -38877,8 +38880,8 @@ C           KASE = 4     IF E(M-1) IS NEGLIGIBLE (CONVERGENCE).
             L = M - LL
 C        ...EXIT
             IF (L .EQ. 0) EXIT
-            TEST = CABS(S(L)) + CABS(S(L+1))
-            ZTEST = TEST + CABS(E(L))
+            TEST = ABS(S(L)) + ABS(S(L+1))
+            ZTEST = TEST + ABS(E(L))
             IF (ZTEST .NE. TEST) GO TO 420
                E(L) = (0.0E0,0.0E0)
 C        ......EXIT
@@ -38896,9 +38899,9 @@ C        ......EXIT
 C           ...EXIT
                IF (LS .EQ. L) EXIT
                TEST = 0.0E0
-               IF (LS .NE. M) TEST = TEST + CABS(E(LS))
-               IF (LS .NE. L + 1) TEST = TEST + CABS(E(LS-1))
-               ZTEST = TEST + CABS(S(LS))
+               IF (LS .NE. M) TEST = TEST + ABS(E(LS))
+               IF (LS .NE. L + 1) TEST = TEST + ABS(E(LS-1))
+               ZTEST = TEST + ABS(S(LS))
                IF (ZTEST .NE. TEST) GO TO 460
                   S(LS) = (0.0E0,0.0E0)
 C           ......EXIT
@@ -38953,8 +38956,8 @@ C        SPLIT AT NEGLIGIBLE S(L).
 C        PERFORM ONE QR STEP.
   580    CONTINUE
 C           CALCULATE THE SHIFT.
-            SCALE = AMAX1(CABS(S(M)),CABS(S(M-1)),CABS(E(M-1)),
-     *                    CABS(S(L)),CABS(E(L)))
+            SCALE = MAX(ABS(S(M)),ABS(S(M-1)),ABS(E(M-1)),
+     *                    ABS(S(L)),ABS(E(L)))
             SM = REAL(S(M))/SCALE
             SMM1 = REAL(S(M-1))/SCALE
             EMM1 = REAL(E(M-1))/SCALE
@@ -39110,10 +39113,10 @@ C                INITIALIZATION
       DO K=1,NM1
       KP1 = K + 1
 C       SEARCH FOR THE K-TH PIVOT ELEMENT
-      S = DABS(A(K,K))
+      S = ABS(A(K,K))
       L = K
       DO I=KP1,N
-      C = DABS(A(I,K))
+      C = ABS(A(I,K))
       IF (S .GE. C) GO TO 30
       S = C
       L = I
@@ -39548,7 +39551,7 @@ C     ********** ROW MODIFICATION **********
   150     H(K+1,J) = H(K+1,J) - P*Y
           H(K,J) = H(K,J) - P*X
         END DO
-        J = MIN0(EN,K+3)
+        J = MIN(EN,K+3)
 C     ********** COLUMN MODIFICATION **********
         DO I = 1,J
           P = X*H(I,K) + Y*H(I,K+1)
@@ -39986,7 +39989,7 @@ C     ********** STORE ROOTS ISOLATED BY BALANC
 C                AND COMPUTE MATRIX NORM **********
       DO I = 1,N
         DO J = K,N
-          NORM = NORM + DABS(H(I,J))
+          NORM = NORM + ABS(H(I,J))
         END DO
         K = I
         IF (I .GE. LOW .AND. I .LE. IGH) GO TO 20
@@ -40006,10 +40009,10 @@ C                FOR L=EN STEP -1 UNTIL LOW DO -- **********
    40 DO LL = LOW,EN
         L = EN + LOW - LL
         IF (L .EQ. LOW) EXIT
-        S = DABS(H(L-1,L-1)) + DABS(H(L,L))
+        S = ABS(H(L-1,L-1)) + ABS(H(L,L))
         IF (S .EQ. 0.D0) S = NORM
         S1 = S
-        S2 = S1 + DABS(H(L,L-1))
+        S2 = S1 + ABS(H(L,L-1))
         IF (S1 .EQ. S2) EXIT
       END DO
 C     ********** FORM SHIFT **********
@@ -40025,7 +40028,7 @@ C     ********** FORM EXCEPTIONAL SHIFT **********
       DO I = LOW,EN
         H(I,I) = H(I,I) - X
       END DO
-      S = DABS(H(EN,NA)) + DABS(H(NA,ENM2))
+      S = ABS(H(EN,NA)) + ABS(H(NA,ENM2))
       X = 0.75D0*S
       Y = X
       W = -0.4375D0*S*S
@@ -40041,13 +40044,13 @@ C                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
         P = (R*S-W)/H(M+1,M) + H(M,M+1)
         Q = H(M+1,M+1) - ZZ - R - S
         R = H(M+2,M+1)
-        S = DABS(P) + DABS(Q) + DABS(R)
+        S = ABS(P) + ABS(Q) + ABS(R)
         P = P/S
         Q = Q/S
         R = R/S
         IF (M .EQ. L) EXIT
-        S1 = DABS(P)*(DABS(H(M-1,M-1))+DABS(ZZ)+DABS(H(M+1,M+1)))
-        S2 = S1 + DABS(H(M,M-1))*(DABS(Q) + DABS(R))
+        S1 = ABS(P)*(ABS(H(M-1,M-1))+ABS(ZZ)+ABS(H(M+1,M+1)))
+        S2 = S1 + ABS(H(M,M-1))*(ABS(Q) + ABS(R))
         IF (S1 .EQ. S2) EXIT
       END DO
       MP2 = M + 2
@@ -40066,12 +40069,12 @@ C                COLUMNS M TO EN **********
         Q = H(K+1,K-1)
         R = 0.D0
         IF (NOTLAS) R = H(K+2,K-1)
-        X = DABS(P) + DABS(Q) + DABS(R)
+        X = ABS(P) + ABS(Q) + ABS(R)
         IF (X .EQ. 0.D0) GO TO 210
         P = P/X
         Q = Q/X
         R = R/X
-  120   S = DSQRT(P*P + Q*Q + R*R)
+  120   S = SQRT(P*P + Q*Q + R*R)
         IF (P .LT. 0.D0) S = -S
         IF (K .EQ. M) GO TO 130
         H(K,K-1) = -S*X
@@ -40092,7 +40095,7 @@ C     ********** ROW MODIFICATION **********
   150     H(K+1,J) = H(K+1,J) - P*Y
           H(K,J) = H(K,J) - P*X
         END DO
-        J = MIN0(EN,K+3)
+        J = MIN(EN,K+3)
 C     ********** COLUMN MODIFICATION **********
         DO I = 1,J
           P = X*H(I,K) + Y*H(I,K+1)
@@ -40123,7 +40126,7 @@ C     ********** ONE ROOT FOUND **********
 C     ********** TWO ROOTS FOUND **********
   230 P = (Y - X)/2.D0
       Q = P*P + W
-      ZZ = DSQRT(DABS(Q))
+      ZZ = SQRT(ABS(Q))
       H(EN,EN) = X + T
       X = H(EN,EN)
       H(NA,NA) = Y + T
@@ -40137,10 +40140,10 @@ C     ********** REAL PAIR **********
       WI(NA) = 0.D0
       WI(EN) = 0.D0
       X = H(EN,NA)
-      S = DABS(X) + DABS(ZZ)
+      S = ABS(X) + ABS(ZZ)
       P = X/S
       Q = ZZ/S
-      R = DSQRT(P*P + Q*Q)
+      R = SQRT(P*P + Q*Q)
       P = P/R
       Q = Q/R
 C     ********** ROW MODIFICATION **********
@@ -40175,7 +40178,7 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
       RETURN
   300 DO I = 1,N
         IP1 = I + 1
-        IF (DABS(WI(I)) .NE. 0.D0) IP1 = IP1 + 1
+        IF (ABS(WI(I)) .NE. 0.D0) IP1 = IP1 + 1
         IF (IP1 .GT. N) GO TO 320
         DO J = IP1,N
           H(J,I) = 0.D0
@@ -40999,9 +41002,9 @@ C     ********** SET INITIAL GUESS(ES) **********
         BNI = 0.0
         CNI = 0.0
         DO J=1,N
-          ANI = ANI + CABS(A(I,J))
-          BNI = BNI + CABS(B(I,J))
-          CNI = CNI + CABS(C(I,J))
+          ANI = ANI + ABS(A(I,J))
+          BNI = BNI + ABS(B(I,J))
+          CNI = CNI + ABS(C(I,J))
         END DO
         IF (ANI.GT.ANORM) ANORM = ANI
         IF (BNI.GT.BNORM) BNORM = BNI
@@ -41055,8 +41058,8 @@ C        ********** CHECK FOR CONVERGENCE **********
           XNI = 0.0
           FXNI = 0.0
           DO J=1,N
-            XNI = XNI + CABS(XOLD(I,J))
-            FXNI = FXNI + CABS(S(I,J))
+            XNI = XNI + ABS(XOLD(I,J))
+            FXNI = FXNI + ABS(S(I,J))
           END DO
           IF (XNI.GT.XNORM) XNORM = XNI
           IF (FXNI.GT.FXNORM) FXNORM = FXNI
@@ -41212,18 +41215,18 @@ C     ********** REDUCE B TO UPPER TRIANGULAR FORM **********
         L1 = L + 1
         S = 0.0
         DO I=L1,N
-          S = S + CABS(B(I,L))
+          S = S + ABS(B(I,L))
         END DO
         IF (S.EQ.0.0) GO TO 130
-        S = S + CABS(B(L,L))
+        S = S + ABS(B(L,L))
         R = 0.0
         DO I=L,N
           B(I,L) = B(I,L)/CMPLX(S,0.0)
-          R = R + CABS(B(I,L))**2
+          R = R + ABS(B(I,L))**2
         END DO
         R = SQRT(R)
         RR = CMPLX(R,0.0)
-        IF (CABS(B(L,L)).NE.0.0) RR = (B(L,L)/CABS(B(L,L)))*RR
+        IF (ABS(B(L,L)).NE.0.0) RR = (B(L,L)/ABS(B(L,L)))*RR
         B(L,L) = B(L,L) + RR
         RHO = CONJG(RR)*B(L,L)
         DO J=L1,N
@@ -41280,13 +41283,13 @@ C                KEEPING B TRIANGULAR **********
           L = N - LB
           L1 = L + 1
 C     ********** ZERO A(L+1,K) **********
-          S = CABS(A(L,K)) + CABS(A(L1,K))
+          S = ABS(A(L,K)) + ABS(A(L1,K))
           IF (S.EQ.0.0) GO TO 240
           U1 = A(L,K)/CMPLX(S,0.0)
           U2 = A(L1,K)/CMPLX(S,0.0)
-          R = SQRT(CABS(U1)**2+CABS(U2)**2)
+          R = SQRT(ABS(U1)**2+ABS(U2)**2)
           RR = CMPLX(R,0.0)
-          IF (CABS(U1).NE.0.0) RR = (U1/CABS(U1))*RR
+          IF (ABS(U1).NE.0.0) RR = (U1/ABS(U1))*RR
           V1 = -(U1+RR)/RR
           V2 = -U2/RR
           U2 = V2/V1
@@ -41317,13 +41320,13 @@ C     ********** ZERO A(L+1,K) **********
             H(L1,J) = H(L1,J) + TH*V2
           END DO
 C     ********** ZERO B(L+1,L) **********
-  200     S = CABS(B(L1,L1)) + CABS(B(L1,L))
+  200     S = ABS(B(L1,L1)) + ABS(B(L1,L))
           IF (S.EQ.0.0) GO TO 240
           U1 = B(L1,L1)/CMPLX(S,0.0)
           U2 = B(L1,L)/CMPLX(S,0.0)
-          R = SQRT(CABS(U1)**2+CABS(U2)**2)
+          R = SQRT(ABS(U1)**2+ABS(U2)**2)
           RR = CMPLX(R,0.0)
-          IF (CABS(U1).NE.0.0) RR = (U1/CABS(U1))*RR
+          IF (ABS(U1).NE.0.0) RR = (U1/ABS(U1))*RR
           V1 = -(U1+RR)/RR
           V2 = -U2/RR
           U2 = V2/V1
@@ -41406,11 +41409,11 @@ C     ********** COMPUTE EPSA, EPSB **********
       BNORM = 0.0
       DO I=1,N
         ANI = 0.0
-        IF (I.NE.1) ANI = CABS(A(I,I-1))
+        IF (I.NE.1) ANI = ABS(A(I,I-1))
         BNI = 0.0
         DO J=I,N
-          ANI = ANI + CABS(A(I,J))
-          BNI = BNI + CABS(B(I,J))
+          ANI = ANI + ABS(A(I,J))
+          BNI = BNI + ABS(B(I,J))
         END DO
         IF (ANI.GT.ANORM) ANORM = ANI
         IF (BNI.GT.BNORM) BNORM = BNI
@@ -41441,7 +41444,7 @@ C     ********** CHECK FOR CONVERGENCE OR REDUCIBILITY **********
         LM1 = EN - LL
         L = LM1 + 1
         IF (L.EQ.1) GO TO 90
-        IF (CABS(A(L , LM1)) .LE. EPSA) EXIT
+        IF (ABS(A(L , LM1)) .LE. EPSA) EXIT
       END DO
    80 A(L,LM1) = CMPLX(0.0,0.0)
       IF (L.LT.NA) GO TO 90
@@ -41452,14 +41455,14 @@ C     ********** CHECK FOR SMALL TOP OF B **********
    90 LD = L
       L1 = L + 1
       B11 = B(L,L)
-      IF (CABS(B11).GT.EPSB) GO TO 120
+      IF (ABS(B11).GT.EPSB) GO TO 120
       B(L,L) = CMPLX(0.0,0.0)
-      S = CABS(A(L,L)) + CABS(A(L1,L))
+      S = ABS(A(L,L)) + ABS(A(L1,L))
       U1 = A(L,L)/CMPLX(S,0.0)
       U2 = A(L1,L)/CMPLX(S,0.0)
-      R = SQRT(CABS(U1)**2+CABS(U2)**2)
+      R = SQRT(ABS(U1)**2+ABS(U2)**2)
       RR = CMPLX(R,0.0)
-      IF (CABS(U1).NE.0.0) RR = (U1/CABS(U1))*RR
+      IF (ABS(U1).NE.0.0) RR = (U1/ABS(U1))*RR
       V1 = -(U1+RR)/RR
       V2 = -U2/RR
       U2 = V2/V1
@@ -41488,11 +41491,11 @@ C     ********** ITERATION STRATEGY **********
       IF (ITS.EQ.50) GO TO 210
 C     ********** DETERMINE SHIFT **********
       B22 = B(L1,L1)
-      IF (CABS(B22).LT.EPSB) B22 = CMPLX(EPSB,0.0)
+      IF (ABS(B22).LT.EPSB) B22 = CMPLX(EPSB,0.0)
       B33 = B(NA,NA)
-      IF (CABS(B33).LT.EPSB) B33 = CMPLX(EPSB,0.0)
+      IF (ABS(B33).LT.EPSB) B33 = CMPLX(EPSB,0.0)
       B44 = B(EN,EN)
-      IF (CABS(B44).LT.EPSB) B44 = CMPLX(EPSB,0.0)
+      IF (ABS(B44).LT.EPSB) B44 = CMPLX(EPSB,0.0)
       A33 = A(NA,NA)/B33
       A34 = A(NA,EN)/B44
       A43 = A(EN,NA)/B33
@@ -41501,10 +41504,10 @@ C     ********** DETERMINE SHIFT **********
       T = CMPLX(0.5,0.0)*(A43*B34-A33-A44)
       RR = T*T + A34*A43 - A33*A44
 C     ********** DETERMINE SINGLE SHIFT ZEROTH COLUMN OF A **********
-      RR = CSQRT(RR)
+      RR = SQRT(RR)
       SH = -T + RR
       SS = -T - RR
-      IF (CABS(SS-A44).LT.CABS(SH-A44)) SH = SS
+      IF (ABS(SS-A44).LT.ABS(SH-A44)) SH = SS
       A1 = A11 - SH
       A2 = A21
       IF (L.NE.LD) A(L,LM1) = -A(L,LM1)
@@ -41517,19 +41520,19 @@ C     ********** MAIN LOOP **********
       DO K=L,NA
         K1 = K + 1
         K2 = K + 2
-        KM1 = MAX0(K-1,L)
-        LL = MIN0(EN,K1+ISH)
+        KM1 = MAX(K-1,L)
+        LL = MIN(EN,K1+ISH)
 C     ********** ZERO A(K+1,K-1) **********
         IF (K.EQ.L) GO TO 140
         A1 = A(K,KM1)
         A2 = A(K1,KM1)
-  140   S = CABS(A1) + CABS(A2)
+  140   S = ABS(A1) + ABS(A2)
         IF (S.EQ.0.0) GO TO 60
         U1 = A1/CMPLX(S,0.0)
         U2 = A2/CMPLX(S,0.0)
-        R = SQRT(CABS(U1)**2+CABS(U2)**2)
+        R = SQRT(ABS(U1)**2+ABS(U2)**2)
         RR = CMPLX(R,0.0)
-        IF (CABS(U1).NE.0.0) RR = (U1/CABS(U1))*RR
+        IF (ABS(U1).NE.0.0) RR = (U1/ABS(U1))*RR
         V1 = -(U1+RR)/RR
         V2 = -U2/RR
         U2 = V2/V1
@@ -41549,13 +41552,13 @@ C     ********** ZERO A(K+1,K-1) **********
           F(K1,J) = F(K1,J) + TF*V2
         END DO
 C     ********** ZERO B(K+1,K) **********
-  170   S = CABS(B(K1,K1)) + CABS(B(K1,K))
+  170   S = ABS(B(K1,K1)) + ABS(B(K1,K))
         IF (S.EQ.0.0) GO TO 200
         U1 = B(K1,K1)/CMPLX(S,0.0)
         U2 = B(K1,K)/CMPLX(S,0.0)
-        R = SQRT(CABS(U1)**2+CABS(U2)**2)
+        R = SQRT(ABS(U1)**2+ABS(U2)**2)
         RR = CMPLX(R,0.0)
-        IF (CABS(U1).NE.0.0) RR = (U1/CABS(U1))*RR
+        IF (ABS(U1).NE.0.0) RR = (U1/ABS(U1))*RR
         V1 = -(U1+RR)/RR
         V2 = -U2/RR
         U2 = V2/V1
@@ -41625,12 +41628,12 @@ C     COMPLEX CMPLX
       DO KK=1,N
 C        ********** BACKSUBSTITUTE FOR ROW K. **********
         K = N - KK + 1
-        IF (CABS(F(K,N)).NE.0.0) GO TO 10
+        IF (ABS(F(K,N)).NE.0.0) GO TO 10
         F(K,N) = CMPLX(0.0,0.0)
         GO TO 30
    10   DENOM = U(K,K) + V(K,K)*L(N,N)
-        S = CABS(DENOM)
-        T = 1.0 + S/CABS(F(K,N))
+        S = ABS(DENOM)
+        T = 1.0 + S/ABS(F(K,N))
         IF (T.GT.1.0) GO TO 20
         IERR = 1
         RETURN
@@ -41644,12 +41647,12 @@ C        ********** BACKSUBSTITUTE FOR ROW K. **********
             SUM = SUM + F(K,M)*L(M,J)
           END DO
           SUM = F(K,J) - V(K,K)*SUM
-          IF (CABS(SUM).NE.0.0) GO TO 50
+          IF (ABS(SUM).NE.0.0) GO TO 50
           F(K,J) = CMPLX(0.0,0.0)
           GO TO 70
    50     DENOM = U(K,K) + V(K,K)*L(J,J)
-          S = CABS(DENOM)
-          T = 1.0 + S/CABS(SUM)
+          S = ABS(DENOM)
+          T = 1.0 + S/ABS(SUM)
           IF (T.GT.1.0) GO TO 60
           IERR = 1
           RETURN
@@ -41720,10 +41723,10 @@ C              AND INFINITY-NORM OF THE RESULT
          S = S + ABS(A(J,I))
          S1 = S1 + ABS(A(I,J))
          END DO
-      ANORM = AMAX1(S,ANORM)
-      ANORM1 = AMAX1(S1,ANORM1)
+      ANORM = MAX(S,ANORM)
+      ANORM1 = MAX(S1,ANORM1)
       END DO
-      ANORM = AMIN1(ANORM,ANORM1)
+      ANORM = MIN(ANORM,ANORM1)
       S = ANORM + 0.1
       IF (S .EQ. ANORM) GO TO 200
 C              SELECT THE NORMALIZATION FACTOR
@@ -41854,7 +41857,7 @@ C     ---------------
 C ----------------------------------------------------------------------
       IERR = 0
       IF (N .GT. 1) GO TO 10
-         Z(1,1) = DEXP(A(1,1))
+         Z(1,1) = EXP(A(1,1))
          RETURN
 C       BALANCE A AND SELECT THE SMALLER OF THE 1-NORM
 C              AND INFINITY-NORM OF THE RESULT
@@ -41865,13 +41868,13 @@ C              AND INFINITY-NORM OF THE RESULT
       S = 0.D0
       S1 = 0.D0
          DO I = 1,N
-         S = S + DABS(A(J,I))
-         S1 = S1 + DABS(A(I,J))
+         S = S + ABS(A(J,I))
+         S1 = S1 + ABS(A(I,J))
          END DO
-      ANORM = DMAX1(S,ANORM)
-      ANORM1 = DMAX1(S1,ANORM1)
+      ANORM = MAX(S,ANORM)
+      ANORM1 = MAX(S1,ANORM1)
       END DO
-      ANORM = DMIN1(ANORM,ANORM1)
+      ANORM = MIN(ANORM,ANORM1)
       S = ANORM + 0.1D0
       IF (S .EQ. ANORM) GO TO 200
 C              SELECT THE NORMALIZATION FACTOR
@@ -42134,7 +42137,7 @@ C     GET THE FIRST COLUMN OF THE TRANSPOSED SYSTEM
 C     FIND THE PIVOT FOR COLUMN 1
    10 M = 1
       DO I = 2,N
-      IF (DABS(C(M)) .LT. DABS(C(I))) M = I
+      IF (ABS(C(M)) .LT. ABS(C(I))) M = I
       END DO
       IP(1) = M
       C1 = C(M)
@@ -42188,7 +42191,7 @@ C       K=N CASE
       GO TO 90
 C     FIND THE PIVOT
    70 DO I = KP1,N
-      IF (DABS(C(M)) .LT. DABS(C(I))) M = I
+      IF (ABS(C(M)) .LT. ABS(C(I))) M = I
       END DO
       IP(K) = M
       CK = C(M)
@@ -42407,7 +42410,7 @@ C-----------------------------------------------------------------------
 C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
       IF (ML .EQ. 0) GO TO 20
       DO I = 1,ML
-         JMAX = MIN0(N,I + MU)
+         JMAX = MIN(N,I + MU)
          K = ML + 1 - I
          DO J = 1,JMAX
             K = K + 1
@@ -42416,11 +42419,11 @@ C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
       END DO
 C     STORE THE REMAINING NONZERO DATA
    20 IMIN = ML + 1
-      IMAX = MIN0(M,ML + N)
+      IMAX = MIN(M,ML + N)
       L = 0
       DO I = IMIN,IMAX
          JMIN = I - ML
-         JMAX = MIN0(N,I + MU)
+         JMAX = MIN(N,I + MU)
          J = JMAX
          DO JJ = JMIN,JMAX
             K = J - L
@@ -42437,7 +42440,7 @@ C     INSERT ZEROS IN THE UPPER RIGHT CORNER
          DO I = 1,IMAX0
             A(I,J) = 0.0
          END DO
-         IMAX0 = MIN0(IMAX,IMAX0 + 1)
+         IMAX0 = MIN(IMAX,IMAX0 + 1)
       END DO
 C     INSERT ZEROS IN THE LOWER LEFT CORNER
    40 IF (IMIN .EQ. IMAX) GO TO 50
@@ -42472,7 +42475,7 @@ C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
       IF (ML .EQ. 0) GO TO 30
       L = ML
       DO I = 1,ML
-         JMAX = MIN0(N,I + MU)
+         JMAX = MIN(N,I + MU)
          J = JMAX
          DO JJ = 1,JMAX
             K = J + L
@@ -42491,10 +42494,10 @@ C     INSERT ZEROS IN THE UPPER LEFT CORNER
       END DO
 C     STORE THE REMAINING NONZERO DATA
    30 IMIN = ML + 1
-      IMAX = MIN0(M,ML + N)
+      IMAX = MIN(M,ML + N)
       DO I = IMIN,IMAX
          JMIN = I - ML
-         JMAX = MIN0(N,I + MU)
+         JMAX = MIN(N,I + MU)
          K = 0
          DO J = JMIN,JMAX
             K = K + 1
@@ -42541,7 +42544,7 @@ C     COMPUTATION OF ML AND MU
       IF (M .EQ. 1) GO TO 20
       NSWC_EXIT_1 : DO L = 2 , M
          J = 1
-         IMAX = MIN0(M,IMIN + NM1)
+         IMAX = MIN(M,IMIN + NM1)
          DO I = IMIN,IMAX
             IF (A(I , J) .NE. 0.0) EXIT NSWC_EXIT_1
             J = J + 1
@@ -42553,7 +42556,7 @@ C     COMPUTATION OF ML AND MU
       IF (N .EQ. 1) GO TO 30
       NSWC_EXIT_2 : DO L = 2 , N
          I = 1
-         JMAX = MIN0(N,JMIN + MM1)
+         JMAX = MIN(N,JMIN + MM1)
          DO J = JMIN,JMAX
             IF (A(I , J) .NE. 0.0) EXIT NSWC_EXIT_2
             I = I + 1
@@ -42585,7 +42588,7 @@ C-----------------------------------------------------------------------
 C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
       IF (ML .EQ. 0) GO TO 20
       DO I = 1,ML
-         JMAX = MIN0(N,I + MU)
+         JMAX = MIN(N,I + MU)
          K = ML + 1 - I
          DO J = 1,JMAX
             K = K + 1
@@ -42594,11 +42597,11 @@ C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
       END DO
 C     STORE THE REMAINING NONZERO DATA
    20 IMIN = ML + 1
-      IMAX = MIN0(M,ML + N)
+      IMAX = MIN(M,ML + N)
       L = 0
       DO I = IMIN,IMAX
          JMIN = I - ML
-         JMAX = MIN0(N,I + MU)
+         JMAX = MIN(N,I + MU)
          J = JMAX
          DO JJ = JMIN,JMAX
             K = J - L
@@ -42615,7 +42618,7 @@ C     INSERT ZEROS IN THE UPPER RIGHT CORNER
          DO I = 1,IMAX0
             A(I,J) = 0.D0
          END DO
-         IMAX0 = MIN0(IMAX,IMAX0 + 1)
+         IMAX0 = MIN(IMAX,IMAX0 + 1)
       END DO
 C     INSERT ZEROS IN THE LOWER LEFT CORNER
    40 IF (IMIN .EQ. IMAX) GO TO 50
@@ -42650,7 +42653,7 @@ C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
       IF (ML .EQ. 0) GO TO 30
       L = ML
       DO I = 1,ML
-         JMAX = MIN0(N,I + MU)
+         JMAX = MIN(N,I + MU)
          J = JMAX
          DO JJ = 1,JMAX
             K = J + L
@@ -42669,10 +42672,10 @@ C     INSERT ZEROS IN THE UPPER LEFT CORNER
       END DO
 C     STORE THE REMAINING NONZERO DATA
    30 IMIN = ML + 1
-      IMAX = MIN0(M,ML + N)
+      IMAX = MIN(M,ML + N)
       DO I = IMIN,IMAX
          JMIN = I - ML
-         JMAX = MIN0(N,I + MU)
+         JMAX = MIN(N,I + MU)
          K = 0
          DO J = JMIN,JMAX
             K = K + 1
@@ -42719,7 +42722,7 @@ C     COMPUTATION OF ML AND MU
       IF (M .EQ. 1) GO TO 20
       NSWC_EXIT_1 : DO L = 2 , M
          J = 1
-         IMAX = MIN0(M,IMIN + NM1)
+         IMAX = MIN(M,IMIN + NM1)
          DO I = IMIN,IMAX
             IF (A(I , J) .NE. 0.D0) EXIT NSWC_EXIT_1
             J = J + 1
@@ -42731,7 +42734,7 @@ C     COMPUTATION OF ML AND MU
       IF (N .EQ. 1) GO TO 30
       NSWC_EXIT_2 : DO L = 2 , N
          I = 1
-         JMAX = MIN0(N,JMIN + MM1)
+         JMAX = MIN(N,JMIN + MM1)
          DO J = JMIN,JMAX
             IF (A(I , J) .NE. 0.D0) EXIT NSWC_EXIT_2
             I = I + 1
@@ -42763,7 +42766,7 @@ C-----------------------------------------------------------------------
 C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
       IF (ML .EQ. 0) GO TO 20
       DO I = 1,ML
-         JMAX = MIN0(N,I + MU)
+         JMAX = MIN(N,I + MU)
          K = ML + 1 - I
          DO J = 1,JMAX
             K = K + 1
@@ -42772,11 +42775,11 @@ C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
       END DO
 C     STORE THE REMAINING NONZERO DATA
    20 IMIN = ML + 1
-      IMAX = MIN0(M,ML + N)
+      IMAX = MIN(M,ML + N)
       L = 0
       DO I = IMIN,IMAX
          JMIN = I - ML
-         JMAX = MIN0(N,I + MU)
+         JMAX = MIN(N,I + MU)
          J = JMAX
          DO JJ = JMIN,JMAX
             K = J - L
@@ -42793,7 +42796,7 @@ C     INSERT ZEROS IN THE UPPER RIGHT CORNER
          DO I = 1,IMAX0
             A(I,J) = (0.0,0.0)
          END DO
-         IMAX0 = MIN0(IMAX,IMAX0 + 1)
+         IMAX0 = MIN(IMAX,IMAX0 + 1)
       END DO
 C     INSERT ZEROS IN THE LOWER LEFT CORNER
    40 IF (IMIN .EQ. IMAX) GO TO 50
@@ -42828,7 +42831,7 @@ C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
       IF (ML .EQ. 0) GO TO 30
       L = ML
       DO I = 1,ML
-         JMAX = MIN0(N,I + MU)
+         JMAX = MIN(N,I + MU)
          J = JMAX
          DO JJ = 1,JMAX
             K = J + L
@@ -42847,10 +42850,10 @@ C     INSERT ZEROS IN THE UPPER LEFT CORNER
       END DO
 C     STORE THE REMAINING NONZERO DATA
    30 IMIN = ML + 1
-      IMAX = MIN0(M,ML + N)
+      IMAX = MIN(M,ML + N)
       DO I = IMIN,IMAX
          JMIN = I - ML
-         JMAX = MIN0(N,I + MU)
+         JMAX = MIN(N,I + MU)
          K = 0
          DO J = JMIN,JMAX
             K = K + 1
@@ -42897,7 +42900,7 @@ C     COMPUTATION OF ML AND MU
       IF (M .EQ. 1) GO TO 20
       NSWC_EXIT_1 : DO L = 2 , M
          J = 1
-         IMAX = MIN0(M,IMIN + NM1)
+         IMAX = MIN(M,IMIN + NM1)
          DO I = IMIN,IMAX
             IF (A(I , J) .NE. (0.0 , 0.0)) EXIT NSWC_EXIT_1
             J = J + 1
@@ -42909,7 +42912,7 @@ C     COMPUTATION OF ML AND MU
       IF (N .EQ. 1) GO TO 30
       NSWC_EXIT_2 : DO L = 2 , N
          I = 1
-         JMAX = MIN0(N,JMIN + MM1)
+         JMAX = MIN(N,JMIN + MM1)
          DO J = JMIN,JMAX
             IF (A(I , J) .NE. (0.0 , 0.0)) EXIT NSWC_EXIT_2
             I = I + 1
@@ -42960,7 +42963,7 @@ C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
       END DO
 C     STORE THE REMAINING NONZERO DATA
    20 IMIN = ML + 1
-      IMAX = MIN0(M,ML + N)
+      IMAX = MIN(M,ML + N)
       DO I = IMIN,IMAX
          IB(I) = L
          DO K = 1,KMAX
@@ -43017,7 +43020,7 @@ C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
       END DO
 C     STORE THE REMAINING NONZERO DATA
    20 IMIN = ML + 1
-      IMAX = MIN0(M,ML + N)
+      IMAX = MIN(M,ML + N)
       DO I = IMIN,IMAX
          IB(I) = L
          DO K = 1,KMAX
@@ -43074,7 +43077,7 @@ C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
       END DO
 C     STORE THE REMAINING NONZERO DATA
    20 IMIN = ML + 1
-      IMAX = MIN0(M,ML + N)
+      IMAX = MIN(M,ML + N)
       DO I = IMIN,IMAX
          IB(I) = L
          DO K = 1,KMAX
@@ -43123,8 +43126,8 @@ C     COMPUTATION OF ML AND MU
          DO L = LMIN,LMAX
             IF (A(L) .EQ. 0.0) GO TO 10
             K = JA(L) - I
-            MU = MAX0(MU,K)
-            ML = MAX0(ML,-K)
+            MU = MAX(MU,K)
+            ML = MAX(ML,-K)
    10    CONTINUE
          END DO
    11 CONTINUE
@@ -43182,8 +43185,8 @@ C     COMPUTATION OF ML AND MU
          DO L = LMIN,LMAX
             IF (A(L) .EQ. 0.D0) GO TO 10
             K = JA(L) - I
-            MU = MAX0(MU,K)
-            ML = MAX0(ML,-K)
+            MU = MAX(MU,K)
+            ML = MAX(ML,-K)
    10    CONTINUE
          END DO
    11 CONTINUE
@@ -43241,8 +43244,8 @@ C     COMPUTATION OF ML AND MU
          DO L = LMIN,LMAX
             IF (A(L) .EQ. (0.0,0.0)) GO TO 10
             K = JA(L) - I
-            MU = MAX0(MU,K)
-            ML = MAX0(ML,-K)
+            MU = MAX(MU,K)
+            ML = MAX(ML,-K)
    10    CONTINUE
          END DO
    11 CONTINUE
@@ -43422,12 +43425,12 @@ C     ERROR RETURN
 C-----------------------------------------------------------------------
 C        COMPUTE A + BI FOR THE BANDED REAL MATRICES A AND B
 C-----------------------------------------------------------------------
-      MCL = MAX0(ML,NL)
-      MCU = MAX0(MU,NU)
+      MCL = MAX(ML,NL)
+      MCU = MAX(MU,NU)
       NUM = MCL + MCU + 1
       IF (NUM .GT. L) GO TO 200
       IERR = 0
-      K = MIN0(MU,NU) + 1
+      K = MIN(MU,NU) + 1
 C     INSERT THE FIRST ABS(ML - NL) DIAGONALS
       IF (NL .GE. ML) GO TO 30
       JA = ML - NL
@@ -43503,7 +43506,7 @@ C     DEFINE THE FIRST MU COLUMNS OF B
             B(I,J) = 0.0
          END DO
          LJ = LP1 - J
-         IMAX = MIN0(M,N - NDIAG)
+         IMAX = MIN(M,N - NDIAG)
          DO I = 1,IMAX
             K = NDIAG + I
             B(K,J) = A(I,LJ)
@@ -43520,7 +43523,7 @@ C     DEFINE THE REMAINING COLUMNS OF B
       NDIAG = 0
       DO J = JMIN,L
          LJ = LP1 - J
-         IMAX = MIN0(M - NDIAG,N)
+         IMAX = MIN(M - NDIAG,N)
          DO I = 1,IMAX
             K = NDIAG + I
             B(I,J) = A(K,LJ)
@@ -43553,7 +43556,7 @@ C     DEFINE THE FIRST MU COLUMNS OF B
             B(I,J) = 0.D0
          END DO
          LJ = LP1 - J
-         IMAX = MIN0(M,N - NDIAG)
+         IMAX = MIN(M,N - NDIAG)
          DO I = 1,IMAX
             K = NDIAG + I
             B(K,J) = A(I,LJ)
@@ -43570,7 +43573,7 @@ C     DEFINE THE REMAINING COLUMNS OF B
       NDIAG = 0
       DO J = JMIN,L
          LJ = LP1 - J
-         IMAX = MIN0(M - NDIAG,N)
+         IMAX = MIN(M - NDIAG,N)
          DO I = 1,IMAX
             K = NDIAG + I
             B(I,J) = A(K,LJ)
@@ -43603,7 +43606,7 @@ C     DEFINE THE FIRST MU COLUMNS OF B
             B(I,J) = (0.0,0.0)
          END DO
          LJ = LP1 - J
-         IMAX = MIN0(M,N - NDIAG)
+         IMAX = MIN(M,N - NDIAG)
          DO I = 1,IMAX
             K = NDIAG + I
             B(K,J) = A(I,LJ)
@@ -43620,7 +43623,7 @@ C     DEFINE THE REMAINING COLUMNS OF B
       NDIAG = 0
       DO J = JMIN,L
          LJ = LP1 - J
-         IMAX = MIN0(M - NDIAG,N)
+         IMAX = MIN(M - NDIAG,N)
          DO I = 1,IMAX
             K = NDIAG + I
             B(I,J) = A(K,LJ)
@@ -44481,19 +44484,19 @@ C-----------------------------------------------------------------------
       NLP1 = NL + 1
       NPML = N + ML
       NPNU = N + NU
-      MCL = MIN0(M - 1,ML + NL)
+      MCL = MIN(M - 1,ML + NL)
       JC = 0
       IF (MCL .EQ. 0) GO TO 100
 C     FIND THE FIRST NONZERO LOWER DIAGONAL
       MAXD = MCL
       DO NDIAG = 1,MAXD
          IMJ = MAXD + 1 - NDIAG
-         JMAX = MIN0(L,M - IMJ,NPML - IMJ,NPNU)
+         JMAX = MIN(L,M - IMJ,NPML - IMJ,NPNU)
          DO J = 1,JMAX
             I = J + IMJ
             SUM = 0.0
-            KMIN = MAX0(1,I - ML,J - NU)
-            KMAX = MIN0(N,I + MU,J + NL)
+            KMIN = MAX(1,I - ML,J - NU)
+            KMAX = MIN(N,I + MU,J + NL)
             KK = MLP1 - I + KMIN
             JJ = NLP1 + J - KMIN
             DO K = KMIN,KMAX
@@ -44518,12 +44521,12 @@ C     COMPUTE THE REMAINING LOWER DIAGONALS
       DO NDIAG = MIND,MAXD
          JC = JC + 1
          IMJ = MAXD + 1 - NDIAG
-         JMAX = MIN0(L,M - IMJ,NPML - IMJ,NPNU)
+         JMAX = MIN(L,M - IMJ,NPML - IMJ,NPNU)
          DO J = 1,JMAX
             I = J + IMJ
             SUM = 0.0
-            KMIN = MAX0(1,I - ML,J - NU)
-            KMAX = MIN0(N,I + MU,J + NL)
+            KMIN = MAX(1,I - ML,J - NU)
+            KMAX = MIN(N,I + MU,J + NL)
             KK = MLP1 - I + KMIN
             JJ = NLP1 + J - KMIN
             DO K = KMIN,KMAX
@@ -44536,17 +44539,17 @@ C     COMPUTE THE REMAINING LOWER DIAGONALS
       END DO
 C     FIND THE LAST NONZERO UPPER DIAGONAL
   100 JC = JC + 1
-      MCU = MIN0(L - 1,MU + NU)
+      MCU = MIN(L - 1,MU + NU)
       IF (MCU .EQ. 0) GO TO 130
       MAXD = MCU
       NSWC_EXIT_1 : DO NDIAG = 1 , MAXD
          JMI = MAXD + 1 - NDIAG
-         IMAX = MIN0(M,L - JMI,NPML,NPNU - JMI)
+         IMAX = MIN(M,L - JMI,NPML,NPNU - JMI)
          DO I = 1,IMAX
             J = I + JMI
             SUM = 0.0
-            KMIN = MAX0(1,I - ML,J - NU)
-            KMAX = MIN0(N,I + MU,J + NL)
+            KMIN = MAX(1,I - ML,J - NU)
+            KMAX = MIN(N,I + MU,J + NL)
             KK = MLP1 - I + KMIN
             JJ = NLP1 + J - KMIN
             DO K = KMIN,KMAX
@@ -44569,15 +44572,15 @@ C     FIND THE LAST NONZERO UPPER DIAGONAL
          C(I,JC) = 0.0
       END DO
 C     COMPUTE THE MAIN DIAGONAL AND THE REMAINING UPPER DIAGONALS
-  140 MAXD = MAX0(1,MCU)
+  140 MAXD = MAX(1,MCU)
       DO NDIAG = 1,MAXD
          JMI = NDIAG - 1
-         IMAX = MIN0(M,L - JMI,NPML,NPNU - JMI)
+         IMAX = MIN(M,L - JMI,NPML,NPNU - JMI)
          DO I = 1,IMAX
             J = I + JMI
             SUM = 0.0
-            KMIN = MAX0(1,I - ML,J - NU)
-            KMAX = MIN0(N,I + MU,J + NL)
+            KMIN = MAX(1,I - ML,J - NU)
+            KMAX = MIN(N,I + MU,J + NL)
             KK = MLP1 - I + KMIN
             JJ = NLP1 + J - KMIN
             DO K = KMIN,KMAX
@@ -44619,19 +44622,19 @@ C-----------------------------------------------------------------------
       NLP1 = NL + 1
       NPML = N + ML
       NPNU = N + NU
-      MCL = MIN0(M - 1,ML + NL)
+      MCL = MIN(M - 1,ML + NL)
       JC = 0
       IF (MCL .EQ. 0) GO TO 100
 C     FIND THE FIRST NONZERO LOWER DIAGONAL
       MAXD = MCL
       DO NDIAG = 1,MAXD
          IMJ = MAXD + 1 - NDIAG
-         JMAX = MIN0(L,M - IMJ,NPML - IMJ,NPNU)
+         JMAX = MIN(L,M - IMJ,NPML - IMJ,NPNU)
          DO J = 1,JMAX
             I = J + IMJ
             SUM = 0.D0
-            KMIN = MAX0(1,I - ML,J - NU)
-            KMAX = MIN0(N,I + MU,J + NL)
+            KMIN = MAX(1,I - ML,J - NU)
+            KMAX = MIN(N,I + MU,J + NL)
             KK = MLP1 - I + KMIN
             JJ = NLP1 + J - KMIN
             DO K = KMIN,KMAX
@@ -44656,12 +44659,12 @@ C     COMPUTE THE REMAINING LOWER DIAGONALS
       DO NDIAG = MIND,MAXD
          JC = JC + 1
          IMJ = MAXD + 1 - NDIAG
-         JMAX = MIN0(L,M - IMJ,NPML - IMJ,NPNU)
+         JMAX = MIN(L,M - IMJ,NPML - IMJ,NPNU)
          DO J = 1,JMAX
             I = J + IMJ
             SUM = 0.D0
-            KMIN = MAX0(1,I - ML,J - NU)
-            KMAX = MIN0(N,I + MU,J + NL)
+            KMIN = MAX(1,I - ML,J - NU)
+            KMAX = MIN(N,I + MU,J + NL)
             KK = MLP1 - I + KMIN
             JJ = NLP1 + J - KMIN
             DO K = KMIN,KMAX
@@ -44674,17 +44677,17 @@ C     COMPUTE THE REMAINING LOWER DIAGONALS
       END DO
 C     FIND THE LAST NONZERO UPPER DIAGONAL
   100 JC = JC + 1
-      MCU = MIN0(L - 1,MU + NU)
+      MCU = MIN(L - 1,MU + NU)
       IF (MCU .EQ. 0) GO TO 130
       MAXD = MCU
       NSWC_EXIT_1 : DO NDIAG = 1 , MAXD
          JMI = MAXD + 1 - NDIAG
-         IMAX = MIN0(M,L - JMI,NPML,NPNU - JMI)
+         IMAX = MIN(M,L - JMI,NPML,NPNU - JMI)
          DO I = 1,IMAX
             J = I + JMI
             SUM = 0.D0
-            KMIN = MAX0(1,I - ML,J - NU)
-            KMAX = MIN0(N,I + MU,J + NL)
+            KMIN = MAX(1,I - ML,J - NU)
+            KMAX = MIN(N,I + MU,J + NL)
             KK = MLP1 - I + KMIN
             JJ = NLP1 + J - KMIN
             DO K = KMIN,KMAX
@@ -44707,15 +44710,15 @@ C     FIND THE LAST NONZERO UPPER DIAGONAL
          C(I,JC) = 0.D0
       END DO
 C     COMPUTE THE MAIN DIAGONAL AND THE REMAINING UPPER DIAGONALS
-  140 MAXD = MAX0(1,MCU)
+  140 MAXD = MAX(1,MCU)
       DO NDIAG = 1,MAXD
          JMI = NDIAG - 1
-         IMAX = MIN0(M,L - JMI,NPML,NPNU - JMI)
+         IMAX = MIN(M,L - JMI,NPML,NPNU - JMI)
          DO I = 1,IMAX
             J = I + JMI
             SUM = 0.D0
-            KMIN = MAX0(1,I - ML,J - NU)
-            KMAX = MIN0(N,I + MU,J + NL)
+            KMIN = MAX(1,I - ML,J - NU)
+            KMAX = MIN(N,I + MU,J + NL)
             KK = MLP1 - I + KMIN
             JJ = NLP1 + J - KMIN
             DO K = KMIN,KMAX
@@ -44757,19 +44760,19 @@ C-----------------------------------------------------------------------
       NLP1 = NL + 1
       NPML = N + ML
       NPNU = N + NU
-      MCL = MIN0(M - 1,ML + NL)
+      MCL = MIN(M - 1,ML + NL)
       JC = 0
       IF (MCL .EQ. 0) GO TO 100
 C     FIND THE FIRST NONZERO LOWER DIAGONAL
       MAXD = MCL
       DO NDIAG = 1,MAXD
          IMJ = MAXD + 1 - NDIAG
-         JMAX = MIN0(L,M - IMJ,NPML - IMJ,NPNU)
+         JMAX = MIN(L,M - IMJ,NPML - IMJ,NPNU)
          DO J = 1,JMAX
             I = J + IMJ
             SUM = (0.0,0.0)
-            KMIN = MAX0(1,I - ML,J - NU)
-            KMAX = MIN0(N,I + MU,J + NL)
+            KMIN = MAX(1,I - ML,J - NU)
+            KMAX = MIN(N,I + MU,J + NL)
             KK = MLP1 - I + KMIN
             JJ = NLP1 + J - KMIN
             DO K = KMIN,KMAX
@@ -44794,12 +44797,12 @@ C     COMPUTE THE REMAINING LOWER DIAGONALS
       DO NDIAG = MIND,MAXD
          JC = JC + 1
          IMJ = MAXD + 1 - NDIAG
-         JMAX = MIN0(L,M - IMJ,NPML - IMJ,NPNU)
+         JMAX = MIN(L,M - IMJ,NPML - IMJ,NPNU)
          DO J = 1,JMAX
             I = J + IMJ
             SUM = (0.0,0.0)
-            KMIN = MAX0(1,I - ML,J - NU)
-            KMAX = MIN0(N,I + MU,J + NL)
+            KMIN = MAX(1,I - ML,J - NU)
+            KMAX = MIN(N,I + MU,J + NL)
             KK = MLP1 - I + KMIN
             JJ = NLP1 + J - KMIN
             DO K = KMIN,KMAX
@@ -44812,17 +44815,17 @@ C     COMPUTE THE REMAINING LOWER DIAGONALS
       END DO
 C     FIND THE LAST NONZERO UPPER DIAGONAL
   100 JC = JC + 1
-      MCU = MIN0(L - 1,MU + NU)
+      MCU = MIN(L - 1,MU + NU)
       IF (MCU .EQ. 0) GO TO 130
       MAXD = MCU
       NSWC_EXIT_1 : DO NDIAG = 1 , MAXD
          JMI = MAXD + 1 - NDIAG
-         IMAX = MIN0(M,L - JMI,NPML,NPNU - JMI)
+         IMAX = MIN(M,L - JMI,NPML,NPNU - JMI)
          DO I = 1,IMAX
             J = I + JMI
             SUM = (0.0,0.0)
-            KMIN = MAX0(1,I - ML,J - NU)
-            KMAX = MIN0(N,I + MU,J + NL)
+            KMIN = MAX(1,I - ML,J - NU)
+            KMAX = MIN(N,I + MU,J + NL)
             KK = MLP1 - I + KMIN
             JJ = NLP1 + J - KMIN
             DO K = KMIN,KMAX
@@ -44845,15 +44848,15 @@ C     FIND THE LAST NONZERO UPPER DIAGONAL
          C(I,JC) = (0.0,0.0)
       END DO
 C     COMPUTE THE MAIN DIAGONAL AND THE REMAINING UPPER DIAGONALS
-  140 MAXD = MAX0(1,MCU)
+  140 MAXD = MAX(1,MCU)
       DO NDIAG = 1,MAXD
          JMI = NDIAG - 1
-         IMAX = MIN0(M,L - JMI,NPML,NPNU - JMI)
+         IMAX = MIN(M,L - JMI,NPML,NPNU - JMI)
          DO I = 1,IMAX
             J = I + JMI
             SUM = (0.0,0.0)
-            KMIN = MAX0(1,I - ML,J - NU)
-            KMAX = MIN0(N,I + MU,J + NL)
+            KMIN = MAX(1,I - ML,J - NU)
+            KMAX = MIN(N,I + MU,J + NL)
             KK = MLP1 - I + KMIN
             JJ = NLP1 + J - KMIN
             DO K = KMIN,KMAX
@@ -44885,7 +44888,7 @@ C     COMPUTE THE FIRST ML COMPONENTS
       IF (ML .EQ. 0) GO TO 20
       JMIN = MLP1
       DO I = 1,ML
-         KMAX = MIN0(N,I + MU)
+         KMAX = MIN(N,I + MU)
          KK = JMIN
          SUM = 0.0
          DO K = 1,KMAX
@@ -44896,10 +44899,10 @@ C     COMPUTE THE FIRST ML COMPONENTS
          JMIN = JMIN - 1
       END DO
 C     COMPUTE THE REMAINING NONZERO COMPONENTS
-   20 IMAX = MIN0(M,N + ML)
+   20 IMAX = MIN(M,N + ML)
       DO I = MLP1,IMAX
          KMIN = I - ML
-         KMAX = MIN0(N,I + MU)
+         KMAX = MIN(N,I + MU)
          KK = 1
          SUM = 0.0
          DO K = KMIN,KMAX
@@ -44932,7 +44935,7 @@ C     COMPUTE THE FIRST ML COMPONENTS
       IF (ML .EQ. 0) GO TO 20
       JMIN = MLP1
       DO I = 1,ML
-         KMAX = MIN0(N,I + MU)
+         KMAX = MIN(N,I + MU)
          KK = JMIN
          SUM = Y(I)
          DO K = 1,KMAX
@@ -44943,10 +44946,10 @@ C     COMPUTE THE FIRST ML COMPONENTS
          JMIN = JMIN - 1
       END DO
 C     COMPUTE THE REMAINING COMPONENTS
-   20 IMAX = MIN0(M,N + ML)
+   20 IMAX = MIN(M,N + ML)
       DO I = MLP1,IMAX
          KMIN = I - ML
-         KMAX = MIN0(N,I + MU)
+         KMAX = MIN(N,I + MU)
          KK = 1
          SUM = Y(I)
          DO K = KMIN,KMAX
@@ -44973,7 +44976,7 @@ C     COMPUTE THE FIRST ML COMPONENTS
       IF (ML .EQ. 0) GO TO 20
       JMIN = MLP1
       DO I = 1,ML
-         KMAX = MIN0(N,I + MU)
+         KMAX = MIN(N,I + MU)
          KK = JMIN
          SUM = 0.D0
          DO K = 1,KMAX
@@ -44984,10 +44987,10 @@ C     COMPUTE THE FIRST ML COMPONENTS
          JMIN = JMIN - 1
       END DO
 C     COMPUTE THE REMAINING NONZERO COMPONENTS
-   20 IMAX = MIN0(M,N + ML)
+   20 IMAX = MIN(M,N + ML)
       DO I = MLP1,IMAX
          KMIN = I - ML
-         KMAX = MIN0(N,I + MU)
+         KMAX = MIN(N,I + MU)
          KK = 1
          SUM = 0.D0
          DO K = KMIN,KMAX
@@ -45020,7 +45023,7 @@ C     COMPUTE THE FIRST ML COMPONENTS
       IF (ML .EQ. 0) GO TO 20
       JMIN = MLP1
       DO I = 1,ML
-         KMAX = MIN0(N,I + MU)
+         KMAX = MIN(N,I + MU)
          KK = JMIN
          SUM = Y(I)
          DO K = 1,KMAX
@@ -45031,10 +45034,10 @@ C     COMPUTE THE FIRST ML COMPONENTS
          JMIN = JMIN - 1
       END DO
 C     COMPUTE THE REMAINING COMPONENTS
-   20 IMAX = MIN0(M,N + ML)
+   20 IMAX = MIN(M,N + ML)
       DO I = MLP1,IMAX
          KMIN = I - ML
-         KMAX = MIN0(N,I + MU)
+         KMAX = MIN(N,I + MU)
          KK = 1
          SUM = Y(I)
          DO K = KMIN,KMAX
@@ -45060,7 +45063,7 @@ C     COMPUTE THE FIRST ML COMPONENTS
       IF (ML .EQ. 0) GO TO 20
       JMIN = MLP1
       DO I = 1,ML
-         KMAX = MIN0(N,I + MU)
+         KMAX = MIN(N,I + MU)
          KK = JMIN
          SUM = (0.0,0.0)
          DO K = 1,KMAX
@@ -45071,10 +45074,10 @@ C     COMPUTE THE FIRST ML COMPONENTS
          JMIN = JMIN - 1
       END DO
 C     COMPUTE THE REMAINING NONZERO COMPONENTS
-   20 IMAX = MIN0(M,N + ML)
+   20 IMAX = MIN(M,N + ML)
       DO I = MLP1,IMAX
          KMIN = I - ML
-         KMAX = MIN0(N,I + MU)
+         KMAX = MIN(N,I + MU)
          KK = 1
          SUM = (0.0,0.0)
          DO K = KMIN,KMAX
@@ -45107,7 +45110,7 @@ C     COMPUTE THE FIRST ML COMPONENTS
       IF (ML .EQ. 0) GO TO 20
       JMIN = MLP1
       DO I = 1,ML
-         KMAX = MIN0(N,I + MU)
+         KMAX = MIN(N,I + MU)
          KK = JMIN
          SUM = Y(I)
          DO K = 1,KMAX
@@ -45118,10 +45121,10 @@ C     COMPUTE THE FIRST ML COMPONENTS
          JMIN = JMIN - 1
       END DO
 C     COMPUTE THE REMAINING COMPONENTS
-   20 IMAX = MIN0(M,N + ML)
+   20 IMAX = MIN(M,N + ML)
       DO I = MLP1,IMAX
          KMIN = I - ML
-         KMAX = MIN0(N,I + MU)
+         KMAX = MIN(N,I + MU)
          KK = 1
          SUM = Y(I)
          DO K = KMIN,KMAX
@@ -45146,7 +45149,7 @@ C     COMPUTE THE FIRST MU COMPONENTS
       IF (MU .EQ. 0) GO TO 20
       DO J = 1,MU
          JJ = ML + J
-         KMAX = MIN0(M,JJ)
+         KMAX = MIN(M,JJ)
          SUM = 0.0
          DO K = 1,KMAX
             SUM = SUM + A(K,JJ)*X(K)
@@ -45157,10 +45160,10 @@ C     COMPUTE THE FIRST MU COMPONENTS
 C     COMPUTE THE REMAINING NONZERO COMPONENTS
    20 NUM = ML + MU + 1
       JMIN = MU + 1
-      JMAX = MIN0(N,M + MU)
+      JMAX = MIN(N,M + MU)
       DO J = JMIN,JMAX
          KMIN = J - MU
-         KMAX = MIN0(M,J + ML)
+         KMAX = MIN(M,J + ML)
          JJ = NUM
          SUM = 0.0
          DO K = KMIN,KMAX
@@ -45192,7 +45195,7 @@ C     COMPUTE THE FIRST MU COMPONENTS
       IF (MU .EQ. 0) GO TO 20
       DO J = 1,MU
          JJ = ML + J
-         KMAX = MIN0(M,JJ)
+         KMAX = MIN(M,JJ)
          SUM = Y(J)
          DO K = 1,KMAX
             SUM = SUM + A(K,JJ)*X(K)
@@ -45203,10 +45206,10 @@ C     COMPUTE THE FIRST MU COMPONENTS
 C     COMPUTE THE REMAINING COMPONENTS
    20 NUM = ML + MU + 1
       JMIN = MU + 1
-      JMAX = MIN0(N,M + MU)
+      JMAX = MIN(N,M + MU)
       DO J = JMIN,JMAX
          KMIN = J - MU
-         KMAX = MIN0(M,J + ML)
+         KMAX = MIN(M,J + ML)
          JJ = NUM
          SUM = Y(J)
          DO K = KMIN,KMAX
@@ -45232,7 +45235,7 @@ C     COMPUTE THE FIRST MU COMPONENTS
       IF (MU .EQ. 0) GO TO 20
       DO J = 1,MU
          JJ = ML + J
-         KMAX = MIN0(M,JJ)
+         KMAX = MIN(M,JJ)
          SUM = 0.D0
          DO K = 1,KMAX
             SUM = SUM + A(K,JJ)*X(K)
@@ -45243,10 +45246,10 @@ C     COMPUTE THE FIRST MU COMPONENTS
 C     COMPUTE THE REMAINING NONZERO COMPONENTS
    20 NUM = ML + MU + 1
       JMIN = MU + 1
-      JMAX = MIN0(N,M + MU)
+      JMAX = MIN(N,M + MU)
       DO J = JMIN,JMAX
          KMIN = J - MU
-         KMAX = MIN0(M,J + ML)
+         KMAX = MIN(M,J + ML)
          JJ = NUM
          SUM = 0.D0
          DO K = KMIN,KMAX
@@ -45278,7 +45281,7 @@ C     COMPUTE THE FIRST MU COMPONENTS
       IF (MU .EQ. 0) GO TO 20
       DO J = 1,MU
          JJ = ML + J
-         KMAX = MIN0(M,JJ)
+         KMAX = MIN(M,JJ)
          SUM = Y(J)
          DO K = 1,KMAX
             SUM = SUM + A(K,JJ)*X(K)
@@ -45289,10 +45292,10 @@ C     COMPUTE THE FIRST MU COMPONENTS
 C     COMPUTE THE REMAINING COMPONENTS
    20 NUM = ML + MU + 1
       JMIN = MU + 1
-      JMAX = MIN0(N,M + MU)
+      JMAX = MIN(N,M + MU)
       DO J = JMIN,JMAX
          KMIN = J - MU
-         KMAX = MIN0(M,J + ML)
+         KMAX = MIN(M,J + ML)
          JJ = NUM
          SUM = Y(J)
          DO K = KMIN,KMAX
@@ -45317,7 +45320,7 @@ C     COMPUTE THE FIRST MU COMPONENTS
       IF (MU .EQ. 0) GO TO 20
       DO J = 1,MU
          JJ = ML + J
-         KMAX = MIN0(M,JJ)
+         KMAX = MIN(M,JJ)
          SUM = (0.0,0.0)
          DO K = 1,KMAX
             SUM = SUM + A(K,JJ)*X(K)
@@ -45328,10 +45331,10 @@ C     COMPUTE THE FIRST MU COMPONENTS
 C     COMPUTE THE REMAINING NONZERO COMPONENTS
    20 NUM = ML + MU + 1
       JMIN = MU + 1
-      JMAX = MIN0(N,M + MU)
+      JMAX = MIN(N,M + MU)
       DO J = JMIN,JMAX
          KMIN = J - MU
-         KMAX = MIN0(M,J + ML)
+         KMAX = MIN(M,J + ML)
          JJ = NUM
          SUM = (0.0,0.0)
          DO K = KMIN,KMAX
@@ -45363,7 +45366,7 @@ C     COMPUTE THE FIRST MU COMPONENTS
       IF (MU .EQ. 0) GO TO 20
       DO J = 1,MU
          JJ = ML + J
-         KMAX = MIN0(M,JJ)
+         KMAX = MIN(M,JJ)
          SUM = Y(J)
          DO K = 1,KMAX
             SUM = SUM + A(K,JJ)*X(K)
@@ -45374,10 +45377,10 @@ C     COMPUTE THE FIRST MU COMPONENTS
 C     COMPUTE THE REMAINING COMPONENTS
    20 NUM = ML + MU + 1
       JMIN = MU + 1
-      JMAX = MIN0(N,M + MU)
+      JMAX = MIN(N,M + MU)
       DO J = JMIN,JMAX
          KMIN = J - MU
-         KMAX = MIN0(M,J + ML)
+         KMAX = MIN(M,J + ML)
          JJ = NUM
          SUM = Y(J)
          DO K = KMIN,KMAX
@@ -45405,7 +45408,7 @@ C-----------------------------------------------------------------------
          DO J = 1,NUM
             SUM = SUM + ABS(A(I,J))
          END DO
-         BNRM = AMAX1(BNRM, SUM)
+         BNRM = MAX(BNRM, SUM)
       END DO
       END FUNCTION BNRM
 
@@ -45422,9 +45425,9 @@ C-----------------------------------------------------------------------
       B1NRM = 0.0
 C     GO DOWN THE FIRST COLUMN OF A
       IMIN = ML + 1
-      IMAX = MIN0(M, IMIN + MU)
+      IMAX = MIN(M, IMIN + MU)
       DO I = IMIN,IMAX
-         B1NRM = AMAX1(B1NRM, SASUM(I,A(I),INCR))
+         B1NRM = MAX(B1NRM, SASUM(I,A(I),INCR))
       END DO
       I = IMAX
       J = I - ML
@@ -45432,9 +45435,9 @@ C     GO DOWN THE FIRST COLUMN OF A
       IF (J .EQ. N) RETURN
       IF (I .EQ. M) GO TO 30
       IMIN = I + 1
-      IMAX = MIN0(M, ML + N)
+      IMAX = MIN(M, ML + N)
       DO I = IMIN,IMAX
-         B1NRM = AMAX1(B1NRM, SASUM(NUM,A(I),INCR))
+         B1NRM = MAX(B1NRM, SASUM(NUM,A(I),INCR))
       END DO
       I = IMAX
       J = I - ML
@@ -45445,14 +45448,14 @@ C     PROCEED ALONG THE LAST ROW OF A
       JMIN = J + 1
       DO J = JMIN,JMAX
          I = I + KA
-         B1NRM = AMAX1(B1NRM, SASUM(NUM,A(I),INCR))
+         B1NRM = MAX(B1NRM, SASUM(NUM,A(I),INCR))
       END DO
       J = JMAX
    50 IF (J .EQ. N .OR. NUM .EQ. 1) RETURN
          I = I + KA
          J = J + 1
          NUM = NUM - 1
-         B1NRM = AMAX1(B1NRM, SASUM(NUM,A(I),INCR))
+         B1NRM = MAX(B1NRM, SASUM(NUM,A(I),INCR))
          GO TO 50
       END FUNCTION B1NRM
 
@@ -45471,9 +45474,9 @@ C-----------------------------------------------------------------------
       DO I = 1,M
          SUM = 0.D0
          DO J = 1,NUM
-            SUM = SUM + DABS(A(I,J))
+            SUM = SUM + ABS(A(I,J))
          END DO
-         DBNRM = DMAX1(DBNRM, SUM)
+         DBNRM = MAX(DBNRM, SUM)
       END DO
       END FUNCTION DBNRM
 
@@ -45491,9 +45494,9 @@ C-----------------------------------------------------------------------
       DB1NRM = 0.D0
 C     GO DOWN THE FIRST COLUMN OF A
       IMIN = ML + 1
-      IMAX = MIN0(M, IMIN + MU)
+      IMAX = MIN(M, IMIN + MU)
       DO I = IMIN,IMAX
-         DB1NRM = DMAX1(DB1NRM, DASUM(I,A(I),INCR))
+         DB1NRM = MAX(DB1NRM, DASUM(I,A(I),INCR))
       END DO
       I = IMAX
       J = I - ML
@@ -45501,9 +45504,9 @@ C     GO DOWN THE FIRST COLUMN OF A
       IF (J .EQ. N) RETURN
       IF (I .EQ. M) GO TO 30
       IMIN = I + 1
-      IMAX = MIN0(M, ML + N)
+      IMAX = MIN(M, ML + N)
       DO I = IMIN,IMAX
-         DB1NRM = DMAX1(DB1NRM, DASUM(NUM,A(I),INCR))
+         DB1NRM = MAX(DB1NRM, DASUM(NUM,A(I),INCR))
       END DO
       I = IMAX
       J = I - ML
@@ -45514,14 +45517,14 @@ C     PROCEED ALONG THE LAST ROW OF A
       JMIN = J + 1
       DO J = JMIN,JMAX
          I = I + KA
-         DB1NRM = DMAX1(DB1NRM, DASUM(NUM,A(I),INCR))
+         DB1NRM = MAX(DB1NRM, DASUM(NUM,A(I),INCR))
       END DO
       J = JMAX
    50 IF (J .EQ. N .OR. NUM .EQ. 1) RETURN
          I = I + KA
          J = J + 1
          NUM = NUM - 1
-         DB1NRM = DMAX1(DB1NRM, DASUM(NUM,A(I),INCR))
+         DB1NRM = MAX(DB1NRM, DASUM(NUM,A(I),INCR))
          GO TO 50
       END FUNCTION DB1NRM
 
@@ -45741,14 +45744,14 @@ C     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
       N1 = N - 1
       LDB = LDA - 1
       DO K = 1,N1
-        LM = MIN0(N-K,ML)
+        LM = MIN(N-K,ML)
         LMK = LM + K
         LM1 = LM + 1
         LM2 = ML1 - LM
 C     SEARCH FOR PIVOT INDEX
         L = -ISAMAX(LM1, A(LMK,LM2), LDB) + LM1 + K
         IPVT(K) = L
-        MP = MIN0(MB,N-K)
+        MP = MIN(MB,N-K)
 C     SWAP ROWS IF NECESSARY
         LL = ML1 + K - L
         IF (L .NE. K) CALL SSWAP(MP + 1, A(K,ML1), LDA, A(L,LL), LDA)
@@ -45835,7 +45838,7 @@ C     JOB = 0 , SOLVE  A * X = B
 C       FIRST SOLVE L*Y = B
       IF (ML .EQ. 0) GO TO 30
       DO K = 1,NM1
-         LM = MIN0(ML,N-K)
+         LM = MIN(ML,N-K)
          L = IPVT(K)
          T = B(L)
          IF (L .EQ. K) GO TO 10
@@ -45849,7 +45852,7 @@ C       NOW SOLVE  U*X = Y
    30 K = N
       DO KB = 2,N
          B(K) = B(K)/A(K,ML1)
-         LM = MIN0(K,M) - 1
+         LM = MIN(K,M) - 1
          LB = K - LM
          T = -B(K)
          CALL SAXPY(LM, T, A(K-1,ML2), LDB, B(LB), 1)
@@ -45861,7 +45864,7 @@ C     JOB = NONZERO, SOLVE TRANS(A) * X = B
 C       FIRST SOLVE  TRANS(U)*Y = B
    50 B(1) = B(1)/A(1,ML1)
       DO K = 2,N
-         LM = MIN0(K,M) - 1
+         LM = MIN(K,M) - 1
          LB = K - LM
          T = SDOT(LM, A(K-1,ML2), LDB, B(LB), 1)
          B(K) = (B(K) - T)/A(K,ML1)
@@ -45870,7 +45873,7 @@ C       FIRST SOLVE  TRANS(U)*Y = B
 C       NOW SOLVE TRANS(L)*X = Y
       DO KB = 1,NM1
          K = N - KB
-         LM = MIN0(ML,N-K)
+         LM = MIN(ML,N-K)
          KLM = K + LM
          MLM = ML1 - LM
          B(K) = B(K) + SDOT(LM, A(KLM,MLM), LDB, B(K+1), 1)
@@ -46104,14 +46107,14 @@ C     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
       N1 = N - 1
       LDB = LDA - 1
       DO K = 1,N1
-        LM = MIN0(N-K,ML)
+        LM = MIN(N-K,ML)
         LMK = LM + K
         LM1 = LM + 1
         LM2 = ML1 - LM
 C     SEARCH FOR PIVOT INDEX
         L = -IDAMAX(LM1, A(LMK,LM2), LDB) + LM1 + K
         IPVT(K) = L
-        MP = MIN0(MB,N-K)
+        MP = MIN(MB,N-K)
 C     SWAP ROWS IF NECESSARY
         LL = ML1 + K - L
         IF (L .NE. K) CALL DSWAP(MP + 1, A(K,ML1), LDA, A(L,LL), LDA)
@@ -46198,7 +46201,7 @@ C     JOB = 0 , SOLVE  A * X = B
 C       FIRST SOLVE L*Y = B
       IF (ML .EQ. 0) GO TO 30
       DO K = 1,NM1
-         LM = MIN0(ML,N-K)
+         LM = MIN(ML,N-K)
          L = IPVT(K)
          T = B(L)
          IF (L .EQ. K) GO TO 10
@@ -46212,7 +46215,7 @@ C       NOW SOLVE  U*X = Y
    30 K = N
       DO KB = 2,N
          B(K) = B(K)/A(K,ML1)
-         LM = MIN0(K,M) - 1
+         LM = MIN(K,M) - 1
          LB = K - LM
          T = -B(K)
          CALL DAXPY(LM, T, A(K-1,ML2), LDB, B(LB), 1)
@@ -46224,7 +46227,7 @@ C     JOB = NONZERO, SOLVE TRANS(A) * X = B
 C       FIRST SOLVE  TRANS(U)*Y = B
    50 B(1) = B(1)/A(1,ML1)
       DO K = 2,N
-         LM = MIN0(K,M) - 1
+         LM = MIN(K,M) - 1
          LB = K - LM
          T = DDOT(LM, A(K-1,ML2), LDB, B(LB), 1)
          B(K) = (B(K) - T)/A(K,ML1)
@@ -46233,7 +46236,7 @@ C       FIRST SOLVE  TRANS(U)*Y = B
 C       NOW SOLVE TRANS(L)*X = Y
       DO KB = 1,NM1
          K = N - KB
-         LM = MIN0(ML,N-K)
+         LM = MIN(ML,N-K)
          KLM = K + LM
          MLM = ML1 - LM
          B(K) = B(K) + DDOT(LM, A(KLM,MLM), LDB, B(K+1), 1)
@@ -46586,14 +46589,14 @@ C     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
       N1 = N - 1
       LDB = LDA - 1
       DO K = 1,N1
-        LM = MIN0(N-K,ML)
+        LM = MIN(N-K,ML)
         LMK = LM + K
         LM1 = LM + 1
         LM2 = ML1 - LM
 C     SEARCH FOR PIVOT INDEX
         L = -ICAMAX(LM1, A(LMK,LM2), LDB) + LM1 + K
         IPVT(K) = L
-        MP = MIN0(MB,N-K)
+        MP = MIN(MB,N-K)
 C     SWAP ROWS IF NECESSARY
         LL = ML1 + K - L
         IF (L .NE. K) CALL CSWAP(MP + 1, A(K,ML1), LDA, A(L,LL), LDA)
@@ -46680,7 +46683,7 @@ C     JOB = 0 , SOLVE  A * X = B
 C       FIRST SOLVE L*Y = B
       IF (ML .EQ. 0) GO TO 30
       DO K = 1,NM1
-         LM = MIN0(ML,N-K)
+         LM = MIN(ML,N-K)
          L = IPVT(K)
          T = B(L)
          IF (L .EQ. K) GO TO 10
@@ -46694,7 +46697,7 @@ C       NOW SOLVE  U*X = Y
    30 K = N
       DO KB = 2,N
          B(K) = B(K)/A(K,ML1)
-         LM = MIN0(K,M) - 1
+         LM = MIN(K,M) - 1
          LB = K - LM
          T = -B(K)
          CALL CAXPY(LM, T, A(K-1,ML2), LDB, B(LB), 1)
@@ -46706,7 +46709,7 @@ C     JOB = NONZERO, SOLVE TRANS(A) * X = B
 C       FIRST SOLVE  TRANS(U)*Y = B
    50 B(1) = B(1)/A(1,ML1)
       DO K = 2,N
-         LM = MIN0(K,M) - 1
+         LM = MIN(K,M) - 1
          LB = K - LM
          T = CDOTU(LM, A(K-1,ML2), LDB, B(LB), 1)
          B(K) = (B(K) - T)/A(K,ML1)
@@ -46715,7 +46718,7 @@ C       FIRST SOLVE  TRANS(U)*Y = B
 C       NOW SOLVE TRANS(L)*X = Y
       DO KB = 1, NM1
          K = N - KB
-         LM = MIN0(ML,N-K)
+         LM = MIN(ML,N-K)
          KLM = K + LM
          MLM = ML1 - LM
          B(K) = B(K) + CDOTU(LM, A(KLM,MLM), LDB, B(K+1), 1)
@@ -48386,7 +48389,7 @@ C-----------------------------------------------------------------------
          DO IP = IPMIN,IPMAX
             SUM = SUM + ABS(A(IP))
          END DO
-         SNRM = AMAX1(SNRM, SUM)
+         SNRM = MAX(SNRM, SUM)
    20 CONTINUE
       END DO
       END FUNCTION SNRM
@@ -48415,7 +48418,7 @@ C     COMPUTE THE L1 NORM OF A
          WK(J) = WK(J) + ABS(A(IP))
       END DO
       DO J = 1,N
-         ANORM = AMAX1(ANORM,WK(J))
+         ANORM = MAX(ANORM,WK(J))
       END DO
       END SUBROUTINE S1NRM
 
@@ -48437,9 +48440,9 @@ C-----------------------------------------------------------------------
          IF (IPMIN .GT. IPMAX) GO TO 20
          SUM = 0.D0
          DO IP = IPMIN,IPMAX
-            SUM = SUM + DABS(A(IP))
+            SUM = SUM + ABS(A(IP))
          END DO
-         DSNRM = DMAX1(DSNRM, SUM)
+         DSNRM = MAX(DSNRM, SUM)
    20 CONTINUE
       END DO
       END FUNCTION DSNRM
@@ -48466,10 +48469,10 @@ C     COMPUTE THE L1 NORM OF A
       END DO
       DO IP = IPMIN,IPMAX
          J = JA(IP)
-         WK(J) = WK(J) + DABS(A(IP))
+         WK(J) = WK(J) + ABS(A(IP))
       END DO
       DO J = 1,N
-         ANORM = DMAX1(ANORM,WK(J))
+         ANORM = MAX(ANORM,WK(J))
       END DO
       END SUBROUTINE DS1NRM
 
@@ -49802,7 +49805,7 @@ C  PIVOT--INTERCHANGE LARGEST ENTRY OF K-TH ROW OF U WITH
 C  THE DIAGONAL ENTRY.
 C  FIND LARGEST ENTRY, COUNTING OFF-DIAGONAL NONZEROS
  110    IF (VI .GT. N) GO TO 1004
-        XPVMAX = DABS(X(VI))
+        XPVMAX = ABS(X(VI))
         MAXC = VI
         NZCNT = 0
         PV = VI
@@ -49810,7 +49813,7 @@ C  FIND LARGEST ENTRY, COUNTING OFF-DIAGONAL NONZEROS
           PV = P(PV)
           IF (PV .GT. N) GO TO 130
           NZCNT = NZCNT + 1
-          XPV = DABS(X(PV))
+          XPV = ABS(X(PV))
           IF (XPV .LE. XPVMAX) GO TO 120
           XPVMAX = XPV
           MAXC = PV
@@ -50259,13 +50262,13 @@ C     PERFORM ELIMINATION USING THE I-TH ROW OF U
       GO TO 30
 C     SEARCH FOR THE K-TH PIVOT ELEMENT
    50 IF (I .GT. N) GO TO 220
-      WMAX = DABS(W(I))
+      WMAX = ABS(W(I))
       MAXI = I
       PM = I
    51 M = PM
       PM = P(M)
       IF (PM .GT. N) GO TO 60
-      WI = DABS(W(PM))
+      WI = ABS(W(PM))
       IF (WI .LE. WMAX) GO TO 51
          WMAX = WI
          MAXI = PM
@@ -50351,11 +50354,11 @@ C-----------------------
      *           IWK(1), WK(1), IERR)
 C     CHECK IF A IS SINGULAR OR IF THERE ARE ERRORS
       IF (IERR .GT. 0) GO TO 20
-      IF (IABS(IERR) .LE. N) GO TO 50
+      IF (ABS(IERR) .LE. N) GO TO 50
       IERR = IERR + N
-      IF (IABS(IERR) .LE. N) RETURN
+      IF (ABS(IERR) .LE. N) RETURN
       IERR = IERR + N
-      IF (IABS(IERR) .LE. N) GO TO 50
+      IF (ABS(IERR) .LE. N) GO TO 50
       RETURN
 C     GENERAL LOOP TO ESTIMATE THE NORM  AINORM
 C     OF THE INVERSE OF A
@@ -50409,11 +50412,11 @@ C-----------------------
      *           IWK(1), WK(1), IERR)
 C     CHECK IF A IS SINGULAR OR IF THERE ARE ERRORS
       IF (IERR .GT. 0) GO TO 20
-      IF (IABS(IERR) .LE. N) GO TO 50
+      IF (ABS(IERR) .LE. N) GO TO 50
       IERR = IERR + N
-      IF (IABS(IERR) .LE. N) RETURN
+      IF (ABS(IERR) .LE. N) RETURN
       IERR = IERR + N
-      IF (IABS(IERR) .LE. N) GO TO 50
+      IF (ABS(IERR) .LE. N) GO TO 50
       RETURN
 C     GENERAL LOOP TO ESTIMATE THE NORM  AINORM
 C     OF THE INVERSE OF A
@@ -50618,7 +50621,7 @@ C     FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY A*X.
   100 ITER = 1
       IF (N .GT. 1) GO TO 110
          V(1) = X(1)
-         ANORM = DABS(V(1))
+         ANORM = ABS(V(1))
          GO TO 510
   110 ANORM = DASUM(N,X,1)
       DO I = 1,N
@@ -50667,7 +50670,7 @@ C     ................ ENTRY   (JUMP = 4)
 C     X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X.
   400 JLAST = J
       J = IDAMAX(N,X,1)
-      IF (X(JLAST) .EQ. DABS(X(J)) .OR.
+      IF (X(JLAST) .EQ. ABS(X(J)) .OR.
      *    ITER .GE. ITMAX) GO TO 410
       ITER = ITER + 1
       GO TO 210
@@ -52190,7 +52193,7 @@ C     ********** ROW MODIFICATION **********
   200       H(K+1,J) = H(K+1,J) - P * Y
             H(K,J) = H(K,J) - P * X
          END DO
-         J = MIN0(EN,K+3)
+         J = MIN(EN,K+3)
 C     ********** COLUMN MODIFICATION **********
          DO I = L, J
             P = X * H(I,K) + Y * H(I,K+1)
@@ -52750,7 +52753,7 @@ C     ********** ROW MODIFICATION **********
   200       H(K+1,J) = H(K+1,J) - P * Y
             H(K,J) = H(K,J) - P * X
          END DO
-         J = MIN0(EN,K+3)
+         J = MIN(EN,K+3)
 C     ********** COLUMN MODIFICATION **********
          DO I = 1, J
             P = X * H(I,K) + Y * H(I,K+1)
@@ -52949,7 +52952,7 @@ C                VECTORS OF ORIGINAL FULL MATRIX.
 C                FOR J=N STEP -1 UNTIL LOW DO -- **********
       DO JJ = LOW, N
          J = N + LOW - JJ
-         M = MIN0(J,IGH)
+         M = MIN(J,IGH)
          DO I = LOW, IGH
             ZZ = 0.0
             DO K = LOW, M
@@ -53134,8 +53137,8 @@ C     ********** ITERATIVE LOOP FOR NORM REDUCTION **********
          R = 0.D0
          DO J = K, L
             IF (J .EQ. I) GO TO 200
-            C = C + DABS(A(J,I))
-            R = R + DABS(A(I,J))
+            C = C + ABS(A(J,I))
+            R = R + ABS(A(I,J))
   200    CONTINUE
          END DO
 C     ********** GUARD AGAINST ZERO C OR R DUE TO UNDERFLOW **********
@@ -53280,7 +53283,7 @@ C-----------------------------------------------------------------------
          SCALE = 0.D0
 C     ********** SCALE COLUMN (ALGOL TOL THEN NOT NEEDED) **********
          DO I = M, IGH
-         SCALE = SCALE + DABS(A(I,M-1))
+         SCALE = SCALE + ABS(A(I,M-1))
          END DO
          IF (SCALE .EQ. 0.D0) GO TO 180
          MP = M + IGH
@@ -53290,7 +53293,7 @@ C     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
             ORT(I) = A(I,M-1) / SCALE
             H = H + ORT(I) * ORT(I)
          END DO
-         G = DSQRT(H)
+         G = SQRT(H)
          IF (ORT(M) .GE. 0.D0) G = -G
          H = H - ORT(M) * G
          ORT(M) = ORT(M) - G
@@ -53390,7 +53393,7 @@ C     ********** STORE ROOTS ISOLATED BY DBAL
 C                AND COMPUTE MATRIX NORM **********
       DO I = 1, N
          DO J = K, N
-         NORM = NORM + DABS(H(I,J))
+         NORM = NORM + ABS(H(I,J))
          END DO
          K = I
          IF (I .GE. LOW .AND. I .LE. IGH) GO TO 50
@@ -53410,9 +53413,9 @@ C                FOR L=EN STEP -1 UNTIL LOW DO -- **********
    70 DO LL = LOW, EN
          L = EN + LOW - LL
          IF (L .EQ. LOW) EXIT
-         S = DABS(H(L-1,L-1)) + DABS(H(L,L))
+         S = ABS(H(L-1,L-1)) + ABS(H(L,L))
          IF (S .EQ. 0.D0) S = NORM
-         IF (DABS(H(L , L - 1)) .LE. MACHEP * S) EXIT
+         IF (ABS(H(L , L - 1)) .LE. MACHEP * S) EXIT
       END DO
 C     ********** FORM SHIFT **********
       X = H(EN,EN)
@@ -53427,7 +53430,7 @@ C     ********** FORM EXCEPTIONAL SHIFT **********
       DO I = LOW, EN
       H(I,I) = H(I,I) - X
       END DO
-      S = DABS(H(EN,NA)) + DABS(H(NA,ENM2))
+      S = ABS(H(EN,NA)) + ABS(H(NA,ENM2))
       X = .75D0 * S
       Y = X
       W = -.4375D0 * S * S
@@ -53443,13 +53446,13 @@ C                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
          P = (R * S - W) / H(M+1,M) + H(M,M+1)
          Q = H(M+1,M+1) - ZZ - R - S
          R = H(M+2,M+1)
-         S = DABS(P) + DABS(Q) + DABS(R)
+         S = ABS(P) + ABS(Q) + ABS(R)
          P = P / S
          Q = Q / S
          R = R / S
          IF (M .EQ. L) EXIT
-         IF (DABS(H(M,M-1)) * (DABS(Q) + DABS(R)) .LE. MACHEP * DABS(P)
-     X    * (DABS(H(M-1,M-1)) + DABS(ZZ) + DABS(H(M+1,M+1)))) GO TO 150
+         IF (ABS(H(M,M-1)) * (ABS(Q) + ABS(R)) .LE. MACHEP * ABS(P)
+     X    * (ABS(H(M-1,M-1)) + ABS(ZZ) + ABS(H(M+1,M+1)))) GO TO 150
       END DO
   150 MP2 = M + 2
       DO I = MP2, EN
@@ -53467,12 +53470,12 @@ C                COLUMNS M TO EN **********
          Q = H(K+1,K-1)
          R = 0.D0
          IF (NOTLAS) R = H(K+2,K-1)
-         X = DABS(P) + DABS(Q) + DABS(R)
+         X = ABS(P) + ABS(Q) + ABS(R)
          IF (X .EQ. 0.D0) GO TO 260
          P = P / X
          Q = Q / X
          R = R / X
-  170    S = DSQRT(P*P + Q*Q + R*R)
+  170    S = SQRT(P*P + Q*Q + R*R)
          IF (P .LT. 0.D0) S = -S
          IF (K .EQ. M) GO TO 180
          H(K,K-1) = -S * X
@@ -53493,7 +53496,7 @@ C     ********** ROW MODIFICATION **********
   200       H(K+1,J) = H(K+1,J) - P * Y
             H(K,J) = H(K,J) - P * X
          END DO
-         J = MIN0(EN,K+3)
+         J = MIN(EN,K+3)
 C     ********** COLUMN MODIFICATION **********
          DO I = L, J
             P = X * H(I,K) + Y * H(I,K+1)
@@ -53514,7 +53517,7 @@ C     ********** ONE ROOT FOUND **********
 C     ********** TWO ROOTS FOUND **********
   280 P = (Y - X) / 2.D0
       Q = P * P + W
-      ZZ = DSQRT(DABS(Q))
+      ZZ = SQRT(ABS(Q))
       X = X + T
       IF (Q .LT. 0.D0) GO TO 320
 C     ********** REAL PAIR **********
@@ -53820,7 +53823,7 @@ C     ********** STORE ROOTS ISOLATED BY DBAL
 C                AND COMPUTE MATRIX NORM **********
       DO I = 1, N
          DO J = K, N
-         NORM = NORM + DABS(H(I,J))
+         NORM = NORM + ABS(H(I,J))
          END DO
          K = I
          IF (I .GE. LOW .AND. I .LE. IGH) GO TO 50
@@ -53840,9 +53843,9 @@ C                FOR L=EN STEP -1 UNTIL LOW DO -- **********
    70 DO LL = LOW, EN
          L = EN + LOW - LL
          IF (L .EQ. LOW) EXIT
-         S = DABS(H(L-1,L-1)) + DABS(H(L,L))
+         S = ABS(H(L-1,L-1)) + ABS(H(L,L))
          IF (S .EQ. 0.D0) S = NORM
-         IF (DABS(H(L , L - 1)) .LE. MACHEP * S) EXIT
+         IF (ABS(H(L , L - 1)) .LE. MACHEP * S) EXIT
       END DO
 C     ********** FORM SHIFT **********
       X = H(EN,EN)
@@ -53857,7 +53860,7 @@ C     ********** FORM EXCEPTIONAL SHIFT **********
       DO I = LOW, EN
       H(I,I) = H(I,I) - X
       END DO
-      S = DABS(H(EN,NA)) + DABS(H(NA,ENM2))
+      S = ABS(H(EN,NA)) + ABS(H(NA,ENM2))
       X = .75D0 * S
       Y = X
       W = -.4375D0 * S * S
@@ -53873,13 +53876,13 @@ C                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
          P = (R * S - W) / H(M+1,M) + H(M,M+1)
          Q = H(M+1,M+1) - ZZ - R - S
          R = H(M+2,M+1)
-         S = DABS(P) + DABS(Q) + DABS(R)
+         S = ABS(P) + ABS(Q) + ABS(R)
          P = P / S
          Q = Q / S
          R = R / S
          IF (M .EQ. L) EXIT
-         IF (DABS(H(M,M-1)) * (DABS(Q) + DABS(R)) .LE. MACHEP * DABS(P)
-     X    * (DABS(H(M-1,M-1)) + DABS(ZZ) + DABS(H(M+1,M+1)))) GO TO 150
+         IF (ABS(H(M,M-1)) * (ABS(Q) + ABS(R)) .LE. MACHEP * ABS(P)
+     X    * (ABS(H(M-1,M-1)) + ABS(ZZ) + ABS(H(M+1,M+1)))) GO TO 150
       END DO
   150 MP2 = M + 2
       DO I = MP2, EN
@@ -53897,12 +53900,12 @@ C                COLUMNS M TO EN **********
          Q = H(K+1,K-1)
          R = 0.D0
          IF (NOTLAS) R = H(K+2,K-1)
-         X = DABS(P) + DABS(Q) + DABS(R)
+         X = ABS(P) + ABS(Q) + ABS(R)
          IF (X .EQ. 0.D0) GO TO 260
          P = P / X
          Q = Q / X
          R = R / X
-  170    S = DSQRT(P*P + Q*Q + R*R)
+  170    S = SQRT(P*P + Q*Q + R*R)
          IF (P .LT. 0.D0) S = -S
          IF (K .EQ. M) GO TO 180
          H(K,K-1) = -S * X
@@ -53923,7 +53926,7 @@ C     ********** ROW MODIFICATION **********
   200       H(K+1,J) = H(K+1,J) - P * Y
             H(K,J) = H(K,J) - P * X
          END DO
-         J = MIN0(EN,K+3)
+         J = MIN(EN,K+3)
 C     ********** COLUMN MODIFICATION **********
          DO I = 1, J
             P = X * H(I,K) + Y * H(I,K+1)
@@ -53954,7 +53957,7 @@ C     ********** ONE ROOT FOUND **********
 C     ********** TWO ROOTS FOUND **********
   280 P = (Y - X) / 2.D0
       Q = P * P + W
-      ZZ = DSQRT(DABS(Q))
+      ZZ = SQRT(ABS(Q))
       H(EN,EN) = X + T
       X = H(EN,EN)
       H(NA,NA) = Y + T
@@ -53968,10 +53971,10 @@ C     ********** REAL PAIR **********
       WI(NA) = 0.D0
       WI(EN) = 0.D0
       X = H(EN,NA)
-      S = DABS(X) + DABS(ZZ)
+      S = ABS(X) + ABS(ZZ)
       P = X / S
       Q = ZZ / S
-      R = DSQRT(P*P+Q*Q)
+      R = SQRT(P*P+Q*Q)
       P = P / R
       Q = Q / R
 C     ********** ROW MODIFICATION **********
@@ -54042,7 +54045,7 @@ C     ********** SOLVE REAL EQUATIONS **********
             Q = (WR(I) - P) * (WR(I) - P) + WI(I) * WI(I)
             T = (X * S - ZZ * R) / Q
             H(I,EN) = T
-            IF (DABS(X) .LE. DABS(ZZ)) GO TO 650
+            IF (ABS(X) .LE. ABS(ZZ)) GO TO 650
             H(I+1,EN) = (-R - W * T) / X
             GO TO 700
   650       H(I+1,EN) = (-S - Y * T) / ZZ
@@ -54054,7 +54057,7 @@ C     ********** COMPLEX VECTOR **********
   710    M = NA
 C     ********** LAST VECTOR COMPONENT CHOSEN IMAGINARY SO THAT
 C                EIGENVECTOR MATRIX IS TRIANGULAR **********
-         IF (DABS(H(EN,NA)) .LE. DABS(H(NA,EN))) GO TO 720
+         IF (ABS(H(EN,NA)) .LE. ABS(H(NA,EN))) GO TO 720
          H(NA,NA) = Q / H(EN,NA)
          H(NA,EN) = -(H(EN,EN) - P) / H(EN,NA)
          GO TO 730
@@ -54093,13 +54096,13 @@ C     ********** SOLVE COMPLEX EQUATIONS **********
             VR = (WR(I) - P) * (WR(I) - P) + WI(I) * WI(I) - Q * Q
             VI = (WR(I) - P) * 2.D0 * Q
             IF (VR .EQ. 0.D0 .AND. VI .EQ. 0.D0) VR = MACHEP * NORM
-     X       * (DABS(W) + DABS(Q) + DABS(X) + DABS(Y) + DABS(ZZ))
+     X       * (ABS(W) + ABS(Q) + ABS(X) + ABS(Y) + ABS(ZZ))
             A = X * R - ZZ * RA + Q * SA
             B = X * S - ZZ * SA - Q * RA
             D = VR * VR + VI * VI
             H(I,NA) = (A * VR + B * VI) / D
             H(I,EN) = (B * VR - A * VI) / D
-            IF (DABS(X) .LE. DABS(ZZ) + DABS(Q)) GO TO 785
+            IF (ABS(X) .LE. ABS(ZZ) + ABS(Q)) GO TO 785
             H(I+1,NA) = (-RA - W * H(I,NA) + Q * H(I,EN)) / X
             H(I+1,EN) = (-SA - W * H(I,EN) - Q * H(I,NA)) / X
             GO TO 790
@@ -54127,7 +54130,7 @@ C                VECTORS OF ORIGINAL FULL MATRIX.
 C                FOR J=N STEP -1 UNTIL LOW DO -- **********
       DO JJ = LOW, N
          J = N + LOW - JJ
-         M = MIN0(J,IGH)
+         M = MIN(J,IGH)
          DO I = LOW, IGH
             ZZ = 0.D0
             DO K = LOW, M
@@ -55127,7 +55130,7 @@ C     ********** FOR I=N STEP -1 UNTIL 1 DO -- **********
          IF (L .LT. 1) GO TO 130
 C     ********** SCALE ROW (ALGOL TOL THEN NOT NEEDED) **********
          DO K = 1, L
-         SCALE = SCALE + DABS(A(I,K))
+         SCALE = SCALE + ABS(A(I,K))
          END DO
          IF (SCALE .NE. 0.D0) GO TO 140
   130    E(I) = 0.D0
@@ -55139,7 +55142,7 @@ C     ********** SCALE ROW (ALGOL TOL THEN NOT NEEDED) **********
          END DO
          E2(I) = SCALE * SCALE * H
          F = A(I,L)
-         G = DSQRT(H)
+         G = SQRT(H)
          IF (F .GE. 0.D0) G = -G
          E(I) = SCALE * G
          H = H - F * G
@@ -55225,7 +55228,7 @@ C     ********** SCALE ROW (ALGOL TOL THEN NOT NEEDED) **********
          DO K = 1, L
             IZ = IZ + 1
             D(K) = A(IZ)
-            SCALE = SCALE + DABS(D(K))
+            SCALE = SCALE + ABS(D(K))
          END DO
          IF (SCALE .NE. 0.D0) GO TO 140
   130    E(I) = 0.D0
@@ -55237,7 +55240,7 @@ C     ********** SCALE ROW (ALGOL TOL THEN NOT NEEDED) **********
          END DO
          E2(I) = SCALE * SCALE * H
          F = D(L)
-         G = DSQRT(H)
+         G = SQRT(H)
          IF (F .GE. 0.D0) G = -G
          E(I) = SCALE * G
          H = H - F * G
@@ -55271,7 +55274,7 @@ C     ********** FORM REDUCED A **********
             END DO
          END DO
   290    D(I) = A(IZ+1)
-         A(IZ+1) = SCALE * DSQRT(H)
+         A(IZ+1) = SCALE * SQRT(H)
       END DO
 C     ********** LAST CARD OF DTRED3 **********
       END SUBROUTINE DTRED3
@@ -55321,7 +55324,7 @@ C                **********
       E2(N) = 0.D0
       DO L = 1, N
          J = 0
-         H = MACHEP * (DABS(D(L)) + DSQRT(E2(L)))
+         H = MACHEP * (ABS(D(L)) + SQRT(E2(L)))
          IF (B .GT. H) GO TO 105
          B = H
          C = B * B
@@ -55336,10 +55339,10 @@ C                THROUGH THE BOTTOM OF THE LOOP **********
          J = J + 1
 C     ********** FORM SHIFT **********
          L1 = L + 1
-         S = DSQRT(E2(L))
+         S = SQRT(E2(L))
          G = D(L)
          P = (D(L1) - G) / (2.D0 * S)
-         R = DSQRT(P*P + 1.D0)
+         R = SQRT(P*P + 1.D0)
          IF (P .LT. 0.D0) R = -R
          D(L) = S / (P + R)
          H = G - D(L)
@@ -55369,7 +55372,7 @@ C     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
          D(L) = H
 C     ********** GUARD AGAINST UNDERFLOW IN CONVERGENCE TEST **********
          IF (H .EQ. 0.D0) GO TO 210
-         IF (DABS(E2(L)) .LE. DABS(C/H)) GO TO 210
+         IF (ABS(E2(L)) .LE. ABS(C/H)) GO TO 210
          E2(L) = H * E2(L)
          IF (E2(L) .NE. 0.D0) GO TO 130
   210    P = D(L) + F
@@ -55440,7 +55443,7 @@ C     ********** FOR I=N STEP -1 UNTIL 2 DO -- **********
          IF (L .LT. 2) GO TO 130
 C     ********** SCALE ROW (ALGOL TOL THEN NOT NEEDED) **********
          DO K = 1, L
-         SCALE = SCALE + DABS(Z(I,K))
+         SCALE = SCALE + ABS(Z(I,K))
          END DO
          IF (SCALE .NE. 0.D0) GO TO 140
   130    E(I) = Z(I,L)
@@ -55450,7 +55453,7 @@ C     ********** SCALE ROW (ALGOL TOL THEN NOT NEEDED) **********
             H = H + Z(I,K) * Z(I,K)
          END DO
          F = Z(I,L)
-         G = DSQRT(H)
+         G = SQRT(H)
          IF (F .GE. 0.D0) G = -G
          E(I) = SCALE * G
          H = H - F * G
@@ -55573,11 +55576,11 @@ C                **********
       E(N) = 0.D0
       DO L = 1, N
          J = 0
-         H = MACHEP * (DABS(D(L)) + DABS(E(L)))
+         H = MACHEP * (ABS(D(L)) + ABS(E(L)))
          IF (B .LT. H) B = H
 C     ********** LOOK FOR SMALL SUB-DIAGONAL ELEMENT **********
          DO M = L, N
-            IF (DABS(E(M)) .LE. B) EXIT
+            IF (ABS(E(M)) .LE. B) EXIT
 C     ********** E(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
 C                THROUGH THE BOTTOM OF THE LOOP **********
          END DO
@@ -55588,7 +55591,7 @@ C     ********** FORM SHIFT **********
          L1 = L + 1
          G = D(L)
          P = (D(L1) - G) / (2.D0 * E(L))
-         R = DSQRT(P*P + 1.D0)
+         R = SQRT(P*P + 1.D0)
          IF (P .LT. 0.D0) R = -R
          D(L) = E(L) / (P + R)
          H = G - D(L)
@@ -55606,15 +55609,15 @@ C     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
             I = M - II
             G = C * E(I)
             H = C * P
-            IF (DABS(P) .LT. DABS(E(I))) GO TO 150
+            IF (ABS(P) .LT. ABS(E(I))) GO TO 150
             C = E(I) / P
-            R = DSQRT(C*C + 1.D0)
+            R = SQRT(C*C + 1.D0)
             E(I+1) = S * P * R
             S = C / R
             C = 1.D0 / R
             GO TO 160
   150       C = P / E(I)
-            R = DSQRT(C*C + 1.D0)
+            R = SQRT(C*C + 1.D0)
             E(I+1) = S * E(I) * R
             S = 1.D0 / R
             C = C * S
@@ -55629,7 +55632,7 @@ C     ********** FORM VECTOR **********
          END DO
          E(L) = S * P
          D(L) = C * P
-         IF (DABS(E(L)) .GT. B) GO TO 130
+         IF (ABS(E(L)) .GT. B) GO TO 130
   220    D(L) = D(L) + F
       END DO
 C     ********** ORDER EIGENVALUES AND EIGENVECTORS **********
@@ -55929,7 +55932,7 @@ C     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
             H = H + ORTR(I) * ORTR(I) + ORTI(I) * ORTI(I)
          END DO
          G = SQRT(H)
-         F = CABS(CMPLX(ORTR(M),ORTI(M)))
+         F = ABS(CMPLX(ORTR(M),ORTI(M)))
          IF (F .EQ. 0.0) GO TO 103
          H = H + F * G
          G = G / F
@@ -56047,9 +56050,9 @@ C                **********
 C     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
       L = LOW + 1
       DO I = L, IGH
-         LL = MIN0(I+1,IGH)
+         LL = MIN(I+1,IGH)
          IF (HI(I,I-1) .EQ. 0.0) GO TO 170
-         NORM = CABS(CMPLX(HR(I,I-1),HI(I,I-1)))
+         NORM = ABS(CMPLX(HR(I,I-1),HI(I,I-1)))
          YR = HR(I,I-1) / NORM
          YI = HI(I,I-1) / NORM
          HR(I,I-1) = NORM
@@ -56100,7 +56103,7 @@ C     ********** FORM SHIFT **********
       IF (XR .EQ. 0.0 .AND. XI .EQ. 0.0) GO TO 340
       YR = (HR(ENM1,ENM1) - SR) / 2.0
       YI = (HI(ENM1,ENM1) - SI) / 2.0
-      Z3 = CSQRT(CMPLX(YR**2-YI**2+XR,2.0*YR*YI+XI))
+      Z3 = SQRT(CMPLX(YR**2-YI**2+XR,2.0*YR*YI+XI))
       ZZR = REAL(Z3)
       ZZI = AIMAG(Z3)
       IF (YR * ZZR + YI * ZZI .GE. 0.0) GO TO 310
@@ -56147,7 +56150,7 @@ C     ********** REDUCE TO TRIANGLE (ROWS) **********
       END DO
       SI = HI(EN,EN)
       IF (SI .EQ. 0.0) GO TO 540
-      NORM = CABS(CMPLX(HR(EN,EN),SI))
+      NORM = ABS(CMPLX(HR(EN,EN),SI))
       SR = HR(EN,EN) / NORM
       SI = SI / NORM
       HR(EN,EN) = NORM
@@ -56380,9 +56383,9 @@ C     ********** NORM BELOW IS NEGATIVE OF H FORMED IN CORTH **********
 C     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
   150 L = LOW + 1
       DO I = L, IGH
-         LL = MIN0(I+1,IGH)
+         LL = MIN(I+1,IGH)
          IF (HI(I,I-1) .EQ. 0.0) GO TO 170
-         NORM = CABS(CMPLX(HR(I,I-1),HI(I,I-1)))
+         NORM = ABS(CMPLX(HR(I,I-1),HI(I,I-1)))
          YR = HR(I,I-1) / NORM
          YI = HI(I,I-1) / NORM
          HR(I,I-1) = NORM
@@ -56438,7 +56441,7 @@ C     ********** FORM SHIFT **********
       IF (XR .EQ. 0.0 .AND. XI .EQ. 0.0) GO TO 340
       YR = (HR(ENM1,ENM1) - SR) / 2.0
       YI = (HI(ENM1,ENM1) - SI) / 2.0
-      Z3 = CSQRT(CMPLX(YR**2-YI**2+XR,2.0*YR*YI+XI))
+      Z3 = SQRT(CMPLX(YR**2-YI**2+XR,2.0*YR*YI+XI))
       ZZR = REAL(Z3)
       ZZI = AIMAG(Z3)
       IF (YR * ZZR + YI * ZZI .GE. 0.0) GO TO 310
@@ -56485,7 +56488,7 @@ C     ********** REDUCE TO TRIANGLE (ROWS) **********
       END DO
       SI = HI(EN,EN)
       IF (SI .EQ. 0.0) GO TO 540
-      NORM = CABS(CMPLX(HR(EN,EN),SI))
+      NORM = ABS(CMPLX(HR(EN,EN),SI))
       SR = HR(EN,EN) / NORM
       SI = SI / NORM
       HR(EN,EN) = NORM
@@ -56597,7 +56600,7 @@ C                VECTORS OF ORIGINAL FULL MATRIX.
 C                FOR J=N STEP -1 UNTIL LOW+1 DO -- **********
       DO JJ = LOW, ENM1
          J = N + LOW - JJ
-         M = MIN0(J-1,IGH)
+         M = MIN(J-1,IGH)
          DO I = LOW, IGH
             ZZR = ZR(I,J)
             ZZI = ZI(I,J)
@@ -56786,8 +56789,8 @@ C     ********** ITERATIVE LOOP FOR NORM REDUCTION **********
          R = 0.D0
          DO J = K, L
             IF (J .EQ. I) GO TO 200
-            C = C + DABS(AR(J,I)) + DABS(AI(J,I))
-            R = R + DABS(AR(I,J)) + DABS(AI(I,J))
+            C = C + ABS(AR(J,I)) + ABS(AI(J,I))
+            R = R + ABS(AR(I,J)) + ABS(AI(I,J))
   200    CONTINUE
          END DO
 C     ********** GUARD AGAINST ZERO C OR R DUE TO UNDERFLOW **********
@@ -56875,7 +56878,7 @@ C-----------------------------------------------------------------------
          SCALE = 0.D0
 C     ********** SCALE COLUMN (ALGOL TOL THEN NOT NEEDED) **********
          DO I = M, IGH
-         SCALE = SCALE + DABS(AR(I,M-1)) + DABS(AI(I,M-1))
+         SCALE = SCALE + ABS(AR(I,M-1)) + ABS(AI(I,M-1))
          END DO
          IF (SCALE .EQ. 0.D0) GO TO 180
          MP = M + IGH
@@ -56886,7 +56889,7 @@ C     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
             ORTI(I) = AI(I,M-1) / SCALE
             H = H + ORTR(I) * ORTR(I) + ORTI(I) * ORTI(I)
          END DO
-         G = DSQRT(H)
+         G = SQRT(H)
          F = DCPABS(ORTR(M),ORTI(M))
          IF (F .EQ. 0.D0) GO TO 103
          H = H + F * G
@@ -57001,7 +57004,7 @@ C                **********
 C     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
       L = LOW + 1
       DO I = L, IGH
-         LL = MIN0(I+1,IGH)
+         LL = MIN(I+1,IGH)
          IF (HI(I,I-1) .EQ. 0.D0) GO TO 170
          NORM = DCPABS(HR(I,I-1),HI(I,I-1))
          YR = HR(I,I-1) / NORM
@@ -57039,9 +57042,9 @@ C                FOR L=EN STEP -1 UNTIL LOW  -- **********
   240 DO LL = LOW, EN
          L = EN + LOW - LL
          IF (L .EQ. LOW) EXIT
-         IF (DABS(HR(L,L-1)) .LE.
-     X      MACHEP * (DABS(HR(L-1,L-1)) + DABS(HI(L-1,L-1))
-     X             + DABS(HR(L,L)) + DABS(HI(L,L)))) GO TO 300
+         IF (ABS(HR(L,L-1)) .LE.
+     X      MACHEP * (ABS(HR(L-1,L-1)) + ABS(HI(L-1,L-1))
+     X             + ABS(HR(L,L)) + ABS(HI(L,L)))) GO TO 300
       END DO
 C     ********** FORM SHIFT **********
   300 IF (L .EQ. EN) GO TO 660
@@ -57069,7 +57072,7 @@ C     ********** FORM SHIFT **********
       SI = SI - (XI*Z(1) - XR*Z(2))/R2
       GO TO 340
 C     ********** FORM EXCEPTIONAL SHIFT **********
-  320 SR = DABS(HR(EN,ENM1)) + DABS(HR(ENM1,EN-2))
+  320 SR = ABS(HR(EN,ENM1)) + ABS(HR(ENM1,EN-2))
       SI = 0.D0
   340 DO I = LOW, EN
          HR(I,I) = HR(I,I) - SR
@@ -57083,7 +57086,7 @@ C     ********** REDUCE TO TRIANGLE (ROWS) **********
       DO I = LP1, EN
          SR = HR(I,I-1)
          HR(I,I-1) = 0.D0
-         NORM = DSQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1)
+         NORM = SQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1)
      X               + SR*SR)
          XR = HR(I-1,I-1) / NORM
          WR(I-1) = XR
@@ -57332,7 +57335,7 @@ C     ********** NORM BELOW IS NEGATIVE OF H FORMED IN DCORTH **********
 C     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
   150 L = LOW + 1
       DO I = L, IGH
-         LL = MIN0(I+1,IGH)
+         LL = MIN(I+1,IGH)
          IF (HI(I,I-1) .EQ. 0.D0) GO TO 170
          NORM = DCPABS(HR(I,I-1),HI(I,I-1))
          YR = HR(I,I-1) / NORM
@@ -57375,9 +57378,9 @@ C                FOR L=EN STEP -1 UNTIL LOW DO -- **********
   240 DO LL = LOW, EN
          L = EN + LOW - LL
          IF (L .EQ. LOW) EXIT
-         IF (DABS(HR(L,L-1)) .LE.
-     X      MACHEP * (DABS(HR(L-1,L-1)) + DABS(HI(L-1,L-1))
-     X             + DABS(HR(L,L)) + DABS(HI(L,L)))) GO TO 300
+         IF (ABS(HR(L,L-1)) .LE.
+     X      MACHEP * (ABS(HR(L-1,L-1)) + ABS(HI(L-1,L-1))
+     X             + ABS(HR(L,L)) + ABS(HI(L,L)))) GO TO 300
       END DO
 C     ********** FORM SHIFT **********
   300 IF (L .EQ. EN) GO TO 660
@@ -57405,7 +57408,7 @@ C     ********** FORM SHIFT **********
       SI = SI - (XI*Z(1) - XR*Z(2))/R2
       GO TO 340
 C     ********** FORM EXCEPTIONAL SHIFT **********
-  320 SR = DABS(HR(EN,ENM1)) + DABS(HR(ENM1,EN-2))
+  320 SR = ABS(HR(EN,ENM1)) + ABS(HR(ENM1,EN-2))
       SI = 0.D0
   340 DO I = LOW, EN
          HR(I,I) = HR(I,I) - SR
@@ -57419,7 +57422,7 @@ C     ********** REDUCE TO TRIANGLE (ROWS) **********
       DO I = LP1, EN
          SR = HR(I,I-1)
          HR(I,I-1) = 0.D0
-         NORM = DSQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1)
+         NORM = SQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1)
      X               + SR*SR)
          XR = HR(I-1,I-1) / NORM
          WR(I-1) = XR
@@ -57507,7 +57510,7 @@ C                VECTORS OF UPPER TRIANGULAR FORM **********
   680 NORM = 0.D0
       DO I = 1, N
          DO J = I, N
-            NORM = NORM + DABS(HR(I,J)) + DABS(HI(I,J))
+            NORM = NORM + ABS(HR(I,J)) + ABS(HI(I,J))
          END DO
       END DO
       IF (N .EQ. 1 .OR. NORM .EQ. 0.D0) GO TO 1001
@@ -57553,7 +57556,7 @@ C                VECTORS OF ORIGINAL FULL MATRIX.
 C                FOR J=N STEP -1 UNTIL LOW+1 DO -- **********
       DO JJ = LOW, ENM1
          J = N + LOW - JJ
-         M = MIN0(J-1,IGH)
+         M = MIN(J-1,IGH)
          DO I = LOW, IGH
             ZZR = ZR(I,J)
             ZZI = ZI(I,J)
@@ -57916,7 +57919,7 @@ C DETERMINE THE VECTOR TO LEAVE THE BASIS.
       GO TO 400
   390 IINEG = -II
       IF (IU(1,IINEG).EQ.1) GO TO 420
-  400 II = IABS(II)
+  400 II = ABS(II)
       CUV = CU(1,II) + CU(2,II)
       IF (Q(KLM1,IN)-PIVOT*CUV.LE.TOLER) GO TO 420
 C BYPASS INTERMEDIATE VERTICES.
@@ -58419,7 +58422,7 @@ C                                       FORM NEW APPROXIMATE SOLUTION.
       RAT = RATIO
       RATIO = RNRM2/XNRM2
       IF (RATIO .LE. FOURTH*RAT) GO TO 20
-      IF (RATIO .LE. AMIN1(RAT,FOUR*EPS2)) RETURN
+      IF (RATIO .LE. MIN(RAT,FOUR*EPS2)) RETURN
       EXIT = .FALSE.
       END SUBROUTINE ORIMP
 
@@ -58449,7 +58452,7 @@ C     --------------
          DO I = NP1,M
          RNORM = RNORM + B(I,J)*B(I,J)
          END DO
-      B(NP1,J) = DSQRT(RNORM)
+      B(NP1,J) = SQRT(RNORM)
    22 CONTINUE
       END DO
       END SUBROUTINE DLLSQ
@@ -58519,7 +58522,7 @@ C***********************************************************************
 C                                       SEARCH FOR PIVOT IN THE J-TH
 C                                       COLUMN AND INTERCHANGE ROWS.
         DO K = JP, M
-           IF (DABS(QR(K,J)) .GT. DABS(QR(KJ,J))) KJ = K
+           IF (ABS(QR(K,J)) .GT. ABS(QR(KJ,J))) KJ = K
         END DO
         IF (QR(KJ,J) .EQ. 0.D0) GO TO 90
         IF (KJ .EQ. J) GO TO 30
@@ -58539,7 +58542,7 @@ C                                       AND FIND ITS NORM.
         DO I = JP, M
            SAV = SAV + QR(I,J)*QR(I,J)
         END DO
-        S(J) = -DSQRT(SAV)
+        S(J) = -SQRT(SAV)
         QR(J,J) = S(J)*AJJ
         IF (JP .GT. N) GO TO 80
 C                                       PREMULTIPLY QR WITH THE J-TH
@@ -58774,8 +58777,8 @@ C     CHECK THE INPUT
       IF (M .LT. 1 .OR. N .LT. 1) GO TO 210
       IF (MDA .LT. M) GO TO 220
       IF (LIW .LT. M + N) GO TO 240
-      M0 = MIN0(M,N)
-      N0 = MAX0(M,N)
+      M0 = MIN(M,N)
+      N0 = MAX(M,N)
 C     NUM = 0
       IF (NB .LE. 0) GO TO 10
       IF (MDB .LT. N0) GO TO 230
@@ -58789,7 +58792,7 @@ C     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
       M4 = M3 + M0
       M5 = M4 + M0
       EPS = 10.0*SPMPAR(1)
-      RERR = AMAX1(EPS,RE)
+      RERR = MAX(EPS,RE)
       IMAX = M5 - 1
       DO I = M4,IMAX
          WORK(I) = RERR
@@ -58898,7 +58901,7 @@ C        CALCULATE COL LENGTH
       END DO
 C         INITIALIZE ERROR BOUNDS
       DO I = 1,N
-         EB(I) = AMAX1(DB(I),UB(I)*H(I))
+         EB(I) = MAX(DB(I),UB(I)*H(I))
          UB(I) = EB(I)
          DB(I) = 0.0
       END DO
@@ -59012,7 +59015,7 @@ C     APPLY HOUSEHOLDER TRANSFORMATION
          IF (I .LE. NP) GO TO 240
          IF (H(I) .EQ. 0.0) GO TO 240
          TT = 1.0 - (A(J,I)/H(I))**2
-         TT = AMAX1(TT,0.0)
+         TT = MAX(TT,0.0)
          T = TT
          TT = 1.0 + 0.05*TT*(H(I)/W(I))**2
          IF (TT .EQ. 1.0) GO TO 230
@@ -59141,7 +59144,7 @@ C     REORDER B TO REFLECT ROW INTERCHANGES
          END DO
          GO TO 40
   100 DO I = 1,M
-         IR(I) = IABS(IR(I))
+         IR(I) = ABS(IR(I))
       END DO
 C     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
       DO J = 1,K
@@ -59203,7 +59206,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
          IF (J .NE. I) GO TO 250
          GO TO 240
   260 DO I = 1,N
-         IC(I) = IABS(IC(I))
+         IC(I) = ABS(IC(I))
       END DO
       END SUBROUTINE U12LS
 
@@ -59243,7 +59246,7 @@ C        CALCULATE ROW LENGTH
       END DO
 C         INITIALIZE ERROR BOUNDS
       DO I = 1,M
-         EB(I) = AMAX1(DB(I),UB(I)*H(I))
+         EB(I) = MAX(DB(I),UB(I)*H(I))
          UB(I) = EB(I)
          DB(I) = 0.0
       END DO
@@ -59357,7 +59360,7 @@ C     APPLY HOUSEHOLDER TRANSFORMATION
          IF (I .LE. NP) GO TO 240
          IF (H(I) .EQ. 0.0) GO TO 240
          TT = 1.0 - (A(I,J)/H(I))**2
-         TT = AMAX1(TT,0.0)
+         TT = MAX(TT,0.0)
          T = TT
          TT = 1.0 + 0.05*TT*(H(I)/W(I))**2
          IF (TT .EQ. 1.0) GO TO 230
@@ -59486,7 +59489,7 @@ C     REORDER B TO REFLECT ROW INTERCHANGES
          END DO
          GO TO 40
   100 DO I = 1,M
-         IR(I) = IABS(IR(I))
+         IR(I) = ABS(IR(I))
       END DO
 C     IF A IS OF REDUCED RANK AND MODE=2,
 C     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
@@ -59547,7 +59550,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
          IF (J .NE. I) GO TO 250
          GO TO 240
   260 DO I = 1,N
-         IC(I) = IABS(IC(I))
+         IC(I) = ABS(IC(I))
       END DO
       END SUBROUTINE U12US
 
@@ -59672,8 +59675,8 @@ C     CHECK THE INPUT
       IF (M .LT. 1 .OR. N .LT. 1) GO TO 210
       IF (MDA .LT. M) GO TO 220
       IF (LIW .LT. M + N) GO TO 240
-      M0 = MIN0(M,N)
-      N0 = MAX0(M,N)
+      M0 = MIN(M,N)
+      N0 = MAX(M,N)
 C     NUM = 0
       IF (NB .LE. 0) GO TO 10
       IF (MDB .LT. N0) GO TO 230
@@ -59687,7 +59690,7 @@ C     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
       M4 = M3 + M0
       M5 = M4 + M0
       EPS = 10.D0*DPMPAR(1)
-      RERR = DMAX1(EPS,RE)
+      RERR = MAX(EPS,RE)
       IMAX = M5 - 1
       DO I = M4,IMAX
          WORK(I) = RERR
@@ -59796,7 +59799,7 @@ C        CALCULATE COL LENGTH
       END DO
 C         INITIALIZE ERROR BOUNDS
       DO I = 1,N
-         EB(I) = DMAX1(DB(I),UB(I)*H(I))
+         EB(I) = MAX(DB(I),UB(I)*H(I))
          UB(I) = EB(I)
          DB(I) = 0.D0
       END DO
@@ -59844,7 +59847,7 @@ C         UB DETERMINES COLUMN PIVOT
       END DO
 C     TEST FOR RANK DEFICIENCY
       IF (RMIN .LT. 1.D0) GO TO 200
-      TT = (EB(IMIN) + DABS(DB(IMIN)))/H(IMIN)
+      TT = (EB(IMIN) + ABS(DB(IMIN)))/H(IMIN)
       IF (TT .GE. 1.D0) GO TO 170
 C     COMPUTE EXACT UB
       DO I = 1,JM1
@@ -59861,7 +59864,7 @@ C     COMPUTE EXACT UB
       GO TO 130
   150 TT = EB(IMIN)
       DO I = 1,JM1
-         TT = TT + DABS(W(I))*EB(I)
+         TT = TT + ABS(W(I))*EB(I)
       END DO
       UB(IMIN) = TT
       IF (UB(IMIN)/H(IMIN) .GE. 1.D0) GO TO 170
@@ -59900,7 +59903,7 @@ C        ROW PIVOT
 C     APPLY HOUSEHOLDER TRANSFORMATION
   220 TN = DNRM2(MM,A(J,J),1)
       IF (TN .EQ. 0.D0) GO TO 170
-      IF (A(J,J) .NE. 0.D0) TN = DSIGN(TN,A(J,J))
+      IF (A(J,J) .NE. 0.D0) TN = SIGN(TN,A(J,J))
       CALL DSCAL(MM,1.D0/TN,A(J,J),1)
       A(J,J) = A(J,J) + 1.D0
       IF (J .EQ. N) GO TO 250
@@ -59910,11 +59913,11 @@ C     APPLY HOUSEHOLDER TRANSFORMATION
          IF (I .LE. NP) GO TO 240
          IF (H(I) .EQ. 0.D0) GO TO 240
          TT = 1.D0 - (A(J,I)/H(I))**2
-         TT = DMAX1(TT,0.D0)
+         TT = MAX(TT,0.D0)
          T = TT
          TT = 1.D0 + 0.05D0*TT*(H(I)/W(I))**2
          IF (TT .EQ. 1.D0) GO TO 230
-            H(I) = H(I)*DSQRT(T)
+            H(I) = H(I)*SQRT(T)
             GO TO 240
   230    H(I) = DNRM2(M-J,A(J+1,I),1)
          W(I) = H(I)
@@ -59923,11 +59926,11 @@ C     APPLY HOUSEHOLDER TRANSFORMATION
   250 H(J) = A(J,J)
       A(J,J) = -TN
 C          UPDATE UB, DB
-      UB(J) = UB(J)/DABS(A(J,J))
-      DB(J) = (DSIGN(EB(J),DB(J)) + DB(J))/A(J,J)
+      UB(J) = UB(J)/ABS(A(J,J))
+      DB(J) = (SIGN(EB(J),DB(J)) + DB(J))/A(J,J)
       IF (J .EQ. KRANK) GO TO 300
       DO I = JP1,KRANK
-         UB(I) = UB(I) + DABS(A(J,I))*UB(J)
+         UB(I) = UB(I) + ABS(A(J,I))*UB(J)
          DB(I) = DB(I) - A(J,I)*DB(J)
       END DO
       GO TO 100
@@ -59963,7 +59966,7 @@ C     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
       KP1 = KRANK + 1
       I = KRANK
   340    TN = DNRM2(NMK,A(I,KP1),MDA)/A(I,I)
-         TN = A(I,I)*DSQRT(1.D0 + TN*TN)
+         TN = A(I,I)*SQRT(1.D0 + TN*TN)
          CALL DSCAL(NMK,1.D0/TN,A(I,KP1),MDA)
          W(I) = A(I,I)/TN + 1.D0
          A(I,I) = -TN
@@ -60036,7 +60039,7 @@ C     REORDER B TO REFLECT ROW INTERCHANGES
          END DO
          GO TO 40
   100 DO I = 1,M
-         IR(I) = IABS(IR(I))
+         IR(I) = ABS(IR(I))
       END DO
 C     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
       DO J = 1,K
@@ -60098,7 +60101,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
          IF (J .NE. I) GO TO 250
          GO TO 240
   260 DO I = 1,N
-         IC(I) = IABS(IC(I))
+         IC(I) = ABS(IC(I))
       END DO
       END SUBROUTINE DU12LS
 
@@ -60138,7 +60141,7 @@ C        CALCULATE ROW LENGTH
       END DO
 C         INITIALIZE ERROR BOUNDS
       DO I = 1,M
-         EB(I) = DMAX1(DB(I),UB(I)*H(I))
+         EB(I) = MAX(DB(I),UB(I)*H(I))
          UB(I) = EB(I)
          DB(I) = 0.D0
       END DO
@@ -60186,7 +60189,7 @@ C         UB DETERMINES ROW PIVOT
       END DO
 C     TEST FOR RANK DEFICIENCY
       IF (RMIN .LT. 1.D0) GO TO 200
-      TT = (EB(IMIN) + DABS(DB(IMIN)))/H(IMIN)
+      TT = (EB(IMIN) + ABS(DB(IMIN)))/H(IMIN)
       IF (TT .GE. 1.D0) GO TO 170
 C     COMPUTE EXACT UB
       DO I = 1,JM1
@@ -60203,7 +60206,7 @@ C     COMPUTE EXACT UB
       GO TO 130
   150 TT = EB(IMIN)
       DO I = 1,JM1
-         TT = TT + DABS(W(I))*EB(I)
+         TT = TT + ABS(W(I))*EB(I)
       END DO
       UB(IMIN) = TT
       IF (UB(IMIN)/H(IMIN) .GE. 1.D0) GO TO 170
@@ -60242,7 +60245,7 @@ C        COLUMN PIVOT
 C     APPLY HOUSEHOLDER TRANSFORMATION
   220 TN = DNRM2(NN,A(J,J),MDA)
       IF (TN .EQ. 0.D0) GO TO 170
-      IF (A(J,J) .NE. 0.D0) TN = DSIGN(TN,A(J,J))
+      IF (A(J,J) .NE. 0.D0) TN = SIGN(TN,A(J,J))
       CALL DSCAL(NN,1.D0/TN,A(J,J),MDA)
       A(J,J) = A(J,J) + 1.D0
       IF (J .EQ. M) GO TO 250
@@ -60252,11 +60255,11 @@ C     APPLY HOUSEHOLDER TRANSFORMATION
          IF (I .LE. NP) GO TO 240
          IF (H(I) .EQ. 0.D0) GO TO 240
          TT = 1.0 - (A(I,J)/H(I))**2
-         TT = DMAX1(TT,0.D0)
+         TT = MAX(TT,0.D0)
          T = TT
          TT = 1.D0 + 0.05D0*TT*(H(I)/W(I))**2
          IF (TT .EQ. 1.D0) GO TO 230
-            H(I) = H(I)*DSQRT(T)
+            H(I) = H(I)*SQRT(T)
             GO TO 240
   230    H(I) = DNRM2(N-J,A(I,J+1),MDA)
          W(I) = H(I)
@@ -60265,11 +60268,11 @@ C     APPLY HOUSEHOLDER TRANSFORMATION
   250 H(J) = A(J,J)
       A(J,J) = -TN
 C          UPDATE UB, DB
-      UB(J) = UB(J)/DABS(A(J,J))
-      DB(J) = (DSIGN(EB(J),DB(J)) + DB(J))/A(J,J)
+      UB(J) = UB(J)/ABS(A(J,J))
+      DB(J) = (SIGN(EB(J),DB(J)) + DB(J))/A(J,J)
       IF (J .EQ. KRANK) GO TO 300
       DO I = JP1,KRANK
-         UB(I) = UB(I) + DABS(A(I,J))*UB(J)
+         UB(I) = UB(I) + ABS(A(I,J))*UB(J)
          DB(I) = DB(I) - A(I,J)*DB(J)
       END DO
       GO TO 100
@@ -60305,7 +60308,7 @@ C     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
       KP1 = KRANK + 1
       I = KRANK
   340    TN = DNRM2(MMK,A(KP1,I),1)/A(I,I)
-         TN = A(I,I)*DSQRT(1.D0 + TN*TN)
+         TN = A(I,I)*SQRT(1.D0 + TN*TN)
          CALL DSCAL(MMK,1.D0/TN,A(KP1,I),1)
          W(I) = A(I,I)/TN + 1.D0
          A(I,I) = -TN
@@ -60378,7 +60381,7 @@ C     REORDER B TO REFLECT ROW INTERCHANGES
          END DO
          GO TO 40
   100 DO I = 1,M
-         IR(I) = IABS(IR(I))
+         IR(I) = ABS(IR(I))
       END DO
 C     IF A IS OF REDUCED RANK AND MODE=2,
 C     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
@@ -60439,7 +60442,7 @@ C     REORDER B TO REFLECT COLUMN INTERCHANGES
          IF (J .NE. I) GO TO 250
          GO TO 240
   260 DO I = 1,N
-         IC(I) = IABS(IC(I))
+         IC(I) = ABS(IC(I))
       END DO
       END SUBROUTINE DU12US
 
@@ -60538,7 +60541,7 @@ C-----------------------------------------------------------------------
 C---------------------
       DATA FACTOR /1.E-3/
       K = 0
-      LDIAG = MIN0(M,N)
+      LDIAG = MIN(M,N)
       IF (LDIAG .LE. 0) GO TO 270
           DO J = 1,LDIAG
           IF (J .EQ. 1) GO TO 20
@@ -60767,10 +60770,10 @@ C-----------------------------------------------------------------------
 C---------------------
       DATA FACTOR /1.E-3/
       K = 0
-      LDIAG = MIN0(M,N)
+      LDIAG = MIN(M,N)
       IF (LDIAG .LE. 0) GO TO 270
       IF (M .GT. MDA) GO TO 300
-      IF (NB .GT. 1 .AND. MAX0(M,N) .GT. MDB) GO TO 310
+      IF (NB .GT. 1 .AND. MAX(M,N) .GT. MDB) GO TO 310
           DO J = 1,LDIAG
           IF (J .EQ. 1) GO TO 20
 C     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX
@@ -60940,7 +60943,7 @@ C-----------------------------------------------------------------------
       IF (MODE .EQ. 2) GO TO 60
 C                            ****** CONSTRUCT THE TRANSFORMATION. ******
           DO J = L1,M
-          CL = AMAX1(ABS(U(1,J)),CL)
+          CL = MAX(ABS(U(1,J)),CL)
           END DO
       IF (CL .LE. 0.0) GO TO 130
       D = U(1,LPIVOT)/CL
@@ -61083,7 +61086,7 @@ C-----------------------------------------------------------------------
 C---------------------
       DATA FACTOR /1.D-3/
       K = 0
-      LDIAG = MIN0(M,N)
+      LDIAG = MIN(M,N)
       IF (LDIAG .LE. 0) GO TO 270
           DO J = 1,LDIAG
           IF (J .EQ. 1) GO TO 20
@@ -61127,7 +61130,7 @@ C    ..
 C     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
 C    ..
           DO J = 1,LDIAG
-          IF (DABS(A(J,J)) .LE. TAU) GO TO 100
+          IF (ABS(A(J,J)) .LE. TAU) GO TO 100
           END DO
       K = LDIAG
       GO TO 110
@@ -61141,7 +61144,7 @@ C     COMPUTE THE NORMS OF THE RESIDUAL VECTORS.
               DO I = KP1,M
               TMP = TMP + B(I,JB)**2
               END DO
-  130     RNORM(JB) = DSQRT(TMP)
+  130     RNORM(JB) = SQRT(TMP)
           END DO
   140 CONTINUE
 C                                           SPECIAL FOR PSEUDORANK = 0
@@ -61312,10 +61315,10 @@ C-----------------------------------------------------------------------
 C---------------------
       DATA FACTOR /1.D-3/
       K = 0
-      LDIAG = MIN0(M,N)
+      LDIAG = MIN(M,N)
       IF (LDIAG .LE. 0) GO TO 270
       IF (M .GT. MDA) GO TO 300
-      IF (NB .GT. 1 .AND. MAX0(M,N) .GT. MDB) GO TO 310
+      IF (NB .GT. 1 .AND. MAX(M,N) .GT. MDB) GO TO 310
           DO J = 1,LDIAG
           IF (J .EQ. 1) GO TO 20
 C     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX
@@ -61359,7 +61362,7 @@ C     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
 C     ALSO STORE THE DIAGONAL ELEMENTS IN THE ARRAY D.
 C    ..
           DO J = 1,LDIAG
-          IF (DABS(A(J,J)) .LE. TAU) GO TO 100
+          IF (ABS(A(J,J)) .LE. TAU) GO TO 100
           D(J) = A(J,J)
           END DO
           K = LDIAG
@@ -61378,7 +61381,7 @@ C     COMPUTE THE NORMS OF THE RESIDUAL VECTORS.
               DO I = KP1,M
               TMP = TMP + B(I,JB)**2
               END DO
-  130     RNORM(JB) = DSQRT(TMP)
+  130     RNORM(JB) = SQRT(TMP)
           END DO
   140 CONTINUE
 C                                           SPECIAL FOR PSEUDORANK = 0
@@ -61480,11 +61483,11 @@ C     NCV    NUMBER OF VECTORS IN C() TO BE TRANSFORMED. IF NCV .LE. 0
 C            NO OPERATIONS WILL BE DONE ON C().
 C-----------------------------------------------------------------------
       IF (0 .GE. LPIVOT .OR. LPIVOT .GE. L1 .OR. L1 .GT. M) RETURN
-      CL = DABS(U(1,LPIVOT))
+      CL = ABS(U(1,LPIVOT))
       IF (MODE .EQ. 2) GO TO 60
 C                            ****** CONSTRUCT THE TRANSFORMATION. ******
           DO J = L1,M
-          CL = DMAX1(DABS(U(1,J)),CL)
+          CL = MAX(ABS(U(1,J)),CL)
           END DO
       IF (CL .LE. 0.D0) GO TO 130
       D = U(1,LPIVOT)/CL
@@ -61493,7 +61496,7 @@ C                            ****** CONSTRUCT THE TRANSFORMATION. ******
           D = U(1,J)/CL
           SM = SM + D*D
           END DO
-      CL = CL*DSQRT(SM)
+      CL = CL*SQRT(SM)
       IF (U(1,LPIVOT) .GT. 0.D0) CL = -CL
       UP = U(1,LPIVOT) - CL
       U(1,LPIVOT) = CL
@@ -61812,7 +61815,7 @@ C     TRANSFORMATIONS.
       MODE = 4
       RETURN
    80 NP1 = N + 1
-      KRANKE = MIN0(ME,N)
+      KRANKE = MIN(ME,N)
       N1 = 2*KRANKE + 1
       N2 = N1 + N
 C     PROCESS-OPTION-VECTOR
@@ -61824,7 +61827,7 @@ C     PROCESS-OPTION-VECTOR
 C     COMPUTE NORM OF EQUALITY CONSTRAINT MATRIX AND RT SIDE.
       ENORM = ZERO
       DO J = 1,N
-        ENORM = AMAX1(ENORM,SASUM(ME,W(1,J),1))
+        ENORM = MAX(ENORM,SASUM(ME,W(1,J),1))
       END DO
       FNORM = SASUM(ME,W(1,NP1),1)
       IF (.NOT.(L.GT.0)) GO TO 200
@@ -62007,7 +62010,7 @@ C     DEFINE BOUND FOR POSITIVE VALUES OF LINK.
         WS(L-1) = T
       END DO
   520 IF (KEY.EQ.3) CALL SCOPY(N, PRGOPT(LAST+2), 1, WS(N1), 1)
-      IF (KEY.EQ.4) TAU = AMAX1(SRELPR,PRGOPT(LAST+2))
+      IF (KEY.EQ.4) TAU = MAX(SRELPR,PRGOPT(LAST+2))
       NEXT = PRGOPT(LINK)
       IF (.NOT.(NEXT.LE.0 .OR. NEXT.GT.NLINK)) GO TO 530
       MODE = 4
@@ -62095,7 +62098,7 @@ C     PROCESS-OPTION-VECTOR
 C     COMPUTE MATRIX NORM OF LEAST SQUARES EQUAS.
    40 ANORM = ZERO
       DO J = 1,N
-        ANORM = AMAX1(ANORM,SASUM(MA,W(1,J),1))
+        ANORM = MAX(ANORM,SASUM(MA,W(1,J),1))
       END DO
 C     SET TOL FOR HFTI( ) RANK TEST.
       TAU = TOL*ANORM
@@ -62103,8 +62106,8 @@ C     COMPUTE HOUSEHOLDER ORTHOGONAL DECOMP OF MATRIX.
       IF (N.GT.0) WS(1) = ZERO
       CALL SCOPY(N, WS, 0, WS, 1)
       CALL SCOPY(MA, W(1,NP1), 1, WS, 1)
-      K = MAX0(M,N)
-      MINMAN = MIN0(MA,N)
+      K = MAX(M,N)
+      MINMAN = MIN(MA,N)
       N1 = K + 1
       N2 = N1 + N
       CALL HFTI(W, MDW, MA, N, WS, 1, 1, TAU, KRANK, RNRM, WS(N2),
@@ -62116,7 +62119,7 @@ C     COMPUTE HOUSEHOLDER ORTHOGONAL DECOMP OF MATRIX.
       GO TO 80
 C     REDUCE-TO-LPDP-AND-SOLVE
    70 IP(1) = KRANK
-      IP(2) = N + MAX0(M,N) + (MG+2)*(N+7)
+      IP(2) = N + MAX(M,N) + (MG+2)*(N+7)
       RETURN
 C     TO REDUCE-TO-LPDP-AND-SOLVE
    80 MAP1 = MA + 1
@@ -62295,7 +62298,7 @@ C     THE NOMINAL TOLERANCE USED IN THE CODE,
   510    IF (.NOT.(LINK.GT.1)) GO TO 540
          KEY = PRGOPT(LAST+1)
          IF (KEY .EQ. 1) COV = PRGOPT(LAST+2).NE.ZERO
-         IF (KEY .EQ. 5) TOL = AMAX1(SRELPR,PRGOPT(LAST+2))
+         IF (KEY .EQ. 5) TOL = MAX(SRELPR,PRGOPT(LAST+2))
          IF (KEY .NE. 8) GO TO 520
             KEY8 = 1
             EPS = PRGOPT(LAST+2)
@@ -62802,8 +62805,8 @@ C     DEFINE BOUND FOR POSITIVE VALUE OF LINK.
         D(J) = T
       END DO
   140 IF (KEY.EQ.7) CALL SCOPY(N, PRGOPT(LAST+2), 1, D, 1)
-      IF (KEY.EQ.8) TAU = AMAX1(SRELPR,PRGOPT(LAST+2))
-      IF (KEY.EQ.9) BLOWUP = AMAX1(SRELPR,PRGOPT(LAST+2))
+      IF (KEY.EQ.8) TAU = MAX(SRELPR,PRGOPT(LAST+2))
+      IF (KEY.EQ.9) BLOWUP = MAX(SRELPR,PRGOPT(LAST+2))
       NEXT = PRGOPT(LINK)
       IF (.NOT.(NEXT.LE.0 .OR. NEXT.GT.NLINK)) GO TO 150
       MODE = 2
@@ -62832,7 +62835,7 @@ C     PROCESS-OPTION-VECTOR
       NSP1 = NSOLN + 1
       NP1 = N + 1
       NM1 = N - 1
-      L1 = MIN0(M,L)
+      L1 = MIN(M,L)
 C     COMPUTE SCALE FACTOR TO APPLY TO EQUAL. CONSTRAINT EQUAS.
       DO J=1,N
         WD(J) = SASUM(M,W(1,J),1)
@@ -63286,7 +63289,7 @@ C     REVISED OCT. 1, 1989
       FAC = DOPE(3)
       TAU = DOPE(4)
       NP1 = N + 1
-      LB = MIN0(M-1,L)
+      LB = MIN(M-1,L)
       RECALC = .TRUE.
       RNORM = ZERO
       KRANK = 0
@@ -63372,7 +63375,7 @@ C     VARIABLES.  REMOVE ANY REDUNDANT CONSTRAINTS.
       IF (.NOT.(L.LT.N)) GO TO 245
       LP1 = L + 1
       RECALC = .TRUE.
-      LB = MIN0(L+ME-KRANK,N)
+      LB = MIN(L+ME-KRANK,N)
       I = LP1
       IP1 = I + 1
   180 IF (.NOT.(I.LE.LB)) GO TO 280
@@ -63884,7 +63887,7 @@ C M ROWS OF ARRAY QR AND COMPUTE ITS RANK.
       RETURN
 C SEEK A SOLUTION (COEFFICIENTS AND RESIDUALS) FOR EACH OF THE L LEAST
 C SQUARES PROBLEMS WHOSE RIGHT-HAND SIDES ARE GIVEN IN THE ARRAY B.
-  110 ITER = -ALOG10(ETA)
+  110 ITER = -LOG10(ETA)
       DO K=1,L
 C K-TH RIGHT-HAND SIDE.
         K0 = K4 - 1
@@ -64348,9 +64351,9 @@ C END NEW RESIDUALS.
       XNORM = SQRT(RNX)
       DXNORM = SQRT(RDX2)
       IF (XNORM.NE.0.0) GO TO 250
-      DIGITX = -ALOG10(ETA)
+      DIGITX = -LOG10(ETA)
       GO TO 260
-  250 DIGITX = -ALOG10(AMAX1(DXNORM/XNORM,ETA))
+  250 DIGITX = -LOG10(MAX(DXNORM/XNORM,ETA))
 C END K-TH ITERATION STEP.
   260 NUMIT = K
       K = K + 1
@@ -65519,9 +65522,9 @@ C     -------------------
       A = A0
       B = B0
       IND = 0
-      ATOL = AMAX1(AERR,1.E-20)
-      FTOL = AMAX1(2.0*EPS,RERR)
-      RTOL = AMAX1(7.0*EPS,RERR)
+      ATOL = MAX(AERR,1.E-20)
+      FTOL = MAX(2.0*EPS,RERR)
+      RTOL = MAX(7.0*EPS,RERR)
       E = B - A
       U = A + C1*E
       V = A + C2*E
@@ -65550,16 +65553,16 @@ C        LOCATION OF THE REGION OF A LOCAL MINIMUM
       GO TO 10
    40 IF (A .GT. 0.0 .OR. B .LT. 0.0) GO TO 41
          W = F(0.0)
-         IF (W .LE. AMIN1(FU,FV)) GO TO 100
+         IF (W .LE. MIN(FU,FV)) GO TO 100
    41 IF (A .NE. A0) GO TO 42
          IF (A .EQ. 0.0) GO TO 201
          W = F(A)
-         IF (W .LE. AMIN1(FU,FV)) GO TO 130
+         IF (W .LE. MIN(FU,FV)) GO TO 130
          GO TO 201
    42 IF (B .NE. B0) GO TO 201
          IF (B .EQ. 0.0) GO TO 201
          W = F(B)
-         IF (W .LE. AMIN1(FU,FV)) GO TO 150
+         IF (W .LE. MIN(FU,FV)) GO TO 150
          GO TO 201
 C              CHECK IF 0 IS A LOCAL MINIMUM
   100 IF (B .LE. ATOL) GO TO 110
@@ -65573,10 +65576,10 @@ C              CHECK IF 0 IS A LOCAL MINIMUM
       A = X
       GO TO 110
   120 X = 0.0
-      ERROR = AMAX1(ABS(A),B)
+      ERROR = MAX(ABS(A),B)
       RETURN
 C             CHECK IF A0 IS A LOCAL MINIMUM
-  130 TOL = AMAX1(RTOL*ABS(A),ATOL)
+  130 TOL = MAX(RTOL*ABS(A),ATOL)
   131 X = A + 0.01*E
       IF (W .GT. F(X)) GO TO 180
       B = X
@@ -65586,7 +65589,7 @@ C             CHECK IF A0 IS A LOCAL MINIMUM
       ERROR = E
       RETURN
 C             CHECK IF B0 IS A LOCAL MINIMUM
-  150 TOL = AMAX1(RTOL*ABS(B),ATOL)
+  150 TOL = MAX(RTOL*ABS(B),ATOL)
   151 X = B - 0.01*E
       IF (W .GT. F(X)) GO TO 180
       A = X
@@ -65617,8 +65620,8 @@ C             REFINEMENT OF THE LOCAL MINIMUM
       FU = FV
       FV = F(V)
 C        CHECKING THE ACCURACY OF THE LOCAL MINIMUM
-  220 IF (E .LE. AMAX1(RTOL*ABS(A),ATOL)) GO TO 240
-      IF (ABS(FV - FU) .GT. FTOL*AMAX1(ABS(FU),ABS(FV))) GO TO 200
+  220 IF (E .LE. MAX(RTOL*ABS(A),ATOL)) GO TO 240
+      IF (ABS(FV - FU) .GT. FTOL*MAX(ABS(FU),ABS(FV))) GO TO 200
       IF (IND .EQ. 1) GO TO 241
       IND = 1
       GO TO 201
@@ -65681,7 +65684,7 @@ C                 WRK(N,7) = WRK1(N)
 C                 WRK(N,8) = WRK2(N)
 C                 WRK(N,9) = A(N,N)
 C     SET TOLERANCES
-      EPS = AMAX1(SPMPAR(1),ABS(RERR))
+      EPS = MAX(SPMPAR(1),ABS(RERR))
       GRADTL = EPS**0.4
       STEPMX = 0.0
       STEPTL = EPS
@@ -65786,8 +65789,8 @@ C     --------------
       STEPMX = 0.0
       CALL OPCHK1(N,X,TYPSIZ,FSCALE,GRADTL,ITNLIM,RERR,STEPMX,IERR)
       IF (IERR .LT. 0) RETURN
-      IF (MO .NE. 0) STEPMX = AMAX1(STMX,STEPMX)
-      RNF = 2.0*AMAX1(RERR,SPMPAR(1))
+      IF (MO .NE. 0) STEPMX = MAX(STMX,STEPMX)
+      RNF = 2.0*MAX(RERR,SPMPAR(1))
       SQRNF = SQRT(RNF)
       ITNCNT = 0
       IAGFLG = 0
@@ -65925,7 +65928,7 @@ C     CHECK MAXIMUM STEP SIZE
          STPSIZ = STPSIZ + (X(I)/TYPSIZ(I))**2
       END DO
       STPSIZ = SQRT(STPSIZ)
-      STEPMX = AMAX1(1.0E3*STPSIZ, 1.0E3)
+      STEPMX = MAX(1.0E3*STPSIZ, 1.0E3)
    20 CONTINUE
 C     CHECK FUNCTION SCALE
       FSCALE = ABS(FSCALE)
@@ -66003,11 +66006,11 @@ C     LAST GLOBAL STEP FAILED TO LOCATE A POINT LOWER THAN X
    10 CONTINUE
 C     FIND DIRECTION IN WHICH RELATIVE GRADIENT MAXIMUM.
 C     CHECK WHETHER WITHIN TOLERANCE.
-      D = AMAX1(ABS(FPLS),FSCALE)
+      D = MAX(ABS(FPLS),FSCALE)
       RGX = 0.0
       DO I = 1,N
-         GRD = ABS(GPLS(I))*AMAX1(ABS(XPLS(I)),TYPSIZ(I))
-         RGX = AMAX1(RGX, GRD)
+         GRD = ABS(GPLS(I))*MAX(ABS(XPLS(I)),TYPSIZ(I))
+         RGX = MAX(RGX, GRD)
       END DO
       JERR = 1
       IF (RGX .GT. GRADTL*D) GO TO 30
@@ -66019,8 +66022,8 @@ C     FIND DIRECTION IN WHICH RELATIVE STEPSIZE MAXIMUM
 C     CHECK WHETHER WITHIN TOLERANCE.
       RSX = 0.0
       DO I = 1,N
-         RELSTP = ABS(XPLS(I) - X(I))/AMAX1(ABS(XPLS(I)),TYPSIZ(I))
-         RSX = AMAX1(RSX,RELSTP)
+         RELSTP = ABS(XPLS(I) - X(I))/MAX(ABS(XPLS(I)),TYPSIZ(I))
+         RSX = MAX(RSX,RELSTP)
       END DO
       JERR = 2
       IF (RSX .LE. STEPTL) GO TO 100
@@ -66063,7 +66066,7 @@ C-----------------------------------------------------------------------
 C     FIXED STEP COORDINATE DESCENT PROCEDURE / ONE ITERATION
 C-----------------------------------------------------------------------
       DO I = 1,N
-         H = R * AMAX1(ABS(X(I)), 1.0)
+         H = R * MAX(ABS(X(I)), 1.0)
          XI = X(I)
          XPLUS = XI + H
          X(I) = XPLUS
@@ -66096,8 +66099,8 @@ C     RESCALE THE VARIABLES
 C-----------------------------------------------------------------------
       XMIN = 1.E-5*SPMPAR(3)
       DO I = 1,N
-         T = AMAX1(ABS(X(I)), 1.E-20)
-         XMIN = AMIN1(T, XMIN)
+         T = MAX(ABS(X(I)), 1.E-20)
+         XMIN = MIN(T, XMIN)
       END DO
       C = 1.E3
       IF (MO .NE. 0) C = 1.E2
@@ -66109,7 +66112,7 @@ C-----------------------------------------------------------------------
       RETURN
    30 DO I = 1,N
          T = ABS(X(I))/C
-         TYPSIZ(I) = AMAX1(T, XMIN)
+         TYPSIZ(I) = MAX(T, XMIN)
       END DO
       IERR = -10
       END SUBROUTINE SCALEX
@@ -66189,7 +66192,7 @@ C     OUTPUT ...
 C       G(N)       FINITE DIFFERENCE APPROXIMATION TO THE GRADIENT
 C-----------------------------------------------------------------------
       DO J = 1,N
-        STEPSZ = R * AMAX1(ABS(X(J)),TYPSIZ(J))
+        STEPSZ = R * MAX(ABS(X(J)),TYPSIZ(J))
         XTMPJ = X(J)
         X(J) = XTMPJ + STEPSZ
         CALL FCN(N, X, FPLUS)
@@ -66224,7 +66227,7 @@ C-----------------------------------------------------------------------
 C     FIND I-TH  STEPSIZE, EVALUATE TWO NEIGHBORS IN DIRECTION OF
 C     I-TH UNIT VECTOR, AND EVALUATE I-TH  COMPONENT OF GRADIENT.
       DO I = 1, N
-         STEPI = R * AMAX1(ABS(X(I)),TYPSIZ(I))
+         STEPI = R * MAX(ABS(X(I)),TYPSIZ(I))
          XTEMPI = X(I)
          X(I) = XTEMPI + STEPI
          CALL FCN(N, X, FPLUS)
@@ -66294,7 +66297,7 @@ C     NEWTON STEP LONGER THAN MAXIMUM ALLOWED
    30 SLP = SDOT(N,G,1,P,1)
       RLN = 0.0
       DO I = 1,N
-         RLN = AMAX1(RLN,ABS(P(I))/AMAX1(ABS(X(I)),TYPSIZ(I)))
+         RLN = MAX(RLN,ABS(P(I))/MAX(ABS(X(I)),TYPSIZ(I)))
       END DO
       RMNLMB = STEPTL/RLN
       LAMBDA = 1.0
@@ -66309,7 +66312,7 @@ C     SOLUTION NOT (YET) FOUND
 C     CALCULATE NEW LAMBDA
         IF (LAMBDA .NE. 1.0) GO TO 120
 C     FIRST BACKTRACK. QUADRATIC FIT
-            TLMBDA = AMIN1(-SLP/(2.0*(FPLS - F - SLP)), 0.9)
+            TLMBDA = MIN(-SLP/(2.0*(FPLS - F - SLP)), 0.9)
             GO TO 170
 C     ALL SUBSEQUENT BACKTRACKS. CUBIC FIT
   120       T1 = (FPLS - F - LAMBDA*SLP)/(LAMBDA*LAMBDA)
@@ -66425,7 +66428,7 @@ C     SET W = L*S
 C     IF ABS(Y(I) - W(I)) IS LESS THAN THE ESTIMATED NOISE IN Y(I)
 C     FOR EACH I, THEN THE UPDATE IS SKIPPED.
       DO I = 1,N
-      IF (ABS(Y(I) - W(I)) .GE. TOL*AMAX1(ABS(G(I)),ABS(GPLS(I))))
+      IF (ABS(Y(I) - W(I)) .GE. TOL*MAX(ABS(G(I)),ABS(GPLS(I))))
      *         GO TO 70
       END DO
       RETURN
@@ -66906,7 +66909,7 @@ C        COMPUTE THE NORM OF THE SCALED GRADIENT.
             DO I = 1, J
                SUM = SUM + FJAC(I,J)*(QTF(I)/FNORM)
                END DO
-            GNORM = AMAX1(GNORM,ABS(SUM/WA2(L)))
+            GNORM = MAX(GNORM,ABS(SUM/WA2(L)))
   150       CONTINUE
             END DO
   170    CONTINUE
@@ -66916,7 +66919,7 @@ C        TEST FOR CONVERGENCE OF THE GRADIENT NORM.
 C        RESCALE IF NECESSARY.
          IF (MODE .EQ. 2) GO TO 190
          DO J = 1, N
-            DIAG(J) = AMAX1(DIAG(J),WA2(J))
+            DIAG(J) = MAX(DIAG(J),WA2(J))
             END DO
   190    CONTINUE
 C        BEGINNING OF THE INNER LOOP.
@@ -66932,7 +66935,7 @@ C           STORE THE DIRECTION P AND X + P. CALCULATE THE NORM OF P.
                END DO
             PNORM = ENORM(N,WA3)
 C           ON THE FIRST ITERATION, ADJUST THE INITIAL STEP BOUND.
-            IF (ITER .EQ. 1) DELTA = AMIN1(DELTA,PNORM)
+            IF (ITER .EQ. 1) DELTA = MIN(DELTA,PNORM)
 C           EVALUATE THE FUNCTION AT X + P AND CALCULATE ITS NORM.
             IFLAG = 1
             CALL FCN(M,N,WA2,WA4,IFLAG)
@@ -66966,7 +66969,7 @@ C           UPDATE THE STEP BOUND.
                IF (ACTRED .LT. 0.0)
      *            TEMP = P5*DIRDER/(DIRDER + P5*ACTRED)
                IF (P1*FNORM1 .GE. FNORM .OR. TEMP .LT. P1) TEMP = P1
-               DELTA = TEMP*AMIN1(DELTA,PNORM/P1)
+               DELTA = TEMP*MIN(DELTA,PNORM/P1)
                PAR = PAR/TEMP
                GO TO 260
   240       CONTINUE
@@ -67167,7 +67170,7 @@ C     FIRST, CALCULATE THE GAUSS-NEWTON DIRECTION.
          IF (TEMP .NE. 0.0) GO TO 40
          L = J
          DO I = 1, J
-            TEMP = AMAX1(TEMP,ABS(R(L)))
+            TEMP = MAX(TEMP,ABS(R(L)))
             L = L + N - I
             END DO
          TEMP = EPSMCH*TEMP
@@ -67230,7 +67233,7 @@ C     AT WHICH THE QUADRATIC IS MINIMIZED.
   120 CONTINUE
 C     FORM APPROPRIATE CONVEX COMBINATION OF THE GAUSS-NEWTON
 C     DIRECTION AND THE SCALED GRADIENT DIRECTION.
-      TEMP = (1.0 - ALPHA)*AMIN1(SGNORM,DELTA)
+      TEMP = (1.0 - ALPHA)*MIN(SGNORM,DELTA)
       DO J = 1, N
          X(J) = TEMP*WA1(J) + ALPHA*X(J)
          END DO
@@ -67319,7 +67322,7 @@ C     **********
       DATA ZERO /0.0E0/
 C     EPSMCH IS THE MACHINE PRECISION.
       EPSMCH = SPMPAR(1)
-      EPS = SQRT(AMAX1(EPSFCN,EPSMCH))
+      EPS = SQRT(MAX(EPSFCN,EPSMCH))
       MSUM = ML + MU + 1
       IF (MSUM .LT. N) GO TO 40
 C        COMPUTATION OF DENSE APPROXIMATE JACOBIAN.
@@ -67431,7 +67434,7 @@ C     **********
       DATA ZERO /0.0E0/
 C     EPSMCH IS THE MACHINE PRECISION.
       EPSMCH = SPMPAR(1)
-      EPS = SQRT(AMAX1(EPSFCN,EPSMCH))
+      EPS = SQRT(MAX(EPSFCN,EPSMCH))
       DO J = 1, N
          TEMP = X(J)
          H = EPS*ABS(TEMP)
@@ -67596,17 +67599,17 @@ C     CALCULATE AN UPPER BOUND, PARU, FOR THE ZERO OF THE FUNCTION.
          END DO
       GNORM = ENORM(N,WA1)
       PARU = GNORM/DELTA
-      IF (PARU .EQ. ZERO) PARU = DWARF/AMIN1(DELTA,P1)
+      IF (PARU .EQ. ZERO) PARU = DWARF/MIN(DELTA,P1)
 C     IF THE INPUT PAR LIES OUTSIDE OF THE INTERVAL (PARL,PARU),
 C     SET PAR TO THE CLOSER ENDPOINT.
-      PAR = AMAX1(PAR,PARL)
-      PAR = AMIN1(PAR,PARU)
+      PAR = MAX(PAR,PARL)
+      PAR = MIN(PAR,PARU)
       IF (PAR .EQ. ZERO) PAR = GNORM/DXNORM
 C     BEGINNING OF AN ITERATION.
   150 CONTINUE
          ITER = ITER + 1
 C        EVALUATE THE FUNCTION AT THE CURRENT VALUE OF PAR.
-         IF (PAR .EQ. ZERO) PAR = AMAX1(DWARF,P001*PARU)
+         IF (PAR .EQ. ZERO) PAR = MAX(DWARF,P001*PARU)
          TEMP = SQRT(PAR)
          DO J = 1, N
             WA1(J) = TEMP*DIAG(J)
@@ -67642,10 +67645,10 @@ C        COMPUTE THE NEWTON CORRECTION.
          TEMP = ENORM(N,WA1)
          PARC = ((FP/DELTA)/TEMP)/TEMP
 C        DEPENDING ON THE SIGN OF THE FUNCTION, UPDATE PARL OR PARU.
-         IF (FP .GT. ZERO) PARL = AMAX1(PARL,PAR)
-         IF (FP .LT. ZERO) PARU = AMIN1(PARU,PAR)
+         IF (FP .GT. ZERO) PARL = MAX(PARL,PAR)
+         IF (FP .LT. ZERO) PARU = MIN(PARU,PAR)
 C        COMPUTE AN IMPROVED ESTIMATE FOR PAR.
-         PAR = AMAX1(PARL,PAR+PARC)
+         PAR = MAX(PARL,PAR+PARC)
 C        END OF AN ITERATION.
          GO TO 150
   220 CONTINUE
@@ -67685,7 +67688,7 @@ C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
 C     **********
       DATA ONE,ZERO /1.0E0,0.0E0/
 C     ZERO OUT UPPER TRIANGLE OF Q IN THE FIRST MIN(M,N) COLUMNS.
-      MINMN = MIN0(M,N)
+      MINMN = MIN(M,N)
       IF (MINMN .LT. 2) GO TO 30
       DO J = 2, MINMN
          JM1 = J - 1
@@ -67801,7 +67804,7 @@ C     COMPUTE THE INITIAL COLUMN NORMS AND INITIALIZE SEVERAL ARRAYS.
          IF (PIVOT) IPVT(J) = J
          END DO
 C     REDUCE A TO R WITH HOUSEHOLDER TRANSFORMATIONS.
-      MINMN = MIN0(M,N)
+      MINMN = MIN(M,N)
       DO J = 1, MINMN
          IF (.NOT.PIVOT) GO TO 40
 C        BRING THE COLUMN OF LARGEST NORM INTO THE PIVOT POSITION.
@@ -67845,7 +67848,7 @@ C        AND UPDATE THE NORMS.
                END DO
             IF (.NOT.PIVOT .OR. RDIAG(K) .EQ. ZERO) GO TO 80
             TEMP = A(J,K)/RDIAG(K)
-            RDIAG(K) = RDIAG(K)*SQRT(AMAX1(ZERO,ONE-TEMP**2))
+            RDIAG(K) = RDIAG(K)*SQRT(MAX(ZERO,ONE-TEMP**2))
             IF (P05*(RDIAG(K)/WA(K))**2 .GT. EPSMCH) GO TO 80
             RDIAG(K) = ENORM(M-J,A(JP1,K))
             WA(K) = RDIAG(K)
@@ -68367,7 +68370,7 @@ C            LARGEST POSITIVE FLOATING POINT NUMBER.
 C----------------------
       ITER = 0
       ICOUNT = 0
-      MCHECK = MIN0(5,1 + M/15)
+      MCHECK = MIN(5,1 + M/15)
       Z = 0.0
 C                CHECK FOR INPUT ERRORS
       MS = NUMLE + NUMGE
@@ -68379,7 +68382,7 @@ C                CHECK FOR INPUT ERRORS
       END DO
       RTOL = XMAX
       DO I = 1,N0
-         IF (C(I) .NE. 0.0) RTOL = AMIN1(ABS(C(I)),RTOL)
+         IF (C(I) .NE. 0.0) RTOL = MIN(ABS(C(I)),RTOL)
       END DO
       RTOL = RERRMX*RTOL
       GO TO 20
@@ -68480,7 +68483,7 @@ C         CHECK THE ACCURACY OF BI AND RESET RERR
          DO I = 1,M
             SUM = SUM + ABS(A(I,KJ))
          END DO
-  142    BNORM = AMAX1(BNORM,SUM)
+  142    BNORM = MAX(BNORM,SUM)
       END DO
       BINORM = 0.0
       DO J = 1,M
@@ -68488,9 +68491,9 @@ C         CHECK THE ACCURACY OF BI AND RESET RERR
          DO I = 1,M
             SUM = SUM + ABS(BI(I,J))
          END DO
-         BINORM = AMAX1(BINORM,SUM)
+         BINORM = MAX(BINORM,SUM)
       END DO
-      RERR = AMAX1(RERRMN,EPS0*BNORM*BINORM)
+      RERR = MAX(RERRMN,EPS0*BNORM*BINORM)
       IF (RERR .GT. 1.E-2) GO TO 580
       BFLAG = 0
 C                 RECALCULATION OF XB
@@ -68508,7 +68511,7 @@ C                 RECALCULATION OF XB
          XB(I) = DSUMP + DSUMN
          S = DSUMP
          T = DSUMN
-         TOL = RERRMX*AMAX1(S,-T)
+         TOL = RERRMX*MAX(S,-T)
          IF (ABS(XB(I)) .LT. TOL) XB(I) = 0.0
       END DO
       GO TO 601
@@ -68582,7 +68585,7 @@ C               OF BI*A AND STORE IT IN Y.
          IF (A(I,JP) .EQ. 0.0) GO TO 305
          NROW = NROW + 1
          INDEX(NROW) = I
-         AMAX = AMAX1(ABS(A(I,JP)),AMAX)
+         AMAX = MAX(ABS(A(I,JP)),AMAX)
   305 CONTINUE
       END DO
       IF (NROW .NE. 0) GO TO 310
@@ -68599,7 +68602,7 @@ C               OF BI*A AND STORE IT IN Y.
          IF (ABS(Y(I)) .GE. 5.E-3) GO TO 313
          BMAX = 0.0
          DO L = 1,M
-            BMAX = AMAX1(ABS(BI(I,L)),BMAX)
+            BMAX = MAX(ABS(BI(I,L)),BMAX)
          END DO
          TOL = RERR1*BMAX
          IF (ABS(Y(I)) .LT. TOL) Y(I) = 0.0
@@ -68728,7 +68731,7 @@ C              TIE BREAKING PROCEDURE
          I = INDEX(II)
          L = IBASIS(I)
          IF (L .GT. N0) GO TO 461
-            IF (C(L) .LE. 0.0) CMIN = AMIN1(0.0,CMIN)
+            IF (C(L) .LE. 0.0) CMIN = MIN(0.0,CMIN)
             IF (C(L) .GT. CMIN) GO TO 464
             IMIN = I
             CMIN = C(L)
@@ -68744,7 +68747,7 @@ C              TIE BREAKING PROCEDURE
             BMIN = S
             GO TO 464
   463    S = -S
-         BMIN = AMIN1(0.0,BMIN)
+         BMIN = MIN(0.0,BMIN)
          IF (S .GT. BMIN) GO TO 464
          IP = I
          BMIN = S
@@ -68788,7 +68791,7 @@ C        CHECK THE ACCURACY OF BI AND RESET RERR
          DO L = 1,M
             IF (A(L,KJ) .NE. 0.0) SUM = SUM + BI(J,L)*A(L,KJ)
          END DO
-         RERR = AMAX1(RERR,ABS(1.0 - SUM))
+         RERR = MAX(RERR,ABS(1.0 - SUM))
          K = K + 1
          IF (K .GE. MCHECK) EXIT
   521 CONTINUE
@@ -68845,7 +68848,7 @@ C       SET UP THE R ARRAY FOR THE NSTEP = 1 CASE
          Y(J) = DSUMP + DSUMN
          S = DSUMP
          T = DSUMN
-         TOL = RERRMX*AMAX1(S,-T)
+         TOL = RERRMX*MAX(S,-T)
          IF (ABS(Y(J)) .LT. TOL) Y(J) = 0.0
       END DO
       GO TO 650
@@ -68876,7 +68879,7 @@ C       SET UP THE R ARRAY FOR THE NSTEP = 2 CASE
          Y(J) = -(DSUMP + DSUMN)
          S = DSUMP
          T = DSUMN
-         TOL = RERRMX*AMAX1(S,-T)
+         TOL = RERRMX*MAX(S,-T)
          IF (ABS(Y(J)) .LT. TOL) Y(J) = 0.0
       END DO
   650 DO J = 1,N0
@@ -69004,7 +69007,7 @@ C-----------------------------------------------------------------------
          END DO
          R(I) = B0(I) - DSUM
       END DO
-  850 RERR1 = AMIN1(RERRMX,RERR)
+  850 RERR1 = MIN(RERRMX,RERR)
       DO I = 1,M
          Y(I) = 0.0
          NSWC_AI_R4 = XB(I)
@@ -69031,7 +69034,7 @@ C-----------------------------------------------------------------------
          IF (SGN .NE. SIGN(1.0,W)) GO TO 856
          S = DSUMP
          T = DSUMN
-         TOL = RERR1*AMAX1(S,-T)
+         TOL = RERR1*MAX(S,-T)
          IF (ABS(W) .GT. TOL) Y(I) = W
   856 CONTINUE
       END DO
@@ -69205,7 +69208,7 @@ C            LARGEST POSITIVE FLOATING POINT NUMBER.
 C----------------------
       ITER = 0
       ICOUNT = 0
-      MCHECK = MIN0(5,1 + M/15)
+      MCHECK = MIN(5,1 + M/15)
       Z = 0.0
 C                CHECK FOR INPUT ERRORS
       MS = NUMLE + NUMGE
@@ -69216,7 +69219,7 @@ C                CHECK FOR INPUT ERRORS
       END DO
       RTOL = XMAX
       DO I = 1,N0
-         IF (C(I) .NE. 0.0) RTOL = AMIN1(ABS(C(I)),RTOL)
+         IF (C(I) .NE. 0.0) RTOL = MIN(ABS(C(I)),RTOL)
       END DO
       RTOL = RERRMX*RTOL
       GO TO 20
@@ -69326,7 +69329,7 @@ C         CHECK THE ACCURACY OF BI AND RESET RERR
          DO LL = LMIN,LMAX
             SUM = SUM + ABS(TA(LL))
          END DO
-  142    BNORM = AMAX1(BNORM,SUM)
+  142    BNORM = MAX(BNORM,SUM)
       END DO
       BINORM = 0.0
       DO J = 1,M
@@ -69334,9 +69337,9 @@ C         CHECK THE ACCURACY OF BI AND RESET RERR
          DO I = 1,M
             SUM = SUM + ABS(BI(I,J))
          END DO
-         BINORM = AMAX1(BINORM,SUM)
+         BINORM = MAX(BINORM,SUM)
       END DO
-      RERR = AMAX1(RERRMN,EPS0*BNORM*BINORM)
+      RERR = MAX(RERRMN,EPS0*BNORM*BINORM)
       IF (RERR .GT. 1.E-2) GO TO 580
       BFLAG = 0
 C                 RECALCULATION OF XB
@@ -69354,7 +69357,7 @@ C                 RECALCULATION OF XB
          XB(I) = DSUMP + DSUMN
          S = DSUMP
          T = DSUMN
-         TOL = RERRMX*AMAX1(S,-T)
+         TOL = RERRMX*MAX(S,-T)
          IF (ABS(XB(I)) .LT. TOL) XB(I) = 0.0
       END DO
       GO TO 601
@@ -69429,7 +69432,7 @@ C               OF BI*A AND STORE IT IN Y.
          GO TO 220
   305 AMAX = 0.0
       DO LL = LMIN,LMAX
-         AMAX = AMAX1(ABS(TA(LL)),AMAX)
+         AMAX = MAX(ABS(TA(LL)),AMAX)
       END DO
       RERR1 = RERRMX*AMAX
       DO I = 1,M
@@ -69442,7 +69445,7 @@ C               OF BI*A AND STORE IT IN Y.
          IF (ABS(Y(I)) .GE. 5.E-3) GO TO 313
          BMAX = 0.0
          DO L = 1,M
-            BMAX = AMAX1(ABS(BI(I,L)),BMAX)
+            BMAX = MAX(ABS(BI(I,L)),BMAX)
          END DO
          TOL = RERR1*BMAX
          IF (ABS(Y(I)) .LT. TOL) Y(I) = 0.0
@@ -69571,7 +69574,7 @@ C              TIE BREAKING PROCEDURE
          I = INDEX(II)
          L = IBASIS(I)
          IF (L .GT. N0) GO TO 461
-            IF (C(L) .LE. 0.0) CMIN = AMIN1(0.0,CMIN)
+            IF (C(L) .LE. 0.0) CMIN = MIN(0.0,CMIN)
             IF (C(L) .GT. CMIN) GO TO 464
             IMIN = I
             CMIN = C(L)
@@ -69587,7 +69590,7 @@ C              TIE BREAKING PROCEDURE
             BMIN = S
             GO TO 464
   463    S = -S
-         BMIN = AMIN1(0.0,BMIN)
+         BMIN = MIN(0.0,BMIN)
          IF (S .GT. BMIN) GO TO 464
          IP = I
          BMIN = S
@@ -69634,7 +69637,7 @@ C        CHECK THE ACCURACY OF BI AND RESET RERR
             L = JTA(LL)
             SUM = SUM + BI(J,L)*TA(LL)
          END DO
-         RERR = AMAX1(RERR,ABS(1.0-SUM))
+         RERR = MAX(RERR,ABS(1.0-SUM))
          K = K + 1
          IF (K .GE. MCHECK) EXIT
   521 CONTINUE
@@ -69691,7 +69694,7 @@ C       SET UP THE R ARRAY FOR THE NSTEP = 1 CASE
          Y(J) = DSUMP + DSUMN
          S = DSUMP
          T = DSUMN
-         TOL = RERRMX*AMAX1(S,-T)
+         TOL = RERRMX*MAX(S,-T)
          IF (ABS(Y(J)) .LT. TOL) Y(J) = 0.0
       END DO
       GO TO 650
@@ -69722,7 +69725,7 @@ C       SET UP THE R ARRAY FOR THE NSTEP = 2 CASE
          Y(J) = -(DSUMP + DSUMN)
          S = DSUMP
          T = DSUMN
-         TOL = RERRMX*AMAX1(S,-T)
+         TOL = RERRMX*MAX(S,-T)
          IF (ABS(Y(J)) .LT. TOL) Y(J) = 0.0
       END DO
   650 DO J = 1,N0
@@ -69866,7 +69869,7 @@ C-----------------------------------------------------------------------
          DT = DBLE(R(I)) + DBLE(Y(I))
          R(I) = DBLE(B0(I)) - DT
       END DO
-      RERR1 = AMIN1(RERRMX,RERR)
+      RERR1 = MIN(RERRMX,RERR)
       DO I = 1,M
          Y(I) = 0.0
          NSWC_AI_R4 = XB(I)
@@ -69893,7 +69896,7 @@ C-----------------------------------------------------------------------
          IF (SGN .NE. SIGN(1.0,W)) GO TO 856
          S = DSUMP
          T = DSUMN
-         TOL = RERR1*AMAX1(S,-T)
+         TOL = RERR1*MAX(S,-T)
          IF (ABS(W) .GT. TOL) Y(I) = W
   856 CONTINUE
       END DO
@@ -71373,7 +71376,7 @@ C     CONVERGENCE.
       NUM = NUM + NUM1
       IF (IERR .EQ. 3) C = 0.0
 C     TERMINATION
-   20 IERR = MIN0(IERR,2)
+   20 IERR = MIN(IERR,2)
       END SUBROUTINE ABCON
 
       SUBROUTINE SRCH(FUN,COND,XL,ETA,X,NUM,IERR)
@@ -71421,7 +71424,7 @@ C          IERR = 3     CND IS .TRUE. FOR  X .GE. XL.  X IS SET TO XL.
       IERR = 0
 C     SEARCH FOR AN INTERVAL (X1, X2) CONTAINING X WHERE
 C     X1 .GE. 0.01269
-      X1 = AMAX1(.01269, XL)
+      X1 = MAX(.01269, XL)
       CALL COND(FUN,X1,CND,NUM,IER)
       IF (CND) GO TO 20
          X2 = 10.1269
@@ -71440,7 +71443,7 @@ C     X2 .LE. 0.01269
          X2 = X1
          X1 = -.100358
          DO I = 1,6
-            X1 = AMAX1(X1, XL)
+            X1 = MAX(X1, XL)
             CALL COND(FUN,X1,CND,NUM1,IER)
             NUM = NUM + NUM1
             IF (.NOT. CND) EXIT
@@ -71453,7 +71456,7 @@ C     SEARCH FOR X IN THE INTERVAL (X1, X2) BY BISECTION
             XBAR = X1 + DX/2.0
             CALL COND(FUN,XBAR,CND,NUM1,IERR)
             NUM = NUM + NUM1
-            XM = AMAX1(ABS(X1), ABS(X2))
+            XM = MAX(ABS(X1), ABS(X2))
             TOL = ETA
             IF (XM .GT. 1.0) TOL = ETA*XM
             IF (DX .LE. TOL) GO TO 250
@@ -71552,7 +71555,7 @@ C     X2 .LE. 0.01269
 C     SEARCH FOR X IN THE INTERVAL (X1, X2) BY BISECTION
    50       DX = X2 - X1
             XBAR = X1 + DX/2.0
-            XM = AMAX1(ABS(X1), ABS(X2))
+            XM = MAX(ABS(X1), ABS(X2))
             TOL = ETA
             IF (XM .GT. 1.0) TOL = ETA*XM
             IEND =  DX .LE. TOL
@@ -71624,10 +71627,10 @@ C     CALCULATION OF THE INTEGRAL OF ACONDG FROM 0 TO INFINITY.
       CALL QAGI1(ACONDG,FUN,Y,C,A,1,AERR,RERR,Z2,ERROR2,NUM2,IER2,
      *            L,M,N,IWK,WK)
       NUM = NUM1 + NUM2
-      IER = MAX0(IER1, IER2)
+      IER = MAX(IER1, IER2)
 C     DETERMINATION OF COND.
       COND = .FALSE.
-      IF (ABS(Z1 - Z2) .LE. TOL*AMAX1(ABS(Z1),ABS(Z2))) COND = .TRUE.
+      IF (ABS(Z1 - Z2) .LE. TOL*MAX(ABS(Z1),ABS(Z2))) COND = .TRUE.
 C     SET IERR AND RETURN
       IERR = 0
       IF (IER .GT. 4) IERR = 1
@@ -71718,7 +71721,7 @@ C     DETERMINATION OF COND.
      *           XCONDX(X,0.0,C,FUN))*EPSR/6.0
       NUM = NUM + 3
       IF (T*Z .GT. 0.0) RETURN
-      IF (ABS(T + Z) .GT. TOL*AMAX1(ABS(T), ABS(Z))) RETURN
+      IF (ABS(T + Z) .GT. TOL*MAX(ABS(T), ABS(Z))) RETURN
          COND = .TRUE.
          RETURN
 C     ERROR RETURN
@@ -72031,7 +72034,7 @@ C***FIRST EXECUTABLE STATEMENT
         E0 = EPSTAB(K3)
         E1 = EPSTAB(K2)
         E2 = RES
-        E1ABS = CABS(E1)
+        E1ABS = ABS(E1)
         A1 = REAL(E0)
         A2 = AIMAG(E0)
         B1 = REAL(E1)
@@ -72040,10 +72043,10 @@ C***FIRST EXECUTABLE STATEMENT
         C2 = AIMAG(E2)
         ERR2 = ABS(C1 - B1)
         ERR3 = ABS(B1 - A1)
-        IF(ABS(A1-B1) .GT. EPMACH*AMAX1(ABS(A1),ABS(B1)) .OR.
-     *     ABS(A2-B2) .GT. EPMACH*AMAX1(ABS(A2),ABS(B2))) GO TO 10
-        IF(ABS(B1-C1) .GT. EPMACH*AMAX1(ABS(B1),ABS(C1)) .OR.
-     *     ABS(B2-C2) .GT. EPMACH*AMAX1(ABS(B2),ABS(C2))) GO TO 10
+        IF(ABS(A1-B1) .GT. EPMACH*MAX(ABS(A1),ABS(B1)) .OR.
+     *     ABS(A2-B2) .GT. EPMACH*MAX(ABS(A2),ABS(B2))) GO TO 10
+        IF(ABS(B1-C1) .GT. EPMACH*MAX(ABS(B1),ABS(C1)) .OR.
+     *     ABS(B2-C2) .GT. EPMACH*MAX(ABS(B2),ABS(C2))) GO TO 10
 C           IF E0, E1 AND E2 ARE EQUAL TO WITHIN MACHINE
 C           ACCURACY, CONVERGENCE IS ASSUMED.
 C           RESULT = E2
@@ -72062,9 +72065,9 @@ C           A PART OF THE TABLE BY ADJUSTING THE VALUE OF N
         DELTA1 = E1 - E3
         DELTA2 = E2 - E1
         DELTA3 = E1 - E0
-        IF(CABS(DELTA1) .LE. EPMACH*AMAX1(E1ABS,CABS(E3))) GO TO 20
-        IF(CABS(DELTA2) .LE. EPMACH*AMAX1(E1ABS,CABS(E2))) GO TO 20
-        IF(CABS(DELTA3) .LE. EPMACH*AMAX1(CABS(E0),E1ABS)) GO TO 20
+        IF(ABS(DELTA1) .LE. EPMACH*MAX(E1ABS,ABS(E3))) GO TO 20
+        IF(ABS(DELTA2) .LE. EPMACH*MAX(E1ABS,ABS(E2))) GO TO 20
+        IF(ABS(DELTA3) .LE. EPMACH*MAX(ABS(E0),E1ABS)) GO TO 20
         R = REAL(DELTA1)
         S = AIMAG(DELTA1)
         CALL CDIVID(1.D0,0.D0,R,S,U1,V1)
@@ -72077,7 +72080,7 @@ C           A PART OF THE TABLE BY ADJUSTING THE VALUE OF N
         SS1 = U1 + U2 - U3
         SS2 = V1 + V2 - V3
         SS = CMPLX(SNGL(SS1), SNGL(SS2))
-        EPSINF = CABS(SS*E1)
+        EPSINF = ABS(SS*E1)
 C           TEST TO DETECT IRREGULAR BEHAVIOUR IN THE TABLE, AND
 C           EVENTUALLY OMIT A PART OF THE TABLE ADJUSTING THE VALUE
 C           OF N.
@@ -72125,7 +72128,7 @@ C           COMPUTE ERROR ESTIMATE
       RES3LA(1) = RES3LA(2)
       RES3LA(2) = RES3LA(3)
       RES3LA(3) = RESULT
-  100 ABSERR = AMAX1(ABSERR,5.0E+00*EPMACH*ABS(REAL(RESULT)))
+  100 ABSERR = MAX(ABSERR,5.0E+00*EPMACH*ABS(REAL(RESULT)))
       END SUBROUTINE CQEXT
 
       SUBROUTINE QAGI1(F,PHI,Y,C,BOUND,INF,EPSABS,EPSREL,RESULT,ABSERR,
@@ -72540,7 +72543,7 @@ C           -----------------------------
       IER = 6
       IF (EPSABS .LT. 0.0 .OR. EPSREL .LT. 0.0) GO TO 999
       IER = 0
-      RERR = AMAX1(EPSREL, 50.0*EPMACH, 0.5E-14)
+      RERR = MAX(EPSREL, 50.0*EPMACH, 0.5E-14)
 C           FIRST APPROXIMATION TO THE INTEGRAL
 C           -----------------------------------
 C           DETERMINE THE INTERVAL TO BE MAPPED ONTO (0,1).
@@ -72557,7 +72560,7 @@ C           TEST ON ACCURACY
       ELIST(1) = ABSERR
       IORD(1) = 1
       DRES = ABS(RESULT)
-      ERRBND = AMAX1(EPSABS,RERR*DRES)
+      ERRBND = MAX(EPSABS,RERR*DRES)
       IF (ABSERR .LE. 100.0*EPMACH*DEFABS .AND. ABSERR .GT. ERRBND)
      *          IER = 2
       IF (LIMIT .EQ. 1) IER = 1
@@ -72613,7 +72616,7 @@ C           AND ERROR AND TEST FOR ACCURACY.
    10   IF (LAST .GT. 10 .AND. ERRO12 .GT. ERRMAX) IROFF3 = IROFF3 + 1
    15   RLIST(MAXERR) = AREA1
         RLIST(LAST) = AREA2
-        ERRBND = AMAX1(EPSABS,RERR*ABS(AREA))
+        ERRBND = MAX(EPSABS,RERR*ABS(AREA))
 C           TEST FOR ROUNDOFF ERROR AND EVENTUALLY
 C           SET ERROR FLAG.
         IF (IROFF1 + IROFF2 .GE. 10 .OR. IROFF3 .GE. 20) IER = 2
@@ -72623,7 +72626,7 @@ C           SUBINTERVALS EQUALS LIMIT.
         IF (LAST .EQ. LIMIT) IER = 1
 C           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
 C           AT SOME POINTS OF THE INTEGRATION RANGE.
-        IF (AMAX1(ABS(A1),ABS(B2)) .LE.
+        IF (MAX(ABS(A1),ABS(B2)) .LE.
      *      T*(ABS(A2) + 0.1E+04*UFLOW)) IER = 4
 C           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
         IF (ERROR2 .GT. ERROR1) GO TO 20
@@ -72683,7 +72686,7 @@ C           PERFORM EXTRAPOLATION.
         ABSERR = ABSEPS
         RESULT = RESEPS
         CORREC = ERLARG
-        ERTEST = AMAX1(EPSABS,RERR*ABS(RESEPS))
+        ERTEST = MAX(EPSABS,RERR*ABS(RESEPS))
         IF (ABSERR .LE. ERTEST) EXIT
 C            PREPARE BISECTION OF THE SMALLEST INTERVAL.
    70   IF(NUMRL2.EQ.1) NOEXT = .TRUE.
@@ -72713,7 +72716,7 @@ C           ------------------------------------
       GO TO 110
   105 IF (ABSERR/ABS(RESULT) .GT. ERRSUM/ABS(AREA)) GO TO 115
 C           TEST ON DIVERGENCE
-  110 IF (KSGN .EQ. -1 .AND. AMAX1(ABS(RESULT),ABS(AREA)) .LE.
+  110 IF (KSGN .EQ. -1 .AND. MAX(ABS(RESULT),ABS(AREA)) .LE.
      *    DEFABS*0.1E-01) GO TO 130
       IF (0.1E-01 .GT. (RESULT/AREA) .OR. (RESULT/AREA) .GT. 0.1E+03
      *    .OR. ERRSUM .GT. ABS(AREA)) IER = 6
@@ -72851,7 +72854,7 @@ C           RESG   - RESULT OF THE 7-POINT GAUSS FORMULA
 C           RESK   - RESULT OF THE 15-POINT KRONROD FORMULA
 C           RESKH  - APPROXIMATION TO THE MEAN VALUE OF THE TRANSFORMED
 C                    INTEGRAND OVER (A,B), I.E. TO I/(B-A)
-      DINF = MIN0(1,INF)
+      DINF = MIN(1,INF)
       CENTR = 0.5*(A + B)
       HLGTH = 0.5*(B - A)
       TABSC1 = BOUN + DINF*(1.0 - CENTR)/CENTR
@@ -72893,9 +72896,9 @@ C           THE INTEGRAL, AND ESTIMATE THE ERROR.
       RESABS = RESABS*HLGTH
       ABSERR = ABS((RESK - RESG)*HLGTH)
       IF (RESASC .NE. 0.0 .AND. ABSERR .NE. 0.0) ABSERR = RESASC*
-     *    AMIN1(1.0, (0.2E+03*ABSERR/RESASC)**1.5)
+     *    MIN(1.0, (0.2E+03*ABSERR/RESASC)**1.5)
       TOL = 50.0*EPMACH
-      IF (RESABS .GT. UFLOW/TOL) ABSERR = AMAX1(ABSERR, TOL*RESABS)
+      IF (RESABS .GT. UFLOW/TOL) ABSERR = MAX(ABSERR, TOL*RESABS)
       END SUBROUTINE QK15I1
 
       SUBROUTINE FFT(C,N,ISN,IERR)
@@ -72909,7 +72912,7 @@ C     AS A REAL ARRAY OF DIMENSION 2*N. IF THIS ASSOCIATION IS NOT
 C     PERMITTED BY THE FORTRAN BEING USED, THEN THE USER MAY USE THE
 C     SUBROUTINE FFT1.
 C-----------------------------------------------------------------------
-      IF (IABS(ISN) .NE. 1) GO TO 10
+      IF (ABS(ISN) .NE. 1) GO TO 10
       CALL SFFT(C(1),C(2),N,N,N,ISN+ISN,IERR)
       RETURN
    10 IERR = 4
@@ -72921,7 +72924,7 @@ C-----------------------------------------------------------------------
       INTEGER :: ISN, N
       REAL, INTENT(INOUT) :: A(N), B(N)
 C     ------------
-      IF (IABS(ISN) .NE. 1) GO TO 10
+      IF (ABS(ISN) .NE. 1) GO TO 10
       CALL SFFT(A,B,N,N,N,ISN,IERR)
       RETURN
    10 IERR = 4
@@ -72941,7 +72944,7 @@ C     A REAL ARRAY OF DIMENSION 2*NTOT. IF THIS ASSOCIATION IS NOT
 C     PERMITTED BY THE FORTRAN BEING USED, THEN THE USER MAY USE
 C     THE SUBROUTINE MFFT1.
 C-----------------------------------------------------------------------
-      IF (IABS(ISN) .NE. 1) GO TO 40
+      IF (ABS(ISN) .NE. 1) GO TO 40
       IF (NDIM .LE. 0) GO TO 50
       NTOT = 1
       DO I = 1,NDIM
@@ -72972,7 +72975,7 @@ C-----------------------------------------------------------------------
       INTEGER :: N(NDIM)
       INTEGER :: I, NSPAN, NTOT
 C     ------------
-      IF (IABS(ISN) .NE. 1) GO TO 40
+      IF (ABS(ISN) .NE. 1) GO TO 40
       IF (NDIM .LE. 0) GO TO 50
       NTOT = 1
       DO I = 1,NDIM
@@ -75263,7 +75266,7 @@ C     COMPUTE INITIAL APPROXIMATIONS OF THE CRITICAL POINTS
       XM1 = HALF*(A + B)
       DO I = 1,K
       XI = I
-      Z = -B1*DCOS(PI*(XI/DN))
+      Z = -B1*COS(PI*(XI/DN))
       X(I+1) = Z + XM1
       II = NP1 - I
       X(II) = XM1 - Z
@@ -75302,10 +75305,10 @@ C     REDEFINE THE EQUATIONS AND SOLVE
       IF (M .LE. 0) GO TO 61
       KOUNT = 2
       GO TO 40
-   50 TEST = DABS(XLB - D(NP1))
+   50 TEST = ABS(XLB - D(NP1))
       XLB = (D(NP1) + XLB*DN)/DNP1
       KOUNT = KOUNT + 1
-      IF (KOUNT .LE. 4 .AND. TEST .GT. EPS0*DABS(XLB)) GO TO 40
+      IF (KOUNT .LE. 4 .AND. TEST .GT. EPS0*ABS(XLB)) GO TO 40
 C     STORE THE RESULTS IN P AND Q
       DO I = 2,MP1
       LPI = L + I
@@ -75376,12 +75379,12 @@ C     SEARCH FOR NEW CRITICAL POINTS
       U = -U
       IF (I .EQ. 1) GO TO 91
       IF (X(I) .LE. X(I-1)) GO TO 230
-   91 Z = DABS(ERR(I))
-      ERROR = DMAX1(ERROR, Z)
+   91 Z = ABS(ERR(I))
+      ERROR = MAX(ERROR, Z)
       IF (Z .GE. TEN) GO TO 240
-      Y = DABS(XLB)
+      Y = ABS(XLB)
       ZZ = ONE
-      IF (Y .NE. ZERO) ZZ = DABS(Z - Y)/Y
+      IF (Y .NE. ZERO) ZZ = ABS(Z - Y)/Y
       IF (Z1 .LT. ZZ) Z1 = ZZ
       END DO
 C     SEARCH FOR AN EXTRA EXTREMAL POINT BETWEEN THE ENDPOINTS
@@ -75401,8 +75404,8 @@ C     OF THE INTERVAL AND THE CRITICAL POINTS
       Z2 = Y
   100 Y = Y + H1
       END DO
-      ERROR = DMAX1(ERROR, Z3)
-      Z = DABS(XLB)
+      ERROR = MAX(ERROR, Z3)
+      Z = ABS(XLB)
       IF (Z3 .LE. Z) GO TO 110
       I = NP1
       DO II = 2,NP1
@@ -75428,8 +75431,8 @@ C     OF THE INTERVAL AND THE CRITICAL POINTS
       Z2 = Y
   111 Y = Y - H1
       END DO
-      ERROR = DMAX1(ERROR, Z3)
-      Z = DABS(XLB)
+      ERROR = MAX(ERROR, Z3)
+      Z = ABS(XLB)
       IF (Z3 .LE. Z) GO TO 120
       DO I = 1,N
       ERR(I) = ERR(I+1)
@@ -75439,7 +75442,7 @@ C     OF THE INTERVAL AND THE CRITICAL POINTS
       ERR(NP1) = U*Z3
   113 XLB = -XLB
       ZZ = ONE
-      IF (Z .NE. ZERO) ZZ = DABS(Z3 - Z)/Z
+      IF (Z .NE. ZERO) ZZ = ABS(Z3 - Z)/Z
       IF (Z1 .LT. ZZ) Z1 = ZZ
 C     CHECK FOR CONVERGENCE
   120 IF (Z1 .LE. EPS) RETURN
@@ -75828,7 +75831,7 @@ C **  THIS PROGRAM CHECKS THE INPUT DATA AND INITIALIZES THE COMPUTATION
       DATA ZERO,ONE,TWO,THREE,C100/0.D0,1.D0,2.D0,3.D0,100.D0/
       DATA KLEFT, KRIGHT, KBOTH /1, 2, 3/
       EPS = DPMPAR(1)
-      BUFFER = C100*DMAX1(EPS,EPS0)
+      BUFFER = C100*MAX(EPS,EPS0)
 C         PUT DATA STATEMENT ITEMS INTO COMMON VARIABLES
       LEFT = KLEFT
       RIGHT = KRIGHT
@@ -75838,14 +75841,14 @@ C -------- SET CURRENT VALUES OF LIMITS ON DIMENSIONS ------------------
       NPARDM = NDIMEN
       MAXKNT = KNTDIM
       MAXSTK = 50
-      MAXPAR = MIN0(20,NPARDM)
+      MAXPAR = MIN(20,NPARDM)
       MAXAUX = 20
 C -------- CHECK INPUT DATA --------------------------------------------
       IERR = 0
       IF (A.GE.B .OR. ACCUR.LE.ZERO) GO TO 200
       IF (DEGREE.GE.MAXPAR .OR. 2*SMOOTH.GE.DEGREE) GO TO 200
       AKMAX = KMAX
-      RATIO = (B-A)/(DABS(A)+DABS(B))
+      RATIO = (B-A)/(ABS(A)+ABS(B))
       IF (RATIO.LE.TWO*BUFFER*AKMAX) GO TO 210
       IF (CHARF.LT.(B-A)/AKMAX) GO TO 220
       IF (NORM.GE.ZERO .AND. (NORM-ONE)*(NORM-TWO)*(NORM-THREE).NE.ZERO)
@@ -75871,7 +75874,7 @@ C             ACTIVE INTERVAL STACK
       XRIGHT(1) = B
 C             TERMINATION AND ERROR VALUES
       ERROR = ZERO
-      DSCTOL = ACCUR**DABS(NORM)
+      DSCTOL = ACCUR**ABS(NORM)
       IF (EDIST.EQ.0) DSCTOL = DSCTOL/(B-A)
       IF (NORM.EQ.THREE) DSCTOL = ACCUR
 C             MISCELLANEOUS VARIABLES AND POINTERS
@@ -75948,7 +75951,7 @@ C                  CHECK EXCEEDING STACK LIMIT. IF SO, STOP
       IF (NSTACK.EQ.MAXSTK) GO TO 30
 C                     DONT SPLIT VERY SMALL INTERVALS, STOP INSTEAD
       DX = XBREAK(IBREAK+1) - XLEFT(NSTACK)
-      RATIO = DX/(DABS(A)+DABS(B))
+      RATIO = DX/(ABS(A)+ABS(B))
       IF (RATIO.LE.BUFFER) GO TO 30
       NSTACK = NSTACK + 1
       XLEFT(NSTACK) = XLEFT(NSTACK-1)
@@ -75963,7 +75966,7 @@ C                  CHECK EXCEEDING STACK LIMIT. IF SO, STOP
       IF (NSTACK.EQ.MAXSTK) GO TO 30
 C                     DONT SPLIT VERY SMALL INTERVALS, STOP INSTEAD
       DX = XBREAK(IBREAK) - XLEFT(NSTACK)
-      RATIO = DX/(DABS(A)+DABS(B))
+      RATIO = DX/(ABS(A)+ABS(B))
       IF (RATIO.LE.BUFFER) GO TO 30
       NSTACK = NSTACK + 1
       XLEFT(NSTACK) = XLEFT(NSTACK-1)
@@ -76121,16 +76124,16 @@ C         COMPUTE MIDPOINT = ABMID AND HALF LENGTH = BA OF INTERVAL
 C         TEST FOR TCHEBYCHEFF (MINIMAX) NORM WHICH USES SPECIAL CODE
       IF (NORM.EQ.THREE) GO TO 20
 C         HAVE GENERAL LP NORM OR LEAST SQUARES OR LEAST DEVIATIONS
-      P = DABS(NORM)
+      P = ABS(NORM)
 C              INITIALIZE THE QUADRATURE RULE
-      ERRINT = DABS(F(PJ,FDUMB)-FIT(PJ))**P*WEIGHT(1)
+      ERRINT = ABS(F(PJ,FDUMB)-FIT(PJ))**P*WEIGHT(1)
 C              LOOP THROUGH REMAINING POINTS
       DO J=2,4
         PJ = ABMID + BA*POINTS(J)
         F1 = F(PJ,FDUMB)
         F2 = FIT(PJ)
-        ER = DABS(F1-F2)**P
-        ERRINT = ERRINT + DABS(F(PJ,FDUMB)-FIT(PJ))**P*WEIGHT(J)
+        ER = ABS(F1-F2)**P
+        ERRINT = ERRINT + ABS(F(PJ,FDUMB)-FIT(PJ))**P*WEIGHT(J)
       END DO
       ERRINT = ERRINT*BA
       GO TO 40
@@ -76138,11 +76141,11 @@ C         TCHEBYCHEFF NORM
    20 CONTINUE
 C             FIND MAX ERROR ON POINTS
 C               INITIALIZE
-      ERRINT = DABS(F(PJ,FDUMB)-FIT(PJ))
+      ERRINT = ABS(F(PJ,FDUMB)-FIT(PJ))
 C              LOOP THROUGH THE REMAINING POINTS
       DO J=2,4
         PJ = ABMID + BA*POINTS(J)
-        ERRINT = DMAX1(ERRINT,DABS(F(PJ,FDUMB)-FIT(PJ)))
+        ERRINT = MAX(ERRINT,ABS(F(PJ,FDUMB)-FIT(PJ)))
       END DO
    40 CONTINUE
       END FUNCTION ERRINT
@@ -76353,7 +76356,7 @@ C         FOR THE APPROXIMATE FIXED ERROR DISTRIBUTION TYPE WE ESTIMATE
 C         THE FINAL NUMBER OF KNOTS BY( LIMITING IT A LITTLE )
 C             (NSTACK+KNOTS+2)((B-A)/(XRIGHT-A))
    20 AKNOTS = NSTACK+KNOTS+2
-      DTEST = DSCTOL/(AKNOTS*DMIN1((B-A)/(XRIGHT(NSTACK)-A),FIVE))
+      DTEST = DSCTOL/(AKNOTS*MIN((B-A)/(XRIGHT(NSTACK)-A),FIVE))
       GO TO 40
    30 DTEST = DSCTOL
 C             CHECK FOR DISCARD OF INTERVAL
@@ -76404,7 +76407,7 @@ C             FATAL ERROR, EXCEEDED ACTIVE STACK SIZE
       RETURN
    10 DX = (XRIGHT(NSTACK)-XLEFT(NSTACK))*HALF
 C              CHECK FOR SMALL INTERVALS
-      RATIO = DX/(DABS(A)+DABS(B))
+      RATIO = DX/(ABS(A)+ABS(B))
       IF (RATIO.GT.BUFFER) GO TO 20
       IERR = 4
       RETURN
@@ -76414,8 +76417,8 @@ C              CHECK FOR SMALL INTERVALS
       XRIGHT(NSTACK) = XLEFT(NSTACK-1)
       RETURN
 C            DISCARD INTERVAL, UPDATE GLOBAL ERROR, XKNOTS AND COEFS
-   30 P = DABS(NORM)
-      IF (NORM.EQ.THREE) ERROR = DMAX1(ERROR,ERRORI)
+   30 P = ABS(NORM)
+      IF (NORM.EQ.THREE) ERROR = MAX(ERROR,ERRORI)
       IF (NORM.NE.THREE) ERROR = (ERROR**P+ERRORI)**(ONE/P)
 C              CHECK FOR PASSING BREAK POINTS
       IF (BREAK.EQ.LEFT .OR. BREAK.EQ.BOTH) IBREAK = IBREAK + 1
@@ -76612,7 +76615,7 @@ C         SMALLEST NUMBER SUCH THAT 1 + EPS0 .GT. 1.
                     EPS0 = SPMPAR(1)
 C  -------------------
 C  INITIALIZATION.
-      EPS = AMAX1(EPS0,TOL)
+      EPS = MAX(EPS0,TOL)
       SC(1) = .125
       C(1) = EPS**(1./28.)
       EP6 = C(1)**6
@@ -76674,7 +76677,7 @@ C  THE LOOP  DO 70 ... CONSTITUTES THE FFT.
       B = 1.0
 C  TEST ON HOW FAST THE COEFFICIENTS OBTAINED DECREASE.
       DO I = 1,IX
-        CT = CABS(A(I))/B
+        CT = ABS(A(I))/B
         IF (CT .LT. CX) GO TO 80
         CX = CT
         INR = I
@@ -76705,9 +76708,9 @@ C  TEST IF THE SERIES IS A TAYLOR OR A LAURENT SERIES.
           IA = IX + 1 - I
           S = S*RQ + A(IA)
         END DO
-        CP = CABS(S)
+        CP = ABS(S)
         IF (CP .GT. SP) SP = CP
-        CM = CABS(S - F(Z + RQ))
+        CM = ABS(S - F(Z + RQ))
         IF (CM .GT. SR) SR = CM
       END DO
       IF (SR .GT. 1.E-3*SP) GO TO 150
@@ -76750,7 +76753,7 @@ C  CALCULATION OF THE EXTRAPOLATION CONSTANTS.
 C  FINAL EXTRAPOLATION AND ERROR ESTIMATE.
       DO I = 1,N
         XK = RT(I,1) - RT(I,2)
-        ERR(I) = ERR(I) + EP6*CABS(XK)
+        ERR(I) = ERR(I) + EP6*ABS(XK)
         RS(I) = RT(I,2) - MULT(FC(3),XK)
       END DO
 C  MULTIPLY POWER SERIES COEFFICIENTS AND ERROR ESTIMATE BY FACTORIALS
@@ -76844,25 +76847,25 @@ C         SMALLEST NUMBER SUCH THAT 1 + EPS0 .GT. 1.
                     EPS0 = DPMPAR(1)
 C  -------------------
 C  INITIALIZATION.
-      EPS = DMAX1(EPS0,TOL)
+      EPS = MAX(EPS0,TOL)
       SC(1) = .125D0
       C(1) = EPS**(1.D0/28.D0)
       EP6 = C(1)**6
-      PI = 4.D0*DATAN(1.D0)
+      PI = 4.D0*ATAN(1.D0)
       FV1(1) = -1.D0
       FV2(1) =  0.D0
       FV1(2) =  0.D0
       FV2(2) = -1.D0
-      R1 = DSQRT(0.5D0)
+      R1 = SQRT(0.5D0)
       RA = 1.D0/R1
       FV1(3) =  R1
       FV2(3) = -R1
       DO I = 2,4
          SC(I) = 0.5D0*SC(I-1)
-         C(I) = DSQRT(C(I-1))
+         C(I) = SQRT(C(I-1))
          ANG = PI*SC(I-1)
-         FV1(I + 2) =  DCOS(ANG)
-         FV2(I + 2) = -DSIN(ANG)
+         FV1(I + 2) =  COS(ANG)
+         FV2(I + 2) = -SIN(ANG)
       END DO
 C  START EXECUTION.
       IF (N .GT. 51 .OR. N .LT. 1) GO TO 260
@@ -76975,7 +76978,7 @@ C  DETERMINATION OF THE NEXT RADIUS TO BE USED.
             IF ((NP - 15) .LE. 0) GO TO 190
             GO TO 260
   170    FACT = 1.D0/FACT
-  180 FACT = 1.D0/DSQRT(FACT)
+  180 FACT = 1.D0/SQRT(FACT)
       NR = NR + 1
   190 R = R*FACT
       M = NR - KL - 1
@@ -76996,7 +76999,7 @@ C  EXTRAPOLATION.
       END DO
       IF (M .EQ. 3) GO TO 230
 C  CALCULATION OF THE EXTRAPOLATION CONSTANTS.
-  220 FC(M) = 1.5D0 + DSIGN(0.5D0,FACT-1.D0)
+  220 FC(M) = 1.5D0 + SIGN(0.5D0,FACT-1.D0)
       IF (M .EQ. 2) FC(M) = FC(M) + RA
       IF (FACT .GT. 1.D0) FC(M) = -FC(M)
       GO TO 30
@@ -77205,7 +77208,7 @@ C     NEXT POINT
       IF (NSWC_AI_R4 .EQ. 0) GO TO 122
       GO TO 40
   121 IL = 1
-      IR = MIN0(I+1,N)
+      IR = MIN(I+1,N)
       GO TO 30
   122 YI(K) = YI(K-1)
       GO TO 110
@@ -78049,7 +78052,7 @@ C     NEXT POINT
       IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 50
   110 IL = 1
-      IR = MIN0(I+1,N)
+      IR = MIN(I+1,N)
       GO TO 10
       END SUBROUTINE SCOMP
 
@@ -78138,7 +78141,7 @@ C     NEXT POINT
       IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 50
   110 IL = 1
-      IR = MIN0(I+1,NM1)
+      IR = MIN(I+1,NM1)
       GO TO 10
       END SUBROUTINE SCOMP1
 
@@ -78230,7 +78233,7 @@ C     NEXT POINT
       IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 50
   110 IL = 1
-      IR = MIN0(I+1,NM1)
+      IR = MIN(I+1,NM1)
       GO TO 10
       END SUBROUTINE SCOMP2
 
@@ -78324,7 +78327,7 @@ C     NEXT POINT
       IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 50
   110 IL = 1
-      IR = MIN0(I+1,N)
+      IR = MIN(I+1,N)
       GO TO 10
       END SUBROUTINE SEVAL
 
@@ -78419,7 +78422,7 @@ C     NEXT POINT
       IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 50
   110 IL = 1
-      IR = MIN0(I+1,NM1)
+      IR = MIN(I+1,NM1)
       GO TO 10
       END SUBROUTINE SEVAL1
 
@@ -78516,7 +78519,7 @@ C     NEXT POINT
       IF (NSWC_AI_R4 .EQ. 0) GO TO 100
       GO TO 50
   110 IL = 1
-      IR = MIN0(I+1,NM1)
+      IR = MIN(I+1,NM1)
       GO TO 10
       END SUBROUTINE SEVAL2
 
@@ -79016,7 +79019,7 @@ C     NEXT POINT
       IF (NSWC_AI_R4 .EQ. 0) GO TO 90
       GO TO 40
   110 IL = 1
-      IR = MIN0(I+1,N)
+      IR = MIN(I+1,N)
       GO TO 10
 C     CASE WHEN ROUNDOFF PRODUCES A VALUE FOR XX WHERE
 C     XX .GE. X(N). THIS CASE MAY NEVER OCCUR.
@@ -79095,7 +79098,7 @@ C     NEXT POINT
       IF (NSWC_AI_R4 .EQ. 0) GO TO 90
       GO TO 40
   110 IL = 1
-      IR = MIN0(I+1,N)
+      IR = MIN(I+1,N)
       GO TO 10
 C     CASE WHEN ROUNDOFF PRODUCES A VALUE FOR XX WHERE
 C     XX .GE. X(N). THIS CASE MAY NEVER OCCUR.
@@ -79127,7 +79130,7 @@ C----------------------
 C     M = THE NUMBER OF N-DIMENSIONAL POINTS GIVEN IN X
 C     WK IS AN ARRAY OF DIMENSION 4*(M-1)
 C----------------------
-      IF (MIN0(M, N) .LT. 2) GO TO 10
+      IF (MIN(M, N) .LT. 2) GO TO 10
       MM1 = M - 1
       IE = 1
       IA = MM1
@@ -79350,7 +79353,7 @@ C     NEXT POINT
       IF (NSWC_AI_R4 .EQ. 0) GO TO 50
       GO TO 40
   110 IL = 1
-      IR = MIN0(I+1,M)
+      IR = MIN(I+1,M)
       GO TO 10
       END SUBROUTINE LOPCMP
 
@@ -80870,7 +80873,7 @@ C---------------------------
       IF (X .LE. T(1)) RETURN
       NPK = N + K
       TLAST = T(NPK)
-      XVAL = AMIN1(X, TLAST)
+      XVAL = MIN(X, TLAST)
 C     DEFINE THE FIRST NEW KNOT. THE REMAINING NEW KNOTS
 C         ARE ASSUMED TO BE THE SAME AS THIS KNOT.
       TNEW = 0.1
@@ -80956,7 +80959,7 @@ C     ABLE EQUAL TO T(1) OR TNEW APPROPRIATELY.
          WK(J,3) = TIPJ - X
       END DO
       DO JC = JCMIN,K
-         L = MIN0(IMK + JC, N)
+         L = MIN(IMK + JC, N)
          WK(JC,1) = BCOEF(L)
       END DO
 C  *** COMPUTE VALUE AT X IN (T(I),T(I+1)), GIVEN ITS RELEVANT
@@ -81139,7 +81142,7 @@ C     NEXT POINT
       IF (NSWC_AI_R4 .EQ. 0) GO TO 120
       GO TO 40
   130 IL = 1
-      IR = MIN0(I + 1, N)
+      IR = MIN(I + 1, N)
       GO TO 10
       END SUBROUTINE PPVAL
 
@@ -81244,7 +81247,7 @@ C-----------------------------------------------------------------------
 C  WRITTEN BY CARL DE BOOR (UNIVERSITY OF WISCONSIN) AND MODIFIED
 C     BY A.H. MORRIS (NSWC).
 C-----------------------------------------------------------------------
-      MHIGH = MAX0(MIN0(NDERIV,K),1)
+      MHIGH = MAX(MIN(NDERIV,K),1)
 C     MHIGH IS USUALLY EQUAL TO NDERIV.
       KP1 = K + 1
       JJ = 0
@@ -81308,7 +81311,7 @@ C        IVES OF THE SAME ORDER DO NOT USE THIS VALUE DUE TO THE FACT
 C        THAT  A(J,I) = 0  FOR J .LT. I .
          DO I = 1,K
             SUM = 0.0
-            JLOW = MAX0(I,M)
+            JLOW = MAX(I,M)
             DO J=JLOW,K
                SUM = A(J,I)*DBIATX(J,M) + SUM
             END DO
@@ -81386,11 +81389,11 @@ C  ***   LOOP OVER I TO CONSTRUCT THE N INTERPOLATION EQUATIONS
       LEFT = K
       DO I = 1,N
          TAUI = TAU(I)
-         ILP1MX = MIN0(I + K,NP1)
+         ILP1MX = MIN(I + K,NP1)
 C        *** FIND  LEFT  IN THE CLOSED INTERVAL (I,I+K-1) SUCH THAT
 C                T(LEFT) .LE. TAU(I) .LT. T(LEFT+1)
 C        MATRIX IS SINGULAR IF THIS IS NOT POSSIBLE
-         LEFT = MAX0(LEFT,I)
+         LEFT = MAX(LEFT,I)
          IF (TAUI .LT. T(LEFT)) GO TO 100
    30       IF (TAUI .LT. T(LEFT+1)) GO TO 40
             LEFT = LEFT + 1
@@ -81512,7 +81515,7 @@ C                 DIVIDE EACH COLUMN BY ITS DIAGONAL .
       DO I=1,NROWM1
          PIVOT = W(MIDDLE,I)
          IF(PIVOT .EQ. 0.)              GO TO 999
-         JMAX = MIN0(NBANDL, NROW - I)
+         JMAX = MIN(NBANDL, NROW - I)
          JBEG = MIDDLE + 1
          JEND = MIDDLE + JMAX
          DO J=JBEG,JEND
@@ -81527,7 +81530,7 @@ C                                  W(MIDDLE,I)  IS PIVOT FOR I-TH STEP .
          IF (PIVOT .EQ. 0.)             GO TO 999
 C                 JMAX  IS THE NUMBER OF (NONZERO) ENTRIES IN COLUMN  I
 C                     BELOW THE DIAGONAL .
-         JMAX = MIN0(NBANDL,NROW - I)
+         JMAX = MIN(NBANDL,NROW - I)
 C              DIVIDE EACH ENTRY IN COLUMN  I  BELOW DIAGONAL BY PIVOT .
          JBEG = MIDDLE + 1
          JEND = MIDDLE + JMAX
@@ -81536,7 +81539,7 @@ C              DIVIDE EACH ENTRY IN COLUMN  I  BELOW DIAGONAL BY PIVOT .
          END DO
 C                 KMAX  IS THE NUMBER OF (NONZERO) ENTRIES IN ROW  I  TO
 C                     THE RIGHT OF THE DIAGONAL .
-         KMAX = MIN0(NBANDU,NROW - I)
+         KMAX = MIN(NBANDU,NROW - I)
 C                  SUBTRACT  A(I,I+K)*(I-TH COLUMN) FROM (I+K)-TH COLUMN
 C                  (BELOW ROW  I ) .
          DO K=1,KMAX
@@ -81585,7 +81588,7 @@ C                                 FORWARD PASS
 C            FOR I=1,2,...,NROW-1, SUBTRACT  RIGHT SIDE(I)*(I-TH COLUMN
 C            OF  L )  FROM RIGHT SIDE  (BELOW I-TH ROW) .
       DO I=1,NROWM1
-         JMAX = MIN0(NBANDL, NROW-I)
+         JMAX = MIN(NBANDL, NROW-I)
          DO J=1,JMAX
             IPJ = I + J
             MPJ = MIDDLE + J
@@ -81604,7 +81607,7 @@ C                                A  IS LOWER TRIANGULAR .
                                         RETURN
    40 I = NROW
    41    B(I) = B(I)/W(MIDDLE,I)
-         JMAX = MIN0(NBANDU,I-1)
+         JMAX = MIN(NBANDU,I-1)
          DO J=1,JMAX
             IMJ = I - J
             MMJ = MIDDLE - J
@@ -81646,7 +81649,7 @@ C             1  THE COEFFICIENT MATRIX IS SINGULAR. A
 C                LEAST SQUARES SOLUTION WAS OBTAINED.
 C            -1  INPUT ERRORS WERE DETECTED.
 C-----------------------------------------------------------------------
-      IF (NTAU .LT. MAX0(2,K)) GO TO 100
+      IF (NTAU .LT. MAX(2,K)) GO TO 100
       IF (TAU(1) .LT. T(K) .OR. TAU(NTAU) .GT. T(N + 1)) GO TO 100
       DO I = 2,NTAU
          IF (TAU(I - 1) .GT. TAU(I)) GO TO 100
@@ -81771,7 +81774,7 @@ C     FACTORIZATION
             GO TO 60
    30    T = 1.0/W(1,K)
          W(1,K) = T
-         IMAX = MIN0(NB - 1,N - K)
+         IMAX = MIN(NB - 1,N - K)
          IF (IMAX .LT. 1) GO TO 60
          JMAX = IMAX
          DO I = 1,IMAX
@@ -81815,7 +81818,7 @@ C-----------------------------------------------------------------------
 C     FORWARD SUBSTITUTION. SOLVE L*Y = B FOR Y AND STORE Y IN B.
    10 NBM1 = NB - 1
       DO K = 1,N
-         JMAX = MIN0(NBM1,N - K)
+         JMAX = MIN(NBM1,N - K)
          IF (JMAX .LT. 1) GO TO 30
          DO J = 1,JMAX
             JPK = J + K
@@ -81827,7 +81830,7 @@ C                              T     -1
 C     BACKSUBSTITUTION. SOLVE L X = D  Y  FOR X AND STORE X IN B.
       K = N
    40    B(K) = B(K)*W(1,K)
-         JMAX = MIN0(NBM1,N - K)
+         JMAX = MIN(NBM1,N - K)
          IF (JMAX .LT. 1) GO TO 60
          DO J = 1,JMAX
             JPK = J + K
@@ -82229,7 +82232,7 @@ C-----------------------------------------------------------------------
         IROW = I + NEQCON
         W(IROW,1) = 0.0
         CALL SCOPY(N, W(IROW,1), 0, W(IROW,1), MDW)
-        CALL SCOPY(MIN0(NP1-I,NORD), G(I,1), MDG, W(IROW,I), MDW)
+        CALL SCOPY(MIN(NP1-I,NORD), G(I,1), MDG, W(IROW,I), MDW)
         W(IROW,NP1) = G(I,NORDP1)
       END DO
 C-----------------------------------------------------------------------
@@ -82427,12 +82430,12 @@ C                                             ALG. STEP 10
 C                                             ALG. STEP 11
       IR = JT
 C                                             ALG. STEP 12
-   30 MU = MIN0(NB - 1, IR - IP - 1)
+   30 MU = MIN(NB - 1, IR - IP - 1)
       IF (MU .EQ. 0) GO TO 60
 C                                             ALG. STEP 13
       DO L = 1,MU
 C                                             ALG. STEP 14
-         K = MIN0(L, JT - IP)
+         K = MIN(L, JT - IP)
 C                                             ALG. STEP 15
          LP1 = L + 1
          IG = IP + L
@@ -82450,10 +82453,10 @@ C                                             ALG. STEP 17
    60 IP = JT
 C                                             ALG. STEPS 18-19
    70 MH = IR + MT - IP
-      KH = MIN0(NBP1, MH)
+      KH = MIN(NBP1, MH)
 C                                             ALG. STEP 20
       DO I = 1,KH
-         CALL H12(1,I,MAX0(I+1,IR-IP+1),MH,G(IP,I),1,RHO,
+         CALL H12(1,I,MAX(I+1,IR-IP+1),MH,G(IP,I),1,RHO,
      1             G(IP,I+1),1,MDG,NBP1-I)
       END DO
 C                                             ALG. STEP 21
@@ -82585,11 +82588,11 @@ C                                   ALG. STEP 27
          I = N + 1 - II
 C                                   ALG. STEP 28
          S = 0.0
-         L = MAX0(0, I - IP)
+         L = MAX(0, I - IP)
 C                                   ALG. STEP 29
          IF (I .EQ. N) GO TO 70
 C                                   ALG. STEP 30
-            IE = MIN0(N + 1 - I, NB)
+            IE = MIN(N + 1 - I, NB)
             DO J = 2,IE
                JG = J + L
                IX = I - 1 + J
@@ -82605,13 +82608,13 @@ C                                   ********************* MODE = 2
    90 DO J = 1,N
          S = 0.0
          IF (J .EQ. 1) GO TO 110
-            I1 = MAX0(1, J - NB + 1)
+            I1 = MAX(1, J - NB + 1)
             I2 = J - 1
             DO I = I1,I2
-               L = J - I + 1 + MAX0(0, I - IP)
+               L = J - I + 1 + MAX(0, I - IP)
                S = S + X(I)*G(I,L)
             END DO
-  110    L = MAX0(0, J - IP)
+  110    L = MAX(0, J - IP)
          IF (G(J,L+1) .EQ. 0.0) GO TO 130
          X(J) = (X(J) - S)/G(J,L+1)
       END DO
@@ -82664,7 +82667,7 @@ C---------------------
       IF (NY .LT. 2) GO TO 120
       M = NX + 2
       N = NY + 2
-      L = MAX0(M*N, M*MY + 5*MAX0(M,N))
+      L = MAX(M*N, M*MY + 5*MAX(M,N))
       IF (NUM .LT. L) GO TO 130
 C     DEFINE THE KNOT SQUENCES
       S(1) = XBREAK(1)
@@ -83766,7 +83769,7 @@ C GRID AND PERFORM INTRPOLATION
     6   LASTI = 0
         DO II=1,MD
           XII = DXMIN+FLOAT(II-1)*DELTDX
-          I = MAX0(1, LASTI)
+          I = MAX(1, LASTI)
     7     I = I+1
           IF (XII .GT. X(I) .AND. I .LT. M) GO TO 7
           IM1 = I-1
@@ -83809,7 +83812,7 @@ C-----------------------------------------------------------------------
 C     REAL TX(NX + KX), TY(NY + KY)
 C     REAL WK(L)  WHERE L = NX*NY + MAX(2*KX*NX, 2*KY*NY)
 C-------------------------
-      M = NX*NY + 2*MAX0(KX*NX, KY*NY)
+      M = NX*NY + 2*MAX(KX*NX, KY*NY)
       IF (L .LT. M) GO TO 120
 C     COMPUTE THE COEFFICIENTS
       IW = NX*NY + 1
@@ -83883,7 +83886,7 @@ C-----------------------------------------------------------------------
 C     REAL TX(NX + KX), TY(NY + KY)
 C     REAL WK(L)  WHERE L = NX*MY + MAX((KX+1)*NX,(KY+1)*NY)
 C-------------------------
-      M = NX*MY + MAX0((KX + 1)*NX,(KY + 1)*NY)
+      M = NX*MY + MAX((KX + 1)*NX,(KY + 1)*NY)
       IF (L .LT. M) GO TO 120
 C     COMPUTE THE COEFFICIENTS
       IW = NX*MY + 1
@@ -83895,7 +83898,7 @@ C     COMPUTE THE COEFFICIENTS
       CALL BSLSQ1(Y, WY, MY, WK, MY, NX, TY, NY, KY,
      *             A, KA, WK(IW), WK(IQ), IFLAG)
       IF (IFLAG .LT. 0) GO TO 110
-      IFLAG = MAX0(IERR,IFLAG)
+      IFLAG = MAX(IERR,IFLAG)
       RETURN
 C     ERROR RETURN
   100 IFLAG = -1
@@ -83948,7 +83951,7 @@ C             1  THE COEFFICIENT MATRIX IS SINGULAR. A
 C                LEAST SQUARES SOLUTION WAS OBTAINED.
 C            -1  INPUT ERRORS WERE DETECTED.
 C-----------------------------------------------------------------------
-      IF (NTAU .LT. MAX0(2,K)) GO TO 100
+      IF (NTAU .LT. MAX(2,K)) GO TO 100
       IF (TAU(1) .LT. T(K) .OR. TAU(NTAU) .GT. T(N + 1)) GO TO 100
       DO I = 2,NTAU
          IF (TAU(I - 1) .GT. TAU(I)) GO TO 100
@@ -84034,7 +84037,7 @@ C-----------------------------------------------------------------------
 C     FORWARD SUBSTITUTION. SOLVE L*Y = B FOR Y AND STORE Y IN B.
    20 NBM1 = NB - 1
       DO K = 1,N
-         JMAX = MIN0(NBM1,N - K)
+         JMAX = MIN(NBM1,N - K)
          IF (JMAX .LT. 1) GO TO 40
          DO J = 1,JMAX
             JPK = J + K
@@ -84052,7 +84055,7 @@ C     BACKSUBSTITUTION. SOLVE L X = D  Y  FOR X AND STORE X IN B.
          DO I = 1,M
             B(I,K) = T*B(I,K)
          END DO
-         JMAX = MIN0(NBM1,N - K)
+         JMAX = MIN(NBM1,N - K)
          IF (JMAX .LT. 1) GO TO 80
          DO J = 1,JMAX
             JPK = J + K
@@ -84495,11 +84498,11 @@ C INITIALIZE VARIABLES
       N1 = 1
       IF (NLEFT .NE. 1) N1 = IEND(NLEFT-1) + 1
       N2 = IEND(NRIGHT)
-      NF = MAX0(N1,N2)
+      NF = MAX(N1,N2)
 C INSERT K AS A NEIGHBOR OF MAX(NRIGHT,NLEFT)
       CALL SHIFTD(NF,NL,2, IADJ)
       IADJ(NF+1) = K
-      IMIN = MAX0(NRIGHT,NLEFT)
+      IMIN = MAX(NRIGHT,NLEFT)
       DO I = IMIN,KM1
         IEND(I) = IEND(I) + 2
       END DO
@@ -84507,11 +84510,11 @@ C INITIALIZE KEND AND INSERT K AS A NEIGHBOR OF
 C   MIN(NRIGHT,NLEFT)
       KEND = NL + 3
       NL = NF - 1
-      NF = MIN0(N1,N2)
+      NF = MIN(N1,N2)
       CALL SHIFTD(NF,NL,1, IADJ)
       IADJ(NF) = K
       IMAX = IMIN - 1
-      IMIN = MIN0(NRIGHT,NLEFT)
+      IMIN = MIN(NRIGHT,NLEFT)
       DO I = IMIN,IMAX
         IEND(I) = IEND(I) + 1
       END DO
@@ -85097,7 +85100,7 @@ C               LEFT OF THE VECTOR FROM (X1,Y1) TO (X2,Y2).
       XP = PX
       YP = PY
 C INITIALIZE VARIABLES AND FIND A CONE CONTAINING P
-      N0 = MAX0(NST,1)
+      N0 = MAX(NST,1)
     1 INDX = IEND(N0)
       NL = IADJ(INDX)
       INDX = 1
@@ -85432,7 +85435,7 @@ C   UPDATE THE SYSTEM COMPONENTS FOR NODE NB
 C   SOLVE THE 2 BY 2 SYSTEM AND UPDATE DGMAX
         DZY = (A11*R2 - A12*R1)/(A11*A22 - A12*A12)
         DZX = (R1 - A12*DZY)/A11
-        DGMAX = AMAX1(DGMAX,ABS(DZX),ABS(DZY))
+        DGMAX = MAX(DGMAX,ABS(DZX),ABS(DZY))
 C   UPDATE THE PARTIALS AT NODE K
         ZXZY(1,K) = ZXK + DZX
         ZXZY(2,K) = ZYK + DZY
@@ -85601,8 +85604,8 @@ C               FITTING FUNCTION APPROACHES A LINEAR
 C CHECK FOR ERRORS AND INITIALIZE LMIN, LMAX
       IF (NN .LT. 3  .OR.  KK .LT. 1  .OR.  KK .GT. NN)
      .   GO TO 16
-      LMIN = MIN0(LMN,NN)
-      LMAX = MIN0(LMX,NN)
+      LMIN = MIN(LMN,NN)
+      LMAX = MIN(LMX,NN)
 C COMPUTE NPTS, LNP, AVSQ, AV, AND R.
 C   SET NPTS TO THE CLOSEST LMIN-1 NODES TO K.
       SUM = 0.
@@ -85667,7 +85670,7 @@ C   THE LAST COLUMN OF A -- I .LE. LNP.
         I = I + 1
         GO TO 6
 C TEST THE SYSTEM FOR ILL-CONDITIONING
-    8 DMIN = AMIN1(ABS(A(1,1)),ABS(A(2,2)),ABS(A(3,3)),
+    8 DMIN = MIN(ABS(A(1,1)),ABS(A(2,2)),ABS(A(3,3)),
      .              ABS(A(4,4)),ABS(A(5,5)))
       IF (DMIN .GE. DTOL) GO TO 15
       IF (LNP .GT. LMAX) GO TO 9
@@ -85717,7 +85720,7 @@ C   THE DATA USING THE LAST 3 COLUMNS OF A.
         CALL SROT(1,A(6,5),1,A(6,6),1,C,S)
       END DO
 C TEST THE LINEAR FIT FOR ILL-CONDITIONING
-   14 DMIN = AMIN1(ABS(A(4,4)),ABS(A(5,5)))
+   14 DMIN = MIN(ABS(A(4,4)),ABS(A(5,5)))
       IF (DMIN .LT. DTOL) GO TO 17
 C SOLVE THE 2 BY 2 TRIANGULAR SYSTEM FOR THE DERIVATIVES
    15 DY = A(6,5)/A(5,5)
@@ -85887,7 +85890,7 @@ C LOOP ON NODES NI IN NPTS
       DO I = 1,LM1
         NI = NPTS(I)
         INDF = 1
-        IF (NI .GT. 1) INDF = IABS(IEND(NI-1)) + 1
+        IF (NI .GT. 1) INDF = ABS(IEND(NI-1)) + 1
         INDL = -IEND(NI)
 C LOOP ON NEIGHBORS NB OF NI
         DO INDX = INDF,INDL
@@ -86334,7 +86337,7 @@ C   R(3) = (1-2 X 1-(X,Y))/AREA
       PHI(1) = R(2)*R(3)
       PHI(2) = R(3)*R(1)
       PHI(3) = R(1)*R(2)
-      RMIN = AMIN1(R(1),R(2),R(3))
+      RMIN = MIN(R(1),R(2),R(3))
       IF (RMIN .NE. R(1)) GO TO 3
       IP1 = 1
       IP2 = 2
@@ -87939,7 +87942,7 @@ C     (WITH THE SCALE FACTOR MAXABS(DIMP1)) IN  DMEVL1.
 C     ****************
       MAXABS = 0.D0
       DO P = 1,NPTS
-         A = DABS(COORD(P))
+         A = ABS(COORD(P))
          IF (A .GT. MAXABS) MAXABS = A
       END DO
       END SUBROUTINE DSCALP
@@ -88233,9 +88236,9 @@ C-----------------------------------------------------------------------
       IND = 0
       IF (A .EQ. B) RETURN
 C     APPLY QUAD TO THE ENTIRE INTERVAL
-      SUB1 = AMIN1(A,B)
-      SUB3 = AMAX1(A,B)
-      TOL = AMAX1(EPSIL, 10.0*EPS)
+      SUB1 = MIN(A,B)
+      SUB3 = MAX(A,B)
+      TOL = MAX(EPSIL, 10.0*EPS)
       CALL QUAD(SUB1, SUB3, RESULT, K, TOL, NPTS, ICHECK, F)
       IF (ICHECK .EQ. 0) GO TO 100
       IS = 1
@@ -88262,7 +88265,7 @@ C     UPDATE QSUBA AND CHECK IF ANY SIGNIFICANT DIGITS ARE LOST
       QSUBA = SUM
       RELERR = RELERR + ERR
       IF (IND .NE. 0 .OR. X*RESULT(K) .GE. 0.0) GO TO 40
-      X = 0.1*AMIN1(ABS(X),ABS(RESULT(K)))
+      X = 0.1*MIN(ABS(X),ABS(RESULT(K)))
       IF (ABS(QSUBA) .LE. X) IND = 1
 C     CALL QUAD FOR THE INTERVAL (SUB2,SUB3)
    40 IF (NPTS .GE. MCOUNT) GO TO 110
@@ -88279,7 +88282,7 @@ C     UPDATE QSUBA AND CHECK IF ANY SIGNIFICANT DIGITS ARE LOST
       QSUBA = SUM
       RELERR = RELERR + ERR
       IF (IND .NE. 0 .OR. X*RESULT(K) .GE. 0.0) GO TO 60
-      X = 0.1*AMIN1(ABS(X),ABS(RESULT(K)))
+      X = 0.1*MIN(ABS(X),ABS(RESULT(K)))
       IF (ABS(QSUBA) .LE. X) IND = 1
 C     SUBDIVIDE THE INTERVAL LAST STACKED
    60 IF (IS .EQ. 1) GO TO 120
@@ -89028,7 +89031,7 @@ C            -----------------------
       IER = 6
       IF (EPSABS .LT. 0.0 .OR. EPSREL .LT. 0.0) GO TO 999
       IER = 0
-      RERR = AMAX1(EPSREL, 50.0*EPMACH, 0.5E-14)
+      RERR = MAX(EPSREL, 50.0*EPMACH, 0.5E-14)
 C           FIRST APPROXIMATION TO THE INTEGRAL
 C           -----------------------------------
       IERRO = 0
@@ -89038,7 +89041,7 @@ C           -----------------------------------
       NEVAL = 21
 C           TEST ON ACCURACY.
       DRES = ABS(RESULT)
-      ERRBND = AMAX1(EPSABS,RERR*DRES)
+      ERRBND = MAX(EPSABS,RERR*DRES)
       LAST = 1
       RLIST(1) = RESULT
       ELIST(1) = ABSERR
@@ -89098,7 +89101,7 @@ C           AND ERROR AND TEST FOR ACCURACY.
    10   IF (LAST .GT. 10 .AND. ERRO12 .GT. ERRMAX) IROFF3 = IROFF3 + 1
    15   RLIST(MAXERR) = AREA1
         RLIST(LAST) = AREA2
-        ERRBND = AMAX1(EPSABS,RERR*ABS(AREA))
+        ERRBND = MAX(EPSABS,RERR*ABS(AREA))
 C           TEST FOR ROUNDOFF ERROR AND EVENTUALLY
 C           SET ERROR FLAG.
         IF (IROFF1 + IROFF2 .GE. 10 .OR. IROFF3 .GE. 20) IER = 2
@@ -89108,7 +89111,7 @@ C           SUBINTERVALS EQUALS LIMIT.
         IF (LAST .EQ. LIMIT) IER = 1
 C           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
 C           AT A POINT OF THE INTEGRATION RANGE.
-        IF (AMAX1(ABS(A1),ABS(B2)) .LE.
+        IF (MAX(ABS(A1),ABS(B2)) .LE.
      *      T*(ABS(A2) + 0.1E+04*UFLOW)) IER = 4
 C           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
         IF (ERROR2 .GT. ERROR1) GO TO 20
@@ -89171,7 +89174,7 @@ C           PERFORM EXTRAPOLATION.
         ABSERR = ABSEPS
         RESULT = RESEPS
         CORREC = ERLARG
-        ERTEST = AMAX1(EPSABS,RERR*ABS(RESEPS))
+        ERTEST = MAX(EPSABS,RERR*ABS(RESEPS))
 C ***JUMP OUT OF DO-LOOP
         IF (ABSERR .LE. ERTEST) EXIT
 C           PREPARE BISECTION OF THE SMALLEST INTERVAL.
@@ -89202,7 +89205,7 @@ C           ------------------------------------
       GO TO 110
   105 IF (ABSERR/ABS(RESULT) .GT. ERRSUM/ABS(AREA)) GO TO 115
 C           TEST ON DIVERGENCE.
-  110 IF (KSGN .EQ. -1 .AND. AMAX1(ABS(RESULT),ABS(AREA)) .LE.
+  110 IF (KSGN .EQ. -1 .AND. MAX(ABS(RESULT),ABS(AREA)) .LE.
      *    DEFABS*0.1E-01) GO TO 130
       IF (0.1E-01 .GT. (RESULT/AREA) .OR. (RESULT/AREA) .GT. 0.1E+03
      *    .OR. ERRSUM .GT. ABS(AREA)) IER = 6
@@ -89362,10 +89365,10 @@ C           THE INTEGRAL, AND ESTIMATE THE ABSOLUTE ERROR.
       RESASC = RESASC*DHLGTH
       ABSERR = ABS((RESK - RESG)*HLGTH)
       IF (RESASC .NE. 0.0 .AND. ABSERR .NE. 0.0)
-     *   ABSERR = RESASC*AMIN1(1.0,
+     *   ABSERR = RESASC*MIN(1.0,
      *   (0.2E+03*ABSERR/RESASC)**1.5)
       TOL = EPMACH*0.5E+02
-      IF (RESABS .GT. UFLOW/TOL) ABSERR = AMAX1(ABSERR,TOL*RESABS)
+      IF (RESABS .GT. UFLOW/TOL) ABSERR = MAX(ABSERR,TOL*RESABS)
       END SUBROUTINE QK21F
 
       SUBROUTINE QAGI(F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR,
@@ -89759,7 +89762,7 @@ C           -----------------------
       IER = 6
       IF (EPSABS .LT. 0.0 .OR. EPSREL .LT. 0.0) GO TO 999
       IER = 0
-      RERR = AMAX1(EPSREL, 50.0*EPMACH, 0.5E-14)
+      RERR = MAX(EPSREL, 50.0*EPMACH, 0.5E-14)
 C           FIRST APPROXIMATION TO THE INTEGRAL
 C           -----------------------------------
 C           DETERMINE THE INTERVAL TO BE MAPPED ONTO (0,1).
@@ -89776,7 +89779,7 @@ C           TEST ON ACCURACY
       ELIST(1) = ABSERR
       IORD(1) = 1
       DRES = ABS(RESULT)
-      ERRBND = AMAX1(EPSABS,RERR*DRES)
+      ERRBND = MAX(EPSABS,RERR*DRES)
       IF (ABSERR .LE. 100.0*EPMACH*DEFABS .AND. ABSERR .GT. ERRBND)
      *          IER = 2
       IF (LIMIT .EQ. 1) IER = 1
@@ -89832,7 +89835,7 @@ C           AND ERROR AND TEST FOR ACCURACY.
    10   IF (LAST .GT. 10 .AND. ERRO12 .GT. ERRMAX) IROFF3 = IROFF3 + 1
    15   RLIST(MAXERR) = AREA1
         RLIST(LAST) = AREA2
-        ERRBND = AMAX1(EPSABS,RERR*ABS(AREA))
+        ERRBND = MAX(EPSABS,RERR*ABS(AREA))
 C           TEST FOR ROUNDOFF ERROR AND EVENTUALLY
 C           SET ERROR FLAG.
         IF (IROFF1 + IROFF2 .GE. 10 .OR. IROFF3 .GE. 20) IER = 2
@@ -89843,7 +89846,7 @@ C           SUBINTERVALS EQUALS LIMIT.
 C           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
 C           AT SOME POINTS OF THE INTEGRATION RANGE.
  
-        IF (AMAX1(ABS(A1),ABS(B2)) .LE.
+        IF (MAX(ABS(A1),ABS(B2)) .LE.
      *      T*(ABS(A2) + 0.1E+04*UFLOW)) IER = 4
 C           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
         IF (ERROR2 .GT. ERROR1) GO TO 20
@@ -89903,7 +89906,7 @@ C           PERFORM EXTRAPOLATION.
         ABSERR = ABSEPS
         RESULT = RESEPS
         CORREC = ERLARG
-        ERTEST = AMAX1(EPSABS,RERR*ABS(RESEPS))
+        ERTEST = MAX(EPSABS,RERR*ABS(RESEPS))
         IF (ABSERR .LE. ERTEST) EXIT
 C            PREPARE BISECTION OF THE SMALLEST INTERVAL.
    70   IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
@@ -89933,7 +89936,7 @@ C           ------------------------------------
       GO TO 110
   105 IF (ABSERR/ABS(RESULT) .GT. ERRSUM/ABS(AREA)) GO TO 115
 C           TEST ON DIVERGENCE
-  110 IF (KSGN .EQ. -1 .AND. AMAX1(ABS(RESULT),ABS(AREA)) .LE.
+  110 IF (KSGN .EQ. -1 .AND. MAX(ABS(RESULT),ABS(AREA)) .LE.
      *    DEFABS*0.1E-01) GO TO 130
       IF (0.1E-01 .GT. (RESULT/AREA) .OR. (RESULT/AREA) .GT. 0.1E+03
      *    .OR. ERRSUM .GT. ABS(AREA)) IER = 6
@@ -90062,7 +90065,7 @@ C           RESG   - RESULT OF THE 7-POINT GAUSS FORMULA
 C           RESK   - RESULT OF THE 15-POINT KRONROD FORMULA
 C           RESKH  - APPROXIMATION TO THE MEAN VALUE OF THE TRANSFORMED
 C                    INTEGRAND OVER (A,B), I.E. TO I/(B-A)
-      DINF = MIN0(1,INF)
+      DINF = MIN(1,INF)
       CENTR = 0.5*(A + B)
       HLGTH = 0.5*(B - A)
       TABSC1 = BOUN + DINF*(1.0 - CENTR)/CENTR
@@ -90104,9 +90107,9 @@ C           THE INTEGRAL, AND ESTIMATE THE ERROR.
       RESABS = RESABS*HLGTH
       ABSERR = ABS((RESK - RESG)*HLGTH)
       IF (RESASC .NE. 0.0 .AND. ABSERR .NE. 0.0) ABSERR = RESASC*
-     *    AMIN1(1.0, (0.2E+03*ABSERR/RESASC)**1.5)
+     *    MIN(1.0, (0.2E+03*ABSERR/RESASC)**1.5)
       TOL = 50.0*EPMACH
-      IF (RESABS .GT. UFLOW/TOL) ABSERR = AMAX1(ABSERR, TOL*RESABS)
+      IF (RESABS .GT. UFLOW/TOL) ABSERR = MAX(ABSERR, TOL*RESABS)
       END SUBROUTINE QK15I
 
       SUBROUTINE QPSRT(LIMIT,LAST,MAXERR,ERMAX,ELIST,IORD,NRMAX)
@@ -90308,10 +90311,10 @@ C           DIAGONAL OF THE EPSILON TABLE IS DELETED.
         E1ABS = ABS(E1)
         DELTA2 = E2 - E1
         ERR2 = ABS(DELTA2)
-        TOL2 = AMAX1(ABS(E2),E1ABS)*EPMACH
+        TOL2 = MAX(ABS(E2),E1ABS)*EPMACH
         DELTA3 = E1 - E0
         ERR3 = ABS(DELTA3)
-        TOL3 = AMAX1(E1ABS,ABS(E0))*EPMACH
+        TOL3 = MAX(E1ABS,ABS(E0))*EPMACH
         IF (ERR2 .GT. TOL2 .OR. ERR3 .GT. TOL3) GO TO 10
 C           IF E0, E1 AND E2 ARE EQUAL TO WITHIN MACHINE
 C           ACCURACY, CONVERGENCE IS ASSUMED.
@@ -90325,7 +90328,7 @@ C ***JUMP OUT OF DO-LOOP
         EPSTAB(K1) = E1
         DELTA1 = E1 - E3
         ERR1 = ABS(DELTA1)
-        TOL1 = AMAX1(E1ABS,ABS(E3))*EPMACH
+        TOL1 = MAX(E1ABS,ABS(E3))*EPMACH
 C           IF TWO ELEMENTS ARE VERY CLOSE TO EACH OTHER, OMIT
 C           A PART OF THE TABLE BY ADJUSTING THE VALUE OF N
         IF (ERR1.LE.TOL1 .OR. ERR2.LE.TOL2 .OR. ERR3.LE.TOL3) GO TO 20
@@ -90375,7 +90378,7 @@ C           COMPUTE ERROR ESTIMATE
       RES3LA(1) = RES3LA(2)
       RES3LA(2) = RES3LA(3)
       RES3LA(3) = RESULT
-  100 ABSERR = AMAX1(ABSERR,5.0*EPMACH*ABS(RESULT))
+  100 ABSERR = MAX(ABSERR,5.0*EPMACH*ABS(RESULT))
       END SUBROUTINE QELG
 
       SUBROUTINE QXGS(F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER,
@@ -90704,7 +90707,7 @@ C            ------------------------------
       IER = 6
       IF (EPSABS .LT. 0.0 .OR. EPSREL.LT. 0.0) GO TO 999
       IER = 0
-      RERR = AMAX1(EPSREL, 50.0*EPMACH)
+      RERR = MAX(EPSREL, 50.0*EPMACH)
 C           FIRST APPROXIMATION TO THE INTEGRAL
 C           -----------------------------------
       IERRO = 0
@@ -90717,7 +90720,7 @@ C           -----------------------------------
      *            EPMACH,UFLOW,OFLOW)
 C           TEST ON ACCURACY.
       DRES = ABS(RESULT)
-      ERRBND = AMAX1(EPSABS,RERR*DRES)
+      ERRBND = MAX(EPSABS,RERR*DRES)
       LAST = 1
       RLIST(1) = RESULT
       ELIST(1) = ABSERR
@@ -90777,7 +90780,7 @@ C           AND ERROR AND TEST FOR ACCURACY.
    10   IF (LAST.GT.10 .AND. ERRO12.GT.ERRMAX) IROFF3 = IROFF3 + 1
    15   RLIST(MAXERR) = AREA1
         RLIST(LAST) = AREA2
-        ERRBND = AMAX1(EPSABS,RERR*ABS(AREA))
+        ERRBND = MAX(EPSABS,RERR*ABS(AREA))
 C           TEST FOR ROUNDOFF ERROR AND EVENTUALLY SET ERROR FLAG.
         IF (IROFF1 + IROFF2 .GE. 10 .OR. IROFF3 .GE. 20) IER = 2
         IF (IROFF2 .GE. 5) IERRO = 3
@@ -90786,7 +90789,7 @@ C           EQUALS LIMIT.
         IF (LAST .EQ. LIMIT) IER = 1
 C           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
 C           AT A POINT OF THE INTEGRATION RANGE.
-        IF (AMAX1(ABS(A1),ABS(B2)) .LE.
+        IF (MAX(ABS(A1),ABS(B2)) .LE.
      *      T*(ABS(A2) + 1.E+03*UFLOW)) IER = 4
 C           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
         IF (ERROR2 .GT. ERROR1) GO TO 20
@@ -90866,7 +90869,7 @@ C           PERFORM EXTRAPOLATION.
         ABSERR = ABSEPS
         RESULT = RESEPS
         CORREC = ERLARG
-        ERTEST = AMAX1(EPSABS,RERR*ABS(RESEPS))
+        ERTEST = MAX(EPSABS,RERR*ABS(RESEPS))
 C ***JUMP OUT OF DO-LOOP
         IF (ABSERR .LE. ERTEST) EXIT
 C           PREPARE BISECTION OF THE SMALLEST INTERVAL.
@@ -90897,7 +90900,7 @@ C           ------------------------------------
       GO TO 110
   105 IF (ABSERR/ABS(RESULT) .GT. ERRSUM/ABS(AREA)) GO TO 115
 C           TEST ON DIVERGENCE.
-  110 IF(KSGN.EQ.(-1).AND.AMAX1(ABS(RESULT),ABS(AREA)).LE.
+  110 IF(KSGN.EQ.(-1).AND.MAX(ABS(RESULT),ABS(AREA)).LE.
      * DEFABS*0.1E-01) GO TO 130
       IF(0.1E-01.GT.(RESULT/AREA).OR.(RESULT/AREA).GT.0.1E+03
      * .OR.ERRSUM.GT.ABS(AREA)) IER = 6
@@ -91000,11 +91003,11 @@ C***ROUTINES CALLED  QXRUL
       REAL :: RESG, RESK, ERROLD
       INTEGER :: K, K0, K1, K2
       INTEGER :: KEY1
-      KEY1 = MAX0(KEY ,  0)
-      KEY1 = MIN0(KEY1,  4)
-      K0   = MAX0(KEY1-2,0)
+      KEY1 = MAX(KEY ,  0)
+      KEY1 = MIN(KEY1,  4)
+      K0   = MAX(KEY1-2,0)
       K1   = K0 + 1
-      K2   = MIN0(KEY1+1,3)
+      K2   = MIN(KEY1+1,3)
       CALL QXRUL(F,A,B,RESG,RESABS,RESASC,K0,K1,VR,VS,LR,LS)
       ERROLD = OFLOW
       T = 10.0*EPMACH
@@ -91013,8 +91016,8 @@ C***ROUTINES CALLED  QXRUL
         RESULT = RESK
         ABSERR = ABS(RESK - RESG)
         IF (RESASC .NE. 0.0 .AND. ABSERR .NE. 0.0)
-     *      ABSERR = RESASC*AMIN1(1.0,(200.0*ABSERR/RESASC)**1.5)
-        IF (RESABS .GT. UFLOW/T) ABSERR = AMAX1(T*RESABS,ABSERR)
+     *      ABSERR = RESASC*MIN(1.0,(200.0*ABSERR/RESASC)**1.5)
+        IF (RESABS .GT. UFLOW/T) ABSERR = MAX(T*RESABS,ABSERR)
         RESG = RESK
         IF (ABSERR .GT. ERROLD * 0.16) EXIT
         IF (ABSERR .LT. 1000.0 * EPMACH * RESABS) EXIT
@@ -91668,7 +91671,7 @@ C            -----------------------
       IER = 6
       IF (EPSABS .LT. 0.D0 .OR. EPSREL .LT. 0.D0) GO TO 999
       IER = 0
-      RERR = DMAX1(EPSREL, 50.D0*EPMACH, 0.5D-28)
+      RERR = MAX(EPSREL, 50.D0*EPMACH, 0.5D-28)
 C           FIRST APPROXIMATION TO THE INTEGRAL
 C           -----------------------------------
       IERRO = 0
@@ -91677,8 +91680,8 @@ C           -----------------------------------
       IF (ID .NE. 0) GO TO 999
       NEVAL = 21
 C           TEST ON ACCURACY.
-      DRES = DABS(RESULT)
-      ERRBND = DMAX1(EPSABS,RERR*DRES)
+      DRES = ABS(RESULT)
+      ERRBND = MAX(EPSABS,RERR*DRES)
       LAST = 1
       RLIST(1) = RESULT
       ELIST(1) = ABSERR
@@ -91731,14 +91734,14 @@ C           AND ERROR AND TEST FOR ACCURACY.
         ERRSUM = ERRSUM + ERRO12 - ERRMAX
         AREA = AREA + AREA12 - RLIST(MAXERR)
         IF (DEFAB1 .EQ. ERROR1 .OR. DEFAB2 .EQ. ERROR2) GO TO 15
-        IF (DABS(RLIST(MAXERR) - AREA12) .GT. 0.1D-04*DABS(AREA12)
+        IF (ABS(RLIST(MAXERR) - AREA12) .GT. 0.1D-04*ABS(AREA12)
      *     .OR. ERRO12 .LT. 0.99D0*ERRMAX) GO TO 10
         IF (EXTRAP) IROFF2 = IROFF2 + 1
         IF (.NOT.EXTRAP) IROFF1 = IROFF1 + 1
    10   IF (LAST .GT. 10 .AND. ERRO12 .GT. ERRMAX) IROFF3 = IROFF3 + 1
    15   RLIST(MAXERR) = AREA1
         RLIST(LAST) = AREA2
-        ERRBND = DMAX1(EPSABS,RERR*DABS(AREA))
+        ERRBND = MAX(EPSABS,RERR*ABS(AREA))
 C           TEST FOR ROUNDOFF ERROR AND EVENTUALLY
 C           SET ERROR FLAG.
         IF (IROFF1 + IROFF2 .GE. 10 .OR. IROFF3 .GE. 20) IER = 2
@@ -91748,8 +91751,8 @@ C           SUBINTERVALS EQUALS LIMIT.
         IF (LAST .EQ. LIMIT) IER = 1
 C           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
 C           AT A POINT OF THE INTEGRATION RANGE.
-        IF (DMAX1(DABS(A1),DABS(B2)) .LE.
-     *      T*(DABS(A2) + 0.1D+04*UFLOW)) IER = 4
+        IF (MAX(ABS(A1),ABS(B2)) .LE.
+     *      T*(ABS(A2) + 0.1D+04*UFLOW)) IER = 4
 C           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
         IF (ERROR2 .GT. ERROR1) GO TO 20
         ALIST(LAST) = A2
@@ -91777,11 +91780,11 @@ C ***JUMP OUT OF DO-LOOP
         IF (LAST .EQ. 2) GO TO 80
         IF (NOEXT) GO TO 90
         ERLARG = ERLARG - ERLAST
-        IF (DABS(B1 - A1) .GT. SMALL) ERLARG = ERLARG + ERRO12
+        IF (ABS(B1 - A1) .GT. SMALL) ERLARG = ERLARG + ERRO12
         IF (EXTRAP) GO TO 40
 C           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
 C           SMALLEST INTERVAL.
-        IF (DABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
+        IF (ABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
         EXTRAP = .TRUE.
         NRMAX = 2
    40   IF (IERRO .EQ. 3 .OR. ERLARG .LE. ERTEST) GO TO 60
@@ -91796,7 +91799,7 @@ C           EXTRAPOLATION.
           MAXERR = IORD(NRMAX)
           ERRMAX = ELIST(MAXERR)
 C ***JUMP OUT OF DO-LOOP
-          IF (DABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
+          IF (ABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
           NRMAX = NRMAX + 1
         END DO
 C           PERFORM EXTRAPOLATION.
@@ -91811,7 +91814,7 @@ C           PERFORM EXTRAPOLATION.
         ABSERR = ABSEPS
         RESULT = RESEPS
         CORREC = ERLARG
-        ERTEST = DMAX1(EPSABS,RERR*DABS(RESEPS))
+        ERTEST = MAX(EPSABS,RERR*ABS(RESEPS))
 C ***JUMP OUT OF DO-LOOP
         IF (ABSERR .LE. ERTEST) EXIT
 C           PREPARE BISECTION OF THE SMALLEST INTERVAL.
@@ -91824,7 +91827,7 @@ C           PREPARE BISECTION OF THE SMALLEST INTERVAL.
         SMALL = SMALL*0.5D0
         ERLARG = ERRSUM
         GO TO 90
-   80   SMALL = DABS(B - A)*0.375D0
+   80   SMALL = ABS(B - A)*0.375D0
         ERLARG = ERRSUM
         ERTEST = ERRBND
         RLIST2(2) = AREA
@@ -91840,12 +91843,12 @@ C           ------------------------------------
       IF (ABSERR .GT. ERRSUM) GO TO 115
       IF (AREA .EQ. 0.D0) GO TO 130
       GO TO 110
-  105 IF (ABSERR/DABS(RESULT) .GT. ERRSUM/DABS(AREA)) GO TO 115
+  105 IF (ABSERR/ABS(RESULT) .GT. ERRSUM/ABS(AREA)) GO TO 115
 C           TEST ON DIVERGENCE.
-  110 IF (KSGN .EQ. -1 .AND. DMAX1(DABS(RESULT),DABS(AREA)) .LE.
+  110 IF (KSGN .EQ. -1 .AND. MAX(ABS(RESULT),ABS(AREA)) .LE.
      *    DEFABS*0.1D-01) GO TO 130
       IF (0.1D-01 .GT. (RESULT/AREA) .OR. (RESULT/AREA) .GT. 0.1D+03
-     *    .OR. ERRSUM .GT. DABS(AREA)) IER = 6
+     *    .OR. ERRSUM .GT. ABS(AREA)) IER = 6
       GO TO 130
 C           COMPUTE GLOBAL INTEGRAL SUM.
   115 RESULT = 0.0
@@ -91976,18 +91979,18 @@ C           RESKH  - APPROXIMATION TO THE MEAN VALUE OF F OVER (A,B),
 C                    I.E. TO I/(B-A)
       CENTR = 0.5D0*(A + B)
       HLGTH = 0.5D0*(B - A)
-      DHLGTH = DABS(HLGTH)
+      DHLGTH = ABS(HLGTH)
 C             CHECK IF THE INTERVAL (A,B) IS TOO SHORT
       ISIG = 5
-      ABSC = DABS(CENTR) + DHLGTH*0.14D0
-      IF (ABSC .EQ. DABS(CENTR)) RETURN
+      ABSC = ABS(CENTR) + DHLGTH*0.14D0
+      IF (ABSC .EQ. ABS(CENTR)) RETURN
 C           COMPUTE THE 21-POINT KRONROD APPROXIMATION TO
 C           THE INTEGRAL, AND ESTIMATE THE ABSOLUTE ERROR.
       ISIG = 0
       RESG = 0.D0
       FC = F(CENTR)
       RESK = WGK(11)*FC
-      RESABS = DABS(RESK)
+      RESABS = ABS(RESK)
       DO J = 1,5
         JTW = 2*J
         ABSC = HLGTH*XGK(JTW)
@@ -91998,7 +92001,7 @@ C           THE INTEGRAL, AND ESTIMATE THE ABSOLUTE ERROR.
         FSUM = FVAL1 + FVAL2
         RESG = RESG + WG(J)*FSUM
         RESK = RESK + WGK(JTW)*FSUM
-        RESABS = RESABS + WGK(JTW)*(DABS(FVAL1) + DABS(FVAL2))
+        RESABS = RESABS + WGK(JTW)*(ABS(FVAL1) + ABS(FVAL2))
       END DO
       DO J = 1,5
         JTWM1 = 2*J - 1
@@ -92009,23 +92012,23 @@ C           THE INTEGRAL, AND ESTIMATE THE ABSOLUTE ERROR.
         FV2(JTWM1) = FVAL2
         FSUM = FVAL1 + FVAL2
         RESK = RESK + WGK(JTWM1)*FSUM
-        RESABS = RESABS + WGK(JTWM1)*(DABS(FVAL1) + DABS(FVAL2))
+        RESABS = RESABS + WGK(JTWM1)*(ABS(FVAL1) + ABS(FVAL2))
       END DO
       RESKH = RESK*0.5D0
-      RESASC = WGK(11)*DABS(FC - RESKH)
+      RESASC = WGK(11)*ABS(FC - RESKH)
       DO J = 1,10
-        RESASC = RESASC + WGK(J)*(DABS(FV1(J)-RESKH)
-     *                  + DABS(FV2(J)-RESKH))
+        RESASC = RESASC + WGK(J)*(ABS(FV1(J)-RESKH)
+     *                  + ABS(FV2(J)-RESKH))
       END DO
       RESULT = RESK*HLGTH
       RESABS = RESABS*DHLGTH
       RESASC = RESASC*DHLGTH
-      ABSERR = DABS((RESK - RESG)*HLGTH)
+      ABSERR = ABS((RESK - RESG)*HLGTH)
       IF (RESASC .NE. 0.D0 .AND. ABSERR .NE. 0.D0)
-     *   ABSERR = RESASC*DMIN1(1.D0,
+     *   ABSERR = RESASC*MIN(1.D0,
      *   (0.2D+03*ABSERR/RESASC)**1.5D0)
       TOL = EPMACH*0.5D+02
-      IF (RESABS .GT. UFLOW/TOL) ABSERR = DMAX1(ABSERR,TOL*RESABS)
+      IF (RESABS .GT. UFLOW/TOL) ABSERR = MAX(ABSERR,TOL*RESABS)
       END SUBROUTINE DQK21
 
       SUBROUTINE DQAGI(F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR,
@@ -92421,7 +92424,7 @@ C           -----------------------
       IER = 6
       IF (EPSABS .LT. 0.D0 .OR. EPSREL .LT. 0.D0) GO TO 999
       IER = 0
-      RERR = DMAX1(EPSREL, 50.D0*EPMACH, 0.5D-28)
+      RERR = MAX(EPSREL, 50.D0*EPMACH, 0.5D-28)
 C           FIRST APPROXIMATION TO THE INTEGRAL
 C           -----------------------------------
 C           DETERMINE THE INTERVAL TO BE MAPPED ONTO (0,1).
@@ -92437,8 +92440,8 @@ C           TEST ON ACCURACY
       RLIST(1) = RESULT
       ELIST(1) = ABSERR
       IORD(1) = 1
-      DRES = DABS(RESULT)
-      ERRBND = DMAX1(EPSABS,RERR*DRES)
+      DRES = ABS(RESULT)
+      ERRBND = MAX(EPSABS,RERR*DRES)
       IF (ABSERR .LE. 100.D0*EPMACH*DEFABS .AND. ABSERR .GT. ERRBND)
      *          IER = 2
       IF (LIMIT .EQ. 1) IER = 1
@@ -92487,14 +92490,14 @@ C           AND ERROR AND TEST FOR ACCURACY.
         ERRSUM = ERRSUM + ERRO12 - ERRMAX
         AREA = AREA + AREA12 - RLIST(MAXERR)
         IF (DEFAB1 .EQ. ERROR1 .OR. DEFAB2 .EQ. ERROR2) GO TO 15
-        IF (DABS(RLIST(MAXERR) - AREA12) .GT. 0.1D-04*DABS(AREA12)
+        IF (ABS(RLIST(MAXERR) - AREA12) .GT. 0.1D-04*ABS(AREA12)
      *      .OR. ERRO12 .LT. 0.99D0*ERRMAX) GO TO 10
         IF (EXTRAP) IROFF2 = IROFF2 + 1
         IF (.NOT.EXTRAP) IROFF1 = IROFF1 + 1
    10   IF (LAST .GT. 10 .AND. ERRO12 .GT. ERRMAX) IROFF3 = IROFF3 + 1
    15   RLIST(MAXERR) = AREA1
         RLIST(LAST) = AREA2
-        ERRBND = DMAX1(EPSABS,RERR*DABS(AREA))
+        ERRBND = MAX(EPSABS,RERR*ABS(AREA))
 C           TEST FOR ROUNDOFF ERROR AND EVENTUALLY
 C           SET ERROR FLAG.
         IF (IROFF1 + IROFF2 .GE. 10 .OR. IROFF3 .GE. 20) IER = 2
@@ -92505,8 +92508,8 @@ C           SUBINTERVALS EQUALS LIMIT.
 C           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
 C           AT SOME POINTS OF THE INTEGRATION RANGE.
  
-        IF (DMAX1(DABS(A1),DABS(B2)) .LE.
-     *      T*(DABS(A2) + 0.1D+04*UFLOW)) IER = 4
+        IF (MAX(ABS(A1),ABS(B2)) .LE.
+     *      T*(ABS(A2) + 0.1D+04*UFLOW)) IER = 4
 C           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
         IF (ERROR2 .GT. ERROR1) GO TO 20
         ALIST(LAST) = A2
@@ -92532,11 +92535,11 @@ C           BISECTED NEXT).
         IF (LAST .EQ. 2) GO TO 80
         IF (NOEXT) GO TO 90
         ERLARG = ERLARG - ERLAST
-        IF (DABS(B1 - A1) .GT. SMALL) ERLARG = ERLARG + ERRO12
+        IF (ABS(B1 - A1) .GT. SMALL) ERLARG = ERLARG + ERRO12
         IF (EXTRAP) GO TO 40
 C           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
 C           SMALLEST INTERVAL.
-        IF (DABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
+        IF (ABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
         EXTRAP = .TRUE.
         NRMAX = 2
    40   IF (IERRO .EQ. 3 .OR. ERLARG .LE. ERTEST) GO TO 60
@@ -92550,7 +92553,7 @@ C           EXTRAPOLATION.
         DO K = ID,JUPBND
           MAXERR = IORD(NRMAX)
           ERRMAX = ELIST(MAXERR)
-          IF (DABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
+          IF (ABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
           NRMAX = NRMAX + 1
         END DO
 C           PERFORM EXTRAPOLATION.
@@ -92565,7 +92568,7 @@ C           PERFORM EXTRAPOLATION.
         ABSERR = ABSEPS
         RESULT = RESEPS
         CORREC = ERLARG
-        ERTEST = DMAX1(EPSABS,RERR*DABS(RESEPS))
+        ERTEST = MAX(EPSABS,RERR*ABS(RESEPS))
         IF (ABSERR .LE. ERTEST) EXIT
 C            PREPARE BISECTION OF THE SMALLEST INTERVAL.
    70   IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
@@ -92593,12 +92596,12 @@ C           ------------------------------------
       IF (ABSERR .GT. ERRSUM) GO TO 115
       IF (AREA .EQ. 0.D0) GO TO 130
       GO TO 110
-  105 IF (ABSERR/DABS(RESULT) .GT. ERRSUM/DABS(AREA)) GO TO 115
+  105 IF (ABSERR/ABS(RESULT) .GT. ERRSUM/ABS(AREA)) GO TO 115
 C           TEST ON DIVERGENCE
-  110 IF (KSGN .EQ. -1 .AND. DMAX1(DABS(RESULT),DABS(AREA)) .LE.
+  110 IF (KSGN .EQ. -1 .AND. MAX(ABS(RESULT),ABS(AREA)) .LE.
      *    DEFABS*0.1D-01) GO TO 130
       IF (0.1D-01 .GT. (RESULT/AREA) .OR. (RESULT/AREA) .GT. 0.1D+03
-     *    .OR. ERRSUM .GT. DABS(AREA)) IER = 6
+     *    .OR. ERRSUM .GT. ABS(AREA)) IER = 6
       GO TO 130
 C           COMPUTE GLOBAL INTEGRAL SUM.
   115 RESULT = 0.D0
@@ -92737,7 +92740,7 @@ C           RESG   - RESULT OF THE 7-POINT GAUSS FORMULA
 C           RESK   - RESULT OF THE 15-POINT KRONROD FORMULA
 C           RESKH  - APPROXIMATION TO THE MEAN VALUE OF THE TRANSFORMED
 C                    INTEGRAND OVER (A,B), I.E. TO I/(B-A)
-      DINF = MIN0(1,INF)
+      DINF = MIN(1,INF)
       CENTR = 0.5D0*(A + B)
       HLGTH = 0.5D0*(B - A)
       TABSC1 = BOUN + DINF*(1.D0 - CENTR)/CENTR
@@ -92748,7 +92751,7 @@ C           COMPUTE THE 15-POINT KRONROD APPROXIMATION TO
 C           THE INTEGRAL, AND ESTIMATE THE ERROR.
       RESG = WG(8)*FC
       RESK = WGK(8)*FC
-      RESABS = DABS(RESK)
+      RESABS = ABS(RESK)
       DO J = 1,7
         ABSC = HLGTH*XGK(J)
         ABSC1 = CENTR - ABSC
@@ -92766,22 +92769,22 @@ C           THE INTEGRAL, AND ESTIMATE THE ERROR.
         FSUM = FVAL1 + FVAL2
         RESG = RESG + WG(J)*FSUM
         RESK = RESK + WGK(J)*FSUM
-        RESABS = RESABS + WGK(J)*(DABS(FVAL1) + DABS(FVAL2))
+        RESABS = RESABS + WGK(J)*(ABS(FVAL1) + ABS(FVAL2))
       END DO
       RESKH = RESK*0.5D0
-      RESASC = WGK(8)*DABS(FC - RESKH)
+      RESASC = WGK(8)*ABS(FC - RESKH)
       DO J = 1,7
-        RESASC = RESASC + WGK(J)*(DABS(FV1(J)-RESKH) +
-     *                            DABS(FV2(J)-RESKH))
+        RESASC = RESASC + WGK(J)*(ABS(FV1(J)-RESKH) +
+     *                            ABS(FV2(J)-RESKH))
       END DO
       RESULT = RESK*HLGTH
       RESASC = RESASC*HLGTH
       RESABS = RESABS*HLGTH
-      ABSERR = DABS((RESK - RESG)*HLGTH)
+      ABSERR = ABS((RESK - RESG)*HLGTH)
       IF (RESASC .NE. 0.D0 .AND. ABSERR .NE. 0.D0) ABSERR = RESASC*
-     *    DMIN1(1.D0, (0.2D+03*ABSERR/RESASC)**1.5D0)
+     *    MIN(1.D0, (0.2D+03*ABSERR/RESASC)**1.5D0)
       TOL = 50.D0*EPMACH
-      IF (RESABS .GT. UFLOW/TOL) ABSERR = DMAX1(ABSERR, TOL*RESABS)
+      IF (RESABS .GT. UFLOW/TOL) ABSERR = MAX(ABSERR, TOL*RESABS)
       END SUBROUTINE DQK15I
 
       SUBROUTINE DQPSRT(LIMIT,LAST,MAXERR,ERMAX,ELIST,IORD,NRMAX)
@@ -92988,13 +92991,13 @@ C           DIAGONAL OF THE EPSILON TABLE IS DELETED.
         E0 = EPSTAB(K3)
         E1 = EPSTAB(K2)
         E2 = RES
-        E1ABS = DABS(E1)
+        E1ABS = ABS(E1)
         DELTA2 = E2 - E1
-        ERR2 = DABS(DELTA2)
-        TOL2 = DMAX1(DABS(E2),E1ABS)*EPMACH
+        ERR2 = ABS(DELTA2)
+        TOL2 = MAX(ABS(E2),E1ABS)*EPMACH
         DELTA3 = E1 - E0
-        ERR3 = DABS(DELTA3)
-        TOL3 = DMAX1(E1ABS,DABS(E0))*EPMACH
+        ERR3 = ABS(DELTA3)
+        TOL3 = MAX(E1ABS,ABS(E0))*EPMACH
         IF (ERR2 .GT. TOL2 .OR. ERR3 .GT. TOL3) GO TO 10
 C           IF E0, E1 AND E2 ARE EQUAL TO WITHIN MACHINE
 C           ACCURACY, CONVERGENCE IS ASSUMED.
@@ -93007,13 +93010,13 @@ C ***JUMP OUT OF DO-LOOP
    10   E3 = EPSTAB(K1)
         EPSTAB(K1) = E1
         DELTA1 = E1 - E3
-        ERR1 = DABS(DELTA1)
-        TOL1 = DMAX1(E1ABS,DABS(E3))*EPMACH
+        ERR1 = ABS(DELTA1)
+        TOL1 = MAX(E1ABS,ABS(E3))*EPMACH
 C           IF TWO ELEMENTS ARE VERY CLOSE TO EACH OTHER, OMIT
 C           A PART OF THE TABLE BY ADJUSTING THE VALUE OF N
         IF (ERR1.LE.TOL1 .OR. ERR2.LE.TOL2 .OR. ERR3.LE.TOL3) GO TO 20
         SS = 1.D0/DELTA1 + 1.D0/DELTA2 - 1.D0/DELTA3
-        EPSINF = DABS(SS*E1)
+        EPSINF = ABS(SS*E1)
 C           TEST TO DETECT IRREGULAR BEHAVIOUR IN THE TABLE, AND
 C           EVENTUALLY OMIT A PART OF THE TABLE ADJUSTING THE VALUE
 C           OF N.
@@ -93026,7 +93029,7 @@ C           THE VALUE OF RESULT.
    30   RES = E1 + 1.D0/SS
         EPSTAB(K1) = RES
         K1 = K1 - 2
-        ERROR = ERR2 + DABS(RES - E2) + ERR3
+        ERROR = ERR2 + ABS(RES - E2) + ERR3
         IF (ERROR .GT. ABSERR) GO TO 40
         ABSERR = ERROR
         RESULT = RES
@@ -93053,12 +93056,12 @@ C           SHIFT THE TABLE.
       ABSERR = OFLOW
       GO TO 100
 C           COMPUTE ERROR ESTIMATE
-   90 ABSERR = DABS(RESULT - RES3LA(3)) + DABS(RESULT - RES3LA(2)) +
-     *         DABS(RESULT - RES3LA(1))
+   90 ABSERR = ABS(RESULT - RES3LA(3)) + ABS(RESULT - RES3LA(2)) +
+     *         ABS(RESULT - RES3LA(1))
       RES3LA(1) = RES3LA(2)
       RES3LA(2) = RES3LA(3)
       RES3LA(3) = RESULT
-  100 ABSERR = DMAX1(ABSERR,5.D0*EPMACH*DABS(RESULT))
+  100 ABSERR = MAX(ABSERR,5.D0*EPMACH*ABS(RESULT))
       END SUBROUTINE DQELG
 
       SUBROUTINE DQXGS(F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER,
@@ -93387,7 +93390,7 @@ C            ------------------------------
       IER = 6
       IF (EPSABS .LT. 0.D0 .OR. EPSREL.LT. 0.D0) GO TO 999
       IER = 0
-      RERR = DMAX1(EPSREL, 50.D0*EPMACH)
+      RERR = MAX(EPSREL, 50.D0*EPMACH)
 C           FIRST APPROXIMATION TO THE INTEGRAL
 C           -----------------------------------
       IERRO = 0
@@ -93399,8 +93402,8 @@ C           -----------------------------------
      *             VALP(1,1),VALN(1,1),LP(1),LN(1),2,
      *             EPMACH,UFLOW,OFLOW)
 C           TEST ON ACCURACY.
-      DRES = DABS(RESULT)
-      ERRBND = DMAX1(EPSABS,RERR*DRES)
+      DRES = ABS(RESULT)
+      ERRBND = MAX(EPSABS,RERR*DRES)
       LAST = 1
       RLIST(1) = RESULT
       ELIST(1) = ABSERR
@@ -93453,14 +93456,14 @@ C           AND ERROR AND TEST FOR ACCURACY.
         ERRSUM = ERRSUM + ERRO12 - ERRMAX
         AREA = AREA + AREA12 - RLIST(MAXERR)
         IF (DEFAB1 .EQ. ERROR1 .OR. DEFAB2 .EQ. ERROR2) GO TO 15
-        IF (DABS(RLIST(MAXERR) - AREA12) .GT. 0.1D-04*DABS(AREA12)
+        IF (ABS(RLIST(MAXERR) - AREA12) .GT. 0.1D-04*ABS(AREA12)
      *     .OR. ERRO12 .LT. 0.99D0*ERRMAX) GO TO 10
         IF (EXTRAP) IROFF2 = IROFF2 + 1
         IF (.NOT.EXTRAP) IROFF1 = IROFF1 + 1
    10   IF (LAST.GT.10 .AND. ERRO12.GT.ERRMAX) IROFF3 = IROFF3 + 1
    15   RLIST(MAXERR) = AREA1
         RLIST(LAST) = AREA2
-        ERRBND = DMAX1(EPSABS,RERR*DABS(AREA))
+        ERRBND = MAX(EPSABS,RERR*ABS(AREA))
 C           TEST FOR ROUNDOFF ERROR AND EVENTUALLY SET ERROR FLAG.
         IF (IROFF1 + IROFF2 .GE. 10 .OR. IROFF3 .GE. 20) IER = 2
         IF (IROFF2 .GE. 5) IERRO = 3
@@ -93469,8 +93472,8 @@ C           EQUALS LIMIT.
         IF (LAST .EQ. LIMIT) IER = 1
 C           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
 C           AT A POINT OF THE INTEGRATION RANGE.
-        IF (DMAX1(DABS(A1),DABS(B2)) .LE.
-     *      T*(DABS(A2) + 1.D+03*UFLOW)) IER = 4
+        IF (MAX(ABS(A1),ABS(B2)) .LE.
+     *      T*(ABS(A2) + 1.D+03*UFLOW)) IER = 4
 C           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
         IF (ERROR2 .GT. ERROR1) GO TO 20
         ALIST(LAST) = A2
@@ -93513,11 +93516,11 @@ C ***JUMP OUT OF DO-LOOP
         IF (LAST .EQ. 2) GO TO 80
         IF (NOEXT) GO TO 90
         ERLARG = ERLARG - ERLAST
-        IF (DABS(B1 - A1) .GT. SMALL) ERLARG = ERLARG + ERRO12
+        IF (ABS(B1 - A1) .GT. SMALL) ERLARG = ERLARG + ERRO12
         IF (EXTRAP) GO TO 40
 C           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
 C           SMALLEST INTERVAL.
-        IF (DABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
+        IF (ABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
         EXTRAP = .TRUE.
         NRMAX = 2
 C           THE BOUND 0.3*ERTEST HAS BEEN INTRODUCED TO PERFORM A
@@ -93534,7 +93537,7 @@ C           LARGER INTERVALS (ERLARG) AND PERFORM EXTRAPOLATION.
           MAXERR = IORD(NRMAX)
           ERRMAX = ELIST(MAXERR)
 C ***JUMP OUT OF DO-LOOP
-          IF(DABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
+          IF(ABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
           NRMAX = NRMAX + 1
         END DO
 C           PERFORM EXTRAPOLATION.
@@ -93549,7 +93552,7 @@ C           PERFORM EXTRAPOLATION.
         ABSERR = ABSEPS
         RESULT = RESEPS
         CORREC = ERLARG
-        ERTEST = DMAX1(EPSABS,RERR*DABS(RESEPS))
+        ERTEST = MAX(EPSABS,RERR*ABS(RESEPS))
 C ***JUMP OUT OF DO-LOOP
         IF (ABSERR .LE. ERTEST) EXIT
 C           PREPARE BISECTION OF THE SMALLEST INTERVAL.
@@ -93562,7 +93565,7 @@ C           PREPARE BISECTION OF THE SMALLEST INTERVAL.
         SMALL = SMALL*0.5D0
         ERLARG = ERRSUM
         GO TO 90
-   80   SMALL = DABS(B - A)*0.375D0
+   80   SMALL = ABS(B - A)*0.375D0
         ERLARG = ERRSUM
         ERTEST = ERRBND
         RLIST2(2) = AREA
@@ -93578,12 +93581,12 @@ C           ------------------------------------
       IF (ABSERR .GT. ERRSUM) GO TO 115
       IF (AREA .EQ. 0.D0) GO TO 130
       GO TO 110
-  105 IF (ABSERR/DABS(RESULT) .GT. ERRSUM/DABS(AREA)) GO TO 115
+  105 IF (ABSERR/ABS(RESULT) .GT. ERRSUM/ABS(AREA)) GO TO 115
 C           TEST ON DIVERGENCE.
-  110 IF(KSGN.EQ.(-1).AND.DMAX1(DABS(RESULT),DABS(AREA)).LE.
+  110 IF(KSGN.EQ.(-1).AND.MAX(ABS(RESULT),ABS(AREA)).LE.
      * DEFABS*0.1D-01) GO TO 130
       IF(0.1D-01.GT.(RESULT/AREA).OR.(RESULT/AREA).GT.0.1D+03
-     * .OR.ERRSUM.GT.DABS(AREA)) IER = 6
+     * .OR.ERRSUM.GT.ABS(AREA)) IER = 6
       GO TO 130
 C           COMPUTE GLOBAL INTEGRAL SUM.
   115 RESULT = 0.D0
@@ -93683,21 +93686,21 @@ C***ROUTINES CALLED  DQXRUL
       DOUBLE PRECISION :: RESG, RESK, ERROLD
       INTEGER :: K, K0, K1, K2
       INTEGER :: KEY1
-      KEY1 = MAX0(KEY ,  0)
-      KEY1 = MIN0(KEY1,  4)
-      K0   = MAX0(KEY1-2,0)
+      KEY1 = MAX(KEY ,  0)
+      KEY1 = MIN(KEY1,  4)
+      K0   = MAX(KEY1-2,0)
       K1   = K0 + 1
-      K2   = MIN0(KEY1+1,3)
+      K2   = MIN(KEY1+1,3)
       CALL DQXRUL(F,A,B,RESG,RESABS,RESASC,K0,K1,VR,VS,LR,LS)
       ERROLD = OFLOW
       T = 10.D0*EPMACH
       DO K = K1,K2
         CALL DQXRUL(F,A,B,RESK,RESABS,RESASC,K,K1,VR,VS,LR,LS)
         RESULT = RESK
-        ABSERR = DABS(RESK - RESG)
+        ABSERR = ABS(RESK - RESG)
         IF (RESASC .NE. 0.D0 .AND. ABSERR .NE. 0.D0)
-     *      ABSERR = RESASC*DMIN1(1.D0,(200.D0*ABSERR/RESASC)**1.5D0)
-        IF (RESABS .GT. UFLOW/T) ABSERR = DMAX1(T*RESABS,ABSERR)
+     *      ABSERR = RESASC*MIN(1.D0,(200.D0*ABSERR/RESASC)**1.5D0)
+        IF (RESABS .GT. UFLOW/T) ABSERR = MAX(T*RESABS,ABSERR)
         RESG = RESK
         IF (ABSERR .GT. ERROLD * 0.16D0) EXIT
         IF (ABSERR .LT. 1000.D0 * EPMACH * RESABS) EXIT
@@ -93878,16 +93881,16 @@ C------------------------
       YA = 0.D0
       DO I = 1,KS
          J = IS + I
-         YA = YA + (DABS(FV1(I)) + DABS(FV2(I)))*WW(J)
+         YA = YA + (ABS(FV1(I)) + ABS(FV2(I)))*WW(J)
       END DO
-      YA = YA*DABS(BB)
+      YA = YA*ABS(BB)
       Y2 = Y2*0.5D0
       YM = 0.D0
       DO I = 1,KS
          J = IS + I
-         YM = YM + (DABS(FV1(I) - Y2) + DABS(FV2(I) - Y2))*WW(J)
+         YM = YM + (ABS(FV1(I) - Y2) + ABS(FV2(I) - Y2))*WW(J)
       END DO
-      YM = YM*DABS(BB)
+      YM = YM*ABS(BB)
       END SUBROUTINE DQXRUL
 
       SUBROUTINE DQXRRD(F,Z,LZ,XL,XU,R,S,LR,LS)
@@ -94066,7 +94069,7 @@ C      OF SUBDIVISIONS THAT MAY BE PERFORMED
       END DO
       MAXC = (MCALLS/NFE+3)/4
       IER = 1
-      MAXK = MIN0(MAXC,(NW/6+2)/3)
+      MAXK = MIN(MAXC,(NW/6+2)/3)
       IF (MAXC.GT.MAXK) IER = 2
       AREA = ABS(VEC(1,1)*VEC(2,2)-VEC(1,2)*VEC(2,1))*POINT5
       K = (NCALLS/NFE+3)/4
@@ -94091,7 +94094,7 @@ C       INITIALIZE DATA LIST
 C       TEST TERMINATION CRITERIA
    30 ANS = TANS
       ERR = TERR
-      IF (ERR.LT.AMAX1(ONE,ABS(ANS))*EPS) GO TO 90
+      IF (ERR.LT.MAX(ONE,ABS(ANS))*EPS) GO TO 90
       IF (K.EQ.MAXK) GO TO 120
 C       FIND TRIANGLE WITH LARGEST ERROR
       ERRMAX = ZERO
@@ -94432,7 +94435,7 @@ C                                                                  *
 C*******************************************************************
       CUTOFF = 0.5
       ROOTRT = 0.1
-      NUP = MIN0(NUPPER,NMAX)
+      NUP = MIN(NUPPER,NMAX)
 C   SET UP THE RELATIVE BASE ADDRESSES FOR THE VARIOUS ARRAYS INTO
 C   WHICH W IS TO BE SPLIT.
       N=NUP
@@ -94556,8 +94559,8 @@ C*******************************************************************
 C   SET UP APPROXIMATE RATE OF CONVERGENCE OF SOLUTIONS XN TO TRUE
 C   SOLUTION X. ALSO SET UP DESIRED RATIO FOR ITERATIVE METHOD.
       NUMR2=RNRM(XN,OLDX,N,1)
-      R2=AMIN1(0.5,AMAX1(NUMR2/DENR2,1.0E-4))
-      R1RAT=AMIN1(ROOTRT,SQRT(R2))
+      R2=MIN(0.5,MAX(NUMR2/DENR2,1.0E-4))
+      R1RAT=MIN(ROOTRT,SQRT(R2))
 C   CHECK FOR ERROR IN XN USING TEST INVOLVING R2 AND OLDX,ACCORDING
 C   TO THEORY FOR ASYMPTOTIC ERROR BOUNDS. MODIFY ERROR IF IT IS
 C   OUTSIDE PRECISION RANGE OF COMPUTER, POSSIBLY DUE TO
@@ -94565,9 +94568,9 @@ C   ILL-CONDITIONING.
 8     ERROR=(R2/(1.0-R2))*NUMR2
       XNORM=RNRM(XN,XN,N,0)
       RELERR=ERROR/XNORM
-      IF(IFLAG .EQ. 0) EPS=AMAX1(EP,XNORM*RELMIN)
-      IF(IFLAG .EQ. 1) EPS=AMAX1(EP,RELMIN)
-      IF(IFLAG .EQ. 1)ERROR=AMAX1(RELERR,RELMIN)
+      IF(IFLAG .EQ. 0) EPS=MAX(EP,XNORM*RELMIN)
+      IF(IFLAG .EQ. 1) EPS=MAX(EP,RELMIN)
+      IF(IFLAG .EQ. 1)ERROR=MAX(RELERR,RELMIN)
       IF((IFLAG .EQ. 0) .AND. (RELERR .LT. RELMIN))
      *   ERROR=RELMIN*XNORM
       IF(ERROR .LE. EPS) GO TO 10
@@ -94610,7 +94613,7 @@ C   CALCULATE SECOND ITERATE.
       NUMR1=RNRM(XM,XMZ,M,1)
 C   CHECK ON THE SPEED OF CONVERGENCE OF ITERATIVE METHOD. IF IT IS
 C   SUFFICIENTLY RAPID, THEN FIX N AND GO TO STAGE B.
-      R1=AMAX1(NUMR1/DENR1,.0001)
+      R1=MAX(NUMR1/DENR1,.0001)
       RATE=R1
       IF(M .GT. NUP) GO TO 19
       IF(R1 .LE. R1RAT) GO TO 15
@@ -94660,7 +94663,7 @@ C   COMPARED TO THE TRUE XM.
       TEMP=RNRM(XM,OLDX,M,1)
       IF(LOOP .EQ. 1) TEMP2=0.5
       IF(LOOP .GT. 1) TEMP2=TEMP/DENR2
-      RT=  AMIN1(0.01,AMAX1(TEMP2,0.0001))/2.0
+      RT=  MIN(0.01,MAX(TEMP2,0.0001))/2.0
       XNORM=RNRM(XM,XM,M,0)
       ESTERR=(RT/(1.0-RT))*TEMP/XNORM
       IF(ESTERR .LT. RELMIN) ESTERR=RELMIN
@@ -94677,7 +94680,7 @@ C   OF ANOTHER ITERATE.
      *   RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,FLAG)
       COND=CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
       NUMR1=RNRM(XM,XMZ,M,1)
-      R1=AMAX1(NUMR1/DENR1,.0001)
+      R1=MAX(NUMR1/DENR1,.0001)
       IF(R1 .LE. CUTOFF) GO TO 22
 C   THIS IS ENTRANCE FOR CASE WHERE ITERATION FAILS IN STAGE B.
 C   PARAMETERS MUST BE RESET FOR A RETURN TO STAGE A OR FOR AN
@@ -94714,15 +94717,15 @@ C   TO WHETHER IT SHOULD BE RESET. THEN CHECK ERROR IN XM COMPARED
 C   WITH THE TRUE SOLUTION X.
 33    IF(LOOP .EQ. 1) GO TO 37
       NUMR2=TEMP
-      R2=AMAX1(1.0E-4,RATE,AMIN1(NUMR2/DENR2,0.5))
+      R2=MAX(1.0E-4,RATE,MIN(NUMR2/DENR2,0.5))
       DENR2=NUMR2
 34    ERROR=(R2/(1.0-R2))*TEMP
       XNORM=RNRM(XM,XM,M,0)
       RELERR=ERROR/XNORM
       RELMIN=RMIN(N,M,COND,UNITRD,AVERR)
-      IF(IFLAG .EQ. 0) EPS=AMAX1(EP,XNORM*RELMIN)
-      IF(IFLAG .EQ. 1) EPS=AMAX1(EP,RELMIN)
-      IF(IFLAG .EQ. 1)ERROR=AMAX1(RELERR,RELMIN)
+      IF(IFLAG .EQ. 0) EPS=MAX(EP,XNORM*RELMIN)
+      IF(IFLAG .EQ. 1) EPS=MAX(EP,RELMIN)
+      IF(IFLAG .EQ. 1)ERROR=MAX(RELERR,RELMIN)
       IF((IFLAG .EQ. 0) .AND. (RELERR .LT. RELMIN))
      *   ERROR=RELMIN*XNORM
       IF(ERROR .GT. EPS) GO TO 35
@@ -94770,7 +94773,7 @@ C   MORE ITERATES ARE COMPUTED WITH THE NEW M.
      *   RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,FLAG)
       COND=CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
       NUMR1=RNRM(XM,XMZ,M,1)
-      R1=AMAX1(NUMR1/DENR1,.0001)
+      R1=MAX(NUMR1/DENR1,.0001)
       RATE=R1
       IF(R1 .LE. CUTOFF) GO TO 22
       GO TO 27
@@ -94835,7 +94838,7 @@ C   IT IS UNLIKELY THAT A SOLUTION X CAN BE FOUND FOR THE ORIGINAL
 C   INTEGRAL EQUATION WITH A SMALLER RELATIVE ERROR THAN RMIN.
       FLOAT1=M
       FLOAT2=FLOAT(M)/FLOAT(N)
-      RMIN=AMAX1((FLOAT1**1.5)*COND*UNITRD,
+      RMIN=MAX((FLOAT1**1.5)*COND*UNITRD,
      *   (FLOAT2**1.5)*AVERR)
       END FUNCTION RMIN
 
@@ -94850,13 +94853,13 @@ C   IFLAG=1    CALCULATE THE MAXIMUM NORM OF X-Y.
 C   FIND THE NORM OF X.
       RNRM=0.0
       DO I=1,N
-      RNRM=AMAX1(RNRM,ABS(X(I)))
+      RNRM=MAX(RNRM,ABS(X(I)))
       END DO
       RETURN
 C   FIND THE NORM OF X-Y.
 2     RNRM=0.0
       DO I=1,N
-      RNRM=AMAX1(RNRM,ABS(X(I)-Y(I)))
+      RNRM=MAX(RNRM,ABS(X(I)-Y(I)))
       END DO
       END FUNCTION RNRM
 
@@ -94873,7 +94876,7 @@ C   IN IEGS.
       AVERR=SQRT(ELINSY*PASTRE)
       PASTRE=ELINSY
       IF(RELRSD .EQ. 0.0) GO TO 1
-      C=AMAX1(1.0,ELINSY/RELRSD)
+      C=MAX(1.0,ELINSY/RELRSD)
       CONEW=SQRT(C*PASTC)
       PASTC=C
       RETURN
@@ -95127,11 +95130,11 @@ C   POINT FORMULA IS APPLIED TO EACH SUBINTERVAL.
      *  .121962627831147E-1,.122091082480372E-1,.122201222273040E-1,
      *  .122293030687103E-1,.122366493950402E-1,.122421601042728E-1,
      *  .122458343697479E-1,.122476716402898E-1/
-      LOOP=MAX0(1,N/256)
+      LOOP=MAX(1,N/256)
       FLOOP=LOOP
       H=(B-A)/FLOOP
       SCALE=H/2.0
-      M=MIN0(128,N/2)
+      M=MIN(128,N/2)
       MT=2*M
       NPLACE=M-1
       DO L=1,LOOP
@@ -95209,7 +95212,7 @@ C   CALCULATE NORM(K).
       DO J=1,NF
       SUM=SUM+ABS(IMKNN(I,J))
       END DO
-      NORMK=AMAX1(NORMK,SUM)
+      NORMK=MAX(NORMK,SUM)
       END DO
       DO I=1,NF
       IMKNN(I,I)=IMKNN(I,I)+1.0
@@ -95237,13 +95240,13 @@ C   POSSIBLE ERRORS IN NYSTROM INTERPOLATION.
 C   ESTIMATE NEW ERROR BOUND FOR NYSTROM INTERPOLATES.
       TEMP=NORMK*(R1/(1.0-R1))*NUMR1
       IF(IFLAG .EQ. 1) TEMP=TEMP/XNORM
-      EP=AMAX1(EP,TEMP)
+      EP=MAX(EP,TEMP)
       GO TO 60
 C   NO ITERATION USED IN COMPUTING X. JUST COMPUTE ERROR ESTIMATE
 C   IN NYSTROM INTERPOLATE.
 50    TEMP=NORMK*ELINSY
       IF(IFLAG .EQ. 0) TEMP=TEMP*XNORM
-      IF(IER .NE. 2) EP=AMAX1(EP,TEMP)
+      IF(IER .NE. 2) EP=MAX(EP,TEMP)
 C   COMPUTE NYSTROM INTERPOLATES AT THE NODES IN T.
 60    DO I=1,NT
       SUM=0.0
@@ -95474,8 +95477,8 @@ C             COMPUTE THE RESIDUAL R = B - AX
       NORMB = 0.0
       NORMR = 0.0
       DO I = 1,N
-      NORMB = AMAX1(NORMB,ABS(B(I)))
-      NORMR = AMAX1(NORMR,ABS(R(I)))
+      NORMB = MAX(NORMB,ABS(B(I)))
+      NORMR = MAX(NORMR,ABS(R(I)))
       END DO
       RELRSD = 0.0
       IF (NORMB .NE. 0.0) RELRSD = NORMR/NORMB
@@ -95511,8 +95514,8 @@ C             CALCULATE THE CORRECTION ERROR
       NORMX = 0.0
       NORME = 0.0
       DO I = 1,N
-      NORMX = AMAX1(NORMX,ABS(X(I)))
-      NORME = AMAX1(NORME,ABS(R(I)))
+      NORMX = MAX(NORMX,ABS(X(I)))
+      NORME = MAX(NORME,ABS(R(I)))
       END DO
       ERROR = 0.0
       IF (NORMX .NE. 0.0) ERROR = NORME/NORMX
@@ -95653,7 +95656,7 @@ C   REMAIN UNCHANGED.
       IYP = IP + NEQN
       IYPOUT = IYP + NEQN
       IPHI = IYPOUT + NEQN
-      IF(IABS(IFLAG) .LT. 2  .OR.  IABS(IFLAG) .GT. 6) GO TO 1
+      IF(ABS(IFLAG) .LT. 2  .OR.  ABS(IFLAG) .GT. 6) GO TO 1
       START = WORK(ISTART) .GT. 0.0
       PHASE1 = WORK(IPHASE) .GT. 0.0
       NORND = IWORK(2) .NE. -1
@@ -95709,11 +95712,11 @@ C   TEST FOR IMPROPER PARAMETERS
       IF(NEQN .LT. 1) GO TO 10
       IF(T .EQ. TOUT) GO TO 10
       IF(RELERR .LT. 0.0  .OR.  ABSERR .LT. 0.0) GO TO 10
-      EPS = AMAX1(RELERR,ABSERR)
+      EPS = MAX(RELERR,ABSERR)
       IF(EPS .LE. 0.0) GO TO 10
       IF(IFLAG .EQ. 0) GO TO 10
-      ISN = ISIGN(1,IFLAG)
-      IFLAG = IABS(IFLAG)
+      ISN = SIGN(1,IFLAG)
+      IFLAG = ABS(IFLAG)
       IF(IFLAG .EQ. 1) GO TO 20
       IF(T .NE. TOLD) GO TO 10
       IF(IFLAG .GE. 2  .AND.  IFLAG .LE. 5) GO TO 20
@@ -95743,7 +95746,7 @@ C   DIRECTION OF INTEGRATION AND INITIALIZE THE STEP SIZE
         YY(L) = Y(L)
       END DO
       DELSGN = SIGN(1.0,DEL)
-      H = SIGN(AMAX1(FOURU*ABS(X),ABS(TOUT-X)),TOUT-X)
+      H = SIGN(MAX(FOURU*ABS(X),ABS(TOUT-X)),TOUT-X)
 C   IF ALREADY PAST OUTPUT POINT, INTERPOLATE AND RETURN
  50   IF(ABS(X-T) .LT. ABSDEL) GO TO 60
       CALL INTRP(X,YY,TOUT,Y,YPOUT,NEQN,KOLD,PHI,PSI)
@@ -95777,7 +95780,7 @@ C   TEST FOR TOO MANY STEPS
       ISNOLD = 1
       RETURN
 C   LIMIT STEP SIZE, SET WEIGHT VECTOR AND TAKE A STEP
- 100  H = SIGN(AMIN1(ABS(H),ABS(TEND-X)),H)
+ 100  H = SIGN(MIN(ABS(H),ABS(TEND-X)),H)
       DO L = 1,NEQN
         WT(L) = RELEPS*ABS(YY(L)) + ABSEPS
         IF(WT(L) .LE. 0.0) GO TO 140
@@ -95989,7 +95992,7 @@ C   INITIALIZE.  COMPUTE APPROPRIATE STEP SIZE FOR FIRST STEP
       SUM = SQRT(SUM)
       ABSH = ABS(H)
       IF(EPS .LT. 16.0*SUM*H*H) ABSH = 0.25*SQRT(EPS/SUM)
-      H = SIGN(AMAX1(ABSH,FOURU*ABS(X)),H)
+      H = SIGN(MAX(ABSH,FOURU*ABS(X)),H)
       HOLD = 0.0
       K = 1
       KOLD = 0
@@ -96148,7 +96151,7 @@ C   TEST IF ORDER SHOULD BE LOWERED
       IF (NSWC_AI_I4 .LT. 0) GO TO 299
       IF (NSWC_AI_I4 .EQ. 0) GO TO 290
       GO TO 285
- 285  IF(AMAX1(ERKM1,ERKM2) .LE. ERK) KNEW = KM1
+ 285  IF(MAX(ERKM1,ERKM2) .LE. ERK) KNEW = KM1
       GO TO 299
  290  IF(ERKM1 .LE. 0.5*ERK) KNEW = KM1
 C   TEST IF STEP SUCCESSFUL
@@ -96242,7 +96245,7 @@ C   FOR NEXT STEP
       IF(K .GT. 1) GO TO 445
       IF(ERKP1 .GE. 0.5*ERK) GO TO 460
       GO TO 450
- 445  IF(ERKM1 .LE. AMIN1(ERK,ERKP1)) GO TO 455
+ 445  IF(ERKM1 .LE. MIN(ERK,ERKP1)) GO TO 455
       IF(ERKP1 .GE. ERK  .OR.  K .EQ. 12) GO TO 460
 C   HERE ERKP1 .LT. ERK .LT. AMAX1(ERKM1,ERKM2) ELSE ORDER WOULD HAVE
 C   BEEN LOWERED IN BLOCK 2.  THUS ORDER IS TO BE RAISED
@@ -96261,8 +96264,8 @@ C   WITH NEW ORDER DETERMINE APPROPRIATE STEP SIZE FOR NEXT STEP
       IF(P5EPS .GE. ERK) GO TO 465
       TEMP2 = K+1
       R = (P5EPS/ERK)**(1.0/TEMP2)
-      HNEW = ABSH*AMAX1(0.5,AMIN1(0.9,R))
-      HNEW = SIGN(AMAX1(HNEW,FOURU*ABS(X)),H)
+      HNEW = ABSH*MAX(0.5,MIN(0.9,R))
+      HNEW = SIGN(MAX(HNEW,FOURU*ABS(X)),H)
  465  H = HNEW
 C       ***     END BLOCK 4     ***
       END SUBROUTINE STEP1
@@ -96580,7 +96583,7 @@ C     COMPUTE INDICES FOR THE SPLITTING OF THE WORK ARRAY
       KSA = KSR + 1
       KT = KSA + 1
 C     THE WORK SPACE TOTALS  6 + 9*NEQN .
-      IF (IABS(IFLAG) .EQ. 1) GO TO 10
+      IF (ABS(IFLAG) .EQ. 1) GO TO 10
          ENDPNT = (IWORK(4) .EQ. -1)
          BLKOUT = (IWORK(5) .EQ. -1)
 C***********************************************************************
@@ -96762,7 +96765,7 @@ C     CHECK INPUT PARAMETERS
       IF (NEQN .LT. 1) GO TO 500
       IF (RELERR .LT. 0.0 .OR. ABSERR .LT. 0.0) GO TO 500
       IF (T .EQ. TEND) GO TO 500
-      MFLAG = IABS(IFLAG)
+      MFLAG = ABS(IFLAG)
       IF (MFLAG .NE. 1) GO TO 10
          TOLD = T
          IF (TOUT .EQ. T) GO TO 70
@@ -96794,7 +96797,7 @@ C     RESET FUNCTION EVALUATION COUNTER
       IF (MFLAG .EQ. 2) GO TO 70
 C     RESET FLAG VALUE FROM PREVIOUS CALL
    60 IFLAG = JFLAG
-      IF (KFLAG .EQ. 3) MFLAG = IABS(IFLAG)
+      IF (KFLAG .EQ. 3) MFLAG = ABS(IFLAG)
 C     SAVE INPUT IFLAG AND SET CONTINUATION FLAG VALUE FOR SUBSEQUENT
 C     INPUT CHECKING
    70 JFLAG = IFLAG
@@ -96841,8 +96844,8 @@ C     COMPUTE INITIAL STEPLENGTH.
    90 CONTINUE
       END DO
       IF (TOLN .LE. 0.0) H = 0.0
-      H = AMAX1(H, U26*AMAX1(ABS(T),ABS(DT)))
-      JFLAG = ISIGN(2,IFLAG)
+      H = MAX(H, U26*MAX(ABS(T),ABS(DT)))
+      JFLAG = SIGN(2,IFLAG)
       H = SIGN(H,DT)
 C     INITIAL STEPLENGTH NOW COMPUTED. COMPUTE FIRST SOLUTION.
 C***********************************************************************
@@ -96851,7 +96854,7 @@ C     SCALE THE ERROR TOLERANCES.
   100 SCALE = 2.0/RELERR
       AE = SCALE*ABSERR
 C     SET SAFETY FACTOR FOR STEPSIZE ADJUSTMENT, BASED ON TOLERANCES.
-      TOLER = AMAX1(ABSERR,RELERR)
+      TOLER = MAX(ABSERR,RELERR)
       SF = 0.85
       IF (TOLER .GE. 1.E-5) SF = 0.8
       IF (TOLER .LE. 1.E-9) SF = 0.9
@@ -96955,7 +96958,7 @@ C     ADVANCE AN APPROXIMATE SOLUTION OVER ONE STEP OF LENGTH H
          IF (ERRTOL .LE. 0.0) GO TO 540
          EZ = ABS(H*(ERC11*WP(N)+ERC13*F3(N)+ERC14*F4(N)+ERC15*Y(N)+
      *               B6B*YP(N)))
-         EEOET = AMAX1(EEOET,EZ/ERRTOL)
+         EEOET = MAX(EEOET,EZ/ERRTOL)
       END DO
       ESTTOL = EEOET*SCALE
 C     CHECK THE ERROR ESTIMATE. IF STEPLENGTH HAS FAILED FOR FIRST STEP
@@ -96983,7 +96986,7 @@ C     THE SECOND STEP IN THE BLOCK
      *                   B7*F1(N)+B8*F7(N)+B9*F2(N))
          ERRTOL = ABS(Y2(N)) + ABS(Y1(N)) + AE
          IF (ERRTOL .LE. 0.0) GO TO 540
-         EEOET = AMAX1(EEOET,EE/ERRTOL)
+         EEOET = MAX(EEOET,EE/ERRTOL)
       END DO
       ESTTOL = EEOET*SCALE
 C     THE FIRST OF THE THREE CHANGES NEEDED TO MAKE THE INTERPOLANT
@@ -97035,8 +97038,8 @@ C     IF STEP FAILURE HAS JUST OCCURED, NEXT STEP IS NOT ALLOWED
 C     TO INCREASE.
       S = 10.0
       IF (ESTTOL .GT. 1.E-5) S = SF/ESTTOL**0.2
-      IF (HFAILD) S = AMIN1(S,1.0)
-      H = SIGN(AMAX1(S*ABS(H),HMIN), H)
+      IF (HFAILD) S = MIN(S,1.0)
+      H = SIGN(MAX(S*ABS(H),HMIN), H)
 C     HAVE WE INTEGRATED PAST AN OUTPUT POINT?
 C     IF SO, CALL THE INTERPOLATION ROUTINE AT T=TOUT.
 C     IF NOT, SEE IF WE ARE AT THE END POINT OF INTEGRATION.
@@ -97342,7 +97345,7 @@ C     AS SET, THIS CORRESPONDS TO ABOUT 500 STEPS.
 C     CHECK INPUT PARAMETERS
       IF (NEQN .LT. 1) GO TO 10
       IF (RELERR .LT. 0.0 .OR. ABSERR .LT. 0.0) GO TO 10
-      MFLAG = IABS(IFLAG)
+      MFLAG = ABS(IFLAG)
       IF (MFLAG .EQ. 0 .OR. MFLAG .GT. 8) GO TO 10
 C     COMPUTE THE RELATIVE MACHINE PRECISION
       EPS = SPMPAR(1)
@@ -97375,7 +97378,7 @@ C     RESET FUNCTION EVALUATION COUNTER
       IF (MFLAG .EQ. 2) GO TO 50
 C     RESET FLAG VALUE FROM PREVIOUS CALL
    45 IFLAG = JFLAG
-      IF (KFLAG .EQ. 3) MFLAG = IABS(IFLAG)
+      IF (KFLAG .EQ. 3) MFLAG = ABS(IFLAG)
 C     SAVE INPUT IFLAG AND SET CONTINUATION FLAG VALUE FOR SUBSEQUENT
 C     INPUT CHECKING
    50 JFLAG = IFLAG
@@ -97423,8 +97426,8 @@ C                       ESTIMATE STARTING STEPSIZE
    70 CONTINUE
       END DO
       IF (TOLN .LE. 0.0) H=0.0
-      H = AMAX1(H,U26*AMAX1(ABS(T),ABS(DT)))
-      JFLAG = ISIGN(2,IFLAG)
+      H = MAX(H,U26*MAX(ABS(T),ABS(DT)))
+      JFLAG = SIGN(2,IFLAG)
 C     SET STEPSIZE FOR INTEGRATION IN THE DIRECTION FROM T TO TOUT
    80 H = SIGN(H,DT)
 C     TEST TO SEE IF RKF45 IS BEING SEVERELY IMPACTED BY TOO MANY
@@ -97509,7 +97512,7 @@ C        INAPPROPRIATE ERROR TOLERANCE
          RETURN
   240    EE = ABS((-2090.0*YP(K)+(21970.0*F3(K)-15048.0*F4(K)))+
      1                           (22528.0*F2(K)-27360.0*F5(K)))
-         EEOET = AMAX1(EEOET,EE/ET)
+         EEOET = MAX(EEOET,EE/ET)
       END DO
       ESTTOL = ABS(H)*EEOET*SCALE/752400.0
       IF (ESTTOL .LE. 1.0) GO TO 260
@@ -97542,8 +97545,8 @@ C                       IF STEP FAILURE HAS JUST OCCURRED, NEXT
 C                          STEPSIZE IS NOT ALLOWED TO INCREASE
       S=5.0
       IF (ESTTOL .GT. 1.889568E-4) S=0.9/ESTTOL**0.2
-      IF (HFAILD) S=AMIN1(S,1.0)
-      H=SIGN(AMAX1(S*ABS(H),HMIN),H)
+      IF (HFAILD) S=MIN(S,1.0)
+      H=SIGN(MAX(S*ABS(H),HMIN),H)
 C     END OF CORE INTEGRATOR
 C     SHOULD WE TAKE ANOTHER STEP
       IF (OUTPUT) GO TO 300
@@ -97862,7 +97865,7 @@ C***********************************************************************
 C     CHECK INPUT PARAMETERS
       IF (NEQN .LT. 1) GO TO 10
       IF ((RELERR .LT. 0.)  .OR.  (ABSERR .LT. 0.)) GO TO 10
-      MFLAG=IABS(IFLAG)
+      MFLAG=ABS(IFLAG)
       IF ((MFLAG .GE. 1)  .AND.  (MFLAG .LE. 7)) GO TO 20
 C     INVALID INPUT
    10 IFLAG=7
@@ -97901,7 +97904,7 @@ C     SAVE RELERR AND ABSERR FOR CHECKING INPUT ON SUBSEQUENT CALLS
 C     RESTRICT RELATIVE ERROR TOLERANCE TO BE AT LEAST AS LARGE AS
 C     32U+REMIN TO AVOID LIMITING PRECISION DIFFICULTIES ARISING FROM
 C     IMPOSSIBLE ACCURACY REQUESTS
-      RER=AMAX1(RELERR,32.*U+REMIN)
+      RER=MAX(RELERR,32.*U+REMIN)
       U26=26.*U
       DT=TOUT-T
       IF (MFLAG .EQ. 1) GO TO 60
@@ -97938,7 +97941,7 @@ C                       ESTIMATE STARTING STEPSIZE
    70   CONTINUE
       END DO
       IF (TOLN .LE. 0.) H=0.
-      H=AMAX1(H,U26*AMAX1(ABS(T),ABS(DT)))
+      H=MAX(H,U26*MAX(ABS(T),ABS(DT)))
 C***********************************************************************
 C     SET STEPSIZE FOR INTEGRATION IN THE DIRECTION FROM T TO TOUT
    80 H=SIGN(H,DT)
@@ -98031,7 +98034,7 @@ C       INAPPROPRIATE ERROR TOLERANCE
         RETURN
   240   EE=ABS((-2090.*YGP(K)+(21970.*F3(K)-15048.*F4(K)))+
      1                        (22528.*F2(K)-27360.*F5(K)))
-        EEOET=AMAX1(EEOET,EE/ET)
+        EEOET=MAX(EEOET,EE/ET)
       END DO
       ESTTOL=ABS(H)*EEOET*SCALE/752400.
       IF (ESTTOL .LE. 1.) GO TO 260
@@ -98076,8 +98079,8 @@ C                       IF STEP FAILURE HAS JUST OCCURRED, NEXT
 C                          STEPSIZE IS NOT ALLOWED TO INCREASE
       S=5.
       IF (ESTTOL .GT. 1.889568E-4) S=0.9/ESTTOL**0.2
-      IF (HFAILD) S=AMIN1(S,1.)
-      H=SIGN(AMAX1(S*ABS(H),HMIN),H)
+      IF (HFAILD) S=MIN(S,1.)
+      H=SIGN(MAX(S*ABS(H),HMIN),H)
 C***********************************************************************
 C     END OF CORE INTEGRATOR
 C***********************************************************************
@@ -99069,7 +99072,7 @@ C   LIMIT STEP SIZE AND SET WEIGHT VECTOR
   330 HMIN = 100.*U*ABS(X)
       HA = AMAX1(ABS(H),HMIN)
       IF (ITSTOP .NE. 1) GO TO 340
-      HA = AMIN1(HA,ABS(TSTOP-X))
+      HA = MIN(HA,ABS(TSTOP-X))
   340 H = SIGN(HA,H)
       LTOL = 1
       DO L = 1,NEQ
@@ -99243,7 +99246,7 @@ C     COMPUTE AN APPROXIMATE BOUND (DFDXB) ON THE PARTIAL
 C     DERIVATIVE OF THE EQUATION WITH RESPECT TO THE
 C     INDEPENDENT VARIABLE. PROTECT AGAINST AN OVERFLOW.
 C     ALSO COMPUTE A BOUND (FBND) ON THE FIRST DERIVATIVE LOCALLY.
-      DA=SIGN(AMAX1(AMIN1(RELPER*ABS(A),ABSDX),100.*SMALL*ABS(A)),DX)
+      DA=SIGN(MAX(MIN(RELPER*ABS(A),ABSDX),100.*SMALL*ABS(A)),DX)
       IF (DA .EQ. 0.) DA=RELPER*DX
       CALL F(A+DA,Y,SF,RPAR,IPAR)
       DO J=1,NEQ
@@ -99276,7 +99279,7 @@ C                               SIZE OF THE VECTOR OF INITIAL VALUES.
       IF (DELY .EQ. 0.) DELY=RELPER
       DELY=SIGN(DELY,DX)
       DELF=VNORM(YPRIME,NEQ)
-      FBND=AMAX1(FBND,DELF)
+      FBND=MAX(FBND,DELF)
       IF (DELF .EQ. 0.) GO TO 30
 C                       USE INITIAL DERIVATIVES FOR FIRST PERTURBATION
       DO J=1,NEQ
@@ -99291,7 +99294,7 @@ C                       CANNOT HAVE A NULL PERTURBATION VECTOR
       END DO
       DELF=VNORM(YP,NEQ)
    50 DFDUB=0.
-      LK=MIN0(NEQ+1,3)
+      LK=MIN(NEQ+1,3)
       DO K=1,LK
 C                       DEFINE PERTURBED VECTOR OF INITIAL VALUES
         DO J=1,NEQ
@@ -99313,10 +99316,10 @@ C                                             IN COMPUTING ONE ESTIMATE
         END DO
 C                       CHOOSE LARGEST BOUNDS ON THE FIRST DERIVATIVE
 C                                      AND A LOCAL LIPSCHITZ CONSTANT
-  100   FBND=AMAX1(FBND,VNORM(YP,NEQ))
+  100   FBND=MAX(FBND,VNORM(YP,NEQ))
         DELF=VNORM(PV,NEQ)
         IF (DELF .GE. BIG * ABS(DELY)) EXIT
-        DFDUB=AMAX1(DFDUB,DELF/ABS(DELY))
+        DFDUB=MAX(DFDUB,DELF/ABS(DELY))
         IF (K .EQ. LK) GO TO 160
 C                       CHOOSE NEXT PERTURBATION VECTOR
         IF (DELF .EQ. 0.) DELF=1.
@@ -99345,8 +99348,8 @@ C     RANGE IS SELECTED.
       TOLMIN=BIG
       TOLSUM=0.
       DO K=1,NEQ
-        TOLEXP=ALOG10(ETOL(K))
-        TOLMIN=AMIN1(TOLMIN,TOLEXP)
+        TOLEXP=LOG10(ETOL(K))
+        TOLMIN=MIN(TOLMIN,TOLEXP)
         TOLSUM=TOLSUM+TOLEXP
       END DO
       TOLP=10.**(0.5*(TOLSUM/FLOAT(NEQ)+TOLMIN)/FLOAT(MORDER+1))
@@ -99376,7 +99379,7 @@ C                       SMALLER THAN  100*SMALL*ABS(A).  HOWEVER, IF
 C                       A=0. AND THE COMPUTED H UNDERFLOWED TO ZERO,
 C                       THE ALGORITHM RETURNS  SMALL*ABS(B)  FOR THE
 C                                                       STEP LENGTH.
-      H=AMAX1(H,100.*SMALL*ABS(A))
+      H=MAX(H,100.*SMALL*ABS(A))
       IF (H .EQ. 0.) H=SMALL*ABS(B)
 C                       NOW SET DIRECTION OF INTEGRATION
       H=SIGN(H,DX)
@@ -99609,10 +99612,10 @@ C-----------------------------------------------------------------------
       DDN = VNWRMS(N, SAVF, EWT)/TESCO(1,L)
       EXDN = 1.0E0/FLOAT(L)
       RHDN = 1.0E0/(1.3E0*DDN**EXDN + 0.0000013E0)
-      RH = AMIN1(RHDN,1.0E0)
+      RH = MIN(RHDN,1.0E0)
       IREDO = 3
       IF (H .EQ. HOLD) GO TO 170
-      RH = AMIN1(RH,ABS(H/HOLD))
+      RH = MIN(RH,ABS(H/HOLD))
       H = HOLD
       GO TO 175
 C-----------------------------------------------------------------------
@@ -99640,9 +99643,9 @@ C-----------------------------------------------------------------------
       H = HOLD
       IREDO = 3
       GO TO 175
- 170  RH = AMAX1(RH,HMIN/ABS(H))
- 175  RH = AMIN1(RH,RMAX)
-      RH = RH/AMAX1(1.0E0,ABS(H)*HMXI*RH)
+ 170  RH = MAX(RH,HMIN/ABS(H))
+ 175  RH = MIN(RH,RMAX)
+      RH = RH/MAX(1.0E0,ABS(H)*HMXI*RH)
       R = 1.0E0
       DO J = 2,L
         R = R*RH
@@ -99736,8 +99739,8 @@ C-----------------------------------------------------------------------
 C TEST FOR CONVERGENCE.  IF M.GT.0, AN ESTIMATE OF THE CONVERGENCE
 C RATE CONSTANT IS STORED IN CRATE, AND THIS IS USED IN THE TEST.
 C-----------------------------------------------------------------------
- 400  IF (M .NE. 0) CRATE = AMAX1(0.2E0*CRATE,DEL/DELP)
-      DCON = DEL*AMIN1(1.0E0,1.5E0*CRATE)/(TESCO(2,NQ)*CONIT)
+ 400  IF (M .NE. 0) CRATE = MAX(0.2E0*CRATE,DEL/DELP)
+      DCON = DEL*MIN(1.0E0,1.5E0*CRATE)/(TESCO(2,NQ)*CONIT)
       IF (DCON .LE. 1.0E0) GO TO 450
       M = M + 1
       IF (M .EQ. 3) GO TO 410
@@ -99880,7 +99883,7 @@ C-----------------------------------------------------------------------
  610  IALTH = 3
       GO TO 690
  620  IF ((KFLAG .EQ. 0) .AND. (RH .LT. 1.1E0)) GO TO 610
-      IF (KFLAG .LE. -2) RH = AMIN1(RH,0.2E0)
+      IF (KFLAG .LE. -2) RH = MIN(RH,0.2E0)
 C-----------------------------------------------------------------------
 C IF THERE IS A CHANGE OF ORDER, RESET NQ, L, AND THE COEFFICIENTS.
 C IN ANY CASE H IS RESET ACCORDING TO RH AND THE YH ARRAY IS RESCALED.
@@ -99902,7 +99905,7 @@ C UNTIL IT SUCCEEDS OR H REACHES HMIN.
 C-----------------------------------------------------------------------
  640  IF (KFLAG .EQ. -10) GO TO 660
       RH = 0.1E0
-      RH = AMAX1(HMIN/ABS(H),RH)
+      RH = MAX(HMIN/ABS(H),RH)
       H = H*RH
       DO I = 1,N
         Y(I) = YH(I,1)
@@ -100121,7 +100124,7 @@ C IF MITER = 2, MAKE N CALLS TO F TO APPROXIMATE J. --------------------
       J1 = 2
       DO J = 1,N
         YJ = Y(J)
-        R = AMAX1(SRUR*ABS(YJ),R0*EWT(J))
+        R = MAX(SRUR*ABS(YJ),R0*EWT(J))
         Y(J) = Y(J) + R
         FAC = -HL0/R
         CALL F(TN, Y, FTEM, RPAR, IPAR)
@@ -100182,7 +100185,7 @@ C IF MITER = 5, MAKE MBAND CALLS TO F TO APPROXIMATE J. ----------------
  500  ML = IWM(1)
       MU = IWM(2)
       MBAND = ML + MU + 1
-      MBA = MIN0(MBAND,N)
+      MBA = MIN(MBAND,N)
       MEBAND = MBAND + ML
       MEB1 = MEBAND - 1
       SRUR = WM(1)
@@ -100192,17 +100195,17 @@ C IF MITER = 5, MAKE MBAND CALLS TO F TO APPROXIMATE J. ----------------
       DO J = 1,MBA
         DO I = J,N,MBAND
           YI = Y(I)
-          R = AMAX1(SRUR*ABS(YI),R0*EWT(I))
+          R = MAX(SRUR*ABS(YI),R0*EWT(I))
           Y(I) = Y(I) + R
         END DO
         CALL F(TN, Y, FTEM, RPAR, IPAR)
         DO JJ = J,N,MBAND
           Y(JJ) = YH(JJ,1)
           YJJ = Y(JJ)
-          R = AMAX1(SRUR*ABS(YJJ),R0*EWT(JJ))
+          R = MAX(SRUR*ABS(YJJ),R0*EWT(JJ))
           FAC = -HL0/R
-          I1 = MAX0(JJ-MU,1)
-          I2 = MIN0(JJ+ML,N)
+          I1 = MAX(JJ-MU,1)
+          I2 = MIN(JJ+ML,N)
           II = JJ*MEB1 - ML + 2
           DO I = I1,I2
             WM(II+I) = (FTEM(I) - SAVF(I))*FAC
@@ -100362,7 +100365,7 @@ C     FORTRAN MAX0,MIN0
       INFO = 0
 C     ZERO INITIAL FILL-IN COLUMNS
       J0 = MU + 2
-      J1 = MIN0(N,M) - 1
+      J1 = MIN(N,M) - 1
       IF (J1 .LT. J0) GO TO 30
       DO JZ = J0, J1
          I0 = M + 1 - JZ
@@ -100387,7 +100390,7 @@ C        ZERO NEXT FILL-IN COLUMN
             END DO
    50    CONTINUE
 C        FIND L = PIVOT INDEX
-         LM = MIN0(ML,N-K)
+         LM = MIN(ML,N-K)
          L = ISAMAX(LM+1,ABD(M,K),1) + M - 1
          IPVT(K) = L + K - M
 C        ZERO PIVOT IMPLIES THIS COLUMN ALREADY TRIANGULARIZED
@@ -100402,7 +100405,7 @@ C           COMPUTE MULTIPLIERS
             T = -1.0E0/ABD(M,K)
             CALL SSCAL(LM,T,ABD(M+1,K),1)
 C           ROW ELIMINATION WITH COLUMN INDEXING
-            JU = MIN0(MAX0(JU,MU+IPVT(K)),N)
+            JU = MIN(MAX(JU,MU+IPVT(K)),N)
             MM = M
             IF (JU .LT. KP1) GO TO 90
             DO J = KP1, JU
@@ -100484,7 +100487,7 @@ C        FIRST SOLVE L*Y = B
          IF (ML .EQ. 0) GO TO 30
          IF (NM1 .LT. 1) GO TO 30
             DO K = 1, NM1
-               LM = MIN0(ML,N-K)
+               LM = MIN(ML,N-K)
                L = IPVT(K)
                T = B(L)
                IF (L .EQ. K) GO TO 10
@@ -100498,7 +100501,7 @@ C        NOW SOLVE  U*X = Y
          DO KB = 1, N
             K = N + 1 - KB
             B(K) = B(K)/ABD(M,K)
-            LM = MIN0(K,M) - 1
+            LM = MIN(K,M) - 1
             LA = M - LM
             LB = K - LM
             T = -B(K)
@@ -100509,7 +100512,7 @@ C        NOW SOLVE  U*X = Y
 C        JOB = NONZERO, SOLVE  TRANS(A) * X = B
 C        FIRST SOLVE  TRANS(U)*Y = B
          DO K = 1, N
-            LM = MIN0(K,M) - 1
+            LM = MIN(K,M) - 1
             LA = M - LM
             LB = K - LM
             T = SDOT(LM,ABD(LA,K),1,B(LB),1)
@@ -100520,7 +100523,7 @@ C        NOW SOLVE TRANS(L)*X = Y
          IF (NM1 .LT. 1) GO TO 90
             DO KB = 1, NM1
                K = N - KB
-               LM = MIN0(ML,N-K)
+               LM = MIN(ML,N-K)
                B(K) = B(K) + SDOT(LM,ABD(M+1,K),1,B(K+1),1)
                L = IPVT(K)
                IF (L .EQ. K) GO TO 70
@@ -100543,7 +100546,7 @@ C     COMPUTE THE MAXIMUM NORM OF THE VECTOR V(*) OF LENGTH NCOMP AND
 C     RETURN THE RESULT AS VNORM
       VNORM=0.
       DO K=1,NCOMP
-        VNORM=AMAX1(VNORM,ABS(V(K)))
+        VNORM=MAX(VNORM,ABS(V(K)))
       END DO
       END FUNCTION VNORM
 
@@ -100892,10 +100895,10 @@ C     ERROR RETURN
       INTEGER, INTENT(INOUT) :: IERR, INDX, INDY
       INTEGER, INTENT(IN) :: EDGE(4)
       INTEGER :: NSWC_AI_I4
-      IF (IABS(EDGE(1)) .GT. 1) GO TO 200
-      IF (IABS(EDGE(2)) .GT. 1) GO TO 200
-      IF (IABS(EDGE(3)) .GT. 1) GO TO 200
-      IF (IABS(EDGE(4)) .GT. 1) GO TO 200
+      IF (ABS(EDGE(1)) .GT. 1) GO TO 200
+      IF (ABS(EDGE(2)) .GT. 1) GO TO 200
+      IF (ABS(EDGE(3)) .GT. 1) GO TO 200
+      IF (ABS(EDGE(4)) .GT. 1) GO TO 200
       IERR = 0
 C               PROCESS EDGES 1 AND 3
       NSWC_AI_I4 = EDGE(1)
@@ -101328,11 +101331,11 @@ C     CHECK INPUT PARAMETERS
 C     COMPUTE MINIMUM WORK SPACE AND CHECK WORK SPACE LENGTH INPUT
       L = N+1
       IF (NBDCND .EQ. 0) L = N
-      LOGB2N = INT(ALOG(FLOAT(L)+0.5)/ALOG(2.0))+1
+      LOGB2N = INT(LOG(FLOAT(L)+0.5)/LOG(2.0))+1
       LL = 2**(LOGB2N+1)
       K = M+1
       L = N+1
-      LENGTH = (LOGB2N-2)*LL+LOGB2N+MAX0(2*L,6*K)+5
+      LENGTH = (LOGB2N-2)*LL+LOGB2N+MAX(2*L,6*K)+5
       IF (NBDCND .EQ. 0) LENGTH = LENGTH+2*L
       IERROR = 11
       LINPUT = INT(W(1)+0.5)
@@ -102166,11 +102169,11 @@ C TEST M AND N FOR THE PROPER FORM
 C     DIVIDE W INTO WORKING SUB ARRAYS
   110 IW1 = IWAH
       IWBH = IW1+NM
-      W(1) = FLOAT(IW1-1+MAX0(2*NM,6*M))
+      W(1) = FLOAT(IW1-1+MAX(2*NM,6*M))
       GO TO 130
   120 IWBH = IWAH+NM+NM
       IW1 = IWBH
-      W(1) = FLOAT(IW1-1+MAX0(2*NM,6*M))
+      W(1) = FLOAT(IW1-1+MAX(2*NM,6*M))
       NM = NM-1
 C SUBROUTINE COMPB COMPUTES THE ROOTS OF THE B POLYNOMIALS
   130 IF ((IERROR) .EQ. 0) GO TO 140
@@ -102796,7 +102799,7 @@ C BEGIN SOLUTION TO SYSTEM
          W(K+1) = (Y(K+1)-C(K+1)*W(K+2))/DEN
       END DO
       DEN = B(1)-CRT-C(1)*D(2)
-      IF ((CABS(DEN)) .EQ. 0) GO TO 60
+      IF ((ABS(DEN)) .EQ. 0) GO TO 60
       GO TO 50
    50 Y(1) = (Y(1)-C(1)*W(2))/DEN
       GO TO  70
@@ -102916,7 +102919,7 @@ C BEGIN SOLUTION TO SYSTEM
       BH = BH-V*U(M-2)
       YM = YM-V*Y(M-2)
       DEN = BH-AM*D(M-1)
-      IF ((CABS(DEN)) .EQ. 0) GO TO 80
+      IF ((ABS(DEN)) .EQ. 0) GO TO 80
       GO TO 70
    70 Y(M) = (YM-AM*Y(M-1))/DEN
       GO TO  90
@@ -102997,7 +103000,7 @@ C     LESS THAN 0 FOR SOME J. AH AND BH ARE TEMPORARY WORK ARRAYS.
       EPS = SPMPAR(1)
       BNORM = ABS(BN(1))
       DO J=2,NM
-         BNORM = AMAX1(BNORM,ABS(BN(J)))
+         BNORM = MAX(BNORM,ABS(BN(J)))
          ARG = AN(J)*CN(J-1)
          IF ((ARG) .LT. 0) GO TO 220
          GO TO 30
@@ -103324,33 +103327,33 @@ C     CASE OF A COMPLEX ZERO
          GO TO 240
   230    F = (1.,0.)+FSG+HSG
   240    I3 = 0
-         IF ((CABS(FP)) .LE. 0) GO TO 260
+         IF ((ABS(FP)) .LE. 0) GO TO 260
          GO TO 250
   250    I3 = 1
          R3 = -F/FP
   260    I2 = 0
-         IF ((CABS(FPP)) .LE. 0) GO TO 320
+         IF ((ABS(FPP)) .LE. 0) GO TO 320
          GO TO 270
   270    I2 = 1
-         CDIS = CSQRT(FP**2-2.*F*FPP)
+         CDIS = SQRT(FP**2-2.*F*FPP)
          R1 = CDIS-FP
          R2 = -FP-CDIS
-         IF ((CABS(R1) - CABS(R2)) .LE. 0) GO TO 290
+         IF ((ABS(R1) - ABS(R2)) .LE. 0) GO TO 290
          GO TO 280
   280    R1 = R1/FPP
          GO TO 300
   290    R1 = R2/FPP
   300    R2 = 2.*F/FPP/R1
-         IF (CABS(R2) .LT. CABS(R1)) R1 = R2
+         IF (ABS(R2) .LT. ABS(R1)) R1 = R2
          IF ((I3) .LE. 0) GO TO 330
          GO TO 310
-  310    IF (CABS(R3) .LT. CABS(R1)) R1 = R3
+  310    IF (ABS(R3) .LT. ABS(R1)) R1 = R3
          GO TO 330
   320    R1 = R3
   330    CX = CX+R1
          IT = IT+1
          IF (IT .GT. 50) GO TO 420
-         IF (CABS(R1) .GT. SCNV) GO TO 200
+         IF (ABS(R1) .GT. SCNV) GO TO 200
          IF ((ICV) .LE. 0) GO TO 340
          GO TO 350
   340    ICV = 1
@@ -103359,7 +103362,7 @@ C     CASE OF A COMPLEX ZERO
          CBP(IG+1) = CONJG(CX)
   360 CONTINUE
       END DO
-      NSWC_AI_R4 = CABS(CBP(N)) - CABS(CBP(1))
+      NSWC_AI_R4 = ABS(CBP(N)) - ABS(CBP(1))
       IF (NSWC_AI_R4 .LT. 0) GO TO 370
       IF (NSWC_AI_R4 .EQ. 0) GO TO 420
       GO TO 390
@@ -104196,7 +104199,7 @@ C                  OBTAIN THE FIRST M VARIATES
          U = A(I)
          V = A(I + 1)
          R = U*U + V*V
-         S = SQRT(-2.0*ALOG(R)/R)
+         S = SQRT(-2.0*LOG(R)/R)
          A(I) = S*U
          A(I + 1) = S*V
       END DO
@@ -104204,7 +104207,7 @@ C                  OBTAIN THE FIRST M VARIATES
 C            OBTAIN THE LAST VARIATE (WHEN N IS ODD)
    20 CALL RCIR1(1, IX, T(1), 1, T(2), 1, IERR)
       R = T(1)*T(1) + T(2)*T(2)
-      S = SQRT(-2.0*ALOG(R)/R)
+      S = SQRT(-2.0*LOG(R)/R)
       A(N) = S*T(1)
       RETURN
 C                         ERROR RETURN
@@ -104238,7 +104241,7 @@ C                  OBTAIN THE FIRST M VARIATES
          U = A(I)
          V = A(I + 1)
          R = U*U + V*V
-         S = DSQRT(-2.D0*DLOG(R)/R)
+         S = SQRT(-2.D0*LOG(R)/R)
          A(I) = S*U
          A(I + 1) = S*V
       END DO
@@ -104246,7 +104249,7 @@ C                  OBTAIN THE FIRST M VARIATES
 C            OBTAIN THE LAST VARIATE (WHEN N IS ODD)
    20 CALL DRCIR1(1, IX, T(1), 1, T(2), 1, IERR)
       R = T(1)*T(1) + T(2)*T(2)
-      S = DSQRT(-2.D0*DLOG(R)/R)
+      S = SQRT(-2.D0*LOG(R)/R)
       A(N) = S*T(1)
       RETURN
 C                         ERROR RETURN
@@ -104273,14 +104276,14 @@ C-----------------------------------------------------------------------
       M = N/2
       M = M + M
       DO I = 1,M,2
-         R = SQRT(-2.0*ALOG(A(I)))
+         R = SQRT(-2.0*LOG(A(I)))
          PHI = PI2*A(I+1)
          A(I) = R*COS(PHI)
          A(I+1) = R*SIN(PHI)
       END DO
       IF (M .EQ. N) RETURN
    20 CALL URNG(IX,TEMP,1,IERR)
-      R = SQRT(-2.0*ALOG(A(N)))
+      R = SQRT(-2.0*LOG(A(N)))
       A(N) = R*COS(PI2*TEMP(1))
       END SUBROUTINE NRNG
 
@@ -104301,15 +104304,15 @@ C-----------------------------------------------------------------------
       M = N/2
       M = M + M
       DO I = 1,M,2
-         R = DSQRT(-2.D0*DLOG(A(I)))
+         R = SQRT(-2.D0*LOG(A(I)))
          PHI = PI2*A(I+1)
-         A(I) = R*DCOS(PHI)
-         A(I+1) = R*DSIN(PHI)
+         A(I) = R*COS(PHI)
+         A(I+1) = R*SIN(PHI)
       END DO
       IF (M .EQ. N) RETURN
    20 CALL DURNG(IX, TEMP, 1, IERR)
-      R = DSQRT(-2.D0*DLOG(A(N)))
-      A(N) = R*DCOS(PI2*TEMP(1))
+      R = SQRT(-2.D0*LOG(A(N)))
+      A(N) = R*COS(PI2*TEMP(1))
       END SUBROUTINE DNRNG
 
       SUBROUTINE NRVG(MO, IX, N, M, A, FMU, X, KX, IERR)
@@ -104686,7 +104689,7 @@ C        COMPUTE THE ROOTS OF THE DIAGONAL ELEMENTS
       IF (MO .NE. 0) GO TO 20
       DO I = 1,M
          IF (A(I) .LE. 0.D0) GO TO 120
-         A(I) = DSQRT(A(I))
+         A(I) = SQRT(A(I))
       END DO
 C           GENERATE THE N RANDOM NORMAL VECTORS
    20 DO J = 1,N
@@ -104756,7 +104759,7 @@ C        GENERATION OF UNIFORM RANDOM VARIATES
       IF (IERROR .NE. 0) GO TO 120
 C        LOOP WHICH GENERATES THE N DESIRED VARIATES
       DO I=1,N
-         X(I) = - A*ALOG(X(I))
+         X(I) = - A*LOG(X(I))
       END DO
       RETURN
 C              ERROR RETURN
@@ -104817,7 +104820,7 @@ C        GENERATION OF UNIFORM RANDOM VARIATES
       IF (IERROR .NE. 0) GO TO 120
 C        LOOP WHICH GENERATES THE N DESIRED VARIATES
       DO I=1,N
-         X(I) = - A*DLOG(X(I))
+         X(I) = - A*LOG(X(I))
       END DO
       RETURN
 C              ERROR RETURN
@@ -104971,7 +104974,7 @@ C--------------------
       DATA MAX /2147483647/
 C--------------------
       IF (N .LE. 0) GO TO 100
-      IF (AMIN1(A,B) .LT. 0.25) GO TO 110
+      IF (MIN(A,B) .LT. 0.25) GO TO 110
       IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 120
       IERR = 0
       DO I = 1,N
@@ -105043,7 +105046,7 @@ C--------------------
       DATA MAX /2147483647/
 C--------------------
       IF (N .LE. 0) GO TO 100
-      IF (DMIN1(A,B) .LT. 0.25D0) GO TO 110
+      IF (MIN(A,B) .LT. 0.25D0) GO TO 110
       IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 120
       IERR = 0
       DO I = 1,N
@@ -105115,7 +105118,7 @@ C            LARGEST NUMBER IN THE FLOATING ARITHMETIC USED.
                    XMAX = SPMPAR(3)
 C--------------------
       IF (N .LE. 0) GO TO 100
-      IF (AMIN1(A,B) .LT. 0.5) GO TO 110
+      IF (MIN(A,B) .LT. 0.5) GO TO 110
       IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 130
       IERR = 0
       AHALF = 0.5*A
@@ -105200,7 +105203,7 @@ C            LARGEST NUMBER IN THE FLOATING ARITHMETIC USED.
                    XMAX = DPMPAR(3)
 C--------------------
       IF (N .LE. 0) GO TO 100
-      IF (DMIN1(A,B) .LT. 0.5D0) GO TO 110
+      IF (MIN(A,B) .LT. 0.5D0) GO TO 110
       IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 130
       IERR = 0
       AHALF = 0.5D0*A
@@ -105360,7 +105363,7 @@ C        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
          CALL DURNG0(IX, U, V)
          CALL DGINV(AHALF, W, U, V, IND)
          IF (IND .EQ. -3 .OR. IND .EQ. -7) GO TO 120
-         S = DSQRT(W/AHALF)
+         S = SQRT(W/AHALF)
          X(I) = Z/S
       END DO
       RETURN
@@ -105523,7 +105526,7 @@ C        IS WITHIN ACCEPTABLE RANGE
 C        CHECK TO ENSURE THAT THE FIRST-ORDER MARKOV MODEL
 C        PARAMETER IS WITHIN THE RANGE REQUIRED TO GUARANTEE
 C        PROCESS STATIONARITY
-      IF (DABS(ALPHA) .GE. 1.D0) GO TO 120
+      IF (ABS(ALPHA) .GE. 1.D0) GO TO 120
 C        GENERATION OF STANDARD NORMAL RANDOM VARIATES
       CALL DRNOR(ISEED,X,N,IERROR)
       IF (IERROR .NE. 0) GO TO 130
@@ -105531,7 +105534,7 @@ C        COMPUTES THE STANDARD DEVIATION OF THE INITIAL TERM OF THE
 C        AUTOCORRELATED SEQUENCE
       C = 0.5D0 + (0.5D0 - ALPHA)
       T = 0.5D0 + (0.5D0 + ALPHA)
-      SIGI = SIG/DSQRT(C*T)
+      SIGI = SIG/SQRT(C*T)
 C        COMPUTES THE INITIAL TERM OF THE REQUIRED AUTOCORRELATED
 C        SEQUENCE
       X(1) = FMU + SIGI*X(1)

@@ -1,6 +1,7 @@
 """Refresh review hashes after verified label cleanup or structured loop exits.
 
-Only hashes and computed-transfer source line numbers may change. Types,
+Normally only hashes and computed-transfer source line numbers may change.
+The generics mode also repeats the downstream intrinsic binding review. Types,
 constant values, purity/intents, calls, intrinsic bindings, helper expressions,
 and COMMON layouts must agree with the existing reviews.
 """
@@ -30,7 +31,7 @@ def without_locations(value):
     return value
 
 
-def migrate(before, after, transformer=transform):
+def migrate(before, after, transformer=transform, review_generics=False):
     if transformer(before) != after:
         raise ValueError('Source change does not match the requested transformation')
     read = lambda name: json.loads((ROOT/'tools'/name).read_text())
@@ -44,7 +45,15 @@ def migrate(before, after, transformer=transform):
     pure_new, pc = refresh(old, new, pure, True)
     old = style(fixes(purity(old, pure)))
     new = style(fixes(purity(new, pure_new)))
-    generic_new, gc = refresh(old, new, generic)
+    if review_generics:
+        # Moving the reviewed generic pass into fixed form changes its input
+        # inventory, so recheck bindings rather than just migrating hashes.
+        from generic_intrinsics import review as intrinsic_review, compile_dump as intrinsic_dump
+        with tempfile.TemporaryDirectory(prefix='nswc-fixed-generic-review-') as work:
+            generic_new = intrinsic_review(new, symbols(intrinsic_dump(new, work)[0], True))
+        gc = generic_new['summary']
+    else:
+        generic_new, gc = refresh(old, new, generic)
     old = returns(coalesce(generics(old, generic)))
     new = returns(coalesce(generics(new, generic_new)))
     with tempfile.TemporaryDirectory(prefix='nswc-label-review-') as work:
@@ -75,24 +84,31 @@ def main():
     parser.add_argument('before', type=Path)
     parser.add_argument('after', type=Path)
     parser.add_argument('--apply', action='store_true')
-    parser.add_argument('--conversion', choices=['labels', 'exits'], default='labels')
+    parser.add_argument('--conversion', choices=['labels', 'exits', 'generics'], default='labels')
     parser.add_argument('--compiler', help='Also verify fixed-form symbols, warnings and assembly')
     args = parser.parse_args()
     before, after = args.before.read_bytes(), args.after.read_bytes()
     transformer = transform
     if args.conversion == 'exits':
         from goto_to_exit import transform as transformer
+    if args.conversion == 'generics':
+        from fixed_generic_intrinsics import transform as transformer
     if args.compiler:
-        if args.conversion == 'exits':
+        if args.conversion == 'generics':
+            from fixed_generic_intrinsics import review as fixed_review, MANIFEST as fixed_manifest
+            if fixed_review(before, args.compiler) != json.loads(fixed_manifest.read_text()):
+                raise ValueError('Fixed intrinsic binding review is stale')
+        elif args.conversion == 'exits':
             from goto_to_exit import verify
         else:
             from remove_unused_labels import verify
-        verify(before, after, args.compiler)
-    manifests, counts = migrate(before, after, transformer)
+        if args.conversion != 'generics':
+            verify(before, after, args.compiler)
+    manifests, counts = migrate(before, after, transformer, review_generics=args.conversion == 'generics')
     if args.apply:
         for name, data in manifests.items():
             (ROOT/'tools'/name).write_text(json.dumps(data, indent=2)+'\n', newline='\n')
-    print('Refreshed only hashes and computed-transfer line numbers:', counts)
+    print('Refreshed downstream reviews:', counts)
 
 
 if __name__ == '__main__':
