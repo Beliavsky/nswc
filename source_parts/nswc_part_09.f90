@@ -7102,7 +7102,7 @@ integer, intent(in) :: fitiwk(fiwkln)
 real, intent(inout) :: fitdwk(fdwkln)
 real, intent(in) :: evlcds(nerows,dimen)
 real, intent(inout) :: evlvls(nepts), temp(dimen)
-integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt, nswc_ai_i4
+integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt
 interface
    pure subroutine meval1(coord,ncrows,c,nepts,dimen,npolys,alpha, &
       & indexs,psi,f,alfl,maxabs,x,dimp1)
@@ -7209,9 +7209,8 @@ end interface
 !     full multinomial degree.
 !     ***************
 if (nepts < 1 .or. dimen < 1) go to 110
-nswc_ai_i4 = evldeg
-if (nswc_ai_i4 < 0) go to 40
-if (nswc_ai_i4 == 0) go to 10
+if (evldeg < 0) go to 40
+if (evldeg == 0) go to 10
 go to 20
 10 nepols = 1
 go to 50
@@ -7791,7 +7790,7 @@ integer, intent(in) :: fitiwk(fiwkln)
 double precision, intent(inout) :: fitdwk(fdwkln)
 double precision, intent(in) :: evlcds(nerows,dimen)
 double precision, intent(inout) :: evlvls(nepts), temp(dimen)
-integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt, nswc_ai_i4
+integer :: maxstt, alfstt, cstt, gbasiz, alfl, dimp1, top, bot, curdeg, psistt
 interface
    pure subroutine dmevl1(coord,ncrows,c,nepts,dimen,npolys,alpha, &
       & indexs,psi,f,alfl,maxabs,x,dimp1)
@@ -7899,9 +7898,8 @@ end interface
 !     full multinomial degree.
 !     ***************
 if (nepts < 1 .or. dimen < 1) go to 110
-nswc_ai_i4 = evldeg
-if (nswc_ai_i4 < 0) go to 40
-if (nswc_ai_i4 == 0) go to 10
+if (evldeg < 0) go to 40
+if (evldeg == 0) go to 10
 go to 20
 10 nepols = 1
 go to 50

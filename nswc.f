@@ -2393,15 +2393,13 @@ C ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
       REAL :: R
-      REAL :: NSWC_AI_R4
 C-----------------------------------------------------------------------
 C                   CUBE ROOT OF A REAL NUMBER
 C-----------------------------------------------------------------------
-      NSWC_AI_R4 = X
-      IF (NSWC_AI_R4 .LT. 0) THEN
+      IF (X .LT. 0) THEN
          R = LOG(-X)/3.0
          CBRT = -EXP(R)
-      ELSE IF (NSWC_AI_R4 .EQ. 0) THEN
+      ELSE IF (X .EQ. 0) THEN
          CBRT = 0.0
       ELSE
          R = LOG(X)/3.0
@@ -2416,12 +2414,10 @@ C                   CUBE ROOT OF A REAL NUMBER
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
       DOUBLE PRECISION :: R
-      DOUBLE PRECISION :: NSWC_AI_R8
-      NSWC_AI_R8 = X
-      IF (NSWC_AI_R8 .LT. 0) THEN
+      IF (X .LT. 0) THEN
          R = LOG(-X)/3.D0
          DCBRT = -EXP(R)
-      ELSE IF (NSWC_AI_R8 .EQ. 0) THEN
+      ELSE IF (X .EQ. 0) THEN
          DCBRT = 0.D0
       ELSE
          R = LOG(X)/3.D0
@@ -87307,7 +87303,6 @@ C     ****************
       INTEGER :: MAXSTT, ALFSTT, CSTT
       INTEGER :: GBASIZ, ALFL, DIMP1
       INTEGER :: TOP, BOT, CURDEG, PSISTT
-      INTEGER :: NSWC_AI_I4
 C     ***************
 C     PURPOSE
 C     -------
@@ -87394,9 +87389,8 @@ C     THE MTABLE -- THIS SETS THE BEGINNING POINT FOR EACH
 C     FULL MULTINOMIAL DEGREE.
 C     ***************
       IF (NEPTS .LT. 1 .OR. DIMEN .LT. 1) GO TO 110
-      NSWC_AI_I4 = EVLDEG
-      IF (NSWC_AI_I4 .LT. 0) GO TO 40
-      IF (NSWC_AI_I4 .EQ. 0) GO TO 10
+      IF (EVLDEG .LT. 0) GO TO 40
+      IF (EVLDEG .EQ. 0) GO TO 10
       GO TO 20
    10 NEPOLS = 1
       GO TO 50
@@ -87985,7 +87979,6 @@ C     ****************
       INTEGER :: MAXSTT, ALFSTT, CSTT
       INTEGER :: GBASIZ, ALFL, DIMP1
       INTEGER :: TOP, BOT, CURDEG, PSISTT
-      INTEGER :: NSWC_AI_I4
 C     ***************
 C     PURPOSE
 C     -------
@@ -88073,9 +88066,8 @@ C     THE MTABLE -- THIS SETS THE BEGINNING POINT FOR EACH
 C     FULL MULTINOMIAL DEGREE.
 C     ***************
       IF (NEPTS .LT. 1 .OR. DIMEN .LT. 1) GO TO 110
-      NSWC_AI_I4 = EVLDEG
-      IF (NSWC_AI_I4 .LT. 0) GO TO 40
-      IF (NSWC_AI_I4 .EQ. 0) GO TO 10
+      IF (EVLDEG .LT. 0) GO TO 40
+      IF (EVLDEG .EQ. 0) GO TO 10
       GO TO 20
    10 NEPOLS = 1
       GO TO 50

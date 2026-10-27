@@ -2386,15 +2386,14 @@ end subroutine dorder
 pure elemental real function cbrt(x)
 implicit none
 real, intent(in) :: x
-real :: r, nswc_ai_r4
+real :: r
 !-----------------------------------------------------------------------
 !                   Cube root of a real number
 !-----------------------------------------------------------------------
-nswc_ai_r4 = x
-if (nswc_ai_r4 < 0) then
+if (x < 0) then
    r = log(-x)/3.0
    cbrt = -exp(r)
-else if (nswc_ai_r4 == 0) then
+else if (x == 0) then
    cbrt = 0.0
 else
    r = log(x)/3.0
@@ -2408,12 +2407,11 @@ implicit none
 !                   Cube root of a real number
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
-double precision :: r, nswc_ai_r8
-nswc_ai_r8 = x
-if (nswc_ai_r8 < 0) then
+double precision :: r
+if (x < 0) then
    r = log(-x)/3.d0
    dcbrt = -exp(r)
-else if (nswc_ai_r8 == 0) then
+else if (x == 0) then
    dcbrt = 0.d0
 else
    r = log(x)/3.d0

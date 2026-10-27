@@ -127,7 +127,8 @@ def main():
     report = {}
     after = transform(before,report)
     from fixed_generic_intrinsics import transform as generics
-    if generics(after) != (ROOT/'nswc.f').read_bytes():
+    from remove_redundant_copies import transform as copies
+    if copies(generics(after)) != (ROOT/'nswc.f').read_bytes():
         raise ValueError('Fixed source does not reproduce terminal-branch cleanup')
     if report != json.loads(MANIFEST.read_text()):
         raise ValueError('Terminal-branch review is stale')

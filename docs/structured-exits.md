@@ -119,3 +119,34 @@ infinities, quiet NaNs, and complex values in all quadrants. Cube-root outputs
 are compared bitwise at `-O0` (apart from NaN payloads) and numerically at `-O2`.
 GNU optimization can choose a different sign for a zero result between these
 equivalent source forms; optimized assembly is not required to be identical.
+
+## Redundant generated copies
+
+`tools/remove_redundant_copies.py` removes a generated `NSWC_AI_*` scalar
+when it is assigned once from an explicitly declared scalar `INTENT(IN)`
+argument of the same type. Its only reads must be two sign comparisons.
+The tool accepts adjacent tests or a restricted structured branch with only
+assignments and known intrinsic calls that do not modify arguments between the tests.
+It rejects labelled or continued test regions, storage association, alternate
+entries, annotated declarations, expression copies, and reused temporaries.
+Comments and strings remain unchanged. This is deliberately a narrow pass,
+not a general copy-propagation optimizer.
+
+Preview into new files:
+
+```text
+python tools/remove_redundant_copies.py nswc.f --output candidate.f --report copies.json
+```
+
+The checked-in review, `tools/redundant-copies.json`, records four removals
+in CBRT, DCBRT, MEVAL, and DMEVAL, plus reasons for retaining other generated
+temporaries. `tools/validate_redundant_copies.py` reconstructs the input from
+the archive, reproduces the transformation, checks idempotence, and requires
+identical GNU optimized assembly and all compiler symbols except the removed
+locals. The pass follows fixed-form generic-intrinsic replacement.
+
+For a newly reviewed change, migrate downstream review hashes with
+`tools/refresh_label_review_hashes.py before.f candidate.f --conversion copies --apply`,
+install the verified fixed source, and run `tools/regenerate_sources.py`.
+Refresh module intrinsic bindings and Intel interface metadata using their
+existing generation tools, then run the numerical validation suites.

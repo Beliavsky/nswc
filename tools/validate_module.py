@@ -107,7 +107,7 @@ def verify(compiler, folder, intel=False, env=None):
             if module:
                 caller = folder / path.name
                 caller.write_text(standalone_caller(path.read_text(), names), newline='\n')
-            exe = folder / 'test.exe'
+            exe = folder / (path.stem + ('_module' if module else '_external') + '.exe')
             command = ([compiler, *flags, '/fpe:0', str(caller), str(library), '/exe:' + str(exe)] if intel else
                        [compiler, *flags, '-ffpe-trap=invalid,zero,overflow', str(caller), str(library), '-o', str(exe)])
             command_run(command, folder, env, timeout=60)

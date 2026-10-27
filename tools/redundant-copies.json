@@ -1,0 +1,473 @@
+{
+  "input_sha256": "102c56c84cea5ac30c8dd134f4bfb8e4a64b5af6d0058b417d2b12e73013af81",
+  "output_sha256": "a3503b164ff606d30ed6456e96b7ee79512cfa4d2bf836380b70710b2b281844",
+  "converted": [
+    {
+      "procedure": "CBRT",
+      "temporary": "NSWC_AI_R4",
+      "argument": "X"
+    },
+    {
+      "procedure": "DCBRT",
+      "temporary": "NSWC_AI_R8",
+      "argument": "X"
+    },
+    {
+      "procedure": "MEVAL",
+      "temporary": "NSWC_AI_I4",
+      "argument": "EVLDEG"
+    },
+    {
+      "procedure": "DMEVAL",
+      "temporary": "NSWC_AI_I4",
+      "argument": "EVLDEG"
+    }
+  ],
+  "skipped": [
+    {
+      "procedure": "ARTNQ",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "DARTNQ",
+      "temporary": "NSWC_AI_R8",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "DCSQRT",
+      "temporary": "NSWC_AI_R8",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "PAREA",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "HC1",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "EXPLI",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "GAMMA",
+      "temporary": "NSWC_AI_I4",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "GAM1",
+      "temporary": "NSWC_AI_R4",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "DGAMMA",
+      "temporary": "NSWC_AI_I4",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "DGAM1",
+      "temporary": "NSWC_AI_R8",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "DPSI",
+      "temporary": "NSWC_AI_I4",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "GRATIO",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "BESJ",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "BESJ",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "BESI",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "BESI",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "CFLECT",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "VALR2",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "PKILL",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "QTCRT",
+      "temporary": "NSWC_AI_R4",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "DQTCRT",
+      "temporary": "NSWC_AI_R8",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "ISWAP",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "SROTMG",
+      "temporary": "NSWC_AI_R4",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "SROTM",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "DROTMG",
+      "temporary": "NSWC_AI_R8",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "DROTM",
+      "temporary": "NSWC_AI_R8",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "BADD",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "DBADD",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "CBADD",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "BSUBT",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "DBSUBT",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "CBSUBT",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "NSPIV1",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "SPLU",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "DNSPIV",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "DSPLU",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "CNSPIV",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "CSPLU",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "EIGV",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "EIGV1",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "HQR2",
+      "temporary": "NSWC_AI_R4",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "DEIGV",
+      "temporary": "NSWC_AI_R8",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "DHQR2",
+      "temporary": "NSWC_AI_R8",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "COMQR2",
+      "temporary": "NSWC_AI_I4",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "DCMQR2",
+      "temporary": "NSWC_AI_I4",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "XL1",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "FMIN",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "SMPLX1",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "SMPLX1",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "SSPLX1",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "SSPLX1",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "CROUT1",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "ASSGN1",
+      "temporary": "NSWC_AI_I4",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "SKNP1",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "SFFT",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "COSQF",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "COSQB",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "RADB2",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "RADB4",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "RADF2",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "RADF4",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "ADCHK",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "TRP",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "LTRP",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "WPFIT",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "CBSPL",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "SCOMP",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "SCOMP1",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "SCOMP2",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "SEVAL",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "SEVAL1",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "SEVAL2",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "PSCMP",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "PSEVL",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "LOPCMP",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "LOPDF",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "INTRVL",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    },
+    {
+      "procedure": "PPVAL",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "BANFAC",
+      "temporary": "NSWC_AI_I4",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "CSURF",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "CSURF",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "CSRF",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "CSRF",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "SURF",
+      "temporary": "NSWC_AI_I4",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "STEP1",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "PDEDGE",
+      "temporary": "NSWC_AI_I4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "INDXB",
+      "temporary": "NSWC_AI_I4",
+      "reason": "source is not a matching scalar INTENT(IN) argument"
+    },
+    {
+      "procedure": "PPADD",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not one declaration, one copy and two tests"
+    },
+    {
+      "procedure": "BSRH",
+      "temporary": "NSWC_AI_R4",
+      "reason": "not a standalone scalar declaration and simple copy"
+    }
+  ]
+}

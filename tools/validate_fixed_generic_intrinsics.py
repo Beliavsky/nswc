@@ -18,7 +18,8 @@ def main():
     if actual != expected:
         raise ValueError('Fixed intrinsic binding review does not reproduce')
     after = transform(before,actual)
-    if after != (ROOT/'nswc.f').read_bytes() or transform(after,actual) != after:
+    from remove_redundant_copies import transform as copies
+    if copies(after) != (ROOT/'nswc.f').read_bytes() or transform(after,actual) != after:
         raise ValueError('Fixed generic source does not reproduce or is not idempotent')
     print(actual['summary'])
     print('Assembly, unreviewed symbols, executable trees and warning messages agree.')

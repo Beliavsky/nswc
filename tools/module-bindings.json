@@ -1,5 +1,5 @@
 {
-  "code_sha256": "6dd1ab91919b65192588d22d2b6125588fc4b9d31d84a45c4199edb444a4a705",
+  "code_sha256": "bc73a4e97b0ea7703e18665ebdf5520a00552d0c186d5d70bafa1aed56dd30d8",
   "compiler": "GNU Fortran (GCC) 17.0.0 20260510 (experimental)",
   "intrinsic_overrides": {
     "DGINV": [

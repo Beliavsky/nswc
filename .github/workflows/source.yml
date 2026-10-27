@@ -32,6 +32,7 @@ jobs:
       - run: python tools/validate_data_constants.py
       - run: python tools/validate_generic_intrinsics.py
       - run: python tools/validate_fixed_generic_intrinsics.py
+      - run: python tools/validate_redundant_copies.py
       - run: python tools/validate_local_declarations.py
       - run: python tools/validate_procedure_purity.py
       - run: python tools/validate_sources.py

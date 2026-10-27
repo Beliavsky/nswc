@@ -122,10 +122,11 @@ def transform(data, report=None):
 
 
 def finish_fixed(data):
-    """Final formatting, structured tails and generics for historical validators."""
+    """Final formatting, branches, generics and copies for historical validators."""
     from normalize_fixed_spacing import transform as spacing
     from fixed_generic_intrinsics import transform as generics
-    return generics(transform(spacing(data)))
+    from remove_redundant_copies import transform as copies
+    return copies(generics(transform(spacing(data))))
 
 
 def main():
